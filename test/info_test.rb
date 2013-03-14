@@ -232,20 +232,6 @@ describe "Info Command" do
     end
   end
 
-  describe "Threads info" do
-    it "must show threads info" do
-      enter 'break 36', 'cont', 'info threads'
-      debug_file 'info'
-      check_output_includes /#<Thread:\S+ run>/
-    end
-
-    it "must show verbose threads info" # TODO: Unreliable due to race conditions, need to fix to be reliable
-    #  enter 'break 20', 'cont', ->{sleep 0.01; "info threads verbose"}
-    #  debug_file 'info'
-    #  check_output_includes /#<Thread:\S+ run>/, "#0", "A.a", "at line #{fullpath('info')}:20"
-    #end
-  end
-
 #  describe "Thread info" do
 #    it "must show threads info when without args" # TODO: Unreliable due to race conditions, need to fix to be reliable
 #    #   enter 'break 48', 'cont', 'info threads'
@@ -260,7 +246,7 @@ describe "Info Command" do
 #      check_output_includes "+", thread_number.to_s, /#<Thread:\S+ run>/
 #    end
 #
-#    it "must show verbose thread info" do
+#    it "must show verbose thread info" do # TODO: Unreliable due to race conditions, need to fix to be reliable
 #      enter 'break 20', 'cont', ->{"info thread #{context.thnum} verbose"}
 #      debug_file 'info'
 #      check_output_includes /#<Thread:\S+ run>/, "#0", "A.a", "at line #{fullpath('info')}:20"
@@ -275,9 +261,10 @@ describe "Info Command" do
 
   describe "Global Variables info" do
     it "must show global variables" do
-      enter 'info global_variables'
-      debug_file 'info'
-      check_output_includes "$$ = #{Process.pid}"
+      skip("XXX: handle global variables, XXX: Fix warning in test")
+      #enter 'info global_variables'
+      #debug_file 'info'
+      #check_output_includes "$$ = #{Process.pid}"
     end
   end
 

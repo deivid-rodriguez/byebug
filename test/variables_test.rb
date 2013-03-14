@@ -100,8 +100,8 @@ describe "Variables Command" do
     end
   end
 
-  # TODO: Need to write tests for 'var ct' command, but I can't install the 'ruby-internal' gem
-  # on my machine, it fails to build gem native extension.
+  # TODO: Need to write tests for 'var ct' command, but I can't install the
+  # 'ruby-internal' gem on my machine, it fails to build gem native extension.
 
   describe "Post Mortem" do
     it "must work in post-mortem mode" do

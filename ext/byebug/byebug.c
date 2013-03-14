@@ -26,15 +26,12 @@ print_debug_info(char *event, VALUE path, VALUE lineno, VALUE method_id,
 {
   char *file;
   const char *method_name, *class_name;
-  //const char *method_name;
 
   file = strrchr(RSTRING_PTR(path), '/');
   method_name = rb_id2name(SYM2ID(method_id));
   class_name = rb_class2name(defined_class);
   fprintf(stderr, "%s: file=%s, line=%d, class=%s, method=%s, stack=%d\n",
            event, ++file, FIX2INT(lineno), class_name, method_name, stack_size);
-  //fprintf(stderr, "%s: file=%s, line=%d, method=%s, stack=%d\n",
-  //                   event, ++file, FIX2INT(lineno), method_name, stack_size);
   return;
 }
 
@@ -176,23 +173,25 @@ process_line_event(VALUE trace_point, void *data)
 
   if(context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
-      if(moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+      if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
           context->stop_next--;
-      if(context->stop_next < 0)
+      if (context->stop_next < 0)
           context->stop_next = -1;
-      if(moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) && !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
+      if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) && !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
       {
           context->stop_line--;
           CTX_FL_UNSET(context, CTX_FL_STEPPED);
       }
   }
-  else if(context->stack_size < context->dest_frame)
+  else if (context->stack_size < context->dest_frame)
   {
       context->stop_next = 0;
   }
 
   breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
-  if(context->stop_next == 0 || context->stop_line == 0 || breakpoint != Qnil){
+  if (context->stop_next == 0 || context->stop_line == 0 ||
+      breakpoint != Qnil)
+  {
     context->stop_reason = CTX_STOP_STEP;
     if (breakpoint != Qnil) {
       rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
