@@ -243,7 +243,6 @@ describe "Breakpoints" do
     end
   end
 
-
   describe "enabling a breakpoint" do
     describe "successfully" do
       before { enter "break 14" }

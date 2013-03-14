@@ -18,7 +18,7 @@ module Byebug
                  line_number, filename)
           return
         end
-        @state.context.set_breakpoint(filename, line_number)
+        Byebug.add_breakpoint filename, line_number
       end
       @state.proceed
     end
