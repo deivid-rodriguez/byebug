@@ -41,7 +41,7 @@ module Byebug
                                   /^\s* cond(?:ition)? (?:\s+(\d+)\s*(.*))?$/ix,
                                   /^\s*del(?:ete)?(?:\s+(.*))?$/ix,
                                   /^\s* dis(?:able)? (?:\s+(.*))?$/ix,
-                                  /^\s* en(?:able)? (?:\s+(.*))?$/ix,
+                                  /^\s* en(?:able)? (?:\s+(.*))?$/ix
                                   # "tbreak", "clear",
                                  ]
     @@Show_annotations_run = [
@@ -183,8 +183,7 @@ module Byebug
       # The prompt shown before reading a command.
       def prompt(context)
         p = '(rdb:%s) ' % (context.dead?  ? 'post-mortem' : context.thnum)
-        p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if
-          Byebug.annotate.to_i > 2
+        p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if Byebug.annotate.to_i > 2
         return p
       end
 
@@ -295,9 +294,9 @@ module Byebug
         end
 
         if Byebug.annotate.to_i > 2
-          # if we are here, the stack frames have changed outside the
-          # command loop (e.g. after a "continue" command), so we show
-          # the annotations again
+          # if we are here, the stack frames have changed outside the command
+          # loop (e.g. after a "continue" command), so we show the annotations
+          # again
           breakpoint_annotations(commands, context)
           display_annotations(commands, context)
           annotation('stack', commands, context, "where")
@@ -307,7 +306,7 @@ module Byebug
       end
 
       def postcmd(commands, context, cmd)
-        if Byebug.annotate.to_i > 0
+        if Byebug.annotate.to_i > 2
           cmd = @last_cmd unless cmd
           breakpoint_annotations(commands, context) if
             @@Show_breakpoints_postcmd.find{|pat| cmd =~ pat}
