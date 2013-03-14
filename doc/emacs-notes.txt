@@ -1,0 +1,38 @@
+* rdebug.el is loaded by the user when Emacs is launched. (Should
+Rdebug ever be part of Emacs, this should be the items autoloaded by
+Emacs.)
+
+There is a command buffer which is the gud process. There are a number
+of "secondary" buffers have in gud-comint-buffer the gud process. The
+way we go the other direction from gud process to secondary buffer is
+by buffer name. Source buffers don't seem to have a local
+gud-comint-buffer variable set but use the global value. Perhaps
+source buffer should have their own buffer-local value(s)?
+
+For each secondary buffer we have things for that specific buffer. In particular:
+* frames (rdebug-frames.el)
+* output (rdebug-output.el)
+* variables (rdebug-varbuf.el)
+* watch or display-expressions - (rdebug-watch.el
+* breakpoints (rdebug-breaks.el)
+
+Each specific secondary buffer includes 
+ - setting the buffer up,
+ - specific commands for that buffer 
+ - the kinds of functions that buffer deals with (e.g. frame
+   things for the "frame" buffer or breakpoints for the "breakpoints" buffer.)
+
+* rdebug-gud.el contains things that interface to gdb. Possibly also
+things that interface to gdb-ui should be there as well.
+
+* rdebug-shortkey.el has all the magic that needs to be done to make
+  shortkey mode work. 
+
+* rdebug-track is all the things to make rdebug-track mode work.
+
+I have some additions, which deals with *when* certain files are loaded.
+
+* rdebug-source.el is loaded when the first Ruby source file is loaded
+Of course, the name rdebug-source.el is not important, we could rename
+it to something else and reuse the name for other source-related
+things.

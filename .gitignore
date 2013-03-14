@@ -1,0 +1,10 @@
+tmp
+vendor/bundle
+
+.rvmrc
+.gdbinit
+.gdb_history
+.bundle
+.tags
+
+Gemfile.lock

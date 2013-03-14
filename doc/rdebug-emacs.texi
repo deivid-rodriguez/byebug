@@ -1,0 +1,1030 @@
+\input texinfo      @c -*-texinfo-*-
+@setfilename rdebug-emacs.info
+
+@set DBG ruby-debug
+@set ttrdebug @code{rdebug}
+@set ttDBG @code{@value{DBG}}
+@set Emacs @sc{gnu} Emacs
+
+@set RDEBUG_EMACS_VERSION 0.1
+@include version-rdebug-emacs.texi
+@finalout
+
+@c Karl Berry informs me that this will add straight quotes in 
+@c typewriter text.
+@c See the "Inserting Quote Characters" node in the Texinfo manual
+@set txicodequoteundirected
+@set txicodequotebacktick
+
+@c THIS MANUAL REQUIRES TEXINFO 4.0 OR LATER.
+
+@c This is a dir.info fragment to support semi-automated addition of
+@c manuals to an info tree.
+@dircategory Programming & development tools.
+@direntry
+* ruby-debug-emacs: (ruby-debug).    Ruby Byebug for GNU Emacs
+@end direntry
+
+@titlepage
+@title Debugging with @code{ruby-debug} inside GNU Emacs Version @value{RDEBUG_EMACS_VERSION}
+@sp 1
+@subtitle @value{EDITION} Edition
+@subtitle @value{UPDATED-MONTH}
+@author Rocky Bernstein and Anders Lindgren
+@page
+@ifset WHERETO
+@tex
+{\parskip=0pt
+\hfill (Send bugs and comments on ruby-debug to fill in...)\par
+\hfill {\it Debugging with {\tt ruby-debug}\par
+\hfill \TeX{}info \texinfoversion\par
+}
+@end tex
+@end ifset
+@end titlepage
+@page
+
+@node Top, Getting started, (dir), (dir)
+@top Debugging with ruby-debug under GNU Emacs
+
+@menu
+* Getting started::             
+* The Multi-window Mode::       
+* Byebug Buffers::            
+* Emacs Byebug Commands::     Indexes (nodes containing large menus)
+* Emacs Command Index::         An item for each GNU/Emacs command name.
+* Emacs Function Index::        An item for each Emacs Function.
+* Emacs Key Binding Index::     An item for each Emacs Byebug Command.
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Getting started
+
+* Installation::                How to install this package
+* Emacs rdebug::                Invoke the ruby byebug initially
+* Emacs shell tracking mode::   Entering rdebug from an existing shell buffer
+
+Byebug Buffers
+
+* Byebug Command Buffer::     
+* Emacs Source::                Commands from the source script
+
+Emacs Byebug Commands
+
+* Emacs Byebug Common Commands::  
+* Emacs Byebug Breakpoint Buffer Commands::  
+* Emacs Byebug Stack Buffer Commands::  
+* Emacs Byebug Variable Buffer Commands::  
+* Emacs Byebug Watch Buffer Commands::  
+* Emacs GUD Commands::          
+
+@end detailmenu
+@end menu
+
+This file describes ruby-debug, the Ruby Byebug, 
+version @value{RDEBUG_EMACS_VERSION}
+
+This is the @value{EDITION} Edition, @value{UPDATED}
+@c Copyright (C) 2007 ...
+
+@c @node GNU Emacs
+@c @chapter Using @code{ruby-debug} from GNU Emacs
+
+
+@cindex @value{Emacs}
+A special interface which comes with Ruby that allows you to use
+@value{Emacs} to view (and edit) the source files for the program you
+are debugging with @value{DBG}. However you must be using at least
+version 21 of @value{Emacs}, but with @value{Emacs} version 22 or 23
+there are even more debugging features available. @code{M-x
+show-emacs-version} inside @value{Emacs} will tell you what version you
+are running.
+
+This package provide a full-fledged debugging environment, on par with
+modern integrated development environments. Once the byebug has been
+activated, the Emacs frame is divided into a number of dedicated
+byebug windows.@footnote{If you are an @value{Emacs} traditionalist,
+you can, of course, run this package with only a shell and source
+buffer}
+
+This package comes with a number of predefined window layouts. It is
+fully customizable so you can create your own.
+
+@c -------------------------------------------------------------------
+
+
+@node Getting started, The Multi-window Mode, Top, Top
+@chapter Getting started
+
+@menu
+* Installation::                How to install this package
+* Emacs rdebug::                Invoke the ruby byebug initially
+* Emacs shell tracking mode::   Entering rdebug from an existing shell buffer
+* Configurating this package::  Introducing the configure system
+@end menu
+
+@node Installation, Emacs rdebug, Getting started, Getting started
+@section Installation
+
+To use this interface, load the file @code{rdebug.el}. This file is a
+light-weight file, basically it only contains a handful of
+@code{autoload} directives.
+
+For example, you can place the following in your @code{~/.emacs} file:
+
+@smallexample
+  (require 'rdebug)
+@end smallexample
+
+In addition, you must have Ruby and ruby-debug installed.
+
+
+@node Emacs rdebug, Emacs shell tracking mode, Installation, Getting started
+@section Emacs rdebug
+
+Use the command @kbd{M-x rdebug} in @sc{gnu} Emacs to start debugging.
+Give the executable file you want to debug as an argument. Make sure
+to use the version that comes with this package as this is newer than
+that supplied with @value{Emacs}.
+
+The @kbd{rdebug} command starts @value{DBG} as a subprocess of Emacs,
+with input and output through a newly created Emacs buffer.
+
+Using @value{DBG} under Emacs is just like using @value{DBG}
+normally except for two things:
+
+@itemize @bullet
+@item
+All ``terminal'' input and output goes through the GNU Emacs buffer.
+@end itemize
+
+This applies both to @value{DBG} commands and their output, and to the input
+and output done by the program you are debugging.
+
+This is useful because it means that you can copy the text of previous
+commands and input them again; you can even use parts of the output
+in this way.
+
+All the facilities of GNU Emacs' Shell mode are available for interacting
+with your script.  In particular, you can send signals the usual
+way---for example, @kbd{C-c C-c} for an interrupt, @kbd{C-c C-z} for a
+stop.
+
+@node Emacs shell tracking mode, Configurating this package, Emacs rdebug, Getting started
+@section Entering rdebug from an existing shell buffer
+
+Many times it's not feasible to enter the byebug from the outset.
+Instead a call to the byebug is put inside the program.
+
+@c See @xref{Unit Testing Session}.
+
+It is also possible in GNU emacs to use a (``comint'') shell and set a
+mode to watch for @value{DBG} prompts and track the source code in
+another window. @xref{Interactive Shell, , Shell, Emacs, The @value{Emacs}
+Manual}.
+
+To enable, this run @kbd{M-x turn-on-rdebug-track-mode}. There is some
+overhead involved in scanning output, so if you are not debugging Ruby
+programs you probably want to turn this off which can be done via the
+@code{M-x turn-off-rdebugtrack} command.
+
+
+@node Configurating this package,  , Emacs shell tracking mode, Getting started
+@section Configurating this package
+
+In this manual we present a number of @value{Emacs} lisp variables and
+functions that you can use to configure the byebug interface. In
+addition, you can use the @value{Emacs} @emph{customize} system, see the
+@kbd{<menu-bar> <byebug> <options> <customize>} menu item.
+
+@c -------------------------------------------------------------------
+
+@node The Multi-window Mode, Byebug Buffers, Getting started, Top
+@chapter Multi-window
+
+In the multi-window byebug mode, a number of buffers are visible when
+the byebug starts. This chapter will describe each of them, in
+addition it will describe the features associated with the multi-window
+mode.
+
+The default multi-window layout looks like the following:
+
+@verbatim
++----------------------------------------------------------------------+
+|                                Toolbar                               |
++-----------------------------------+----------------------------------+
+|                                   |                                  |
+| Byebug shell                    | Variables buffer                 |
+|                                   |                                  |
++-----------------------------------+----------------------------------+
+|                                   |                                  |
+| Source buffer                     | Output buffer                    |
+|                                   |                                  |
++-----------------------------------+----------------------------------+
+|                                   |                                  |
+| Stack buffer                      | Breakpoints buffer               |
+|                                   |                                  |
++-----------------------------------+----------------------------------+
+@end verbatim
+
+@section Activating Multi-window mode
+
+The variable @code{rdebug-many-windows} controls if multi-window mode
+should be used, it is enabled by default. When starting the byebug
+using the @code{M-x rdebug} mode the command line option @code{--emacs
+3} must be specified (this is also the default).
+
+When attaching to an already running byebug process, you must give the
+byebug command @kbd{set annotate 3}.
+
+@section Window Layouts
+
+When the byebug is started, the original window layout of
+@value{Emacs} is replaced with the window layout of the byebug. You
+can switch back and forth between the original window layout and the
+byebug layout using
+@kbd{M-x rdebug-display-original-window-configuration} and
+@kbd{M-x rdebug-display-byebug-window-configuration}.
+
+If, for some reason, the byebug layout has been garbled you can
+restore it to the original state using @kbd{M-x
+rdebug-restore-byebug-window-layout}.
+
+The byebug provides a number of different window layouts. The easies
+way to try them out is to use the menu @kbd{<menu-bar> <byebug>
+<layout>} and select any in the section starting with @code{Standard}.
+
+
+@section The buffers
+
+All buffers in this section share a set of commands for common byebug
+operations and for switching between buffers. In addition, each buffer
+has got a set of dedicated commands.
+
+All byebug buffers, with the exception of source and the byebug
+shell window, are called @emph{secondary buffers}.
+
+@subsection Keybindings for all Byebug Windows
+
+The byebug provides key-bindings that work in all byebug windows,
+including Ruby source buffers. The key bindings are designed to match
+keys of commonly used byebug environments.
+
+The variable @code{rdebug-populate-common-keys-function} can be assigned
+to a function that should bind the keys use. Three functions are
+provided @code{rdebug-populate-common-keys-standard},
+@code{...-eclipse}, and @code{...-netbeans}.
+
+@multitable @columnfractions 0.4 0.2 0.2 0.2
+@headitem Command               @tab Standard @tab Eclipse @tab Netbeans
+@item Run                       @tab f5       @tab         @tab
+@item Quit                      @tab S-f5     @tab         @tab
+@item Toggle Breakpoint         @tab f9       @tab         @tab
+@item Enable/Disable Breakpoint @tab C-f9     @tab S-C-b   @tab S-f8
+@item Step over                 @tab f10      @tab f6      @tab f8
+@item Step into                 @tab f11      @tab f5      @tab f7
+@item Step out                  @tab S-f11    @tab f7      @tab M-S-f7
+
+@end multitable
+
+
+
+@subsection Keybindings for Secondary Buffers
+
+The following commands are available in all secondary windows.
+
+Capital letters move between secondary buffers as mentioned above (jump
+to if visible or replace a secondary if not).
+
+@table @kbd
+@item SPACE
+step (edebug compatible)
+@item <
+Up in the stack trace
+@item >
+Down in the stack trace
+@item ?
+Help
+@item B
+Display breakpoints buffer
+@item C
+Display command buffer
+@item O
+Display program output
+@item S
+Display source window
+@item T
+Display stack trace buffer
+@item V
+display variables buffer
+@item W
+display watch buffer
+@item b
+Set breakpoint
+@item c
+Continue (i.e. run)
+@item d
+Remove breakpoint
+@item f
+Finish (i.e. step out of the current function)
+@item n
+Next (i.e. step into function)
+@item p
+print
+@item q
+Quit
+@item r
+Restart
+@item s
+Step (i.e. step over function)
+@end table
+
+You can use the same commands in the source buffer if you enable
+@code{rdebug-short-key-mode}. The best way to do this is to add the
+following to your init file:
+
+@smallexample
+  (add-hook 'rdebug-mode-hook 'rdebug-turn-on-short-key-mode)
+@end smallexample
+
+
+
+@subsection The Byebug Shell Buffer
+
+The @emph{byebug shell window} is the main communication channel
+between @value{DBG} and @value{Emacs}. You can use the shell to issue
+byebug commands directly. In addition, any @value{Emacs} byebug
+command you issue will be translated into shell commands, and the output
+will be parsed.
+
+It is the ambition that the @value{Emacs} byebug interface should be
+in a state where the byebug shell window would not need to be visible.
+
+@subsection The Source Buffer
+
+The @emph{source buffers} (or buffers) contains the actual Ruby source
+code that is being debugged. A small arrow in the left fringe displays
+the current line. Active breakpoints are displayed as red dots and
+passive as grey.
+
+@subsection The Output Buffer
+
+The @emph{output buffer} displays any output the debugged program emits.
+
+The option @code{rdebug-use-separate-io-buffer} controls if the output
+buffer should be used, or if the output would go into the byebug shell
+buffer.
+
+@subsection The Variables Buffer
+
+In this buffer, local and object variables are displayed. The values of
+the variables can be edited.
+
+@table @kbd
+@item RET
+Edit the value
+@item e
+Print the value
+@item x
+Pretty-print the value
+@end table
+
+@subsection The Stack Trace Buffer
+
+The @emph{stack trace} buffer displays the function that is currently
+being byebug, the function that called it, etc., all the way up to the
+originally called function.
+
+You can navigate in the stack trace buffer in order to see the source of
+any function in the call chain. The Variables buffer will also be
+updated to reflect the local variables of that function.
+
+@table @kbd
+@item RET
+Select a function to display
+@item <digits>
+Go to a stack frame
+@end table
+
+@subsection The Watch Buffer
+
+The @emph{Watch Buffer} can display arbitrary expressions, including,
+but not limited to, global variables.
+
+@table @kbd
+@item a
+Add a watch expression
+@item C-d, d
+Delete a watch expression
+@item RET, e
+Edit a watch expression
+@item <digits>
+Go to the expression
+@end table
+
+@subsection The Breakpoints Buffer
+
+The @emph{Breakpoints Buffer} displays all breakpoints that currently are
+defined and shows if they are enabled or disabled.
+
+@table @kbd
+@item t
+Toggle a breakpoint between enabled and disabled
+@item i
+Add a breakpoint condition
+@item ret
+Goto a breakpoint
+@item C-d
+Delete a breakpoint
+@item <digits>
+Go to the expression
+@end table
+
+@subsection The Help Buffer
+
+The @emph{Help Buffer} is displayed whenever you press @code{?}. It will
+display a help text on the available byebug commands and commands to
+navigate between the buffers.
+
+
+@c -------------------------------------------------------------------
+
+@node Byebug Buffers, Emacs Byebug Commands, The Multi-window Mode, Top
+@chapter Byebug Buffers
+
+@menu
+* Byebug Command Buffer::     
+* Emacs Source::                Commands from the source script
+@end menu
+
+@node Byebug Command Buffer, Emacs Source, Byebug Buffers, Byebug Buffers
+@section Emacs Byebug Command buffer
+
+Each time @value{DBG} displays a stack frame, Emacs automatically finds the
+source file for that frame and puts an arrow (@samp{=>}) at the
+left margin of the current line.  Emacs uses a separate buffer for
+source display, and splits the screen to show both your @value{DBG} session
+and the source.
+
+Explicit @value{DBG} @code{list} or search commands still produce output as
+usual, but you probably have no reason to use them from GNU Emacs.
+
+@quotation
+@emph{Warning:} If the directory where your script resides is not your
+current directory, it can be easy to confuse Emacs about the location of
+the source files, in which case the auxiliary display buffer does not
+appear to show your source.  @value{DBG} can find programs by searching your
+environment's @code{PATH} variable, so the @value{DBG} input and output
+session proceeds normally; but Emacs does not get enough information
+back from @value{DBG} to locate the source files in this situation.  To
+avoid this problem, either start @value{DBG} mode from the directory where
+your script resides, or specify an absolute file name when prompted for the
+@kbd{M-x gdb} argument.
+
+A similar confusion can result if you use the @value{DBG} @code{file} command to
+switch to debugging a program in some other location, from an existing
+@value{DBG} buffer in Emacs.
+@end quotation
+
+@noindent
+(preceded by @kbd{M-:} or @kbd{ESC :}, or typed in the @code{*scratch*} buffer, or
+in your @file{.emacs} file).
+
+In the @value{DBG} I/O buffer, you can use the Emacs commands listed
+below in addition to the standard Shell mode commands. The I/O buffer
+name name is usually @code{*gud-}@emph{script-name}@code{*}, where
+@emph{script-name} is the name of the script you are debugging.
+
+Many of the commands listed below are also bound to a second key
+sequence which also can be used in the also be used in the source
+script. These are listed in @ref{Emacs Source}.
+
+In secondary buffers many commands are available the corresponding
+final keystroke. For example @code{C-c n} in a secondary buffer is
+@code{n}.
+
+@table @kbd
+@item C-h m
+Describe the features of Emacs' @value{DBG} Mode.
+
+@item C-x C-a C-b (gud-break)
+@pindex C-x C-a C-b (gud-break)
+Set breakpoint at current line.
+
+@item C-x C-a C-d (gud-remove)
+@pindex C-x C-a C-d (gud-remove)
+Remove breakpoint at current line.
+
+@item C-x C-a C-l (gud-refresh)
+@pindex C-x C-a C-d (gud-refresh)
+Fix up a possibly garbled display, and redraw the arrow.
+
+@item C-c RET (comint-copy-old-input)
+@pindex C-c RET (comint-copy-old-input)
+Insert after prompt old input at point as new input to be edited.
+Calls `comint-get-old-input' to get old input.
+
+@item C-c n (gud-next)
+@pindex C-c n (gud-next)
+Step one line, skipping functions. (Step over).
+
+@item C-x C-a C-o (comint-delete-output)
+@pindex C-c n (comint-delete-output)
+Delete all output from interpreter since last input. Does not delete
+the prompt.
+
+@item C-x C-a C-r (gud-cont)
+
+@item C-c SPC (gud-step @var{arg})
+@pindex C-c SPC (gud-step @var{arg})
+@itemx C-x C-a C-s (gud-step @var{arg})
+@pindex C-x C-a C-s (gud-step @var{arg})
+Step one source line. Same as @value{DBG} @code{step} command. The
+@value{Emacs} command name is @code{gud-step} and @code{C-x C-a C-s}
+is an alternate binding which can be used in the source
+script. 
+@c @xref{Step}.
+
+With a numeric argument, run that many times.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs}
+Manual}.
+
+
+@item C-x C-a C-t (gud-tbreak @var{arg})
+Set temporary breakpoint at current line.
+
+@item C-x C-a C-w (backward-kill-word)
+@item C-x C-a C-x (comint-get-next-from-history)
+@item C-x C-a C-z (comint-stop-subjob)
+Stop the current subjob.
+This command also kills the pending input
+between the process mark and point.
+
+WARNING: if there is no current subjob, you can end up suspending
+the top-level process running in the buffer.  If you accidentally do
+this, use M-x comint-continue-subjob to resume the process.  (This
+is not a problem with most shells, since they ignore this signal.)
+
+@item C-x C-a C-\ (comint-quit-subjob)
+Send quit signal to the current subjob.
+This command also kills the pending input
+between the process mark and point.
+
+@item C-c +   (gud-step-plus)
+Run @code{step+}.
+
+@item C-c .   (comint-insert-previous-argument @var{index})
+Insert the @emph{index-th} argument from the previous Comint command-line at point.
+Spaces are added at beginning and/or end of the inserted string if
+necessary to ensure that it's separated from adjacent arguments.
+Interactively, if no prefix argument is given, the last argument is inserted.
+Repeated interactive invocations will cycle through the same argument
+from progressively earlier commands (using the value of index specified
+with the first command).
+
+@item C-c < (gud-up) 
+Go up a stack frame. With a numeric argument, go up that many
+stack frames. Same @value{DBG} @code{up} command.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs}
+Manual}.
+
+@item C-c >	(gud-down)
+Go down a stack frame.  Same as @value{DBG} @code{down}.
+With a numeric argument, go down that many stack frames.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs}
+Manual}.
+
+@item C-c ?	(rdebug-display-secondary-window-help-buffer)
+Display the rdebug help buffer.
+
+@item C-c B	(rdebug-display-breakpoints-buffer)
+Display the rdebug breakpoints buffer.
+
+@item C-x C-a C	(rdebug-display-cmd-buffer)
+Display the rdebug command buffer.
+
+@item C-c O	(rdebug-display-output-buffer)
+Display the rdebug output buffer.
+
+@item C-c R	(gud-run)
+@itemx C-c r	(gud run)
+Restart or run the script. Same as @value{DBG} @code{run} command.
+
+@item C-c S	(gud-source-resync)
+@item C-c T	(rdebug-display-stack-buffer)
+Display the rdebug stack buffer.
+@item C-c V	(rdebug-display-variables-buffer)
+Display the rdebug variables buffer.
+
+@item C-c W	(rdebug-display-watch-buffer)
+Display the rdebug watch buffer.
+
+@item C-c f	(gud-finish @var{arg})
+@pindex C-c f	(gud-finish @var{arg})
+Finish executing current function.
+
+@itemx C-x C-a C-f (gud-finish)
+@pindex C-x C-a C-f (gud-finish)
+Finish executing current function. The same as @value{DBG}
+@code{finish} command. 
+@c @xref{Finish}.
+
+@item C-c n	(gud-next)
+@pindex C-c n	(gud-next)
+Execute to next source line in this function, skipping all function
+calls. Same as @value{DBG} @code{next} command.  
+@c @xref{Next}.
+
+With a numeric argument, run that many times.
+@c @xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs} Manual}.
+
+@item C-c q	(gud-quit)
+
+@item C-x C-a C-l
+Resynchronize the current position with the source window. The
+@value{Emacs} command name is @code{gud-refresh} and @code{C-x C-a
+C-l} is an alternate binding which also can be used in the source script.
+
+@item C-c a
+Shows argument variables (e.g.@: @code{$1}, @code{$2}) of the current
+stack frame. Same as @value{DBG} @code{info args} command. The
+@value{Emacs} command name is @code{gud-args} and @code{C-x C-a a} is
+an alternate binding which also can be used in the source script.
+
+@item C-c T
+Show stack trace. Same as @value{DBG} @code{where} command. The
+@value{Emacs} command name is @code{gud-where} and @code{C-x C-a T} is
+an alternate binding which can be used in the source
+script. 
+@c @xref{Backtrace}.
+
+@end table
+
+In any source file, the Emacs command @kbd{C-x SPC} (@code{gud-break})
+tells @value{DBG} to set a breakpoint on the source line point is on.
+
+If you accidentally delete the source-display buffer, an easy way to get
+it back is to type the command @code{frame} in the @value{DBG} buffer, to
+request a frame display; when you run under Emacs, this recreates
+the source buffer if necessary to show you the context of the current
+frame.
+
+The source files displayed in Emacs are in ordinary Emacs buffers
+which are visiting the source files in the usual way.  You can edit
+the files with these buffers if you wish; but keep in mind that @value{DBG}
+communicates with Emacs in terms of line numbers.  If you add or
+delete lines from the text, the line numbers that @value{DBG} knows cease
+to correspond properly with the code.
+
+@xref{Byebug Operation, , , Emacs, The @value{Emacs}
+Manual}.
+
+@node Emacs Source,  , Byebug Command Buffer, Byebug Buffers
+@section Commands from the source script
+
+@table @kbd
+@item C-x SPC
+
+tells @value{DBG} to set a breakpoint on the source
+line point is on. (@code{gud-break}) 
+
+@item C-x C-a t	
+
+@code{gud-linetrace}
+
+@item C-x C-a C-f
+Restart or run the script. Same as @value{DBG} @code{run} command. The
+@value{Emacs} command name is @code{gud-finish}. In the corresponding
+I/O buffer, @code{C-c R} is an alternate binding.
+
+@item C-x C-a T	
+Show stack trace. Same as @value{DBG} @code{where} command. In the
+corresponding I/O buffer, @code{C-c T} is an alternate
+binding. 
+@c @xref{Backtrace}.
+
+@item C-x C-a <	
+
+Go up a stack frame. With a numeric argument, go up that many
+stack frames. Same @value{DBG} @code{up} command.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs} Manual}.
+
+The @value{Emacs} command name is @code{gud-up}. In the corresponding
+I/O buffer, @code{C-c <} is an alternate binding.
+
+@item C-x C-a >	
+
+Go down a stack frame.  Same as @value{DBG} @code{down}.
+With a numeric argument, go down that many stack frames.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs}
+Manual}.
+
+The @value{Emacs} command name is @code{gud-down}. In the
+corresponding I/O buffer, @code{C-c >} is an alternate binding.
+
+@item C-x C-a C-t
+
+@code{gud-tbreak}
+
+@item C-x C-a C-s
+
+Step one source line. Same as @value{DBG} @code{step}
+command. 
+@c @xref{Step}.
+
+With a numeric argument, run that many times.
+@xref{Arguments, , Numeric Arguments, Emacs, The @value{Emacs}
+Manual}.
+
+The @value{Emacs} command name is @code{gud-step}. In the
+corresponding I/O buffer, @code{C-x C-a C-s} is an alternate binding.
+
+@item C-x C-a C-e
+
+@code{gud-statement}
+
+@item C-x C-a R	
+Restart or run the script. Same as @value{DBG} @code{run} command. The
+@value{Emacs} command name is @code{gud-run}. In the corresponding I/O
+buffer, @code{C-c R} is an alternate binding.
+
+@item C-x C-a C-d
+Delete breakpoint. @code{gud-remove}
+
+@item C-x C-a C-p
+
+@code{gud-print}
+
+@item C-x C-a C-n
+
+Execute to next source line in this function, skipping all function
+calls. Same as @value{DBG} @code{next} command.  With a numeric
+argument, run that many times.  @xref{Arguments, , Numeric Arguments,
+Emacs, The @value{Emacs} Manual}.
+
+The @value{Emacs} command name is @code{gud-next}. In the
+corresponding I/O buffer, @code{C-x C-a C-n} is an alternate binding.
+
+@item C-x C-a f	C-f
+
+@code{gud-finish}
+
+@item C-x C-a C-r
+Continue execution of your script Same as @value{DBG} @code{continue}
+command. The @value{Emacs} command name is @code{gud-cont}. In the
+corresponding I/O buffer, @code{C-x C-a C-r} is an alternate binding. 
+@c See @ref{Continue}.
+
+@item C-x C-a C-b
+
+@code{gud-break}
+
+@item C-x C-a a	
+
+@code{gud-args}
+Shows argument variables (e.g.@: @code{$1}, @code{$2}) of the current
+stack frame. Same as @value{DBG} @code{info args} command.  The
+@value{Emacs} command name is @code{gud-args}. In the corresponding
+I/O buffer, @code{C-c a} is an alternate binding which also can be
+used in the source script.
+
+@item C-x C-a C-l
+Move to current position in this source window. The @value{Emacs}
+command name is @code{gud-refresh}. In the corresponding I/O buffer,
+@code{C-x C-a C-l} is an alternate binding.
+
+@end table
+
+@node Emacs Byebug Commands, Emacs Command Index, Byebug Buffers, Top
+@chapter Emacs Byebug Commands
+
+@menu
+* Emacs Byebug Common Commands::  
+* Emacs Byebug Breakpoint Buffer Commands::  
+* Emacs Byebug Stack Buffer Commands::  
+* Emacs Byebug Variable Buffer Commands::  
+* Emacs Byebug Watch Buffer Commands::  
+* Emacs GUD Commands::          
+@end menu
+
+@node Emacs Byebug Common Commands, Emacs Byebug Breakpoint Buffer Commands, Emacs Byebug Commands, Emacs Byebug Commands
+@section Emacs Byebug Common Commands
+
+The commands in this section are used to make a secondary buffer
+visible. If the buffer doesn't exist, nothing is done.
+The way the buffer is made visible is follows the following
+rules tried in order:
+
+@enumerate
+@item
+If the buffer doesn't exist, do nothing. 
+@item 
+If the buffer is already displayed, switch to it. 
+@item 
+If the current buffer is a
+secondary buffer, bury it replacing with the requested
+buffer. 
+@item 
+If there is secondary buffer visible, that
+is replaced instead.  
+@item 
+Just pick a visible buffer to bury and replace.
+                            @end enumerate
+
+The commands are also have key bindings that end in an uppercase
+letter. This letter is given in parenthesis. When in one of the
+secondary buffers, the uppercase letter is bound to the command as well.
+
+@table @kbd
+
+@item (rdebug-display-breakpoints-buffer) (@kbd{B})
+@findex rdebug-display-breakpoints-buffer (@kbd{B})
+Display the rdebug breakpoints buffer.  Bound to: @kbd{C-x C-a B},
+@kbd{<menu-bar> <byebug> <view> <breakpoints>}. Secondary buffers:
+@kbd{O}.
+
+@item (rdebug-display-cmd-buffer) (@kbd{C})
+@findex rdebug-display-cmd-buffer (@kbd{C})
+Display the byebug command buffer.
+
+Bound to: @kbd{C-x C-a C}, @kbd{<menu-bar> <byebug> <view> <shell>}.
+
+@item (rdebug-display-output-buffer) (@kbd{O})
+@findex rdebug-display-output-buffer (@kbd{?})
+Display the byebug output buffer.
+
+Bound to: @kbd{C-x C-a O}, @kbd{<menu-bar> <byebug> <view>
+<output>}. Secondary buffers: @kbd{O}.
+
+@item (rdebug-display-secondary-window-help-buffer) (@kbd{?})
+@findex rdebug-display-secondary-window-help-buffer (@kbd{?})
+
+@item (rdebug-display-stack-buffer) (@kbd{T})
+@findex rdebug-display-stack-buffer (@kbd{T})
+Display the byebug stack buffer. Bound to: @kbd{C-x C-a T},
+@kbd{<menu-bar> <byebug> <view> <stack>}. Secondary buffers: @kbd{T}.
+
+@item (rdebug-display-variables-buffer) (@kbd{V})
+@findex rdebug-display-variables-buffer (@kbd{V})
+Display the byebug variables buffer. Bound to: @kbd{C-x C-a V},
+@kbd{<menu-bar> <byebug> <view> <variables>}.  Secondary buffers:
+@kbd{V}.
+
+@item (rdebug-display-watch-buffer) (@kbd{W})
+@findex rdebug-display-watch-buffer (@kbd{W})
+Display the byebug variables buffer. Bound to: @kbd{C-x C-a W},
+@kbd{<menu-bar> <byebug> <view> <watch>}. Secondary buffers: @kbd{V}.
+
+@item (rdebug-display-byebug-window-configuration)
+@findex rdebug-display-byebug-window-configuration
+Display the current layout of windows of the rdebug Ruby byebug.
+@item (rdebug-display-original-window-configuration)
+@findex rdebug-display-original-window-configuration
+Display the layout of windows prior to starting the rdebug Ruby
+byebug.  This function is called upon quitting the byebug and
+@var{rdebug-many-windows} is not nil.
+@item (rdebug-goto-entry-n)
+@findex rdebug-goto-entry-n
+Breakpoints, Display expressions and Stack Frames all have
+numbers associated with them which are distinct from line
+numbers. In a secondary buffer, this function is usually bound to
+a numeric key. which will position you at that entry number. To
+go to an entry above 9, just keep entering the number. For
+example, if you press 1 and then 9, you should jump to entry
+1 (if it exists) and then 19 (if that exists). Entering any
+non-digit will start entry number from the beginning again.
+@item (rdebug-quit) - q
+@findex rdebug-quit (q)
+Kill the byebug process associated with the buffer.
+
+When @var{rdebug-many-windows} is active, the original window layout is
+restored.
+@item (rdebug-restore-windows)
+@findex rdebug-restore-windows
+Display the initial ruby byebug window layout.
+
+@end table
+
+
+@node Emacs Byebug Breakpoint Buffer Commands, Emacs Byebug Stack Buffer Commands, Emacs Byebug Common Commands, Emacs Byebug Commands
+@section Emacs Byebug Breakpoint Buffer Commands
+
+@table @kbd
+@item (rdebug-goto-breakpoint)
+@findex rdebug-goto-breakpoint
+@item (rdebug-goto-breakpoint-mouse)
+@findex rdebug-goto-breakpoint-mouse
+@item (rdebug-breakpoints-mode)
+@findex rdebug-breakpoints-mode
+Major mode for displaying breakpoints in a secondary window. Uses
+@var{rdebug-breakpoints-mode-map}.
+@end table
+
+@node Emacs Byebug Stack Buffer Commands, Emacs Byebug Variable Buffer Commands, Emacs Byebug Breakpoint Buffer Commands, Emacs Byebug Commands
+@section Emacs Byebug Stack Buffer Commands
+
+@table @kbd
+@item (rdebug-goto-stack-frame)
+@findex rdebug-goto-stack-frame
+@item (rdebug-frames-mode)
+@findex rdebug-frames-mode
+Major mode for displaying the stack trace. Uses
+@var{rdebug-frames-mode-map}.
+@end table
+
+@node Emacs Byebug Variable Buffer Commands, Emacs Byebug Watch Buffer Commands, Emacs Byebug Stack Buffer Commands, Emacs Byebug Commands
+@section Emacs Byebug Variable Buffer Commands
+
+@table @kbd
+@item (rdebug-variables-edit)
+@findex rdebug-variables-edit
+@end table
+
+@node Emacs Byebug Watch Buffer Commands, Emacs GUD Commands, Emacs Byebug Variable Buffer Commands, Emacs Byebug Commands
+@section Emacs Byebug Watch Buffer Commands
+
+@table @kbd
+@item (rdebug-watch-add)
+@findex rdebug-watch-add
+Add a display expression.
+@item (rdebug-watch-delete)
+@findex rdebug-watch-delete
+Delete a display expression.
+@item (rdebug-watch-edit)
+@findex rdebug-watch-edit
+Edit a display expression.
+@item (rdebug-watch-mode)
+@findex rdebug-watch-mode
+Major mode for displaying the display expressions. Uses
+@var{rdebug-watch-mode-map}.
+@end table
+
+@node Emacs GUD Commands,  , Emacs Byebug Watch Buffer Commands, Emacs Byebug Commands
+@section Emacs Byebug GUD Commands
+
+@table @kbd
+@item (comint-copy-old-input)
+@findex comint-copy-old-input
+Insert after prompt old input at point as new input to be edited.
+Calls `comint-get-old-input' to get old input.
+@item (comint-delete-output)
+@findex comint-delete-output
+Delete all output from interpreter since last input.
+Does not delete the prompt.
+@item (gud-break)
+@findex gud-break
+Set a breakpoint on the source line point is on.
+@item (gud-cont) - c
+@findex gud-cont (c)
+Continue execution. 
+@item (gud-next) - n
+@findex gud-next (n)
+Step one line, skipping functions. (Step over).
+@item (gud-refresh)
+@findex gud-refresh
+Fix up a possibly garbled display, and redraw the arrow.
+@item (gud-remove)
+@findex gud-remove
+Remove breakpoint at current line.
+@item (gud-step) - s
+@findex gud-step (s)
+Step one statement. (Step into)
+@item (gud-step-plus) - + 
+@findex gud-step-plus (+)
+Run @code{step+}---like @code{gud-step} but ensure we go to a new
+line.
+@item (gud-tbreak @var{arg})
+@findex gud-tbreak
+Set temporary breakpoint at current line.
+@end table
+
+@node Emacs Command Index, Emacs Function Index, Emacs Byebug Commands, Top
+@unnumbered Emacs Command Index
+@printindex pg
+
+@node Emacs Function Index, Emacs Key Binding Index, Emacs Command Index, Top
+@unnumbered Emacs Function Index
+@printindex fn
+
+@node Emacs Key Binding Index,  , Emacs Function Index, Top
+@unnumbered Key Binding Index
+@printindex ky
+
+@tex
+% I think something like @colophon should be in texinfo.  In the
+% meantime:
+\long\def\colophon{\hbox to0pt{}\vfill
+\centerline{The body of this manual is set in}
+\centerline{\fontname\tenrm,}
+\centerline{with headings in {\bf\fontname\tenbf}}
+\centerline{and examples in {\tt\fontname\tentt}.}
+\centerline{{\it\fontname\tenit\/},}
+\centerline{{\bf\fontname\tenbf}, and}
+\centerline{{\sl\fontname\tensl\/}}
+\centerline{are used for emphasis.}\vfill}
+\page\colophon
+% Blame: doc@cygnus.com, 1991.
+@end tex
+
+@bye
