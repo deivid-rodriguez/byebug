@@ -4,17 +4,16 @@ describe "Info Command" do
   include TestDsl
   include Columnize
 
-# XXX: How to handle args in the new API?
-#
-# describe "Args info" do
-#   temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 15)
+   describe "Args info" do
+     temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 15)
 
-#   it "must show info about all args" do
-#     enter 'break 3', 'cont', 'info args'
-#     debug_file 'info'
-#     check_output_includes 'a = "aaaaaaa...', 'b = "b"'
-#   end
-# end
+     it "must show info about all args" do
+       skip ("XXX: How to handle args in the new API?")
+       #enter 'break 3', 'cont', 'info args'
+       #debug_file 'info'
+       #check_output_includes 'a = "aaaaaaa...', 'b = "b"'
+     end
+   end
 
   describe "Breakpoints info" do
     it "must show info about all breakpoints" do
@@ -103,7 +102,7 @@ describe "Info Command" do
       columnize(LineCache.trace_line_numbers(file).to_a.sort, Byebug::InfoCommand.settings[:width])
     end
 
-    it "must show basic about the file" do
+    it "must show basic info about the file" do
       enter "info file #{file} basic"
       debug_file 'info'
       check_output_includes filename, lines
