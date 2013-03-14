@@ -29,7 +29,7 @@ print_debug_info(char *event, VALUE path, VALUE lineno, VALUE method_id,
 
   file = strrchr(RSTRING_PTR(path), '/');
   method_name = rb_id2name(SYM2ID(method_id));
-  class_name = rb_class2name(defined_class);
+  class_name = NIL_P(defined_class) ? "undef" : rb_class2name(defined_class);
   fprintf(stderr, "%s: file=%s, line=%d, class=%s, method=%s, stack=%d\n",
            event, ++file, FIX2INT(lineno), class_name, method_name, stack_size);
   return;
