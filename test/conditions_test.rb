@@ -7,34 +7,37 @@ describe "Conditions" do
     before { enter 'break 3' }
 
     describe "successfully" do
-      before { enter ->{"cond #{breakpoint.id} b == 5"}, "cont" }
+      it "must assign the expression to breakpoint" do
+        enter ->{"cond #{breakpoint.id} b == 5"}, "cont"
+        debug_file('conditions') { breakpoint.expr.must_equal "b == 5" }
+      end
+
       it "must stop at the breakpoint if condition is true" do
+        enter ->{"cond #{breakpoint.id} b == 5"}, "cont"
         debug_file('conditions') { state.line.must_equal 3 }
       end
 
-      it "must assign that expression to breakpoint" do
-        debug_file('conditions') { breakpoint.expr.must_equal "b == 5" }
+      it "must work with full command name too" do
+        enter ->{"condition #{breakpoint.id} b == 5"}, "cont"
+        debug_file('conditions') { state.line.must_equal 3 }
       end
     end
 
-    it "must not stop at the breakpoint if condition is false" do
-      enter "break 4", ->{"cond #{breakpoint.id} b == 3"}, "cont"
-      debug_file('conditions') { state.line.must_equal 4 }
-    end
+    describe "unsucessfully" do
+      before { enter "break 4" }
 
-    it "must ignore the condition if its syntax is incorrect" do
-      enter "break 3", ->{"cond #{breakpoint.id} b =="}, "break 4", "cont"
-      debug_file('conditions') { state.line.must_equal 4 }
-    end
-
-    it "must assign the expression to the breakpoint anyway, even if its syntax is incorrect" do
-      enter "break 3", ->{"cond #{breakpoint.id} b =="}, "break 4", "cont"
-      debug_file('conditions') { breakpoint.expr.must_equal "b ==" }
-    end
-
-    it "must work with full command name too" do
-      enter ->{"condition #{breakpoint.id} b == 5"}, "cont"
-      debug_file('conditions') { state.line.must_equal 3 }
+      it "must not stop at the breakpoint if condition is false" do
+        enter ->{"cond #{breakpoint.id} b == 3"}, "cont"
+        debug_file('conditions') { state.line.must_equal 4 }
+      end
+      it "must assign the expression to breakpoint in spite of incorrect syntax" do
+        enter ->{"cond #{breakpoint.id} b =="}, "cont"
+        debug_file('conditions') { breakpoint.expr.must_equal "b ==" }
+      end
+      it "must ignore the condition if when incorrect syntax" do
+        enter ->{"cond #{breakpoint.id} b =="},  "cont"
+        debug_file('conditions') { state.line.must_equal 4 }
+      end
     end
   end
 
