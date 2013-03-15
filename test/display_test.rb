@@ -4,13 +4,13 @@ describe "Display Command" do
   include TestDsl
 
   it "must show expressions" do
-    enter 'display d + 1', 'break 3', 'cont'
+    enter 'break 3', 'cont', 'display d + 1'
     debug_file('display')
     check_output_includes "1: ", "d + 1 = 5"
   end
 
   it "must work with shortcut" do
-    enter 'disp d + 1', 'break 3', 'cont'
+    enter 'break 3', 'cont', 'disp d + 1'
     debug_file('display')
     check_output_includes "1: ", "d + 1 = 5"
   end
