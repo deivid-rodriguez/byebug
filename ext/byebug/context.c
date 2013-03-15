@@ -273,6 +273,29 @@ Context_frame_args(int argc, VALUE *argv, VALUE self)
 */
 
 static VALUE
+Context_tracing(VALUE self)
+{
+    debug_context_t *context;
+
+    Data_Get_Struct(self, debug_context_t, context);
+    return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
+}
+
+static VALUE
+Context_set_tracing(VALUE self, VALUE value)
+{
+    debug_context_t *context;
+
+    Data_Get_Struct(self, debug_context_t, context);
+
+    if (RTEST(value))
+        CTX_FL_SET(context, CTX_FL_TRACING);
+    else
+        CTX_FL_UNSET(context, CTX_FL_TRACING);
+    return value;
+}
+
+static VALUE
 Context_stop_reason(VALUE self)
 {
     debug_context_t *context;
@@ -382,6 +405,8 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "ignored?", Context_ignored, 0);
   rb_define_method(cContext, "thnum", Context_thnum, 0);
   rb_define_method(cContext, "stop_reason", Context_stop_reason, 0);
+  rb_define_method(cContext, "tracing", Context_tracing, 0);
+  rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
   rb_define_method(cContext, "frame_file", Context_frame_file, -1);
   rb_define_method(cContext, "frame_line", Context_frame_line, -1);
   rb_define_method(cContext, "frame_method", Context_frame_method, -1);

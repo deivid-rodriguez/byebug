@@ -152,7 +152,7 @@ set history size -- Set the size of the command history"],
               when /^linetrace\+$/
                 self.class.settings[:tracing_plus] = set_on
               when /^linetrace$/
-                Byebug.tracing = set_on
+                Command.settings[:tracing] = set_on
               when /^listsize$/
                 listsize = get_int(args[0], "Set listsize", 1, nil, 10)
                 if listsize

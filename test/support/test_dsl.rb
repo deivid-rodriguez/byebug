@@ -62,8 +62,9 @@ module TestDsl
     if block
       interface.test_block= lambda do
         is_test_block_called = true
-        # We need to store exception and reraise it after completing debugging, because
-        # Byebug will swallow any exceptions, so e.g. our failed assertions will be ignored
+        # We need to store exception and reraise it after completing debugging,
+        # because Byebug will swallow any exceptions, so e.g. our failed
+        # assertions will be ignored
         begin
           block.call
         rescue Exception => e
@@ -81,11 +82,12 @@ module TestDsl
     raise exception if exception
   end
 
-  # Checks the output of the byebug. By default it checks output queue of the current interface,
-  # but you can check again any queue by providing it as a second argument.
+  #
+  # Checks the output of byebug. By default it checks output queue of the current
+  # interface, but you can check again any queue by providing it as a second
+  # argument.
   #
   # Usage:
-  #
   #   enter 'break 4', 'cont'
   #   debug("ex1")
   #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
@@ -141,13 +143,11 @@ module TestDsl
   end
 
   def temporary_change_hash_value(item, key, value)
-    old_value = item[key]
-    begin
-      item[key] = value
-      yield
-    ensure
-      item[key] = old_value
-    end
+  old_value = item[key]
+    item[key] = value
+    yield
+  ensure
+    item[key] = old_value
   end
 
   def temporary_set_const(klass, const, value)

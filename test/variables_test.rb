@@ -1,8 +1,12 @@
 require_relative 'test_helper'
 
 describe "Variables Command" do
-  include TestDsl
+
+  extend TestDsl::ClassMethods
+
   temporary_change_hash_value(Byebug::Command.settings, :width, 40)
+
+  include TestDsl
 
   describe "class variables" do
     it "must show variables" do
