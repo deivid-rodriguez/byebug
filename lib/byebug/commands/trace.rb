@@ -3,13 +3,13 @@ module Byebug
     def regexp
       /^\s* tr(?:ace)? (?: \s+ (\S+))         # on |off | var(iable)
                        (?: \s+ (\S+))?        # (all | variable-name)?
-                       (?: \s+ (\S+))? \s*    # (stop | nostop)? 
+                       (?: \s+ (\S+))? \s*    # (stop | nostop)?
        $/ix
     end
 
     def execute
       if @match[1] =~ /on|off/
-        onoff = 'on' == @match[1] 
+        onoff = 'on' == @match[1]
         if @match[2]
           Byebug.tracing = onoff
           print "Tracing %s all threads.\n" % (onoff ? 'on' : 'off')
@@ -23,8 +23,7 @@ module Byebug
           if @match[3] && @match[3] !~ /(:?no)?stop/
             errmsg("expecting 'stop' or 'nostop'; got %s\n" % @match[3])
           else
-            dbg_cmd = if @match[3] && (@match[3] !~ /nostop/) 
-                        'byebug' else '' end
+            dbg_cmd = (@match[3] && (@match[3] !~ /nostop/)) ? 'byebug' : ''
           end
           eval("
            trace_var(:#{varname}) do |val|
@@ -34,7 +33,7 @@ module Byebug
         else
           errmsg "#{varname} is not a global variable.\n"
         end
-      else 
+      else
         errmsg("expecting 'on', 'off', 'var' or 'variable'; got: %s\n" %
                @match[1])
       end

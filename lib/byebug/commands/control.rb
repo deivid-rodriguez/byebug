@@ -1,4 +1,5 @@
 module Byebug
+
   class RestartCommand < Command # :nodoc:
     self.allow_in_control = true
 
@@ -15,33 +16,34 @@ module Byebug
         errmsg "Don't know name of debugged program\n"
         return
       end
-      prog_script = Byebug::PROG_SCRIPT
+
+      if not File.exist?(File.expand_path(Byebug::PROG_SCRIPT))
+        errmsg "Ruby program #{Byebug::PROG_SCRIPT} doesn't exist\n"
+        return
+      end
+
       if not defined? Byebug::RDEBUG_SCRIPT
-        # FIXME? Should ask for confirmation?
         print "Byebug was not called from the outset...\n"
-        rdebug_script = prog_script
+        if not File.executable?(Byebug::PROG_SCRIPT)
+          print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
+                "We'll add a call to Ruby.\n"
+          ruby = begin defined?(Gem) ? Gem.ruby : "ruby" rescue "ruby" end
+          rdebug_script = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
+        else
+          rdebug_script = Byebug::PROG_SCRIPT
+        end
       else
         rdebug_script = Byebug::RDEBUG_SCRIPT
       end
+
       begin
         Dir.chdir(Byebug::INITIAL_DIR)
       rescue
         print "Failed to change initial directory #{Byebug::INITIAL_DIR}"
       end
-      if not File.exist?(File.expand_path(prog_script))
-        errmsg "Ruby program #{prog_script} doesn't exist\n"
-        return
-      end
-      if not File.executable?(prog_script) and rdebug_script == prog_script
-        print "Ruby program #{prog_script} doesn't seem to be executable...\n"
-        print "We'll add a call to Ruby.\n"
-        ruby = begin defined?(Gem) ? Gem.ruby : "ruby" rescue "ruby" end
-        rdebug_script = "#{ruby} -I#{$:.join(' -I')} #{prog_script}"
-      else
-        rdebug_script += ' '
-      end
+
       if @match[1]
-        argv = [prog_script] + @match[1].split(/[ \t]+/)
+        argv = [Byebug::PROG_SCRIPT] + @match[1].split(/[ \t]+/)
       else
         if not defined? Command.settings[:argv]
           errmsg "Arguments have not been set. Use 'set args' to set them.\n"
@@ -50,10 +52,9 @@ module Byebug
           argv = Command.settings[:argv]
         end
       end
-      args = argv.join(' ')
+      cmd = "#{rdebug_script} #{argv.compact.join(' ')}"
 
       # An execv would be preferable to the "exec" below.
-      cmd = rdebug_script + args
       print "Re exec'ing:\n\t#{cmd}\n"
       exec cmd
     rescue Errno::EOPNOTSUPP

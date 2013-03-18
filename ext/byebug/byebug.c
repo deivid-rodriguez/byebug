@@ -16,9 +16,10 @@ static VALUE tpReturn;
 static VALUE tpRaise;
 
 static VALUE idAlive;
-static VALUE idAtLine;
 static VALUE idAtBreakpoint;
 static VALUE idAtCatchpoint;
+static VALUE idAtLine;
+static VALUE idAtTracing;
 
 static void
 print_debug_info(char *event, VALUE path, VALUE lineno, VALUE method_id,
@@ -70,7 +71,7 @@ cleanup(debug_context_t *context)
   /* release a lock */
   locker = Qnil;
 
-  /* let the next thread to run */
+  /* let the next thread run */
   thread = remove_from_locked();
   if(thread != Qnil)
     rb_thread_run(thread);
@@ -171,7 +172,10 @@ process_line_event(VALUE trace_point, void *data)
   moved = context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
           strcmp(context->last_file, RSTRING_PTR(path)) != 0;
 
-  if(context->dest_frame == -1 || context->stack_size == context->dest_frame)
+  if (CTX_FL_TEST(context, CTX_FL_TRACING))
+    rb_funcall(context_object, idAtTracing, 2, path, lineno);
+
+  if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
       if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
           context->stop_next--;
@@ -302,6 +306,7 @@ process_raise_event(VALUE trace_point, void *data)
   cleanup(context);
 }
 
+
 static VALUE
 Byebug_setup_tracepoints(VALUE self)
 {
@@ -358,11 +363,88 @@ values_i(VALUE key, VALUE value, VALUE ary)
 }
 
 static VALUE
+Byebug_started(VALUE self)
+{
+  return catchpoints != Qnil ? Qtrue : Qfalse;
+}
+
+static VALUE
+Byebug_stop(VALUE self)
+{
+    if (Byebug_started(self))
+    {
+        Byebug_remove_tracepoints(self);
+        return Qfalse;
+    }
+    return Qtrue;
+}
+
+static VALUE
+Byebug_start(VALUE self)
+{
+    VALUE result;
+
+    if (Byebug_started(self))
+        result = Qfalse;
+    else
+    {
+        Byebug_setup_tracepoints(self);
+        result = Qtrue;
+    }
+
+    if (rb_block_given_p())
+      rb_ensure(rb_yield, self, Byebug_stop, self);
+
+    return result;
+}
+
+static VALUE
+Byebug_load(int argc, VALUE *argv, VALUE self)
+{
+    VALUE file, stop, context_object;
+    debug_context_t *context;
+    int state = 0;
+
+    if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
+    {
+        stop = Qfalse;
+    }
+
+    Byebug_start(self);
+
+    context_object = Byebug_current_context(self);
+    Data_Get_Struct(context_object, debug_context_t, context);
+    context->stack_size = 0;
+    if (RTEST(stop)) context->stop_next = 1;
+
+    /* Initializing $0 to the script's path */
+    ruby_script(RSTRING_PTR(file));
+    rb_load_protect(file, 0, &state);
+    if (0 != state)
+    {
+        VALUE errinfo = rb_errinfo();
+        //debug_suspend(self);
+        reset_stepping_stop_points(context);
+        rb_set_errinfo(Qnil);
+        return errinfo;
+    }
+
+    /* We should run all at_exit handler's in order to provide, 
+     * for instance, a chance to run all defined test cases */
+    rb_exec_end_proc();
+
+    return Qnil;
+}
+
+
+
+static VALUE
 Byebug_contexts(VALUE self)
 {
   VALUE ary;
 
   ary = rb_ary_new();
+
   /* check that all contexts point to alive threads */
   rb_hash_foreach(contexts, remove_dead_threads, 0);
 
@@ -385,80 +467,13 @@ Byebug_catchpoints(VALUE self)
   return catchpoints;
 }
 
-static VALUE
-Byebug_started(VALUE self)
-{
-  return catchpoints != Qnil ? Qtrue : Qfalse;
-}
-
-/*
- *   call-seq:
- *      Byebug.stop -> bool
- *
- *   This method disables the byebug. It returns +true+ if the byebug is
- *   disabled, otherwise it returns +false+.
- */
-static VALUE
-Byebug_stop(VALUE self)
-{
-    if (Byebug_started(self))
-    {
-        Byebug_remove_tracepoints(self);
-        return Qfalse;
-    }
-    return Qtrue;
-}
-
-/*
- *   call-seq:
- *      Byebug.start_ -> bool
- *      Byebug.start_ { ... } -> bool
- *
- *   This method is internal and activates the byebug. Use Byebug.start (from
- *   <tt>lib/byebug.rb</tt>) instead.
- *
- *   The return value is the value of !Byebug.started? <i>before</i> issuing the +start+;
- *   That is, +true+ is returned, unless byebug was previously started.
- *
- *   If a block is given, it starts byebug and yields to block. When the block is finished
- *   executing it stops the byebug with Byebug.stop method. Inside the block you will
- *   probably want to have a call to Byebug.byebug. For example:
- *
- *     Byebug.start{byebug; foo}  # Stop inside of foo
- *
- *   Also, byebug only allows one invocation of byebug at a time; nested Byebug.start's
- *   have no effect and you can't use this inside the byebug itself.
- *
- *   <i>Note that if you want to completely remove the byebug hook, you must call
- *   Byebug.stop as many times as you called Byebug.start method.</i>
- */
-static VALUE
-Byebug_start(VALUE self)
-{
-    VALUE result;
-
-    if (Byebug_started(self))
-        result = Qfalse;
-    else
-    {
-        Byebug_setup_tracepoints(self);
-        result = Qtrue;
-    }
-
-    if (rb_block_given_p())
-      rb_ensure(rb_yield, self, Byebug_stop, self);
-
-    return result;
-}
-
-
 /*
  *   Document-class: Byebug
  *
  *   == Summary
  *
- *   This is a singleton class allows controlling the byebug. Use it to start/stop byebug,
- *   set/remove breakpoints, etc.
+ *   This is a singleton class allows controlling the byebug. Use it to start/stop
+ *   byebug, set/remove breakpoints, etc.
  */
 void
 Init_byebug()
@@ -473,11 +488,13 @@ Init_byebug()
   rb_define_module_function(mByebug, "_start", Byebug_start, 0);
   rb_define_module_function(mByebug, "stop", Byebug_stop, 0);
   rb_define_module_function(mByebug, "started?", Byebug_started, 0);
+  rb_define_module_function(mByebug, "debug_load", Byebug_load, -1);
 
   idAlive = rb_intern("alive?");
-  idAtLine = rb_intern("at_line");
   idAtBreakpoint = rb_intern("at_breakpoint");
   idAtCatchpoint = rb_intern("at_catchpoint");
+  idAtTracing    = rb_intern("at_tracing");
+  idAtLine       = rb_intern("at_line");
 
   cContext = Init_context(mByebug);
 
