@@ -2,14 +2,13 @@
 
 #=== Summary
 #
-#A command-line front-end to the Ruby byebug, <tt>byebug</tt>, the
-#Fast Ruby Byebug.
+#A command-line front-end to <tt>byebug</tt>
 #
 #Command invocation:
 #
-#   rdebug [options] [--] [script-options] ruby-script-to-debug
-#   rdebug [options] [script-options] [--client]
-#   rdebug [--version | --help]
+#   byebug [options] [--] [script-options] ruby-script-to-debug
+#   byebug [options] [script-options] [--client]
+#   byebug [--version | --help]
 #
 #=== Options
 #
@@ -104,7 +103,7 @@
 
 require 'optparse'
 require 'ostruct'
-require 'byebug'
+require File.dirname(__FILE__) + "/../lib/byebug"
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
@@ -119,7 +118,7 @@ def debug_program(options)
   # Record where we are we can know if the call stack has been truncated or not.
   Byebug.start_sentinal=caller(0)[1]
 
-  bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop, false)
+  bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
   if bt
     print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{bt}\n"
@@ -367,7 +366,7 @@ else
     end
 
     options.stop = false if options.tracing
-    Byebug.tracing = options.tracing
+    Byebug.current_context.tracing = options.tracing
 
     if !options.quit
       if Byebug.started?

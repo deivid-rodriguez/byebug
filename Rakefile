@@ -7,7 +7,7 @@ Rake::ExtensionTask.new('byebug')
 
 SO_NAME = "byebug.so"
 
-desc "Run new MiniTest tests."
+desc "Run MiniTest suite"
 task :test do
   Rake::TestTask.new(:test) do |t|
     t.test_files = FileList["test/*_test.rb"]
