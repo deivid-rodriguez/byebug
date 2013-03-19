@@ -162,22 +162,17 @@ context_create(VALUE thread, VALUE cDebugThread) {
   return Data_Wrap_Struct(cContext, Context_mark, Context_free, context);
 }
 
-static inline void
-check_frame_number_valid(debug_context_t *context, int frame_no)
-{
-  if (frame_no < 0 || frame_no >= context->stack_size) {
-    rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)",
-        frame_no, context->stack_size);
-  }
-}
-
 static debug_frame_t*
 get_frame_no(debug_context_t *context, int frame_n)
 {
   debug_frame_t *frame;
   int i;
 
-  check_frame_number_valid(context, frame_n);
+  if (frame_n < 0 || frame_n >= context->stack_size) {
+    rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)",
+        frame_n, context->stack_size);
+  }
+
   frame = context->stack;
   for (i = 0; i < frame_n; i++) {
     frame = frame->prev;
@@ -255,22 +250,28 @@ Context_frame_self(int argc, VALUE *argv, VALUE self)
   return frame->self;
 }
 
-/*
+static VALUE
+Context_frame_locals(int argc, VALUE *argv, VALUE self)
+{
+  VALUE binding = Context_frame_binding(argc, argv, self);
+  const char src[] =
+              "local_variables.inject({}){|h, v| h[v] = eval(\"#{v}\"); h}";
+  return NIL_P(binding) ?
+         rb_hash_new() :
+         rb_funcall(binding, rb_intern("eval"), 1, rb_str_new2(src));
+}
+
 static VALUE
 Context_frame_args(int argc, VALUE *argv, VALUE self)
 {
-    debug_context_t *context;
-    debug_frame_t *frame;
-    VALUE frame_no;
-    int frame_n;
-
-    Data_Get_Struct(self, debug_context_t, context);
-    frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-    frame = get_frame_no(context, frame_n);
-
-    return frame->arg_ary;
+  VALUE binding = Context_frame_binding(argc, argv, self);
+  const char src[] =
+      "__method__ ? " \
+      "self.method(__method__).parameters.map{|(attr, mid)| mid} : []";
+  return NIL_P(binding) ?
+         rb_ary_new() :
+         rb_funcall(binding, rb_intern("eval"), 1, rb_str_new2(src));
 }
-*/
 
 static VALUE
 Context_tracing(VALUE self)
@@ -323,6 +324,24 @@ Context_stop_reason(VALUE self)
 
     return ID2SYM(rb_intern(symbol));
 }
+
+//static VALUE
+//Context_jump(VALUE self, VALUE line, VALUE file)
+//{
+//  debug_context_t *context;
+//  debug_frame_t *frame;
+//  int i;
+//
+//  Data_Get_Struct(self, debug_context_t, context);
+//
+//  frame = context->stack;
+//  for (i = 0; i < context->stack_size; i++) {
+//    if (strcmp(frame->file, RSTRING_PTR(file))) {
+//      /* And now? */
+//    }
+//    frame = frame->prev;
+//  }
+//}
 
 static VALUE
 Context_stop_next(int argc, VALUE *argv, VALUE self)
@@ -378,12 +397,12 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_stop_frame(VALUE self, VALUE frame)
 {
-  debug_context_t *debug_context;
+  debug_context_t *context;
 
-  Data_Get_Struct(self, debug_context_t, debug_context);
-  if(FIX2INT(frame) < 0 && FIX2INT(frame) >= debug_context->stack_size)
+  Data_Get_Struct(self, debug_context_t, context);
+  if(FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
-  debug_context->stop_frame = debug_context->stack_size - FIX2INT(frame);
+  context->stop_frame = context->stack_size - FIX2INT(frame);
 
   return frame;
 }
@@ -412,7 +431,8 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_method", Context_frame_method, -1);
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
-//rb_define_method(cContext, "frame_args", Context_frame_args, -1);
+  rb_define_method(cContext, "frame_args", Context_frame_args, -1);
+  rb_define_method(cContext, "frame_locals", Context_frame_locals, -1);
   rb_define_method(cContext, "stop_next=", Context_stop_next, -1);
   rb_define_method(cContext, "step", Context_stop_next, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);

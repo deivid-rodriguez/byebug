@@ -33,7 +33,6 @@ module Byebug
       print_frame(@state.frame_pos, true)
     end
 
-    # XXX: Implement args and locals for this to be used...
     def get_frame_call(prefix, pos, context)
       id = context.frame_method(pos)
       klass = context.frame_class(pos)
@@ -93,16 +92,16 @@ module Byebug
       end
 
       frame_num = "#%d " % pos
-      #call_str = get_frame_call(frame_num, pos, context)
+      call_str = get_frame_call(frame_num, pos, context)
       file_line = "at line %s:%d\n" % [CommandProcessor.canonic_file(file), line]
       print frame_num
-      #unless call_str.empty?
-      #  print call_str
-      #  print ' '
-      #  if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
-      #    print "\n       "
-      #  end
-      #end
+      unless call_str.empty?
+        print call_str
+        print ' '
+        if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
+          print "\n       "
+        end
+      end
       print file_line
       if ENV['EMACS'] && adjust
         fmt = (Byebug.annotate.to_i > 1 ?
@@ -262,15 +261,15 @@ The position of the current frame is marked with -->.  }
         pos = get_int(@match[1], "Frame")
         return unless pos
       end
-      if @match[2]
-        context = parse_thread_num('frame', @match[2])
-        unless context
-          errmsg "Thread #{@match[2]} doesn't exist.\n"
-          return
-        end
-      else
+      #if @match[2]
+      #  context = parse_thread_num('frame', @match[2])
+      #  unless context
+      #    errmsg "Thread #{@match[2]} doesn't exist.\n"
+      #    return
+      #  end
+      #else
         context = @state.context
-      end
+      #end
       adjust_frame(pos, true, context)
     end
 

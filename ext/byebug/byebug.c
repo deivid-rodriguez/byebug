@@ -472,7 +472,7 @@ Byebug_catchpoints(VALUE self)
  *
  *   == Summary
  *
- *   This is a singleton class allows controlling the byebug. Use it to start/stop
+ *   This is a singleton class allows controlling byebug. Use it to start/stop
  *   byebug, set/remove breakpoints, etc.
  */
 void
