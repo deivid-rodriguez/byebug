@@ -1,12 +1,13 @@
 require 'columnize'
-require 'byebug/helper'
+require_relative 'helper'
 
 module Byebug
-  RUBY_DEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
-    defined?(RUBY_DEBUG_DIR)
+
+  BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
+    defined?(BYEBUG_DIR)
 
   class Command # :nodoc:
-    SubcmdStruct=Struct.new(:name, :min, :short_help, :long_help) unless
+    SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
       defined?(SubcmdStruct)
 
     include Columnize
@@ -46,7 +47,7 @@ module Byebug
       end
 
       def load_commands
-        Dir[File.join(Byebug.const_get(:RUBY_DEBUG_DIR), 'commands', '*')].each do |file|
+        Dir[File.join(Byebug.const_get(:BYEBUG_DIR), 'commands', '*')].each do |file|
           require file if file =~ /\.rb$/
         end
         Byebug.constants.grep(/Functions$/).map { |name| Byebug.const_get(name) }.each do |mod|
@@ -207,18 +208,23 @@ module Byebug
 
   Command.load_commands
 
-  # Returns setting object.
+  #
+  # Returns ths settings object.
   # Use Byebug.settings[] and Byebug.settings[]= methods to query and set
   # byebug settings. These settings are available:
   #
-  # - :autolist - automatically calls 'list' command on breakpoint
-  # - :autoeval - evaluates input in the current binding if it's not recognized as a byebug command
-  # - :autoirb - automatically calls 'irb' command on breakpoint
-  # - :stack_trace_on_error - shows full stack trace if eval command results with an exception
-  # - :frame_full_path - displays full paths when showing frame stack
-  # - :frame_class_names - displays method's class name when showing frame stack
-  # - :reload_source_on_change - makes 'list' command to always display up-to-date source code
-  # - :force_stepping - stepping command always move to the new line
+  # :autolist                - automatically calls 'list' command on breakpoint
+  # :autoeval                - evaluates input in the current binding if it's
+  #                            not recognized as a byebug command
+  # :autoirb                 - automatically calls 'irb' command on breakpoint
+  # :stack_trace_on_error    - shows full stack trace if eval command results in
+  #                            an exception
+  # :frame_full_path         - displays full paths when showing frame stack
+  # :frame_class_names       - displays method's class name when showing frame
+  #                            stack
+  # :reload_source_on_change - makes 'list' command always display up-to-date
+  #                            source code
+  # :force_stepping          - stepping command always move to the new line
   #
   def self.settings
     Command.settings

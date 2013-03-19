@@ -1,5 +1,5 @@
-require 'byebug/interface'
-require 'byebug/command'
+require_relative 'interface'
+require_relative 'command'
 
 module Byebug
 

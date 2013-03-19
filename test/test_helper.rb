@@ -1,7 +1,8 @@
+require 'rubygems'
 require 'pathname'
 require 'minitest/autorun'
+require 'minitest/spec'
 require 'mocha/setup'
-
 require 'byebug'
 
 Dir.glob(File.expand_path("../support/*.rb", __FILE__)).each { |f| require f }

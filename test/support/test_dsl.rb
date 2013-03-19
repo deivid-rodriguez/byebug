@@ -51,7 +51,6 @@ module TestDsl
   #   debug "ex1" # ex1 should be placed in test/examples/ex1.rb
   #
   #   enter 'b 4', 'cont'
-  #   # Next line will be executed after running 'cont' and stop at breakpoint
   #   debug("ex1") { state.line.must_equal 4 }
   #
   def debug_file(filename, &block)
@@ -143,7 +142,7 @@ module TestDsl
   end
 
   def temporary_change_hash_value(item, key, value)
-  old_value = item[key]
+    old_value = item[key]
     item[key] = value
     yield
   ensure
@@ -152,17 +151,43 @@ module TestDsl
 
   def temporary_set_const(klass, const, value)
     old_value = klass.const_defined?(const) ? klass.const_get(const) : :__undefined__
-    begin
-      force_set_const(klass, const, value)
-      yield
-    ensure
-      if old_value == :__undefined__
-        klass.send(:remove_const, const)
-      else
-        force_set_const(klass, const, old_value)
-      end
+    force_set_const(klass, const, value)
+    yield
+  ensure
+    if old_value == :__undefined__
+      klass.send(:remove_const, const)
+    else
+     force_set_const(klass, const, old_value)
     end
   end
+
+  def set_tmp_hash(hash, key, value)
+    @old_hashes.merge!({ hash => { key => hash[key] } }) do |k, v1, v2|
+      v1.merge(v2)
+    end
+    hash[key] = value
+  end
+
+  def restore_tmp_hash(hash, key)
+    hash[key] = @old_hashes[hash][key]
+  end
+
+  def set_tmp_const(klass, const, value)
+    @old_consts.merge!({ klass =>
+      { const => klass.const_defined?(const) ?
+                 klass.const_get(const) : :__undefined__ } }) do |k, v1, v2|
+      v1.merge(v2)
+    end
+    value == :__undefined__ ? klass.send(:remove_const, const) :
+                              force_set_const(klass, const, value)
+  end
+
+  def restore_tmp_const(klass, const)
+    @old_consts[klass][const] == :__undefined ?
+                    klass.send(:remove_const, const) :
+                    force_set_const(klass, const, @old_consts[klass][const])
+  end
+
 
   module ClassMethods
 

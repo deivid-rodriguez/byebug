@@ -1,7 +1,7 @@
-require 'byebug.so'
-require 'byebug/version'
-require 'byebug/context'
-require 'byebug/processor'
+require_relative 'byebug.so'
+require_relative 'byebug/version'
+require_relative 'byebug/context'
+require_relative 'byebug/processor'
 require 'pp'
 require 'stringio'
 require 'socket'
@@ -103,6 +103,7 @@ module Byebug
       handler.interface = value
     end
 
+    #
     # Byebug.start(options) -> bool
     # Byebug.start(options) { ... } -> obj
     #

@@ -151,7 +151,6 @@ module Byebug
       return nil
     end
 
-
   end
 
   # Implements byebug "where" or "backtrace" command.

@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 10.0.3'
   s.add_development_dependency 'rake-compiler', '~> 0.8.3'
   s.add_development_dependency 'mocha', '~> 0.13.3'
+  s.add_development_dependency 'minitest', '~> 4.7.0'
   s.license = "BSD"
 end

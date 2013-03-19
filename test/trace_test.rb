@@ -14,15 +14,13 @@ describe "Trace Command" do
 
     describe "enabling" do
       it "must trace execution by setting trace to on" do
-        temporary_set_const(Byebug, "PROG_SCRIPT", fullpath('trace')) do
-          enter 'trace on'
-          debug_file('trace')
-          check_output_includes(
-            "Tracing:#{fullpath('trace')}:4 @break1 = false",
-            "Tracing:#{fullpath('trace')}:5 @break2 = false"
-          )
-          check_output_doesnt_include /Tracing:#{fullpath('trace')}:8 until @break1/
-        end
+        enter 'trace on'
+        debug_file('trace')
+        check_output_includes(
+          "Tracing:#{fullpath('trace')}:4 @break1 = false",
+          "Tracing:#{fullpath('trace')}:5 @break2 = false"
+        )
+        check_output_doesnt_include /Tracing:#{fullpath('trace')}:8 until @break1/
       end
 
       it "must show a message it is on" do
@@ -150,9 +148,9 @@ describe "Trace Command" do
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', 'trace on'
-      #debug_file 'post_mortem'
-      #check_output_includes "Tracing on on current thread."
+      enter 'cont', 'trace on'
+      debug_file 'post_mortem'
+      check_output_includes "Tracing on on current thread."
     end
   end
 

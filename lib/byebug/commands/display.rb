@@ -1,9 +1,11 @@
 module Byebug
+
   module DisplayFunctions # :nodoc:
+
     def display_expression(exp)
       print "%s = %s\n", exp, debug_silent_eval(exp).to_s
     end
-    
+
     def active_display_expressions?
       @state.display.select{|d| d[0]}.size > 0
     end
@@ -46,15 +48,15 @@ module Byebug
   end
 
   class DisplayCommand < Command # :nodoc:
-    def self.always_run 
+    def self.always_run
       Byebug.annotate = 0 unless Byebug.annotate
-      if Byebug.annotate > 1 
+      if Byebug.annotate > 1
         0
       else
         2
       end
     end
-    
+
     def regexp
       /^\s*disp(?:lay)?$/
     end

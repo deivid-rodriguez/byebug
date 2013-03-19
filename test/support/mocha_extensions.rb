@@ -1,4 +1,5 @@
 module Mocha
+
   class Expectation
 
     # Allows to specify a block to execute when expectation will be matched.
