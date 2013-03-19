@@ -3,6 +3,7 @@ require_relative 'helper'
 
 module Byebug
 
+  # This is the root dir for the byebug lib
   BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
     defined?(BYEBUG_DIR)
 
@@ -197,9 +198,9 @@ module Byebug
         @state.context.frame_binding(@state.frame_pos)
       end
 
-      def line_at(file, line)
-        Byebug.line_at(file, line)
-      end
+      #def line_at(file, line)
+      #  Byebug.line_at(file, line)
+      #end
 
       def get_context(thnum)
         Byebug.contexts.find{|c| c.thnum == thnum}
@@ -208,7 +209,7 @@ module Byebug
 
   Command.load_commands
 
-  #
+  ##
   # Returns ths settings object.
   # Use Byebug.settings[] and Byebug.settings[]= methods to query and set
   # byebug settings. These settings are available:

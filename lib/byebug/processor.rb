@@ -80,9 +80,9 @@ module Byebug
     require 'pathname'  # For cleanpath
 
     # Regularize file name.
-    # This is also used as a common funnel place if basename is
-    # desired or if we are working remotely and want to change the
-    # basename. Or we are eliding filenames.
+    # This is also used as a common funnel place if basename is desired or if we
+    # are working remotely and want to change the basename. Or we are eliding
+    # filenames.
     def self.canonic_file(filename)
       # For now we want resolved filenames
       if Command.settings[:basename]
@@ -132,7 +132,7 @@ module Byebug
       if Byebug.annotate.to_i > 2
         print afmt("source #{file}:#{line}")
       end
-      print "Breakpoint %d at %s:%s\n", n, file, line
+      print "Stopped at breakpoint %d at %s:%s\n", n, file, line
     end
     protect :at_breakpoint
 
@@ -153,15 +153,16 @@ module Byebug
     protect :at_catchpoint
 
     def at_tracing(context, file, line)
-      return if defined?(Byebug::RDEBUG_FILE) &&
-        Byebug::RDEBUG_FILE == file # Don't trace ourself
-      @last_file = CommandProcessor.canonic_file(file)
+      # Don't trace ourselves
+      return if defined?(Byebug::RDEBUG_FILE) && Byebug::RDEBUG_FILE == file
+
+      #@last_file = CommandProcessor.canonic_file(file)
       file = CommandProcessor.canonic_file(file)
-      unless file == @last_file and @last_line == line and
-          Command.settings[:tracing_plus]
-        print "Tracing:%s:%s %s", file, line, Byebug.line_at(file, line)
+      unless file == @last_file and line == @last_line and
+             Command.settings[:tracing_plus]
         @last_file = file
         @last_line = line
+        print "Tracing: #{file}:#{line} #{Byebug.line_at(file, line)}"
       end
       always_run(context, file, line, 2)
     end
@@ -181,14 +182,18 @@ module Byebug
 
       # The prompt shown before reading a command.
       def prompt(context)
-        p = '(rdb:%s) ' % (context.dead?  ? 'post-mortem' : context.thnum)
+        p = '(byebug:%s) ' % (context.dead?  ? 'post-mortem' : context.thnum)
         p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if Byebug.annotate.to_i > 2
         return p
       end
 
-      # Run these commands, for example display commands or possibly the list or
-      # irb in an "autolist" or "autoirb". We return a list of commands that are
-      # acceptable to run bound to the current state.
+      ##
+      # Run commands everytime.
+      #
+      # For example display commands or possibly the list or irb in an
+      # "autolist" or "autoirb".
+      # @return A list of commands that are acceptable to run bound to the
+      #         current state.
       def always_run(context, file, line, run_level)
         event_cmds = Command.commands.select{|cmd| cmd.event }
 
@@ -217,7 +222,8 @@ module Byebug
         return state, commands
       end
 
-      # Handle byebug commands
+      # Handles byebug commands.
+      #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
         $rdebug_state = state if Command.settings[:byebugtesting]
@@ -265,7 +271,6 @@ module Byebug
       def one_cmd(commands, context, input)
         if cmd = commands.find{ |c| c.match(input) }
           if context.dead? && cmd.class.need_context
-            p cmd
             print "Command is unavailable\n"
           else
             cmd.execute

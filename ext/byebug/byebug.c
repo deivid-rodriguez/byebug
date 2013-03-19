@@ -181,7 +181,8 @@ process_line_event(VALUE trace_point, void *data)
           context->stop_next--;
       if (context->stop_next < 0)
           context->stop_next = -1;
-      if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) && !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
+      if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) &&
+                   !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
       {
           context->stop_line--;
           CTX_FL_UNSET(context, CTX_FL_STEPPED);
@@ -192,18 +193,22 @@ process_line_event(VALUE trace_point, void *data)
       context->stop_next = 0;
   }
 
-  breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
-  if (context->stop_next == 0 || context->stop_line == 0 ||
-      breakpoint != Qnil)
+  if (context->stop_next == 0 || context->stop_line == 0)
   {
     context->stop_reason = CTX_STOP_STEP;
-    if (breakpoint != Qnil) {
-      rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
-    }
     reset_stepping_stop_points(context);
     call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
                  path, lineno);
   }
+
+  breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
+  if (breakpoint != Qnil) {
+    context->stop_reason = CTX_STOP_BREAKPOINT;
+    rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
+    call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
+                                                                  path, lineno);
+  }
+
   cleanup(context);
 }
 

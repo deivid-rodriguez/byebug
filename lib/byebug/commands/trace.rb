@@ -1,22 +1,22 @@
 module Byebug
   class TraceCommand < Command # :nodoc:
     def regexp
-      /^\s* tr(?:ace)? (?: \s+ (\S+))         # on |off | var(iable)
-                       (?: \s+ (\S+))?        # (all | variable-name)?
-                       (?: \s+ (\S+))? \s*    # (stop | nostop)?
+      /^\s* tr(?:ace)? (?: \s+ (\S+))      # on | off | var(iable)
+                       (?: \s+ (\S+))?     # (all | variable-name)?
+                       (?: \s+ (\S+))? \s* # (stop | nostop)?
        $/ix
     end
 
     def execute
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1]
-        if @match[2]
-          Byebug.tracing = onoff
-          print "Tracing %s all threads.\n" % (onoff ? 'on' : 'off')
-        else
-          Byebug.current_context.tracing = onoff
-          print "Tracing %s on current thread.\n"  % (onoff ? 'on' : 'off')
-        end
+        #if @match[2]
+        #  Byebug.tracing = onoff
+        #  print "Tracing %s all threads.\n" % (onoff ? 'on' : 'off')
+        #else
+        Byebug.current_context.tracing = onoff
+        print "Tracing is #{onoff ? 'on' : 'off'}"
+        #end
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]
         if debug_eval("defined?(#{varname})")
@@ -25,11 +25,10 @@ module Byebug
           else
             dbg_cmd = (@match[3] && (@match[3] !~ /nostop/)) ? 'byebug' : ''
           end
-          eval("
-           trace_var(:#{varname}) do |val|
-              print \"traced variable #{varname} has value \#{val}\n\"
-              #{dbg_cmd}
-           end")
+          eval("trace_var(:#{varname}) do |val|
+                  print \"traced variable #{varname} has value \#{val}\n\"
+                  #{dbg_cmd}
+                end")
         else
           errmsg "#{varname} is not a global variable.\n"
         end

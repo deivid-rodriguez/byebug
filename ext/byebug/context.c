@@ -351,7 +351,8 @@ Context_stop_next(int argc, VALUE *argv, VALUE self)
   debug_context_t *context;
 
   rb_scan_args(argc, argv, "11", &steps, &force);
-  if(FIX2INT(steps) < 0) rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
+  if (FIX2INT(steps) < 0)
+    rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
 
   Data_Get_Struct(self, debug_context_t, context);
   context->stop_next = FIX2INT(steps);
@@ -370,7 +371,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
-  if(context->stack_size == 0)
+  if (context->stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
   rb_scan_args(argc, argv, "12", &lines, &frame, &force);

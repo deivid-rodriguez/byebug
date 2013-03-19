@@ -22,18 +22,16 @@ module Byebug
     :tracing     => nil    # Byebug.tracing value. true/false resets,
   } unless defined?(DEFAULT_START_SETTINGS)
 
-  # the port number used for remote debugging
+  # Port number used for remote debugging
   PORT = 8989 unless defined?(PORT)
 
-  # What file is used for byebug startup commands.
-  unless defined?(INITFILE)
-    INITFILE = '.rdebugrc'
-    HOME_DIR = ENV['HOME'].to_s
-  end
+  # Configuration file used for startup commands. Default value is .byebugrc
+  INITFILE = '.byebugrc' unless defined?(INITFILE)
 
   class << self
 
-    # if true, checks the modification time of source files and reloads if it was modified
+    # If true, checks the modification time of source files and reloads them if
+    # they were modified
     attr_accessor :reload_source_on_change
 
     attr_accessor :last_exception
@@ -42,11 +40,10 @@ module Byebug
     # gdb-style annotation mode. Used in GNU Emacs interface
     attr_accessor :annotate
 
-    # in remote mode, wait for the remote connection
+    # If in remote mode, wait for the remote connection
     attr_accessor :wait_connection
 
-    # If set, a string to look for in caller() and is used to see
-    # if the call stack is truncated.
+    # A string to look for in caller() to see if the call stack is truncated
     attr_accessor :start_sentinal
 
     attr_reader :thread, :control_thread, :cmd_port, :ctrl_port
@@ -75,13 +72,13 @@ module Byebug
       LineCache::clear_file_cache
     end
 
-    # Get line +line_number+ from file named +filename+. Return "\n" if
-    # there was a problem. Leaking blanks are stripped off.
-    def line_at(filename, line_number) # :nodoc:
-      @reload_on_change=nil unless defined?(@reload_on_change)
+    # Get line +line_number+ from file named +filename+.
+    # @return "\n" if there was a problem. Leaking blanks are stripped off.
+    def line_at(filename, line_number)
+      @reload_on_change = nil unless defined?(@reload_on_change)
       line = LineCache::getline(filename, line_number, @reload_on_change)
       return "\n" unless line
-      return "#{line.gsub(/^\s+/, '').chomp}\n"
+      return "#{line.gsub(/^\s+/, '').chomp}"
     end
 
     alias stop remove_tracepoints
@@ -125,23 +122,23 @@ module Byebug
     # many times as you called Byebug.start method.</i>
     #
     # +options+ is a hash used to set various debugging options.
-    #   Set :init true if you want to save ARGV and some variables which make a
-    # byebug restart possible. Only the first time :init is set true values
-    # will values get set. Since ARGV is saved, you should make sure it hasn't
-    # been changed before the (first) call.
-    #   Set :post_mortem true if you want to enter post-mortem debugging on an
-    # uncaught exception. Once post-mortem debugging is set, it can't be unset.
+    #   :init        - true if you want to save ARGV and some other variables to
+    #                  make a byebug restart possible. Only the first time :init
+    #                  is set to true the values will get set. Since ARGV is
+    #                  saved, you should make sure it hasn't been changed before
+    #                  the (first) call.
+    #   :post_mortem - true if you want to enter post-mortem debugging on an
+    #                  uncaught exception. Once post-mortem debugging is set, it
+    #                  can't be unset.
+    #
     def start(options={}, &block)
       options = Byebug::DEFAULT_START_SETTINGS.merge(options)
       if options[:init]
-        Byebug.const_set('ARGV', ARGV.clone) unless
-          defined? Byebug::ARGV
-        Byebug.const_set('PROG_SCRIPT', $0) unless
-          defined? Byebug::PROG_SCRIPT
-        Byebug.const_set('INITIAL_DIR', Dir.pwd) unless
-          defined? Byebug::INITIAL_DIR
+        Byebug.const_set('ARGV', ARGV.clone) unless defined? Byebug::ARGV
+        Byebug.const_set('PROG_SCRIPT', $0) unless defined? Byebug::PROG_SCRIPT
+        Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
       end
-      Byebug.tracing = options[:tracing] unless options[:tracing].nil?
+      #Byebug.tracing = options[:tracing] unless options[:tracing].nil?
       if Byebug.started?
         retval = block && block.call(self)
       else
@@ -247,12 +244,13 @@ module Byebug
     # program you are debugging, in the directory where you invoke byebug.
     #
     def run_init_script(out = handler.interface)
-      cwd_script_file  = File.expand_path(File.join(".", INITFILE))
-      run_script(cwd_script_file, out) if File.exists?(cwd_script_file)
+      cwd_script  = File.expand_path(File.join(".", INITFILE))
+      run_script(cwd_script, out) if File.exists?(script_file)
 
-      home_script_file = File.expand_path(File.join(HOME_DIR, INITFILE))
-      run_script(home_script_file, out) if File.exists?(home_script_file) and
-        cwd_script_file != home_script_file
+      home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
+      if File.exists?(home_script) and cwd_script != home_script
+         run_script(home_script_file, out)
+      end
     end
 
     #
@@ -374,13 +372,15 @@ class Module
 end
 module Kernel
 
-  # Enters the byebug in the current thread after _steps_ line events occur.
-  # Before entering the byebug startup, init script is read. Setting _steps_ to
+  ##
+  # Enters byebug in the current thread after _steps_ line events occur.
+  #
+  # Before entering byebug startup, the init script is read. Setting _steps_ to
   # 0 will cause a break in the byebug subroutine and not wait for a line event
   # to occur. You will have to go "up 1" in order to be back to your debugged
-  # program from byebug program. Setting _steps_ to 0 could be useful if you
-  # want to stop right after the last statement in some scope, because the next
-  # step will take you out of some scope.
+  # program from byebug. Setting _steps_ to 0 could be useful if you want to
+  # stop right after the last statement in some scope, because the next step
+  # will take you out of some scope.
   def byebug(steps = 1)
     Byebug.start
     Byebug.run_init_script(StringIO.new)
@@ -401,5 +401,3 @@ module Kernel
     end
   end
 end
-
-

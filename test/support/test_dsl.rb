@@ -21,10 +21,11 @@ module TestDsl
     end
   end
 
+  ##
   # Adds commands to the input queue, so they will be later retrieved by
-  # Processor, i.e. it emulates user's input.
+  # Processor, i.e., it emulates user's input.
   #
-  # If a command is a Proc object, it will be executed before retrieving by
+  # If a command is a Proc object, it will be executed before being retrieved by
   # Processor. May be handy when you need build a command depending on the
   # current context/state.
   #
@@ -39,13 +40,13 @@ module TestDsl
     interface.input_queue.concat(messages)
   end
 
-  # Runs a byebug with the provided basename for a file. The file should be
-  # placed in the test/examples dir.
+  ##
+  # Runs byebug with the provided basename for a file.
   #
-  # You also can specify a block, which will be executed when Processor extracts
-  # all the commands from the input queue. You can use it e.g. for making
-  # asserts for the current test. If you specified the block, and it never was
-  # executed, the test will fail.
+  # The file should be placed in the test/examples dir. You also can specify a
+  # block, which will be executed when Processor extracts all the commands from
+  # the input queue. You can use that for making asserts on the current test. If
+  # you specified the block and it never was executed, the test will fail.
   #
   # Usage:
   #   debug "ex1" # ex1 should be placed in test/examples/ex1.rb
@@ -81,10 +82,11 @@ module TestDsl
     raise exception if exception
   end
 
+  ##
+  # Checks the output of byebug.
   #
-  # Checks the output of byebug. By default it checks output queue of the current
-  # interface, but you can check again any queue by providing it as a second
-  # argument.
+  # By default it checks output queue of the current interface, but you can
+  # check again any queue by providing it as a second argument.
   #
   # Usage:
   #   enter 'break 4', 'cont'
@@ -92,7 +94,8 @@ module TestDsl
   #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
   #
   def check_output(check_method, *args)
-    queue = args.last.is_a?(String) || args.last.is_a?(Regexp) ? interface.output_queue : args.pop
+    queue = args.last.is_a?(String) || args.last.is_a?(Regexp) ?
+            interface.output_queue : args.pop
     queue_messages = queue.map(&:strip)
     messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
     queue_messages.send(check_method, messages)
