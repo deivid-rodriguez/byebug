@@ -5,8 +5,7 @@ require File.dirname(__FILE__) + "/lib/byebug/version"
 Gem::Specification.new do |s|
   s.name = %q{byebug}
   s.version = Byebug::VERSION
-  s.authors = ["David Rodríguez", "Zachary Scott", "Kent Sibilev",
-               "Mark Moseley", "Gabriel Horner"]
+  s.authors = ["David Rodríguez", "Kent Sibilev", "Mark Moseley"]
   s.email = "deivid.rodriguez@mail.com"
   s.homepage = "http://github.com/deivid-rodriguez/byebug"
   s.summary = %q{Ruby 2.0 fast debugger - base + cli}

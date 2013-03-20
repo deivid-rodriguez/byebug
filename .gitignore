@@ -1,6 +1,7 @@
 tmp
 pkg
 vendor/bundle
+doc
 
 .rvmrc
 .gdbinit
