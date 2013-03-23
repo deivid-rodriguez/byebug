@@ -141,6 +141,7 @@ call_at_line(debug_context_t *context, char *file, int line,
              VALUE context_object, VALUE path, VALUE lineno)
 {
   CTX_FL_UNSET(context, CTX_FL_STEPPED);
+  CTX_FL_UNSET(context, CTX_FL_ENABLE_BKPT);
   CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
   context->last_file = file;
   context->last_line = line;
@@ -169,24 +170,25 @@ process_line_event(VALUE trace_point, void *data)
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
-  moved = context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
-          strcmp(context->last_file, RSTRING_PTR(path)) != 0;
+  if (context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
+       strcmp(context->last_file, RSTRING_PTR(path)))
+  {
+    CTX_FL_SET(context, CTX_FL_ENABLE_BKPT);
+    moved = 1;
+  }
 
   if (CTX_FL_TEST(context, CTX_FL_TRACING))
     rb_funcall(context_object, idAtTracing, 2, path, lineno);
 
   if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
-      if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
-          context->stop_next--;
-      if (context->stop_next < 0)
-          context->stop_next = -1;
-      if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) &&
-                   !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
-      {
-          context->stop_line--;
-          CTX_FL_UNSET(context, CTX_FL_STEPPED);
-      }
+    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+    {
+      context->stop_next--;
+      context->stop_line--;
+      if ( context->stop_next < 0 ) context->stop_next = -1;
+      if ( context->stop_line < 0 ) context->stop_line = -1;
+    }
   }
   else if (context->stack_size < context->dest_frame)
   {
@@ -200,13 +202,16 @@ process_line_event(VALUE trace_point, void *data)
     call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
                  path, lineno);
   }
-
-  breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
-  if (breakpoint != Qnil) {
-    context->stop_reason = CTX_STOP_BREAKPOINT;
-    rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
-    call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
-                                                                  path, lineno);
+  else if (CTX_FL_TEST(context, CTX_FL_ENABLE_BKPT))
+  {
+    breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
+    if (breakpoint != Qnil) {
+      context->stop_reason = CTX_STOP_BREAKPOINT;
+      reset_stepping_stop_points(context);
+      rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
+      call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
+                 path, lineno);
+    }
   }
 
   cleanup(context);

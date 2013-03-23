@@ -404,12 +404,6 @@ check_breakpoint_by_expr(VALUE breakpoint_object, VALUE binding)
     return RTEST(expr_result);
 }
 
-//static VALUE
-//Breakpoint_find(VALUE self, VALUE breakpoints, VALUE source, VALUE pos, VALUE binding)
-//{
-//  return breakpoint_find(breakpoints, source, pos, binding);
-//}
-
 extern VALUE
 find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
                        VALUE binding)

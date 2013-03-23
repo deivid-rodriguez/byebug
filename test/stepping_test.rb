@@ -7,38 +7,36 @@ describe "Stepping Commands" do
 
     describe "Usual mode" do
 
-      before { enter 'break 10', 'cont' }
+      before do
+        @old_hashes = {}
+        set_tmp_hash(Byebug::Command.settings, :force_stepping, false)
+        enter 'break 10', 'cont'
+      end
+
+      after do
+        restore_tmp_hash(Byebug::Command.settings, :force_stepping)
+      end
 
       it "must go to the next line if forced by a setting" do
-        temporary_change_hash_value(
-                           Byebug::Command.settings, :force_stepping, true) do
-          enter 'next'
-          debug_file('stepping') { state.line.must_equal 11 }
-        end
+        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        enter 'next'
+        debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must go to the next line if forced by a setting (by shortcut)" do
-        temporary_change_hash_value(
-                           Byebug::Command.settings, :force_stepping, true) do
-          enter 'n'
-          debug_file('stepping') { state.line.must_equal 11 }
-        end
+        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        enter 'n'
+        debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must leave on the same line if forced by a setting" do
-        temporary_change_hash_value(
-                          Byebug::Command.settings, :force_stepping, false) do
-          enter 'next'
-          debug_file('stepping') { state.line.must_equal 10 }
-        end
+        enter 'next'
+        debug_file('stepping') { state.line.must_equal 10 }
       end
 
       it "must go to the specified number of lines forward by default" do
-        temporary_change_hash_value(
-                           Byebug::Command.settings, :force_stepping, true) do
-          enter 'next 2'
-          debug_file('stepping') { state.line.must_equal 21 }
-        end
+        enter 'next 2'
+        debug_file('stepping') { state.line.must_equal 21 }
       end
 
       it "must go to the next line if forced to do that by 'plus' sign" do
@@ -61,16 +59,17 @@ describe "Stepping Commands" do
       temporary_change_hash_value(Byebug::Command.settings, :autoeval, false)
       it "must not work in post-mortem mode" do
         skip("No post morten mode for now")
-        #enter 'cont', "next"
-        #debug_file('post_mortem')
-        #check_output_includes 'Unknown command: "next".  Try "help".', interface.error_queue
+        enter 'cont', "next"
+        debug_file('post_mortem')
+        check_output_includes 'Unknown command: "next".  Try "help".', interface.error_queue
       end
     end
   end
 
-
   describe "Step Command" do
+
     describe "Usual mode" do
+
       before { enter 'break 10', 'cont' }
 
       it "must go to the step line if forced by a setting" do
@@ -120,9 +119,9 @@ describe "Stepping Commands" do
       temporary_change_hash_value(Byebug::Command.settings, :autoeval, false)
       it "must not work in post-mortem mode" do
         skip("No post morten mode for now")
-        #enter 'cont', "step"
-        #debug_file('post_mortem')
-        #check_output_includes 'Unknown command: "step".  Try "help".', interface.error_queue
+        enter 'cont', "step"
+        debug_file('post_mortem')
+        check_output_includes 'Unknown command: "step".  Try "help".', interface.error_queue
       end
     end
   end

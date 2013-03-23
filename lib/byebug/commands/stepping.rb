@@ -1,7 +1,7 @@
 module Byebug
 
   # Mix-in module to assist in command parsing.
-  module SteppingFunctions # :nodoc:
+  module SteppingFunctions
     def parse_stepping_args(command_name, match)
       if match[1].nil?
         force = Command.settings[:force_stepping]
@@ -62,7 +62,7 @@ module Byebug
     def execute
       steps, force = parse_stepping_args("Step", @match)
       return unless steps
-      @state.context.step(steps, force)
+      @state.context.step steps, force
       @state.proceed
     end
 

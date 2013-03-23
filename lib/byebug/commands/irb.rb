@@ -21,7 +21,7 @@ module IRB # :nodoc:
   ExtendCommandBundle.def_extend_command "cont", :Continue
   ExtendCommandBundle.def_extend_command "n", :Next
   ExtendCommandBundle.def_extend_command "step", :Step
-  
+
   def self.start_session(binding)
     unless @__initialized
       args = ARGV.dup
@@ -30,7 +30,7 @@ module IRB # :nodoc:
       ARGV.replace(args)
       @__initialized = true
     end
-    
+
     workspace = WorkSpace.new(binding)
 
     irb = Irb.new(workspace)
@@ -49,7 +49,7 @@ module Byebug
   # Implements byebug "irb" command.
   class IRBCommand < Command
 
-    register_setting_get(:autoirb) do 
+    register_setting_get(:autoirb) do
       IRBCommand.always_run
     end
     register_setting_set(:autoirb) do |value|
@@ -61,7 +61,7 @@ module Byebug
         (?:\s+(-d))?
         \s*$/x
     end
-    
+
     def execute
       unless @state.interface.kind_of?(LocalInterface)
         print "Command is available only in local mode.\n"
@@ -78,15 +78,15 @@ module Byebug
       cont = IRB.start_session(get_binding)
       case cont
       when :cont
-        @state.proceed 
+        @state.proceed
       when :step
         force = Command.settings[:force_stepping]
-        @state.context.step(1, force)
-        @state.proceed 
+        @state.context.step 1, force
+        @state.proceed
       when :next
         force = Command.settings[:force_stepping]
-        @state.context.step_over(1, @state.frame_pos, force)
-        @state.proceed 
+        @state.context.step_over 1, @state.frame_pos, force
+        @state.proceed
       else
         file = @state.context.frame_file(0)
         line = @state.context.frame_line(0)
@@ -99,7 +99,7 @@ module Byebug
       $rdebug_state = nil if add_debugging
       trap("SIGINT", save_trap) if save_trap
     end
-    
+
     class << self
       def help_command
         'irb'
@@ -110,9 +110,9 @@ module Byebug
           irb [-d]\tstarts an Interactive Ruby (IRB) session.
 
 If -d is added you can get access to byebug state via the global variable
-$RDEBUG_state. 
+$rdebug_state.
 
-irb is extended with methods "cont", "n" and "step" which 
+irb is extended with methods "cont", "n" and "step" which
 run the corresponding byebug commands. In contrast to the real byebug
 commands these commands don't allow command arguments.
         }

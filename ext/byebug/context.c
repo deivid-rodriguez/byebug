@@ -377,17 +377,17 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   rb_scan_args(argc, argv, "12", &lines, &frame, &force);
   context->stop_line = FIX2INT(lines);
   CTX_FL_UNSET(context, CTX_FL_STEPPED);
-  if(frame == Qnil)
+  if (frame == Qnil)
   {
     context->dest_frame = context->stack_size;
   }
   else
   {
-    if(FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
+    if (FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
       rb_raise(rb_eRuntimeError, "Destination frame is out of range.");
     context->dest_frame = context->stack_size - FIX2INT(frame);
   }
-  if(RTEST(force))
+  if (RTEST(force))
     CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
     CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
