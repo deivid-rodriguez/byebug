@@ -39,12 +39,12 @@ describe "Stepping Commands" do
         debug_file('stepping') { state.line.must_equal 21 }
       end
 
-      it "must go to the next line if forced to do that by 'plus' sign" do
+      it "must go to the next line if forced by 'plus' sign" do
         enter 'next+'
         debug_file('stepping') { state.line.must_equal 11 }
       end
 
-      it "must leave on the same line if forced to do that by 'minus' sign" do
+      it "must leave on the same line if forced by 'minus' sign" do
         enter 'next-'
         debug_file('stepping') { state.line.must_equal 10 }
       end

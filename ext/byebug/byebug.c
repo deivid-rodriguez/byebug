@@ -155,7 +155,7 @@ process_line_event(VALUE trace_point, void *data)
   VALUE context_object;
   VALUE breakpoint;
   debug_context_t *context;
-  int moved;
+  int moved = 0;
 
   context_object = Byebug_current_context(mByebug);
   Data_Get_Struct(context_object, debug_context_t, context);
@@ -180,7 +180,7 @@ process_line_event(VALUE trace_point, void *data)
   if (CTX_FL_TEST(context, CTX_FL_TRACING))
     rb_funcall(context_object, idAtTracing, 2, path, lineno);
 
-  if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
+  if (context->dest_frame == -1 || context->stack_size >= context->dest_frame)
   {
     if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
     {
