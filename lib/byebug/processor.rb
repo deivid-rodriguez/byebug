@@ -1,11 +1,15 @@
+require 'forwardable'
 require_relative 'interface'
 require_relative 'command'
 
 module Byebug
 
   # Should this be a mixin?
-  class Processor # :nodoc
+  class Processor
     attr_accessor :interface
+
+    extend Forwardable
+    def_delegators :@interface, :errmsg, :print
 
     # Format msg with gdb-style annotation header
     def afmt(msg, newline="\n")
@@ -16,23 +20,9 @@ module Byebug
       print afmt(msg) if Byebug.annotate.to_i > 2
     end
 
-    # FIXME: use delegate?
-    def errmsg(*args)
-      @interface.errmsg(*args)
-    end
-
-    # Callers of this routine should make sure to use comma to separate format
-    # argments rather than %. Otherwise it seems that if the string you want to
-    # print has format specifier, which could happen if you are trying to show
-    # say a source-code line with "puts" or "print" in it, this print routine
-    # will give an error saying it is looking for more arguments.
-    def print(*args)
-      @interface.print(*args)
-    end
-
   end
 
-  class CommandProcessor < Processor # :nodoc:
+  class CommandProcessor < Processor
     attr_reader   :display
 
     # FIXME: get from Command regexp method.
@@ -180,7 +170,9 @@ module Byebug
 
     private
 
-      # The prompt shown before reading a command.
+      ##
+      # Prompt shown before reading a command.
+      #
       def prompt(context)
         p = '(byebug:%s) ' % (context.dead?  ? 'post-mortem' : context.thnum)
         p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if Byebug.annotate.to_i > 2
@@ -222,7 +214,8 @@ module Byebug
         return state, commands
       end
 
-      # Handles byebug commands.
+      ##
+      # Handle byebug commands.
       #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
@@ -268,6 +261,9 @@ module Byebug
         postloop(commands, context)
       end # process_commands
 
+      ##
+      # Executes a single byebug command
+      #
       def one_cmd(commands, context, input)
         if cmd = commands.find{ |c| c.match(input) }
           if context.dead? && cmd.class.need_context
@@ -346,13 +342,13 @@ module Byebug
 
       def display_annotations(commands, context)
         return if display.empty?
-#         have_display = display.find{|d| d[0]}
-#         return unless have_display and @byebug_displays_were_empty
-#         @byebug_displays_were_empty = have_display
+       #have_display = display.find{|d| d[0]}
+       #return unless have_display and @byebug_displays_were_empty
+       #@byebug_displays_were_empty = have_display
         annotation('display', commands, context, "display")
       end
 
-      class State # :nodoc:
+      class State
         attr_accessor :binding, :commands, :context, :display, :file, :frame_pos
         attr_accessor :interface, :line, :previous_line
 
@@ -364,18 +360,8 @@ module Byebug
           yield self
         end
 
-        # FIXME: use delegate?
-        def errmsg(*args)
-          @interface.errmsg(*args)
-        end
-
-        def print(*args)
-          @interface.print(*args)
-        end
-
-        def confirm(*args)
-          @interface.confirm(*args)
-        end
+        extend Forwardable
+        def_delegators :@interface, :errmsg, :print, :confirm
 
         def proceed?
           @proceed
@@ -388,7 +374,9 @@ module Byebug
 
   end # end class CommandProcessor
 
+
   class ControlCommandProcessor < Processor # :nodoc:
+
     def initialize(interface)
       super()
       @interface = interface
@@ -437,7 +425,7 @@ module Byebug
       return p
     end
 
-    class State # :nodoc:
+    class State
       attr_reader :commands, :interface
 
       def initialize(interface, commands)
@@ -448,13 +436,8 @@ module Byebug
       def proceed
       end
 
-      def errmsg(*args)
-        @interface.print(*args)
-      end
-
-      def print(*args)
-        @interface.print(*args)
-      end
+      extend Forwardable
+      def_delegators :@interface, :errmsg, :print
 
       def confirm(*args)
         'y'
@@ -468,6 +451,6 @@ module Byebug
         errmsg "No filename given.\n"
         throw :debug_error
       end
-    end # State
+    end
   end
 end

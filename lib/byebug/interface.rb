@@ -64,6 +64,11 @@ module Byebug
       readline(prompt, false)
     end
 
+    # Callers of this routine should make sure to use comma to separate format
+    # argments rather than %. Otherwise it seems that if the string you want to
+    # print has format specifier, which could happen if you are trying to show
+    # say a source-code line with "puts" or "print" in it, this print routine
+    # will give an error saying it is looking for more arguments.
     def print(*args)
       STDOUT.printf(*args)
     end

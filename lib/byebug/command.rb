@@ -1,4 +1,5 @@
 require 'columnize'
+require 'forwardable'
 require_relative 'helper'
 
 module Byebug
@@ -7,7 +8,8 @@ module Byebug
   BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
     defined?(BYEBUG_DIR)
 
-  class Command # :nodoc:
+  class Command
+
     SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
       defined?(SubcmdStruct)
 
@@ -156,14 +158,8 @@ module Byebug
 
     protected
 
-      # FIXME: use delegate?
-      def errmsg(*args)
-        @state.errmsg(*args)
-      end
-
-      def print(*args)
-        @state.print(*args)
-      end
+      extend Forwardable
+      def_delegators :@state, :errmsg, :print
 
       def confirm(msg)
         @state.confirm(msg) == 'y'
