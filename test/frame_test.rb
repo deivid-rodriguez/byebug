@@ -34,11 +34,8 @@ describe "Frame Command" do
   end
 
   it "must print current stack frame when without arguments" do
-    enter 'break 16', 'cont', 'up', 'frame'
-    debug_file('frame')
-    # XXX: Deal with arguments
-    #check_output_includes "#0 ", "A.d(e#String)"
-    check_output_includes "#0 ", "A.d"
+    enter 'break A.d', 'cont', 'up', 'frame'
+    debug_file('frame') { check_output_includes "#0", "A.d(e#string)" }
   end
 
   it "must set frame to the first one" do
