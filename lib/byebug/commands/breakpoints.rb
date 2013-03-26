@@ -32,14 +32,13 @@ module Byebug
         end
       end
 
-      brkpt_filename = nil
+      brkpt_filename = file
       if file.nil?
         unless @state.context
           errmsg "We are not in a state that has an associated file.\n"
           return
         end
         brkpt_filename = @state.file
-        file = File.basename(@state.file)
         if line.nil?
           # Set breakpoint at current line
           line = @state.line.to_s
@@ -53,11 +52,6 @@ module Byebug
           errmsg "Unknown class #{file}.\n"
           throw :debug_error
         end
-      else
-        # FIXME: This should be done in LineCache.
-        file = File.expand_path(file) if file.index(File::SEPARATOR) || \
-        File::ALT_SEPARATOR && file.index(File::ALT_SEPARATOR)
-        brkpt_filename = file
       end
 
       if line =~ /^\d+$/
@@ -65,15 +59,19 @@ module Byebug
         if LineCache.cache(brkpt_filename, Command.settings[:reload_source_on_change])
           last_line = LineCache.size(brkpt_filename)
           if line > last_line
-            errmsg("There are only %d lines in file \"%s\".\n", last_line, file)
+            errmsg \
+              "There are only %d lines in file %s\n",
+              last_line, brkpt_filename
             return
           end
           unless LineCache.trace_line_numbers(brkpt_filename).member?(line)
-            errmsg("Line %d is not a stopping point in file \"%s\".\n", line, file)
+            errmsg \
+              "Line %d is not a stopping point in file %s\n",
+               line, brkpt_filename
             return
           end
         else
-          errmsg("No source file named %s\n" % file)
+          errmsg("No source file named %s\n", brkpt_filename)
           return unless confirm("Set breakpoint anyway? (y/n) ")
         end
 
@@ -82,7 +80,8 @@ module Byebug
           return
         end
         b = Byebug.add_breakpoint brkpt_filename, line, expr
-        print "Created breakpoint #{b.id} at #{brkpt_filename}:#{line.to_s}"
+        print "Created breakpoint #{b.id} at " \
+              "#{CommandProcessor.canonic_file(brkpt_filename)}:#{line.to_s}"
         unless syntax_valid?(expr)
           errmsg("Expression \"#{expr}\" syntactically incorrect; breakpoint disabled.\n")
           b.enabled = false

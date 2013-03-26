@@ -5,14 +5,15 @@ describe "Breakpoints" do
 
   describe "setting breakpoint in the current file" do
     before { enter 'break 10' }
-    subject { breakpoint }
+    subject { Byebug.breakpoints.first }
 
     def check_subject(field, value)
       debug_file("breakpoint1") { subject.send(field).must_equal value }
     end
 
     it("must have correct pos") { check_subject(:pos, 10) }
-    it("must have correct source") { check_subject(:source, fullpath("breakpoint1")) }
+    it("must have correct source") {
+      check_subject(:source, fullpath("breakpoint1")) }
     it("must have correct expression") { check_subject(:expr, nil) }
     it("must have correct hit count") { check_subject(:hit_count, 0) }
     it("must have correct hit value") { check_subject(:hit_value, 0) }
@@ -20,7 +21,8 @@ describe "Breakpoints" do
     it("must return right response") do
       id = nil
       debug_file('breakpoint1') { id = subject.id }
-      check_output_includes "Breakpoint #{id} file #{fullpath('breakpoint1')}, line 10"
+      check_output_includes \
+        "Created breakpoint #{id} at #{fullpath('breakpoint1')}:10"
     end
   end
 
@@ -40,7 +42,9 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output_includes "There are only #{LineCache.size(fullpath('breakpoint1'))} lines in file \"breakpoint1.rb\".", interface.error_queue
+      check_output_includes \
+        "There are only #{LineCache.size(fullpath('breakpoint1'))} lines in" \
+        " file #{fullpath('breakpoint1')}", interface.error_queue
     end
   end
 
@@ -54,7 +58,9 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output_includes 'Line 11 is not a stopping point in file "breakpoint1.rb".', interface.error_queue
+      check_output_includes \
+        "Line 11 is not a stopping point in file #{fullpath('breakpoint1')}",
+        interface.error_queue
     end
   end
 
@@ -66,49 +72,63 @@ describe "Breakpoints" do
 
     it "must stop at the correct file" do
       enter 'break 14', 'cont'
-      debug_file("breakpoint1") { state.file.must_equal fullpath("breakpoint1") }
+      debug_file("breakpoint1") {
+        state.file.must_equal fullpath("breakpoint1") }
     end
 
     describe "show a message" do
-      temporary_change_hash_value(Byebug::Command.settings, :basename, false)
+      before do
+        @old_hashes = {}
+        set_tmp_hash(Byebug::Command.settings, :basename, false)
+        @id = nil
+      end
+
+      after do
+        restore_tmp_hash(Byebug::Command.settings, :basename)
+      end
 
       it "must show a message with full filename" do
         enter 'break 14', 'cont'
-        debug_file("breakpoint1")
-        check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
+        debug_file("breakpoint1") { @id = Byebug.breakpoints.first.id }
+        check_output_includes \
+          "Created breakpoint #{@id} at #{fullpath('breakpoint1')}:14"
       end
 
       it "must show a message with basename" do
         enter 'set basename', 'break 14', 'cont'
-        debug_file("breakpoint1")
-        check_output_includes "Breakpoint 1 at breakpoint1.rb:14"
+        debug_file("breakpoint1") { @id = Byebug.breakpoints.first.id }
+        check_output_includes "Created breakpoint #{@id} at breakpoint1.rb:14"
       end
     end
   end
 
-
   describe "reloading source on change" do
-    temporary_change_hash_value(Byebug::Command.settings, :reload_source_on_change, false)
-
     it "must not reload source if autoreload is not set" do
-      enter(
+      id = nil
+      enter \
         'set noautoreload',
         ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'cont'}
-      )
-      debug_file "breakpoint1"
-      check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
+          'cont'}
+      debug_file("breakpoint1") { id = Byebug.breakpoints.first.id }
+      check_output_includes \
+        "Created breakpoint #{id} at #{fullpath('breakpoint1')}:14"
     end
 
     it "must reload source if autoreload is set" do
       enter(
         'set autoreload',
         ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        # Setting second breakpoint just to reload the source code after rolling the file changes back
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'break 15'}, 'cont'
+        # Setting second breakpoint just to reload the source code after rolling
+        # the file changes back
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
+          'break 15'},
+        'cont'
       )
       debug_file "breakpoint1"
-      check_output_includes "Line 14 is not a stopping point in file \"breakpoint1.rb\".", interface.error_queue
+      check_output_includes \
+        "Line 14 is not a stopping point in file #{fullpath('breakpoint1')}",
+        interface.error_queue
     end
   end
 
@@ -123,7 +143,8 @@ describe "Breakpoints" do
       end
 
       it "must stop at the correct file" do
-        debug_file("breakpoint1") { state.file.must_equal fullpath("breakpoint2") }
+        debug_file("breakpoint1") {
+          state.file.must_equal fullpath("breakpoint2") }
       end
     end
 
@@ -137,7 +158,8 @@ describe "Breakpoints" do
       end
 
       it "must ask about setting breakpoint anyway" do
-        check_output_includes "Set breakpoint anyway? (y/n)", interface.confirm_queue
+        check_output_includes \
+          "Set breakpoint anyway? (y/n)", interface.confirm_queue
       end
     end
   end
@@ -153,7 +175,8 @@ describe "Breakpoints" do
       end
 
       it "must stop at the correct file" do
-        debug_file("breakpoint1") { state.file.must_equal fullpath("breakpoint1") }
+        debug_file("breakpoint1") {
+          state.file.must_equal fullpath("breakpoint1") }
       end
     end
 
@@ -167,7 +190,8 @@ describe "Breakpoints" do
       end
 
       it "must stop at the correct file" do
-        debug_file("breakpoint1") { state.file.must_equal fullpath("breakpoint1") }
+        debug_file("breakpoint1") {
+          state.file.must_equal fullpath("breakpoint1") }
       end
     end
 
@@ -180,7 +204,6 @@ describe "Breakpoints" do
     end
   end
 
-
   describe "set breakpoint to an invalid location" do
     before { enter "break foo" }
 
@@ -190,19 +213,20 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output_includes 'Invalid breakpoint location: foo.', interface.error_queue
+      check_output_includes \
+        'Invalid breakpoint location: foo.', interface.error_queue
     end
   end
-
 
   describe "disabling a breakpoint" do
     describe "successfully" do
       before { enter "break 14" }
 
       describe "short syntax" do
-        before { enter ->{"disable #{breakpoint.id}"}, "break 15" }
+        before { enter ->{"disable #{Byebug.breakpoints.first.id}"}, "break 15" }
         it "must have a breakpoint with #enabled? returning false" do
-          debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+          debug_file("breakpoint1") {
+            Byebug.breakpoints.first.enabled?.must_equal false }
         end
 
         it "must not stop on the disabled breakpoint" do
@@ -212,9 +236,11 @@ describe "Breakpoints" do
       end
 
       describe "full syntax" do
-        before { enter ->{"disable breakpoints #{breakpoint.id}"}, "break 15" }
+        before { enter ->{"disable breakpoints #{Byebug.breakpoints.first.id}"},
+                       "break 15" }
         it "must have a breakpoint with #enabled? returning false" do
-          debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+          debug_file("breakpoint1") {
+            Byebug.breakpoints.first.enabled?.must_equal false }
         end
       end
     end
@@ -223,34 +249,40 @@ describe "Breakpoints" do
       it "must show an error if syntax is incorrect" do
         enter "disable"
         debug_file("breakpoint1")
-        check_output_includes(
-          '"disable" must be followed "display", "breakpoints" or breakpoint numbers.',
-          interface.error_queue
-        )
+        check_output_includes \
+          '"disable" must be followed "display", "breakpoints" or breakpoint ' \
+          'numbers.', interface.error_queue
+
       end
 
       it "must show an error if no breakpoints is set" do
         enter "disable 1"
         debug_file("breakpoint1")
-        check_output_includes 'No breakpoints have been set.', interface.error_queue
+        check_output_includes \
+          'No breakpoints have been set.', interface.error_queue
       end
 
-      it "must show an error if not a number is provided as an argument to 'disable' command" do
+      it "must show an error if not a number is provided as an argument to " \
+         " 'disable' command" do
         enter "break 14", "disable foo"
         debug_file("breakpoint1")
-        check_output_includes "Disable breakpoints argument 'foo' needs to be a number."
+        check_output_includes \
+          "Disable breakpoints argument 'foo' needs to be a number."
       end
     end
   end
 
   describe "enabling a breakpoint" do
+
     describe "successfully" do
       before { enter "break 14" }
+
       describe "short syntax" do
-        before { enter ->{"enable #{breakpoint.id}"}, "break 15" }
+        before { enter ->{"enable #{Byebug.breakpoints.first.id}"}, "break 15" }
 
         it "must have a breakpoint with #enabled? returning true" do
-          debug_file("breakpoint1") { breakpoint.enabled?.must_equal true }
+          debug_file("breakpoint1") {
+            Byebug.breakpoints.first.enabled?.must_equal true }
         end
 
         it "must stop on the enabled breakpoint" do
@@ -260,10 +292,12 @@ describe "Breakpoints" do
       end
 
       describe "full syntax" do
-        before { enter ->{"enable breakpoints #{breakpoint.id}"}, "break 15" }
+        before { enter ->{"enable breakpoints #{Byebug.breakpoints.first.id}"},
+                 "break 15" }
 
         it "must have a breakpoint with #enabled? returning true" do
-          debug_file("breakpoint1") { breakpoint.enabled?.must_equal true }
+          debug_file("breakpoint1") {
+            Byebug.breakpoints.first.enabled?.must_equal true }
         end
       end
     end
@@ -272,16 +306,15 @@ describe "Breakpoints" do
       it "must show an error if syntax is incorrect" do
         enter "enable"
         debug_file("breakpoint1")
-        check_output_includes(
-          '"enable" must be followed "display", "breakpoints" or breakpoint numbers.',
-          interface.error_queue
-        )
+        check_output_includes '"enable" must be followed "display", ' \
+          '"breakpoints" or breakpoint numbers.', interface.error_queue
       end
     end
   end
 
   describe "deleting a breakpoint" do
-    before { enter "break 14", ->{"delete #{breakpoint.id}"}, "break 15" }
+    before { enter "break 14", ->{"delete #{Byebug.breakpoints.first.id}"},
+                   "break 15" }
 
     it "must have only one breakpoint" do
       debug_file("breakpoint1") { Byebug.breakpoints.size.must_equal 1 }
@@ -307,42 +340,45 @@ describe "Breakpoints" do
     it "must show an error when conditional syntax is wrong" do
       enter "break 14 ifa b == 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output_includes "Expecting 'if' in breakpoint condition; got: ifa b == 3.", interface.error_queue
+      check_output_includes \
+        "Expecting 'if' in breakpoint condition; got: ifa b == 3.",
+        interface.error_queue
     end
 
     describe "enabling with wrong conditional syntax" do
       before do
         enter(
           "break 14",
-          ->{"disable #{breakpoint.id}"},
-          ->{"cond #{breakpoint.id} b -=( 3"},
-          ->{"enable #{breakpoint.id}"}
+          ->{"disable #{Byebug.breakpoints.first.id}"},
+          ->{"cond #{Byebug.breakpoints.first.id} b -=( 3"},
+          ->{"enable #{Byebug.breakpoints.first.id}"}
         )
       end
 
       it "must not enable a breakpoint" do
-        debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+        debug_file("breakpoint1") {
+          Byebug.breakpoints.first.enabled?.must_equal false }
       end
 
       it "must show an error" do
         debug_file("breakpoint1")
-        check_output_includes(
-          'Expression "b -=( 3" syntactically incorrect; breakpoint remains disabled.',
-          interface.error_queue
-        )
+        check_output_includes 'Expression "b -=( 3" syntactically incorrect; ' \
+          'breakpoint remains disabled.', interface.error_queue
       end
     end
 
     it "must show an error if no file or line is specified" do
       enter "break ifa b == 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output_includes "Invalid breakpoint location: ifa b == 3.", interface.error_queue
+      check_output_includes \
+        "Invalid breakpoint location: ifa b == 3.", interface.error_queue
     end
 
     it "must show an error if expression syntax is invalid" do
       enter "break if b -=) 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output_includes 'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.', interface.error_queue
+      check_output_includes 'Expression "b -=) 3" syntactically incorrect; ' \
+        'breakpoint disabled.', interface.error_queue
     end
   end
 

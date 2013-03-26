@@ -35,11 +35,11 @@ module Byebug
 
       DEF_OPTIONS = {
         :allow_in_control     => false,
-        :allow_in_post_mortem => true,
-        :event => true,
-        :always_run => 0,
-        :unknown => false,
-        :need_context => false,
+        :allow_in_post_mortem => true ,
+        :event                => true ,
+        :always_run           => 0    ,
+        :unknown              => false,
+        :need_context         => false,
       } unless defined?(DEF_OPTIONS)
 
       def inherited(klass)
@@ -50,12 +50,10 @@ module Byebug
       end
 
       def load_commands
-        Dir[File.join(Byebug.const_get(:BYEBUG_DIR), 'commands', '*')].each do |file|
-          require file if file =~ /\.rb$/
-        end
-        Byebug.constants.grep(/Functions$/).map { |name| Byebug.const_get(name) }.each do |mod|
-          include mod
-        end
+        Dir[File.join(Byebug.const_get(:BYEBUG_DIR), 'commands', '*')].each {
+          |file| require file if file =~ /\.rb$/ }
+        Byebug.constants.grep(/Functions$/).map {
+          |name| Byebug.const_get(name) }.each { |mod| include mod }
       end
 
       def method_missing(meth, *args, &block)

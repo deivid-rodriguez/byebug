@@ -69,7 +69,9 @@ module Byebug
 
     require 'pathname'  # For cleanpath
 
+    ##
     # Regularize file name.
+    #
     # This is also used as a common funnel place if basename is desired or if we
     # are working remotely and want to change the basename. Or we are eliding
     # filenames.
@@ -84,8 +86,8 @@ module Byebug
     end
 
     def self.print_location_and_text(file, line)
-      file_line = "%s:%s\n%s" % [canonic_file(file), line,
-                                 Byebug.line_at(file, line)]
+      file_line = "#{canonic_file(file)}:#{line}\n#{Byebug.line_at(file, line)}"
+
       # FIXME: use annotations routines
       if Byebug.annotate.to_i > 2
         file_line = "\032\032source #{file_line}"

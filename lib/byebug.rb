@@ -144,9 +144,9 @@ module Byebug
       else
         retval = Byebug._start(&block)
       end
-      if options[:post_mortem]
-        post_mortem
-      end
+      #if options[:post_mortem]
+      #  post_mortem
+      #end
       return retval
     end
 
