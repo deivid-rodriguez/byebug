@@ -183,11 +183,13 @@ process_line_event(VALUE trace_point, void *data)
   if (context->dest_frame == -1 || context->stack_size >= context->dest_frame)
   {
     if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+      context->stop_next = context->stop_next <= 0 ? -1 : context->stop_next-1;
+
+    if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) &&
+                 !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
     {
-      context->stop_next--;
-      context->stop_line--;
-      if ( context->stop_next < 0 ) context->stop_next = -1;
-      if ( context->stop_line < 0 ) context->stop_line = -1;
+      context->stop_line = context->stop_line <= 0 ? -1 : context->stop_line-1;
+      CTX_FL_UNSET(context, CTX_FL_STEPPED);
     }
   }
   else if (context->stack_size < context->dest_frame)
@@ -228,6 +230,8 @@ process_return_event(VALUE trace_point, void *data)
   Data_Get_Struct(context_object, debug_context_t, context);
   if (!check_start_processing(context, rb_thread_current())) return;
 
+  CTX_FL_SET(context, CTX_FL_STEPPED);
+
   if(context->stack_size == context->stop_frame)
   {
       context->stop_next = 1;
@@ -240,9 +244,9 @@ process_return_event(VALUE trace_point, void *data)
     print_debug_info("return", path, lineno, method_id, defined_class,
                                                            context->stack_size);
 
-  // rb_funcall(context_object, idAtReturn, 2, path, lineno);
-
+  //rb_funcall(context_object, idAtReturn, 2, path, lineno);
   pop_frame(context_object);
+
   cleanup(context);
 }
 
@@ -321,6 +325,7 @@ static VALUE
 Byebug_setup_tracepoints(VALUE self)
 {
   if (catchpoints != Qnil) return Qnil;
+
   contexts = rb_hash_new();
   breakpoints = rb_ary_new();
   catchpoints = rb_hash_new();
