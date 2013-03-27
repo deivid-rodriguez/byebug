@@ -1,6 +1,8 @@
 module Byebug
+
   # Mix-in module to showing settings
-  module ShowFunctions # :nodoc:
+  module ShowFunctions
+
     def show_setting(setting_name)
       case setting_name
       when /^annotate$/

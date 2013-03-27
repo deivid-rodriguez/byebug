@@ -1,7 +1,7 @@
 module Byebug
 
   # Mix-in module to assist in command parsing.
-  module FrameFunctions # :nodoc:
+  module FrameFunctions
 
     def adjust_frame(frame_pos, absolute, context=@state.context)
       @state.frame_pos = 0 if context != @state.context

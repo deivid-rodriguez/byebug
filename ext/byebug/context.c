@@ -274,6 +274,17 @@ Context_frame_args(int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+Context_frame_args_info(int argc, VALUE *argv, VALUE self)
+{
+  VALUE binding = Context_frame_binding(argc, argv, self);
+  const char src[] = "method(__method__).parameters";
+
+  return NIL_P(binding) ?
+         rb_ary_new() :
+         rb_funcall(binding, rb_intern("eval"), 1, rb_str_new2(src));
+}
+
+static VALUE
 Context_tracing(VALUE self)
 {
     debug_context_t *context;
@@ -325,23 +336,29 @@ Context_stop_reason(VALUE self)
     return ID2SYM(rb_intern(symbol));
 }
 
-//static VALUE
-//Context_jump(VALUE self, VALUE line, VALUE file)
-//{
-//  debug_context_t *context;
-//  debug_frame_t *frame;
-//  int i;
-//
-//  Data_Get_Struct(self, debug_context_t, context);
-//
-//  frame = context->stack;
-//  for (i = 0; i < context->stack_size; i++) {
-//    if (strcmp(frame->file, RSTRING_PTR(file))) {
-//      /* And now? */
-//    }
-//    frame = frame->prev;
-//  }
-//}
+#if 0
+
+static VALUE
+Context_jump(VALUE self, VALUE line, VALUE file)
+{
+  debug_context_t *context;
+  debug_frame_t *frame;
+  int i, lineno;
+
+  Data_Get_Struct(self, debug_context_t, context);
+
+  frame = context->stack;
+  lineno = FIX2INT(line);
+
+  for (i = 0; i < context->stack_size; i++) {
+    if (strcmp(frame->file, RSTRING_PTR(file))) {
+      /* And now? */
+    }
+    frame = frame->prev;
+  }
+}
+
+#endif
 
 static VALUE
 Context_stop_next(int argc, VALUE *argv, VALUE self)
@@ -433,6 +450,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
   rb_define_method(cContext, "frame_args", Context_frame_args, -1);
+  rb_define_method(cContext, "frame_args_info", Context_frame_args_info, -1);
   rb_define_method(cContext, "frame_locals", Context_frame_locals, -1);
   rb_define_method(cContext, "stop_next=", Context_stop_next, -1);
   rb_define_method(cContext, "step", Context_stop_next, -1);

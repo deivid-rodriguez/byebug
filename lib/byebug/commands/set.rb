@@ -95,14 +95,13 @@ set history size -- Set the size of the command history"],
                 if args[0]
                   arg = args[0].downcase.to_sym
                   case arg
-                  when :short, :last
+                  when :short, :last, :tracked
                     Command.settings[:callstyle] = arg
-                    print "%s\n" % show_setting(try_subcmd.name)
-                    return
+                  else
+                    print "Invalid call style #{arg}. Should be one of: " \
+                          "'short', 'last' or 'tracked'.\n"
                   end
                 end
-                print "Invalid call style #{arg}. Should be one of: " +
-                  "'short' or 'last'.\n"
               when /^trace$/
                 Command.settings[:stack_trace_on_error] = set_on
               when /^fullpath$/
@@ -125,15 +124,18 @@ set history size -- Set the size of the command history"],
                   when /^save$/
                     interface.history_save = get_onoff(args[1])
                   when /^size$/
-                    interface.history_length = get_int(args[1],
-                                                       "Set history size")
+                    interface.history_length =
+                      get_int(args[1], "Set history size")
                   when /^filename$/
-                    interface.histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
+                    interface.histfile =
+                      File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
                   else
-                    print "Invalid history parameter #{args[0]}. Should be 'filename', 'save' or 'size'.\n"
+                    print "Invalid history parameter #{args[0]}. Should be " \
+                          "'filename', 'save' or 'size'.\n"
                   end
                 else
-                  print "Need two parameters for 'set history'; got #{args.size}.\n"
+                  print "Need two parameters for 'set history'; got " \
+                        "#{args.size}.\n"
                   return
                 end
               when /^linetrace\+$/
@@ -159,7 +161,7 @@ set history size -- Set the size of the command history"],
                 print "Unknown setting #{@match[1]}.\n"
                 return
               end
-              print "%s\n" % show_setting(try_subcmd.name)
+              print "#{show_setting(try_subcmd.name)}\n"
               return
             rescue RuntimeError
               return

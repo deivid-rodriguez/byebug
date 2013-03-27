@@ -8,21 +8,8 @@ module Byebug
   end
 
   class Context
-
-    def frame_locals(frame_no=0)
-      result = {}
-      binding = frame_binding(frame_no)
-      locals = eval("local_variables", binding)
-      locals.each {|local| result[local.to_s] = eval(local.to_s, binding)}
-      result
-    end
-
     def frame_class(frame_no=0)
       frame_self(frame_no).class
-    end
-
-    def frame_args_info(frame_no=0)
-      nil
     end
 
     def interrupt
