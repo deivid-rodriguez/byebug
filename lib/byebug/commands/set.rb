@@ -18,7 +18,7 @@ module Byebug
         ['autoreload', 4, true, "Reload source code when changed"],
         ['basename', 1, true, "Report file basename only showing file names"],
         ['callstyle', 2, false, "Set how you want call parameters displayed"],
-        ['byebugtesting', 8, false, "Used when testing the byebug"],
+        ['byebugtesting', 8, false, "Used when testing byebug"],
         ['forcestep', 2, true,
          'Make sure \'next/step\' commands always move to a new line'],
         ['fullpath', 2, true, "Display full file names in frames"],
@@ -34,7 +34,7 @@ module Byebug
         ['listsize', 3, false, "Set number of source lines to list by default"],
         ['trace', 1, true, "Display stack trace when 'eval' raises exception"],
         ['width', 1, false,
-         'Number of characters the byebug thinks are in a line']
+         'Number of characters per line for byebug\'s output']
       ].map do |name, min, is_bool, short_help, long_help|
       SubcmdStruct2.new(name, min, is_bool, short_help, long_help)
     end unless defined?(Subcommands)

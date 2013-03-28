@@ -1,5 +1,6 @@
 module Byebug
-  module VarFunctions # :nodoc:
+
+  module VarFunctions
     def var_list(ary, b = get_binding)
       ary.sort!
       for v in ary
@@ -24,7 +25,7 @@ module Byebug
     end
   end
 
-  # Implements the byebug 'var class' command.
+  # Implements byebug's 'var class' command
   class VarClassVarCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+cl(?:ass)?/
@@ -33,7 +34,7 @@ module Byebug
     def execute
       unless @state.context
         errmsg "can't get class variables here.\n"
-        return 
+        return
       end
       var_class_self
     end
@@ -51,7 +52,7 @@ module Byebug
     end
   end
 
-  class VarConstantCommand < Command # :nodoc:
+  class VarConstantCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+co(?:nst(?:ant)?)?\s+/
     end
@@ -84,7 +85,7 @@ module Byebug
     end
   end
 
-  class VarGlobalCommand < Command # :nodoc:
+  class VarGlobalCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+g(?:lobal)?\s*$/
     end
@@ -106,7 +107,7 @@ module Byebug
     end
   end
 
-  class VarInstanceCommand < Command # :nodoc:
+  class VarInstanceCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+ins(?:tance)?\s*/
     end
@@ -129,7 +130,7 @@ module Byebug
     end
   end
 
-  # Implements the byebug 'var local' command.
+  # Implements byebug's 'var local' command
   class VarLocalCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+l(?:ocal)?\s*$/
@@ -137,7 +138,7 @@ module Byebug
 
     def execute
       locals = @state.context.frame_locals(@state.frame_pos)
-      _self = @state.context.frame_self(@state.frame_pos) 
+      _self = @state.context.frame_self(@state.frame_pos)
       locals.keys.sort.each do |name|
         print "  %s => %p\n", name, locals[name]
       end
@@ -155,8 +156,7 @@ module Byebug
       end
     end
   end
-  
-    # Implements the byebug 'var inherit' command.
+
   begin
     require 'classtree'
     have_classtree = true
@@ -164,6 +164,7 @@ module Byebug
     have_classtree = false
   end
 
+  # Implements byebug's 'var inherit' command
   class VarInheritCommand < Command
     def regexp
       /^\s*v(?:ar)?\s+ct\s*/
@@ -172,7 +173,7 @@ module Byebug
     def execute
       unless @state.context
         errmsg "can't get object inheritance.\n"
-        return 
+        return
       end
       puts @match.post_match
       obj = debug_eval("#{@match.post_match}.classtree")

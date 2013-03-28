@@ -89,9 +89,7 @@ check_start_processing(debug_context_t *context, VALUE thread)
 
   while(1)
   {
-    /* halt execution of the current thread if the byebug
-       is activated in another
-    */
+    /* halt execution of the current thread if byebug is activated in another */
     while(locker != Qnil && locker != thread)
     {
       add_to_locked(thread);

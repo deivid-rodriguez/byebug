@@ -12,7 +12,7 @@ module Byebug
       end
       print "\n"
     end
-    
+
     def parse_thread_num(subcmd, arg)
       if '' == arg
         errmsg "'%s' needs a thread number\n" % subcmd
@@ -27,13 +27,13 @@ module Byebug
     def parse_thread_num_for_cmd(subcmd, arg)
       c = parse_thread_num(subcmd, arg)
       return nil unless c
-      case 
+      case
       when nil == c
         errmsg "No such thread.\n"
       when @state.context == c
         errmsg "It's the current thread.\n"
       when c.ignored?
-        errmsg "Can't #{subcmd} to the byebug thread #{arg}.\n"
+        errmsg "Can't #{subcmd} to byebug's thread #{arg}.\n"
       else # Everything is okay
         return c
       end
@@ -71,14 +71,14 @@ module Byebug
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
     self.need_context         = true
-    
+
     def regexp
       /^\s*th(?:read)?\s+stop\s*(\S*)\s*$/
     end
 
     def execute
       c = parse_thread_num_for_cmd("thread stop", @match[1])
-      return unless c 
+      return unless c
       c.suspend
       display_context(c)
     end
@@ -100,14 +100,14 @@ module Byebug
     self.allow_in_post_mortem = false
     self.allow_in_control = true
     self.need_context = true
-    
+
     def regexp
       /^\s*th(?:read)?\s+resume\s*(\S*)\s*$/
     end
 
     def execute
       c = parse_thread_num_for_cmd("thread resume", @match[1])
-      return unless c 
+      return unless c
       if !c.thread.stop?
         print "Already running."
         return
@@ -136,14 +136,14 @@ module Byebug
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
     self.need_context         = true
-    
+
     def regexp
       /^\s*th(?:read)?\s*(?:sw(?:itch)?)?\s+(\S+)\s*$/
     end
 
     def execute
       c = parse_thread_num_for_cmd("thread switch", @match[1])
-      return unless c 
+      return unless c
       display_context(c)
       c.stop_next = 1
       c.thread.run
@@ -165,7 +165,7 @@ module Byebug
 
   class ThreadCurrentCommand < Command # :nodoc:
     self.need_context = true
-    
+
     def regexp
       /^\s*th(?:read)?\s*(?:cur(?:rent)?)?\s*$/
     end

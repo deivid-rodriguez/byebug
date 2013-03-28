@@ -7,7 +7,7 @@ module Byebug
     have_methodsig = false
   end
 
-  # Implements the byebug 'method sig' command.
+  # Implements byebug's 'method sig' command.
   class MethodSigCommand < Command
     def regexp
       /^\s*m(?:ethod)?\s+sig(?:nature)?\s+(\S+)\s*$/
@@ -39,7 +39,7 @@ module Byebug
     end
   end if have_methodsig
 
-  # Implements the byebug 'method' command.
+  # Implements byebug's 'method' command.
   class MethodCommand < Command
     def regexp
       /^\s*m(?:ethod)?\s+((iv)|(i(:?nstance)?)\s+)?/
@@ -53,14 +53,14 @@ module Byebug
         end
       elsif @match[1]
         obj = debug_eval(@match.post_match)
-        print "%s\n", columnize(obj.methods.sort(), 
+        print "%s\n", columnize(obj.methods.sort(),
                                 self.class.settings[:width])
       else
         obj = debug_eval(@match.post_match)
         unless obj.kind_of? Module
           print "Should be Class/Module: %s\n", @match.post_match
         else
-          print "%s\n", columnize(obj.instance_methods(false).sort(), 
+          print "%s\n", columnize(obj.instance_methods(false).sort(),
                                   self.class.settings[:width])
         end
       end

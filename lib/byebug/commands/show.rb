@@ -75,7 +75,7 @@ module Byebug
         return s
       when /^byebugtesting$/
         on_off = Command.settings[:byebugtesting]
-        return "Currently testing the byebug is #{show_onoff(on_off)}."
+        return "Currently testing byebug is #{show_onoff(on_off)}."
       when /^forcestep$/
         on_off = self.class.settings[:force_stepping]
         return "force-stepping is #{show_onoff(on_off)}."
@@ -232,7 +232,7 @@ show history size -- Show the size of the command history"],
           end
         end
         s = "
-          Generic command for showing things about the byebug.
+          Generic command for showing things about byebug.
 
           --
           List of show subcommands:

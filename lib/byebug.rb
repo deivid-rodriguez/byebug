@@ -107,16 +107,14 @@ module Byebug
     # If it's called without a block it returns +true+, unless byebug was
     # already started.
     #
-    # If a block is given, it starts byebug and yields to block. When the
-    # block is finished executing it stops the byebug with Byebug.stop
-    # method. Inside the block you will probably want to have a call to
-    # Byebug.byebug. For example:
+    # If a block is given, it starts byebug and yields block. When the block is
+    # executed it stops byebug with Byebug.stop method. Inside the block you
+    # will probably want to have a call to Byebug.byebug. For example:
     #
     #     Byebug.start{byebug; foo}  # Stop inside of foo
     #
     # Also, byebug only allows one invocation of byebug at a time; nested
-    # Byebug.start's have no effect and you can't use this inside the byebug
-    # itself.
+    # Byebug.start's have no effect and you can't use this inside byebug itself.
     #
     # <i>Note that if you want to stop byebug, you must call Byebug.stop as
     # many times as you called Byebug.start method.</i>
@@ -376,8 +374,8 @@ module Kernel
   # Enters byebug in the current thread after _steps_ line events occur.
   #
   # Before entering byebug startup, the init script is read. Setting _steps_ to
-  # 0 will cause a break in the byebug subroutine and not wait for a line event
-  # to occur. You will have to go "up 1" in order to be back to your debugged
+  # 0 will cause a break in byebug's subroutine and not wait for a line event to
+  # occur. You will have to go "up 1" in order to be back to your debugged
   # program from byebug. Setting _steps_ to 0 could be useful if you want to
   # stop right after the last statement in some scope, because the next step
   # will take you out of some scope.

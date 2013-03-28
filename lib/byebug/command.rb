@@ -4,7 +4,7 @@ require_relative 'helper'
 
 module Byebug
 
-  # This is the root dir for the byebug lib
+  # Root dir for byebug
   BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
     defined?(BYEBUG_DIR)
 
