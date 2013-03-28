@@ -1,6 +1,6 @@
 module Byebug
 
-  class CatchCommand < Command # :nodoc:
+  class CatchCommand < Command
     self.allow_in_control = true
 
     def regexp

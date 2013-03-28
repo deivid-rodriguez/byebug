@@ -291,10 +291,11 @@ process_raise_event(VALUE trace_point, void *data)
 {
   VALUE path, lineno, method_id, defined_class, binding, self;
   VALUE context_object;
-  VALUE hit_count;
-  VALUE exception_name;
+  VALUE expn_class, aclass;
+  VALUE err = rb_errinfo();
+  VALUE ancestors;
   debug_context_t *context;
-  int c_hit_count;
+  int i;
 
   context_object = Byebug_current_context(mByebug);
   Data_Get_Struct(context_object, debug_context_t, context);
@@ -305,23 +306,41 @@ process_raise_event(VALUE trace_point, void *data)
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
-  if (catchpoint_hit_count(catchpoints, rb_errinfo(), &exception_name) != Qnil) {
-    /* On 64-bit systems with gcc and -O2 there seems to be
-       an optimization bug in running INT2FIX(FIX2INT...)..)
-       So we do this in two steps.
-      */
-    c_hit_count = FIX2INT(rb_hash_aref(catchpoints, exception_name)) + 1;
-    hit_count = INT2FIX(c_hit_count);
-    rb_hash_aset(catchpoints, exception_name, hit_count);
-    context->stop_reason = CTX_STOP_CATCHPOINT;
-    rb_funcall(context_object, idAtCatchpoint, 1, rb_errinfo());
-    call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
-                 path, lineno);
+  if (debug == Qtrue)
+    print_debug_info("call", path, lineno, method_id, defined_class,
+                                                           context->stack_size);
+  expn_class = rb_obj_class(err);
+
+  if (catchpoints == Qnil ||
+      context->stack_size == 0 ||
+      CTX_FL_TEST(context, CTX_FL_CATCHING) ||
+      RHASH_TBL(catchpoints)->num_entries == 0) {
+    cleanup(context);
+    return;
+  }
+
+  ancestors = rb_mod_ancestors(expn_class);
+  for (i = 0; i < RARRAY_LEN(ancestors); i++) {
+    VALUE mod_name;
+    VALUE hit_count;
+
+    aclass    = rb_ary_entry(ancestors, i);
+    mod_name  = rb_mod_name(aclass);
+    hit_count = rb_hash_aref(catchpoints, mod_name);
+
+    if (hit_count != Qnil) {
+      /* increment exception */
+      rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
+      context->stop_reason = CTX_STOP_CATCHPOINT;
+      rb_funcall(context_object, idAtCatchpoint, 1, rb_errinfo());
+      call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
+                   path, lineno);
+      break;
+    }
   }
 
   cleanup(context);
 }
-
 
 static VALUE
 Byebug_setup_tracepoints(VALUE self)
@@ -495,6 +514,16 @@ Byebug_catchpoints(VALUE self)
   return catchpoints;
 }
 
+static VALUE
+Byebug_add_catchpoint(VALUE self, VALUE value)
+{
+  if (TYPE(value) != T_STRING)
+    rb_raise(rb_eTypeError, "value of a catchpoint must be String");
+
+  rb_hash_aset(catchpoints, rb_str_dup(value), INT2FIX(0));
+  return value;
+}
+
 /*
  *   Document-class: Byebug
  *
@@ -507,11 +536,16 @@ void
 Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
-  rb_define_module_function(mByebug, "setup_tracepoints", Byebug_setup_tracepoints, 0);
-  rb_define_module_function(mByebug, "remove_tracepoints", Byebug_remove_tracepoints, 0);
-  rb_define_module_function(mByebug, "current_context", Byebug_current_context, 0);
+  rb_define_module_function(mByebug, "setup_tracepoints",
+                                     Byebug_setup_tracepoints, 0);
+  rb_define_module_function(mByebug, "remove_tracepoints",
+                                     Byebug_remove_tracepoints, 0);
+  rb_define_module_function(mByebug, "current_context",
+                                     Byebug_current_context, 0);
   rb_define_module_function(mByebug, "contexts", Byebug_contexts, 0);
   rb_define_module_function(mByebug, "breakpoints", Byebug_breakpoints, 0);
+  rb_define_module_function(mByebug, "add_catchpoint",
+                                     Byebug_add_catchpoint, 1);
   rb_define_module_function(mByebug, "catchpoints", Byebug_catchpoints, 0);
   rb_define_module_function(mByebug, "_start", Byebug_start, 0);
   rb_define_module_function(mByebug, "stop", Byebug_stop, 0);
