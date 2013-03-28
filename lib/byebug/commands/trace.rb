@@ -11,11 +11,11 @@ module Byebug
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1]
         #if @match[2]
-        #  Byebug.tracing = onoff
-        #  print "Tracing %s all threads.\n" % (onoff ? 'on' : 'off')
+          Byebug.tracing = onoff
+          print "Tracing is #{onoff ? 'on' : 'off'}"
         #else
-        Byebug.current_context.tracing = onoff
-        print "Tracing is #{onoff ? 'on' : 'off'}"
+        #  Byebug.current_context.tracing = onoff
+        #  print "Tracing %s on current thread.\n"  % (onoff ? 'on' : 'off')
         #end
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]

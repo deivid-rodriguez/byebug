@@ -4,8 +4,10 @@ static VALUE mByebug; /* Ruby Byebug Module object */
 static VALUE cContext;
 static VALUE cDebugThread;
 
-static VALUE debug = Qfalse;
-static VALUE locker = Qnil;
+static VALUE tracing = Qfalse;
+static VALUE debug   = Qfalse;
+static VALUE locker  = Qnil;
+
 static VALUE contexts;
 static VALUE catchpoints;
 static VALUE breakpoints;
@@ -177,7 +179,7 @@ process_line_event(VALUE trace_point, void *data)
     moved = 1;
   }
 
-  if (CTX_FL_TEST(context, CTX_FL_TRACING))
+  if (RTEST(tracing) || CTX_FL_TEST(context, CTX_FL_TRACING))
     rb_funcall(context_object, idAtTracing, 2, path, lineno);
 
   if (context->dest_frame == -1 || context->stack_size >= context->dest_frame)
@@ -451,7 +453,18 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static VALUE
+Byebug_tracing(VALUE self)
+{
+    return tracing;
+}
 
+static VALUE
+Byebug_set_tracing(VALUE self, VALUE value)
+{
+    tracing = RTEST(value) ? Qtrue : Qfalse;
+    return value;
+}
 
 static VALUE
 Byebug_contexts(VALUE self)
@@ -503,6 +516,8 @@ Init_byebug()
   rb_define_module_function(mByebug, "_start", Byebug_start, 0);
   rb_define_module_function(mByebug, "stop", Byebug_stop, 0);
   rb_define_module_function(mByebug, "started?", Byebug_started, 0);
+  rb_define_module_function(mByebug, "tracing", Byebug_tracing, 0);
+  rb_define_module_function(mByebug, "tracing=", Byebug_set_tracing, 1);
   rb_define_module_function(mByebug, "debug_load", Byebug_load, -1);
 
   idAlive = rb_intern("alive?");

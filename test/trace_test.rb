@@ -1,9 +1,9 @@
 require_relative 'test_helper'
 
-describe "Trace Command (test setup)" do
+describe "Trace Command" do
   include TestDsl
 
-  describe "Trace Command" do
+  describe "Trace Command Setup" do
 
     before do
       @old_consts = {}
@@ -11,7 +11,6 @@ describe "Trace Command (test setup)" do
       set_tmp_const(Byebug, "PROG_SCRIPT", fullpath('trace'))
       set_tmp_hash(Byebug::Command.settings, :basename, false)
       untrace_var(:$bla) if defined?($bla)
-      #temporary_change_method_value(Byebug::Command.settings, :tracing, false)
     end
 
     after do
@@ -33,13 +32,13 @@ describe "Trace Command (test setup)" do
         it "must show a message when turned on" do
           enter 'trace on'
           debug_file 'trace'
-          check_output_includes "Tracing on on current thread."
+          check_output_includes "Tracing is on"
         end
 
         it "must be able to use a shortcut" do
           enter 'tr on'
           debug_file 'trace'
-          check_output_includes "Tracing on on current thread."
+          check_output_includes "Tracing is on"
         end
       end
 
@@ -60,7 +59,7 @@ describe "Trace Command (test setup)" do
         it "must show a message when turned off" do
           enter 'trace off'
           debug_file 'trace'
-          check_output_includes "Tracing off on current thread."
+          check_output_includes "Tracing is off"
         end
       end
     end

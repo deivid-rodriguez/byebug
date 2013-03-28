@@ -19,7 +19,7 @@ module Byebug
   DEFAULT_START_SETTINGS = {
     :init        => true,  # Set $0 and save ARGV?
     :post_mortem => false, # post-mortem debugging on uncaught exception?
-    :tracing     => nil    # Byebug.tracing value. true/false resets,
+    :tracing     => nil    # Byebug.tracing value. true/false resets
   } unless defined?(DEFAULT_START_SETTINGS)
 
   # Port number used for remote debugging
@@ -138,7 +138,7 @@ module Byebug
         Byebug.const_set('PROG_SCRIPT', $0) unless defined? Byebug::PROG_SCRIPT
         Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
       end
-      #Byebug.tracing = options[:tracing] unless options[:tracing].nil?
+      Byebug.tracing = options[:tracing] unless options[:tracing].nil?
       if Byebug.started?
         retval = block && block.call(self)
       else
