@@ -81,41 +81,41 @@ Breakpoint_set_hit_value(VALUE self, VALUE value)
 static VALUE
 Breakpoint_hit_condition(VALUE self)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    switch(breakpoint->hit_condition)
-    {
-        case HIT_COND_GE:
-            return ID2SYM(rb_intern("greater_or_equal"));
-        case HIT_COND_EQ:
-            return ID2SYM(rb_intern("equal"));
-        case HIT_COND_MOD:
-            return ID2SYM(rb_intern("modulo"));
-        case HIT_COND_NONE:
-        default:
-            return Qnil;
-    }
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  switch(breakpoint->hit_condition)
+  {
+    case HIT_COND_GE:
+      return ID2SYM(rb_intern("greater_or_equal"));
+    case HIT_COND_EQ:
+      return ID2SYM(rb_intern("equal"));
+    case HIT_COND_MOD:
+      return ID2SYM(rb_intern("modulo"));
+    case HIT_COND_NONE:
+    default:
+      return Qnil;
+  }
 }
 
 static VALUE
 Breakpoint_set_hit_condition(VALUE self, VALUE value)
 {
-    breakpoint_t *breakpoint;
-    ID id_value;
+  breakpoint_t *breakpoint;
+  ID id_value;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    id_value = rb_to_id(value);
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  id_value = rb_to_id(value);
 
-    if(rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
-        breakpoint->hit_condition = HIT_COND_GE;
-    else if(rb_intern("equal") == id_value || rb_intern("eq") == id_value)
-        breakpoint->hit_condition = HIT_COND_EQ;
-    else if(rb_intern("modulo") == id_value || rb_intern("mod") == id_value)
-        breakpoint->hit_condition = HIT_COND_MOD;
-    else
-        rb_raise(rb_eArgError, "Invalid condition parameter");
-    return value;
+  if(rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
+    breakpoint->hit_condition = HIT_COND_GE;
+  else if(rb_intern("equal") == id_value || rb_intern("eq") == id_value)
+    breakpoint->hit_condition = HIT_COND_EQ;
+  else if(rb_intern("modulo") == id_value || rb_intern("mod") == id_value)
+    breakpoint->hit_condition = HIT_COND_MOD;
+  else
+    rb_raise(rb_eArgError, "Invalid condition parameter");
+  return value;
 }
 
 static void
@@ -153,6 +153,7 @@ Breakpoint_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
   breakpoint->expr = NIL_P(expr) ? expr : StringValue(expr);
   breakpoint->hit_count = 0;
   breakpoint->hit_value = 0;
+  breakpoint->hit_condition = HIT_COND_NONE;
 
   return Qnil;
 }
@@ -302,47 +303,45 @@ filename_cmp(VALUE source, char *file)
 #endif
 }
 
-/* XXX: Activate */
-/*
 static int
-check_breakpoint_hit_condition(VALUE breakpoint_object)
+check_breakpoint_by_hit_condition(VALUE breakpoint_object)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    if (breakpoint == Qnil)
-        return 0;
-
-    Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
-    breakpoint->hit_count++;
-
-    if (Qtrue != breakpoint->enabled)
-       return 0;
-    switch (breakpoint->hit_condition)
-    {
-        case HIT_COND_NONE:
-            return 1;
-        case HIT_COND_GE:
-        {
-            if (breakpoint->hit_count >= breakpoint->hit_value)
-                return 1;
-            break;
-        }
-        case HIT_COND_EQ:
-        {
-            if (breakpoint->hit_count == breakpoint->hit_value)
-                return 1;
-            break;
-        }
-        case HIT_COND_MOD:
-        {
-            if (breakpoint->hit_count % breakpoint->hit_value == 0)
-                return 1;
-            break;
-        }
-    }
+  if (breakpoint_object == Qnil)
     return 0;
+  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+
+  breakpoint->hit_count++;
+
+  if (Qtrue != breakpoint->enabled)
+    return 0;
+
+  switch (breakpoint->hit_condition)
+  {
+    case HIT_COND_NONE:
+      return 1;
+    case HIT_COND_GE:
+    {
+      if (breakpoint->hit_count >= breakpoint->hit_value)
+        return 1;
+      break;
+    }
+    case HIT_COND_EQ:
+    {
+      if (breakpoint->hit_count == breakpoint->hit_value)
+        return 1;
+      break;
+    }
+    case HIT_COND_MOD:
+    {
+      if (breakpoint->hit_count % breakpoint->hit_value == 0)
+        return 1;
+      break;
+    }
+  }
+  return 0;
 }
-*/
 
 static int
 check_breakpoint_by_pos(VALUE breakpoint_object, char *file, int line)
@@ -352,6 +351,7 @@ check_breakpoint_by_pos(VALUE breakpoint_object, char *file, int line)
     if(breakpoint_object == Qnil)
         return 0;
     Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+
     if (Qtrue != breakpoint->enabled)
         return 0;
     if(breakpoint->type != BP_POS_TYPE)
@@ -367,41 +367,42 @@ static int
 check_breakpoint_by_method(VALUE breakpoint_object, VALUE klass, ID mid,
                            VALUE self)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    if (breakpoint_object == Qnil)
-        return 0;
-    Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
-    if (!Qtrue == breakpoint->enabled)
-        return 0;
-    if (breakpoint->type != BP_METHOD_TYPE)
-        return 0;
-    if (breakpoint->pos.mid != mid)
-        return 0;
-    if (classname_cmp(breakpoint->source, klass))
-        return 1;
-    if ((rb_type(self) == T_CLASS) &&
-        classname_cmp(breakpoint->source, self))
-        return 1;
+  if (breakpoint_object == Qnil)
     return 0;
+  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+
+  if (!Qtrue == breakpoint->enabled)
+    return 0;
+  if (breakpoint->type != BP_METHOD_TYPE)
+    return 0;
+  if (breakpoint->pos.mid != mid)
+    return 0;
+  if (classname_cmp(breakpoint->source, klass))
+    return 1;
+  if ((rb_type(self) == T_CLASS) && classname_cmp(breakpoint->source, self))
+    return 1;
+  return 0;
 }
 
 static int
 check_breakpoint_by_expr(VALUE breakpoint_object, VALUE binding)
 {
-    breakpoint_t *breakpoint;
-    VALUE args, expr_result;
+  breakpoint_t *breakpoint;
+  VALUE args, expr_result;
 
-    if (breakpoint_object == Qnil)
-        return 0;
-    Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
-    if (Qtrue != breakpoint->enabled)
-        return 0;
-    if (NIL_P(breakpoint->expr))
-        return 1;
-    args = rb_ary_new3(2, breakpoint->expr, binding);
-    expr_result = rb_protect(eval_expression, args, 0);
-    return RTEST(expr_result);
+  if (breakpoint_object == Qnil)
+    return 0;
+  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+
+  if (Qtrue != breakpoint->enabled)
+    return 0;
+  if (NIL_P(breakpoint->expr))
+    return 1;
+  args = rb_ary_new3(2, breakpoint->expr, binding);
+  expr_result = rb_protect(eval_expression, args, 0);
+  return RTEST(expr_result);
 }
 
 extern VALUE
@@ -419,7 +420,8 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     if ( check_breakpoint_by_pos(breakpoint_object, file, line) &&
-         check_breakpoint_by_expr(breakpoint_object, binding) )
+         check_breakpoint_by_expr(breakpoint_object, binding)   &&
+         check_breakpoint_by_hit_condition(breakpoint_object) )
     {
       return breakpoint_object;
     }
@@ -431,17 +433,18 @@ extern VALUE
 find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
                           VALUE self)
 {
-    VALUE breakpoint_object;
-    int i;
+  VALUE breakpoint_object;
+  int i;
 
-    for(i = 0; i < RARRAY_LEN(breakpoints); i++)
-    {
-        breakpoint_object = rb_ary_entry(breakpoints, i);
-        if ( check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
-             check_breakpoint_by_expr(breakpoint_object, binding) )
-            return breakpoint_object;
-    }
-    return Qnil;
+  for(i = 0; i < RARRAY_LEN(breakpoints); i++)
+  {
+    breakpoint_object = rb_ary_entry(breakpoints, i);
+    if ( check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
+         check_breakpoint_by_expr(breakpoint_object, binding)            &&
+         check_breakpoint_by_hit_condition(breakpoint_object) )
+      return breakpoint_object;
+  }
+  return Qnil;
 }
 
 extern void
@@ -449,7 +452,6 @@ Init_breakpoint(VALUE mByebug)
 {
   breakpoint_max = 0;
   cBreakpoint = rb_define_class_under(mByebug, "Breakpoint", rb_cObject);
-/*  rb_define_singleton_method(cBreakpoint, "find", Breakpoint_find, 4); */
   rb_define_singleton_method(cBreakpoint, "remove", Breakpoint_remove, 2);
   rb_define_method(cBreakpoint, "initialize", Breakpoint_initialize, 3);
   rb_define_method(cBreakpoint, "id", Breakpoint_id, 0);

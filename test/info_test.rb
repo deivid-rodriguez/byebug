@@ -8,10 +8,9 @@ describe "Info Command" do
      temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 15)
 
      it "must show info about all args" do
-       skip ("XXX: How to handle args in the new API?")
-       #enter 'break 3', 'cont', 'info args'
-       #debug_file 'info'
-       #check_output_includes 'a = "aaaaaaa...', 'b = "b"'
+       enter 'break 3', 'cont', 'info args'
+       debug_file 'info'
+       check_output_includes 'a = "aaaaaaa...', 'b = "b"'
      end
    end
 
@@ -19,15 +18,14 @@ describe "Info Command" do
     it "must show info about all breakpoints" do
       enter 'break 7', 'break 9 if a == b', 'info breakpoints'
       debug_file 'info'
-      check_output_includes(
-        "Num Enb What",
-        /\d+ y   at #{fullpath('info')}:7/,
-        /\d+ y   at #{fullpath('info')}:9 if a == b/
-      )
+      check_output_includes "Num Enb What",
+                            /\d+ y   at #{fullpath('info')}:7/,
+                            /\d+ y   at #{fullpath('info')}:9 if a == b/
     end
 
     it "must show info about specific breakpoint" do
-      enter 'break 7', 'break 9', ->{"info breakpoints #{breakpoint.id}"}
+      enter 'break 7', 'break 9',
+            ->{"info breakpoints #{Byebug.breakpoints.first.id}"}
       debug_file 'info'
       check_output_includes "Num Enb What", /\d+ y   at #{fullpath('info')}:7/
       check_output_doesnt_include  /\d+ y   at #{fullpath('info')}:9/
@@ -42,13 +40,16 @@ describe "Info Command" do
     it "must show an error if no breakpoints are found" do
       enter 'break 7', 'info breakpoints 123'
       debug_file 'info'
-      check_output_includes "No breakpoints found among list given.", interface.error_queue
+      check_output_includes "No breakpoints found among list given.",
+                            interface.error_queue
     end
 
     it "must show hit count" do
       enter 'break 9', 'cont', 'info breakpoints'
       debug_file 'info'
-      check_output_includes /\d+ y   at #{fullpath('info')}:9/, "breakpoint already hit 1 time"
+      check_output_includes /\d+ y   at #{fullpath('info')}:9/
+      check_output_includes /\d+ y   at #{fullpath('info')}:9/,
+                            "breakpoint already hit 1 time"
     end
   end
 
@@ -56,12 +57,10 @@ describe "Info Command" do
     it "must show all display expressions" do
       enter 'display 3 + 3', 'display a + b', 'info display'
       debug_file 'info'
-      check_output_includes(
-        "Auto-display expressions now in effect:",
-        "Num Enb Expression",
-          "1: y  3 + 3",
-          "2: y  a + b"
-      )
+      check_output_includes "Auto-display expressions now in effect:",
+                            "Num Enb Expression",
+                            "1: y  3 + 3",
+                            "2: y  a + b"
     end
 
     it "must show a message if there are no display expressions created" do
@@ -88,7 +87,8 @@ describe "Info Command" do
     it "must show explicitly loaded files" do
       enter 'info files stat'
       debug_file 'info'
-      check_output_includes "File #{fullpath('info')}", LineCache.stat(fullpath('info')).mtime.to_s
+      check_output_includes "File #{fullpath('info')}",
+                            LineCache.stat(fullpath('info')).mtime.to_s
     end
   end
 
@@ -99,7 +99,8 @@ describe "Info Command" do
     let(:mtime) { LineCache.stat(file).mtime.to_s }
     let(:sha1) { LineCache.sha1(file) }
     let(:breakpoint_line_numbers) do
-      columnize(LineCache.trace_line_numbers(file).to_a.sort, Byebug::InfoCommand.settings[:width])
+      columnize(LineCache.trace_line_numbers(file).to_a.sort,
+                Byebug::InfoCommand.settings[:width])
     end
 
     it "must show basic info about the file" do
@@ -133,17 +134,18 @@ describe "Info Command" do
     it "must show breakpoints in the file" do
       enter 'break 5', 'break 7', "info file #{file} breakpoints"
       debug_file 'info'
-      check_output_includes(
-        filename, "breakpoint line numbers:", breakpoint_line_numbers,
-        /Breakpoint \d+ at #{file}:5/, /Breakpoint \d+ at #{file}:7/
-      )
+      check_output_includes /Created breakpoint \d+ at #{file}:5/,
+                            /Created breakpoint \d+ at #{file}:7/,
+                            filename,
+                            "breakpoint line numbers:", breakpoint_line_numbers
       check_output_doesnt_include lines, mtime, sha1
     end
 
     it "must show all info about the file" do
       enter "info file #{file} all"
       debug_file 'info'
-      check_output_includes filename, lines, breakpoint_line_numbers, mtime, sha1
+      check_output_includes \
+        filename, lines, breakpoint_line_numbers, mtime, sha1
     end
 
     it "must not show info about the file if the file is not loaded" do
@@ -175,33 +177,36 @@ describe "Info Command" do
     end
   end
 
-# describe "Locals info" do
-#   it "must show the current local variables" do
-#     temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 12) do
-#       enter 'break 21', 'cont', 'info locals'
-#       debug_file 'info'
-#       check_output_includes 'a = "1111...', 'b = 2'
-#     end
-#   end
+  describe "Locals info" do
+    it "must show the current local variables" do
+      temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 12) do
+        enter 'break 21', 'cont', 'info locals'
+        debug_file 'info'
+        check_output_includes 'a = "1111...', 'b = 2'
+      end
+    end
 
-#   it "must fail if the local variable doesn't respond to #to_s or to #inspect" do
-#     enter 'break 26', 'cont', 'info locals'
-#     debug_file 'info'
-#     check_output_includes "*Error in evaluation*"
-#   end
-# end
+    it "must fail if the local variable doesn't respond to #to_s or to #inspect" do
+      enter 'break 26', 'cont', 'info locals'
+      debug_file 'info'
+      check_output_includes "*Error in evaluation*"
+    end
+  end
 
   describe "Program info" do
     it "must show the initial stop reason" do
       enter 'info program'
       debug_file 'info'
-      check_output_includes "It stopped after stepping, next'ing or initial start."
+      check_output_includes \
+        "It stopped after stepping, next'ing or initial start."
     end
 
     it "must show the step stop reason" do
       enter 'step', 'info program'
       debug_file 'info'
-      check_output_includes "Program stopped.", "It stopped after stepping, next'ing or initial start."
+      check_output_includes \
+        "Program stopped.",
+        "It stopped after stepping, next'ing or initial start."
     end
 
     it "must show the breakpoint stop reason" do
@@ -213,7 +218,8 @@ describe "Info Command" do
     it "must show the catchpoint stop reason"
 
     it "must show the unknown stop reason" do
-      enter 'break 7', 'cont', ->{context.stubs(:stop_reason).returns("blabla"); 'info program'}
+      enter 'break 7', 'cont',
+             ->{context.stubs(:stop_reason).returns("blabla"); 'info program'}
       debug_file 'info'
       check_output_includes "Program stopped.", "unknown reason: blabla"
     end
@@ -225,73 +231,73 @@ describe "Info Command" do
     it "must show stack info" do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
-      check_output_includes(
+      check_output_includes \
         "-->", "#0", "A.a", "at line #{fullpath('info')}:20",
                "#1",        "at line #{fullpath('info')}:30"
-      )
     end
   end
 
-#  describe "Thread info" do
-#    it "must show threads info when without args" # TODO: Unreliable due to race conditions, need to fix to be reliable
-#    #   enter 'break 48', 'cont', 'info threads'
-#    #   debug_file 'info'
-#    #   check_output_includes /#<Thread:\S+ run>/, /#<Thread:\S+ run>/
-#    # end
-#
-#    it "must show thread info" do
-#      thread_number = nil
-#      enter ->{thread_number = context.thnum; "info thread #{context.thnum}"}
-#      debug_file 'info'
-#      check_output_includes "+", thread_number.to_s, /#<Thread:\S+ run>/
-#    end
-#
-#    it "must show verbose thread info" do # TODO: Unreliable due to race conditions, need to fix to be reliable
-#      enter 'break 20', 'cont', ->{"info thread #{context.thnum} verbose"}
-#      debug_file 'info'
-#      check_output_includes /#<Thread:\S+ run>/, "#0", "A.a", "at line #{fullpath('info')}:20"
-#    end
-#
-#    it "must show error when unknown parameter is used" do
-#      enter ->{"info thread #{context.thnum} blabla"}
-#      debug_file 'info'
-#      check_output_includes "'terse' or 'verbose' expected. Got 'blabla'", interface.error_queue
-#    end
-#  end
+   describe "Thread info" do
+     it "must show threads info when without args" do
+       skip("XXX: Unreliable due to race conditions, needs fix to be reliable")
+       enter 'break 48', 'cont', 'info threads'
+       debug_file 'info'
+       check_output_includes /#<Thread:\S+ run>/, /#<Thread:\S+ run>/
+     end
+
+     it "must show thread info" do
+       skip("No thread support")
+       thread_number = nil
+       enter ->{thread_number = context.thnum; "info thread #{context.thnum}"}
+       debug_file 'info'
+       check_output_includes "+", thread_number.to_s, /#<Thread:\S+ run>/
+     end
+
+     it "must show verbose thread info" do
+       skip("XXX: Unreliable due to race conditions, needs fix to be reliable")
+       enter 'break 20', 'cont', ->{"info thread #{context.thnum} verbose"}
+       debug_file 'info'
+       check_output_includes /#<Thread:\S+ run>/, "#0", "A.a",
+                             "at line #{fullpath('info')}:20"
+     end
+
+     it "must show error when unknown parameter is used" do
+       skip("No thread support")
+       enter ->{"info thread #{context.thnum} blabla"}
+       debug_file 'info'
+       check_output_includes "'terse' or 'verbose' expected. Got 'blabla'",
+                             interface.error_queue
+     end
+   end
 
   describe "Global Variables info" do
     it "must show global variables" do
-      skip("XXX: handle global variables, XXX: Fix warning in test")
-      #enter 'info global_variables'
-      #debug_file 'info'
-      #check_output_includes "$$ = #{Process.pid}"
+      #skip("XXX: handle global variables, XXX: Fix warning in test")
+      enter 'info global_variables'
+      debug_file 'info'
+      check_output_includes "$$ = #{Process.pid}"
     end
   end
 
   describe "Variables info" do
     it "must show all variables" do
-      temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 30) do
-        enter 'break 21', 'cont', 'info variables'
-        debug_file 'info'
-        check_output_includes(
-          'a = "1111111111111111111111...',
-          "b = 2",
-          /self = #<A:\S+.../,
-          '@bla = "blabla"',
-          '@foo = "bar"'
-        )
-      end
+      Byebug::InfoCommand.settings[:width] = 30
+      enter 'break 21', 'cont', 'info variables'
+      debug_file 'info'
+      check_output_includes 'a = "1111111111111111111111...',
+                            'b = 2',
+                            /self = #<A:\S+.../,
+                            '@bla = "blabla"',
+                            '@foo = "bar"'
     end
 
     it "must fail if the variable doesn't respond to #to_s or to #inspect" do
       enter 'break 26', 'cont', 'info variables'
       debug_file 'info'
-      check_output_includes(
-        'a = *Error in evaluation*',
-        /self = #<A:\S+.../,
-        '@bla = "blabla"',
-        '@foo = "bar"'
-      )
+      check_output_includes 'a = *Error in evaluation*',
+                            /self = #<A:\S+.../,
+                            '@bla = "blabla"',
+                            '@foo = "bar"'
     end
 
     it "must handle printf strings correctly" do
@@ -304,9 +310,9 @@ describe "Info Command" do
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', 'info line'
-      #debug_file "post_mortem"
-      #check_output_includes "Line 8 of \"#{fullpath('post_mortem')}\""
+      enter 'cont', 'info line'
+      debug_file "post_mortem"
+      check_output_includes "Line 8 of \"#{fullpath('post_mortem')}\""
     end
   end
 

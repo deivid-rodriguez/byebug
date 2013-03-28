@@ -3533,13 +3533,12 @@ your debugged program rather than in byebug.
 
 @item breakpoint @ovar{steps=1}
 @vindex @code{Kernel::breakpoint}
-An alias for byebug.  
+An alias for byebug.
 
 @item binding_n @ovar{n=0}
 @vindex @code{Kernel::binding_n}
-Returns a @samp{binding()} for the @var{n}-th call frame. Note however
-that you need to first call @samp{Byebug.start} before issuing this
-call.
+Returns a @samp{binding()} for the @var{n}-th call frame. Note however that you
+need to first call @samp{Byebug.start} before issuing this call.
 
 @end table
 

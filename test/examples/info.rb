@@ -2,11 +2,11 @@ byebug
 def bla(a, b)
   a + b
 end
-2
-3
-4
-5
-6
+va = 2
+vb = 3
+vc = 4
+vd = 5
+ve = 6
 bla("a" * 30, "b")
 
 class A

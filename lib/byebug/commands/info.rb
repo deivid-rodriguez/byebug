@@ -1,16 +1,15 @@
 module Byebug
-  module InfoFunctions # :nodoc:
+
+  module InfoFunctions
     def info_catch(*args)
       unless @state.context
         print "No frame selected.\n"
         return
       end
       if Byebug.catchpoints and not Byebug.catchpoints.empty?
-        # FIXME: show whether Exception is valid or not
-        # print "Exception: is_a?(Class)\n"
         Byebug.catchpoints.each do |exception, hits|
-          # print "#{exception}: #{exception.is_a?(Class)}\n"
-           print "#{exception}\n"
+          print "#{exception}: #{exception.is_a?(Class)}\n"
+          #print "#{exception}\n"
         end
       else
         print "No exceptions set to be caught.\n"
@@ -24,15 +23,15 @@ module Byebug
     Subcommands =
       [
        ['args', 1, 'Argument variables of current stack frame'],
-       ['breakpoints', 1, 'Status of user-settable breakpoints','
-Without argument, list info about all breakpoints.  With an integer argument,
-list info on that breakpoint.'],
+       ['breakpoints', 1, 'Status of user-settable breakpoints',
+        'Without argument, list info about all breakpoints.  With an integer ' \
+        'argument, list info on that breakpoint.'],
        ['catch', 3, 'Exceptions that can be caught in the current stack frame'],
        ['display', 2, 'Expressions to display when program stops'],
-       ['file', 4, 'Info about a particular file read in','
-After the file name is supplied, you can list file attributes that you wish to
-see. Attributes include: "all", "basic", "breakpoint", "lines", "mtime", "path"
-and "sha1".'],
+       ['file', 4, 'Info about a particular file read in',
+        'After the file name is supplied, you can list file attributes that ' \
+        'you wish to see. Attributes include: "all", "basic", "breakpoint", ' \
+        '"lines", "mtime", "path" and "sha1".'],
        ['files', 5, 'File names and timestamps of files read in'],
        ['global_variables', 2, 'Global variables'],
        ['instance_variables', 2,
@@ -42,16 +41,18 @@ and "sha1".'],
        ['locals', 2, 'Local variables of the current stack frame'],
        ['program', 2, 'Execution status of the program'],
        ['stack', 2, 'Backtrace of the stack'],
-#      ['thread', 6,  'List info about thread NUM', '
-#If no thread number is given, we list info for all threads. \'terse\' and
-#\'verbose\' options are possible. If \'terse\', just give summary thread name
-#information. See "help info threads" for more detail about this summary
-#information. If \'verbose\' appended to the end of the command, then the entire
-#stack trace is given for each thread.'],
-#       ['threads', 7, 'information of currently-known threads', '
-#This information includes whether the thread is the current thread (+), is
-#suspended ($) or is ignored (!), plus the thread number and the top stack item.
-#If \'verbose\' is given then the entire stack frame is shown.'],
+#      ['thread', 6,  'List info about thread NUM',
+#       'If no thread number is given, we list info for all threads. '         \
+#       '\'terse\' and \'verbose\' options are possible. If \'terse\', just '  \
+#       'give summary thread name information. See "help info threads" for '   \
+#       'more detail about this summary information. If \'verbose\' appended ' \
+#       'to the end of the command, then the entire stack trace is given for ' \
+#       'each thread.'],
+#      ['threads', 7, 'information of currently-known threads',
+#       'This information includes whether the thread is the current thread ' \
+#       '(+), it\'s suspended ($) or it\'s ignored (!), plus the thread '     \
+#       'number and the top stack item. If \'verbose\' is given then the '    \
+#       'entire stack frame is shown.'],
        ['variables', 1,
         'Local and instance variables of the current stack frame']
       ].map do |name, min, short_help, long_help|
@@ -60,11 +61,11 @@ and "sha1".'],
 
     InfoFileSubcommands =
       [
-       ['all', 1, 'All file information available - breakpoints, lines, mtime,
-path and sha1'],
+       ['all', 1, 'All file information available - breakpoints, lines, mtime' \
+         ', path and sha1'],
        ['basic', 2, 'basic information - path, number of lines'],
-       ['breakpoints', 2, 'Show trace line numbers', '
-These are the line number where a breakpoint can be set.'],
+       ['breakpoints', 2, 'Show trace line numbers',
+        'These are the line number where a breakpoint can be set.'],
        ['lines', 1, 'Show number of lines in the file'],
        ['mtime', 1, 'Show modification time of file'],
        ['path', 4, 'Show full file path name for file'],
@@ -197,7 +198,7 @@ These are the line number where a breakpoint can be set.'],
         LineCache::cache(file, Command.settings[:reload_source_on_change])
       end
 
-      print "File %s", file
+      print "File #{file}"
       path = LineCache.path(file)
       if %w(all basic path).member?(subcmd.name) and path != file
         print " - %s\n", path
@@ -390,7 +391,7 @@ These are the line number where a breakpoint can be set.'],
       end
       obj = debug_eval('self')
       locals = @state.context.frame_locals(@state.frame_pos)
-      locals['self'] = @state.context.frame_self(@state.frame_pos)
+      locals[:self] = @state.context.frame_self(@state.frame_pos)
       locals.keys.sort.each do |name|
         next if name =~ /^__dbg_/ # skip byebug pollution
         ### FIXME: make a common routine
