@@ -51,24 +51,24 @@ describe "Irb Command" do
       debug_file('irb') { state.line.must_equal 4 }
     end
 
-    describe "setting context to $rdebug_state" do
-      before { $rdebug_state = nil }
+    describe "setting context to $byebug_state" do
+      before { $byebug_state = nil }
       temporary_change_hash_value(Byebug::Command.settings, :byebugtesting, false)
 
-      it "must set $rdebug_state if irb is in the debug mode" do
-        rdebug_state = nil
-        irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
+      it "must set $byebug_state if irb is in the debug mode" do
+        byebug_state = nil
+        irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
         enter 'irb -d'
         debug_file('irb')
-        rdebug_state.must_be_kind_of Byebug::CommandProcessor::State
+        byebug_state.must_be_kind_of Byebug::CommandProcessor::State
       end
 
-      it "must not set $rdebug_state if irb is not in the debug mode" do
-        rdebug_state = nil
-        irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
+      it "must not set $byebug_state if irb is not in the debug mode" do
+        byebug_state = nil
+        irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
         enter 'irb'
         debug_file('irb')
-        rdebug_state.must_be_nil
+        byebug_state.must_be_nil
       end
     end
 

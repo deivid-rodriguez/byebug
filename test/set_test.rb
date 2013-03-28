@@ -64,13 +64,10 @@ describe "Set Command" do
   end
 
   describe "byebugtesting" do
-    temporary_change_hash_value(Byebug::Command.settings, :byebugtesting, false)
-    before { $rdebug_state = nil }
-    after { $rdebug_state = nil }
-
-    it "must set $rdebug_context if byebugsetting is on" do
+    it "must set $byebug_state if byebugsetting is on" do
       enter 'set byebugtesting', 'break 3', 'cont'
-      debug_file('set') { state.must_be_kind_of Byebug::CommandProcessor::State }
+      debug_file('set') {
+        state.must_be_kind_of Byebug::CommandProcessor::State }
     end
 
     it "must set basename on too" do
@@ -81,9 +78,9 @@ describe "Set Command" do
       end
     end
 
-    it "must not set $rdebug_context if byebugsetting is off" do
+    it "must not set $byebug_state if byebugsetting is off" do
       enter 'set nobyebugtesting', 'break 3', 'cont'
-      debug_file('set') { state.must_be_nil }
+      debug_file('set') { $byebug_state.must_be_nil }
     end
   end
 
@@ -168,9 +165,9 @@ describe "Set Command" do
     temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', "set autolist on"
-      #debug_file 'post_mortem'
-      #check_output_includes "autolist is on."
+      enter 'cont', "set autolist on"
+      debug_file 'post_mortem'
+      check_output_includes "autolist is on."
     end
   end
 

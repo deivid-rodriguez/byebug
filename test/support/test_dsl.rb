@@ -114,7 +114,7 @@ module TestDsl
   end
 
   def state
-    $rdebug_state
+    $byebug_state
   end
 
   def context

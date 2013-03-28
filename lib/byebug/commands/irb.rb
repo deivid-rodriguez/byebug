@@ -1,18 +1,19 @@
 require 'irb'
 
-module IRB # :nodoc:
-  module ExtendCommand # :nodoc:
-    class Continue # :nodoc:
+module IRB
+
+  module ExtendCommand
+    class Continue
       def self.execute(conf)
         throw :IRB_EXIT, :cont
       end
     end
-    class Next # :nodoc:
+    class Next
       def self.execute(conf)
         throw :IRB_EXIT, :next
       end
     end
-    class Step # :nodoc:
+    class Step
       def self.execute(conf)
         throw :IRB_EXIT, :step
       end
@@ -44,9 +45,10 @@ module IRB # :nodoc:
   end
 end
 
+
 module Byebug
 
-  # Implements byebug "irb" command.
+  # Implements byebug's "irb" command.
   class IRBCommand < Command
 
     register_setting_get(:autoirb) do
@@ -73,7 +75,7 @@ module Byebug
       end
 
       add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
-      $rdebug_state = @state if add_debugging
+      $byebug_state = @state if add_debugging
       $rdebug_in_irb = true
       cont = IRB.start_session(get_binding)
       case cont
@@ -96,7 +98,7 @@ module Byebug
 
     ensure
       $rdebug_in_irb = nil
-      $rdebug_state = nil if add_debugging
+      $byebug_state = nil if add_debugging
       trap("SIGINT", save_trap) if save_trap
     end
 
@@ -109,8 +111,8 @@ module Byebug
         %{
           irb [-d]\tstarts an Interactive Ruby (IRB) session.
 
-If -d is added you can get access to byebug state via the global variable
-$rdebug_state.
+If -d is added you can get access to byebug's state via the global variable
+$byebug_state.
 
 irb is extended with methods "cont", "n" and "step" which
 run the corresponding byebug commands. In contrast to the real byebug

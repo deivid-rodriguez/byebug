@@ -23,7 +23,7 @@ module Byebug
   end
 
   class CommandProcessor < Processor
-    attr_reader   :display
+    attr_reader :display
 
     # FIXME: get from Command regexp method.
     @@Show_breakpoints_postcmd = [
@@ -91,8 +91,8 @@ module Byebug
       # FIXME: use annotations routines
       if Byebug.annotate.to_i > 2
         file_line = "\032\032source #{file_line}"
-      elsif ENV['EMACS']
-        file_line = "\032\032#{file_line}"
+      #elsif ENV['EMACS']
+      #  file_line = "\032\032#{file_line}"
       end
       print file_line
     end
@@ -221,7 +221,11 @@ module Byebug
       #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
-        $rdebug_state = state if Command.settings[:byebugtesting]
+        if Command.settings[:byebugtesting]
+          $byebug_state = state
+        else
+          $byebug_state = nil
+        end
         splitter = lambda do |str|
           str.split(/;/).inject([]) do |m, v|
             if m.empty?
