@@ -106,11 +106,9 @@ describe "Show Command" do
   end
 
   it "must show linetrace" do
-    temporary_change_method_value(context, :tracing, true) do
-      enter 'show linetrace'
-      debug_file 'show'
-      check_output_includes "line tracing is on."
-    end
+    enter 'trace on', 'show linetrace'
+    debug_file 'show'
+    check_output_includes "line tracing is on."
   end
 
 
