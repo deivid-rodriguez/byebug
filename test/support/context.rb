@@ -1,4 +1,5 @@
 module Byebug
+
   class Context
 
     def inspect

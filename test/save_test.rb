@@ -2,14 +2,14 @@ require_relative 'test_helper'
 
 describe "Save Command" do
   include TestDsl
-  let(:file_name) { 'save_output.txt' }
 
   describe "successful saving" do
+    let(:file_name) { 'save_output.txt' }
     let(:file_contents) { File.read(file_name) }
     before do
-      enter 'break 2', 'break 3 if true', 'catch NoMethodError', 'display 2 + 3', 'display 5 + 6',
-        'set autoeval', 'set autolist',
-        "save #{file_name}"
+      enter 'break 2', 'break 3 if true', 'catch NoMethodError',
+            'display 2 + 3', 'display 5 + 6', 'set autoeval', 'set autolist',
+            "save #{file_name}"
       debug_file 'save'
     end
     after do
@@ -79,13 +79,14 @@ describe "Save Command" do
   end
 
   describe "Post Mortem" do
+    let(:file_name) { 'save_output.txt' }
     #let(:file_contents) { File.read(file_name) }
     #after { FileUtils.rm(file_name) }
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', "save #{file_name}"
-      #debug_file 'post_mortem'
-      #file_contents.must_include "set autoirb off"
+      enter 'cont', "save #{file_name}"
+      debug_file 'post_mortem'
+      file_contents.must_include "set autoirb off"
     end
   end
 
