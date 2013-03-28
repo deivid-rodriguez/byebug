@@ -8,34 +8,29 @@ describe "Stepping Commands" do
     describe "Usual mode" do
 
       before do
-        @old_hashes = {}
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, false)
         enter 'break 10', 'cont'
       end
 
-      after do
-        restore_tmp_hash(Byebug::Command.settings, :force_stepping)
-      end
-
       it "must go to the next line if forced by a setting" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 'next'
         debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must go to the next line if forced by a setting (by shortcut)" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 'n'
         debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must leave on the same line if forced by a setting" do
+        Byebug::Command.settings[:force_stepping] = false
         enter 'next'
         debug_file('stepping') { state.line.must_equal 10 }
       end
 
       it "must go the specified number of lines forward by default" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 'next 2'
         debug_file('stepping') { state.line.must_equal 21 }
       end
@@ -72,35 +67,29 @@ describe "Stepping Commands" do
     describe "Usual mode" do
 
       before do
-        @old_hashes = {}
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, false)
         enter 'break 10', 'cont'
       end
 
-      after do
-        restore_tmp_hash(Byebug::Command.settings, :force_stepping)
-      end
-
-
       it "must go to the step line if forced by a setting" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 'step'
         debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must go to the next line by shortcut" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 's'
         debug_file('stepping') { state.line.must_equal 11 }
       end
 
       it "must leave on the same line if forced by a setting" do
+        Byebug::Command.settings[:force_stepping] = false
         enter 'step'
         debug_file('stepping') { state.line.must_equal 10 }
       end
 
       it "must go the specified number of lines forward by default" do
-        set_tmp_hash(Byebug::Command.settings, :force_stepping, true)
+        Byebug::Command.settings[:force_stepping] = true
         enter 'step 2'
         debug_file('stepping') { state.line.must_equal 15 }
       end

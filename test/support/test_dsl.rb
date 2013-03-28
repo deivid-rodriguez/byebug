@@ -12,6 +12,7 @@ module TestDsl
     base.class_eval do
       extend ClassMethods
       before do
+        Byebug::Command.settings[:byebugtesting] = true
         Byebug.interface = TestInterface.new
         Byebug.handler.display.clear
       end
