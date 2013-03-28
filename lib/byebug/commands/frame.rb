@@ -91,23 +91,22 @@ module Byebug
         end
       end
 
-      frame_num = "#%d " % pos
+      frame_num = "##{pos}"
       call_str = get_frame_call(frame_num, pos, context)
-      file_line = "at line %s:%d\n" % [CommandProcessor.canonic_file(file), line]
+      file_line = "at line #{CommandProcessor.canonic_file(file)}:#{line}\n"
       print frame_num
       unless call_str.empty?
         print call_str
-        print ' '
         if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
           print "\n       "
         end
       end
       print file_line
-      if ENV['EMACS'] && adjust
-        fmt = (Byebug.annotate.to_i > 1 ?
-               "\032\032source %s:%d\n" : "\032\032%s:%d\n")
-        print fmt % [CommandProcessor.canonic_file(file), line]
-      end
+      #if ENV['EMACS'] && adjust
+      #  fmt = (Byebug.annotate.to_i > 1 ?
+      #         "\032\032source %s:%d\n" : "\032\032%s:%d\n")
+      #  print fmt % [CommandProcessor.canonic_file(file), line]
+      #end
     end
 
     # Check if call stack is truncated.  This can happen if

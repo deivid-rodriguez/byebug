@@ -228,12 +228,16 @@ describe "Info Command" do
   end
 
   describe "Stack info" do
+    before do
+      Byebug::InfoCommand.settings[:full_path] = true
+    end
     it "must show stack info" do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
       check_output_includes \
         "-->", "#0", "A.a", "at line #{fullpath('info')}:20",
-               "#1",        "at line #{fullpath('info')}:30"
+               "#1", "A.b", "at line #{fullpath('info')}:30",
+               "#2",        "at line #{fullpath('info')}:36"
     end
   end
 

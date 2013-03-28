@@ -1,4 +1,5 @@
 module Byebug
+
   # Implements byebug "set" command.
   class SetCommand < Command
     SubcmdStruct2=Struct.new(:name, :min, :is_bool, :short_help,
@@ -6,10 +7,11 @@ module Byebug
     Subcommands =
       [
         ['annotate', 2, false, "Set annotation level",
-"0 == normal
-2 == output annotated suitably for use by programs that control byebug."],
+         '0 == normal. '                                                    \
+         '2 == output annotated suitably for use by programs that control ' \
+         'byebug.'],
         ['args', 2, false,
-"Set argument list to give program being debugged when it is started"],
+         'Set argument list to give program being debugged when it is started'],
         ['autoeval', 4, true, "Evaluate every unrecognized command"],
         ['autolist', 4, true, "Execute 'list' command on every breakpoint"],
         ['autoirb', 4, true, "Invoke IRB on every stop"],
@@ -18,20 +20,21 @@ module Byebug
         ['callstyle', 2, false, "Set how you want call parameters displayed"],
         ['byebugtesting', 8, false, "Used when testing the byebug"],
         ['forcestep', 2, true,
-"Make sure 'next/step' commands always move to a new line"],
+         'Make sure \'next/step\' commands always move to a new line'],
         ['fullpath', 2, true, "Display full file names in frames"],
         ['history', 2, false,
-"Generic command for setting command history parameters",
-"set history filename -- Set the filename in which to record the command history
-set history save -- Set saving of the history record on exit
-set history size -- Set the size of the command history"],
+         'Generic command for setting command history parameters',
+         'set history filename -- Set the filename in which to record the ' \
+         'command history. '                                                \
+         'set history save -- Set saving of the history record on exit. '   \
+         'set history size -- Set the size of the command history'],
         ['linetrace+', 10, true,
-"Set line execution tracing to show different lines"],
+         'Set line execution tracing to show different lines'],
         ['linetrace', 3, true, "Set line execution tracing"],
         ['listsize', 3, false, "Set number of source lines to list by default"],
         ['trace', 1, true, "Display stack trace when 'eval' raises exception"],
         ['width', 1, false,
-"Number of characters the byebug thinks are in a line"]
+         'Number of characters the byebug thinks are in a line']
       ].map do |name, min, is_bool, short_help, long_help|
       SubcmdStruct2.new(name, min, is_bool, short_help, long_help)
     end unless defined?(Subcommands)
