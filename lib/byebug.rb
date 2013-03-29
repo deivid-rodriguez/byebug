@@ -11,7 +11,6 @@ require 'linecache19'
 module Byebug
 
   @reload_source_on_change = false
-  @tracing_started = false
 
   self.handler = CommandProcessor.new
 

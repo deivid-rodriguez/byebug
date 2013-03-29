@@ -186,8 +186,9 @@ module Byebug
       #
       # For example display commands or possibly the list or irb in an
       # "autolist" or "autoirb".
-      # @return A list of commands that are acceptable to run bound to the
-      #         current state.
+      #
+      # @return List of commands acceptable to run bound to the current state
+      #
       def always_run(context, file, line, run_level)
         event_cmds = Command.commands.select{|cmd| cmd.event }
 

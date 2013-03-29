@@ -18,10 +18,6 @@ static VALUE tpReturn;
 static VALUE tpRaise;
 
 static VALUE idAlive;
-static VALUE idAtBreakpoint;
-static VALUE idAtCatchpoint;
-static VALUE idAtLine;
-static VALUE idAtTracing;
 
 static void
 print_debug_info(char *event, VALUE path, VALUE lineno, VALUE method_id,
@@ -145,7 +141,7 @@ call_at_line(debug_context_t *context, char *file, int line,
   CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
   context->last_file = file;
   context->last_line = line;
-  rb_funcall(context_object, idAtLine, 2, path, lineno);
+  rb_funcall(context_object, rb_intern("at_line"), 2, path, lineno);
 }
 
 static void
@@ -177,10 +173,10 @@ process_line_event(VALUE trace_point, void *data)
     moved = 1;
   }
 
-  if (RTEST(tracing) || CTX_FL_TEST(context, CTX_FL_TRACING))
-    rb_funcall(context_object, idAtTracing, 2, path, lineno);
+  if (RTEST(tracing))
+    rb_funcall(context_object, rb_intern("at_tracing"), 2, path, lineno);
 
-  if (context->dest_frame == -1 || context->stack_size >= context->dest_frame)
+  if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
     if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
       context->stop_next = context->stop_next <= 0 ? -1 : context->stop_next-1;
@@ -210,7 +206,7 @@ process_line_event(VALUE trace_point, void *data)
     if (breakpoint != Qnil) {
       context->stop_reason = CTX_STOP_BREAKPOINT;
       reset_stepping_stop_points(context);
-      rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
+      rb_funcall(context_object, rb_intern("at_breakpoint"), 1, breakpoint);
       call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
                  path, lineno);
     }
@@ -276,7 +272,7 @@ process_call_event(VALUE trace_point, void *data)
                                                       binding, self);
   if (breakpoint != Qnil) {
       context->stop_reason = CTX_STOP_BREAKPOINT;
-      rb_funcall(context_object, idAtBreakpoint, 1, breakpoint);
+      rb_funcall(context_object, rb_intern("at_breakpoint"), 1, breakpoint);
       call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
                  path, lineno);
   }
@@ -330,7 +326,7 @@ process_raise_event(VALUE trace_point, void *data)
       /* increment exception */
       rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
       context->stop_reason = CTX_STOP_CATCHPOINT;
-      rb_funcall(context_object, idAtCatchpoint, 1, rb_errinfo());
+      rb_funcall(context_object, rb_intern("at_catchpoint"), 1, rb_errinfo());
       call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
                    path, lineno);
       break;
@@ -553,10 +549,6 @@ Init_byebug()
   rb_define_module_function(mByebug, "debug_load", Byebug_load, -1);
 
   idAlive = rb_intern("alive?");
-  idAtBreakpoint = rb_intern("at_breakpoint");
-  idAtCatchpoint = rb_intern("at_catchpoint");
-  idAtTracing    = rb_intern("at_tracing");
-  idAtLine       = rb_intern("at_line");
 
   cContext = Init_context(mByebug);
 

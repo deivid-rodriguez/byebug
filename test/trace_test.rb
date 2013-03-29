@@ -6,16 +6,10 @@ describe "Trace Command" do
   describe "Trace Command Setup" do
 
     before do
-      @old_consts = {}
-      @old_hashes = {}
-      set_tmp_const(Byebug, "PROG_SCRIPT", fullpath('trace'))
-      set_tmp_hash(Byebug::Command.settings, :basename, false)
+      force_set_const(Byebug, 'PROG_SCRIPT', fullpath('trace'))
+      Byebug::Command.settings[:basename] = false
+      Byebug.tracing = false
       untrace_var(:$bla) if defined?($bla)
-    end
-
-    after do
-      restore_tmp_const(Byebug, "PROG_SCRIPT")
-      restore_tmp_hash(Byebug::Command.settings, :basename)
     end
 
     describe "tracing" do
@@ -52,8 +46,8 @@ describe "Trace Command" do
         it "must stop tracing by setting trace to off" do
           enter 'trace on', 'next', 'trace off'
           debug_file 'trace'
-          check_output_includes "Tracing:#{fullpath('trace')}:3 $bla = 3"
-          check_output_doesnt_include "Tracing:#{fullpath('trace')}:4 $bla = 4"
+          check_output_includes "Tracing: #{fullpath('trace')}:4 $bla = 4"
+          check_output_doesnt_include "Tracing: #{fullpath('trace')}:5 $bla = 5"
         end
 
         it "must show a message when turned off" do
@@ -64,50 +58,54 @@ describe "Trace Command" do
       end
     end
 
-    #
-    # XXX: No thread support
-    #
-    # describe "tracing on all thread" do
-    #   describe "enabling" do
-    #     it "must trace execution by setting trace to on" do
-    #       temporary_set_const(Byebug, "PROG_SCRIPT", fullpath('trace_threads')) do
-    #         thnum = nil
-    #         enter 'trace on all'
-    #         debug_file('trace_threads') { thnum = context.thnum }
-    #         check_output_includes(
-    #           "Tracing(#{thnum}):#{fullpath('trace_threads')}:4 @break1 = false",
-    #           "Tracing(#{thnum}):#{fullpath('trace_threads')}:5 @break2 = false"
-    #         )
-    #         check_output_includes /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
-    #       end
-    #     end
+    describe "tracing on all thread" do
+      describe "enabling" do
+        it "must trace execution by setting trace to on" do
+          skip("XXX: No thread support")
+          temporary_set_const(Byebug, "PROG_SCRIPT", fullpath('trace_threads')) do
+            thnum = nil
+            enter 'trace on all'
+            debug_file('trace_threads') { thnum = context.thnum }
+            check_output_includes \
+              "Tracing(#{thnum}):#{fullpath('trace_threads')}:4 @break1 = false",
+              "Tracing(#{thnum}):#{fullpath('trace_threads')}:5 @break2 = false"
+            check_output_includes \
+              /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
+          end
+        end
 
-    #     it "must show a message it is on" do
-    #       enter 'trace on all'
-    #       debug_file 'trace'
-    #       check_output_includes "Tracing on all threads."
-    #     end
-    #   end
+        it "must show a message it is on" do
+          skip("XXX: No thread support")
+          enter 'trace on all'
+          debug_file 'trace'
+          check_output_includes "Tracing on all threads."
+        end
+      end
 
-    #   describe "disabling" do
-    #     it "must stop tracing by setting trace to off" do
-    #       temporary_set_const(Byebug, "PROG_SCRIPT", fullpath('trace_threads')) do
-    #         thnum = nil
-    #         enter 'trace on all', 'break 19', 'cont', 'trace off all'
-    #         debug_file('trace_threads') { thnum = context.thnum }
-    #         check_output_includes /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
-    #         check_output_includes "Tracing(#{thnum}):#{fullpath('trace_threads')}:19 t1.join"
-    #         check_output_doesnt_include "Tracing(#{thnum}):#{fullpath('trace_threads')}:20 t1"
-    #       end
-    #     end
+      describe "disabling" do
+        it "must stop tracing by setting trace to off" do
+          skip("XXX: No thread support")
+          temporary_set_const(Byebug, "PROG_SCRIPT", fullpath('trace_threads')) do
+            thnum = nil
+            enter 'trace on all', 'break 19', 'cont', 'trace off all'
+            debug_file('trace_threads') { thnum = context.thnum }
+            check_output_includes \
+              /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
+            check_output_includes \
+              "Tracing(#{thnum}):#{fullpath('trace_threads')}:19 t1.join"
+            check_output_doesnt_include \
+              "Tracing(#{thnum}):#{fullpath('trace_threads')}:20 t1"
+          end
+        end
 
-    #     it "must show a message it is off" do
-    #       enter 'trace off'
-    #       debug_file 'trace'
-    #       check_output_includes "Tracing off on current thread."
-    #     end
-    #   end
-    # end
+        it "must show a message it is off" do
+          skip("XXX: No thread support")
+          enter 'trace off'
+          debug_file 'trace'
+          check_output_includes "Tracing off on current thread."
+        end
+      end
+    end
 
     describe "tracing global variables" do
       it "must track global variable" do
@@ -139,13 +137,15 @@ describe "Trace Command" do
         it "must show an error message if there is no such global variable" do
           enter 'trace variable $foo'
           debug_file 'trace'
-          check_output_includes "$foo is not a global variable.", interface.error_queue
+          check_output_includes \
+            "$foo is not a global variable.", interface.error_queue
         end
 
         it "must show an error message if subcommand is invalid" do
           enter 'trace variable $bla foo'
           debug_file 'trace'
-          check_output_includes "expecting 'stop' or 'nostop'; got foo", interface.error_queue
+          check_output_includes \
+            "expecting 'stop' or 'nostop'; got foo", interface.error_queue
         end
       end
     end

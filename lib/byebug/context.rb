@@ -29,8 +29,8 @@ module Byebug
     end
 
     def at_tracing(file, line)
-      @tracing_started = File.identical?(file, Byebug::PROG_SCRIPT)
-      handler.at_tracing(self, file, line) if @tracing_started
+      handler.at_tracing(self, file, line) if
+        File.identical?(file, Byebug::PROG_SCRIPT)
     end
 
     def at_line(file, line)
