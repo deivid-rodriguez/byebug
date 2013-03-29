@@ -91,7 +91,7 @@ module TestDsl
   #
   # Usage:
   #   enter 'break 4', 'cont'
-  #   debug("ex1")
+  #   debug 'ex1'
   #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
   #
   def check_output(check_method, *args)

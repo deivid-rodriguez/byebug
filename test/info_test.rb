@@ -276,7 +276,6 @@ describe "Info Command" do
 
   describe "Global Variables info" do
     it "must show global variables" do
-      #skip("XXX: handle global variables, XXX: Fix warning in test")
       enter 'info global_variables'
       debug_file 'info'
       check_output_includes "$$ = #{Process.pid}"

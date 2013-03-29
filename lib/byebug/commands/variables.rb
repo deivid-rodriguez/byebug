@@ -5,7 +5,8 @@ module Byebug
       ary.sort!
       for v in ary
         begin
-          s = debug_eval(v.to_s, b).inspect
+          s = debug_eval(v.to_s, b).inspect unless
+            v == :$KCODE || v == :$-K || v == :$=
         rescue
           begin
             s = debug_eval(v.to_s, b).to_s
