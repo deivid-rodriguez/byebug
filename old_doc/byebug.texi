@@ -160,7 +160,7 @@ purposes than how to write short Ruby code.}
 @smallexample
 $ @b{byebug triangle.rb}
 triangle.rb:4 def hanoi(n,a,b,c)
-(rdb:1) @b{list}
+(byebug:1) @b{list}
 [-1, 8] in ./triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
@@ -170,14 +170,14 @@ triangle.rb:4 def hanoi(n,a,b,c)
    6    0.upto(n) do |i|
    7      tri += i
    8    end
-(rdb:1) @b{l}
+(byebug:1) @b{l}
 [9, 18] in ./triangle.rb
    9    tri
    10  end
    11  
    12  t = triangle(3)
    13  puts t
-(rdb:1) @b{list 1,100}
+(byebug:1) @b{list 1,100}
 [1, 100] in ./triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
@@ -192,7 +192,7 @@ triangle.rb:4 def hanoi(n,a,b,c)
    11  
    12  t = triangle(3)
    13  puts t
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 @noindent
@@ -200,59 +200,53 @@ triangle.rb:4 def hanoi(n,a,b,c)
 There are lots of command options, but we don't need them for now. See
 @ref{byebug command-line options} for a full list of command options.
 
-Position information consists of a filename and line number,
-e.g.@: @code{triangle.rb:4}. We are currently stopped before the first
-executable line of the program; this is line 4 of
-@code{triangle.rb}. If you are used to less dynamic languages and have
-used byebugs for more statically compiled languages like C, C++, or
-Java, it may seem odd to be stopped before a function definition.  But
-in Ruby line 4 is executed, the name @code{triangle} (probably) does
-not exist so issuing a method call of @code{triangle} will raise a
-``method not found'' error.
+Position information consists of a filename and line number, e.g.@:
+@code{triangle.rb:4}. We are currently stopped before the first executable line
+of the program; this is line 4 of @code{triangle.rb}. If you are used to less
+dynamic languages and have used debuggers for more statically compiled languages
+like C, C++, or Java, it may seem odd to be stopped before a function definition
+but in Ruby line 4 is executed, the name @code{triangle} (probably) does not
+exist so issuing a method call of @code{triangle} will raise a ``method not
+found'' error.
 
-@DBG{}'s prompt is @code{(rdb:@emph{n})}. The @emph{n} is the thread
-number. Here it is 1 which is usually the case for the main thread. If
-the program has died and you are in post-mortem debugging, there is no
-thread number. In this situation, the string @code{post-mortem} is
-used in place of a thread number. If the program has terminated
-normally, the string this position will be @code{ctrl}. The commands
-which are available change depending on the program state.
+@DBG{}'s prompt is @code{(byebug:@emph{n})}. The @emph{n} is the thread number.
+Here it is 1 which is usually the case for the main thread. If the program has
+died and you are in post-mortem debugging, there is no thread number. In this
+situation, the string @code{post-mortem} is used in place of a thread number. If
+the program has terminated normally, the string this position will be
+@code{ctrl}. The commands which are available change depending on the program
+state.
 
-The first command, @code{list} (@pxref{List}), prints 10 lines
-centered around the current line; the current line here is line 4 and
-is marked by @code{=>}, so the range byebug would like to show
-is -1..8. However since there aren't 5 lines before the current line,
-those additional lines---``lines'' -1 and 0---are dropped and we print
-the remaining 8 lines.  The @code{list} command can be abbreviated
-with @code{l} which is what we use next. Notice that when we use this
-a second time, we continue listing from the place we last left
-off. The desired range of lines this time is lines 9 to 18; but since
-the program ends at line 13, only the remaining 5 lines are shown.
+The first command, @code{list} (@pxref{List}), prints 10 lines centered around
+the current line; the current line here is line 4 and is marked by @code{=>}, so
+the range byebug would like to show is -1..8. However since there aren't 5 lines
+before the current line, those additional lines---``lines'' -1 and 0---are
+dropped and we print the remaining 8 lines.  The @code{list} command can be
+abbreviated with @code{l} which is what we use next. Notice that when we use
+this a second time, we continue listing from the place we last left off. The
+desired range of lines this time is lines 9 to 18; but since the program ends at
+line 13, only the remaining 5 lines are shown.
 
-If you want to set how many lines to print by default rather than use
-the initial number of lines, 10, use the @code{set listsize} command
-(@pxref{Listsize}). To see the entire program in one shot, we gave an
-explicit starting and ending line number.
-
-If you use a front-end to byebug such as the Emacs interface,
-@c (@pxref{GNU Emacs})
-you probably won't use @code{list} all that much.
+If you want to set how many lines to print by default rather than use the
+initial number of lines, 10, use the @code{set listsize} command
+(@pxref{Listsize}). To see the entire program in one shot, we gave an explicit
+starting and ending line number.
 
 Now let us step through the program.
 
 @smallexample
-(rdb:1) @b{step}
+(byebug:1) @b{step}
 triangle.rb:12
 t = triangle(3)
-(rdb:1) @b{@key{<RET>}}
+(byebug:1) @b{@key{<RET>}}
 triangle.rb:5
 tri = 0
-(rdb:1) @b{p tri}
+(byebug:1) @b{p tri}
 nil
-(rdb:1) @b{step}
+(byebug:1) @b{step}
 triangle.rb:6
 0.upto(n) do |i|
-(rdb:1) @b{p tri}
+(byebug:1) @b{p tri}
 0
 @end smallexample
 
@@ -273,7 +267,7 @@ to see how things are going stop, there is a better way by setting a
 display expression (@pxref{DisplayCommands}).
 
 @smallexample
-(rdb:1) @b{display tri}
+(byebug:1) @b{display tri}
 1: tri = 0
 @end smallexample
 
@@ -281,11 +275,11 @@ Now let us run the program until we return from the function. However
 we'll want to see which lines get run.
 
 @smallexample
-(rdb:1) @b{display i}
+(byebug:1) @b{display i}
 2: i =
-(rdb:1) @b{set linetrace on}
+(byebug:1) @b{set linetrace on}
 line tracing is on.
-(rdb:1) @b{finish}
+(byebug:1) @b{finish}
 Tracing(1):triangle.rb:7 tri += i
 1: tri = 0
 2: i = 0
@@ -309,14 +303,14 @@ Tracing(1):triangle.rb:13 puts t
 2: i = 
 triangle.rb:13
 puts t
-(rdb:1) @b{quit}
+(byebug:1) @b{quit}
 Really quit? (y/n) @b{y}
 @end smallexample
 
-So far, so good. A you can see from the above to get out of the
-byebug, one can issue a @code{quit} command. (@code{q} and
-@code{exit} are just as good. If you want to quit without being
-prompted, suffix the command with an exclamation mark, e.g.\@code{q!}.
+So far, so good. A you can see from the above to get out of byebug, one can
+issue a @code{quit} command. (@code{q} and @code{exit} are just as good. If you
+want to quit without being prompted, suffix the command with an exclamation
+mark, e.g.\@code{q!}.
 
 @node Second Sample Session
 @section Sample Session 2: Delving Deeper (@code{where}, @code{frame}, @code{restart}, @code{autoeval}, @code{break}, @code{ps})
@@ -333,7 +327,7 @@ command-parameter processing with error checking.
 @smallexample
 $ @b{byebug hanoi.rb}
 hanoi.rb:3 def hanoi(n,a,b,c)
-(rdb:1) @b{list 1,100}
+(byebug:1) @b{list 1,100}
 [1, 100] in ./hanoi.rb
    1  #!/usr/bin/ruby
    2
@@ -370,7 +364,7 @@ hanoi.rb:3 def hanoi(n,a,b,c)
    33 end
    34
    35 hanoi(n, :a, :b, :c)
-(rdb:1)
+(byebug:1)
 @end smallexample
 
 Recall in the first section I said that before the @code{def} is run
@@ -378,9 +372,9 @@ the method it names is undefined. Let's check that out. First let's
 see what private methods we can call before running @code{def hanoi}
 
 @smallexample
-(rdb:1) @b{set autoeval on}
+(byebug:1) @b{set autoeval on}
 autoeval is on.
-(rdb:1) @b{private_methods}
+(byebug:1) @b{private_methods}
 [:require_relative, :Digest, :default_src_encoding, :debug_program, ... 
 @end smallexample
 
@@ -399,7 +393,7 @@ sort and put into columns lists like this using the print command, @code{ps}.
 
 
 @smallexample
-(rdb:1) @b{ps private_methods}
+(byebug:1) @b{ps private_methods}
 Array         debug_program         p                           spawn
 Complex       default_src_encoding  pp                          sprintf
 Digest        eval                  print                       srand
@@ -426,20 +420,20 @@ dbg_puts      open                  sleep
 Now let's see what happens after stepping:
 
 @smallexample
-(rdb:1) @b{private_methods.member?(:hanoi)}
+(byebug:1) @b{private_methods.member?(:hanoi)}
 false
-(rdb:1) @b{step}
+(byebug:1) @b{step}
 hanoi.rb:13
 i_args=ARGV.length
-(rdb:1) @b{private_methods.member?(:hanoi)}
+(byebug:1) @b{private_methods.member?(:hanoi)}
 true
-(rdb:1)
+(byebug:1)
 @end smallexample
 
 Okay, now where were we?
 
 @smallexample
-(rdb:1) @b{list}
+(byebug:1) @b{list}
 [8, 17] in ./hanoi.rb
    8      if n-1 > 0
    9         hanoi(n-1, c, b, a)
@@ -451,7 +445,7 @@ Okay, now where were we?
    15      puts "*** Need number of disks or no parameter"
    16      exit 1
    17  end
-(rdb:1) @b{ARGV}
+(byebug:1) @b{ARGV}
 []
 @end smallexample
 
@@ -459,45 +453,45 @@ Ooops. We forgot to specify any parameters to this program. Let's try
 again. We can use the @code{restart} command here.
 
 @smallexample
-(rdb:1) @b{restart 3}
+(byebug:1) @b{restart 3}
 Re exec'ing:
         /usr/bin/byebug hanoi.rb 3
 hanoi.rb:3
 def hanoi(n,a,b,c)
-(rdb:1) @b{break 4}
+(byebug:1) @b{break 4}
 Breakpoint 1 file hanoi.rb, line 4
-(rdb:1) @b{continue}
+(byebug:1) @b{continue}
 Breakpoint 1 at hanoi.rb:4
 ./hanoi.rb:4 if n-1 > 0
-(rdb:1) @b{display n}
+(byebug:1) @b{display n}
 1: n = 3
-(rdb:1) @b{display a}
+(byebug:1) @b{display a}
 2: a = a
-(rdb:1) @b{undisplay 2}
-(rdb:1) @b{display a.inspect}
+(byebug:1) @b{undisplay 2}
+(byebug:1) @b{display a.inspect}
 3: a.inspect = :a
-(rdb:1) @b{display b.inspect}
+(byebug:1) @b{display b.inspect}
 4: b.inspect = :b
-(rdb:1) @b{continue}
+(byebug:1) @b{continue}
 Breakpoint 1 at hanoi.rb:4
 1: n = 2
 3: a.inspect = :a
 4: b.inspect = :c
 ./hanoi.rb:4 
 if n-1 > 0
-(rdb:1) @b{c}
+(byebug:1) @b{c}
 Breakpoint 1 at hanoi.rb:4
 1: n = 1
 3: a.inspect = :a
 4: b.inspect = :b
 ./hanoi.rb:4 
 if n-1 > 0
-(rdb:1) @b{where}
+(byebug:1) @b{where}
 --> #0 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:4
     #1 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
     #2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
     #3 at line hanoi.rb:35
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 In the above we added a new command, @code{break}
@@ -525,7 +519,7 @@ style of what to show in the trace (@pxref{Callstyle}).
 Let's explore a little more. Now were were we? 
 
 @smallexample
-(rdb:1) @b{list}
+(byebug:1) @b{list}
    1  #!/usr/bin/ruby
    2
    3  def hanoi(n,a,b,c)
@@ -534,19 +528,19 @@ Let's explore a little more. Now were were we?
    6      end
    7      puts "Move disk %s to %s" % [a, b]
    8      if n-1 > 0
-(rdb:1) @b{undisplay}
+(byebug:1) @b{undisplay}
 Clear all expressions? (y/n) @b{y}
-(rdb:1) @b{i_args}
+(byebug:1) @b{i_args}
 NameError Exception: undefined local variable or method `i_args' for main:Object
-(rdb:1) @b{frame -1}
+(byebug:1) @b{frame -1}
 #3 at line hanoi.rb:35
-(rdb:1) @b{i_args}
+(byebug:1) @b{i_args}
 1
-(rdb:1) @b{p n}
+(byebug:1) @b{p n}
 3
-(rdb:1) @b{down 2}
+(byebug:1) @b{down 2}
 #2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
-(rdb:1) @b{p n}
+(byebug:1) @b{p n}
 2
 @end smallexample
 
@@ -666,7 +660,7 @@ Now we run the program..
   Started
   test-tri.rb:9
   solutions = []
-  (rdb:1)
+  (byebug:1)
 @end smallexample
 and we see that we are stopped at line 9 just before the
 initialization of the list @code{solutions}.
@@ -674,9 +668,9 @@ initialization of the list @code{solutions}.
 Now let's see where we are...
 
 @smallexample
-(rdb:1) @b{where}
+(byebug:1) @b{where}
 --> #0 TestTri.test_basic at line /home/rocky/ruby/test-tri.rb:9
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 Something seems wrong here; @code{TestTri.test_basic} indicates that
@@ -720,7 +714,7 @@ Loaded suite test-tri2
 Started
 test-tri2.rb:11
 solutions = []
-(rdb:1) @b{where}
+(byebug:1) @b{where}
 --> #0 TestTri.test_basic at line test-tri2.rb:11
     #1 MiniTest::Unit::TestCase.run(runner#MiniTest::Unit)
        at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:458
@@ -729,7 +723,7 @@ solutions = []
     #3 MiniTest::Unit.run
        at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:393
     #4 at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:334
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 Much better. But again let me emphasize that the parameter types are
@@ -774,12 +768,12 @@ irb(main):005:1> @b{end}
 irb(main):006:0> @b{Byebug.start@{byebug; foo@}}
 (irb):3
 
-(rdb:1) @b{s}
+(byebug:1) @b{s}
 (irb):4
 
-(rdb:1) @b{p x}
+(byebug:1) @b{p x}
 1
-(rdb:1) @b{s}
+(byebug:1) @b{s}
 foo
 => true
 irb(main):007:0> 
@@ -876,9 +870,9 @@ method header. It's possible the call will continue after a
 $ @b{byebug primes.rb}
 primes.rb:3
 class SievePrime
-(rdb:1) @b{set linetrace on}
+(byebug:1) @b{set linetrace on}
 line tracing is on.
-(rdb:1) @b{step 9}
+(byebug:1) @b{step 9}
 Tracing(1):primes.rb:4 @@odd_primes = []
 Tracing(1):primes.rb:5 def self.next_prime(&block)
 Tracing(1):primes.rb:23 SievePrime.next_prime do |prime|
@@ -891,7 +885,7 @@ Tracing(1):primes.rb:8 not_prime = false
 Tracing(1):primes.rb:9 candidate += 1
 primes.rb:9
 candidate += 1
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 The loop between lines 23--26 gets interleaved between those of
@@ -1439,15 +1433,15 @@ might want to enter the following code to compute the 5th Fibonacci
 number:
 @smallexample
 # Compute the 5 Fibonaci number
-(rdb:1) set autoeval on
-(rdb:1) fib1=0; fib2=1; 5.times @{|temp| temp=fib1; fib1=fib2; fib2 += temp @}
+(byebug:1) set autoeval on
+(byebug:1) fib1=0; fib2=1; 5.times @{|temp| temp=fib1; fib1=fib2; fib2 += temp @}
 SyntaxError Exception: compile error
 /usr/bin/irb:10: syntax error, unexpected $end, expecting '@}'
  5.times @{|temp| temp=fib1
                           ^
-(rdb:1) fib1=0\; fib2=1\; 5.times @{|temp| temp=fib1\; fib1=fib2\; fib2 += temp @}
+(byebug:1) fib1=0\; fib2=1\; 5.times @{|temp| temp=fib1\; fib1=fib2\; fib2 += temp @}
 5
-(rdb:1) fib2
+(byebug:1) fib2
 fib2
 8
 @end smallexample
@@ -1470,9 +1464,9 @@ history size} command. See @ref{History} for history parameters.
 
 In the command-line interface, when @code{byebug} is waiting for
 input it presents a prompt of the form
-@code{(rdb:}@emph{x}@code{)}. If debugging locally, @emph{x} will be
+@code{(byebug:}@emph{x}@code{)}. If debugging locally, @emph{x} will be
 the thread number. Usual the main thread is 1, so often you'll see
-@code{(rdb:1)}. In the control interface though @emph{x} will be
+@code{(byebug:1)}. In the control interface though @emph{x} will be
 @code{ctrl} and in post-mortem debugging @code{post-mortem}.
 
 In the local interface, whenever @code{byebug} gives an error
@@ -1501,7 +1495,7 @@ display a short list of named classes of commands:
 
 @flushleft
 @smallexample
-(rdb:1) @b{help}
+(byebug:1) @b{help}
 byebug help v@value{BYEBUG_VERSION}
 Type 'help <command-name>' for help on a specific command
 
@@ -1523,14 +1517,14 @@ With a command name as @code{help} argument, @DBG displays short
 information on how to use that command.
 
 @smallexample
-(rdb:1) @b{help list}
+(byebug:1) @b{help list}
 byebug help v@value{BYEBUG_VERSION}
 l[ist]		list forward
 l[ist] -	list backward
 l[ist] =	list current line
 l[ist] nn-mm	list given lines
 * NOTE - to turn on autolist, use 'set autolist'
-(rdb:1)
+(byebug:1)
 @end smallexample
 @end table
 
@@ -1552,7 +1546,7 @@ do. For example, @code{help set an} is the same as @code{help set annotate}.
 
 Some examples follow.
 @example
-(rdb:1) @b{help info}
+(byebug:1) @b{help info}
 Generic command for showing things about the program being debugged.
 -- 
 List of info subcommands:
@@ -1575,14 +1569,14 @@ info variables -- Local and instance variables of the current stack frame
 @end example
 
 @example
-(rdb:1) @b{help info breakpoints}
+(byebug:1) @b{help info breakpoints}
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.  With an
 integer argument, list info on that breakpoint.
 @end example
 
 @example
-(rdb:1) @b{help info br}
+(byebug:1) @b{help info br}
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.  With an
 integer argument, list info on that breakpoint.
@@ -1677,7 +1671,7 @@ remove an expression from the list, you specify that number.  The
 automatic display looks like this:
 
 @smallexample
-(rdb:1) display n
+(byebug:1) display n
 1: n = 3
 @end smallexample
 
@@ -1687,9 +1681,9 @@ If the expression is undefined or illegal the expression will be
 printed but no value will appear.
 
 @smallexample
-(rdb:1) display undefined_variable
+(byebug:1) display undefined_variable
 2: undefined_variable =
-(rdb:1) display 1/0
+(byebug:1) display 1/0
 3: 1/0 = 
 @end smallexample
 
@@ -1765,11 +1759,11 @@ same as you would if you were in @code{irb}. If there are many expressions
 you want to look at, you may want to go into irb from byebug.
 @smallexample
 @group
-(rdb:p) p n
+(byebug:p) p n
 3
-(rdb:1) p "the value of n is #@{n@}"
+(byebug:1) p "the value of n is #@{n@}"
 "the value of n is 3"
-(rdb:1)
+(byebug:1)
 @end group
 @end smallexample
 @end table
@@ -1782,9 +1776,9 @@ you want to look at, you may want to go into irb from byebug.
 Evaluates and pretty-prints @var{expr}
 @smallexample
 @group
-(rdb:1) @b{p $LOAD_PATH}
+(byebug:1) @b{p $LOAD_PATH}
 ["/home/rocky/lib/ruby", "/usr/lib/ruby/site_ruby/1.8", "/usr/lib/ruby/site_ruby/1.8/i586-linux", "/usr/lib/ruby/1.8"]
-(rdb:1) @b{pp $LOAD_PATH}
+(byebug:1) @b{pp $LOAD_PATH}
 ["/home/rocky/lib/ruby",
  "/usr/lib/ruby/site_ruby/1.8",
  "/usr/lib/ruby/site_ruby/1.8/i586-linux",
@@ -1797,7 +1791,7 @@ If the value you want to print is an array, sometimes a columnized
 list looks nicer:
 @smallexample
 @group
-(rdb:1) @b{putl $LOAD_PATH}
+(byebug:1) @b{putl $LOAD_PATH}
 /home/rocky/lib/ruby                    /usr/lib/ruby/site_ruby/1.8
 /usr/lib/ruby/site_ruby/1.8/i586-linux  /usr/lib/ruby/1.8
 @end group
@@ -1817,7 +1811,7 @@ and so does the output of the @code{method} commands.
 
 @smallexample
 @group
-(rdb:1) ps Kernel.private_methods
+(byebug:1) ps Kernel.private_methods
 Digest                   initialize                  y
 Pathname                 initialize_copy           
 Rational                 location_of_caller        
@@ -1861,7 +1855,7 @@ rather than the position may have gotten updated via a prior
 @smallexample
 triangle.rb:4
 def triangle(n)
-(rdb:1) @b{list}
+(byebug:1) @b{list}
 [-1, 8] in /home/rocky/ruby/triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
@@ -1877,7 +1871,7 @@ def triangle(n)
 >> @b{exit}
 triangle.rb:4
 def triangle(n)
-(rdb:1) @b{list # Note we get the same line range as before going into irb}
+(byebug:1) @b{list # Note we get the same line range as before going into irb}
 [-1, 8] in /home/rocky/ruby/triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
@@ -1935,7 +1929,7 @@ Show procedure signature of method @var{object}.
 @smallexample
   def mymethod(a, b=5, &bock) 
   end
-  (rdb:1) @b{method sig mymethod}
+  (byebug:1) @b{method sig mymethod}
   Mine#mymethod(a, b=5, &bock)
 @end smallexample
 on @var{object}.
@@ -2133,7 +2127,7 @@ frame numbers shown.  The position of the current frame is marked with
 @code{-->}.
 
 @smallexample
-(rdb:1) where
+(byebug:1) where
 --> #0 Object.gcd(a#Fixnum, b#Fixnum) at line /tmp/gcd.rb:6
     #1 at line /tmp/gcd.rb:19
 @end smallexample
@@ -2280,17 +2274,17 @@ Here's an example:
 $ @b{byebug ~/ruby/gcd.rb 3 5}
 /home/rocky/ruby/gcd.rb:4   # Note this is the file name
 def gcd(a, b)
-(rdb:1) @b{break gcd.rb:6}
+(byebug:1) @b{break gcd.rb:6}
 *** No source file named gcd.rb
-(rdb:1) @b{info line}
+(byebug:1) @b{info line}
 Line 4 of "/home/rocky/ruby/gcd.rb"
-(rdb:1) @b{break /home/rocky/ruby/gcd.rb:6}
+(byebug:1) @b{break /home/rocky/ruby/gcd.rb:6}
 Breakpoint 1 file /home/rocky/ruby/gcd.rb, line 6
-(rdb:1) @b{break ~/ruby/gcd.rb:10}  # tilde expansion also works
+(byebug:1) @b{break ~/ruby/gcd.rb:10}  # tilde expansion also works
 Breakpoint 2 file /home/rocky/ruby/gcd.rb, line 10
-(rdb:1) @b{info file gcd.rb}
+(byebug:1) @b{info file gcd.rb}
 File gcd.rb is not cached
-(rdb:1) @b{info file /home/rocky/ruby/gcd.rb}
+(byebug:1) @b{info file /home/rocky/ruby/gcd.rb}
 File /home/rocky/ruby/gcd.rb
          19 lines
 @end example
@@ -2348,12 +2342,12 @@ only that breakpoint.
 
 Examples:
 @example
-(rdb:1) @b{info break}
+(byebug:1) @b{info break}
 Breakpoints at following places:
 Num  Enb What
 1    y   gcd.rb:3
 2    y   gcb.rb:28 if n > 1
-(rdb:1) @b{info break 2}
+(byebug:1) @b{info break 2}
 2    y   gcb.rb:28 if n > 1
 @end example
 @end table
@@ -2668,11 +2662,11 @@ When autoeval is set on, you'll get a different error message when you
 invalid commands are encountered. Here's a session fragment to show
 the difference
 @smallexample
-(rdb:1) @b{stepp}
+(byebug:1) @b{stepp}
 Unknown command
-(rdb:1) @b{set autoeval on}
+(byebug:1) @b{set autoeval on}
 autoeval is on.
-(rdb:1) @b{stepp}
+(byebug:1) @b{stepp}
 NameError Exception: undefined local variable or method `stepp' for ...
 @end smallexample
 
@@ -2950,7 +2944,7 @@ ignored (!); the thread number and the top stack item. If
 an example:
 
 @smallexample
-(rdb:7) info threads
+(byebug:7) info threads
   1 #<Thread:0xb7d08704 sleep>	./test/thread1.rb:27
  !2 #<Byebug::DebugThread:0xb7782e4c sleep>	
   3 #<Thread:0xb777e220 sleep>	./test/thread1.rb:11
@@ -2958,14 +2952,14 @@ an example:
   5 #<Thread:0xb777e07c sleep>	./test/thread1.rb:11
   6 #<Thread:0xb777dfb4 sleep>	./test/thread1.rb:11
 + 7 #<Thread:0xb777deec run>	./test/thread1.rb:14
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 Thread 7 is the current thread since it has a plus sign in front. Thread 2 is
 ignored since it has a @code{!}. A ``verbose'' listing of the above:
 
 @smallexample
-(rdb:7) info threads verbose
+(byebug:7) info threads verbose
   1 #<Thread:0xb7d08704 sleep>	
 	#0 Integer.join at line test/thread1.rb:27
 	#1 at line test/thread1.rb:27
@@ -3037,7 +3031,7 @@ post-mortem debugging set the @code{post_mortem} key in
 
     $ @b{ruby t.rb }
     t.rb:8: raise 'test'
-    (rdb:post-mortem) @b{l=}
+    (byebug:post-mortem) @b{l=}
     [3, 12] in t.rb
        3  
        4  Byebug.start
@@ -3049,7 +3043,7 @@ post-mortem debugging set the @code{post_mortem} key in
        10  def t2
        11    t1
        12  end
-    (rdb:post-mortem)
+    (byebug:post-mortem)
 @end smallexample
 
 Alternatively you can call @code{Byebug.post_mortem()} after byebug has
@@ -3080,7 +3074,7 @@ end
 @end smallexample 
 
 Once inside byebug in post-mortem debugging, the prompt should
-be @code{(rdb:post-mortem)}.
+be @code{(byebug:post-mortem)}.
 
 @node Byebug Module and Class
 @chapter The Byebug Module and Class
@@ -3444,7 +3438,7 @@ And now an example of invoking it:
 ruby /tmp/testit.rb:
 /tmp/testit.rb:7
 y=2
-(rdb:1) help
+(byebug:1) help
 byebug help v0.10.3
 Type 'help <command-name>' for help on a specific command
 Available commands:
@@ -3455,11 +3449,11 @@ condition down    finish list pp     restart step   var
 continue edit     frame  me   ps     save    thread where
                   ^^ This is you
 
-(rdb:1) help me
+(byebug:1) help me
 This does whatever it is I want to do
-(rdb:1) me
+(byebug:1) me
 hi
-(rdb:1) 
+(byebug:1) 
 @end smallexample
 
 @node Kernel routines
@@ -3490,9 +3484,9 @@ y = 1
 
 $ scope-test.rb:8
 y = 1
-(rdb:1) p a
+(byebug:1) p a
 NameError Exception: undefined local variable or method `a' for main:Object
-(rdb:1)
+(byebug:1)
 @end smallexample
 The byebug will get at the line event which follows @samp{a=1}. This
 is outside the @code{do} block scope where @var{a} is defined. If
@@ -3512,15 +3506,15 @@ y = 1
 $ scope-test.rb:8
 ../lib/byebug-base.rb:175
 Byebug.current_context.stop_frame = 0
-(rdb:1) where
+(byebug:1) where
 --> #0 Kernel.byebug(steps#Fixnum) at line ../lib/byebug-base.rb:175
     #1 at line scope-test.rb:6
     #2 at line scope-test.rb:4
-(rdb:1) up
+(byebug:1) up
 #1 at line scope-test.rb:6
-(rdb:1) p a
+(byebug:1) p a
 1
-(rdb:1)
+(byebug:1)
 @end smallexample
 As seen above you will have to position the frame up one to be back in
 your debugged program rather than in byebug.
