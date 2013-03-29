@@ -107,10 +107,8 @@ describe "Trace Command" do
       it "must track global variable" do
         enter 'trace variable $bla'
         debug_file 'trace'
-        check_output_includes(
-          "traced variable $bla has value 3",
-          "traced variable $bla has value 7",
-        )
+        check_output_includes "traced variable $bla has value 3",
+                              "traced variable $bla has value 7"
       end
 
       it "must be able to use a shortcut" do

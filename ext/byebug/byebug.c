@@ -136,7 +136,6 @@ static void
 call_at_line(debug_context_t *context, char *file, int line,
              VALUE context_object, VALUE path, VALUE lineno)
 {
-  CTX_FL_UNSET(context, CTX_FL_STEPPED);
   CTX_FL_UNSET(context, CTX_FL_ENABLE_BKPT);
   CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
   context->last_file = file;
@@ -178,14 +177,9 @@ process_line_event(VALUE trace_point, void *data)
 
   if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
-    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)) {
       context->stop_next = context->stop_next <= 0 ? -1 : context->stop_next-1;
-
-    if (moved || (CTX_FL_TEST(context, CTX_FL_STEPPED) &&
-                 !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)))
-    {
       context->stop_line = context->stop_line <= 0 ? -1 : context->stop_line-1;
-      CTX_FL_UNSET(context, CTX_FL_STEPPED);
     }
   }
   else if (context->stack_size < context->dest_frame)
@@ -197,8 +191,8 @@ process_line_event(VALUE trace_point, void *data)
   {
     context->stop_reason = CTX_STOP_STEP;
     reset_stepping_stop_points(context);
-    call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
-                 path, lineno);
+    call_at_line(
+      context, RSTRING_PTR(path), FIX2INT(lineno), context_object, path, lineno);
   }
   else if (CTX_FL_TEST(context, CTX_FL_ENABLE_BKPT))
   {
@@ -208,7 +202,7 @@ process_line_event(VALUE trace_point, void *data)
       reset_stepping_stop_points(context);
       rb_funcall(context_object, rb_intern("at_breakpoint"), 1, breakpoint);
       call_at_line(context, RSTRING_PTR(path), FIX2INT(lineno), context_object,
-                 path, lineno);
+                            path, lineno);
     }
   }
 
@@ -226,9 +220,7 @@ process_return_event(VALUE trace_point, void *data)
   Data_Get_Struct(context_object, debug_context_t, context);
   if (!check_start_processing(context, rb_thread_current())) return;
 
-  CTX_FL_SET(context, CTX_FL_STEPPED);
-
-  if(context->stack_size == context->stop_frame)
+  if (context->stack_size == context->stop_frame)
   {
       context->stop_next = 1;
       context->stop_frame = 0;

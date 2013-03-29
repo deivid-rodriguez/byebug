@@ -16,9 +16,8 @@ typedef struct rb_trace_arg_struct rb_trace_point_t;
 #define CTX_FL_DEAD         (1<<5)
 #define CTX_FL_WAS_RUNNING  (1<<6)
 #define CTX_FL_ENABLE_BKPT  (1<<7)
-#define CTX_FL_STEPPED      (1<<8)
-#define CTX_FL_FORCE_MOVE   (1<<9)
-#define CTX_FL_CATCHING     (1<<10)
+#define CTX_FL_FORCE_MOVE   (1<<8)
+#define CTX_FL_CATCHING     (1<<9)
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))

@@ -7,7 +7,7 @@ class SteppingExample
   end
 
   def b
-    [1,2,3].map { |a| a.to_f }
+    v2 = 5 if 1 == 2 ; [1,2,3].map { |a| a.to_f }
     c
   end
 

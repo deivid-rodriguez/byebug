@@ -46,6 +46,7 @@ describe "Stepping Commands" do
       end
 
       it "must ignore the setting if 'minus' is specified" do
+        Byebug::Command.settings[:force_stepping] = true
         enter 'next-'
         debug_file('stepping') { state.line.must_equal 10 }
       end

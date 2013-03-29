@@ -2000,31 +2000,30 @@ Print lines between @var{first} and @var{last} inclusive.
 Print lines centered around where the script is stopped.
 @end table
 
-Repeating a @code{list} command with @key{RET} discards the argument,
-so it is equivalent to typing just @code{list}.  This is more useful
-than listing the same lines again.  An exception is made for an
-argument of @samp{-}; that argument is preserved in repetition so that
-each repetition moves up in the source file.
+Repeating a @code{list} command with @key{RET} discards the argument, so it is
+equivalent to typing just @code{list}.  This is more useful than listing the
+same lines again.  An exception is made for an argument of @samp{-}; that
+argument is preserved in repetition so that each repetition moves up in the
+source file.
 
 @node Edit
 @section Editing Source files (@samp{edit})
 
-To edit the lines in a source file, use the @code{edit} command.  The
-editing program of your choice is invoked with the current line set to
-the active line in the program.  Alternatively, you can give a line
-specification to specify what part of the file you want to print if
-you want to see other parts of the program.
+To edit the lines in a source file, use the @code{edit} command.  The editing
+program of your choice is invoked with the current line set to the active line
+in the program.  Alternatively, you can give a line specification to specify
+what part of the file you want to print if you want to see other parts of the
+program.
 
-You can customize to use any editor you want by using the
-@code{EDITOR} environment variable. The only restriction is that your
-editor (say @code{ex}), recognizes the following command-line syntax:
+You can customize to use any editor you want by using the @code{EDITOR}
+environment variable. The only restriction is that your editor (say @code{ex})
+recognizes the following command-line syntax:
 @smallexample
 ex +@var{number} file
 @end smallexample
-The optional numeric value +@var{number} specifies the number of the
-line in the file where to start editing.  For example, to configure
-@value{DBG} to use the @code{vi} editor, you could use these commands
-with the @code{sh} shell:
+The optional numeric value +@var{number} specifies the number of the line in the
+file where to start editing.  For example, to configure @value{DBG} to use the
+@code{vi} editor, you could use these commands with the @code{sh} shell:
 @smallexample
 EDITOR=/usr/bin/vi
 export EDITOR
@@ -2213,23 +2212,22 @@ expressions to that frame of that thread.
 @node Stopping
 @section Stopping and Resuming Execution
 
-One important use of a byebug is to stop your program @emph{before}
-it terminates, so that if your script runs into trouble you can
-investigate and find out why. However should your script accidentally
-continue to termination, it can be arranged for @DBG to not to leave
-byebug without your explicit instruction. That way, you can
-restart the program using the same command arguments.
+One important use of a debugger is to stop your program @emph{before} it
+terminates, so that if your script runs into trouble you can investigate and
+find out why. However should your script accidentally continue to termination,
+it can be arranged for @value{DBG} to not to leave byebug without your explicit
+instruction. That way, you can restart the program using the same command
+arguments.
 
-Inside @value{DBG}, your script may stop for any of several reasons,
-such as a signal, a breakpoint, or reaching a new line after a
-byebug command such as @code{step}.  You may then examine and
-change variables, set new breakpoints or remove old ones, and then
-continue execution.  
+Inside @value{DBG}, your script may stop for any of several reasons, such as a
+signal, a breakpoint, or reaching a new line after a byebug command such as
+@code{step}.  You may then examine and change variables, set new breakpoints or
+remove old ones, and then continue execution.
 
 @menu
 * Breakpoints::          Breakpoints (break, catch, delete)
 * Disabling::            Disabling breakpoints (disable, enable)
-* Conditions::                      Break conditions (condition)
+* Conditions::           Break conditions (condition)
 * Resuming Execution::   Resuming execution (continue, step, next, finish)
 @end menu
 
@@ -2404,11 +2402,10 @@ become effective once again in stopping your program.
 
 @end table
 
-Breakpoints that you set are initially enabled; subsequently, they
-become disabled or enabled only when you use one of the commands
-above.  (The command @code{until} can set and delete a breakpoint of
-its own, but it does not change the state of your other breakpoints;
-see @ref{Resuming Execution, ,Resuming Execution}.)
+Breakpoints that you set are initially enabled; subsequently, they become
+disabled or enabled only when you use one of the commands above.  (The command
+@code{until} can set and delete a breakpoint of its own, but it does not change
+the state of your other breakpoints; see @ref{Resuming Execution}.)
 
 @node Conditions
 @subsection Break conditions (@samp{condition})
@@ -2471,21 +2468,20 @@ condition 1       # Change that! Unconditionally stop on breakpoint 1.
 @node Resuming Execution
 @subsection Resuming Execution (@samp{step}, @samp{next}, @samp{finish}, @samp{continue}, @samp{jump})
 
-A typical technique for using stepping is to set a breakpoint
-(@pxref{Breakpoints}) at the beginning of the function or the section
-of your script where a problem is believed to lie, run your script
-until it stops at that breakpoint, and then step through the suspect
-area, examining the variables that are interesting, until you see the
-problem happen.
+A typical technique for using stepping is to set a breakpoint (
+@pxref{Breakpoints}) at the beginning of the function or the section of your
+script where a problem is believed to lie, run your script until it stops at
+that breakpoint, and then step through the suspect area, examining the variables
+that are interesting, until you see the problem happen.
 
 @cindex stepping
 @cindex continuing
 @cindex resuming execution
-@dfn{Continuing} means resuming program execution until your script
-completes normally.  In contrast, @dfn{stepping} means executing just
-one more ``step'' of your script, where ``step'' may mean either one
-line of source code.  Either when continuing or when stepping,
-your script may stop even sooner, due to a breakpoint or a signal.
+@dfn{Continuing} means resuming program execution until your script completes
+normally.  In contrast, @dfn{stepping} means executing just one more ``step'' of
+your script, where ``step'' may mean one line of source code.  Either when
+continuing or when stepping, your script may stop even sooner, due to a
+breakpoint or a signal.
 
 @menu
 * Step::          running the next statement (step)
@@ -2524,7 +2520,7 @@ commands. Instead it uses count-1 step commands followed by a step+ command. For
 example, @code{step+ 3} is the same as @code{step; step; step+}, not
 @code{step+; step+; step+}}
 
-If you find yourself generally wanting to use @code{step+} rather than 
+If you find yourself generally wanting to use @code{step+} rather than
 @code{step}, you may want to consider using @code{set forcestep},
 (@pxref{Forcestep}).
 
@@ -2542,12 +2538,11 @@ before @var{count} steps, stepping stops right away.
 @kindex next @r{[}+-@r{]} @ovar{count}
 @kindex n @r{(@code{next})}
 @item next @r{[}+@r{]} @ovar{count}
-This is similar to @code{step}, but function or method calls that
-appear within the line of code are executed without stopping. As with
-step, if you want to make sure that on a step you go to a
-@emph{different} position, add a plus sign (@samp{+}).  Similarly,
-appending a minus disables a @code{forcestep} temporarily, and an
-argument @var{count} is a repeat count, as for @code{step}.
+This is similar to @code{step}, but function or method calls that appear within
+the line of code are executed without stopping. As with step, if you want to
+make sure that on a step you go to a @emph{different} position, add a plus sign
+(@samp{+}).  Similarly, appending a minus disables a @code{forcestep}
+temporarily, and an argument @var{count} is a repeat count, as for @code{step}.
 @end table
 
 @node Finish
@@ -2555,15 +2550,14 @@ argument @var{count} is a repeat count, as for @code{step}.
 @table @code
 @kindex finish @ovar{frame-number}
 @item finish @ovar{frame-number}
-Execute until selected stack frame returns.  If no frame number is
-given, we run until the currently selected frame returns.  The
-currently selected frame starts out the most-recent frame or 0 if no
-frame positioning (e.g@: @code{up}, @code{down} or @code{frame}) has
-been performed. If a frame number is given we run until @var{frame} frames
-returns.
+Execute until selected stack frame returns.  If no frame number is given, we run
+until the currently selected frame returns.  The currently selected frame starts
+out the most-recent frame or 0 if no frame positioning (e.g@: @code{up},
+@code{down} or @code{frame}) has been performed. If a frame number is given we
+run until @var{frame} frames returns.
 
-If you want instead to terminate the program and byebug entirely,
-use @code{quit} (@pxref{Quitting byebug, ,Quitting byebug}).
+If you want instead to terminate the program and byebug entirely, use
+@code{quit} (@pxref{Quitting byebug, ,Quitting byebug}).
 
 @end table
 
