@@ -157,11 +157,11 @@ process_line_event(VALUE trace_point, void *data)
   Data_Get_Struct(context_object, debug_context_t, context);
   if (!check_start_processing(context, rb_thread_current())) return;
 
-  load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class,
-                               &binding, &self);
+  load_frame_info(
+      trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
   if (debug == Qtrue)
-    print_debug_info("line", path, lineno, method_id, defined_class,
-                                                           context->stack_size);
+    print_debug_info(
+      "line", path, lineno, method_id, defined_class, context->stack_size);
 
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);

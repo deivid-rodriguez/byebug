@@ -19,12 +19,15 @@ class TestInterface < Byebug::Interface
   end
 
   def read_command(*args)
-    if @input_queue.empty? && test_block
-      test_block.call
-      self.test_block = nil
+    if @input_queue.empty?
+      if test_block
+        test_block.call
+        self.test_block = nil
+      end
+    else
+      result = @input_queue.shift
+      result.is_a?(Proc) ? result.call : result
     end
-    result = @input_queue.shift
-    result.is_a?(Proc) ? result.call : result
   end
 
   def print(*args)

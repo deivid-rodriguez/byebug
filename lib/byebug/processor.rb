@@ -349,9 +349,9 @@ module Byebug
 
       def display_annotations(commands, context)
         return if display.empty?
-       #have_display = display.find{|d| d[0]}
-       #return unless have_display and @byebug_displays_were_empty
-       #@byebug_displays_were_empty = have_display
+        #have_display = display.find{|d| d[0]}
+        #return unless have_display and @byebug_displays_were_empty
+        #@byebug_displays_were_empty = have_display
         annotation('display', commands, context, "display")
       end
 

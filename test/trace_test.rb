@@ -16,23 +16,19 @@ describe "Trace Command" do
 
       describe "enabling" do
         it "must trace execution by setting trace to on" do
-          enter 'trace on', 'next'
-          debug_file 'trace'
-          check_output_includes "Tracing: #{fullpath('trace')}:4 $bla = 4",
-                                "Tracing: #{fullpath('trace')}:5 $bla = 5"
-          check_output_doesnt_include "Tracing: #{fullpath('trace')}:6 $bla = 6"
-        end
-
-        it "must show a message when turned on" do
           enter 'trace on'
           debug_file 'trace'
-          check_output_includes "Tracing is on"
+          check_output_includes "Tracing is on",
+                                "Tracing: #{fullpath('trace')}:4 $bla = 4",
+                                "Tracing: #{fullpath('trace')}:7 $bla = 7"
         end
 
         it "must be able to use a shortcut" do
           enter 'tr on'
           debug_file 'trace'
-          check_output_includes "Tracing is on"
+          check_output_includes "Tracing is on",
+                                "Tracing: #{fullpath('trace')}:4 $bla = 4",
+                                "Tracing: #{fullpath('trace')}:7 $bla = 7"
         end
       end
 
