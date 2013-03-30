@@ -4,6 +4,8 @@ vendor/bundle
 doc
 
 .rvmrc
+.ruby-version
+.ruby-gemset
 .gdbinit
 .gdb_history
 .bundle
