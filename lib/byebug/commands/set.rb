@@ -80,10 +80,10 @@ module Byebug
                   return
                 end
                 if defined?(Byebug::RDEBUG_SCRIPT)
-                  # rdebug was called initially. 1st arg is script name.
+                  # byebug was called initially. 1st arg is script name.
                   Command.settings[:argv][1..-1] = args
                 else
-                  # rdebug wasn't called initially. 1st arg is not script name.
+                  # byebug wasn't called initially. 1st arg is not script name.
                   Command.settings[:argv] = args
                 end
               when /^args$/

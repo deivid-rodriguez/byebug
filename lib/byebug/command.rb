@@ -13,6 +13,7 @@ module Byebug
         string[Command.settings[:width]-3 .. -1] = "..."
       end
     end
+
   end
 
   # Root dir for byebug

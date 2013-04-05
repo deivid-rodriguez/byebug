@@ -19,7 +19,7 @@ describe "Restart Command (test setup)" do
         "PROG_SCRIPT", Pathname.new(fullpath('restart')).
                        relative_path_from(Pathname.new(Byebug::INITIAL_DIR)).
                        cleanpath.to_s)
-      set_tmp_const(Byebug, "RDEBUG_SCRIPT", 'rdebug_script')
+      set_tmp_const(Byebug, "RDEBUG_SCRIPT", 'byebug_script')
       set_tmp_hash(Byebug::Command.settings, :argv, ['argv'])
       Byebug::RestartCommand.any_instance.stubs(:exec).
                                        with("#{Byebug::RDEBUG_SCRIPT} argv")

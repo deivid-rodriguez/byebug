@@ -28,12 +28,12 @@ module Byebug
           print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
                 "We'll add a call to Ruby.\n"
           ruby = begin defined?(Gem) ? Gem.ruby : "ruby" rescue "ruby" end
-          rdebug_script = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
+          byebug_script = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
         else
-          rdebug_script = Byebug::PROG_SCRIPT
+          byebug_script = Byebug::PROG_SCRIPT
         end
       else
-        rdebug_script = Byebug::RDEBUG_SCRIPT
+        byebug_script = Byebug::RDEBUG_SCRIPT
       end
 
       begin
@@ -52,7 +52,7 @@ module Byebug
           argv = Command.settings[:argv]
         end
       end
-      cmd = "#{rdebug_script} #{argv.compact.join(' ')}"
+      cmd = "#{byebug_script} #{argv.compact.join(' ')}"
 
       # An execv would be preferable to the "exec" below.
       print "Re exec'ing:\n\t#{cmd}\n"

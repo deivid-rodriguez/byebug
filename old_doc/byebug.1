@@ -1,18 +1,18 @@
-.\" $Id: rdebug.1 516 2007-12-31 05:55:24Z rockyb $
-.TH rdebug 1 
+.\" $Id: byebug.1 516 2007-12-31 05:55:24Z rockyb $
+.TH byebug 1 
 .SH NAME
-rdebug \- Fast Ruby byebug
+byebug \- Fast Ruby byebug
 .SH SYNOPSIS
-.B rdebug 
+.B byebug 
 [byebug-options] 
-rdebug
+byebug
 [script-options...]
 .SH "DESCRIPTION"
 This manual page documents briefly the
-.BR rdebug
+.BR byebug
 command.
 .PP
-.B rdebug
+.B byebug
 is a fast implementation of the standard Ruby byebug debug.rb.  It
 is implemented by utilizing a Ruby C API hook, allows for remote
 debugging and can be used as the Ruby byebug backend interface for a
@@ -22,7 +22,7 @@ The commands generally follow gdb's command set unless there's good
 reason not to.
 
 .PP
-rdebug can do four main kinds of things (plus other things in support of
+byebug can do four main kinds of things (plus other things in support of
 these) to help you catch bugs in the act:
 
 .TP
@@ -75,10 +75,10 @@ or
 .B down. A negative number starts counting from the other end.
 .TP
 .B help \fR[\|\fIname\fR\|]
-Show information about rdebug command \c
+Show information about byebug command \c
 .I name\c
 \&, or general information
-about using rdebug.
+about using byebug.
 .TP
 .B info \fR[\|\fIname\fR\|]
 Get the various information usually about the debugged program.
@@ -142,7 +142,7 @@ goes the other direction and is like the down command
 .B where \fR[\|\fIcount\fR\|]
 Display all or \fIcount\fR items of the program stack.
 .PP
-For full details on rdebug, see \c
+For full details on byebug, see \c
 https://github.com/cldwalker/byebug
 .SH OPTIONS
 .PP
@@ -155,7 +155,7 @@ front-ends such as GNU Emacs to post this updated information without
 having to poll for it.
 .TP
 .B \-\-client
-Connect to a remote byebug. Used with another rdebug invocation using \-\-server.
+Connect to a remote byebug. Used with another byebug invocation using \-\-server.
 See also \-\-host and \-\-cport options
 .TP
 .B \-\-cport=PORT
@@ -215,7 +215,7 @@ is given. If no script name is given just exit after printing the
 version number.
 .TP
 .B \-\-nx
-Don't execute commands found in any initialization files, e.g. .rdebugrc.
+Don't execute commands found in any initialization files, e.g. .byebugrc.
 .TP
 .B \-\-keep-frame-binding
 Keep frame bindings.
@@ -223,7 +223,7 @@ Keep frame bindings.
 .B \-\-script=FILE
 Name of the script file to run
 .B \-s | \-\-server
-Listen for remote connections. Another rdebug session accesses using the \-\-client option.
+Listen for remote connections. Another byebug session accesses using the \-\-client option.
 See also the \-\-host, \-\-port and
 \-\-cport options
 .TP
@@ -237,5 +237,5 @@ Show invocation help and exit.
 .Sp
 https://github.com/cldwalker/byebug
 .SH AUTHOR
-rdebug was written by Kent Siblev. This manual page was written by
-Rocky Bernstein <rocky@gnu.org>
+byebug was written by Kent Siblev. This manual page was written by Rocky
+Bernstein <rocky@gnu.org>

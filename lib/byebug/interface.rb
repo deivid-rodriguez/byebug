@@ -20,6 +20,7 @@ module Byebug
       end
     end
 
+
     # Format msg with gdb-style annotation header
     def afmt(msg, newline="\n")
       "\032\032#{msg}#{newline}"
@@ -31,13 +32,14 @@ module Byebug
 
   end
 
-  class LocalInterface < Interface # :nodoc:
+  class LocalInterface < Interface
     attr_accessor :command_queue, :history_length, :history_save, :histfile
     attr_accessor :restart_file
 
     unless defined?(FILE_HISTORY)
-      FILE_HISTORY = ".rdebug_hist"
+      FILE_HISTORY = ".byebug_hist"
     end
+
     def initialize()
       super
       @command_queue = []

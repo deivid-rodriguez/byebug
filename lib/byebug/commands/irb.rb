@@ -71,12 +71,12 @@ module Byebug
       end
 
       save_trap = trap("SIGINT") do
-        throw :IRB_EXIT, :cont if $rdebug_in_irb
+        throw :IRB_EXIT, :cont if $byebug_in_irb
       end
 
       add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
       $byebug_state = @state if add_debugging
-      $rdebug_in_irb = true
+      $byebug_in_irb = true
       cont = IRB.start_session(get_binding)
       case cont
       when :cont
@@ -97,7 +97,7 @@ module Byebug
       end
 
     ensure
-      $rdebug_in_irb = nil
+      $byebug_in_irb = nil
       $byebug_state = nil if add_debugging
       trap("SIGINT", save_trap) if save_trap
     end

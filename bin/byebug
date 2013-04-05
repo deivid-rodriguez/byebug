@@ -19,7 +19,7 @@
 #    this updated information without having to poll for it.
 #
 #<tt>--client</tt>::
-#    Connect to a remote byebug. Used with another rdebug invocation
+#    Connect to a remote byebug. Used with another byebug invocation
 #    using <tt>--server</tt>.  See also <tt>--host</tt> and
 #    <tt>--cport</tt> options
 #
@@ -82,7 +82,7 @@
 #
 #<tt>--nx</tt>::
 #      Don’t execute commands  found in any initialization
-#      files, e.g. <tt>.rdebugrc</tt>.
+#      files, e.g. <tt>.byebugrc</tt>.
 #
 #<tt>--keep-frame-binding</tt>::
 #      Keep frame bindings.
@@ -91,7 +91,7 @@
 #      Name of the script file to run
 #
 #<tt>-s | --server</tt>::
-#      Listen for remote connections. Another rdebug session
+#      Listen for remote connections. Another byebug session
 #      accesses using the <tt>--client</tt>  option. See also the
 #      <tt>--host</tt>, <tt>--port</tt> and <tt>--cport</tt> options
 #
@@ -107,7 +107,7 @@ require File.dirname(__FILE__) + "/../lib/byebug"
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
-  # Otherwise we get a load message that looks like rdebug has a problem.
+  # Otherwise we get a load message that looks like byebug has a problem.
   output = `ruby -c "#{Byebug::PROG_SCRIPT}" 2>&1`
   if $?.exitstatus != 0 and RUBY_PLATFORM !~ /mswin/
     puts output
@@ -212,7 +212,7 @@ EOB
     opts.on('--no-stop', 'Do not stop when script is loaded') do
       options.stop = false
     end
-    opts.on('-nx', 'Not run byebug initialization files (e.g. .rdebugrc') do
+    opts.on('-nx', 'Not run byebug initialization files (e.g. .byebugrc') do
       options.nx = true
     end
     opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') do
@@ -299,11 +299,11 @@ begin
   if not defined? Byebug::ARGV
     Byebug::ARGV = ARGV.clone
   end
-  rdebug_path = File.expand_path($0)
+  byebug_path = File.expand_path($0)
   if RUBY_PLATFORM =~ /mswin/
-    rdebug_path += '.cmd' unless rdebug_path =~ /\.cmd$/i
+    byebug_path += '.cmd' unless byebug_path =~ /\.cmd$/i
   end
-  Byebug::RDEBUG_SCRIPT = rdebug_path
+  Byebug::RDEBUG_SCRIPT = byebug_path
   Byebug::RDEBUG_FILE = __FILE__
   Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
@@ -350,7 +350,7 @@ else
     # start control thread
     Byebug.start_control(options.host, options.cport) if options.control
 
-    # load initrc script (e.g. .rdebugrc)
+    # load initrc script (e.g. .byebugrc)
     Byebug.run_init_script(StringIO.new) unless options.nx
 
     # run restore-settings startup script if specified

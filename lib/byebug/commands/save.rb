@@ -1,10 +1,10 @@
 module Byebug
-  module SaveFunctions # :nodoc:
 
+  module SaveFunctions
     # Create a temporary file to write in if file is nil
     def open_save
       require "tempfile"
-      file = Tempfile.new("rdebug-save")
+      file = Tempfile.new("byebug-save")
       # We want close to not unlink, so redefine.
       def file.close
         @tmpfile.close if @tmpfile
@@ -13,9 +13,9 @@ module Byebug
     end
   end
 
-  class SaveCommand < Command # :nodoc:
+  class SaveCommand < Command
     self.allow_in_control = true
-    
+
     def save_breakpoints(file)
       Byebug.breakpoints.each do |b|
         file.puts "break #{b.source}:#{b.pos}#{" if #{b.expr}" if b.expr}"
@@ -24,10 +24,10 @@ module Byebug
 
     def save_catchpoints(file)
       Byebug.catchpoints.keys.each do |c|
-        file.puts "catch #{c}" 
+        file.puts "catch #{c}"
       end
     end
-    
+
     def save_displays(file)
       for d in @state.display
         if d[0]
@@ -35,7 +35,7 @@ module Byebug
         end
       end
     end
-    
+
     def save_settings(file)
       # FIXME put routine in set
       %w(autoeval basename byebugtesting).each do |setting|
@@ -47,13 +47,13 @@ module Byebug
         file.puts "set #{setting} #{on_off}"
       end
     end
-    
+
     def regexp
       /^\s* sa(?:ve)?
-        (?:\s+(.+))? 
+        (?:\s+(.+))?
         \s*$/ix
     end
-    
+
     def execute
       if not @match[1] or @match[1].strip.empty?
         file = open_save()
@@ -75,7 +75,7 @@ module Byebug
       def help_command
         'save'
       end
-      
+
       def help(cmd)
         %{
 save [FILE]
