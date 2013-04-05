@@ -9,12 +9,12 @@ module Byebug
       if Byebug.catchpoints and not Byebug.catchpoints.empty?
         Byebug.catchpoints.each do |exception, hits|
           print "#{exception}: #{exception.is_a?(Class)}\n"
-          #print "#{exception}\n"
         end
       else
         print "No exceptions set to be caught.\n"
       end
     end
+
   end
 
   # Implements byebug "info" command.
@@ -114,9 +114,7 @@ module Byebug
       args = @state.context.frame_args(@state.frame_pos)
       args.each do |name|
         s = "#{name} = #{locals[name].inspect}"
-        if s.size > self.class.settings[:width]
-          s[self.class.settings[:width]-3 .. -1] = "..."
-        end
+        pad_with_dots(s)
         print "#{s}\n"
       end
     end
@@ -278,9 +276,7 @@ module Byebug
             s = "*Error in evaluation*"
           end
         end
-        if s.size > self.class.settings[:width]
-          s[self.class.settings[:width]-3 .. -1] = "..."
-        end
+        pad_with_dots(s)
         print "#{s}\n"
       end
     end
@@ -404,9 +400,7 @@ module Byebug
             s = "#{name} = *Error in evaluation*"
           end
         end
-        if s.size > self.class.settings[:width]
-          s[self.class.settings[:width]-3 .. -1] = "..."
-        end
+        pad_with_dots(s)
         s.gsub!('%', '%%')  # protect against printf format strings
         print "#{s}\n"
       end

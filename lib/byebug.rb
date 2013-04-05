@@ -367,6 +367,7 @@ class Module
   #   EOD
   # end
 end
+
 module Kernel
 
   ##

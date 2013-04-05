@@ -4,6 +4,17 @@ require_relative 'helper'
 
 module Byebug
 
+  module CommandFunctions
+    ##
+    # Pad a string with dots at the end to fit :width setting
+    #
+    def pad_with_dots(string)
+      if string.size > Command.settings[:width]
+        string[Command.settings[:width]-3 .. -1] = "..."
+      end
+    end
+  end
+
   # Root dir for byebug
   BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
     defined?(BYEBUG_DIR)
@@ -191,10 +202,6 @@ module Byebug
       def get_binding
         @state.context.frame_binding(@state.frame_pos)
       end
-
-      #def line_at(file, line)
-      #  Byebug.line_at(file, line)
-      #end
 
       def get_context(thnum)
         Byebug.contexts.find{|c| c.thnum == thnum}

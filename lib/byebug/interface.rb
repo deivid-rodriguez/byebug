@@ -1,6 +1,6 @@
 module Byebug
 
-  class Interface # :nodoc:
+  class Interface
     attr_writer :have_readline
 
     def initialize
@@ -126,7 +126,7 @@ module Byebug
       end
   end
 
-  class RemoteInterface < Interface # :nodoc:
+  class RemoteInterface < Interface
     attr_accessor :command_queue, :history_length, :history_save, :histfile
     attr_accessor :restart_file
 
@@ -180,7 +180,7 @@ module Byebug
       end
   end
 
-  class ScriptInterface < Interface # :nodoc:
+  class ScriptInterface < Interface
     attr_accessor :command_queue, :history_length, :history_save, :histfile
     attr_accessor :restart_file
 

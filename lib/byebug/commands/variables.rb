@@ -14,9 +14,7 @@ module Byebug
             s = "*Error in evaluation*"
           end
         end
-        if s.size > self.class.settings[:width]
-          s[self.class.settings[:width]-3 .. -1] = "..."
-        end
+        pad_with_dots(s)
         print "%s = %s\n", v, s
       end
     end
