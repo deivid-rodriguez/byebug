@@ -47,11 +47,7 @@ module Byebug
 
     def execute
       if not @match[1]
-        print "\"set\" must be followed by the name of an set command:\n"
-        print "List of set subcommands:\n\n"
-        for subcmd in Subcommands do
-          print "set #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
+        print_subcommands
       else
         args = @match[1].split(/[ \t]+/)
         subcmd = args.shift

@@ -1530,19 +1530,17 @@ l[ist] nn-mm	list given lines
 
 @node Help for Subcommands
 @subsection Help on Subcommands
-A number of commands have many sub-parameters or
-@emph{subcommands}. These include @code{info}, @code{set},
-@code{show}, @code{enable} and @code{disable}.
+A number of commands have many sub-parameters or @emph{subcommands}. These
+include @code{info}, @code{set}, @code{show}, @code{enable} and @code{disable}.
 
-When you ask for help for one of these commands, you will get help for
-all of the subcommands that that command offers. Sometimes you may
-want help that subcommand and to do this just follow the command with
-its subcommand name. For example @code{help set annotate} will just
-give help about the annotate command. Furthermore it will give longer
-help than the summary information that appears when you ask for
-help. You don't need to list the full subcommand name, but just enough
-of the letters to make that subcommand distinct from others will
-do. For example, @code{help set an} is the same as @code{help set annotate}.
+When you ask for help for one of these commands, you will get help for all of
+the subcommands that that command offers. Sometimes you may want help that
+subcommand and to do this just follow the command with its subcommand name. For
+example @code{help set annotate} will just give help about the annotate command.
+Furthermore it will give longer help than the summary information that appears
+when you ask for help. You don't need to list the full subcommand name, but just
+enough of the letters to make that subcommand distinct from others will do. For
+example, @code{help set an} is the same as @code{help set annotate}.
 
 Some examples follow.
 @example

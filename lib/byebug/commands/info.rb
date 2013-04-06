@@ -88,11 +88,7 @@ module Byebug
 
     def execute
       if !@match[1]
-        errmsg "\"info\" must be followed by the name of an info command:\n"
-        print "List of info subcommands:\n\n"
-        for subcmd in Subcommands do
-          print "info #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
+        print_subcommands
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift

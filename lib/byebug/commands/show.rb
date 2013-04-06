@@ -194,11 +194,7 @@ show history size -- Show the size of the command history"],
 
     def execute
       if not @match[1]
-        print "\"show\" must be followed by the name of an show command:\n"
-        print "List of show subcommands:\n\n"
-        for subcmd in Subcommands do
-          print "show #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
+        print_subcommands
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift

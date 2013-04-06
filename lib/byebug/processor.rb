@@ -148,7 +148,6 @@ module Byebug
       # Don't trace ourselves
       return if defined?(Byebug::RDEBUG_FILE) && Byebug::RDEBUG_FILE == file
 
-      #@last_file = CommandProcessor.canonic_file(file)
       file = CommandProcessor.canonic_file(file)
       unless file == @last_file and line == @last_line and
              Command.settings[:tracing_plus]
