@@ -1,13 +1,17 @@
 module Byebug
+
   # Implements byebug "list" command.
   class ListCommand < Command
 
     register_setting_get(:autolist) do
-      ListCommand.always_run 
+      ListCommand.always_run
     end
     register_setting_set(:autolist) do |value|
       ListCommand.always_run = value
     end
+
+    #always_run = 1
+    Command.settings[:autolist] = 1
 
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(.+))? $/x
@@ -16,17 +20,17 @@ module Byebug
     def execute
       listsize = Command.settings[:listsize]
       if !@match || !(@match[1] || @match[2])
-        b = @state.previous_line ? 
+        b = @state.previous_line ?
         @state.previous_line + listsize : @state.line - (listsize/2)
         e = b + listsize - 1
       elsif @match[1] == '-'
         b = if @state.previous_line
               if  @state.previous_line > 0
-                @state.previous_line - listsize 
+                @state.previous_line - listsize
               else
                 @state.previous_line
               end
-            else 
+            else
               @state.line - (listsize/2)
             end
         e = b + listsize - 1
@@ -65,30 +69,30 @@ module Byebug
 
     private
 
-    # Show FILE from line B to E where CURRENT is the current line number.
-    # If we can show from B to E then we return B, otherwise we return the
-    # previous line @state.previous_line.
-    def display_list(b, e, file, current)
-      print "[%d, %d] in %s\n", b, e, file
-      lines = LineCache::getlines(file, 
-                                  Command.settings[:reload_source_on_change])
-      if lines
-        return @state.previous_line if b >= lines.size
-        e = lines.size if lines.size < e
-        [b, 1].max.upto(e) do |n|
-          if n > 0 && lines[n-1]
-            if n == current
-              print "=> %d  %s\n", n, lines[n-1].chomp
-            else
-              print "   %d  %s\n", n, lines[n-1].chomp
+      # Show FILE from line B to E where CURRENT is the current line number.
+      # If we can show from B to E then we return B, otherwise we return the
+      # previous line @state.previous_line.
+      def display_list(b, e, file, current)
+        print "[%d, %d] in %s\n", b, e, file
+        lines = LineCache::getlines(file,
+                                    Command.settings[:reload_source_on_change])
+        if lines
+          return @state.previous_line if b >= lines.size
+          e = lines.size if lines.size < e
+          [b, 1].max.upto(e) do |n|
+            if n > 0 && lines[n-1]
+              if n == current
+                print "=> %d  %s\n", n, lines[n-1].chomp
+              else
+                print "   %d  %s\n", n, lines[n-1].chomp
+              end
             end
           end
+        else
+          errmsg "No sourcefile available for %s\n", file
+          return @state.previous_line
         end
-      else
-        errmsg "No sourcefile available for %s\n", file
-        return @state.previous_line
+        return e == lines.size ? @state.previous_line : b
       end
-      return e == lines.size ? @state.previous_line : b
-    end
   end
 end

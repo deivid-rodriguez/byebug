@@ -4,7 +4,7 @@ describe "Set Command" do
   include TestDsl
 
   describe "setting to on" do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
+    Byebug::Command.settings[:autolist] = 0
 
     it "must set a setting to on" do
       enter 'set autolist on'
@@ -32,7 +32,7 @@ describe "Set Command" do
   end
 
   describe "setting to off" do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 1)
+    Byebug::Command.settings[:autolist] = 1
 
     it "must set a setting to off" do
       enter 'set autolist off'
@@ -54,7 +54,7 @@ describe "Set Command" do
   end
 
   describe "messages" do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
+    Byebug::Command.settings[:autolist] = 0
 
     it "must show a message after setting" do
       enter 'set autolist on'
@@ -147,7 +147,7 @@ describe "Set Command" do
   end
 
   describe "width" do
-    temporary_change_hash_value(Byebug::Command.settings, :width, 20)
+    Byebug::Command.settings[:width] = 20
 
     it "must set ENV['COLUMNS'] by the 'set width' command" do
       old_columns = ENV["COLUMNS"]
@@ -162,7 +162,8 @@ describe "Set Command" do
   end
 
   describe "Post Mortem" do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
+    Byebug::Command.settings[:autolist] = 0
+
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
       enter 'cont', "set autolist on"

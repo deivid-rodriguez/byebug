@@ -148,23 +148,18 @@ module Byebug
       end
     end
 
-    register_setting_var(:basename, false)  # use basename in showing files?
+    # Register default settings
+    register_setting_var(:basename, false)
     register_setting_var(:callstyle, :last)
     register_setting_var(:byebugtesting, false)
     register_setting_var(:force_stepping, false)
     register_setting_var(:full_path, true)
-    register_setting_var(:listsize, 10)    # number of lines in list command
+    register_setting_var(:listsize, 10)
     register_setting_var(:stack_trace_on_error, false)
-    register_setting_var(:tracing_plus, false) # different linetrace lines?
-
-    # width of line output. Use COLUMNS value if it exists and is not too large.
-    width = ENV['COLUMNS'].to_i
-    width = 80 unless width > 10
-    register_setting_var(:width, width)
-
-    if not defined? Byebug::ARGV
-      Byebug::ARGV = ARGV.clone
-    end
+    register_setting_var(:tracing_plus, false)
+    register_setting_var(:width,
+                         ENV['COLUMNS'].to_i > 10 ? ENV['COLUMNS'].to_i : 80)
+    Byebug::ARGV = ARGV.clone unless defined? Byebug::ARGV
     register_setting_var(:argv, Byebug::ARGV)
 
     def initialize(state)

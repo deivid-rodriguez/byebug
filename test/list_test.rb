@@ -4,14 +4,12 @@ describe "List Command" do
   include TestDsl
 
   describe "List Command Setup" do
-    before do
-      LineCache.clear_file_cache
-      Byebug::Command.settings[:listsize] = 3
-    end
-
+    before { LineCache.clear_file_cache }
     after  { LineCache.clear_file_cache }
 
     describe "listsize" do
+      before { Byebug::Command.settings[:listsize] = 3 }
+
       it "must show lines according to :listsize setting" do
         enter 'set listsize 4', 'break 5', 'cont', 'list'
         debug_file 'list'
@@ -26,72 +24,93 @@ describe "List Command" do
     end
 
     describe "without arguments" do
+      before { Byebug::Command.settings[:listsize] = 3 }
+
       it "must show surrounding lines with the first call" do
         enter 'break 5', 'cont', 'list'
         debug_file 'list'
-        check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
       end
 
       it "must list forward after second call" do
         enter 'break 5', 'cont', 'list', 'list'
         debug_file 'list'
-        check_output_includes "[7, 9] in #{fullpath('list')}", "7  7", "8  8", "9  9"
+        check_output_includes \
+          "[7, 9] in #{fullpath('list')}", "7  7", "8  8", "9  9"
       end
     end
 
     describe "list backward" do
+      before { Byebug::Command.settings[:listsize] = 3 }
+
       it "must show surrounding lines with the first call" do
         enter 'break 5', 'cont', 'list -'
         debug_file 'list'
-        check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
       end
 
       it "must list backward after second call" do
         enter 'break 5', 'cont', 'list -', 'list -'
         debug_file 'list'
-        check_output_includes "[1, 3] in #{fullpath('list')}", "1  byebug", "2  2", "3  3"
+        check_output_includes \
+          "[1, 3] in #{fullpath('list')}", "1  byebug", "2  2", "3  3"
       end
     end
 
-    it "must show the surrounding lines with =" do
-      enter 'break 5', 'cont', 'list ='
-      debug_file 'list'
-      check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+
+    describe "list surrounding" do
+      before { Byebug::Command.settings[:listsize] = 3 }
+
+      it "must show the surrounding lines with =" do
+        enter 'break 5', 'cont', 'list ='
+        debug_file 'list'
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+      end
     end
 
     describe "autolist" do
-      temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
+      before { Byebug::Command.settings[:listsize] = 3 }
 
       it "must show the surronding lines even without 'list' command if autolist is enabled" do
         enter 'set autolist', 'break 5', 'cont'
         debug_file 'list'
-        check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
       end
     end
 
     describe "specified lines" do
+      before { Byebug::Command.settings[:listsize] = 3 }
+
       it "must show with mm-nn" do
         enter 'list 4-6'
         debug_file 'list'
-        check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "5  5", "6  6"
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "5  5", "6  6"
       end
 
       it "must show with mm,nn" do
         enter 'list 4,6'
         debug_file 'list'
-        check_output_includes "[4, 6] in #{fullpath('list')}", "4  4", "5  5", "6  6"
+        check_output_includes \
+          "[4, 6] in #{fullpath('list')}", "4  4", "5  5", "6  6"
       end
 
       it "must show surroundings with mm-" do
         enter 'list 4-'
         debug_file 'list'
-        check_output_includes "[3, 5] in #{fullpath('list')}", "3  3", "4  4", "5  5"
+        check_output_includes \
+          "[3, 5] in #{fullpath('list')}", "3  3", "4  4", "5  5"
       end
 
       it "must show surroundings with mm," do
         enter 'list 4,'
         debug_file 'list'
-        check_output_includes "[3, 5] in #{fullpath('list')}", "3  3", "4  4", "5  5"
+        check_output_includes \
+          "[3, 5] in #{fullpath('list')}", "3  3", "4  4", "5  5"
       end
 
       it "must show nothing if there is no such lines" do
@@ -111,9 +130,9 @@ describe "List Command" do
     end
 
     describe "reload source" do
-      temporary_change_hash_value(Byebug::Command.settings, :reload_source_on_change, false)
-
+      before { Byebug::Command.settings[:reload_source_on_change] = false }
       after { change_line_in_file(fullpath('list'), 4, '4') }
+
       it "must not reload if setting is false" do
         enter 'set noautoreload', -> do
           change_line_in_file(fullpath('list'), 4, '100')
@@ -136,7 +155,8 @@ describe "List Command" do
     it "must show an error when there is no such file" do
       enter ->{state.file = "blabla"; 'list 4-4'}
       debug_file 'list'
-      check_output_includes "No sourcefile available for blabla", interface.error_queue
+      check_output_includes "No sourcefile available for blabla",
+                            interface.error_queue
     end
 
     describe "Post Mortem" do
