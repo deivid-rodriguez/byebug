@@ -2,6 +2,7 @@
 require 'rake/testtask'
 require 'rake/extensiontask'
 require 'rubygems/package_task'
+require 'bundler/gem_tasks'
 
 Rake::ExtensionTask.new('byebug')
 
@@ -14,9 +15,6 @@ task :test do
     t.verbose = true
   end
 end
-
-desc "Test everything - same as test."
-task :check => :test
 
 base_spec = eval(File.read('byebug.gemspec'), binding, 'byebug.gemspec')
 
