@@ -5,8 +5,7 @@ module Byebug
       ary.sort!
       for v in ary
         begin
-          s = debug_eval(v.to_s, b).inspect unless
-            v == :$KCODE || v == :$-K || v == :$=
+          s = debug_eval(v.to_s, b).inspect
         rescue
           begin
             s = debug_eval(v.to_s, b).to_s
@@ -21,6 +20,9 @@ module Byebug
     def var_class_self
       obj = debug_eval('self')
       var_list(obj.class.class_variables, get_binding)
+    end
+    def var_global
+      var_list(global_variables.reject { |v| [:$=, :$KCODE, :$-K].include?(v) })
     end
   end
 
@@ -90,7 +92,7 @@ module Byebug
     end
 
     def execute
-      var_list(global_variables)
+      var_global
     end
 
     class << self

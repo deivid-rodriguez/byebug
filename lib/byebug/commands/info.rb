@@ -377,7 +377,7 @@ module Byebug
         errmsg "info global_variables not available here.\n"
         return
       end
-      var_list(global_variables)
+      var_global
     end
 
     def info_variables(*args)
