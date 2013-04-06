@@ -231,7 +231,7 @@ module Byebug
       socket.close
     end
 
-    #
+    ##
     # Runs normal byebug initialization scripts.
     #
     # Reads and executes the commands from init file (if any) in the current
@@ -242,15 +242,15 @@ module Byebug
     #
     def run_init_script(out = handler.interface)
       cwd_script  = File.expand_path(File.join(".", INITFILE))
-      run_script(cwd_script, out) if File.exists?(script_file)
+      run_script(cwd_script, out) if File.exists?(cwd_script)
 
       home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
       if File.exists?(home_script) and cwd_script != home_script
-         run_script(home_script_file, out)
+         run_script(home_script, out)
       end
     end
 
-    #
+    ##
     # Runs a script file
     #
     def run_script(file, out = handler.interface, verbose=false)
