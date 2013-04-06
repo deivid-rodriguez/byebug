@@ -1,10 +1,9 @@
 module MiniTest::Assertions
 
-  # This matcher checks that given collection is included into the original collection,
-  # and in correct order. It accepts both strings and regexps.
+  # This matcher checks that given collection is included into the original
+  # collection and in correct order. It accepts both strings and regexps.
   #
   # Examples:
-  #
   #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 3 5})            # => pass
   #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 5 3})            # => fail
   #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\d+/, "5"])     # => pass

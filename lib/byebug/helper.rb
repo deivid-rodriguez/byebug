@@ -63,7 +63,7 @@ module Byebug
       eval("BEGIN {return true}\n#{code}", nil, "", 0)
     rescue Exception
       false
-    end 
+    end
 
   end
 end

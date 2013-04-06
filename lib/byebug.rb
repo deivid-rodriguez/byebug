@@ -95,7 +95,7 @@ module Byebug
       Breakpoint.remove breakpoints, id
     end
 
-    def interface=(value) # :nodoc:
+    def interface=(value)
       handler.interface = value
     end
 

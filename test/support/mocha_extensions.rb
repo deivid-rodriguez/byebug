@@ -1,12 +1,10 @@
 module Mocha
 
   class Expectation
-
     # Allows to specify a block to execute when expectation will be matched.
     # This way, we can specify dynamic values to return or just make some side effects
     #
     # Example:
-    #
     #   foo.expects(:bar).with('bla').calls { 2 + 3 }
     #   foo.bar('bla') # => 5
     #
@@ -21,12 +19,12 @@ module Mocha
     end
     alias_method :invoke_without_calls, :invoke
     alias_method :invoke, :invoke_with_calls
-
   end
 
   class Mock
 
-    # We monkey-patch that method to be able to pass arguments to Expectation#invoke method
+    # We monkey-patch that method to be able to pass arguments to
+    # Expectation#invoke method
     def method_missing(symbol, *arguments, &block)
       if @responder and not @responder.respond_to?(symbol)
         raise NoMethodError, "undefined method `#{symbol}' for #{self.mocha_inspect} which responds like #{@responder.mocha_inspect}"

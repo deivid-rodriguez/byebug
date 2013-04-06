@@ -150,38 +150,46 @@ module Byebug
 
     Subcommands =
       [
-        ['annotate', 2, "Show annotation level",
-"0 == normal; 2 == output annotated suitably for use by programs that control
-byebug."],
+       ['annotate', 2, 'Show annotation level',
+        '0 == normal;' \
+        '2 == output annotated suitably for use by programs that control ' \
+        'byebug.'],
         ['args', 2,
-"Show argument list to give program being debugged when it is started",
-"Follow this command with any number of args, to be passed to the program."],
-        ['autoeval',  4, "Show if unrecognized command are evaluated"],
-        ['autolist',  4, "Show if 'list' commands is run on breakpoints"],
-        ['autoirb',   4, "Show if IRB is invoked on byebug stops"],
-        ['autoreload', 4, "Show if source code is reloaded when changed"],
-        ['basename',  1, "Show if basename used in reporting files"],
-        ['callstyle', 2, "Show paramater style used showing call frames"],
-        ['commands',  2, "Show the history of commands you typed",
-"You can supply a command number to start with."],
-        ['forcestep', 1, "Show if sure 'next/step' forces move to a new line"],
-        ['fullpath',  2, "Show if full file names are displayed in frames"],
-        ['history', 2, "Generic command for showing command history parameters",
-"show history filename -- Show the filename in which to record the command history
-show history save -- Show saving of the history record on exit
-show history size -- Show the size of the command history"],
-        ['keep-frame-bindings', 1, "Save frame binding on each call"],
-        ['linetrace', 3, "Show line execution tracing"],
+         'Show argument list to give program being debugged when it is '     \
+         'started',
+         'Follow this command with any number of args, to be passed to the ' \
+         'program.'],
+        ['autoeval', 4, 'Show whether unrecognized command are evaluated'],
+        ['autolist', 4, 'Show whether "list" command is run on stopping'],
+        ['autoirb', 4, 'Show whether IRB is invoked on stopping'],
+        ['autoreload', 4, 'Show whether source code is reloaded when changed'],
+        ['basename',  1, 'Show whether basename is used when reporting files'],
+        ['callstyle', 2, 'Show paramater style used when showing call frames'],
+        ['commands',  2, 'Show the history of commands you typed',
+         'You can supply a command number to start with.'],
+        ['forcestep', 1, 'Show whether "next/step" force to move onto a new ' \
+         'line'],
+        ['fullpath',  2, 'Show whether full paths are displayed in frames'],
+        ['history', 2, 'Generic command to show command history parameters',
+         'show history filename -- Show the filename in which to record the ' \
+         'command history.'                                                   \
+         'show history save -- Show whether history record should be saved '  \
+         'on exit.'                                                           \
+         'show history size -- Show the size of the command history.'],
+        ['keep-frame-bindings', 1, 'Save frame binding on each call'],
+        ['linetrace', 3, 'Show line execution tracing'],
         ['linetrace+', 10,
-"Show if consecutive lines should be different are shown in tracing"],
-        ['listsize', 3, "Show number of source lines to list by default"],
-        ['port', 3, "Show server port"],
+         'Show whether different consecutive lines are shown in tracing.'],
+        ['listsize', 3, 'Show number of source lines to list by default.'],
+        ['port', 3, 'Show server port'],
         ['post-mortem', 3,
-"Show whether we go into post-mortem debugging on an uncaught exception"],
+         'Show whether we go into post-mortem debugging on an uncaught ' \
+         ' exception'],
         ['trace', 1,
-"Show if a stack trace is displayed when 'eval' raises exception"],
-        ['version', 1, "Show byebug's version"],
-        ['width', 1, "Show the number of characters byebug thinks are in a line"]
+         'Show whether a stack trace is displayed when "eval" raises an ' \
+         'exception.'],
+        ['version', 1, 'Show byebug\'s version'],
+        ['width', 1, 'Show the number of characters per line for byebug']
       ].map do |name, min, short_help, long_help|
       SubcmdStruct.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)

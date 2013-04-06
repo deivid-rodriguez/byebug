@@ -82,14 +82,14 @@ describe "Variables Command" do
     end
 
     it "must cut long variable values according to :width setting" do
-      temporary_change_hash_value(Byebug::Command.settings, :width, 20) do
-        enter 'break 25', 'cont', 'var instance v'
-        debug_file 'variables'
-        check_output_includes '@inst_c = "1111111111111111...'
-      end
+      Byebug::Command.settings[:width] = 20
+      enter 'break 25', 'cont', 'var instance v'
+      debug_file 'variables'
+      check_output_includes '@inst_c = "1111111111111111...'
     end
 
     it "must show fallback message if value doesn't have #to_s or #inspect methods" do
+      Byebug::Command.settings[:width] = 21
       enter 'break 25', 'cont', 'var instance v'
       debug_file 'variables'
       check_output_includes '@inst_d = *Error in evaluation*'

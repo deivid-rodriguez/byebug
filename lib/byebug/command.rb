@@ -13,7 +13,6 @@ module Byebug
         string[Command.settings[:width]-3 .. -1] = "..."
       end
     end
-
   end
 
   # Root dir for byebug
@@ -36,8 +35,8 @@ module Byebug
 
     include Columnize
 
-    # Find param in subcmds. param id downcased and can be abbreviated
-    # to the minimum length listed in the subcommands
+    # Find param in subcmds. param is downcased and can be abbreviated to the
+    # minimum length listed in the subcommands.
     def find(subcmds, param)
       param.downcase!
       for try_subcmd in subcmds do
@@ -56,7 +55,7 @@ module Byebug
 
       DEF_OPTIONS = {
         :allow_in_control     => false,
-        :allow_in_post_mortem => true ,
+        :allow_in_post_mortem => false,
         :event                => true ,
         :always_run           => 0    ,
         :unknown              => false,
@@ -99,7 +98,7 @@ module Byebug
       private :settings_map
 
       def settings
-        unless true and defined? @settings and @settings
+        unless defined? @settings and @settings
           @settings = Object.new
           map = settings_map
           c = class << @settings; self end

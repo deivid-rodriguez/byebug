@@ -5,7 +5,7 @@ describe "Info Command" do
   include Columnize
 
    describe "Args info" do
-     temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 15)
+     before { Byebug::InfoCommand.settings[:width] = 15 }
 
      it "must show info about all args" do
        enter 'break 3', 'cont', 'info args'
@@ -178,15 +178,16 @@ describe "Info Command" do
   end
 
   describe "Locals info" do
+
     it "must show the current local variables" do
-      temporary_change_hash_value(Byebug::InfoCommand.settings, :width, 12) do
-        enter 'break 21', 'cont', 'info locals'
-        debug_file 'info'
-        check_output_includes 'a = "1111...', 'b = 2'
-      end
+      Byebug::InfoCommand.settings[:width] = 12
+      enter 'break 21', 'cont', 'info locals'
+      debug_file 'info'
+      check_output_includes 'a = "1111...', 'b = 2'
     end
 
     it "must fail if the local variable doesn't respond to #to_s or to #inspect" do
+      Byebug::InfoCommand.settings[:width] = 21
       enter 'break 26', 'cont', 'info locals'
       debug_file 'info'
       check_output_includes "*Error in evaluation*"
@@ -228,9 +229,8 @@ describe "Info Command" do
   end
 
   describe "Stack info" do
-    before do
-      Byebug::InfoCommand.settings[:full_path] = true
-    end
+    before { Byebug::InfoCommand.settings[:full_path] = true }
+
     it "must show stack info" do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
@@ -283,8 +283,9 @@ describe "Info Command" do
   end
 
   describe "Variables info" do
+    before { Byebug::InfoCommand.settings[:width] = 30 }
+
     it "must show all variables" do
-      Byebug::InfoCommand.settings[:width] = 30
       enter 'break 21', 'cont', 'info variables'
       debug_file 'info'
       check_output_includes 'a = "1111111111111111111111...',

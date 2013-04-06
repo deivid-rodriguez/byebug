@@ -86,7 +86,8 @@ module Byebug
     end
 
     def self.print_location_and_text(file, line)
-      file_line = "#{canonic_file(file)}:#{line}\n#{Byebug.line_at(file, line)}"
+      file_line = "#{canonic_file(file)}:#{line}\n" \
+                  "#{Byebug.line_at(file, line)}\n"
 
       # FIXME: use annotations routines
       if Byebug.annotate.to_i > 2
@@ -132,7 +133,7 @@ module Byebug
       aprint 'stopped' if Byebug.annotate.to_i > 2
       file = CommandProcessor.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
-      print afmt("%s:%d" % [file, line]) if ENV['EMACS']
+      #print afmt("%s:%d" % [file, line]) if ENV['EMACS']
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
       fs = context.stack_size
       tb = caller(0)[-fs..-1]
@@ -149,8 +150,8 @@ module Byebug
       return if defined?(Byebug::RDEBUG_FILE) && Byebug::RDEBUG_FILE == file
 
       file = CommandProcessor.canonic_file(file)
-      unless file == @last_file and line == @last_line and
-             Command.settings[:tracing_plus]
+      tracing_plus = Command.settings[:tracing_plus]
+      if file != @last_file || line != @last_line || tracing_plus == false
         @last_file = file
         @last_line = line
         print "Tracing: #{file}:#{line} #{Byebug.line_at(file, line)}"
@@ -355,8 +356,8 @@ module Byebug
       end
 
       class State
-        attr_accessor :binding, :commands, :context, :display, :file, :frame_pos
-        attr_accessor :interface, :line, :previous_line
+        attr_accessor :binding, :commands, :context, :display, :file
+        attr_accessor :frame_pos, :interface, :line, :previous_line
 
         def initialize
           super()
@@ -381,7 +382,7 @@ module Byebug
   end # end class CommandProcessor
 
 
-  class ControlCommandProcessor < Processor # :nodoc:
+  class ControlCommandProcessor < Processor
 
     def initialize(interface)
       super()
@@ -425,7 +426,7 @@ module Byebug
     # The prompt shown before reading a command.
     # Note: have an unused 'context' parameter to match the local interface.
     def prompt(context)
-      p = '(rdb:ctrl) '
+      p = '(byebug:ctrl) '
       p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if
         Byebug.annotate.to_i > 2
       return p

@@ -24,9 +24,10 @@ module Byebug
       [
        ['args', 1, 'Argument variables of current stack frame'],
        ['breakpoints', 1, 'Status of user-settable breakpoints',
-        'Without argument, list info about all breakpoints.  With an integer ' \
+        'Without argument, list info about all breakpoints. With an integer ' \
         'argument, list info on that breakpoint.'],
-       ['catch', 3, 'Exceptions that can be caught in the current stack frame'],
+       ['catch', 3,
+        'Exceptions that can be caught in the current stack frame'],
        ['display', 2, 'Expressions to display when program stops'],
        ['file', 4, 'Info about a particular file read in',
         'After the file name is supplied, you can list file attributes that ' \
@@ -42,16 +43,16 @@ module Byebug
        ['program', 2, 'Execution status of the program'],
        ['stack', 2, 'Backtrace of the stack'],
 #      ['thread', 6,  'List info about thread NUM',
-#       'If no thread number is given, we list info for all threads. '         \
-#       '\'terse\' and \'verbose\' options are possible. If \'terse\', just '  \
-#       'give summary thread name information. See "help info threads" for '   \
-#       'more detail about this summary information. If \'verbose\' appended ' \
-#       'to the end of the command, then the entire stack trace is given for ' \
-#       'each thread.'],
+#       'If no thread number is given, we list info for all threads. "terse"' \
+#       ' and "verbose" options are possible. If "terse", just give summary ' \
+#       'thread name information. See "help info threads" for more detail '   \
+#       'about this summary information. If "verbose" is appended to the end' \
+#       ' of the command, then the entire stack trace is given for each '     \
+#       'thread.'],
 #      ['threads', 7, 'information of currently-known threads',
 #       'This information includes whether the thread is the current thread ' \
 #       '(+), it\'s suspended ($) or it\'s ignored (!), plus the thread '     \
-#       'number and the top stack item. If \'verbose\' is given then the '    \
+#       'number and the top stack item. If "verbose" is given then the '      \
 #       'entire stack frame is shown.'],
        ['variables', 1,
         'Local and instance variables of the current stack frame']
@@ -61,8 +62,8 @@ module Byebug
 
     InfoFileSubcommands =
       [
-       ['all', 1, 'All file information available - breakpoints, lines, mtime' \
-         ', path and sha1'],
+       ['all', 1, 'All file information available - breakpoints, lines, ' \
+        'mtime, path and sha1'],
        ['basic', 2, 'basic information - path, number of lines'],
        ['breakpoints', 2, 'Show trace line numbers',
         'These are the line number where a breakpoint can be set.'],
@@ -76,7 +77,7 @@ module Byebug
 
 #   InfoThreadSubcommands =
 #     [
-#      ['terse', 1,   'summary information'],
+#      ['terse', 1, 'summary information'],
 #      ['verbose', 1, 'summary information and stack frame info'],
 #     ].map do |name, min, short_help, long_help|
 #     SubcmdStruct.new(name, min, short_help, long_help)
