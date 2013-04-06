@@ -81,15 +81,16 @@ module Byebug
         end
         b = Byebug.add_breakpoint brkpt_filename, line, expr
         print "Created breakpoint #{b.id} at " \
-              "#{CommandProcessor.canonic_file(brkpt_filename)}:#{line.to_s}"
+              "#{CommandProcessor.canonic_file(brkpt_filename)}:#{line.to_s}\n"
         unless syntax_valid?(expr)
-          errmsg("Expression \"#{expr}\" syntactically incorrect; breakpoint disabled.\n")
+          errmsg "Expression \"#{expr}\" syntactically incorrect; breakpoint" \
+                 " disabled.\n"
           b.enabled = false
         end
       else
         method = line.intern
         b = Byebug.add_breakpoint class_name, method, expr
-        print "Created breakpoint #{b.id} at #{class_name}::#{method.to_s}"
+        print "Created breakpoint #{b.id} at #{class_name}::#{method.to_s}\n"
       end
     end
 
