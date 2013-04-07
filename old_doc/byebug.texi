@@ -7,9 +7,9 @@
 
 @set txicodequoteundirected
 @set txicodequotebacktick
-@set BYEBUG_VERSION 0.0.1
-@set EDITION 0.0.1
-@set UPDATED March-2013
+@set BYEBUG_VERSION 1.0.1
+@set EDITION 1.0.1
+@set UPDATED April-2013
 
 @macro Example {}
 @iftex
@@ -74,8 +74,7 @@
 @node Top, Summary, (dir), (dir)
 @top Debugging with byebug
 
-This file describes Byebug, a Ruby 2.0 debugger,
-version @value{BYEBUG_VERSION}
+This file describes Byebug, a Ruby 2.0 debugger, version @value{BYEBUG_VERSION}
 
 This is the @value{EDITION} Edition, @value{UPDATED}
 @c Copyleft (U+0254) 2013
@@ -124,8 +123,8 @@ Change things in your script, so you can experiment with correcting the effects 
 one bug and go on to learn about another.
 @end itemize
 
-Although you can use @value{ttbyebug} to invoke your Ruby programs via a debugger
-at the outset, there are other ways to use and enter the debugger 
+Although you can use @value{byebug} to invoke your Ruby programs via a debugger
+at the outset, there are other ways to use and enter the debugger.
 
 @menu
 * First Sample Session::   A Simple Sample @code{byebug} session
@@ -174,7 +173,7 @@ triangle.rb:4 def hanoi(n,a,b,c)
 [9, 18] in ./triangle.rb
    9    tri
    10  end
-   11  
+   11
    12  t = triangle(3)
    13  puts t
 (byebug:1) @b{list 1,100}
@@ -189,10 +188,10 @@ triangle.rb:4 def hanoi(n,a,b,c)
    8    end
    9    tri
    10  end
-   11  
+   11
    12  t = triangle(3)
    13  puts t
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
 @noindent
@@ -298,9 +297,9 @@ Tracing(1):triangle.rb:9 tri
 6
 Tracing(1):triangle.rb:13 puts t
 1: tri =
-2: i = 
+2: i =
 1: tri =
-2: i = 
+2: i =
 triangle.rb:13
 puts t
 (byebug:1) @b{quit}
@@ -375,7 +374,7 @@ see what private methods we can call before running @code{def hanoi}
 (byebug:1) @b{set autoeval on}
 autoeval is on.
 (byebug:1) @b{private_methods}
-[:require_relative, :Digest, :default_src_encoding, :debug_program, ... 
+[:require_relative, :Digest, :default_src_encoding, :debug_program, ...
 @end smallexample
 
 The @code{set autoeval} (@pxref{Autoeval}) command causes any commands
@@ -477,21 +476,21 @@ Breakpoint 1 at hanoi.rb:4
 1: n = 2
 3: a.inspect = :a
 4: b.inspect = :c
-./hanoi.rb:4 
+./hanoi.rb:4
 if n-1 > 0
 (byebug:1) @b{c}
 Breakpoint 1 at hanoi.rb:4
 1: n = 1
 3: a.inspect = :a
 4: b.inspect = :b
-./hanoi.rb:4 
+./hanoi.rb:4
 if n-1 > 0
 (byebug:1) @b{where}
 --> #0 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:4
     #1 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
     #2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
     #3 at line hanoi.rb:35
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
 In the above we added a new command, @code{break}
@@ -516,7 +515,7 @@ that when the program was called the parameter had a different type,
 since the types of variables can change dynamically. You alter the
 style of what to show in the trace (@pxref{Callstyle}).
 
-Let's explore a little more. Now were were we? 
+Let's explore a little more. Now were were we?
 
 @smallexample
 (byebug:1) @b{list}
@@ -566,39 +565,36 @@ There are a number of situations where calling byebug at the outset is
 impractical for a couple of reasons.
 
 @enumerate
-@item 
-The byebug just doesn't work when run at the outset.  By necessity
-any debugging changes to the behavior or the program in slight and
-subtle ways, and sometimes this can hinder finding bugs.
-@item 
-There's a lot of code which that needs to get run before the part you
-want to inspect. Running this code takes time and you don't want the
-overhead of byebug.
+@item
+byebug just doesn't work when run at the outset.  By necessity any debugging
+changes the behavior or the program in slight and subtle ways, and sometimes
+this can hinder finding bugs.
+@item
+There's a lot of code that needs to be run before the part you want to inspect.
+Running this code takes time and you don't want the overhead of byebug.
 @end enumerate
 
-In this section we'll show how to enter the code in the middle
-of your program, while delving more into byebug operation.
+In this section we'll show how to enter the code in the middle of your program,
+while delving more into byebug's operation.
 
-In this section we will also use unit testing. Using unit tests will
-greatly reduce the amount of debugging needed, while at the same time, 
-will increase the quality of your program.
+In this section we will also use unit testing. Using unit tests will greatly
+reduce the amount of debugging needed, while at the same time, will increase the
+quality of your program.
 
-What we'll do is take the @code{triangle} code from the first session
-and write a unit test for that. In a sense we did write a mini-test
-for the program which was basically the last line where we printed the
-value of triangle(3). This test however wasn't automated: the
-implication is that someone would look at the output and verify that
-what was printed is what was expected.
+What we'll do is take the @code{triangle} code from the first session and write
+a unit test for that. In a sense we did write a minitest for the program which
+was basically the last line where we printed the value of triangle(3). This test
+however wasn't automated: the implication is that someone would look at the
+output and verify that what was printed is what was expected.
 
-And before we can turn that into something that can be
-@code{required}, we probably want to remove that output. However I
-like to keep in that line so that when I look at the file, I have an
-example of how to run it.  Therefore we will conditionally run this
-line if that file is invoked directly, but skip it if it is
-not.@footnote{@code{byebug} resets @code{$0} to try to make things
-like this work.}
+Before we can turn that into something that can be @code{required}, we probably
+want to remove that output. However I like to keep in that line so that when I
+look at the file, I have an example of how to run it.  Therefore we will
+conditionally run this line if that file is invoked directly, but skip it if it
+is not@footnote{@code{byebug} resets @code{$0} to try to make things like this
+work.}.
 @smallexample
-  if __FILE__ == $0 
+  if __FILE__ == $0
     t = triangle(3)
     puts t
   end
@@ -606,10 +602,9 @@ like this work.}
 
 Let's call this file @code{tri2.rb}.
 
-Okay, we're now ready to write our unit test. We'll use
-@code{"test/unit"} which comes with the standard Ruby distribution.
-Here's the test code; it should be in the same directory as tri2.rb.
-
+Okay, we're now ready to write our unit test. We'll use @code{"test/unit"} which
+comes with the standard Ruby distribution.  Here's the test code; it should be
+in the same directory as tri2.rb.
 @smallexample
   #!/usr/bin/env ruby
   require 'test/unit'
@@ -617,8 +612,8 @@ Here's the test code; it should be in the same directory as tri2.rb.
 
   class TestTri < Test::Unit::TestCase
     def test_basic
-     solutions = []
-     0.upto(5) do |i|
+      solutions = []
+      0.upto(5) do |i|
         solutions << triangle(i)
       end
       assert_equal([0, 1, 3, 6, 10, 15], solutions,
@@ -627,17 +622,15 @@ Here's the test code; it should be in the same directory as tri2.rb.
   end
 @end smallexample
 
-If you run it will work. However if you run @code{byebug} initially,
-you will not get into the test, because @code{test/unit} wants to be
-the main program. So here is a situation where one may need to modify
-the program to add an explicit @emph{entry} into the
-byebug.@footnote{For some versions of rake and @code{byebug} you can
-in fact set a breakpoint after running @code{byebug}
-initially. Personally though I find it much simpler and more reliable
-to modify the code as shown here.}
+If you run it, it will work. However if you run @code{byebug} initially, you
+will not get into the test, because @code{test/unit} wants to be the main
+program. So here is a situation where one may need to modify the program to add
+an explicit @emph{entry} into byebug. @footnote{For some versions of rake and
+@code{byebug} you can in fact set a breakpoint after running @code{byebug}
+initially. Personally though I find it much simpler and more reliable to modify
+the code as shown here.}
 
-One way to do this is to add the following before the place you want
-to stop:
+One way to do this is to add the following before the place you want to stop:
 @smallexample
   require 'byebug'
   byebug
@@ -645,7 +638,7 @@ to stop:
 
 Let's add this code just after entering @code{test_basic}:
 @smallexample
-  ... 
+  ...
   def test_basic
     @b{require "byebug"}
     @b{byebug}
@@ -662,31 +655,29 @@ Now we run the program..
   solutions = []
   (byebug:1)
 @end smallexample
-and we see that we are stopped at line 9 just before the
-initialization of the list @code{solutions}.
+and we see that we are stopped at line 9 just before the initialization of the
+list @code{solutions}.
 
 Now let's see where we are...
-
 @smallexample
 (byebug:1) @b{where}
 --> #0 TestTri.test_basic at line /home/rocky/ruby/test-tri.rb:9
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
-Something seems wrong here; @code{TestTri.test_basic} indicates that
-we are in class @code{TestTri} in method @code{test_basic}. However we
-don't see the call to this like we did in the last example when we
-used the @code{where} command. This is because byebug really
-didn't spring into existence until after we already entered that
-method, and Ruby doesn't keep call stack information around in a
-way that will give the information we show when running @code{where}.
+Something seems wrong here; @code{TestTri.test_basic} indicates that we are in
+class @code{TestTri} in method @code{test_basic}. However we don't see the call
+to this like we did in the last example when we used the @code{where} command.
+This is because byebug really didn't spring into existence until after we
+already had entered that method, and Ruby doesn't keep call stack information
+around in a way that would give the information we show when running
+@code{where}.
 
-If we want call stack information, we have to turn call-stack tracking
-on @emph{beforehand}. This is done by adding @code{Byebug.start}.
+If we want call stack information, we have to turn call-stack tracking on
+@emph{beforehand}. This is done by adding @code{Byebug.start}.
 
-Here's what our test program looks like so after we modify it to start
-tracking calls from the outset
-
+Here's what our test program looks like so after we modify it to start tracking
+calls from the outset
 @smallexample
 #!/usr/bin/env ruby
 require 'test/unit'
@@ -723,39 +714,36 @@ solutions = []
     #3 MiniTest::Unit.run
        at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:393
     #4 at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:334
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
-Much better. But again let me emphasize that the parameter types are
-those of the corresponding variables that @emph{currently} exist, and
-this might have changed since the time when the call was made.
+Much better. But again let me emphasize that the parameter types are those of
+the corresponding variables that @emph{currently} exist, and this might have
+changed since the time when the call was made.
 
 @node Byebug.start with a block
 @section Using the @code{Byebug.start} with a block
 
-We saw that @code{Byebug.start()} and @code{Byebug.stop()} allow
-fine-grain control over where byebug tracking should occur. 
+We saw that @code{Byebug.start()} and @code{Byebug.stop()} allow fine-grain
+control over where byebug tracking should occur.
 
-Rather than use an explicit @code{stop()}, you can also pass a block
-to the @code{start()} method. This causes @code{start()} to run and
-then @code{yield} to that block. When the block is finished,
-@code{stop()} is run. In other words, this wraps a
-@code{Byebug.start()} and @code{Byebug.stop()} around the block of
-code. But it also has a side benefit of ensuring that in the presence
-of an uncaught exception @code{stop} is run, without having to
-explicitly use @code{begin} ... @code{ensure Byebug.stop() end}.
+Rather than use an explicit @code{stop()}, you can also pass a block to the
+@code{start()} method. This causes @code{start()} to run and then @code{yield}
+to that block. When the block is finished, @code{stop()} is run. In other words,
+this wraps a @code{Byebug.start()} and @code{Byebug.stop()} around the block of
+code. But it also has a side benefit of ensuring that in the presence of an
+uncaught exception @code{stop} is run, without having to explicitly use
+@code{begin} ... @code{ensure Byebug.stop() end}.
 
-For example, in Ruby Rails you might want to debug code in one of the
-controllers without causing any slowdown to any other code. And
-this can be done by wrapping the controller in a @code{start()} with a
-block; when the method wrapped this way finishes byebug is
-turned off, and the application proceeds at regular speed.
+For example, in Ruby on Rails you might want to debug code in one of the
+controllers without causing any slowdown to any other code. And this can be done
+by wrapping the controller in a @code{start()} with a block; when the method
+wrapped this way finishes, byebug is turned off and the application proceeds at
+regular speed.
 
-Of course, inside the block you will probably want to enter the
-byebug using @code{Byebug.byebug()}, otherwise there would
-little point in using the @code{start}. For example, you can do this
-in @code{irb}:
-
+Of course, inside the block you will probably want to enter the byebug using
+@code{Byebug.byebug()}, otherwise there would be little point in using the
+@code{start}. For example, you can do this in @code{irb}:
 @smallexample
 $ @b{irb}
 irb(main):001:0> @b{require 'byebug'}
@@ -776,66 +764,53 @@ irb(main):006:0> @b{Byebug.start@{byebug; foo@}}
 (byebug:1) @b{s}
 foo
 => true
-irb(main):007:0> 
+irb(main):007:0>
 @end smallexample
 
-There is a counter inside of @code{Byebug.start} method to make sure
-that this works when another @code{Byebug.start} method is called
-inside of outer one. However if you are stopped inside byebug,
-issuing another @code{byebug} call will not have any effect even if
-it is nested inside another @code{Byebug.start}.
+There is a counter inside of @code{Byebug.start} method to make sure that this
+works when another @code{Byebug.start} method is called inside of the outer one.
+However if you are stopped inside byebug, issuing another @code{byebug} call
+will not have any effect even if it is nested inside another
+@code{Byebug.start}.
 
 @node Debugging Oddities
-@section How debugging Ruby may be different than debugging other Languages
+@section How debugging Ruby may be different from debugging other languages
 
-If you are used to debugging in other languages like C, C++, Perl,
-Java or even Bash@footnote{this is just an excuse to put in a
-shameless plug for my bash byebug @url{http://bashdb.sf.net}}, there
-may be a number of things that seem or feel a little bit different and
-may confuse you. A number of these things aren't oddities of the
-byebug per se, so much as a difference in how Ruby works compared to
-those other languages. Because Ruby works a little differently from
-those other languages, writing a byebug has to also be a little
+If you are used to debugging in other languages like C, C++, Perl, Java or even
+Bash@footnote{this is just an excuse to put in a shameless plug for this bash
+debugger @url{http://bashdb.sf.net}}, there may be a number of things that seem
+or feel a little bit different and may confuse you. A number of these things
+aren't oddities of the debugger per se, so much as a difference in how Ruby
+works compared to those other languages. Because Ruby works a little differently
+from those other languages, writing a debugger has to also be a little
 different as well if it is to be useful.
 
-In this respect, using byebug may help you understand Ruby
-better.
+In this respect, using byebug may help you understand Ruby better.
 
-We've already seen two examples of such differences. One difference is
-the fact that we stop on method definitions or @code{def}'s and that is
-because these are in fact executable statements. In other compiled
-languages this would not happen because that's already been done when
-you compile the program (or in Perl when it scans in the program). The
-other difference we saw was in our inability to show call stack parameter
-types without having made arrangements for byebug to track
-this. In other languages call stack information is usually available
-without asking assistance of byebug.@footnote{However in C, and
-C++ generally you have to ask the compiler to add such information.}
+We've already seen two examples of such differences. One difference is the fact
+that we stop on method definitions or @code{def}'s and that is because these are
+in fact executable statements. In other compiled languages this would not happen
+because that's already been done when you compile the program (or in Perl when
+it scans in the program). The other difference we saw was our inability to show
+call stack parameter types without having made arrangements for byebug to track
+this. In other languages call stack information is usually available without
+asking assistance of the debugger@footnote{However in C and C++ you generally
+have to ask the compiler to add such information.}.
 
-In this section we'll consider some other things that might throw
-off new users to Ruby who are familiar with other languages and
-debugging in them.
+In this section we'll consider some other things that might throw off new users
+to Ruby who are familiar with other languages and debugging in them.
 
 @menu
-* Stack No Longer Shows Scope Nesting::
 * Bouncing Around in Blocks (e.g. Iterators)::
 * No Parameter Values in a Call Stack::
 * Lines You Can Stop At::
 @end menu
 
-@node Stack No Longer Shows Scope Nesting
-@subsection Stack No Longer Shows Scope Nesting
-In the Ruby 1.8 byebug, backtraces will show more stack frames 
-that you might find in other languages, such as C. In the Ruby 1.9
-byebug, this is no longer the case.
-
 @node Bouncing Around in Blocks (e.g. Iterators)
 @subsection Bouncing Around in Blocks (e.g.@: Iterators)
-
-When debugging languages with coroutines like Python and Ruby, a
-method call may not necessarily go to the first statement after the
-method header. It's possible the call will continue after a
-@code{yield} statement from a prior call. 
+When debugging languages with coroutines like Python and Ruby, a method call may
+not necessarily go to the first statement after the method header. It's possible
+that the call will continue after a @code{yield} statement from a prior call.
 
 @smallexample
  1 #!/usr/bin/env ruby
@@ -854,7 +829,7 @@ method header. It's possible the call will continue after a
 14       end
 15       unless not_prime
 16         @@@@odd_primes << candidate
-17         yield candidate 
+17         yield candidate
 18       end
 19       candidate += 2
 20     end
@@ -885,60 +860,55 @@ Tracing(1):primes.rb:8 not_prime = false
 Tracing(1):primes.rb:9 candidate += 1
 primes.rb:9
 candidate += 1
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
 The loop between lines 23--26 gets interleaved between those of
-@code{Sieve::next_prime}, lines 6--19 above. 
+@code{Sieve::next_prime}, lines 6--19 above.
 
-A similar kind of thing can occur in debugging programs with many threads. 
+A similar kind of thing can occur when debugging programs with many threads.
 
 @node No Parameter Values in a Call Stack
 @subsection No Parameter Values in a Call Stack
-In traditional byebugs in a call stack you can generally see the
-names of the parameters and the values that were passed in.
+In traditional debuggers, in a call stack you can generally see the names of the
+parameters and the values that were passed in.
 
-Ruby is a very dynamic language and it tries to be efficient within
-the confines of the language definition. Values generally aren't taken
-out of a variable or expression and pushed onto a stack. Instead a new
-scope created and the parameters are given initial values. Parameter
-passing is by @emph{reference}, not by value as it is say Algol, C, or
-Perl. During the execution of a method, parameter values can
-change---and often do. In fact even the @emph{class} of the object can
-change.
+Ruby is a very dynamic language and it tries to be efficient within the confines
+of the language definition. Values generally aren't taken out of a variable or
+expression and pushed onto a stack. Instead a new scope created and the
+parameters are given initial values. Parameter passing is by @emph{reference},
+not by value as it is say Algol, C, or Perl. During the execution of a method,
+parameter values can change---and often do. In fact even the @emph{class} of the
+object can change.
 
 So at present, the name of the parameter shown. The call-style setting
-@pxref{Callstyle} can be used to set whether the name is shown or the
-name and the @emph{current} class of the object. 
+@pxref{Callstyle} can be used to set whether the name is shown or the name and
+the @emph{current} class of the object.
 
-It has been contemplated that a style might be added which saves on
-call shorter ``scalar'' types of values and the class name. 
+It has been contemplated that a style might be added which saves on call shorter
+``scalar'' types of values and the class name.
 
 @node Lines You Can Stop At
 @subsection Lines You Can Stop At
-As with the duplicate stops per control (e.g.@: @code{if} statement),
-until tools like byebugs get more traction among core ruby
-developers there are going to be weirdness. Here we describe the
-stopping locations which effects the breakpoint line numbers you can
-stop at. 
+As with the duplicate stops per control (e.g.@: @code{if} statement), until
+tools like byebugs get more traction among core ruby developers there are going
+to be weirdness. Here we describe the stopping locations which effects the
+breakpoint line numbers you can stop at.
 
 Consider the following little Ruby program.
-
 @smallexample
 'Yes it does' =~ /
 (Yes) \s+
 it  \s+
 does
-/ix 
+/ix
 puts $1
 @end smallexample
 
-The stopping points that Ruby records are the last two lines, lines 5
-and 6.
+The stopping points that Ruby records are the last two lines, lines 5 and 6.
 
-Inside @code{byebug} you an get a list of stoppable lines for a
-file using the @code{info file} command with the attribute
-@code{breakpoints}.
+Inside @code{byebug} you can get a list of stoppable lines for a file using the
+@code{info file} command with the attribute @code{breakpoints}.
 
 @ifset FINISHED
 To be continued...
@@ -957,14 +927,14 @@ To be continued...
 @chapter Getting in and out
 
 @menu
-* Starting byebug::    How to enter byebug
-* Command Files::            Command files
-* Quitting byebug::    How to leave byebug (quit, kill)
-* Calling from Program::     Calling byebug from inside your program
+* Starting byebug::      How to enter byebug
+* Command Files::        Command files
+* Quitting byebug::      How to leave byebug (quit, kill)
+* Calling from Program:: Calling byebug from inside your program
 @end menu
 
 It is also possible to enter byebug when you have an uncaught
-exception. See See also @ref{Post-Mortem Debugging}. 
+exception. See See also @ref{Post-Mortem Debugging}.
 
 @node Starting byebug
 @section Starting byebug
@@ -1007,10 +977,10 @@ Options:
         --no-quit                    Do not quit when script finishes
         --no-rewrite-program         Do not set $0 to the program being debugged
         --no-stop                    Do not stop when script is loaded
-    -nx                              Not run byebug initialization files (e.g. .byebugrc        
+    -nx                              Not run byebug initialization files (e.g. .byebugrc
     -p, --port PORT                  Port used for remote debugging
     -r, --require SCRIPT             Require the library, before executing your script
-        --restart-script FILE        Name of the script file to run. Erased after read    
+        --restart-script FILE        Name of the script file to run. Erased after read
         --script FILE                Name of the script file to run
     -s, --server                     Listen for remote connections
     -w, --wait                       Wait for a client connection, implies -s option
@@ -1023,7 +993,7 @@ Common options:
     -v                               Print version number, then turn on verbose mode
 @end smallexample
 
-Options for the @code{byebug} are shown in the following list.  
+Options for the @code{byebug} are shown in the following list.
 
 @menu
 * byebug command-line options::   Options you can pass to byebug
@@ -1036,7 +1006,7 @@ Options for the @code{byebug} are shown in the following list.
 You can run @DBG{} in various alternative modes---for example, as a
 program that interacts directly with the program in the same process
 on the same computer or via a socket to another process possibly on a
-different computer. 
+different computer.
 
 Many options appear as a long option name, such as @option{--help}, and
 a short one letter option name, such as @option{-h}. A double dash
@@ -1068,7 +1038,7 @@ having to poll for it.
 @cindex @option{--client}
 Connect to remote byebug. The remote byebug should have been set
 up previously our you will get a connection error and @code{byebug}
-will terminate. 
+will terminate.
 
 @item --cport @var{port}
 @cindex @option{--cport} @var{port}
@@ -1081,13 +1051,13 @@ Ruby's.
 
 @item --emacs
 Activates GNU Emacs mode.
-@c @pxref{GNU Emacs}. 
+@c @pxref{GNU Emacs}.
 Byebug output is tagged in such a way to allow GNU Emacs to track
 where you are in the code.
 
 @item --emacs-basic
 Activates full GNU Emacs mode.
-@c (@pxref{GNU Emacs}). 
+@c (@pxref{GNU Emacs}).
 This is the equivalent of setting the options @option{--emacs-basic},
 @code{annotate=3}, @option{--no-stop}, @option{-no-control} and
 @option{--post-mortem}.
@@ -1119,7 +1089,7 @@ and module name resolution.
 However it's still possible to restore the old, slower behavior by
 using this option or by setting @code{Byebug.keep_frame_binding =
 true}. There are two possibilities for which you might want to use
-this option. 
+this option.
 
 First, if you think there's a bug in the evaluation of variables, you
 might want to set this to see if this corrects things.
@@ -1137,8 +1107,8 @@ is partly why this byebug doesn't work on Ruby 1.9.
 @cindex @option{--post-mortem}
 If your program raises an exception that isn't caught you can enter
 byebug for inspection of what went wrong. You may also want to
-use this option in conjunction with @option{--no-stop}. See also 
-@ref{Post-Mortem Debugging}. 
+use this option in conjunction with @option{--no-stop}. See also
+@ref{Post-Mortem Debugging}.
 
 @item --no-control
 @cindex @option{--no-control}
@@ -1223,7 +1193,7 @@ people may want @option{--no-quit --no-control} to be the default
 behavior. One could write a wrapper script or set a shell alias to
 handle this. @DBG{} has another way to do this as well. Before
 processing command options if the file @code{$HOME/.rdboptrc} is found
-(or, on Windows, @code{$HOME/rdbopt.ini}, it is loaded. 
+(or, on Windows, @code{$HOME/rdbopt.ini}, it is loaded.
 If you want to set the defaults in some other way, you
 can put Ruby code here and set variable @code{options} which is an
 OpenStruct. For example here's how you'd set @option{-no-quit} and
@@ -1272,7 +1242,7 @@ Processes command line options and operands.
 @item
 Reads the init file in your current directory, if any, and failing
 that the home directory. The home directory is the directory named in
-the @code{HOME} or @code{HOMEPATH} environment variable. 
+the @code{HOME} or @code{HOMEPATH} environment variable.
 
 Thus, you can have more than one init file, one generic in your home
 directory, and another, specific to the program you are debugging, in
@@ -1323,13 +1293,13 @@ at the same speed as if there were no byebug.
 There are three parts to calling byebug from inside the script,
 ``requiring'' byebug code, telling byebug to start
 tracking things and then making the call calling byebug to
-stop. 
+stop.
 
 To get byebug class accessible from your Ruby program:
 
 @smallexample
 require 'byebug'
-@end smallexample 
+@end smallexample
 After @code{require 'byebug'}, it's possible to set some of the
 byebug variables influence preferences. For example if you want to
 have @ttDBG run a @code{list} command every time it stops you set the
@@ -1342,7 +1312,7 @@ To tell byebug to start tracking things:
 
 @smallexample
 Byebug.start
-@end smallexample 
+@end smallexample
 
 There is also a @code{Byebug.stop} to turn off byebug tracking. If
 speed is crucial, you may want to start and stop this around certain
@@ -1356,7 +1326,7 @@ And finally to enter byebug:
 
 @smallexample
 byebug
-@end smallexample 
+@end smallexample
 
 As indicated above, when @code{byebug} is run a @code{.byebugrc}
 profile is read if that file exists.
@@ -1367,14 +1337,14 @@ where there is a problem you want to investigate. And since
 conditional expression, for example:
 @smallexample
 byebug if 'bar' == foo and 20 == iter_count
-@end smallexample 
+@end smallexample
 
 Although each step does a very specific thing which offers great
 flexibility, in order to make getting into byebug easier the
 three steps have been rolled into one command:
 @smallexample
 require "byebug/byebug"
-@end smallexample 
+@end smallexample
 
 @node Byebug Command Reference
 @chapter @code{byebug} Command Reference
@@ -1426,7 +1396,7 @@ arguments.  Some commands do not allow any arguments.
 
 Multiple commands can be put on a line by separating each with a
 semicolon (@code{;}). You can disable the meaning of a semicolon to
-separate commands by escaping it with a backslash. 
+separate commands by escaping it with a backslash.
 
 For example, if you have @code{autoeval} (@ref{Autoeval}) set, you
 might want to enter the following code to compute the 5th Fibonacci
@@ -1449,7 +1419,7 @@ You might also consider using the @code{irb} command, @ref{irb}, and
 then you won't have to escape semicolons.
 
 A blank line as input (typing just @key{<RET>}) means to repeat the
-previous command.  
+previous command.
 
 In the ``local'' interface, the Ruby Readline module is used. It
 handles line editing and retrieval of previous commands. Up arrow, for
@@ -1509,7 +1479,7 @@ continue   edit     frame   kill  pp      restart  step    var
 @end flushleft
 @c the above line break eliminates huge line overfull...
 
-@end table 
+@end table
 
 @table @code
 @item help @var{command}
@@ -1546,9 +1516,9 @@ Some examples follow.
 @example
 (byebug:1) @b{help info}
 Generic command for showing things about the program being debugged.
--- 
+--
 List of info subcommands:
---  
+--
 info args -- Argument variables of current stack frame
 info breakpoints -- Status of user-settable breakpoints
 info catch -- Exceptions that can be caught in the current stack frame
@@ -1616,7 +1586,7 @@ questions asked, enter the ``unconditionally''.
 @kindex restart @r{[}@var{program args}@r{]}
 @kindex R @r{(@code{restart})}
 @item restart
-@itemx R 
+@itemx R
 
 Restart the program. This is a re-exec - all byebug state is
 lost. If command arguments are passed those are used. Otherwise the
@@ -1625,7 +1595,7 @@ last program arguments used in the last invocation are used.
 In not all cases will you be able to restart the program. First, the
 program should have been invoked at the outset rather than having been
 called from inside your program or invoked as a result of post-mortem
-handling. 
+handling.
 
 Also, since this relies on the the OS @code{exec} call, this command
 is available only if your OS supports that @code{exec}; OSX for
@@ -1674,7 +1644,7 @@ automatic display looks like this:
 @end smallexample
 
 @noindent
-This display shows item numbers, expressions and their current values.  
+This display shows item numbers, expressions and their current values.
 If the expression is undefined or illegal the expression will be
 printed but no value will appear.
 
@@ -1682,7 +1652,7 @@ printed but no value will appear.
 (byebug:1) display undefined_variable
 2: undefined_variable =
 (byebug:1) display 1/0
-3: 1/0 = 
+3: 1/0 =
 @end smallexample
 
 Note: this command uses @code{to_s} to in expressions; for example an
@@ -1699,7 +1669,7 @@ on (@pxref{DisplayCommands}).
 
 @item display
 Display the current values of the expressions on the list, just as is
-done when your program stops. 
+done when your program stops.
 
 @kindex undisplay @ovar{num}
 @item undisplay @ovar{num}
@@ -1747,7 +1717,7 @@ does in @code{irb}.
 @node eval
 @subsection Printing an expression (@samp{eval}, @samp{p})
 @table @code
-@kindex eval @var{expr} 
+@kindex eval @var{expr}
 @kindex p @r{(@code{eval})}
 @item eval @var{expr}
 @itemx p @var{expr}
@@ -1796,8 +1766,8 @@ list looks nicer:
 @end smallexample
 
 Note however that entries are sorted to run down first rather than
-across. So in the example above the second entry in the list is 
-@code{/usr/lib/ruby/site_ruby/1.8/i586-linux} and the @emph{third} entry is 
+across. So in the example above the second entry in the list is
+@code{/usr/lib/ruby/site_ruby/1.8/i586-linux} and the @emph{third} entry is
 @code{/usr/lib/ruby/site_ruby/1.8}.
 
 If the value is not an array @code{putl} will just call pretty-print.
@@ -1811,24 +1781,24 @@ and so does the output of the @code{method} commands.
 @group
 (byebug:1) ps Kernel.private_methods
 Digest                   initialize                  y
-Pathname                 initialize_copy           
-Rational                 location_of_caller        
-active_gem_with_options  method_added              
-alias_method             method_removed            
-append_features          method_undefined          
-attr                     module_function           
-attr_accessor            private                   
-attr_reader              protected                 
-attr_writer              public                    
-class_variable_get       remove_class_variable     
-class_variable_set       remove_const              
-define_method            remove_instance_variable  
-extend_object            remove_method             
-extended                 singleton_method_added    
-gcd                      singleton_method_removed  
+Pathname                 initialize_copy
+Rational                 location_of_caller
+active_gem_with_options  method_added
+alias_method             method_removed
+append_features          method_undefined
+attr                     module_function
+attr_accessor            private
+attr_reader              protected
+attr_writer              public
+class_variable_get       remove_class_variable
+class_variable_set       remove_const
+define_method            remove_instance_variable
+extend_object            remove_method
+extended                 singleton_method_added
+gcd                      singleton_method_removed
 gem_original_require     singleton_method_undefined
-include                  timeout                   
-included                 undef_method              
+include                  timeout
+included                 undef_method
 @end group
 @end smallexample
 
@@ -1839,7 +1809,7 @@ See also the @code{methods}.
 @node irb
 @subsection Run irb (@samp{irb})
 @table @code
-@kindex irb 
+@kindex irb
 @item irb
 Run an interactive ruby session (@code{irb}) with the bindings
 environment set to the state you are in the program.
@@ -1915,17 +1885,17 @@ Show methods of @var{object}. Basically this is the same as running
 @kindex method iv @var{object}
 Show method instance variables of @var{object}. Basically this is the same as running
 @smallexample
-  obj.instance_variables.each do |v| 
+  obj.instance_variables.each do |v|
      puts "%s = %s\n" % [v, obj.instance_variable_get(v)]
-  end  
+  end
 @end smallexample
 on @var{object}.
 @item signature @var{object}
 @kindex method signature @var{object}
-Show procedure signature of method @var{object}. 
+Show procedure signature of method @var{object}.
 @emph{This command is available only if the nodewrap is installed.}
 @smallexample
-  def mymethod(a, b=5, &bock) 
+  def mymethod(a, b=5, &bock)
   end
   (byebug:1) @b{method sig mymethod}
   Mine#mymethod(a, b=5, &bock)
@@ -1955,7 +1925,7 @@ You can print other portions of source files by giving an explicit
 position as a parameter to the list command.
 
 If you use @value{DBG} through its Emacs interface, you may prefer to
-use Emacs facilities to view source. 
+use Emacs facilities to view source.
 @c @pxref{GNU Emacs}.
 
 @kindex list @ovar{line-number}
@@ -2162,7 +2132,7 @@ frames that have existed longer.  Using a negative @var{n} is the same thing
 as issuing a @code{down} command of the absolute value of the @var{n}.
 Using zero for @var{n} does no frame adjustment, but since the current
 position is redisplayed, it may trigger a resynchronization if there is
-a front end also watching over things. 
+a front end also watching over things.
 
 @var{n} defaults to one. You may abbreviate @code{up} as @code{u}.
 
@@ -2174,7 +2144,7 @@ that were created more recently.  Using a negative @var{n} is the same
 as issuing a @code{up} command of the absolute value of the @var{n}.
 Using zero for @var{n} does no frame adjustment, but since the current
 position is redisplayed, it may trigger a resynchronization if there is
-a front end also watching over things. 
+a front end also watching over things.
 
 @var{n} defaults to one.
 @end table
@@ -2195,10 +2165,10 @@ most ``main'' stack frame.
 Without an argument, @code{frame} prints the current stack
 frame. Since the current position is redisplayed, it may trigger a
 resynchronization if there is a front end also watching over
-things. 
+things.
 
 If a thread number is given then we set the context for evaluating
-expressions to that frame of that thread. 
+expressions to that frame of that thread.
 @end table
 
 @node Stopping
@@ -2229,7 +2199,7 @@ remove old ones, and then continue execution.
 @cindex breakpoints
 A @dfn{breakpoint} makes your script stop whenever a certain point in
 the program is reached.  For each breakpoint, you can add conditions to
-control in finer detail whether your script stops.  
+control in finer detail whether your script stops.
 
 You specify the place where your script should stop with the
 @code{break} command and its variants.
@@ -2296,7 +2266,7 @@ specified here. If the method you want to stop in is in the main class
 program), then use the name @code{Object}.
 
 @kindex catch @ovar{exception} @r{[} on | 1 | off | 0 @r{]}
-@kindex cat @r{(@code{catch})} 
+@kindex cat @r{(@code{catch})}
 @item catch @ovar{exception} @r{[} on | 1 | off | 0 @r{]}
 Set catchpoint to an exception. Without an exception name show catchpoints.
 
@@ -2307,7 +2277,7 @@ off. To delete all exceptions type ``catch off''.
 @kindex delete @ovar{breakpoints}
 @kindex del @r{(@code{delete})}
 @item delete @ovar{breakpoints}
-Delete the breakpoints specified as arguments. 
+Delete the breakpoints specified as arguments.
 
 If no argument is specified, delete all breakpoints (@DBG asks
 confirmation.  You can abbreviate this command as @code{del}.
@@ -2406,7 +2376,7 @@ the state of your other breakpoints; see @ref{Resuming Execution}.)
 
 The simplest sort of breakpoint breaks every time your script reaches
 a specified place.  You can also specify a @dfn{condition} for a
-breakpoint.  A condition is just a Ruby expression.  
+breakpoint.  A condition is just a Ruby expression.
 
 Break conditions can be specified when a breakpoint is set, by using
 @samp{if} in the arguments to the @code{break} command. A breakpoint
@@ -2561,7 +2531,7 @@ If you want instead to terminate the program and byebug entirely, use
 @item continue @ovar{line-specification}
 @itemx c @ovar{line-specification}
 Resume program execution, at the address where your script last
-stopped; any breakpoints set at that address are bypassed.  
+stopped; any breakpoints set at that address are bypassed.
 
 The optional argument @var{line-specification} allows you to specify a
 line number to set a one-time breakpoint which is deleted when that
@@ -2585,7 +2555,7 @@ Change the next line to execute to the given line number.
 @section byebug settings (@samp{set args}, @samp{set autoeval}..)
 
 You can alter the way byebug interacts with you using @code{set}
-commands. 
+commands.
 
 The various parameters to @code{set} are given below. Each parameter
 name needs to to be only enough to make it unique. For example
@@ -2668,7 +2638,7 @@ autoeval is on.
 NameError Exception: undefined local variable or method `stepp' for ...
 @end smallexample
 
-@kindex show autoeval 
+@kindex show autoeval
 @item show args
 Shows whether Ruby evaluation of byebug input should occur or not.
 @end table
@@ -2728,12 +2698,12 @@ Shows the whether filename display shows just the file basename or not.
 @kindex set callstyle @r{[} short | last | tracked @r{]}
 @item set forcestep @r{[} short | last | tracked @r{]}
 @else
-@kindex set callstyle @r{[} short | last 
-@item set forcestep @r{[} short | last 
+@kindex set callstyle @r{[} short | last
+@item set forcestep @r{[} short | last
 @end ifset
 
 Sets how you want call parameters displayed; @code{short} shows just
-the parameter names; 
+the parameter names;
 @ifset FINISHED
 @code{last} shows the parameter names and the
 class of these variables as they currently exist. Note the type could
@@ -2742,7 +2712,7 @@ values.
 @end ifset
 @code{tracked} is the most accurate but this adds
 overhead. On every call, scalar values of the parameters get
-saved. For non-scalar values the class is saved. 
+saved. For non-scalar values the class is saved.
 @end table
 
 @node Forcestep
@@ -2755,7 +2725,7 @@ saved. For non-scalar values the class is saved.
 Due to the interpretive, expression-oriented nature of the Ruby
 Language and implementation, each line often contains many possible
 stopping points, while in a byebug it is often desired to treat each
-line as an individual stepping unit. 
+line as an individual stepping unit.
 
 Setting forcestep on will cause each @code{step} or @code{next}
 command to stop at a different line number. See also @ref{Step} and
@@ -2829,11 +2799,11 @@ Shows whether line tracing is in effect or not.
 
 Setting linetrace+ on will cause consecutive trace lines not to be a
 duplicate of the preceding line-trace line. Note however that this
-setting doesn't by itself turn on or off line tracing. 
+setting doesn't by itself turn on or off line tracing.
 
 @kindex show linetrace+
 @item show linetrace
-Shows whether the line tracing style is to show all lines or remove 
+Shows whether the line tracing style is to show all lines or remove
 duplicates linetrace lines when it is a repeat of the previous line.
 @end table
 
@@ -2867,7 +2837,7 @@ have the ability to change the state inside byebug.
 @kindex set width @var{column-width}
 @item set width @var{column-width}
 Set number of characters byebug thinks are in a line.
-We also change OS environment variable @code{COLUMNS}. 
+We also change OS environment variable @code{COLUMNS}.
 @kindex show width
 @item show width
 Shows the current width setting.
@@ -2950,7 +2920,7 @@ an example:
   5 #<Thread:0xb777e07c sleep>	./test/thread1.rb:11
   6 #<Thread:0xb777dfb4 sleep>	./test/thread1.rb:11
 + 7 #<Thread:0xb777deec run>	./test/thread1.rb:14
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
 Thread 7 is the current thread since it has a plus sign in front. Thread 2 is
@@ -3031,10 +3001,10 @@ post-mortem debugging set the @code{post_mortem} key in
     t.rb:8: raise 'test'
     (byebug:post-mortem) @b{l=}
     [3, 12] in t.rb
-       3  
+       3
        4  Byebug.start
        5  Byebug.post_mortem
-       6  
+       6
        7  def t1
     => 8    raise 'test'
        9  end
@@ -3059,7 +3029,7 @@ can enable post-mortem mode by wrapping this block inside a
 
 @smallexample
 def offender
-  1/0 
+  1/0
 end
 ...
 require "ruby-gems"
@@ -3069,7 +3039,7 @@ Byebug.post_mortem do
   offender
   ...
 end
-@end smallexample 
+@end smallexample
 
 Once inside byebug in post-mortem debugging, the prompt should
 be @code{(byebug:post-mortem)}.
@@ -3087,9 +3057,9 @@ be @code{(byebug:post-mortem)}.
 @section The Byebug Module
 
 @menu
-* Byebug.run::      
+* Byebug.run::
 @ifset LATER
-* Byebug.post-mortem:: 
+* Byebug.post-mortem::
 @end ifset
 * Byebug.context::
 * Byebug.settings::
@@ -3133,7 +3103,7 @@ method.
 
 The first time Byebug.start is called there is also some additional
 setup to make the @code{restart} command work. In particular, @code{$0} and
-@code{ARGV} are used to set internal byebug variables. 
+@code{ARGV} are used to set internal byebug variables.
 
 Therefore you should make try to make sure that when
 @code{Byebug.start} is called neither of these variables has been
@@ -3171,9 +3141,9 @@ If not @code{nil}, this contains @code{$!} from the last exception.
 @subsection @code{Byebug.context}
 As mentioned previously, @code{Byebug.start} instruments additional
 information to be obtained about the current block/frame stack. Here
-we describe these additional @code{Byebug.context} methods. 
+we describe these additional @code{Byebug.context} methods.
 
-Were a frame position is indicated, it is optional. The top or current frame 
+Were a frame position is indicated, it is optional. The top or current frame
 position (position zero) is used if none is given.
 
 @table @code
@@ -3287,7 +3257,7 @@ Return a list of the breakpoints that have been added but not removed.
 
 @node Byebug.Breakpoint
 @subsection The @code{Byebug::Breakpoint} Class
-Breakpoint are objects in the @code{Byebug::Breakpoint} class. 
+Breakpoint are objects in the @code{Byebug::Breakpoint} class.
 @table @code
 @item enabled?
 @vindex @code{Byebug::Breakpoints.enabled?}
@@ -3451,7 +3421,7 @@ continue edit     frame  me   ps     save    thread where
 This does whatever it is I want to do
 (byebug:1) me
 hi
-(byebug:1) 
+(byebug:1)
 @end smallexample
 
 @node Kernel routines
@@ -3474,7 +3444,7 @@ $ cat scope-test.rb
 
 require 'rubygems'
 require 'byebug' ; Byebug.start
-1.times do 
+1.times do
    a = 1
    byebug   # implied steps=1
  end
@@ -3495,7 +3465,7 @@ $ cat scope-test.rb
 
 require 'rubygems'
 require 'byebug' ; Byebug.start
-1.times do 
+1.times do
    a = 1
    byebug(0)
 end
@@ -3547,12 +3517,12 @@ OSX some of the below may need adjusting.
 @section Prerequisites: To build the package you'll need at a minimum:
 
 @itemize @bullet
-@item 
-Ruby (of course). Currently only version 1.8.6 and above but not 
+@item
+Ruby (of course). Currently only version 1.8.6 and above but not
 version 1.9.@emph{x} work.
 @item
 Ruby development headers. This typically includes a file called @file{ruby.h}
-@item 
+@item
 A C compiler like GNU C (@code{gcc})
 @item
 Rake
@@ -3564,7 +3534,7 @@ If you want to build the documentation and install Emacs files, you'll
 also need:
 
 @itemize @bullet
-@item 
+@item
  a POSIX shell like bash
 @item
  autoconf
@@ -3577,9 +3547,9 @@ also need:
 @end itemize
 
 @node Package Checkout
-@section Basic Package Checkout and Installation 
+@section Basic Package Checkout and Installation
 
-Check out the trunk of repository following the instructions at 
+Check out the trunk of repository following the instructions at
 @url{http://rubyforge.org/scm/?group_id=1900}  For example on a Unixy system,
 this may work:
 
@@ -3599,7 +3569,7 @@ the code has been checked out and run:
 @end smallexample
 
 If all goes well you should have some gem files put in the directory
-@code{pkg}. Use the gem command to install that. 
+@code{pkg}. Use the gem command to install that.
 
 @smallexample
   sudo gem install byebug-*.gem   # See gem help for other possibilities
@@ -3640,7 +3610,7 @@ script @code{runner.sh}. For example (again from trunk)
 
 @node Running Regression Tests
 @section Running the Regression Tests
-  
+
 We've put together some basic tests to make sure byebug is doing
 what we think it should do. To run these (from @code{trunk}):
 
@@ -3721,15 +3691,15 @@ should be:
 After fixing this, run @code{make ruby}. Also, I needed to run
 @code{make rubyw}.
 
-And then @code{make install} as indicated. 
+And then @code{make install} as indicated.
 
 Once all of that's in place, the place you want be is in
-@code{byebug/trunk/ext/win32}, not @code{byebug/ext}. 
+@code{byebug/trunk/ext/win32}, not @code{byebug/ext}.
 
 So let's say you've installed the cross-compiled install ruby in
 @code{/usr/local/ruby-mingw32/}. Here then are the commands to build @code{byebug-base-}@emph{xxx}@code{-mswin32.gem}:
 @smallexample
-   cd .../byebug/trunk/ext/win32 
+   cd .../byebug/trunk/ext/win32
    ruby -I /usr/local/ruby-mingw32/lib/ruby/1.8/i386-mingw32 ../extconf.rb
    make # Not rake
    cd ../..   # back in byebug/trunk
