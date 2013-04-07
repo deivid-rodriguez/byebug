@@ -87,17 +87,15 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        print_subcmds(Subcommands)
+      return print_subcmds(Subcommands) unless @match[1]
+
+      args = @match[1].split(/[ \t]+/)
+      param = args.shift
+      subcmd = find(Subcommands, param)
+      if subcmd
+        send("info_#{subcmd.name}", *args)
       else
-        args = @match[1].split(/[ \t]+/)
-        param = args.shift
-        subcmd = find(Subcommands, param)
-        if subcmd
-          send("info_#{subcmd.name}", *args)
-        else
-          errmsg "Unknown info command #{param}\n"
-        end
+        errmsg "Unknown info command #{param}\n"
       end
     end
 
@@ -403,33 +401,25 @@ module Byebug
       end
 
       def help(args)
+        # specific subcommand help
         if args[1]
-          s = args[1]
-          subcmd = Subcommands.find do |try_subcmd|
-            (s.size >= try_subcmd.min) and
-              (try_subcmd.name[0..s.size-1] == s)
-          end
-          if subcmd
-            str = subcmd.short_help + '.'
-            if 'file' == subcmd.name and args[2]
-              s = args[2]
-              subsubcmd = InfoFileSubcommands.find do |try_subcmd|
-                (s.size >= try_subcmd.min) and
-                  (try_subcmd.name[0..s.size-1] == s)
-              end
-              if subsubcmd
-                str += "\n" + subsubcmd.short_help + '.'
-              else
-                str += "\nInvalid file attribute #{args[2]}."
-              end
-            else
-              str += "\n" + subcmd.long_help if subcmd.long_help
-            end
-            return str
+          subcmd = find(Subcommands, args[1])
+          return "Invalid \"info\" subcommand \"#{args[1]}\"." unless subcmd
+
+          str = subcmd.short_help + '.'
+          if 'file' == subcmd.name and args[2]
+            subsubcmd = find(InfoFileSubcommands, args[2])
+            return str += "\nInvalid \"file\" attribute \"#{args[2]}\"." \
+              unless subsubcmd
+
+            str += "\n" + subsubcmd.short_help + '.'
           else
-            return "Invalid 'info' subcommand '#{args[1]}'."
+            str += "\n" + subcmd.long_help if subcmd.long_help
           end
+          return str
         end
+
+        # general help
         s = %{
           Generic command for showing things about the program being debugged.
           --

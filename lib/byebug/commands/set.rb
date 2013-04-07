@@ -46,129 +46,119 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        print_subcmds(Subcommands)
+      # "Set" alone just prints subcommands
+      return print_subcmds(Subcommands) unless @match[1]
+
+      args = @match[1].split(/[ \t]+/)
+      try_subcmd = args.shift
+      try_subcmd.downcase!
+      if try_subcmd =~ /^no/i
+        set_on = false
+        try_subcmd = try_subcmd[2..-1]
       else
-        args = @match[1].split(/[ \t]+/)
-        subcmd = args.shift
-        subcmd.downcase!
-        if subcmd =~ /^no/i
-          set_on = false
-          subcmd = subcmd[2..-1]
+        set_on = true
+      end
+
+      subcmd = find(Subcommands, try_subcmd)
+
+      # Subcommand not found...
+      return print "Unknown set command \"#{try_subcmd}\"\n" unless subcmd
+
+      set_on = get_onoff(args[0]) if subcmd.is_bool and args.size > 0
+
+      case subcmd.name
+      when /^annotate$/
+        level = get_int(args[0], "Set annotate", 0, 3, 0)
+        if level
+          Byebug.annotate = level
         else
-          set_on = true
+          return
         end
-        for try_subcmd in Subcommands do
-          if (subcmd.size >= try_subcmd.min) and
-              (try_subcmd.name[0..subcmd.size-1] == subcmd)
-            begin
-              if try_subcmd.is_bool
-                if args.size > 0
-                  set_on = get_onoff(args[0])
-                end
-              end
-              case try_subcmd.name
-              when /^annotate$/
-                level = get_int(args[0], "Set annotate", 0, 3, 0)
-                if level
-                  Byebug.annotate = level
-                else
-                  return
-                end
-                if defined?(Byebug::RDEBUG_SCRIPT)
-                  # byebug was called initially. 1st arg is script name.
-                  Command.settings[:argv][1..-1] = args
-                else
-                  # byebug wasn't called initially. 1st arg is not script name.
-                  Command.settings[:argv] = args
-                end
-              when /^args$/
-                Command.settings[:argv][1..-1] = args
-              when /^autolist$/
-                Command.settings[:autolist] = (set_on ? 1 : 0)
-              when /^autoeval$/
-                Command.settings[:autoeval] = set_on
-              when /^basename$/
-                Command.settings[:basename] = set_on
-              when /^callstyle$/
-                if args[0]
-                  arg = args[0].downcase.to_sym
-                  case arg
-                  when :short, :last, :tracked
-                    Command.settings[:callstyle] = arg
-                  else
-                    print "Invalid call style #{arg}. Should be one of: " \
-                          "'short', 'last' or 'tracked'.\n"
-                  end
-                end
-              when /^trace$/
-                Command.settings[:stack_trace_on_error] = set_on
-              when /^fullpath$/
-                Command.settings[:full_path] = set_on
-              when /^autoreload$/
-                Command.settings[:reload_source_on_change] = set_on
-              when /^autoirb$/
-                Command.settings[:autoirb] = (set_on ? 1 : 0)
-              when /^byebugtesting$/
-                Command.settings[:byebugtesting] = set_on
-                if set_on
-                  Command.settings[:basename] = true
-                end
-              when /^forcestep$/
-                self.class.settings[:force_stepping] = set_on
-              when /^history$/
-                if 2 == args.size
-                  interface = @state.interface
-                  case args[0]
-                  when /^save$/
-                    interface.history_save = get_onoff(args[1])
-                  when /^size$/
-                    interface.history_length =
-                      get_int(args[1], "Set history size")
-                  when /^filename$/
-                    interface.histfile =
-                      File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
-                  else
-                    print "Invalid history parameter #{args[0]}. Should be " \
-                          "'filename', 'save' or 'size'.\n"
-                  end
-                else
-                  print "Need two parameters for 'set history'; got " \
-                        "#{args.size}.\n"
-                  return
-                end
-              when /^linetrace\+$/
-                self.class.settings[:tracing_plus] = set_on
-              when /^linetrace$/
-                Command.settings[:tracing] = set_on
-              when /^listsize$/
-                listsize = get_int(args[0], "Set listsize", 1, nil, 10)
-                if listsize
-                  self.class.settings[:listsize] = listsize
-                else
-                  return
-                end
-              when /^width$/
-                width = get_int(args[0], "Set width", 10, nil, 80)
-                if width
-                  self.class.settings[:width] = width
-                  ENV['COLUMNS'] = width.to_s
-                else
-                  return
-                end
-              else
-                print "Unknown setting #{@match[1]}.\n"
-                return
-              end
-              print "#{show_setting(try_subcmd.name)}\n"
-              return
-            rescue RuntimeError
-              return
-            end
+        if defined?(Byebug::RDEBUG_SCRIPT)
+          # byebug was called initially. 1st arg is script name.
+          Command.settings[:argv][1..-1] = args
+        else
+          # byebug wasn't called initially. 1st arg is not script name.
+          Command.settings[:argv] = args
+        end
+      when /^args$/
+        Command.settings[:argv][1..-1] = args
+      when /^autolist$/
+        Command.settings[:autolist] = (set_on ? 1 : 0)
+      when /^autoeval$/
+        Command.settings[:autoeval] = set_on
+      when /^basename$/
+        Command.settings[:basename] = set_on
+      when /^callstyle$/
+        if args[0]
+          arg = args[0].downcase.to_sym
+          case arg
+          when :short, :last, :tracked
+            Command.settings[:callstyle] = arg
+          else
+            print "Invalid call style #{arg}. Should be one of: " \
+                  "'short', 'last' or 'tracked'.\n"
           end
         end
-        print "Unknown set command #{subcmd}\n"
+      when /^trace$/
+        Command.settings[:stack_trace_on_error] = set_on
+      when /^fullpath$/
+        Command.settings[:full_path] = set_on
+      when /^autoreload$/
+        Command.settings[:reload_source_on_change] = set_on
+      when /^autoirb$/
+        Command.settings[:autoirb] = (set_on ? 1 : 0)
+      when /^byebugtesting$/
+        Command.settings[:byebugtesting] = set_on
+        if set_on
+          Command.settings[:basename] = true
+        end
+      when /^forcestep$/
+        self.class.settings[:force_stepping] = set_on
+      when /^history$/
+        if 2 == args.size
+          interface = @state.interface
+          case args[0]
+          when /^save$/
+            interface.history_save = get_onoff(args[1])
+          when /^size$/
+            interface.history_length =
+              get_int(args[1], "Set history size")
+          when /^filename$/
+            interface.histfile =
+              File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
+          else
+            print "Invalid history parameter #{args[0]}. Should be " \
+                  "'filename', 'save' or 'size'.\n"
+          end
+        else
+          print "Need two parameters for 'set history'; got " \
+                "#{args.size}.\n"
+          return
+        end
+      when /^linetrace\+$/
+        self.class.settings[:tracing_plus] = set_on
+      when /^linetrace$/
+        Command.settings[:tracing] = set_on
+      when /^listsize$/
+        listsize = get_int(args[0], "Set listsize", 1, nil, 10)
+        if listsize
+          self.class.settings[:listsize] = listsize
+        else
+          return
+        end
+      when /^width$/
+        width = get_int(args[0], "Set width", 10, nil, 80)
+        if width
+          self.class.settings[:width] = width
+          ENV['COLUMNS'] = width.to_s
+        else
+          return
+        end
+      else
+        return print "Unknown setting #{@match[1]}.\n"
       end
+      return print "#{show_setting(subcmd.name)}\n"
     end
 
     class << self
@@ -177,20 +167,17 @@ module Byebug
       end
 
       def help(args)
+        # specific subcommand help
         if args[1]
-          s = args[1]
-          subcmd = Subcommands.find do |try_subcmd|
-            (s.size >= try_subcmd.min) and
-              (try_subcmd.name[0..s.size-1] == s)
-          end
-          if subcmd
-            str = subcmd.short_help + '.'
-            str += "\n" + subcmd.long_help if subcmd.long_help
-            return str
-          else
-            return "Invalid 'set' subcommand '#{args[1]}'."
-          end
+          subcmd = find(Subcommands, args[1])
+          return "Invalid \"set\" subcommand \"#{args[1]}\"." unless subcmd
+
+          str = subcmd.short_help + '.'
+          str += "\n" + subcmd.long_help if subcmd.long_help
+          return str
         end
+
+        # general help
         s = %{
           Modifies parts of byebug environment. Boolean values take
           on, off, 1 or 0.
