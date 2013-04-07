@@ -147,14 +147,14 @@ module Byebug
 
     def at_tracing(context, file, line)
       # Don't trace ourselves
-      return if defined?(Byebug::RDEBUG_FILE) && Byebug::RDEBUG_FILE == file
+      return if defined?(Byebug::BYEBUG_BIN) && Byebug::BYEBUG_BIN == file
 
       file = CommandProcessor.canonic_file(file)
       tracing_plus = Command.settings[:tracing_plus]
       if file != @last_file || line != @last_line || tracing_plus == false
         @last_file = file
         @last_line = line
-        print "Tracing: #{file}:#{line} #{Byebug.line_at(file, line)}"
+        print "Tracing: #{file}:#{line} #{Byebug.line_at(file, line)}\n"
       end
       always_run(context, file, line, 2)
     end

@@ -300,7 +300,7 @@ begin
     byebug_path += '.cmd' unless byebug_path =~ /\.cmd$/i
   end
   Byebug::RDEBUG_SCRIPT = byebug_path
-  Byebug::RDEBUG_FILE = __FILE__
+  Byebug::BYEBUG_BIN = __FILE__
   Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
 rescue StandardError => e
