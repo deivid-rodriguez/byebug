@@ -493,30 +493,27 @@ if n-1 > 0
 (byebug:1)
 @end smallexample
 
-In the above we added a new command, @code{break}
-(@pxref{Breakpoints}) which indicates to go into byebug just
-before that line of code is run. And @code{continue} resumes
-execution.  Notice the difference between @code{display a} and
-@code{display a.inspect}. An implied string conversion is performed on
-the expression after it is evaluated. To remove a display expression
-we used @code{undisplay} is used. If we give a display number, just
-that display expression is removed.
+In the above we added a new command, @code{break} (@pxref{Breakpoints}) which
+indicates to go into byebug just before that line of code is run. And
+@code{continue} resumes execution.  Notice the difference between 
+@code{display a} and @code{display a.inspect}. An implied string conversion is
+performed on the expression after it is evaluated. To remove a display
+expression @code{undisplay} is used. If we give a display number, just that
+display expression is removed.
 
-Above we also used a new command @code{where} (@pxref{Backtrace} to
-show the call stack. In the above situation, starting from the bottom
-line we see we called the hanoi from line 35 of the file
-@code{hanoi.rb} and the hanoi method called itself two more times at
-line 5.
+Above we also used a new command @code{where} (@pxref{Backtrace} to show the
+call stack. In the above situation, starting from the bottom line we see we
+called the hanoi from line 35 of the file @code{hanoi.rb} and the hanoi method
+called itself two more times at line 5.
 
-In the call stack we show the file line position in the same format
-when we stop at a line. Also we see the names of the parameters and
-the types that those parameters @emph{currently} have. It's possible
-that when the program was called the parameter had a different type,
-since the types of variables can change dynamically. You alter the
-style of what to show in the trace (@pxref{Callstyle}).
+In the call stack we show the file line position in the same format we use when
+we stop at a line. Also we see the names of the parameters and the types that
+those parameters @emph{currently} have. It's possible that when the program was
+called the parameter had a different type, since the types of variables can
+change dynamically. You can alter the style of what to show in the trace
+(@pxref{Callstyle}).
 
-Let's explore a little more. Now were were we?
-
+Let's explore a little more. Now where were we?
 @smallexample
 (byebug:1) @b{list}
    1  #!/usr/bin/ruby
@@ -543,23 +540,21 @@ NameError Exception: undefined local variable or method `i_args' for main:Object
 2
 @end smallexample
 
-Notice in the above to get the value of variable @code{n}, I have to
-use a print command like @code{p n}; If I entered just @code{n}, that
-would be taken to mean byebug command ``next''. In the current
-scope, variable @code{i_args} is not defined. However I can change to
-the top-most frame by using the @code{frame} command. Just as with
-arrays, -1 means the last one. Alternatively using frame number 3
-would have been the same thing; so would issuing @code{up 3}.
+Notice in the above to get the value of variable @code{n} I had to use a print
+command like @code{p n}; If I entered just @code{n}, that would be taken to mean
+byebug command ``next''. In the current scope, variable @code{i_args} is not
+defined. However I can change to the top-most frame by using the @code{frame}
+command. Just as with arrays, -1 means the last one. Alternatively using frame
+number 3 would have been the same thing; so would issuing @code{up 3}.
 
-Note that in the outside frame 3, the value of @code{i_args} can be
-shown. Also note that the value of variable @code{n} is different.
+Note that in the outside frame 3, the value of @code{i_args} can be shown. Also
+note that the value of variable @code{n} is different.
 
 @node Unit Testing Session
-@section Using byebug in unit testing (@code{byebug/byebug}, @code{Byebug.start})
+@section Using byebug in unit testing (@code{byebug}, @code{Byebug.start})
 
-In the previous sessions we've been calling byebug right at the
-outset. I confess that this mode of operation is usually not how I use
-byebug.
+In the previous sessions we've been calling byebug right at the outset. I
+confess that this mode of operation is usually not how I use byebug.
 
 There are a number of situations where calling byebug at the outset is
 impractical for a couple of reasons.
