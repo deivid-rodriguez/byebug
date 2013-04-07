@@ -12,10 +12,10 @@ module Byebug
         onoff = 'on' == @match[1]
         #if @match[2]
           Byebug.tracing = onoff
-          print "Tracing is #{onoff ? 'on' : 'off'}"
+          print "Tracing is #{onoff ? 'on' : 'off'}\n"
         #else
         #  Byebug.current_context.tracing = onoff
-        #  print "Tracing %s on current thread.\n"  % (onoff ? 'on' : 'off')
+        #  print "Tracing #{onoff ? 'on' : 'off'} on current thread.\n"
         #end
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]
@@ -26,7 +26,7 @@ module Byebug
             dbg_cmd = (@match[3] && (@match[3] !~ /nostop/)) ? 'byebug' : ''
           end
           eval("trace_var(:#{varname}) do |val|
-                  print \"traced variable #{varname} has value \#{val}\n\"
+                  print \"traced variable \#{varname} has value \#{val}\n\"
                   #{dbg_cmd}
                 end")
         else
