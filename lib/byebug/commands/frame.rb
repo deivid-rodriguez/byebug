@@ -78,6 +78,17 @@ module Byebug
       return call_str
     end
 
+    def print_backtrace
+      (0...@state.context.stack_size).each do |idx|
+        if idx == @state.frame_pos
+          print "--> "
+        else
+          print "    "
+        end
+        print_frame(idx)
+      end
+    end
+
     def print_frame(pos, adjust = false, context=@state.context)
       file = context.frame_file(pos)
       line = context.frame_line(pos)
@@ -159,17 +170,9 @@ module Byebug
     end
 
     def execute
-      (0...@state.context.stack_size).each do |idx|
-        if idx == @state.frame_pos
-          print "--> "
-        else
-          print "    "
-        end
-        print_frame(idx)
-
-      end
+      print_backtrace
       if truncated_callstack?(@state.context, Byebug.start_sentinal)
-#        print "Warning: saved frames may be incomplete; compare with caller(0).\n"
+         print "Warning: saved frames may be incomplete; compare with caller(0).\n"
       end
     end
 

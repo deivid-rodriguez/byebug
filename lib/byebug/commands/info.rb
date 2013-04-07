@@ -307,14 +307,7 @@ module Byebug
         errmsg "info stack not available here.\n"
         return
       end
-      (0...@state.context.stack_size).each do |idx|
-        if idx == @state.frame_pos
-          print "--> "
-        else
-          print "    "
-        end
-        print_frame(idx)
-      end
+      print_backtrace
     end
 
 #   def info_thread_preamble(arg)
