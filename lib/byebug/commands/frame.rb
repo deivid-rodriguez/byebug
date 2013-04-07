@@ -93,7 +93,7 @@ module Byebug
 
       frame_num = "##{pos}"
       call_str = get_frame_call(frame_num, pos, context)
-      file_line = "at line #{CommandProcessor.canonic_file(file)}:#{line}\n"
+      file_line = " at line #{CommandProcessor.canonic_file(file)}:#{line}\n"
       print frame_num
       unless call_str.empty?
         print call_str
