@@ -7,7 +7,6 @@ describe 'Trace Command' do
 
     before do
       Byebug::Command.settings[:basename] = false
-      Byebug.tracing = false
       untrace_var(:$bla) if defined?($bla)
     end
 
@@ -15,7 +14,7 @@ describe 'Trace Command' do
 
       describe 'enabling' do
         it 'must trace execution by setting trace to on' do
-          enter 'trace on'
+          enter 'trace on', 'cont 7', 'trace off'
           debug_file 'trace'
           check_output_includes 'Tracing is on',
                                 "Tracing: #{fullpath('trace')}:4 $bla = 4",
@@ -23,7 +22,7 @@ describe 'Trace Command' do
         end
 
         it 'must be able to use a shortcut' do
-          enter 'tr on'
+          enter 'tr on', 'cont 7', 'trace off'
           debug_file 'trace'
           check_output_includes 'Tracing is on',
                                 "Tracing: #{fullpath('trace')}:4 $bla = 4",

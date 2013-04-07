@@ -292,9 +292,7 @@ end
 
 opts = process_options(options)
 begin
-  if not defined? Byebug::ARGV
-    Byebug::ARGV = ARGV.clone
-  end
+  Byebug::ARGV = ARGV.clone if not defined? Byebug::ARGV
   byebug_path = File.expand_path($0)
   if RUBY_PLATFORM =~ /mswin/
     byebug_path += '.cmd' unless byebug_path =~ /\.cmd$/i

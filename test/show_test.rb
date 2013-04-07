@@ -19,7 +19,6 @@ describe "Show Command" do
     end
   end
 
-
   describe "args" do
     temporary_change_hash_value(Byebug::Command.settings, :argv, %w{foo bar})
 
@@ -106,11 +105,10 @@ describe "Show Command" do
   end
 
   it "must show linetrace" do
-    enter 'trace on', 'show linetrace'
+    enter 'trace on', 'show linetrace', 'trace off'
     debug_file 'show'
     check_output_includes "line tracing is on."
   end
-
 
   describe "linetrace+" do
     it "must show a message when linetrace+ is on" do
@@ -282,9 +280,9 @@ describe "Show Command" do
 
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', "show autolist"
-      #debug_file 'post_mortem'
-      #check_output_includes "autolist is off."
+      enter 'cont', "show autolist"
+      debug_file 'post_mortem'
+      check_output_includes "autolist is off."
     end
   end
 
