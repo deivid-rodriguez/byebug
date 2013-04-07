@@ -155,11 +155,11 @@ module Byebug
         '2 == output annotated suitably for use by programs that control ' \
         'byebug.'],
         ['args', 2,
-         'Show argument list to give program being debugged when it is '     \
-         'started',
-         'Follow this command with any number of args, to be passed to the ' \
+         'Show argument list to give to the program being debugged when it ' \
+         'is started',
+         'Follow this command with any number of args to be passed to the '  \
          'program.'],
-        ['autoeval', 4, 'Show whether unrecognized command are evaluated'],
+        ['autoeval', 4, 'Show whether unrecognized commands are evaluated'],
         ['autolist', 4, 'Show whether "list" command is run on stopping'],
         ['autoirb', 4, 'Show whether IRB is invoked on stopping'],
         ['autoreload', 4, 'Show whether source code is reloaded when changed'],
@@ -179,15 +179,15 @@ module Byebug
         ['keep-frame-bindings', 1, 'Save frame binding on each call'],
         ['linetrace', 3, 'Show line execution tracing'],
         ['linetrace+', 10,
-         'Show whether different consecutive lines are shown in tracing.'],
+         'Show whether different consecutive lines are shown in tracing'],
         ['listsize', 3, 'Show number of source lines to list by default.'],
         ['port', 3, 'Show server port'],
         ['post-mortem', 3,
          'Show whether we go into post-mortem debugging on an uncaught ' \
-         ' exception'],
+         'exception'],
         ['trace', 1,
          'Show whether a stack trace is displayed when "eval" raises an ' \
-         'exception.'],
+         'exception'],
         ['version', 1, 'Show byebug\'s version'],
         ['width', 1, 'Show the number of characters per line for byebug']
       ].map do |name, min, short_help, long_help|
@@ -202,7 +202,7 @@ module Byebug
 
     def execute
       if not @match[1]
-        print_subcommands
+        print_subcmds(Subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift

@@ -24,19 +24,26 @@ module Byebug
     SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
       defined?(SubcmdStruct)
 
-    def print_subcommands
-      cmd_name = self.class.name.chomp("Command").downcase
-      errmsg "#{cmd_name} must be followed by the name of a subcommand.\n"
-      print "List of #{cmd_name} subcommands:\n\n"
-      for subcmd in Subcommands do
+    ##
+    # Print list of subcmds
+    #
+    def print_subcmds(subcmds)
+      cmd_name = self.class.name[/Byebug::(.*)Command/, 1].downcase
+      errmsg "\"#{cmd_name}\" must be followed by the name of a subcommand.\n"
+      print "List of \"#{cmd_name}\" subcommands:\n"
+      for subcmd in subcmds do
         print "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
       end
     end
 
     include Columnize
 
-    # Find param in subcmds. param is downcased and can be abbreviated to the
-    # minimum length listed in the subcommands.
+    ##
+    # Find param in subcmds.
+    #
+    # @param is downcased and can be abbreviated to the minimum length listed in
+    # the subcommands.
+    #
     def find(subcmds, param)
       param.downcase!
       for try_subcmd in subcmds do

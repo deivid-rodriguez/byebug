@@ -47,7 +47,7 @@ module Byebug
 
     def execute
       if not @match[1]
-        print_subcommands
+        print_subcmds(Subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         subcmd = args.shift

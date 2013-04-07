@@ -21,7 +21,7 @@ module Byebug
         varname=@match[2]
         if debug_eval("defined?(#{varname})")
           if @match[3] && @match[3] !~ /(:?no)?stop/
-            errmsg("expecting 'stop' or 'nostop'; got %s\n" % @match[3])
+            errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[3]}\"\n"
           else
             dbg_cmd = (@match[3] && (@match[3] !~ /nostop/)) ? 'byebug' : ''
           end
@@ -33,8 +33,8 @@ module Byebug
           errmsg "#{varname} is not a global variable.\n"
         end
       else
-        errmsg("expecting 'on', 'off', 'var' or 'variable'; got: %s\n" %
-               @match[1])
+        errmsg "expecting \"on\", \"off\", \"var\" or \"variable\"; got: " \
+               "\"#{@match[1]}\"\n"
       end
     end
 

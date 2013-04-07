@@ -14,7 +14,6 @@ module Byebug
         print "No exceptions set to be caught.\n"
       end
     end
-
   end
 
   # Implements byebug "info" command.
@@ -88,8 +87,8 @@ module Byebug
     end
 
     def execute
-      if !@match[1]
-        print_subcommands
+      if not @match[1]
+        print_subcmds(Subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
