@@ -6,7 +6,6 @@ describe "Stepping Commands" do
   describe "Next Command" do
 
     describe "Usual mode" do
-
       before do
         enter 'break 10', 'cont'
       end

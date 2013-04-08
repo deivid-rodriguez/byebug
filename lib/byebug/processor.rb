@@ -125,7 +125,7 @@ module Byebug
       if Byebug.annotate.to_i > 2
         print afmt("source #{file}:#{line}")
       end
-      print "Stopped at breakpoint %d at %s:%s\n", n, file, line
+      print "Stopped by breakpoint %d at %s:%s\n", n, file, line
     end
     protect :at_breakpoint
 
@@ -166,8 +166,7 @@ module Byebug
     protect :at_line
 
     def at_return(context, file, line)
-      context.stop_frame = -1
-      process_commands(context, file, line)
+      #context.stop_frame = -1
     end
 
     private

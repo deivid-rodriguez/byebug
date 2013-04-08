@@ -158,12 +158,12 @@ process_line_event(VALUE trace_point, void *data)
 
   load_frame_info(
       trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
+  update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                               defined_class, binding, self);
+
   if (debug == Qtrue)
     print_debug_info(
       "line", path, lineno, method_id, defined_class, context->stack_size);
-
-  update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                               defined_class, binding, self);
 
   if (context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
        strcmp(context->last_file, RSTRING_PTR(path)))
@@ -228,12 +228,12 @@ process_return_event(VALUE trace_point, void *data)
 
   load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class,
                                &binding, &self);
+  pop_frame(context_object);
+
   if (debug == Qtrue)
     print_debug_info("return", path, lineno, method_id, defined_class,
                                                            context->stack_size);
-
   //rb_funcall(context_object, idAtReturn, 2, path, lineno);
-  pop_frame(context_object);
 
   cleanup(context);
 }
@@ -252,12 +252,12 @@ process_call_event(VALUE trace_point, void *data)
 
   load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class,
                                &binding, &self);
+  push_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                             defined_class, binding, self);
+
   if (debug == Qtrue)
     print_debug_info("call", path, lineno, method_id, defined_class,
                                                            context->stack_size);
-
-  push_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                             defined_class, binding, self);
 
   breakpoint = find_breakpoint_by_method(breakpoints, defined_class,
                                                       SYM2ID(method_id),
@@ -343,12 +343,12 @@ Byebug_setup_tracepoints(VALUE self)
   rb_tracepoint_enable(tpLine);
 
   tpReturn = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_RETURN | RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_CLASS | RUBY_EVENT_END,
+      RUBY_EVENT_RETURN | RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
       process_return_event, NULL);
   rb_tracepoint_enable(tpReturn);
 
   tpCall = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_CALL | RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL,
+      RUBY_EVENT_CALL | RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
       process_call_event, NULL);
   rb_tracepoint_enable(tpCall);
 
