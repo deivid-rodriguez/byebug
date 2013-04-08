@@ -102,12 +102,12 @@ module Byebug
         end
       end
 
-      frame_num = "##{pos}"
+      frame_num = "##{pos} "
       call_str = get_frame_call(frame_num, pos, context)
-      file_line = " at line #{CommandProcessor.canonic_file(file)}:#{line}\n"
+      file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}\n"
       print frame_num
       unless call_str.empty?
-        print call_str
+        print "#{call_str} "
         if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
           print "\n       "
         end
@@ -185,17 +185,19 @@ module Byebug
         s = if cmd == 'where'
           %{
             w[here]\tdisplay stack frames
-            }
+           }
             else
           %{
             bt|backtrace\t\talias for where - display stack frames
-         }
+           }
             end
         s += %{
-Print the entire stack frame. Each frame is numbered, the most recent
-frame is 0. frame number can be referred to in the "frame" command;
-"up" and "down" add or subtract respectively to frame numbers shown.
-The position of the current frame is marked with -->.  }
+            Print the entire stack frame. Each frame is numbered, the most
+            recent frame is 0. frame number can be referred to in the "frame"
+            command; "up" and "down" add or subtract respectively to frame
+            numbers shown. The position of the current frame is marked with
+            -->.
+              }
       end
     end
   end

@@ -235,9 +235,9 @@ describe "Info Command" do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
       check_output_includes \
-        "-->", "#0", "A.a", "at line #{fullpath('info')}:20",
-               "#1", "A.b", "at line #{fullpath('info')}:30",
-               "#2",        "at line #{fullpath('info')}:36"
+        "-->", "#0", "A.a", "at #{fullpath('info')}:20",
+               "#1", "A.b", "at #{fullpath('info')}:30",
+               "#2",        "at #{fullpath('info')}:36"
     end
   end
 
@@ -262,7 +262,7 @@ describe "Info Command" do
        enter 'break 20', 'cont', ->{"info thread #{context.thnum} verbose"}
        debug_file 'info'
        check_output_includes /#<Thread:\S+ run>/, "#0", "A.a",
-                             "at line #{fullpath('info')}:20"
+                             "at #{fullpath('info')}:20"
      end
 
      it "must show error when unknown parameter is used" do

@@ -486,10 +486,10 @@ Breakpoint 1 at hanoi.rb:4
 ./hanoi.rb:4
 if n-1 > 0
 (byebug:1) @b{where}
---> #0 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:4
-    #1 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
-    #2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
-    #3 at line hanoi.rb:35
+--> #0 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at hanoi.rb:4
+    #1 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at hanoi.rb:5
+    #2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at hanoi.rb:5
+    #3 at hanoi.rb:35
 (byebug:1)
 @end smallexample
 
@@ -529,13 +529,13 @@ Clear all expressions? (y/n) @b{y}
 (byebug:1) @b{i_args}
 NameError Exception: undefined local variable or method `i_args' for main:Object
 (byebug:1) @b{frame -1}
-#3 at line hanoi.rb:35
+#3 at hanoi.rb:35
 (byebug:1) @b{i_args}
 1
 (byebug:1) @b{p n}
 3
 (byebug:1) @b{down 2}
-#2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at line hanoi.rb:5
+#2 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at hanoi.rb:5
 (byebug:1) @b{p n}
 2
 @end smallexample
@@ -656,7 +656,7 @@ list @code{solutions}.
 Now let's see where we are...
 @smallexample
 (byebug:1) @b{where}
---> #0 TestTri.test_basic at line /home/rocky/ruby/test-tri.rb:9
+--> #0 TestTri.test_basic at /home/rocky/ruby/test-tri.rb:9
 (byebug:1)
 @end smallexample
 
@@ -701,14 +701,14 @@ Started
 test-tri2.rb:11
 solutions = []
 (byebug:1) @b{where}
---> #0 TestTri.test_basic at line test-tri2.rb:11
+--> #0 TestTri.test_basic at test-tri2.rb:11
     #1 MiniTest::Unit::TestCase.run(runner#MiniTest::Unit)
-       at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:458
+       at /usr/local/lib/ruby/1.9.1/minitest/unit.rb:458
     #2 MiniTest::Unit.run_test_suites
-       at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:426
+       at /usr/local/lib/ruby/1.9.1/minitest/unit.rb:426
     #3 MiniTest::Unit.run
-       at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:393
-    #4 at line /usr/local/lib/ruby/1.9.1/minitest/unit.rb:334
+       at /usr/local/lib/ruby/1.9.1/minitest/unit.rb:393
+    #4 at /usr/local/lib/ruby/1.9.1/minitest/unit.rb:334
 (byebug:1)
 @end smallexample
 
@@ -1166,14 +1166,14 @@ If all you want to do however is get a linetrace, @code{tracer}, not
 @smallexample
 $ @b{time ruby -rtracer gcd.rb 34 21 > /dev/null}
 
-real	0m0.266s
-user	0m0.008s
-sys	0m0.000s
+real  0m0.266s
+user  0m0.008s
+sys  0m0.000s
 $ @b{time byebug --trace gcd.rb 34 21 > /dev/null}
 
-real	0m0.875s
-user	0m0.448s
-sys	0m0.056s
+real  0m0.875s
+user  0m0.448s
+sys  0m0.056s
 $
 @end smallexample
 
@@ -1484,10 +1484,10 @@ information on how to use that command.
 @smallexample
 (byebug:1) @b{help list}
 byebug help v@value{BYEBUG_VERSION}
-l[ist]		list forward
-l[ist] -	list backward
-l[ist] =	list current line
-l[ist] nn-mm	list given lines
+l[ist]    list forward
+l[ist] -  list backward
+l[ist] =  list current line
+l[ist] nn-mm  list given lines
 * NOTE - to turn on autolist, use 'set autolist'
 (byebug:1)
 @end smallexample
@@ -2091,8 +2091,8 @@ frame numbers shown.  The position of the current frame is marked with
 
 @smallexample
 (byebug:1) where
---> #0 Object.gcd(a#Fixnum, b#Fixnum) at line /tmp/gcd.rb:6
-    #1 at line /tmp/gcd.rb:19
+--> #0 Object.gcd(a#Fixnum, b#Fixnum) at /tmp/gcd.rb:6
+    #1 at /tmp/gcd.rb:19
 @end smallexample
 
 @ifset FINISHED
@@ -2908,13 +2908,13 @@ an example:
 
 @smallexample
 (byebug:7) info threads
-  1 #<Thread:0xb7d08704 sleep>	./test/thread1.rb:27
- !2 #<Byebug::DebugThread:0xb7782e4c sleep>	
-  3 #<Thread:0xb777e220 sleep>	./test/thread1.rb:11
-  4 #<Thread:0xb777e144 sleep>	./test/thread1.rb:11
-  5 #<Thread:0xb777e07c sleep>	./test/thread1.rb:11
-  6 #<Thread:0xb777dfb4 sleep>	./test/thread1.rb:11
-+ 7 #<Thread:0xb777deec run>	./test/thread1.rb:14
+  1 #<Thread:0xb7d08704 sleep>  ./test/thread1.rb:27
+ !2 #<Byebug::DebugThread:0xb7782e4c sleep>  
+  3 #<Thread:0xb777e220 sleep>  ./test/thread1.rb:11
+  4 #<Thread:0xb777e144 sleep>  ./test/thread1.rb:11
+  5 #<Thread:0xb777e07c sleep>  ./test/thread1.rb:11
+  6 #<Thread:0xb777dfb4 sleep>  ./test/thread1.rb:11
++ 7 #<Thread:0xb777deec run>  ./test/thread1.rb:14
 (byebug:1)
 @end smallexample
 
@@ -2923,29 +2923,29 @@ ignored since it has a @code{!}. A ``verbose'' listing of the above:
 
 @smallexample
 (byebug:7) info threads verbose
-  1 #<Thread:0xb7d08704 sleep>	
-	#0 Integer.join at line test/thread1.rb:27
-	#1 at line test/thread1.rb:27
- !2 #<Byebug::DebugThread:0xb7782e4c sleep>	
-  3 #<Thread:0xb777e220 sleep>	
-	#0 sleep(count#Fixnum) at line test/thread1.rb:11
-	#1 Object.fn(count#Fixnum, i#Fixnum) at line test/thread1.rb:11
-	#2 at line test/thread1.rb:23
-  4 #<Thread:0xb777e144 sleep>	
-	#0 sleep(count#Fixnum) at line test/thread1.rb:11
-	#1 Object.fn(count#Fixnum, i#Fixnum) at line test/thread1.rb:11
-	#2 at line test/thread1.rb:23
-  5 #<Thread:0xb777e07c sleep>	
-	#0 sleep(count#Fixnum) at line test/thread1.rb:11
-	#1 Object.fn(count#Fixnum, i#Fixnum) at line test/thread1.rb:11
-	#2 at line test/thread1.rb:23
-  6 #<Thread:0xb777dfb4 sleep>	
-	#0 sleep(count#Fixnum) at line test/thread1.rb:11
-	#1 Object.fn(count#Fixnum, i#Fixnum) at line test/thread1.rb:11
-	#2 at line test/thread1.rb:23
-+ 7 #<Thread:0xb777deec run>	
-	#0 Object.fn(count#Fixnum, i#Fixnum) at line test/thread1.rb:14
-	#1 at line test/thread1.rb:23
+  1 #<Thread:0xb7d08704 sleep>  
+  #0 Integer.join at test/thread1.rb:27
+  #1 at test/thread1.rb:27
+ !2 #<Byebug::DebugThread:0xb7782e4c sleep>  
+  3 #<Thread:0xb777e220 sleep>  
+  #0 sleep(count#Fixnum) at test/thread1.rb:11
+  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
+  #2 at test/thread1.rb:23
+  4 #<Thread:0xb777e144 sleep>  
+  #0 sleep(count#Fixnum) at test/thread1.rb:11
+  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
+  #2 at test/thread1.rb:23
+  5 #<Thread:0xb777e07c sleep>  
+  #0 sleep(count#Fixnum) at test/thread1.rb:11
+  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
+  #2 at test/thread1.rb:23
+  6 #<Thread:0xb777dfb4 sleep>  
+  #0 sleep(count#Fixnum) at test/thread1.rb:11
+  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
+  #2 at test/thread1.rb:23
++ 7 #<Thread:0xb777deec run>  
+  #0 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:14
+  #1 at test/thread1.rb:23
 @end smallexample
 
 @kindex info variables
@@ -3231,19 +3231,17 @@ Fixnum. Number of characters byebug thinks are in a line. @xref{Width}.
 @table @code
 @item add_breakpoint(file, line, expr)
 @vindex @code{Byebug.add_breakpoint}
-Adds a breakpoint in file @var{file}, at line @var{line}. If
-@var{expr} is not nil, it is evaluated and a breakpoint takes effect
-at the indicated position when that expression is true. You should
-verify that @var{expr} is syntactically valid or a @code{SyntaxError}
-exception, and unless your code handles this the debugged program may
-terminate.
+Adds a breakpoint in file @var{file}, at line @var{line}. If @var{expr} is not
+nil, it is evaluated and a breakpoint takes effect at the indicated position
+when that expression is true. You should verify that @var{expr} is syntactically
+valid or a @code{SyntaxError} exception, and unless your code handles this the
+debugged program may terminate.
 
 @item remove_breakpoint(bpnum)
 @vindex @code{Byebug.remove_breakpoint}
-When a breakpoint is added, it is assigned a number as a way to
-uniquely identify it. (There can be more than one breakpoint on a
-given line.) To remove a breakpoint, use @code{remove_breakpoint} with
-breakpoint number @var{bpnum}.
+When a breakpoint is added, it is assigned a number as a way to uniquely
+identify it. (There can be more than one breakpoint on a given line.) To remove
+a breakpoint, use @code{remove_breakpoint} with breakpoint number @var{bpnum}.
 
 @item breakpoints
 @vindex @code{Byebug.breakpoints}
@@ -3252,7 +3250,7 @@ Return a list of the breakpoints that have been added but not removed.
 
 @node Byebug.Breakpoint
 @subsection The @code{Byebug::Breakpoint} Class
-Breakpoint are objects in the @code{Byebug::Breakpoint} class.
+Breakpoints are objects in the @code{Byebug::Breakpoint} class.
 @table @code
 @item enabled?
 @vindex @code{Byebug::Breakpoints.enabled?}
@@ -3260,15 +3258,17 @@ Returns whether breakpoint is enabled or not.
 
 @item enabled=
 @vindex @code{Byebug::Breakpoints.enabled=}
-Sets whether breakpoint is enabled or not.
+Sets a breakpoint as enabled or not.
 
 @item expr
 @vindex @code{Byebug::Breakpoints.expr}
-Expression which has to be true at the point where the breakpoint is
+Returns an expression which has to be true at the point where the breakpoint is
 set before we stop.
 
 @item expr=
 @vindex @code{Byebug::Breakpoints.expr=}
+Sets an expression which has to be true at the point where the breakpoint is set
+before we stop.
 
 @item hit_condition
 @item hit_condition=
@@ -3289,8 +3289,8 @@ Sets the hit value of the breakpoint.
 
 @item id
 @cindex @code{Byebug::Breakpoints.id}
-A numeric name for the breakpoint which is used in listing breakpoints
-and removing, enabling or disabling the breakpoint
+A numeric name for the breakpoint which is used in listing breakpoints and
+removing, enabling or disabling the breakpoint.
 
 @item pos
 @vindex @code{Byebug::Breakpoints.pos=}
@@ -3310,56 +3310,54 @@ Sets the file name in which the breakpoint occurs.
 
 @node Byebug.Context
 @subsection The @code{Byebug::Context} Class
-Callbacks in @code{Byebug:Context} get called when a stopping point
-or an event is reached. It has information about the suspended program
-which enable a byebug to inspect the frame stack, evaluate variables
-from the perspective of the debugged program, and contains information
-about the place the debugged program is stopped.
+Callbacks in @code{Byebug:Context} get called when a stopping point or an event
+is reached. It has information about the suspended program which enable byebug
+to inspect the frame stack, evaluate variables from the perspective of the
+debugged program, and contains information about the place the debugged program
+is stopped.
 
 @table @code
 @item at_line(@var{file}, @var{line})
 @vindex Byebug::Context::at_line(@var{file}, @var{line})
-This routine is called when byebug encounters a ``line'' event for
-which it has been indicated we want to stop at, such as by hitting a
-breakpoint or by some sort of stepping.
+This routine is called when byebug encounters a ``line'' event for which it has
+been indicated we want to stop at, such as by hitting a breakpoint or by some
+sort of stepping.
 
 @item at_return(@var{file}, @var{line})
 @vindex Byebug::Context::at_return(@var{file}, @var{line})
-This routine is called when byebug encounters a ``return'' event for
-which it has been indicated we want to stop at, such as by hitting a
-@code{finish} statement.
+This routine is called when byebug encounters a ``return'' event for which it
+has been indicated we want to stop at, such as by hitting a @code{finish}
+statement.
 
 @item debug_load(@var{file}, @var{stop-initially})
 @vindex Byebug::Context::debug_load(@var{file}, @var{stop-initially})
-This method should be used to debug a file. If the file terminates
-normally, @code{nil} is returned. If not a backtrace is returned.
+This method should be used to debug a file. If the file terminates normally,
+@code{nil} is returned. If not a backtrace is returned.
 
-The @var{stop-initially} parameter indicates whether the program
-should stop after loading. If an explicit call to byebug is in
-the debugged program, you may want to set this @code{false}.
+The @var{stop-initially} parameter indicates whether the program should stop
+after loading. If an explicit call to byebug is in the debugged program, you may
+want to set this @code{false}.
 @end table
 
 @node Byebug.Command
 @subsection The @code{Byebug::Command} Class
+Each command you run is in fact its own class. Should you want to extend byebug,
+it's pretty easy to do since after all byebug is Ruby.
 
-Each command you run is in fact its own class. Should you want to extend
-byebug, it's pretty easy to do since after all byebug is Ruby.
-
-Each @code{Byebug#Command} class should have the a @code{regexp}
-method. This method returns regular expression for command-line
-strings that match your command. It's up to you to make sure this
-regular expression doesn't conflict with another one. If it does, it's
-undefined which one will get matched and run
+Each @code{Byebug#Command} class should have a @code{regexp} method. This method
+returns regular expression for command-line strings that match your command.
+It's up to you to make sure this regular expression doesn't conflict with
+another one. If it does, it's undefined which one will get matched and run.
 
 In addition the instance needs these methods:
 @table @code
 @item execute
-Code which gets run when you type a command (string) that matches the
-commands regular expression.
+Code which gets run when you type a command (string) that matches the commands
+regular expression.
 @item help
-A string which gets displayed when folks as for help on that command
+A string which gets displayed when folks ask for help on that command.
 @item help_command
-A name used the help system uses to show what commands are available.
+A name the help system uses to show what commands are available.
 @end table
 
 Here's a small example of a new command:
@@ -3426,12 +3424,12 @@ hi
 
 @item byebug @ovar{steps=1}
 @vindex @code{Kernel::byebug}
-Enters byebug in the current thread after a stepping @var{steps} line-event steps.
-Before entering byebug startup script is read.
+Enters byebug in the current thread after a stepping @var{steps} line-event
+steps. Before entering byebug startup script is read.
 
-Setting @var{steps} to 0 will cause a break in byebug subroutine
-and not wait for eany line event to occur. This could be useful you
-want to stop right after the last statement in some scope.
+Setting @var{steps} to 0 will cause a break in byebug subroutine and not wait
+for any line event to occur. This could be useful you want to stop right after
+the last statement in some scope.
 
 Consider this example:
 @smallexample
@@ -3451,10 +3449,12 @@ y = 1
 NameError Exception: undefined local variable or method `a' for main:Object
 (byebug:1)
 @end smallexample
-The byebug will get at the line event which follows @samp{a=1}. This
-is outside the @code{do} block scope where @var{a} is defined. If
-instead you want to stop before leaving the @code{do} loop it is
-possibly to stop right inside the @code{byebug}; call with 0 zero parameter:
+
+Byebug will stop at the line event which follows @samp{a=1}. This is outside the
+@code{do} block scope where @var{a} is defined. If instead you want to stop
+before leaving the @code{do} loop it is possibly to stop right inside
+@code{byebug}; call with 0 zero parameter:
+
 @smallexample
 $ cat scope-test.rb
 
@@ -3467,20 +3467,21 @@ end
 y = 1
 
 $ scope-test.rb:8
-../lib/byebug-base.rb:175
+../lib/byebug.rb:386
 Byebug.current_context.stop_frame = 0
 (byebug:1) where
---> #0 Kernel.byebug(steps#Fixnum) at line ../lib/byebug-base.rb:175
-    #1 at line scope-test.rb:6
-    #2 at line scope-test.rb:4
+--> #0 Kernel.byebug(steps#Fixnum) at ../lib/byebug-base.rb:386
+    #1 at scope-test.rb:6
+    #2 at scope-test.rb:4
 (byebug:1) up
-#1 at line scope-test.rb:6
+#1 at scope-test.rb:6
 (byebug:1) p a
 1
 (byebug:1)
 @end smallexample
-As seen above you will have to position the frame up one to be back in
-your debugged program rather than in byebug.
+
+As seen above you will have to position the frame up one to be back in your
+debugged program rather than in byebug.
 
 @item breakpoint @ovar{steps=1}
 @vindex @code{Kernel::breakpoint}
@@ -3675,12 +3676,11 @@ On my system, this script fails in running @code{make ruby} because the
 fake.rb that got created needed to have a small change:
 
 @smallexample
-
-	    ALT_SEPARATOR = "\"; \
+    ALT_SEPARATOR = "\"; \
 @end smallexample
 should be:
 @smallexample
-	    ALT_SEPARATOR = "\\"; \
+    ALT_SEPARATOR = "\\"; \
 @end smallexample
 
 After fixing this, run @code{make ruby}. Also, I needed to run

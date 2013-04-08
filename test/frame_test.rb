@@ -78,16 +78,16 @@ describe "Frame Command" do
       enter 'set fullpath', 'break 16', 'cont', 'where'
       debug_file 'frame'
       check_output_includes \
-        "-->", "#0", "A.d(e#String)", "at line #{fullpath('frame')}:16",
-               "#1", "A.c", "at line #{fullpath('frame')}:12"
+        "-->", "#0", "A.d(e#String)", "at #{fullpath('frame')}:16",
+               "#1", "A.c"          , "at #{fullpath('frame')}:12"
     end
 
     it "must display current backtrace with full path = false" do
       enter 'set nofullpath', 'break 16', 'cont', 'where'
       debug_file 'frame'
       check_output_includes \
-        "-->", "#0", "A.d(e#String)", "at line #{short_path(fullpath('frame'))}:16",
-               "#1", "A.c", "at line #{short_path(fullpath('frame'))}:12"
+        "-->", "#0", "A.d(e#String)", "at #{short_path(fullpath('frame'))}:16",
+               "#1", "A.c"          , "at #{short_path(fullpath('frame'))}:12"
     end
   end
 
@@ -96,20 +96,20 @@ describe "Frame Command" do
       enter 'set callstyle last', 'break 16', 'cont', 'where'
       debug_file 'frame'
       check_output_includes \
-        "-->", "#0", "A.d(e#String)", "at line #{fullpath('frame')}:16",
-               "#1", "A.c", "at line #{fullpath('frame')}:12",
-               "#2", "A.b", "at line #{fullpath('frame')}:8",
-               "#3", "A.a", "at line #{fullpath('frame')}:5"
+        "-->", "#0", "A.d(e#String)", "at #{fullpath('frame')}:16",
+               "#1", "A.c"          , "at #{fullpath('frame')}:12",
+               "#2", "A.b"          , "at #{fullpath('frame')}:8" ,
+               "#3", "A.a"          , "at #{fullpath('frame')}:5"
     end
 
     it "displays current backtrace with callstyle 'short'" do
       enter 'set callstyle short', 'break 16', 'cont', 'where'
       debug_file 'frame'
       check_output_includes \
-        "-->", "#0", "d(e)", "at line #{fullpath('frame')}:16",
-               "#1", "c", "at line #{fullpath('frame')}:12",
-               "#2", "b", "at line #{fullpath('frame')}:8",
-               "#3", "a", "at line #{fullpath('frame')}:5"
+        "-->", "#0", "d(e)", "at #{fullpath('frame')}:16",
+               "#1", "c"   , "at #{fullpath('frame')}:12",
+               "#2", "b"   , "at #{fullpath('frame')}:8" ,
+               "#3", "a"   , "at #{fullpath('frame')}:5"
     end
 
     it "displays current backtrace with callstyle 'tracked'" do
