@@ -1,6 +1,8 @@
-## Current
+## 1.0.2
 
-* "autolist" is a default setting now
+* "autolist" and "autoeval" are default settings now
+* Fixes bug which messed up the call-stack when manipulating backtrace
+information and when nexting/stepping
 
 
 ## 1.0.1
