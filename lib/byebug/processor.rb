@@ -243,7 +243,11 @@ module Byebug
         end
 
         preloop(commands, context)
-        CommandProcessor.print_location_and_text(file, line)
+
+        if not Command.settings[:autolist]
+          CommandProcessor.print_location_and_text(file, line)
+        end
+
         while !state.proceed?
           input = if @interface.command_queue.empty?
                     @interface.read_command(prompt(context))
