@@ -1,5 +1,6 @@
 module Byebug
-  module EvalFunctions # :nodoc:
+
+  module EvalFunctions
     def run_with_binding
       binding = @state.context ? get_binding : TOPLEVEL_BINDING
       $__dbg_interface = @state.interface
@@ -21,10 +22,10 @@ module Byebug
       $__dbg_interface = nil
     end
   end
-  
+
   class EvalCommand < Command # :nodoc:
     self.allow_in_control = true
-    
+
     register_setting_get(:autoeval) do
       EvalCommand.unknown
     end
@@ -32,11 +33,14 @@ module Byebug
       EvalCommand.unknown = value
     end
 
+    # Set default value
+    Command.settings[:autoeval] = 1
+
     def match(input)
       @input = input
       super
     end
-    
+
     def regexp
       /^\s*(p|e(?:val)?)\s+/
     end
@@ -44,7 +48,7 @@ module Byebug
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        print "%s\n", debug_eval(expr, b).inspect
+        print "#{debug_eval(expr, b).inspect}\n"
       end
     end
 
@@ -56,22 +60,22 @@ module Byebug
       def help(cmd)
         if cmd == 'p'
           %{
-            p expression\tevaluate expression and print its value
-          }
+           p expression\tevaluate expression and print its value
+           }
         else
           %{
-            e[val] expression\tevaluate expression and print its value,
-            \t\t\talias for p.
-            * NOTE - to turn on autoeval, use 'set autoeval'
-          }
+           e[val] expression\tevaluate expression and print its value,
+           \t\t\talias for p.
+           * NOTE - to turn on autoeval, use 'set autoeval'
+           }
         end
       end
     end
   end
 
-  class PPCommand < Command # :nodoc:
+  class PPCommand < Command
     self.allow_in_control = true
-    
+
     def regexp
       /^\s*pp\s+/
     end
@@ -82,7 +86,7 @@ module Byebug
         PP.pp(debug_eval(@match.post_match, b), out)
       end
       print out.string
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -93,15 +97,15 @@ module Byebug
 
       def help(cmd)
         %{
-          pp expression\tevaluate expression and pretty-print its value
-        }
+         pp expression\tevaluate expression and pretty-print its value
+         }
       end
     end
   end
 
-  class PutLCommand < Command # :nodoc:
+  class PutLCommand < Command
     self.allow_in_control = true
-    
+
     def regexp
       /^\s*putl\s+/
     end
@@ -112,13 +116,13 @@ module Byebug
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "%s\n", columnize(vals, self.class.settings[:width])
+          print "#{columnize(vals, self.class.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
         end
       end
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -129,17 +133,17 @@ module Byebug
 
       def help(cmd)
         %{
-          putl expression\t\tevaluate expression, an array, and columnize its value
-        }
+         putl expression\tevaluate expression, an array, and columnize its value
+         }
       end
     end
   end
-  
-  class PSCommand < Command # :nodoc:
+
+  class PSCommand < Command
     self.allow_in_control = true
-    
+
     include EvalFunctions
-    
+
     def regexp
       /^\s*ps\s+/
     end
@@ -150,13 +154,13 @@ module Byebug
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "%s\n", columnize(vals.sort!, self.class.settings[:width])
+          print "#{columnize(vals.sort!, self.class.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
         end
       end
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -167,10 +171,10 @@ module Byebug
 
       def help(cmd)
         %{
-          ps expression\tevaluate expression, an array, sort, and columnize its value
-        }
+         ps expression\tevaluate expression, an array, sort and columnize its value
+         }
       end
     end
   end
-  
+
 end

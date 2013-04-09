@@ -10,7 +10,7 @@ module Byebug
       ListCommand.always_run = value
     end
 
-    #always_run = 1
+    # Set default value
     Command.settings[:autolist] = 1
 
     def regexp
