@@ -168,24 +168,17 @@ module Byebug
     end
 
     def info_file(*args)
-      unless args[0]
-        info_files
-        return
-      end
+      return info_files unless args[0]
       file = args[0]
-      param =  args[1]
 
-      param = 'basic' unless param
+      param =  args[1] ? args[1] : 'basic'
+
       subcmd = find(InfoFileSubcommands, param)
-      unless subcmd
-        errmsg "Invalid parameter #{param}\n"
-        return
-      end
+      return errmsg "Invalid parameter #{param}\n" unless subcmd
 
       unless LineCache::cached?(file)
         unless LineCache::cached_script?(file)
-          print "File #{file} is not cached\n"
-          return
+          return print "File #{file} is not cached\n"
         end
         LineCache::cache(file, Command.settings[:reload_source_on_change])
       end
@@ -193,10 +186,9 @@ module Byebug
       print "File #{file}"
       path = LineCache.path(file)
       if %w(all basic path).member?(subcmd.name) and path != file
-        print " - %s\n", path
-      else
-        print "\n"
+        print " - #{path}"
       end
+      print "\n"
 
       if %w(all basic lines).member?(subcmd.name)
         lines = LineCache.size(file)
@@ -215,6 +207,7 @@ module Byebug
         stat = LineCache.stat(file)
         print "\t%s\n", stat.mtime if stat
       end
+
       if %w(all sha1).member?(subcmd.name)
         print "\t%s\n", LineCache.sha1(file)
       end
