@@ -314,14 +314,13 @@ mark, e.g.\@code{q!}.
 @node Second Sample Session
 @section Sample Session 2: Delving Deeper (@code{where}, @code{frame}, @code{restart}, @code{autoeval}, @code{break}, @code{ps})
 
-In this section we'll introduce breakpoints, the call stack and
-restarting.  So far we've been doing pretty good in that we've not
-encountered a bug to fix. Let's try another simple example. Okay
-here's the program.
+In this section we'll introduce breakpoints, the call stack and restarting. So
+far we've been doing pretty good in that we've not encountered a bug to fix.
+Let's try another simple example. Okay here's the program.
 
-Below we will debug a simple Ruby program to solve the classic Towers
-of Hanoi puzzle. It is augmented by the bane of programming: some
-command-parameter processing with error checking.
+Below we will debug a simple Ruby program to solve the classic Towers of Hanoi
+puzzle. It is augmented by the bane of programming: some command-parameter
+processing with error checking.
 
 @smallexample
 $ @b{byebug hanoi.rb}
@@ -2074,19 +2073,18 @@ frames in @value{DBG} commands.
 @cindex backtraces
 @cindex tracebacks
 @cindex stack traces
-A backtrace is essentially the same as the call stack: a summary of
-how your script got where it is.  It shows one line per frame, for
-many frames, starting with the place that you are stopped at (frame
-zero), followed by its caller (frame one), and on up the stack.
+A backtrace is essentially the same as the call stack: a summary of how your
+script got where it is.  It shows one line per frame, for many frames, starting
+with the place that you are stopped at (frame zero), followed by its caller
+(frame one), and on up the stack.
 
 @table @code
 @kindex where
 @kindex w @r{(@code{where})}
 @itemx where
 Print the entire stack frame; @code{info stack} is an alias for this command.
-Each frame is numbered and can be referred to in the @code{frame}
-command; @code{up} and @code{down} add or subtract respectively to
-frame numbers shown.  The position of the current frame is marked with
+Each frame is numbered and can be referred to in the @code{frame} command;
+@code{up} and @code{down} add or subtract respectively to frame numbers shown.  The position of the current frame is marked with
 @code{-->}.
 
 @smallexample
@@ -2113,33 +2111,30 @@ Similar, but print only the outermost @var{n} frames.
 @node Selection
 @subsection Selecting a frame (@samp{up}, @samp{down}, @samp{frame})
 
-Commands for listing source code in your script work on whichever
-stack frame is selected at the moment.  Here are the commands for
-selecting a stack frame; all of them finish by printing a brief
-description of the stack frame just selected.
+Commands for listing source code in your script work on whichever stack frame is
+selected at the moment.  Here are the commands for selecting a stack frame; all
+of them finish by printing a brief description of the stack frame just selected.
 
 @table @code
 @kindex up @ovar{n}
 @item up @ovar{n}
-Move @var{n} frames up the stack.  For positive numbers @var{n}, this
-advances toward the outermost frame, to higher frame numbers, to
-frames that have existed longer.  Using a negative @var{n} is the same thing
-as issuing a @code{down} command of the absolute value of the @var{n}.
-Using zero for @var{n} does no frame adjustment, but since the current
-position is redisplayed, it may trigger a resynchronization if there is
-a front end also watching over things.
+Move @var{n} frames up the stack.  For positive numbers @var{n}, this advances
+toward the outermost frame, to higher frame numbers, to frames that have existed
+longer.  Using a negative @var{n} is the same thing as issuing a @code{down}
+command of the absolute value of the @var{n}.  Using zero for @var{n} does no
+frame adjustment, but since the current position is redisplayed, it may trigger
+a resynchronization if there is a front end also watching over things.
 
 @var{n} defaults to one. You may abbreviate @code{up} as @code{u}.
 
 @kindex down @ovar{n}
 @item down @ovar{n}
-Move @var{n} frames down the stack.  For positive numbers @var{n}, this
-advances toward the innermost frame, to lower frame numbers, to frames
-that were created more recently.  Using a negative @var{n} is the same
-as issuing a @code{up} command of the absolute value of the @var{n}.
-Using zero for @var{n} does no frame adjustment, but since the current
-position is redisplayed, it may trigger a resynchronization if there is
-a front end also watching over things.
+Move @var{n} frames down the stack.  For positive numbers @var{n}, this advances
+toward the innermost frame, to lower frame numbers, to frames that were created
+more recently.  Using a negative @var{n} is the same as issuing a @code{up}
+command of the absolute value of the @var{n}.  Using zero for @var{n} does no
+frame adjustment, but since the current position is redisplayed, it may trigger
+a resynchronization if there is a front end also watching over things.
 
 @var{n} defaults to one.
 @end table
@@ -2148,22 +2143,21 @@ a front end also watching over things.
 @kindex frame @r{[}@ovar{n} @r{[}thread @var{thread-num}@r{]}@r{]}
 @cindex current stack frame
 @item frame @ovar{n} @r{[}thread @var{thread-num}@r{]}
-The @code{frame} command allows you to move from one stack frame to
-another, and to print the stack frame you select.  @var{n} is the the
-stack frame number or 0 if no frame number is given; @code{frame 0}
-then will always show the current and most recent stack frame.
+The @code{frame} command allows you to move from one stack frame to another, and
+to print the stack frame you select.  @var{n} is the the stack frame number or 0
+if no frame number is given; @code{frame 0} then will always show the current
+and most recent stack frame.
 
-If a negative number is given, counting is from the other end of the
-stack frame, so @code{frame -1} shows the least-recent, outermost or
-most ``main'' stack frame.
+If a negative number is given, counting is from the other end of the stack
+frame, so @code{frame -1} shows the least-recent, outermost or most ``main''
+stack frame.
 
-Without an argument, @code{frame} prints the current stack
-frame. Since the current position is redisplayed, it may trigger a
-resynchronization if there is a front end also watching over
-things.
+Without an argument, @code{frame} prints the current stack frame. Since the
+current position is redisplayed, it may trigger a resynchronization if there is
+a front end also watching over things.
 
-If a thread number is given then we set the context for evaluating
-expressions to that frame of that thread.
+If a thread number is given then we set the context for evaluating expressions
+to that frame of that thread.
 @end table
 
 @node Stopping
