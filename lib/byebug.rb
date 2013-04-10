@@ -27,10 +27,6 @@ module Byebug
 
   class << self
 
-    # If true, checks the modification time of source files and reloads them if
-    # they were modified
-    attr_accessor :reload_source_on_change
-
     attr_accessor :last_exception
     Byebug.last_exception = nil
 
@@ -73,8 +69,8 @@ module Byebug
     # Get line +line_number+ from file named +filename+.
     # @return "\n" if there was a problem. Leaking blanks are stripped off.
     def line_at(filename, line_number)
-      @reload_source_on_change = nil unless defined?(@reload_source_on_change)
-      line = LineCache::getline(filename, line_number, @reload_source_on_change)
+      @@reload_source_on_change = nil unless defined?(@@reload_source_on_change)
+      line = LineCache::getline(filename, line_number, @@reload_source_on_change)
       return "\n" unless line
       return "#{line.gsub(/^\s+/, '').chomp}"
     end
