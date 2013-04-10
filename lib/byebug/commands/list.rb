@@ -95,6 +95,7 @@ module Byebug
         if e > maxline
           e = maxline
           b = e - listsize + 1
+          b = [1, b].max
         end
 
         return [ b, e ]

@@ -37,6 +37,12 @@ describe 'List Command' do
         check_output_includes "[3, 12] in #{fullpath('list')}"
       end
 
+      it 'must list whole file if number of lines is smaller than listsize' do
+        enter 'set listsize 13', 'list'
+        debug_file 'list'
+        check_output_includes "[1, 12] in #{fullpath('list')}"
+      end
+
     end
 
     describe 'without arguments' do
