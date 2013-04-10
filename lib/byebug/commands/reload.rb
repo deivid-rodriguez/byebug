@@ -11,7 +11,7 @@ module Byebug
     register_setting_set(:reload_source_on_change) do |value|
       Byebug.class_variable_set(:@@reload_source_on_change, value)
     end
-    Command.settings[:reload_source_on_change] = false
+    Command.settings[:reload_source_on_change] = true
 
     def regexp
       /^\s*r(?:eload)?$/
