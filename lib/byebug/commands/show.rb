@@ -129,7 +129,7 @@ module Byebug
         end
       when /^listsize$/
         listlines = Command.settings[:listsize]
-        return "Number of source lines to list by default is #{listlines}."
+        return "Number of source lines to list is #{listlines}."
       when /^port$/
         return "server port is #{Byebug::PORT}."
       when /^trace$/

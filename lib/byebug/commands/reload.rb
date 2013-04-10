@@ -5,12 +5,13 @@ module Byebug
     self.allow_in_control = true
 
     register_setting_get(:reload_source_on_change) do
-      Byebug.reload_source_on_change
+      Byebug.class_variable_get(:@@reload_source_on_change)
     end
 
     register_setting_set(:reload_source_on_change) do |value|
-      Byebug.reload_source_on_change = value
+      Byebug.class_variable_set(:@@reload_source_on_change, value)
     end
+    Command.settings[:reload_source_on_change] = false
 
     def regexp
       /^\s*r(?:eload)?$/
@@ -24,7 +25,7 @@ module Byebug
     private
 
     def source_reloading
-      Byebug.reload_source_on_change ? 'on' : 'off'
+      Command.settings[:reload_source_on_change] ? 'on' : 'off'
     end
 
     class << self

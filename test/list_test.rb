@@ -8,7 +8,10 @@ describe "List Command" do
     after  { LineCache.clear_file_cache }
 
     describe "listsize" do
-      before { Byebug::Command.settings[:listsize] = 3 }
+      before do
+        Byebug::Command.settings[:listsize] = 3
+        Byebug::Command.settings[:autolist] = 0
+      end
 
       it "must show lines according to :listsize setting" do
         enter 'set listsize 4', 'break 5', 'cont', 'list'
@@ -21,6 +24,19 @@ describe "List Command" do
         debug_file 'list'
         check_output_includes "[4, 6] in #{fullpath('list')}"
       end
+
+      it "must move range up when it goes before begining of file" do
+        enter 'set listsize 10', 'break 3', 'cont', 'list'
+        debug_file 'list'
+        check_output_includes "[1, 10] in #{fullpath('list')}"
+      end
+
+      it "must move range down when it goes after end of file" do
+        enter 'set listsize 10', 'break 10', 'cont', 'list'
+        debug_file 'list'
+        check_output_includes "[3, 12] in #{fullpath('list')}"
+      end
+
     end
 
     describe "without arguments" do
@@ -116,7 +132,8 @@ describe "List Command" do
       it "must show nothing if there is no such lines" do
         enter 'list 44,44'
         debug_file 'list'
-        check_output_includes "[44, 44] in #{fullpath('list')}"
+        check_error_includes 'Invalid line range'
+        check_output_doesnt_include "[44, 44] in #{fullpath('list')}"
         check_output_doesnt_include /^44  \S/
       end
 
@@ -130,7 +147,6 @@ describe "List Command" do
     end
 
     describe "reload source" do
-      before { Byebug::Command.settings[:reload_source_on_change] = false }
       after { change_line_in_file(fullpath('list'), 4, '4') }
 
       it "must not reload if setting is false" do

@@ -10,8 +10,6 @@ require 'linecache19'
 
 module Byebug
 
-  @reload_source_on_change = false
-
   self.handler = CommandProcessor.new
 
   # Default options to Byebug.start
@@ -66,7 +64,8 @@ module Byebug
     end
 
     def source_reload
-      Object.send(:remove_const, "SCRIPT_LINES__") if Object.const_defined?("SCRIPT_LINES__")
+      Object.send(:remove_const, "SCRIPT_LINES__") if
+        Object.const_defined?("SCRIPT_LINES__")
       Object.const_set("SCRIPT_LINES__", {})
       LineCache::clear_file_cache
     end
@@ -74,8 +73,8 @@ module Byebug
     # Get line +line_number+ from file named +filename+.
     # @return "\n" if there was a problem. Leaking blanks are stripped off.
     def line_at(filename, line_number)
-      @reload_on_change = nil unless defined?(@reload_on_change)
-      line = LineCache::getline(filename, line_number, @reload_on_change)
+      @reload_source_on_change = nil unless defined?(@reload_source_on_change)
+      line = LineCache::getline(filename, line_number, @reload_source_on_change)
       return "\n" unless line
       return "#{line.gsub(/^\s+/, '').chomp}"
     end

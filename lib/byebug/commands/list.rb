@@ -18,37 +18,19 @@ module Byebug
     end
 
     def execute
-      listsize = Command.settings[:listsize]
-      if !@match || !(@match[1] || @match[2])
-        b = @state.previous_line ?
-        @state.previous_line + listsize : @state.line - (listsize/2)
-        e = b + listsize - 1
-      elsif @match[1] == '-'
-        b = if @state.previous_line
-              if  @state.previous_line > 0
-                @state.previous_line - listsize
-              else
-                @state.previous_line
-              end
-            else
-              @state.line - (listsize/2)
-            end
-        e = b + listsize - 1
-      elsif @match[1] == '='
-        @state.previous_line = nil
-        b = @state.line - (listsize/2)
-        e = b + listsize -1
-      else
-        b, e = @match[2].split(/[-,]/)
-        if e
-          b = b.to_i
-          e = e.to_i
-        else
-          b = b.to_i - (listsize/2)
-          e = b + listsize - 1
-        end
+      Byebug.source_reload if Command.settings[:reload_source_on_change]
+      lines = LineCache::getlines(@state.file,
+                                  Command.settings[:reload_source_on_change])
+      if !lines
+        errmsg "No sourcefile available for #{@state.file}\n"
+        return @state.previous_line
       end
-      @state.previous_line = display_list(b, e, @state.file, @state.line)
+
+      b, e = set_line_range(Command.settings[:listsize], lines.size)
+      return @state.previous_line if b < 0
+
+      print "[#{b}, #{e}] in #{@state.file}\n"
+      @state.previous_line = display_list(b, e, lines, @state.line)
     end
 
     class << self
@@ -69,28 +51,69 @@ module Byebug
 
     private
 
-      # Show FILE from line B to E where CURRENT is the current line number.
-      # If we can show from B to E then we return B, otherwise we return the
-      # previous line @state.previous_line.
-      def display_list(b, e, file, current)
-        print "[%d, %d] in %s\n", b, e, file
-        lines = LineCache::getlines(file,
-                                    Command.settings[:reload_source_on_change])
-        if lines
-          return @state.previous_line if b >= lines.size
-          e = lines.size if lines.size < e
-          [b, 1].max.upto(e) do |n|
-            if n > 0 && lines[n-1]
-              if n == current
-                print "=> %d  %s\n", n, lines[n-1].chomp
+      ##
+      # Set line range to be printed by list
+      #
+      # @param listsize - number of lines to be printed
+      # @param maxline - max line number that can be printed
+      #
+      def set_line_range(listsize, maxline)
+        if !@match || !(@match[1] || @match[2])
+          b = @state.previous_line ?
+          @state.previous_line + listsize : @state.line - (listsize/2)
+        elsif @match[1] == '-'
+          b = if @state.previous_line
+                if  @state.previous_line > 0
+                  @state.previous_line - listsize
+                else
+                  @state.previous_line
+                end
               else
-                print "   %d  %s\n", n, lines[n-1].chomp
+                @state.line - (listsize/2)
               end
+        elsif @match[1] == '='
+          @state.previous_line = nil
+          b = @state.line - (listsize/2)
+        else
+          b, e = @match[2].split(/[-,]/)
+          if e
+            b = b.to_i
+            e = e.to_i
+          else
+            b = b.to_i - (listsize/2)
+          end
+        end
+
+        if b > maxline
+          errmsg "Invalid line range"
+          return [ -1, -1 ]
+        end
+
+        b = [1, b].max
+        e ||=  b + listsize - 1
+
+        if e > maxline
+          e = maxline
+          b = e - listsize + 1
+        end
+
+        return [ b, e ]
+      end
+
+      ##
+      # Show file lines in LINES from line B to line E where CURRENT is the
+      # current line number. If we can show from B to E then we return B,
+      # otherwise we return the previous line @state.previous_line.
+      #
+      def display_list(b, e, lines, current)
+        b.upto(e) do |n|
+          if n > 0 && lines[n-1]
+            if n == current
+              print "=> %d  %s\n", n, lines[n-1].chomp
+            else
+              print "   %d  %s\n", n, lines[n-1].chomp
             end
           end
-        else
-          errmsg "No sourcefile available for %s\n", file
-          return @state.previous_line
         end
         return e == lines.size ? @state.previous_line : b
       end

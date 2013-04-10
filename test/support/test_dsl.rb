@@ -102,6 +102,10 @@ module TestDsl
     queue_messages.send(check_method, messages)
   end
 
+  def check_error_includes(*args)
+    check_output :must_include_in_order, *args, interface.error_queue
+  end
+
   def check_output_includes(*args)
     check_output :must_include_in_order, *args
   end

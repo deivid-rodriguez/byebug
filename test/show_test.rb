@@ -133,7 +133,7 @@ describe "Show Command" do
     temporary_change_hash_value(Byebug::Command.settings, :listsize, 10) do
       enter 'show listsize'
       debug_file 'show'
-      check_output_includes 'Number of source lines to list by default is 10.'
+      check_output_includes 'Number of source lines to list is 10.'
     end
   end
 
