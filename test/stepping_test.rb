@@ -52,7 +52,8 @@ describe "Stepping Commands" do
     end
 
     describe "Post Mortem" do
-      temporary_change_hash_value(Byebug::Command.settings, :autoeval, false)
+      before { Byebug::Command.settings[:autoeval] = 0 }
+
       it "must not work in post-mortem mode" do
         skip("No post morten mode for now")
         enter 'cont', "next"
@@ -106,7 +107,8 @@ describe "Stepping Commands" do
     end
 
     describe "Post Mortem" do
-      temporary_change_hash_value(Byebug::Command.settings, :autoeval, false)
+      before { Byebug::Command.settings[:autoeval] = 0 }
+
       it "must not work in post-mortem mode" do
         skip("No post morten mode for now")
         enter 'cont', "step"

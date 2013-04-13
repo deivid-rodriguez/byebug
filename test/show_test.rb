@@ -4,23 +4,18 @@ describe "Show Command" do
   include TestDsl
 
   describe "annotate" do
-    temporary_change_method_value(Byebug, :annotate, nil)
-
-    it "must show annotate setting" do
-      enter 'show annotate'
-      debug_file 'show'
-      check_output_includes "Annotation level is 0"
-    end
-
     it "must show annotate setting" do
       enter 'show annotate'
       debug_file 'show'
       Byebug.annotate.must_equal 0
+      check_output_includes "Annotation level is 0"
     end
   end
 
   describe "args" do
-    temporary_change_hash_value(Byebug::Command.settings, :argv, %w{foo bar})
+    before do
+      Byebug::Command.settings[:argv] = %w{foo bar}
+    end
 
     it "must show args" do
       Byebug.send(:remove_const, "RDEBUG_SCRIPT") if Byebug.const_defined?("RDEBUG_SCRIPT")
@@ -276,13 +271,11 @@ describe "Show Command" do
   end
 
   describe "Post Mortem" do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 0)
-
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
       enter 'cont', "show autolist"
       debug_file 'post_mortem'
-      check_output_includes "autolist is off."
+      check_output_includes "autolist is on."
     end
   end
 

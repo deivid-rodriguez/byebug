@@ -1,6 +1,6 @@
 module Byebug
 
-  class RestartCommand < Command # :nodoc:
+  class RestartCommand < Command
     self.allow_in_control = true
 
     def regexp

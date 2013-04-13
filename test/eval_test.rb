@@ -38,8 +38,6 @@ describe 'Eval Command' do
   end
 
   describe 'stack trace on error' do
-    temporary_change_hash_value(Byebug::Command.settings, :stack_trace_on_error, false)
-
     it 'must show a stack trace if showing trace on error is enabled' do
       enter 'set notrace', 'eval 2 / 0'
       debug_file 'eval'

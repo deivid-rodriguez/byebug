@@ -22,7 +22,7 @@ module Byebug
       if expr
         if expr !~ /^\s*if\s+(.+)/
           if file or line
-            errmsg "Expecting 'if' in breakpoint condition; got: #{expr}.\n"
+            errmsg "Expecting \"if\" in breakpoint condition; got: #{expr}.\n"
           else
             errmsg "Invalid breakpoint location: #{expr}.\n"
           end

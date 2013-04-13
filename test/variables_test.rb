@@ -1,12 +1,11 @@
 require_relative 'test_helper'
 
 describe "Variables Command" do
-
-  extend TestDsl::ClassMethods
-
-  temporary_change_hash_value(Byebug::Command.settings, :width, 40)
-
   include TestDsl
+
+  def after_setup
+    Byebug::Command.settings[:width] = 40
+  end
 
   describe "class variables" do
     it "must show variables" do
@@ -82,15 +81,13 @@ describe "Variables Command" do
     end
 
     it "must cut long variable values according to :width setting" do
-      Byebug::Command.settings[:width] = 20
-      enter 'break 25', 'cont', 'var instance v'
+      enter 'set width 20', 'break 25', 'cont', 'var instance v'
       debug_file 'variables'
       check_output_includes '@inst_c = "1111111111111111...'
     end
 
     it "must show fallback message if value doesn't have #to_s or #inspect methods" do
-      Byebug::Command.settings[:width] = 21
-      enter 'break 25', 'cont', 'var instance v'
+      enter 'set width 21', 'break 25', 'cont', 'var instance v'
       debug_file 'variables'
       check_output_includes '@inst_d = *Error in evaluation*'
     end
@@ -110,9 +107,9 @@ describe "Variables Command" do
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       skip("No post morten mode for now")
-      #enter 'cont', 'var local'
-      #debug_file 'post_mortem'
-      #check_output_includes "x => nil", "z => 4"
+      enter 'cont', 'var local'
+      debug_file 'post_mortem'
+      check_output_includes "x => nil", "z => 4"
     end
   end
 

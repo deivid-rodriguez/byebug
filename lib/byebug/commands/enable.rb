@@ -16,14 +16,15 @@ module Byebug
         return nil unless pos
         breakpoints.each do |b|
           if b.id == pos
-            enabled = ("Enable" == is_enable)
+            enabled = ('Enable' == is_enable)
             if enabled
               unless syntax_valid?(b.expr)
-                errmsg("Expression \"#{b.expr}\" syntactically incorrect; breakpoint remains disabled.\n")
+                errmsg "Expression \"#{b.expr}\" syntactically incorrect; " \
+                       "breakpoint remains disabled.\n"
                 break
               end
             end
-            b.enabled = ("Enable" == is_enable)
+            b.enabled = ('Enable' == is_enable)
             break
           end
         end
@@ -38,7 +39,7 @@ module Byebug
       args.each do |pos|
         pos = get_int(pos, "#{is_enable} display", 1, @state.display.size)
         return nil unless pos
-        @state.display[pos-1][0] = ("Enable" == is_enable)
+        @state.display[pos-1][0] = ('Enable' == is_enable)
       end
     end
 
@@ -49,11 +50,11 @@ module Byebug
       [
        ['breakpoints', 2, 'Enable specified breakpoints',
         'Give breakpoint numbers (separated by spaces) as arguments. This is ' \
-        'used to cancel the effect of the \"disable\" command.'],
+        'used to cancel the effect of the "disable" command.'],
        ['display', 2,
         'Enable some expressions to be displayed when program stops',
         'Arguments are the code numbers of the expressions to resume '     \
-        'displaying. Do \"info display\" to see the current list of code ' \
+        'displaying. Do "info display" to see the current list of code ' \
         'numbers.'],
       ].map do |name, min, short_help, long_help|
       SubcmdStruct.new(name, min, short_help, long_help)
@@ -65,8 +66,8 @@ module Byebug
 
     def execute
       if not @match[1]
-        errmsg "\"enable\" must be followed \"display\", \"breakpoints\"" +
-          " or breakpoint numbers.\n"
+        errmsg "\"enable\" must be followed by \"display\", \"breakpoints\" " \
+               "or breakpoint numbers.\n"
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
@@ -74,17 +75,17 @@ module Byebug
         if subcmd
           send("enable_#{subcmd.name}", args)
         else
-          send("enable_breakpoints", args.unshift(param))
+          send('enable_breakpoints', args.unshift(param))
         end
       end
     end
 
     def enable_breakpoints(args)
-      enable_disable_breakpoints("Enable", args)
+      enable_disable_breakpoints('Enable', args)
     end
 
     def enable_display(args)
-      enable_disable_display("Enable", args)
+      enable_disable_display('Enable', args)
     end
 
     class << self
@@ -99,7 +100,7 @@ module Byebug
           return "Invalid \"enable\" subcommand \"#{args[1]}\"." unless subcmd
 
           str = subcmd.short_help + '.'
-          str += "\n" + subcmd.long_help if subcmd.long_help
+          str += '\n' + subcmd.long_help if subcmd.long_help
           return str
         end
 
@@ -127,7 +128,7 @@ module Byebug
         'breakpoint is not forgotten, but has no effect until reenabled.'],
        ['display', 1, 'Disable some display expressions when program stops',
         'Arguments are the code numbers of the expressions to stop '       \
-        'displaying. Do \"info display\" to see the current list of code ' \
+        'displaying. Do "info display" to see the current list of code ' \
         'numbers.'],
       ].map do |name, min, short_help, long_help|
       SubcmdStruct.new(name, min, short_help, long_help)
@@ -139,8 +140,8 @@ module Byebug
 
     def execute
       if not @match[1]
-        errmsg "\"disable\" must be followed \"display\", \"breakpoints\"" +
-          " or breakpoint numbers.\n"
+        errmsg "\"disable\" must be followed by \"display\", \"breakpoints\" " \
+               "or breakpoint numbers.\n"
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
@@ -148,17 +149,17 @@ module Byebug
         if subcmd
           send("disable_#{subcmd.name}", args)
         else
-          send("disable_breakpoints", args.unshift(param))
+          send('disable_breakpoints', args.unshift(param))
         end
       end
     end
 
     def disable_breakpoints(args)
-      enable_disable_breakpoints("Disable", args)
+      enable_disable_breakpoints('Disable', args)
     end
 
     def disable_display(args)
-      enable_disable_display("Disable", args)
+      enable_disable_display('Disable', args)
     end
 
     class << self
@@ -173,7 +174,7 @@ module Byebug
           return "Invalid \"disable\" subcommand \"#{args[1]}\"." unless subcmd
 
           str = subcmd.short_help + '.'
-          str += "\n" + subcmd.long_help if subcmd.long_help
+          str += '\n' + subcmd.long_help if subcmd.long_help
           return str
         end
 

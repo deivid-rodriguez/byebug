@@ -10,16 +10,39 @@ module TestDsl
 
   def self.included(base)
     base.class_eval do
-      extend ClassMethods
       before do
-        Byebug::Command.settings[:byebugtesting] = true
+        load_defaults
         Byebug.interface = TestInterface.new
         Byebug.handler.display.clear
       end
-      after do
-        Byebug.handler.display.clear
-      end
     end
+  end
+
+  ##
+  # Loads byebug default settings
+  #
+  def load_defaults
+    Byebug::Command.settings[:byebugtesting] = true
+    Byebug::Command.settings[:basename] = false
+    Byebug::Command.settings[:callstyle] = :last
+    Byebug::Command.settings[:force_stepping] = false
+    Byebug::Command.settings[:full_path] = true
+    Byebug::Command.settings[:listsize] = 10
+    Byebug::Command.settings[:stack_trace_on_error] = false
+    Byebug::Command.settings[:tracing_plus] = false
+    Byebug::Command.settings[:width] =
+      ENV['COLUMNS'].to_i > 10 ? ENV['COLUMNS'].to_i : 80
+    Byebug::Command.settings[:argv] = Byebug::ARGV
+    Byebug::Command.settings[:autolist] = 1
+    Byebug::Command.settings[:autoeval] = 1
+    Byebug::Command.settings[:reload_source_on_change] = 1
+    force_unset_const Byebug, 'RDEBUG_SCRIPT'
+    force_set_const Byebug, 'DEFAULT_START_SETTINGS',
+                    init: true, post_mortem: false, tracing: nil
+    force_set_const Byebug, 'ARGV', ARGV.clone
+    force_set_const Byebug, 'PROG_SCRIPT', $0
+    force_set_const Byebug, 'INITIAL_DIR', Dir.pwd
+    Byebug.annotate = 0
   end
 
   ##
@@ -127,8 +150,12 @@ module TestDsl
   end
 
   def force_set_const(klass, const, value)
-    klass.send(:remove_const, const) if klass.const_defined?(const)
+    force_unset_const(klass, const)
     klass.const_set(const, value)
+  end
+
+  def force_unset_const(klass, const)
+    klass.send(:remove_const, const) if klass.const_defined?(const)
   end
 
   def change_line_in_file(file, line, new_line_content)
@@ -162,76 +189,6 @@ module TestDsl
       klass.send(:remove_const, const)
     else
      force_set_const(klass, const, old_value)
-    end
-  end
-
-  def set_tmp_hash(hash, key, value)
-    @old_hashes.merge!({ hash => { key => hash[key] } }) do |k, v1, v2|
-      v1.merge(v2)
-    end
-    hash[key] = value
-  end
-
-  def restore_tmp_hash(hash, key)
-    hash[key] = @old_hashes[hash][key]
-  end
-
-  def set_tmp_const(klass, const, value)
-    @old_consts.merge!({ klass =>
-      { const => klass.const_defined?(const) ?
-                 klass.const_get(const) : :__undefined__ } }) do |k, v1, v2|
-      v1.merge(v2)
-    end
-    value == :__undefined__ ? klass.send(:remove_const, const) :
-                              force_set_const(klass, const, value)
-  end
-
-  def restore_tmp_const(klass, const)
-    @old_consts[klass][const] == :__undefined ?
-                    klass.send(:remove_const, const) :
-                    force_set_const(klass, const, @old_consts[klass][const])
-  end
-
-
-  module ClassMethods
-
-    include Shared
-
-    def temporary_change_method_value(item, method, value)
-      old_value = nil
-      before do
-        old_value = item.send(method)
-        item.send("#{method}=", value)
-      end
-      after do
-        item.send("#{method}=", old_value)
-      end
-    end
-
-    def temporary_change_hash_value(item, key, value)
-      old_value = nil
-      before do
-        old_value = item[key]
-        item[key] = value
-      end
-      after do
-        item[key] = old_value
-      end
-    end
-
-    def temporary_set_const(klass, const, value)
-      old_value = nil
-      before do
-        old_value = klass.const_defined?(const) ? klass.const_get(const) : :__undefined__
-        force_set_const(klass, const, value)
-      end
-      after do
-        if old_value == :__undefined__
-          klass.send(:remove_const, const)
-        else
-          force_set_const(klass, const, old_value)
-        end
-      end
     end
   end
 

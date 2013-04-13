@@ -1,6 +1,6 @@
 module Byebug
 
-  module DisplayFunctions # :nodoc:
+  module DisplayFunctions
 
     def display_expression(exp)
       print "%s = %s\n", exp, debug_silent_eval(exp).to_s
@@ -22,7 +22,7 @@ module Byebug
     end
   end
 
-  class AddDisplayCommand < Command # :nodoc:
+  class AddDisplayCommand < Command
     def regexp
       /^\s*disp(?:lay)?\s+(.+)$/
     end
@@ -47,7 +47,7 @@ module Byebug
     end
   end
 
-  class DisplayCommand < Command # :nodoc:
+  class DisplayCommand < Command
     def self.always_run
       Byebug.annotate = 0 unless Byebug.annotate
       if Byebug.annotate > 1
@@ -78,7 +78,7 @@ module Byebug
     end
   end
 
-  class DeleteDisplayCommand < Command # :nodoc:
+  class DeleteDisplayCommand < Command
 
     def regexp
       /^\s* undisp(?:lay)? \s* (?:(\S+))?$/x
