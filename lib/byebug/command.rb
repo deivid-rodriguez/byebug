@@ -210,6 +210,14 @@ module Byebug
         end
       end
 
+      def debug_warning_eval(str, b = get_binding)
+        begin
+          debug_eval(str, b)
+        rescue :debug_error => e
+          print "#{e.class} Exception: #{e.message}\n"
+        end
+      end
+
       def get_binding
         @state.context.frame_binding(@state.frame_pos)
       end

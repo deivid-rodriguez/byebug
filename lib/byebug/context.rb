@@ -8,8 +8,16 @@ module Byebug
   end
 
   class Context
-    def frame_class(frame_no=0)
-      frame_self(frame_no).class
+    def frame_args(frame_no=0)
+      bind = frame_binding(frame_no)
+      return [] unless eval "__method__"
+      begin
+        eval "self.method(__method__).parameters.map{|(attr, mid)| mid}", bind
+      rescue NameError => e
+        print "(WARNING: retreving args from frame #{frame_no} => " \
+              "#{e.class} Exception: #{e.message})\n     "
+        return []
+      end
     end
 
     def interrupt

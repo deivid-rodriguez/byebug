@@ -288,18 +288,6 @@ Context_frame_locals(int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-Context_frame_args(int argc, VALUE *argv, VALUE self)
-{
-  VALUE binding = Context_frame_binding(argc, argv, self);
-  const char src[] =
-      "__method__ ? " \
-      "self.method(__method__).parameters.map{|(attr, mid)| mid} : []";
-  return NIL_P(binding) ?
-         rb_ary_new() :
-         rb_funcall(binding, rb_intern("eval"), 1, rb_str_new2(src));
-}
-
-static VALUE
 Context_frame_args_info(int argc, VALUE *argv, VALUE self)
 {
   VALUE binding = Context_frame_binding(argc, argv, self);
@@ -509,7 +497,6 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_method", Context_frame_method, -1);
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
-  rb_define_method(cContext, "frame_args", Context_frame_args, -1);
   rb_define_method(cContext, "frame_class", Context_frame_class, -1);
   rb_define_method(cContext, "frame_args_info", Context_frame_args_info, -1);
   rb_define_method(cContext, "frame_locals", Context_frame_locals, -1);
