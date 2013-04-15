@@ -10,7 +10,7 @@ describe 'Restart Command' do
 
   describe 'usual restarting' do
     before do
-      force_set_const Byebug, 'RDEBUG_SCRIPT', 'byebug_script'
+      force_set_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
     end
 
     it 'must be restarted with arguments' do
@@ -21,7 +21,7 @@ describe 'Restart Command' do
         relative_path_from(Pathname.new(Byebug::INITIAL_DIR)).
         cleanpath.to_s
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::RDEBUG_SCRIPT} test/examples/restart.rb 1 2 3")
+        with("#{Byebug::BYEBUG_SCRIPT} test/examples/restart.rb 1 2 3")
       enter 'restart 1 2 3'
       debug_file('restart')
     end
@@ -29,7 +29,7 @@ describe 'Restart Command' do
     it 'must be restarted without arguments' do
       Byebug::Command.settings[:argv] = ['argv']
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::RDEBUG_SCRIPT} argv")
+        with("#{Byebug::BYEBUG_SCRIPT} argv")
       enter 'restart'
       debug_file('restart')
     end
@@ -37,7 +37,7 @@ describe 'Restart Command' do
     it 'must specify arguments by "set" command' do
       Byebug::Command.settings[:argv] = []
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::RDEBUG_SCRIPT} 1 2 3")
+        with("#{Byebug::BYEBUG_SCRIPT} 1 2 3")
       enter 'set args 1 2 3', 'restart'
       debug_file('restart')
     end
@@ -48,11 +48,11 @@ describe 'Restart Command' do
 
     describe 'reexecing' do
       it 'must restart and show a message about reexecing' do
-        force_set_const Byebug, 'RDEBUG_SCRIPT', 'byebug_script'
+        force_set_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
         Byebug::Command.settings[:argv] = ['argv']
         must_restart
         debug_file('restart')
-        check_output_includes "Re exec'ing:\n\t#{Byebug::RDEBUG_SCRIPT} argv"
+        check_output_includes "Re exec'ing:\n\t#{Byebug::BYEBUG_SCRIPT} argv"
       end
     end
 

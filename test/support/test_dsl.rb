@@ -36,7 +36,7 @@ module TestDsl
     Byebug::Command.settings[:autolist] = 1
     Byebug::Command.settings[:autoeval] = 1
     Byebug::Command.settings[:reload_source_on_change] = 1
-    force_unset_const Byebug, 'RDEBUG_SCRIPT'
+    force_unset_const Byebug, 'BYEBUG_SCRIPT'
     force_set_const Byebug, 'DEFAULT_START_SETTINGS',
                     init: true, post_mortem: false, tracing: nil
     force_set_const Byebug, 'ARGV', ARGV.clone

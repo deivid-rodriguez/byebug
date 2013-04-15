@@ -22,7 +22,7 @@ module Byebug
         return
       end
 
-      if not defined? Byebug::RDEBUG_SCRIPT
+      if not defined? Byebug::BYEBUG_SCRIPT
         print "Byebug was not called from the outset...\n"
         if not File.executable?(Byebug::PROG_SCRIPT)
           print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
@@ -33,7 +33,7 @@ module Byebug
           byebug_script = Byebug::PROG_SCRIPT
         end
       else
-        byebug_script = Byebug::RDEBUG_SCRIPT
+        byebug_script = Byebug::BYEBUG_SCRIPT
       end
 
       begin

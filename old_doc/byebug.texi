@@ -1114,9 +1114,9 @@ Restart byebug when your program terminates normally.
 
 @item --no-rewrite-program
 @cindex @option{--no-rewrite-program}
-Normally @code{byebug} will reset the program name @code{$0} from its
-name to the debugged program, and set the its name in variable
-@code{$RDEBUG_0}. In the unlikely even you don't want this use this option.
+Normally @code{byebug} will reset the program name @code{$0} from its name to
+the debugged program, and set the its name in variable @code{$BYEBUG_SCRIPT}. In
+the unlikely even you don't want this use this option.
 
 @item --no-stop
 @cindex @option{--no-stop}

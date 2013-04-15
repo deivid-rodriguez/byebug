@@ -297,8 +297,7 @@ begin
   if RUBY_PLATFORM =~ /mswin/
     byebug_path += '.cmd' unless byebug_path =~ /\.cmd$/i
   end
-  Byebug::RDEBUG_SCRIPT = byebug_path
-  Byebug::BYEBUG_BIN = __FILE__
+  Byebug::BYEBUG_SCRIPT = byebug_path
   Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
 rescue StandardError => e

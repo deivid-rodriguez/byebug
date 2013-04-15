@@ -147,7 +147,7 @@ module Byebug
 
     def at_tracing(context, file, line)
       # Don't trace ourselves
-      return if defined?(Byebug::BYEBUG_BIN) && Byebug::BYEBUG_BIN == file
+      return if defined?(Byebug::BYEBUG_SCRIPT) && Byebug::BYEBUG_SCRIPT == file
 
       file = CommandProcessor.canonic_file(file)
       tracing_plus = Command.settings[:tracing_plus]

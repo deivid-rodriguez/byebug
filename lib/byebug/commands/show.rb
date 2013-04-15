@@ -10,7 +10,7 @@ module Byebug
         return ("Annotation level is #{Byebug.annotate}")
       when /^args$/
         if Command.settings[:argv] and Command.settings[:argv].size > 0
-          if defined?(Byebug::RDEBUG_SCRIPT)
+          if defined?(Byebug::BYEBUG_SCRIPT)
             # byebug was called initially. 1st arg is script name.
             args = Command.settings[:argv][1..-1].join(' ')
           else

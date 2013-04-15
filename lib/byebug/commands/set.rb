@@ -74,7 +74,7 @@ module Byebug
         else
           return
         end
-        if defined?(Byebug::RDEBUG_SCRIPT)
+        if defined?(Byebug::BYEBUG_SCRIPT)
           # byebug was called initially. 1st arg is script name.
           Command.settings[:argv][1..-1] = args
         else

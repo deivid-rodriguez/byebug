@@ -18,14 +18,13 @@ describe "Show Command" do
     end
 
     it "must show args" do
-      Byebug.send(:remove_const, "RDEBUG_SCRIPT") if Byebug.const_defined?("RDEBUG_SCRIPT")
       enter 'show args'
       debug_file 'show'
       check_output_includes 'Argument list to give program being debugged when it is started is "foo bar".'
     end
 
-    it "must not show the first arg if RDEBUG_SCRIPT is defined" do
-      temporary_set_const(Byebug, "RDEBUG_SCRIPT", "bla") do
+    it "must not show the first arg if BYEBUG_SCRIPT is defined" do
+      temporary_set_const(Byebug, "BYEBUG_SCRIPT", "bla") do
         enter 'show args'
         debug_file 'show'
         check_output_includes 'Argument list to give program being debugged when it is started is "bar".'
