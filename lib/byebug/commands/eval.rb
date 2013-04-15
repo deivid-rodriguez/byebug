@@ -23,7 +23,7 @@ module Byebug
     end
   end
 
-  class EvalCommand < Command # :nodoc:
+  class EvalCommand < Command
     self.allow_in_control = true
 
     register_setting_get(:autoeval) do

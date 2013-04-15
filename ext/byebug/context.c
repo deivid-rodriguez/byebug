@@ -17,7 +17,6 @@ context_thread_0(debug_context_t *context)
     return id2ref(context->thread);
 }
 
-
 /* "Step", "Next" and "Finish" do their work by saving information about where
  * to stop next. reset_stepping_stop_points removes/resets this information. */
 extern void
@@ -264,6 +263,20 @@ Context_frame_self(int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+Context_frame_class(int argc, VALUE *argv, VALUE self)
+{
+  debug_context_t *context;
+  debug_frame_t *frame;
+  VALUE frame_no;
+  int frame_n;
+
+  Data_Get_Struct(self, debug_context_t, context);
+  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
+  frame = get_frame_no(context, frame_n);
+  return frame->defined_class;
+}
+
+static VALUE
 Context_frame_locals(int argc, VALUE *argv, VALUE self)
 {
   VALUE binding = Context_frame_binding(argc, argv, self);
@@ -497,6 +510,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
   rb_define_method(cContext, "frame_args", Context_frame_args, -1);
+  rb_define_method(cContext, "frame_class", Context_frame_class, -1);
   rb_define_method(cContext, "frame_args_info", Context_frame_args_info, -1);
   rb_define_method(cContext, "frame_locals", Context_frame_locals, -1);
   rb_define_method(cContext, "stop_next=", Context_stop_next, -1);
