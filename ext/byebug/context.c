@@ -5,6 +5,19 @@ static int thnum_current = 0;
 
 static VALUE idAlive;
 
+static VALUE
+id2ref(VALUE id)
+{
+    return id;
+}
+
+static VALUE
+context_thread_0(debug_context_t *context)
+{
+    return id2ref(context->thread);
+}
+
+
 /* "Step", "Next" and "Finish" do their work by saving information about where
  * to stop next. reset_stepping_stop_points removes/resets this information. */
 extern void
@@ -287,53 +300,91 @@ Context_frame_args_info(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_tracing(VALUE self)
 {
-    debug_context_t *context;
+  debug_context_t *context;
 
-    Data_Get_Struct(self, debug_context_t, context);
-    return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
+  Data_Get_Struct(self, debug_context_t, context);
+  return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
 }
 
 static VALUE
 Context_set_tracing(VALUE self, VALUE value)
 {
-    debug_context_t *context;
+  debug_context_t *context;
 
-    Data_Get_Struct(self, debug_context_t, context);
+  Data_Get_Struct(self, debug_context_t, context);
 
-    if (RTEST(value))
-        CTX_FL_SET(context, CTX_FL_TRACING);
-    else
-        CTX_FL_UNSET(context, CTX_FL_TRACING);
-    return value;
+  if (RTEST(value))
+      CTX_FL_SET(context, CTX_FL_TRACING);
+  else
+      CTX_FL_UNSET(context, CTX_FL_TRACING);
+  return value;
 }
 
 static VALUE
 Context_stop_reason(VALUE self)
 {
-    debug_context_t *context;
-    const char *symbol;
+  debug_context_t *context;
+  const char *symbol;
 
-    Data_Get_Struct(self, debug_context_t, context);
+  Data_Get_Struct(self, debug_context_t, context);
 
-    switch(context->stop_reason)
-    {
-        case CTX_STOP_STEP:
-            symbol = "step";
-            break;
-        case CTX_STOP_BREAKPOINT:
-            symbol = "breakpoint";
-            break;
-        case CTX_STOP_CATCHPOINT:
-            symbol = "catchpoint";
-            break;
-        case CTX_STOP_NONE:
-        default:
-            symbol = "none";
-    }
-    if(CTX_FL_TEST(context, CTX_FL_DEAD))
-        symbol = "post-mortem";
+  switch(context->stop_reason)
+  {
+    case CTX_STOP_STEP:
+      symbol = "step";
+      break;
+    case CTX_STOP_BREAKPOINT:
+      symbol = "breakpoint";
+      break;
+    case CTX_STOP_CATCHPOINT:
+      symbol = "catchpoint";
+      break;
+    case CTX_STOP_NONE:
+    default:
+      symbol = "none";
+  }
+  if(CTX_FL_TEST(context, CTX_FL_DEAD))
+    symbol = "post-mortem";
 
-    return ID2SYM(rb_intern(symbol));
+  return ID2SYM(rb_intern(symbol));
+}
+
+static void
+context_suspend_0(debug_context_t *context)
+{
+    VALUE status;
+
+    status = rb_funcall(context_thread_0(context), rb_intern("status"), 0);
+    if (rb_str_cmp(status, rb_str_new2("run")) == 0)
+      CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
+    else if(rb_str_cmp(status, rb_str_new2("sleep")) == 0)
+      CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
+    else
+      return;
+    CTX_FL_SET(context, CTX_FL_SUSPEND);
+}
+
+static VALUE
+Context_suspend(VALUE self)
+{
+  debug_context_t *context;
+
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (CTX_FL_TEST(context, CTX_FL_SUSPEND))
+    rb_raise(rb_eRuntimeError, "Already suspended.");
+  context_suspend_0(context);
+
+  return Qnil;
+}
+
+static VALUE
+Context_is_suspended(VALUE self)
+{
+  debug_context_t *context;
+
+  Data_Get_Struct(self, debug_context_t, context);
+  return CTX_FL_TEST(context, CTX_FL_SUSPEND) ? Qtrue : Qfalse;
 }
 
 #if 0
@@ -436,6 +487,8 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "ignored?", Context_ignored, 0);
   rb_define_method(cContext, "thnum", Context_thnum, 0);
   rb_define_method(cContext, "stop_reason", Context_stop_reason, 0);
+  rb_define_method(cContext, "suspend", Context_suspend, 0);
+  rb_define_method(cContext, "suspended?", Context_is_suspended, 0);
   rb_define_method(cContext, "tracing", Context_tracing, 0);
   rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
   rb_define_method(cContext, "frame_file", Context_frame_file, -1);

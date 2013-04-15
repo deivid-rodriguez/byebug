@@ -1,5 +1,6 @@
 module Byebug
-  module ThreadFunctions # :nodoc:
+
+  module ThreadFunctions
     def display_context(c, show_top_frame=true)
       c_flag = c.thread == Thread.current ? '+' : ' '
       c_flag = '$' if c.suspended?
@@ -41,7 +42,7 @@ module Byebug
     end
   end
 
-  class ThreadListCommand < Command # :nodoc:
+  class ThreadListCommand < Command
     self.allow_in_control = true
 
     def regexp
@@ -67,7 +68,7 @@ module Byebug
     end
   end
 
-  class ThreadStopCommand < Command # :nodoc:
+  class ThreadStopCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
     self.need_context         = true
@@ -96,7 +97,7 @@ module Byebug
     end
   end
 
-  class ThreadResumeCommand < Command # :nodoc:
+  class ThreadResumeCommand < Command
     self.allow_in_post_mortem = false
     self.allow_in_control = true
     self.need_context = true
@@ -132,7 +133,7 @@ module Byebug
   # Thread switch Must come after "Thread resume" because "switch" is
   # optional
 
-  class ThreadSwitchCommand < Command # :nodoc:
+  class ThreadSwitchCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
     self.need_context         = true
@@ -163,7 +164,7 @@ module Byebug
     end
   end
 
-  class ThreadCurrentCommand < Command # :nodoc:
+  class ThreadCurrentCommand < Command
     self.need_context = true
 
     def regexp

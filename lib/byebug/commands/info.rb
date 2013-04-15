@@ -41,18 +41,18 @@ module Byebug
        ['locals', 2, 'Local variables of the current stack frame'],
        ['program', 2, 'Execution status of the program'],
        ['stack', 2, 'Backtrace of the stack'],
-#      ['thread', 6,  'List info about thread NUM',
-#       'If no thread number is given, we list info for all threads. "terse"' \
-#       ' and "verbose" options are possible. If "terse", just give summary ' \
-#       'thread name information. See "help info threads" for more detail '   \
-#       'about this summary information. If "verbose" is appended to the end' \
-#       ' of the command, then the entire stack trace is given for each '     \
-#       'thread.'],
-#      ['threads', 7, 'information of currently-known threads',
-#       'This information includes whether the thread is the current thread ' \
-#       '(+), it\'s suspended ($) or it\'s ignored (!), plus the thread '     \
-#       'number and the top stack item. If "verbose" is given then the '      \
-#       'entire stack frame is shown.'],
+       ['thread', 6,  'List info about thread NUM',
+        'If no thread number is given, we list info for all threads. "terse"' \
+        ' and "verbose" options are possible. If "terse", just give summary ' \
+        'thread name information. See "help info threads" for more detail '   \
+        'about this summary information. If "verbose" is appended to the end' \
+        ' of the command, then the entire stack trace is given for each '     \
+        'thread.'],
+       ['threads', 7, 'information of currently-known threads',
+        'This information includes whether the thread is the current thread ' \
+        '(+), it\'s suspended ($) or it\'s ignored (!), plus the thread '     \
+        'number and the top stack item. If "verbose" is given then the '      \
+        'entire stack frame is shown.'],
        ['variables', 1,
         'Local and instance variables of the current stack frame']
       ].map do |name, min, short_help, long_help|
@@ -301,56 +301,56 @@ module Byebug
       print_backtrace
     end
 
-#   def info_thread_preamble(arg)
-#     if not @state.context
-#       errmsg "info threads not available here.\n"
-#       return false, false
-#     end
-#     verbose = if arg
-#       subcmd = find(InfoThreadSubcommands, arg)
-#       unless subcmd
-#         errmsg "'terse' or 'verbose' expected. Got '#{arg}'\n"
-#         return false, false
-#       end
-#       'verbose' == subcmd.name
-#     else
-#       false
-#     end
-#     return true, verbose
-#   end
-#   private :info_thread_preamble
+    def info_thread_preamble(arg)
+      if not @state.context
+        errmsg "info threads not available here.\n"
+        return false, false
+      end
+      verbose = if arg
+        subcmd = find(InfoThreadSubcommands, arg)
+        unless subcmd
+          errmsg "'terse' or 'verbose' expected. Got '#{arg}'\n"
+          return false, false
+        end
+        'verbose' == subcmd.name
+      else
+        false
+      end
+      return true, verbose
+    end
+    private :info_thread_preamble
 
-#   def info_threads(*args)
-#     ok, verbose = info_thread_preamble(args[0])
-#     return unless ok
-#     threads = Byebug.contexts.sort_by{|c| c.thnum}.each do |c|
-#       display_context(c, !verbose)
-#       if verbose and not c.ignored?
-#         (0...c.stack_size).each do |idx|
-#           print "\t"
-#           print_frame(idx, false, c)
-#         end
-#       end
-#     end
-#   end
+    def info_threads(*args)
+      ok, verbose = info_thread_preamble(args[0])
+      return unless ok
+      threads = Byebug.contexts.sort_by{|c| c.thnum}.each do |c|
+        display_context(c, !verbose)
+        if verbose and not c.ignored?
+          (0...c.stack_size).each do |idx|
+            print "\t"
+            print_frame(idx, false, c)
+          end
+        end
+      end
+    end
 
-#   def info_thread(*args)
-#     unless args[0]
-#       info_threads(args[0])
-#       return
-#     end
-#     ok, verbose = info_thread_preamble(args[1])
-#     return unless ok
-#     c = parse_thread_num("info thread" , args[0])
-#     return unless c
-#     display_context(c, !verbose)
-#     if verbose and not c.ignored?
-#       (0...c.stack_size).each do |idx|
-#         print "\t"
-#         print_frame(idx, false, c)
-#       end
-#     end
-#   end
+    def info_thread(*args)
+      unless args[0]
+        info_threads(args[0])
+        return
+      end
+      ok, verbose = info_thread_preamble(args[1])
+      return unless ok
+      c = parse_thread_num("info thread" , args[0])
+      return unless c
+      display_context(c, !verbose)
+      if verbose and not c.ignored?
+        (0...c.stack_size).each do |idx|
+          print "\t"
+          print_frame(idx, false, c)
+        end
+      end
+    end
 
     def info_global_variables(*args)
       unless @state.context

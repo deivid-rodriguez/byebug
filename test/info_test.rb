@@ -243,14 +243,13 @@ describe "Info Command" do
 
    describe "Thread info" do
      it "must show threads info when without args" do
-       skip("XXX: Unreliable due to race conditions, needs fix to be reliable")
-       enter 'break 48', 'cont', 'info threads'
-       debug_file 'info'
-       check_output_includes /#<Thread:\S+ run>/, /#<Thread:\S+ run>/
+       enter 'break 47', 'cont', 'info threads'
+       debug_file 'info_threads'
+       check_output_includes /#<Thread:\S+ run>/, /#<Thread:\S+ sleep>/
      end
 
      it "must show thread info" do
-       skip("No thread support")
+       skip("XXX: Unreliable due to race conditions, needs fix to be reliable")
        thread_number = nil
        enter ->{thread_number = context.thnum; "info thread #{context.thnum}"}
        debug_file 'info'
