@@ -10,7 +10,7 @@ module Byebug
   class Context
     def frame_args(frame_no=0)
       bind = frame_binding(frame_no)
-      return [] unless eval "__method__"
+      return [] unless eval "__method__", bind
       begin
         eval "self.method(__method__).parameters.map{|(attr, mid)| mid}", bind
       rescue NameError => e
