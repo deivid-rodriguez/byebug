@@ -167,6 +167,35 @@ module Byebug
       end
     end
 
+    def info_file_path(file)
+      path = LineCache.path(file)
+      if path != file
+        print " - #{path}"
+      end
+    end
+
+    def info_file_lines(file)
+      lines = LineCache.size(file)
+      print "\t %d lines\n", lines if lines
+    end
+
+    def info_file_breakpoints(file)
+      breakpoints = LineCache.trace_line_numbers(file)
+      if breakpoints
+        print "\tbreakpoint line numbers:\n"
+        print columnize(breakpoints.to_a.sort, self.class.settings[:width])
+      end
+    end
+
+    def info_file_mtime(file)
+      stat = LineCache.stat(file)
+      print "\t%s\n", stat.mtime if stat
+    end
+
+    def info_file_sha1(file)
+      print "\t%s\n", LineCache.sha1(file)
+    end
+
     def info_file(*args)
       return info_files unless args[0]
       file = args[0]
@@ -184,33 +213,13 @@ module Byebug
       end
 
       print "File #{file}"
-      path = LineCache.path(file)
-      if %w(all basic path).member?(subcmd.name) and path != file
-        print " - #{path}"
-      end
+      info_file_path(file) if %w(all basic path).member?(subcmd.name)
       print "\n"
 
-      if %w(all basic lines).member?(subcmd.name)
-        lines = LineCache.size(file)
-        print "\t %d lines\n", lines if lines
-      end
-
-      if %w(all breakpoints).member?(subcmd.name)
-        breakpoints = LineCache.trace_line_numbers(file)
-        if breakpoints
-          print "\tbreakpoint line numbers:\n"
-          print columnize(breakpoints.to_a.sort, self.class.settings[:width])
-        end
-      end
-
-      if %w(all mtime).member?(subcmd.name)
-        stat = LineCache.stat(file)
-        print "\t%s\n", stat.mtime if stat
-      end
-
-      if %w(all sha1).member?(subcmd.name)
-        print "\t%s\n", LineCache.sha1(file)
-      end
+      info_file_lines(file) if %w(all basic lines).member?(subcmd.name)
+      info_file_breakpoints(file) if %w(all breakpoints).member?(subcmd.name)
+      info_file_mtime(file) if %w(all mtime).member?(subcmd.name)
+      info_file_sha1(file) if %w(all sha1).member?(subcmd.name)
     end
 
     def info_files(*args)
