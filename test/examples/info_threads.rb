@@ -43,6 +43,6 @@ end
 
 A.new.b
 A.new.a
-A.new.c
 @break = true
 t1.join
+A.new.c

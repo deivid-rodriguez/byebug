@@ -243,9 +243,9 @@ describe "Info Command" do
 
    describe "Thread info" do
      it "must show threads info when without args" do
-       enter 'break 47', 'cont', 'info threads'
+       enter 'break 48', 'cont', 'info threads'
        debug_file 'info_threads'
-       check_output_includes /#<Thread:\S+ run>/, /#<Thread:\S+ sleep>/
+       check_output_includes /#<Thread:\S+ run>/
      end
 
      it "must show thread info" do
