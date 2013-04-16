@@ -74,15 +74,12 @@ module Byebug
         else
           return
         end
+      when /^args$/
         if defined?(Byebug::BYEBUG_SCRIPT)
-          # byebug was called initially. 1st arg is script name.
           Command.settings[:argv][1..-1] = args
         else
-          # byebug wasn't called initially. 1st arg is not script name.
           Command.settings[:argv] = args
         end
-      when /^args$/
-        Command.settings[:argv][1..-1] = args
       when /^autolist$/
         Command.settings[:autolist] = (set_on ? 1 : 0)
       when /^autoeval$/
@@ -142,19 +139,13 @@ module Byebug
         Command.settings[:tracing] = set_on
       when /^listsize$/
         listsize = get_int(args[0], "Set listsize", 1, nil, 10)
-        if listsize
-          self.class.settings[:listsize] = listsize
-        else
-          return
-        end
+        return unless listsize
+        self.class.settings[:listsize] = listsize
       when /^width$/
         width = get_int(args[0], "Set width", 10, nil, 80)
-        if width
-          self.class.settings[:width] = width
-          ENV['COLUMNS'] = width.to_s
-        else
-          return
-        end
+        return unless width
+        self.class.settings[:width] = width
+        ENV['COLUMNS'] = width.to_s
       else
         return print "Unknown setting #{@match[1]}.\n"
       end

@@ -72,13 +72,16 @@ module TestDsl
   # the input queue. You can use that for making asserts on the current test. If
   # you specified the block and it never was executed, the test will fail.
   #
+  # The Byebug::PROG_SCRIPT constant will be set to the file to be debugged
+  # unless the second parameter says otherwise.
+  #
   # Usage:
   #   debug "ex1" # ex1 should be placed in test/examples/ex1.rb
   #
   #   enter 'b 4', 'cont'
   #   debug("ex1") { state.line.must_equal 4 }
   #
-  def debug_file(filename, &block)
+  def debug_file(filename, set_prog_script = false, &block)
     is_test_block_called = false
     debug_completed = false
     exception = nil
@@ -96,6 +99,9 @@ module TestDsl
           raise e
         end
       end
+    end
+    if set_prog_script
+      force_set_const(Byebug, 'PROG_SCRIPT', Pathname.new(fullpath(filename)))
     end
     Byebug.start do
       load fullpath(filename)

@@ -385,7 +385,7 @@ module Kernel
   end
   alias breakpoint byebug unless respond_to?(:breakpoint)
 
-  #
+  ##
   # Returns a binding of n-th call frame
   #
   def binding_n(n = 0)

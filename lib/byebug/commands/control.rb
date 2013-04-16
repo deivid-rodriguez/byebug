@@ -12,15 +12,11 @@ module Byebug
     end
 
     def execute
-      if not defined? Byebug::PROG_SCRIPT
-        errmsg "Don't know name of debugged program\n"
-        return
-      end
+      return errmsg "Don't know name of debugged program\n" unless
+        defined? Byebug::PROG_SCRIPT
 
-      if not File.exist?(File.expand_path(Byebug::PROG_SCRIPT))
-        errmsg "Ruby program #{Byebug::PROG_SCRIPT} doesn't exist\n"
-        return
-      end
+      return errmsg "Ruby program #{Byebug::PROG_SCRIPT} doesn't exist\n" unless
+        File.exist?(File.expand_path(Byebug::PROG_SCRIPT))
 
       if not defined? Byebug::BYEBUG_SCRIPT
         print "Byebug was not called from the outset...\n"
@@ -28,12 +24,12 @@ module Byebug
           print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
                 "We'll add a call to Ruby.\n"
           ruby = begin defined?(Gem) ? Gem.ruby : "ruby" rescue "ruby" end
-          byebug_script = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
+          cmd = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
         else
-          byebug_script = Byebug::PROG_SCRIPT
+          cmd = Byebug::PROG_SCRIPT
         end
       else
-        byebug_script = Byebug::BYEBUG_SCRIPT
+        cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT}"
       end
 
       begin
@@ -43,16 +39,12 @@ module Byebug
       end
 
       if @match[1]
-        argv = [Byebug::PROG_SCRIPT] + @match[1].split(/[ \t]+/)
+        cmd += " #{@match[1]}"
+      elsif not defined? Command.settings[:argv]
+        return errmsg "Arguments not set. Use 'set args' to set them.\n"
       else
-        if not defined? Command.settings[:argv]
-          errmsg "Arguments have not been set. Use 'set args' to set them.\n"
-          return
-        else
-          argv = Command.settings[:argv]
-        end
+        cmd += " #{Command.settings[:argv].compact.shelljoin}"
       end
-      cmd = "#{byebug_script} #{argv.compact.join(' ')}"
 
       # An execv would be preferable to the "exec" below.
       print "Re exec'ing:\n\t#{cmd}\n"
