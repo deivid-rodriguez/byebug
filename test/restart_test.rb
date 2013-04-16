@@ -15,25 +15,25 @@ describe 'Restart Command' do
 
     it 'must be restarted with arguments' do
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::BYEBUG_SCRIPT} #{fullpath('restart')} 1 2 3")
+        with("#{Byebug::BYEBUG_SCRIPT} 1 2 3")
       enter 'restart 1 2 3'
-      debug_file 'restart', true
+      debug_file 'restart'
     end
 
     it 'arguments must be correctly escaped' do
       Byebug::Command.settings[:argv] = ['argv1', 'argv 2']
       Byebug::RestartCommand.any_instance.expects(:exec).with \
-        "#{Byebug::BYEBUG_SCRIPT} #{fullpath('restart')} argv1 argv\\ 2"
+        "#{Byebug::BYEBUG_SCRIPT} argv1 argv\\ 2"
       enter 'restart'
-      debug_file 'restart', true
+      debug_file 'restart'
     end
 
     it 'must specify arguments by "set" command' do
       Byebug::Command.settings[:argv] = []
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::BYEBUG_SCRIPT} #{fullpath('restart')} 1 2 3")
+        with("#{Byebug::BYEBUG_SCRIPT} 1 2 3")
       enter 'set args 1 2 3', 'restart'
-      debug_file 'restart', true
+      debug_file 'restart'
     end
   end
 
@@ -45,9 +45,9 @@ describe 'Restart Command' do
         force_set_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
         Byebug::Command.settings[:argv] = ['argv']
         must_restart
-        debug_file 'restart', true
+        debug_file 'restart'
         check_output_includes \
-          "Re exec'ing:\n\t#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} argv"
+          "Re exec'ing:\n\t#{Byebug::BYEBUG_SCRIPT} argv"
       end
     end
 
@@ -108,16 +108,16 @@ describe 'Restart Command' do
       end
 
       it 'must restart anyway' do
-        debug_file 'restart', true
+        debug_file 'restart'
       end
 
       it 'must show a warning message' do
-        debug_file 'restart', true
+        debug_file 'restart'
         check_output_includes 'Byebug was not called from the outset...'
       end
 
       it 'must show a warning message when prog script is not executable' do
-        debug_file 'restart', true
+        debug_file 'restart'
         check_output_includes "Ruby program #{Byebug::PROG_SCRIPT} not " \
                               "executable... We'll add a call to Ruby."
       end

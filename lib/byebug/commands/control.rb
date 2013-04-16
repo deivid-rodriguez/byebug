@@ -29,7 +29,7 @@ module Byebug
           cmd = Byebug::PROG_SCRIPT
         end
       else
-        cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT}"
+        cmd = Byebug::BYEBUG_SCRIPT
       end
 
       begin
@@ -43,6 +43,7 @@ module Byebug
       elsif not defined? Command.settings[:argv]
         return errmsg "Arguments not set. Use 'set args' to set them.\n"
       else
+        require 'shellwords'
         cmd += " #{Command.settings[:argv].compact.shelljoin}"
       end
 
