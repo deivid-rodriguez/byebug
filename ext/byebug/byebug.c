@@ -19,19 +19,37 @@ static VALUE tpRaise;
 
 static VALUE idAlive;
 
-static void
-print_debug_info(char *event, VALUE path, VALUE lineno, VALUE method_id,
-                                            VALUE defined_class, int stack_size)
-{
-  char *file;
-  const char *method_name, *class_name;
-
-  file = strrchr(RSTRING_PTR(path), '/');
-  method_name = rb_id2name(SYM2ID(method_id));
-  class_name = NIL_P(defined_class) ? "undef" : rb_class2name(defined_class);
-  fprintf(stderr, "%s: file=%s, line=%d, class=%s, method=%s, stack=%d\n",
-           event, ++file, FIX2INT(lineno), class_name, method_name, stack_size);
-  return;
+static VALUE
+tp_inspect(VALUE trace_point) {
+  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point);
+  if (trace_arg) {
+    VALUE event = rb_tracearg_event(trace_arg);
+    if (ID2SYM(rb_intern("line")) == event ||
+        ID2SYM(rb_intern("specified_line")) == event)
+    {
+       VALUE sym = rb_tracearg_method_id(trace_arg);
+       if (!NIL_P(sym))
+         return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
+                           rb_tracearg_event(trace_arg),
+                           rb_tracearg_path(trace_arg),
+                           FIX2INT(rb_tracearg_lineno(trace_arg)),
+                           sym);
+    }
+    if (ID2SYM(rb_intern("call")) == event ||
+        ID2SYM(rb_intern("c_call")) == event ||
+        ID2SYM(rb_intern("return")) == event ||
+        ID2SYM(rb_intern("c_return")) == event)
+      return rb_sprintf("%"PRIsVALUE" `%"PRIsVALUE"'@%"PRIsVALUE":%d",
+                        rb_tracearg_event(trace_arg),
+                        rb_tracearg_method_id(trace_arg),
+                        rb_tracearg_path(trace_arg),
+                        FIX2INT(rb_tracearg_lineno(trace_arg)));
+    return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d",
+                      rb_tracearg_event(trace_arg),
+                      rb_tracearg_path(trace_arg),
+                      FIX2INT(rb_tracearg_lineno(trace_arg)));
+  }
+  return rb_sprintf("No info");
 }
 
 static VALUE
@@ -162,8 +180,8 @@ process_line_event(VALUE trace_point, void *data)
                                defined_class, binding, self);
 
   if (debug == Qtrue)
-    print_debug_info(
-      "line", path, lineno, method_id, defined_class, context->stack_size);
+    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
+                                    context->stack_size);
 
   if (context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
        strcmp(context->last_file, RSTRING_PTR(path)))
@@ -220,20 +238,19 @@ process_return_event(VALUE trace_point, void *data)
   Data_Get_Struct(context_object, debug_context_t, context);
   if (!check_start_processing(context, rb_thread_current())) return;
 
+  load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class,
+                               &binding, &self);
+  if (debug == Qtrue)
+    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
+                                    context->stack_size);
+
   if (context->stack_size == context->stop_frame)
   {
       context->stop_next = 1;
       context->stop_frame = 0;
   }
 
-  load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class,
-                               &binding, &self);
   pop_frame(context_object);
-
-  if (debug == Qtrue)
-    print_debug_info("return", path, lineno, method_id, defined_class,
-                                                           context->stack_size);
-  //rb_funcall(context_object, idAtReturn, 2, path, lineno);
 
   cleanup(context);
 }
@@ -256,8 +273,8 @@ process_call_event(VALUE trace_point, void *data)
                              defined_class, binding, self);
 
   if (debug == Qtrue)
-    print_debug_info("call", path, lineno, method_id, defined_class,
-                                                           context->stack_size);
+    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
+                                    context->stack_size);
 
   breakpoint = find_breakpoint_by_method(breakpoints, defined_class,
                                                       SYM2ID(method_id),
@@ -293,8 +310,8 @@ process_raise_event(VALUE trace_point, void *data)
                                defined_class, binding, self);
 
   if (debug == Qtrue)
-    print_debug_info("call", path, lineno, method_id, defined_class,
-                                                           context->stack_size);
+    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
+                                    context->stack_size);
   expn_class = rb_obj_class(err);
 
   if (catchpoints == Qnil ||
