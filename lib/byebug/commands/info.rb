@@ -114,37 +114,30 @@ module Byebug
     end
 
     def info_breakpoints(*args)
-      unless @state.context
-        print "info breakpoints not available here.\n"
-        return
+      return print "\"info breakpoints\" not available here.\n" unless
+        @state.context
+
+      return print "No breakpoints.\n" if Byebug.breakpoints.empty?
+
+      brkpts = Byebug.breakpoints.sort_by{|b| b.id}
+      unless args.empty?
+        indices = args.map{|a| a.to_i}
+        brkpts = brkpts.select{|b| indices.member?(b.id)}
+        return errmsg "No breakpoints found among list given.\n" if
+          brkpts.empty?
       end
-      unless Byebug.breakpoints.empty?
-        brkpts = Byebug.breakpoints.sort_by{|b| b.id}
-        unless args.empty?
-          indices = args.map{|a| a.to_i}
-          brkpts = brkpts.select{|b| indices.member?(b.id)}
-          if brkpts.empty?
-            errmsg "No breakpoints found among list given.\n"
-            return
-          end
+      print "Num Enb What\n"
+      brkpts.each do |b|
+        print "%-3d %-3s at %s:%s%s\n", b.id,
+                                        b.enabled? ? 'y' : 'n',
+                                        b.source,
+                                        b.pos,
+                                        b.expr.nil? ? '' : " if #{b.expr}"
+        hits = b.hit_count
+        if hits > 0
+          s = (hits > 1) ? 's' : ''
+          print "\tbreakpoint already hit #{hits} time#{s}\n"
         end
-        print "Num Enb What\n"
-        brkpts.each do |b|
-          if b.expr.nil?
-            print "%3d %s   at %s:%s\n",
-            b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos
-          else
-            print "%3d %s   at %s:%s if %s\n",
-            b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos, b.expr
-          end
-          hits = b.hit_count
-          if hits > 0
-            s = (hits > 1) ? 's' : ''
-            print "\tbreakpoint already hit #{hits} time#{s}\n"
-          end
-        end
-      else
-        print "No breakpoints.\n"
       end
     end
 

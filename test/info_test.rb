@@ -19,16 +19,16 @@ describe "Info Command" do
       enter 'break 7', 'break 9 if a == b', 'info breakpoints'
       debug_file 'info'
       check_output_includes "Num Enb What",
-                            /\d+ y   at #{fullpath('info')}:7/,
-                            /\d+ y   at #{fullpath('info')}:9 if a == b/
+                            /\d+ +y   at #{fullpath('info')}:7/,
+                            /\d+ +y   at #{fullpath('info')}:9 if a == b/
     end
 
     it "must show info about specific breakpoint" do
       enter 'break 7', 'break 9',
             ->{"info breakpoints #{Byebug.breakpoints.first.id}"}
       debug_file 'info'
-      check_output_includes "Num Enb What", /\d+ y   at #{fullpath('info')}:7/
-      check_output_doesnt_include  /\d+ y   at #{fullpath('info')}:9/
+      check_output_includes "Num Enb What", /\d+ +y   at #{fullpath('info')}:7/
+      check_output_doesnt_include  /\d+ +y   at #{fullpath('info')}:9/
     end
 
     it "must show an error if no breakpoints are found" do
@@ -47,8 +47,8 @@ describe "Info Command" do
     it "must show hit count" do
       enter 'break 9', 'cont', 'info breakpoints'
       debug_file 'info'
-      check_output_includes /\d+ y   at #{fullpath('info')}:9/
-      check_output_includes /\d+ y   at #{fullpath('info')}:9/,
+      check_output_includes /\d+ +y   at #{fullpath('info')}:9/
+      check_output_includes /\d+ +y   at #{fullpath('info')}:9/,
                             "breakpoint already hit 1 time"
     end
   end
