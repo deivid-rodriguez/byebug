@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 10.0.4'
   s.add_development_dependency 'rake-compiler', '~> 0.8.3'
   s.add_development_dependency 'mocha', '~> 0.13.3'
-  s.add_development_dependency 'minitest', '~> 4.7.1'
+  s.add_development_dependency 'minitest', '~> 4.7.3'
 
   s.license = "BSD"
 end
