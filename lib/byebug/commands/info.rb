@@ -74,13 +74,13 @@ module Byebug
       SubcmdStruct.new(name, min, short_help, long_help)
     end unless defined?(InfoFileSubcommands)
 
-#   InfoThreadSubcommands =
-#     [
-#      ['terse', 1, 'summary information'],
-#      ['verbose', 1, 'summary information and stack frame info'],
-#     ].map do |name, min, short_help, long_help|
-#     SubcmdStruct.new(name, min, short_help, long_help)
-#   end unless defined?(InfoThreadSubcommands)
+    InfoThreadSubcommands =
+      [
+       ['terse', 1, 'summary information'],
+       ['verbose', 1, 'summary information and stack frame info'],
+      ].map do |name, min, short_help, long_help|
+      SubcmdStruct.new(name, min, short_help, long_help)
+    end unless defined?(InfoThreadSubcommands)
 
     def regexp
       /^\s* i(?:nfo)? (?:\s+(.*))?$/ix
@@ -166,11 +166,13 @@ module Byebug
         print " - #{path}"
       end
     end
+    private :info_file_path
 
     def info_file_lines(file)
       lines = LineCache.size(file)
       print "\t %d lines\n", lines if lines
     end
+    private :info_file_lines
 
     def info_file_breakpoints(file)
       breakpoints = LineCache.trace_line_numbers(file)
@@ -179,15 +181,18 @@ module Byebug
         print columnize(breakpoints.to_a.sort, self.class.settings[:width])
       end
     end
+    private :info_file_breakpoints
 
     def info_file_mtime(file)
       stat = LineCache.stat(file)
       print "\t%s\n", stat.mtime if stat
     end
+    private :info_file_mtime
 
     def info_file_sha1(file)
       print "\t%s\n", LineCache.sha1(file)
     end
+    private :info_file_sha1
 
     def info_file(*args)
       return info_files unless args[0]
@@ -270,29 +275,30 @@ module Byebug
       end
     end
 
-    def info_program(*args)
-      if not @state.context
-        print "The program being debugged is not being run.\n"
-        return
-      elsif @state.context.dead?
-        print "The program crashed.\n"
-        if Byebug.last_exception
-          print("Exception: #{Byebug.last_exception.inspect}\n")
-        end
-        return
+    def info_stop_reason(stop_reason)
+      case stop_reason
+        when :step
+          print "It stopped after stepping, next'ing or initial start.\n"
+        when :breakpoint
+          print("It stopped at a breakpoint.\n")
+        when :catchpoint
+          print("It stopped at a catchpoint.\n")
+        else
+          print "unknown reason: %s\n" % @state.context.stop_reason.to_s
       end
+    end
+    private :info_stop_reason
+
+    def info_program(*args)
+      return print "The program being debugged is not being run.\n" if
+        not @state.context
+
+      return print "The program crashed.\n" + Byebug.last_exception ?
+                   "Exception: #{Byebug.last_exception.inspect}" : "" + "\n" if
+        @state.context.dead?
 
       print "Program stopped. "
-      case @state.context.stop_reason
-      when :step
-        print "It stopped after stepping, next'ing or initial start.\n"
-      when :breakpoint
-        print("It stopped at a breakpoint.\n")
-      when :catchpoint
-        print("It stopped at a catchpoint.\n")
-      else
-        print "unknown reason: %s\n" % @state.context.stop_reason.to_s
-      end
+      info_stop_reason @state.context.stop_reason
     end
 
     def info_stack(*args)
