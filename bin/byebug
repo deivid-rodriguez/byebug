@@ -13,14 +13,15 @@
 #=== Options
 #
 #<tt>-A | --annotate</tt> <i>level</i>::
-#    Set gdb-style annotation to <i>level</i>, a number.  Additional
-#    information is output automatically when program state is changed. This
-#    can be used by front-ends such as GNU Emacs to post this updated
-#    information without having to poll for it.
+#    Set gdb-style annotation to <i>level</i>, a number.  Additional information
+#    is output automatically when program state is changed. This can be used by
+#    front-ends such as GNU Emacs to post this updated information without
+#    having to poll for it.
 #
 #<tt>--client</tt>::
 #    Connect to a remote byebug. Used with another byebug invocation using
-#    <tt>--server</tt>.  See also <tt>--host</tt> and <tt>--cport</tt> options
+#    <tt>--server</tt>.  See also <tt>--host</tt>, <tt>--port</tt> and
+#    <tt>--cport</tt> options.
 #
 #<tt>--cport=</tt><i>port</i>::
 #    Use port <i>port</i> for access to byebug control.
@@ -28,75 +29,65 @@
 #<tt>-d | --debug</tt>::
 #    Set $DEBUG true.
 #
-#<tt>--emacs</tt>::
-#    Activates full GNU Emacs mode. Is the equivalent of setting the options
-#    <tt>--emacs-basic --annotate=3 --no-stop --no-control --post-mortem</tt>.
-#
-#<tt>--emacs-basic</tt>::
-#     Activates GNU Emacs mode. Byebug prompts are prefaced with two octal 032
-#     characters.
-#
 #<tt>-h | --host=</tt><i>host</i>::
-#     Use host name <i>host</i> for remote debugging.
+#    Use host name <i>host</i> for remote debugging.
+#
+#<tt>--help</tt>::
+#      Show invocation help and exit.
 #
 #<tt>-I | --include</tt> <i>path</i>
-#     Add <i>path</i> to <tt>$LOAD_PATH</tt>
-#
-#<tt>-m | --post-mortem</tt>::
-#     Activate post-mortem mode.
-#
-#<tt>--no-control</tt>::
-#      Do not automatically start control thread.
-#
-#<tt>--no-stop</tt>::
-#      Do not stop when script is loaded.
-#
-#<tt>-p | --port=PORT</tt>::
-#      Host name used for remote debugging.
-#
-#<tt>-r | --require</tt><i>script</i>::
-#      Require the library, before executing your script.
-#
-#<tt>--script</tt> <i>file</i>::
-#      Run byebug script file <i>file</i>
-#
-#<tt>-x | --trace</tt>::
-#      Show lines before executing them.
-#
-#<tt>--no-quit</tt>::
-#      Do not quit when script terminates. Instead rerun the program.
-#
-#<tt>--version</tt>::
-#      Show the version number and exit.
-#
-#<tt>--verbose</tt>::
-#      Turn on verbose mode.
-#
-#<tt>--v</tt>::
-#      Print the version number, then turn on verbose mode if a script name is
-#      given. If no script name is given just exit after printing the version
-#      number.
-#
-#<tt>--nx</tt>::
-#      Don’t execute commands found in any initialization files like
-#      <tt>.byebugrc</tt>.
+#    Add <i>path</i> to <tt>$LOAD_PATH</tt>
 #
 #<tt>--keep-frame-binding</tt>::
-#      Keep frame bindings.
+#    Keep frame bindings.
 #
-#<tt>--script=</tt><i>file</i>::
-#      Name of the script file to run.
+#<tt>-m | --post-mortem</tt>::
+#    Activate post-mortem mode.
+#
+#<tt>--no-control</tt>::
+#    Do not automatically start control thread.
+#
+#<tt>--no-quit</tt>::
+#    Do not quit when script terminates. Instead rerun the program.
+#
+#<tt>--no-stop</tt>::
+#    Do not stop when script is loaded.
+#
+#<tt>--nx</tt>::
+#    Don’t execute commands found in any initialization files like
+#    <tt>.byebugrc</tt>.
+#
+#<tt>-p | --port=PORT</tt>::
+#    Use port <i>port</i> for remote debugging.
+#
+#<tt>-r | --require</tt><i>script</i>::
+#    Require the library, before executing your script.
 #
 #<tt>-s | --server</tt>::
-#      Listen for remote connections. Another byebug session accesses using the
-#      <tt>--client</tt>  option. See also the <tt>--host</tt>, <tt>--port</tt>
-#      and <tt>--cport</tt> options
+#    Listen for remote connections. Another byebug session accesses using the
+#    <tt>--client</tt>  option. See also the <tt>--host</tt>, <tt>--port</tt>
+#    and <tt>--cport</tt> options
+#
+#<tt>--script</tt>=<i>file</i>::
+#    Run script file <i>file</i>
+#
+#<tt>--v</tt>::
+#    Print the version number, then turn on verbose mode if a script name is
+#    given. If no script name is given just exit after printing the version
+#    number.
+#
+#<tt>--verbose</tt>::
+#    Turn on verbose mode.
+#
+#<tt>--version</tt>::
+#    Show the version number and exit.
 #
 #<tt>-w | --wait</tt>::
 #      Wait for a client connection; implies <tt>-s</tt> option.
 #
-#<tt>--help</tt>::
-#      Show invocation help and exit.
+#<tt>-x | --trace</tt>::
+#    Show lines before executing them.
+#
 
 require 'optparse'
 require 'ostruct'
@@ -140,9 +131,9 @@ end
 options = OpenStruct.new(
   'annotate'           => Byebug.annotate,
   'client'             => false,
-  'control'            => true,
   'cport'              => Byebug::PORT + 1,
   'host'               => nil,
+  'control'            => true,
   'quit'               => true,
   'no_rewrite_program' => false,
   'stop'               => true,
@@ -165,67 +156,37 @@ Usage: #{program} [options] <script.rb> -- <script.rb parameters>
 EOB
     opts.separator ""
     opts.separator "Options:"
-    opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") do
-      |annotate|
-        Byebug.annotate = annotate
-    end
-    opts.on("-c", "--client", "Connect to remote byebug") do
-      options.client = true
-    end
-    opts.on("--cport PORT", Integer, "Port used for control commands") do
-      |cport|
-      options.cport = cport
-    end
-    opts.on("-d", "--debug", "Set $DEBUG=true") {$DEBUG = true}
-    opts.on("--emacs LEVEL", Integer,
-            "Activates full Emacs support at annotation level LEVEL") do
-      |level|
-      Byebug.annotate = level.to_i
-      ENV['EMACS'] = '1'
-      ENV['COLUMNS'] = '120' if ENV['COLUMNS'].to_i < 120
-      options.control = false
-      options.quit = false
-    end
-    opts.on('--emacs-basic', 'Activates basic Emacs mode') do
-      ENV['EMACS'] = '1'
-    end
-    opts.on('-h', '--host HOST', 'Host name used for remote debugging') do
-      |host|
-      options.host = host
-    end
-    opts.on('-I', '--include PATH', String, 'Add PATH to $LOAD_PATH') do |path|
-      $LOAD_PATH.unshift(path)
-    end
-    opts.on('--no-control', 'Do not automatically start control thread') do
-      options.control = false
-    end
-    opts.on('--no-quit', 'Do not quit when script finishes') do
-      options.quit = false
-    end
-    opts.on('--no-rewrite-program',
-            'Do not set $0 to the program being debugged') do
-      options.no_rewrite_program = true
-    end
-    opts.on('--no-stop', 'Do not stop when script is loaded') do
-      options.stop = false
-    end
-    opts.on('-nx', 'Not run byebug initialization files (e.g. .byebugrc') do
-      options.nx = true
-    end
-    opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') do
-      |port|
-      options.port = port
-    end
-    opts.on('-r', '--require SCRIPT', String,
-            'Require the library, before executing your script') do |name|
-      if name == 'debug'
-        puts "byebug is not compatible with Ruby's 'debug' library. This option is ignored."
+    opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") {
+      |annotate| Byebug.annotate = annotate }
+    opts.on("-c", "--client", "Connect to remote byebug") {
+      options.client = true }
+    opts.on("--cport PORT", Integer, "Port used for control commands") {
+      |cport| options.cport = cport }
+    opts.on("-d", "--debug", "Set $DEBUG=true") {
+      $DEBUG = true }
+    opts.on('-h', '--host HOST', 'Host name used for remote debugging') {
+      |host| options.host = host }
+    opts.on('-I', '--include PATH', String, 'Add PATH to $LOAD_PATH') {
+      |path| $LOAD_PATH.unshift(path) }
+    opts.on('--no-control', 'Do not automatically start control thread') {
+      options.control = false }
+    opts.on('--no-quit', 'Do not quit when script finishes') {
+      options.quit = false }
+    opts.on('--no-rewrite-program', 'Don\'t set $0 to the program debugged') {
+      options.no_rewrite_program = true }
+    opts.on('--no-stop', 'Do not stop when script is loaded') {
+      options.stop = false }
+    opts.on('-nx', 'Don\'t run any byebug initialization files') {
+      options.nx = true }
+    opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') {
+      |port| options.port = port }
+    opts.on('-r', '--require SCRIPT', String, 'Require library before script') {
+      |name| if name == 'debug'
+        puts 'byebug not compatible with Ruby\'s \'debug\' lib, option ignored'
       else
         require name
-      end
-    end
-    opts.on('--restart-script FILE', String,
-            'Name of the script file to run. Erased after read') do
+      end }
+    opts.on('--restart-script FILE', String, 'Name of the script file to run. Erased after read') do
       |restart_script|
       options.restart_script = restart_script
       unless File.exists?(options.restart_script)
@@ -241,21 +202,19 @@ EOB
         exit
       end
     end
-    opts.on('-s', '--server', 'Listen for remote connections') do
-      options.server = true
-    end
-    opts.on('-w', '--wait', 'Wait for a client connection, implies -s option') do
-      options.wait = true
-    end
-    opts.on('-x', '--trace', 'Turn on line tracing') {options.tracing = true}
+    opts.on('-s', '--server', 'Listen for remote connections') {
+      options.server = true }
+    opts.on('-w', '--wait', 'Wait for a client connection, implies -s option') {
+      options.wait = true }
+    opts.on('-x', '--trace', 'Turn on line tracing') {
+      options.tracing = true }
     opts.separator ''
     opts.separator 'Common options:'
     opts.on_tail('--help', 'Show this message') do
       puts opts
       exit
     end
-    opts.on_tail('--version',
-                 'Print the version') do
+    opts.on_tail('--version', 'Print program version') do
       puts "byebug #{Byebug::VERSION}"
       exit
     end
@@ -263,8 +222,7 @@ EOB
       $VERBOSE = true
       options.verbose_long = true
     end
-    opts.on_tail('-v',
-                 'Print version number, then turn on verbose mode') do
+    opts.on_tail('-v', 'Print version number, then turn on verbose mode') do
       puts "byebug #{Byebug::VERSION}"
       $VERBOSE = true
     end
@@ -274,16 +232,10 @@ end
 
 # What file is used for byebug startup commands.
 unless defined?(OPTS_INITFILE)
-  if RUBY_PLATFORM =~ /mswin/
-    # Of course MS Windows has to be different
-    OPTS_INITFILE = 'rdbopt.ini'
-    HOME_DIR =  (ENV['HOME'] ||
-                 ENV['HOMEDRIVE'].to_s + ENV['HOMEPATH'].to_s).to_s
-  else
-    OPTS_INITFILE = '.rdboptrc'
-    HOME_DIR = ENV['HOME'].to_s
-  end
+  OPTS_INITFILE = '.byebugoptrc'
+  HOME_DIR = ENV['HOME'].to_s
 end
+
 begin
   initfile = File.join(HOME_DIR, OPTS_INITFILE)
   eval(File.read(initfile)) if File.exist?(initfile)
@@ -294,9 +246,6 @@ opts = process_options(options)
 begin
   Byebug::ARGV = ARGV.clone if not defined? Byebug::ARGV
   byebug_path = File.expand_path($0)
-  if RUBY_PLATFORM =~ /mswin/
-    byebug_path += '.cmd' unless byebug_path =~ /\.cmd$/i
-  end
   Byebug::BYEBUG_SCRIPT = byebug_path
   Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
@@ -330,9 +279,7 @@ else
   Byebug.wait_connection = options.wait
 
   if options.server
-    # start remote mode
     Byebug.start_remote(options.host, [options.port, options.cport]) do
-      # load initrc script
       Byebug.run_init_script(StringIO.new) unless options.nx
     end
     debug_program(options)

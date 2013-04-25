@@ -1043,19 +1043,6 @@ Port used for control commands.
 Set @code{$DEBUG} to @code{true}. This option is compatible with
 Ruby's.
 
-@item --emacs
-Activates GNU Emacs mode.
-@c @pxref{GNU Emacs}.
-Byebug output is tagged in such a way to allow GNU Emacs to track
-where you are in the code.
-
-@item --emacs-basic
-Activates full GNU Emacs mode.
-@c (@pxref{GNU Emacs}).
-This is the equivalent of setting the options @option{--emacs-basic},
-@code{annotate=3}, @option{--no-stop}, @option{-no-control} and
-@option{--post-mortem}.
-
 @item -h | --host @var{host-address}
 Connect host address for remote debugging.
 
@@ -1066,43 +1053,37 @@ Add @var{PATH} to @code{$LOAD_PATH}
 
 @item --keep-frame-binding
 @cindex @option{--keep-frame-binding}
-Bindings are used to set the proper environment in evaluating
-expression inside byebug. Under normal circumstances, I don't
-believe most people will ever need this option.
-
-By default, byebug doesn't create binding object for each frame
-when the frame is created, i.e. when a call is performed. Creating a
-binding is an expensive operation and has been a major source of
-performance problems.
-
-Instead, byebug creates a binding when there is a need to
-evaluate expressions. The artificial binding that is created might be
-different from the real one.  In particular, in performing constant
-and module name resolution.
-
-However it's still possible to restore the old, slower behavior by
-using this option or by setting @code{Byebug.keep_frame_binding =
-true}. There are two possibilities for which you might want to use
+Bindings are used to set the proper environment in evaluating expressions inside
+byebug. Under normal circumstances, I don't believe most people will ever need
 this option.
 
-First, if you think there's a bug in the evaluation of variables, you
-might want to set this to see if this corrects things.
+By default, byebug doesn't create a binding object for each frame when the frame
+is created, i.e. when a call is performed. Creating a binding is an expensive
+operation and has been a major source of performance problems.
 
-Second, since the internal structures that are used here @code{FRAME}
-and @code{SCOPE} are not part of the Ruby specification, it is
-possible they can change with newer releases; so here this option this
-may offer a remedy. (But you'll probably also have to hack the C code
-since it's likely under this scenario that byebug will no longer
-compile.) In fact, in Ruby 1.9 these structures have changed and that
-is partly why this byebug doesn't work on Ruby 1.9.
+Instead, byebug creates a binding when there is a need to evaluate expressions.
+The artificial binding that is created might be different from the real one. In
+particular, in performing constant and module name resolution.
+
+However it's still possible to restore the old, slower behavior by using this
+option or by setting @code{Byebug.keep_frame_binding = true}. There are two
+possibilities for which you might want to use this option.
+
+First, if you think there's a bug in the evaluation of variables, you might want
+to set this to see if this corrects things.
+
+Second, since the internal structures that are used here @code{FRAME} and
+@code{SCOPE} are not part of the Ruby specification, it is possible they can
+change with newer releases; so here this option this may offer a remedy. (But
+you'll probably also have to hack the C code since it's likely under this
+scenario that byebug will no longer compile.)
 
 @item -m | --post-mortem
 @cindex @option{-m}
 @cindex @option{--post-mortem}
-If your program raises an exception that isn't caught you can enter
-byebug for inspection of what went wrong. You may also want to
-use this option in conjunction with @option{--no-stop}. See also
-@ref{Post-Mortem Debugging}.
+If your program raises an exception that isn't caught you can enter byebug for
+inspection of what went wrong. You may also want to use this option in
+conjunction with @option{--no-stop}. See also @ref{Post-Mortem Debugging}.
 
 @item --no-control
 @cindex @option{--no-control}
@@ -1205,7 +1186,11 @@ puts "rocky's rdboptrc run"
 
 Here are the default values in @code{options}
 @smallexample
-#<OpenStruct server=false, client=false, frame_bind=false, cport=8990, tracing=false, nx=false, post_mortem=false, port=8989, verbose_long=false, annotate=nil, control=true, restart_script=nil, quit=true, no_rewrite_program=false, stop=true, script=nil, host=nil, wait=false>
+#<OpenStruct server=false, client=false, frame_bind=false, cport=8990,
+             tracing=false, nx=false, post_mortem=false, port=8989,
+             verbose_long=false, annotate=nil, control=true, restart_script=nil,
+             quit=true, no_rewrite_program=false, stop=true, script=nil,
+             host=nil, wait=false>
 @end smallexample
 
 
@@ -1426,18 +1411,16 @@ history size} command. See @ref{History} for history parameters.
 @node Command Output
 @section Command Output
 
-In the command-line interface, when @code{byebug} is waiting for
-input it presents a prompt of the form
-@code{(byebug:}@emph{x}@code{)}. If debugging locally, @emph{x} will be
-the thread number. Usual the main thread is 1, so often you'll see
-@code{(byebug:1)}. In the control interface though @emph{x} will be
-@code{ctrl} and in post-mortem debugging @code{post-mortem}.
+In the command-line interface, when @code{byebug} is waiting for input it
+presents a prompt of the form @code{(byebug:}@emph{x}@code{)}. If debugging
+locally, @emph{x} will be the thread number. Usual the main thread is 1, so
+often you'll see @code{(byebug:1)}. In the control interface though @emph{x}
+will be @code{ctrl} and in post-mortem debugging @code{post-mortem}.
 
-In the local interface, whenever @code{byebug} gives an error
-message such as for an invalid command, or an invalid location
-position, it will generally preface the message with
-@code{***}. However if annotation mode is on that the message is put
-in a @code{begin-error} annotation and no @code{***} appears.
+In the local interface, whenever @code{byebug} gives an error message such as
+for an invalid command, or an invalid location position, it will generally
+preface the message with @code{***}. However if annotation mode is on then the
+message is put in a @code{begin-error} annotation and no @code{***} appears.
 
 @node Help
 @section Getting help (@samp{help})
@@ -1446,16 +1429,16 @@ in a @code{begin-error} annotation and no @code{***} appears.
 * Help for Subcommands::
 @end menu
 
-Once inside @code{byebug} you can always ask it for information on
-its commands, using the command @code{help}.
+Once inside @code{byebug} you can always ask it for information on its commands
+using the @code{help} command.
 
 @table @code
 @kindex h @r{(@code{help})}
 @kindex help @ovar{command-name}
 @item help
 @itemx h
-You can use @code{help} (abbreviated @code{h}) with no arguments to
-display a short list of named classes of commands:
+You can use @code{help} (abbreviated @code{h}) with no arguments to display a
+short list of named classes of commands:
 
 @flushleft
 @smallexample
@@ -1581,19 +1564,16 @@ questions asked, enter the ``unconditionally''.
 @kindex R @r{(@code{restart})}
 @item restart
 @itemx R
+Restart the program. This is a re-exec - all byebug state is lost. If command
+arguments are passed those are used. Otherwise program arguments from the last
+invocation are used.
 
-Restart the program. This is a re-exec - all byebug state is
-lost. If command arguments are passed those are used. Otherwise the
-last program arguments used in the last invocation are used.
+You won't be able to restart your program in all cases. First, the program
+should have been invoked at the outset rather than having been called from
+inside your program or invoked as a result of post-mortem handling.
 
-In not all cases will you be able to restart the program. First, the
-program should have been invoked at the outset rather than having been
-called from inside your program or invoked as a result of post-mortem
-handling.
-
-Also, since this relies on the the OS @code{exec} call, this command
-is available only if your OS supports that @code{exec}; OSX for
-example does not (yet).
+Also, since this relies on the the OS @code{exec} call, this command is
+available only if your OS supports @code{exec}; OSX for example does not (yet).
 @end table
 
 @node Interrupt
@@ -1613,10 +1593,10 @@ Interrupt the program. Useful if there are multiple threads running.
 @item source @var{filename}
 Execute the command file @var{filename}.
 
-The lines in a command file are executed sequentially.  They are not
-printed as they are executed.  If there is an error, execution
-proceeds to the next command in the file. For information about
-command files that get run automatically on startup, @pxref{Command Files}.
+The lines in a command file are executed sequentially.  They are not printed as
+they are executed.  If there is an error, execution proceeds to the next command
+in the file. For information about command files that get run automatically on
+startup, @pxref{Command Files}.
 @end table
 
 @node DisplayCommands
@@ -2562,23 +2542,23 @@ Each @code{set} command has a corresponding @code{show} command which
 allows you to see the current value.
 
 @menu
-* Args::                 Annotation Level
-* Autoeval::             Evaluate unrecognized commands
-* Autolist::             Execute ``list'' command on every breakpoint
-* Autoirb::              Invoke IRB on every stop
-* Autoreload::           Reload source code when changed
-* Basename::             Report file basename only showing file names
-* Callstyle::            Show Report file basename only showing file names
-* Forcestep::            Make sure 'next/step' commands always move to a new line
-* Fullpath::             Display full file names in frames
-* History::              Generic command for showing command history parameters.
-* Keepframebindings::    Save frame binding on each call
-* Linetrace::            line execution tracing
-* Linetrace+::           line tracing style
-* Listsize::             Number of lines to try to show in a 'list' command
-* Post-mortem::          Whether post-mortem handling is in effect.
-* Trace::                Display stack trace when 'eval' raises exception
-* Width::                Number of characters byebug thinks are in a line
+* Args::              Annotation Level
+* Autoeval::          Evaluate unrecognized commands
+* Autolist::          Execute ``list'' command on every breakpoint
+* Autoirb::           Invoke IRB on every stop
+* Autoreload::        Reload source code when changed
+* Basename::          Report file basename only showing file names
+* Callstyle::         Show Report file basename only showing file names
+* Forcestep::         Make sure 'next/step' commands always move to a new line
+* Fullpath::          Display full file names in frames
+* History::           Generic command for showing command history parameters.
+* Keepframebindings:: Save frame binding on each call
+* Linetrace::         line execution tracing
+* Linetrace+::        line tracing style
+* Listsize::          Number of lines to try to show in a 'list' command
+* Post-mortem::       Whether post-mortem handling is in effect.
+* Trace::             Display stack trace when 'eval' raises exception
+* Width::             Number of characters byebug thinks are in a line
 @end menu
 
 @node Args
@@ -2812,8 +2792,8 @@ Shows the list-size setting.
 @subsection Show Post-mortem handling
 @table @code
 @kindex show post-mortem
-Shows wither post-mortem debugging is in effect. Right now we don't
-have the ability to change the state inside byebug.
+Shows wither post-mortem debugging is in effect. Right now we don't have the
+ability to change that state inside byebug.
 @end table
 
 @node Trace
@@ -2951,32 +2931,27 @@ Local and instance variables.
 @chapter Post-Mortem Debugging
 @cindex post-mortem debugging
 
-It is also to possible enter byebug when you have an uncaught
-exception that is about to terminate our program. This is called
-@emph{post-mortem debugging}. In this state many, of byebug commands
-for examining variables and moving around in the stack still
-work. However some commands, such as those which imply a continuation
+It is also to possible enter byebug when you have an uncaught exception that is
+about to terminate our program. This is called @emph{post-mortem debugging}. In
+this state many byebug commands for examining variables and moving around the
+stack still work. However some commands, such as those implying a continuation
 of running code, no longer work.
 
 The most reliable way to set up post-mortem debugging is to use the
 @option{--post-mortem} option in invoking @code{byebug}. See @ref{byebug
-command-line options}. This traps/wraps at byebug ``load'' of
-your Ruby script.  When this is done, your program is stopped after
-the exception takes place, but before the stack has been
-unraveled. (Alas, it would be nice to if one could allow resetting the
-exception and continuing, but details of code in Ruby 1.8's
-@code{eval.c} prevent this.)
+command-line options}. This traps/wraps at byebug ``load'' of your Ruby script.
+ When this is done, your program is stopped after the exception takes place, but
+before the stack has been unraveled. (Alas, it would be nice to if one could
+allow resetting the exception and continuing...)
 
-If however you haven't invoked @code{byebug} at the outset, but
-instead call @code{byebug} from inside your program, to set up
-post-mortem debugging set the @code{post_mortem} key in
-@code{Byebug.start}. Here's an example modified from
-@url{http://www.datanoise.com/articles/2006/12/20/post-mortem-debugging}:
+If however you haven't invoked @code{byebug} at the outset, but instead call
+@code{byebug} from inside your program, to set up post-mortem debugging set the
+@code{post_mortem} key in @code{Byebug.start}. Here's an example:
 
 @smallexample
     $ @b{cat t.rb }
     require 'rubygems'
-    require 'byebug' ; Byebug.start(:post_mortem => true)
+    require 'byebug' ; Byebug.start(post_mortem: true)
 
     def t1
       raise 'test'
