@@ -5,13 +5,13 @@ describe 'Display Command' do
 
   it 'must show expressions' do
     enter 'break 3', 'cont', 'display d + 1'
-    debug_file('display')
+    debug_file 'display'
     check_output_includes '1: ', 'd + 1 = 5'
   end
 
   it 'must work with shortcut' do
     enter 'break 3', 'cont', 'disp d + 1'
-    debug_file('display')
+    debug_file 'display'
     check_output_includes '1: ', 'd + 1 = 5'
   end
 
@@ -24,7 +24,7 @@ describe 'Display Command' do
     enter 'break 3', 'cont', -> do
       Byebug.handler.display.concat([[true, 'abc'], [true, 'd']]); 'display'
     end
-    debug_file('display')
+    debug_file 'display'
     check_output_includes '1: ', 'abc = ', '2: ', 'd = 4'
   end
 
@@ -41,7 +41,7 @@ describe 'Display Command' do
         let(:confirm_response) { 'y' }
 
         it 'must ask about confirmation' do
-          debug_file('display')
+          debug_file 'display'
           check_output_includes \
             'Clear all expressions? (y/n)', interface.confirm_queue
         end
@@ -52,7 +52,7 @@ describe 'Display Command' do
         end
 
         it 'must not show any output' do
-          debug_file('display')
+          debug_file 'display'
           check_output_doesnt_include '1: ', 'abc = ', '2: ', 'd = 4'
         end
       end
@@ -66,7 +66,7 @@ describe 'Display Command' do
         end
 
         it 'must not show any output' do
-          debug_file('display')
+          debug_file 'display'
           check_output_includes '1: ', 'abc = ', '2: ', 'd = 4'
         end
       end
@@ -86,12 +86,12 @@ describe 'Display Command' do
       end
 
       it 'must display only the active position' do
-        debug_file('display')
+        debug_file 'display'
         check_output_includes '2: ', 'd = 4'
       end
 
       it 'must not display the disabled position' do
-        debug_file('display')
+        debug_file 'display'
         check_output_doesnt_include '1: ', 'abc'
       end
     end
@@ -105,14 +105,14 @@ describe 'Display Command' do
 
     it 'must show an error if no displays are set' do
       enter 'disable display 1'
-      debug_file('display')
+      debug_file 'display'
       check_output_includes \
         'No display expressions have been set.', interface.error_queue
     end
 
     it 'must show an error if there is no such display position' do
       enter 'display d', 'disable display 4'
-      debug_file('display')
+      debug_file 'display'
       check_output_includes \
         'Disable display argument "4" needs to be at most 1.'
     end
@@ -137,9 +137,8 @@ describe 'Display Command' do
 
   describe 'Post Mortem' do
     it 'must be able to set display expressions in post-mortem mode' do
-      skip('No post morten mode for now')
       enter 'cont', 'display 2 + 2', 'cont'
-      debug_file('post_mortem')
+      debug_file 'post_mortem'
       check_output_includes '1:', '2 + 2 = 4'
     end
   end

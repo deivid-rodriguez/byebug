@@ -4,9 +4,10 @@ static VALUE mByebug; /* Ruby Byebug Module object */
 static VALUE cContext;
 static VALUE cDebugThread;
 
-static VALUE tracing = Qfalse;
-static VALUE debug   = Qfalse;
-static VALUE locker  = Qnil;
+static VALUE tracing     = Qfalse;
+static VALUE post_mortem = Qfalse;
+static VALUE debug       = Qfalse;
+static VALUE locker      = Qnil;
 
 static VALUE contexts;
 static VALUE catchpoints;
@@ -96,9 +97,7 @@ cleanup(debug_context_t *context)
 static int
 check_start_processing(debug_context_t *context, VALUE thread)
 {
-  /* return if thread is marked as 'ignored'.
-    byebug's threads are marked this way
-  */
+  /* return if thread is marked as 'ignored' */
   if(CTX_FL_TEST(context, CTX_FL_IGNORE)) return 0;
 
   while(1)
@@ -310,6 +309,15 @@ process_raise_event(VALUE trace_point, void *data)
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
+  if (post_mortem == Qtrue && self)
+  {
+    VALUE binding = rb_binding_new();
+    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_file"), path);
+    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_line"), lineno);
+    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_binding"), binding);
+    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_context"), context_object);
+  }
+
   expn_class = rb_obj_class(err);
 
   if (catchpoints == Qnil ||
@@ -353,22 +361,23 @@ Byebug_setup_tracepoints(VALUE self)
   catchpoints = rb_hash_new();
 
   tpLine = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_LINE,
-      process_line_event, NULL);
+    RUBY_EVENT_LINE,
+    process_line_event, NULL);
   rb_tracepoint_enable(tpLine);
 
   tpReturn = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_RETURN | RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
-      process_return_event, NULL);
+    RUBY_EVENT_RETURN | RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
+    process_return_event, NULL);
   rb_tracepoint_enable(tpReturn);
 
   tpCall = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_CALL | RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
-      process_call_event, NULL);
+    RUBY_EVENT_CALL | RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
+    process_call_event, NULL);
   rb_tracepoint_enable(tpCall);
 
   tpRaise = rb_tracepoint_new(Qnil,
-      RUBY_EVENT_RAISE, process_raise_event, NULL);
+    RUBY_EVENT_RAISE,
+    process_raise_event, NULL);
   rb_tracepoint_enable(tpRaise);
 
   return Qnil;
@@ -399,16 +408,17 @@ values_i(VALUE key, VALUE value, VALUE ary)
     return ST_CONTINUE;
 }
 
+#define BYEBUG_STARTED (catchpoints != Qnil)
 static VALUE
 Byebug_started(VALUE self)
 {
-  return catchpoints != Qnil ? Qtrue : Qfalse;
+  return BYEBUG_STARTED;
 }
 
 static VALUE
 Byebug_stop(VALUE self)
 {
-    if (Byebug_started(self))
+    if (BYEBUG_STARTED)
     {
         Byebug_remove_tracepoints(self);
         return Qfalse;
@@ -421,7 +431,7 @@ Byebug_start(VALUE self)
 {
     VALUE result;
 
-    if (Byebug_started(self))
+    if (BYEBUG_STARTED)
         result = Qfalse;
     else
     {
@@ -433,6 +443,21 @@ Byebug_start(VALUE self)
       rb_ensure(rb_yield, self, Byebug_stop, self);
 
     return result;
+}
+
+static VALUE
+set_current_skipped_status(VALUE status)
+{
+  VALUE context_object;
+  debug_context_t *context;
+
+  context_object = Byebug_current_context(mByebug);
+  Data_Get_Struct(context_object, debug_context_t, context);
+  if (status)
+    CTX_FL_SET(context, CTX_FL_SKIPPED);
+  else
+    CTX_FL_UNSET(context, CTX_FL_SKIPPED);
+  return Qnil;
 }
 
 static VALUE
@@ -474,16 +499,58 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+debug_at_exit_c(VALUE proc)
+{
+  return rb_funcall(proc, rb_intern("call"), 0);
+}
+
+static void
+debug_at_exit_i(VALUE proc)
+{
+  if (BYEBUG_STARTED)
+  {
+    set_current_skipped_status(Qtrue);
+    rb_ensure(debug_at_exit_c, proc, set_current_skipped_status, Qfalse);
+  }
+  else
+    debug_at_exit_c(proc);
+}
+
+static VALUE
+Byebug_at_exit(VALUE self)
+{
+  VALUE proc;
+  if (!rb_block_given_p())
+    rb_raise(rb_eArgError, "called without a block");
+  proc = rb_block_proc();
+  rb_set_end_proc(debug_at_exit_i, proc);
+  return proc;
+}
+
+static VALUE
 Byebug_tracing(VALUE self)
 {
-    return tracing;
+  return tracing;
 }
 
 static VALUE
 Byebug_set_tracing(VALUE self, VALUE value)
 {
-    tracing = RTEST(value) ? Qtrue : Qfalse;
-    return value;
+  tracing = RTEST(value) ? Qtrue : Qfalse;
+  return value;
+}
+
+static VALUE
+Byebug_post_mortem(VALUE self)
+{
+  return post_mortem;
+}
+
+static VALUE
+Byebug_set_post_mortem(VALUE self, VALUE value)
+{
+  post_mortem = RTEST(value) ? Qtrue : Qfalse;
+  return value;
 }
 
 static VALUE
@@ -551,9 +618,12 @@ Init_byebug()
   rb_define_module_function(mByebug, "_start", Byebug_start, 0);
   rb_define_module_function(mByebug, "stop", Byebug_stop, 0);
   rb_define_module_function(mByebug, "started?", Byebug_started, 0);
-  rb_define_module_function(mByebug, "tracing", Byebug_tracing, 0);
+  rb_define_module_function(mByebug, "tracing?", Byebug_tracing, 0);
   rb_define_module_function(mByebug, "tracing=", Byebug_set_tracing, 1);
   rb_define_module_function(mByebug, "debug_load", Byebug_load, -1);
+  rb_define_module_function(mByebug, "debug_at_exit", Byebug_at_exit, 0);
+  rb_define_module_function(mByebug, "post_mortem?", Byebug_post_mortem, 0);
+  rb_define_module_function(mByebug, "post_mortem=", Byebug_set_post_mortem, 1);
 
   idAlive = rb_intern("alive?");
 

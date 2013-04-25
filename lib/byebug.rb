@@ -14,9 +14,9 @@ module Byebug
 
   # Default options to Byebug.start
   DEFAULT_START_SETTINGS = {
-    :init        => true,  # Set $0 and save ARGV?
-    :post_mortem => false, # post-mortem debugging on uncaught exception?
-    :tracing     => nil    # Byebug.tracing value. true/false resets
+    init:        true,  # Set $0 and save ARGV?
+    post_mortem: false, # post-mortem debugging on uncaught exception?
+    tracing:     nil    # Byebug.tracing? value. true/false resets
   } unless defined?(DEFAULT_START_SETTINGS)
 
   # Port number used for remote debugging
@@ -101,11 +101,11 @@ module Byebug
     # If it's called without a block it returns +true+, unless byebug was
     # already started.
     #
-    # If a block is given, it starts byebug and yields block. When the block is
+    # If a block is given, it starts byebug and yields block. After the block is
     # executed it stops byebug with Byebug.stop method. Inside the block you
     # will probably want to have a call to Byebug.byebug. For example:
     #
-    #     Byebug.start{byebug; foo}  # Stop inside of foo
+    #     Byebug.start { byebug; foo }  # Stop inside of foo
     #
     # Also, byebug only allows one invocation of byebug at a time; nested
     # Byebug.start's have no effect and you can't use this inside byebug itself.
@@ -136,9 +136,9 @@ module Byebug
       else
         retval = Byebug._start(&block)
       end
-      #if options[:post_mortem]
-      #  post_mortem
-      #end
+      if options[:post_mortem]
+        post_mortem
+      end
       return retval
     end
 
@@ -254,62 +254,62 @@ module Byebug
       processor.process_commands(verbose)
     end
 
-    # XXX: Implement
-
-    #   # Activates the post-mortem mode. There are two ways of using it:
-    #   #
-    #   # == Global post-mortem mode
-    #   # By calling Byebug.post_mortem method without a block, you install
-    #   # at_exit hook that intercepts any unhandled by your script exceptions
-    #   # and enables post-mortem mode.
-    #   #
-    #   # == Local post-mortem mode
-    #   #
-    #   # If you know that a particular block of code raises an exception you can
-    #   # enable post-mortem mode by wrapping this block with Byebug.post_mortem, e.g.
-    #   #
-    #   #   def offender
-    #   #      raise 'error'
-    #   #   end
-    #   #   Byebug.post_mortem do
-    #   #      ...
-    #   #      offender
-    #   #      ...
-    #   #   end
-    #   def post_mortem
-    #     if block_given?
-    #       old_post_mortem = self.post_mortem?
-    #       begin
-    #         self.post_mortem = true
-    #         yield
-    #       rescue Exception => exp
-    #         handle_post_mortem(exp)
-    #         raise
-    #       ensure
-    #         self.post_mortem = old_post_mortem
-    #       end
-    #     else
-    #       return if post_mortem?
-    #       self.post_mortem = true
-    #       debug_at_exit do
-    #         handle_post_mortem($!) if $! && post_mortem?
-    #       end
-    #     end
+    ##
+    # Activates the post-mortem mode. There are two ways of using it:
+    #
+    # == Global post-mortem mode
+    # By calling Byebug.post_mortem method without a block, you install an
+    # at_exit hook that intercepts any exception not handled by your script
+    # and enables post-mortem mode.
+    #
+    # == Local post-mortem mode
+    #
+    # If you know that a particular block of code raises an exception you can
+    # enable post-mortem mode by wrapping this block with Byebug.post_mortem,
+    # e.g.
+    #
+    #   def offender
+    #      raise 'error'
     #   end
-
-    #   def handle_post_mortem(exp)
-    #     return if !exp || !exp.__debug_context ||
-    #       exp.__debug_context.stack_size == 0
-    #     Byebug.suspend
-    #     orig_tracing = Byebug.tracing, Byebug.current_context.tracing
-    #     Byebug.tracing = Byebug.current_context.tracing = false
-    #     Byebug.last_exception = exp
-    #     handler.at_line(exp.__debug_context, exp.__debug_file, exp.__debug_line)
-    #   ensure
-    #     Byebug.tracing, Byebug.current_context.tracing = orig_tracing
-    #     Byebug.resume
+    #   Byebug.post_mortem do
+    #      ...
+    #      offender
+    #      ...
     #   end
-    #   # private :handle_post_mortem
+    def post_mortem
+      if block_given?
+        old_post_mortem = self.post_mortem?
+        begin
+          self.post_mortem = true
+          yield
+        rescue Exception => exp
+          handle_post_mortem(exp)
+          raise
+        ensure
+          self.post_mortem = old_post_mortem
+        end
+      else
+        return if self.post_mortem?
+        self.post_mortem = true
+        debug_at_exit do
+          handle_post_mortem($!) if $! && post_mortem?
+        end
+      end
+    end
+
+    def handle_post_mortem(exp)
+      return if !exp || !exp.__debug_context ||
+        exp.__debug_context.stack_size == 0
+      #Byebug.suspend
+      orig_tracing = Byebug.tracing?, Byebug.current_context.tracing
+      Byebug.tracing = Byebug.current_context.tracing = false
+      Byebug.last_exception = exp
+      handler.at_line(exp.__debug_context, exp.__debug_file, exp.__debug_line)
+    ensure
+      Byebug.tracing, Byebug.current_context.tracing = orig_tracing
+      #Byebug.resume
+    end
+    private :handle_post_mortem
 
   end
 
@@ -321,7 +321,7 @@ module Byebug
 
 end
 
-class Exception # :nodoc:
+class Exception
   attr_reader :__debug_file, :__debug_line, :__debug_binding, :__debug_context
 end
 
@@ -343,24 +343,23 @@ class Module
     EOD
   end
 
-  # XXX: Implement
-  # #
-  # # Wraps the +meth+ method with Byebug.post_mortem {...} block.
-  # #
-  # def post_mortem_method(meth)
-  #   old_meth = "__postmortem_#{meth}"
-  #   old_meth = "#{$1}_set" if old_meth =~ /^(.+)=$/
-  #   alias_method old_meth.to_sym, meth
-  #   class_eval <<-EOD
-  #   def #{meth}(*args, &block)
-  #     Byebug.start do |dbg|
-  #       dbg.post_mortem do
-  #         #{old_meth}(*args, &block)
-  #       end
-  #     end
-  #   end
-  #   EOD
-  # end
+  #
+  # Wraps the +meth+ method with Byebug.post_mortem {...} block.
+  #
+  def post_mortem_method(meth)
+    old_meth = "__postmortem_#{meth}"
+    old_meth = "#{$1}_set" if old_meth =~ /^(.+)=$/
+    alias_method old_meth.to_sym, meth
+    class_eval <<-EOD
+    def #{meth}(*args, &block)
+      Byebug.start do |dbg|
+        dbg.post_mortem do
+          #{old_meth}(*args, &block)
+        end
+      end
+    end
+    EOD
+  end
 end
 
 module Kernel

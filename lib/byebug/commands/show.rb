@@ -118,7 +118,7 @@ module Byebug
         end
         return s.join("\n")
       when /^linetrace$/
-        on_off = Byebug.tracing
+        on_off = Byebug.tracing?
         return "line tracing is #{show_onoff(on_off)}."
       when /^linetrace\+$/
         on_off = Command.settings[:tracing_plus]
