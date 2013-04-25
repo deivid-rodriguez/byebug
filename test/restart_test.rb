@@ -143,7 +143,6 @@ describe 'Restart Command' do
 
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
-      skip('No post morten mode for now')
       must_restart
       enter 'cont', 'restart'
       debug_file 'post_mortem'

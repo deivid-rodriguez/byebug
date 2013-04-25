@@ -52,12 +52,12 @@ module Byebug
       @display = []
 
       @mutex = Mutex.new
-      @last_cmd = nil
+      @last_cmd  = nil
       @last_file = nil   # Filename the last time we stopped
       @last_line = nil   # line number the last time we stopped
       @byebug_breakpoints_were_empty = false # Show breakpoints 1st time
-      @byebug_displays_were_empty = true # No display 1st time
-      @byebug_context_was_dead = true # Assume we haven't started.
+      @byebug_displays_were_empty    = true  # No display 1st time
+      @byebug_context_was_dead       = true  # Assume we haven't started.
     end
 
     def interface=(interface)
@@ -293,14 +293,12 @@ module Byebug
 
       def preloop(commands, context)
         aprint('stopped') if Byebug.annotate.to_i > 2
-        if context.dead?
-          unless @byebug_context_was_dead
-            if Byebug.annotate.to_i > 2
-              aprint('exited')
-              print "The program finished.\n"
-            end
-            @byebug_context_was_dead = true
+        if context.dead? and not @byebug_context_was_dead
+          if Byebug.annotate.to_i > 2
+            aprint('exited')
+            print "The program finished.\n"
           end
+          @byebug_context_was_dead = true
         end
 
         if Byebug.annotate.to_i > 2

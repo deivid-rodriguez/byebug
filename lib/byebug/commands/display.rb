@@ -1,7 +1,6 @@
 module Byebug
 
   module DisplayFunctions
-
     def display_expression(exp)
       print "%s = %s\n", exp, debug_silent_eval(exp).to_s
     end
@@ -79,7 +78,6 @@ module Byebug
   end
 
   class DeleteDisplayCommand < Command
-
     def regexp
       /^\s* undisp(?:lay)? \s* (?:(\S+))?$/x
     end

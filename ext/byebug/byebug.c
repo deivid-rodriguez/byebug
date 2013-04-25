@@ -18,8 +18,6 @@ static VALUE tpCall;
 static VALUE tpReturn;
 static VALUE tpRaise;
 
-static VALUE idAlive;
-
 static VALUE
 tp_inspect(VALUE trace_point) {
   rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point);
@@ -72,11 +70,13 @@ Byebug_current_context(VALUE self)
   return Byebug_thread_context(self, rb_thread_current());
 }
 
+/*
 static int
 remove_dead_threads(VALUE thread, VALUE context, VALUE ignored)
 {
   return (IS_THREAD_ALIVE(thread)) ? ST_CONTINUE : ST_DELETE;
 }
+*/
 
 static void
 cleanup(debug_context_t *context)
@@ -312,6 +312,7 @@ process_raise_event(VALUE trace_point, void *data)
   if (post_mortem == Qtrue && self)
   {
     VALUE binding = rb_binding_new();
+    CTX_FL_SET(context, CTX_FL_DEAD);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_file"), path);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_line"), lineno);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_binding"), binding);
@@ -561,7 +562,7 @@ Byebug_contexts(VALUE self)
   ary = rb_ary_new();
 
   /* check that all contexts point to alive threads */
-  rb_hash_foreach(contexts, remove_dead_threads, 0);
+  /*rb_hash_foreach(contexts, remove_dead_threads, self);*/
 
   rb_hash_foreach(contexts, values_i, ary);
 
@@ -624,8 +625,6 @@ Init_byebug()
   rb_define_module_function(mByebug, "debug_at_exit", Byebug_at_exit, 0);
   rb_define_module_function(mByebug, "post_mortem?", Byebug_post_mortem, 0);
   rb_define_module_function(mByebug, "post_mortem=", Byebug_set_post_mortem, 1);
-
-  idAlive = rb_intern("alive?");
 
   cContext = Init_context(mByebug);
 

@@ -69,7 +69,7 @@ module Byebug
     end
   end
 
-  class InterruptCommand < Command # :nodoc:
+  class InterruptCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
     self.event                = false

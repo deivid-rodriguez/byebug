@@ -20,7 +20,6 @@ module Byebug
     defined?(BYEBUG_DIR)
 
   class Command
-
     SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
       defined?(SubcmdStruct)
 
@@ -60,14 +59,12 @@ module Byebug
         @commands ||= []
       end
 
-      DEF_OPTIONS = {
-        :allow_in_control     => false,
-        :allow_in_post_mortem => false,
-        :event                => true ,
-        :always_run           => 0    ,
-        :unknown              => false,
-        :need_context         => false,
-      } unless defined?(DEF_OPTIONS)
+      DEF_OPTIONS = { allow_in_control:     false,
+                      allow_in_post_mortem: true ,
+                      event:                true ,
+                      always_run:           0    ,
+                      unknown:              false,
+                      need_context:         false } unless defined?(DEF_OPTIONS)
 
       def inherited(klass)
         DEF_OPTIONS.each do |o, v|

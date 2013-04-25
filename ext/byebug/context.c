@@ -3,8 +3,6 @@
 static VALUE cContext;
 static int thnum_current = 0;
 
-static VALUE idAlive;
-
 static VALUE
 id2ref(VALUE id)
 {
@@ -78,7 +76,7 @@ Context_dead(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
-  return IS_THREAD_ALIVE(context->thread) ? Qfalse : Qtrue;
+  return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
 }
 
 extern VALUE
@@ -329,7 +327,9 @@ Context_stop_reason(VALUE self)
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  switch(context->stop_reason)
+  if (CTX_FL_TEST(context, CTX_FL_DEAD))
+    symbol = "post-mortem";
+  else switch (context->stop_reason)
   {
     case CTX_STOP_STEP:
       symbol = "step";
@@ -344,9 +344,6 @@ Context_stop_reason(VALUE self)
     default:
       symbol = "none";
   }
-  if(CTX_FL_TEST(context, CTX_FL_DEAD))
-    symbol = "post-mortem";
-
   return ID2SYM(rb_intern(symbol));
 }
 
@@ -504,8 +501,6 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "step", Context_stop_next, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);
   rb_define_method(cContext, "stop_frame=", Context_stop_frame, 1);
-
-  idAlive = rb_intern("alive?");
 
   return cContext;
 }

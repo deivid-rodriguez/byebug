@@ -34,7 +34,7 @@ module TestDsl
       ENV['COLUMNS'].to_i > 10 ? ENV['COLUMNS'].to_i : 80
     Byebug::Command.settings[:argv] = Byebug::ARGV
     Byebug::Command.settings[:autolist] = 1
-    Byebug::Command.settings[:autoeval] = 1
+    Byebug::Command.settings[:autoeval] = true
     Byebug::Command.settings[:reload_source_on_change] = 1
     force_unset_const Byebug, 'BYEBUG_SCRIPT'
     force_set_const Byebug, 'DEFAULT_START_SETTINGS',

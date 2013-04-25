@@ -24,8 +24,6 @@ typedef struct rb_trace_arg_struct rb_trace_point_t;
 #define CTX_FL_SET(c,f)   do { (c)->flags |= (f); } while (0)
 #define CTX_FL_UNSET(c,f) do { (c)->flags &= ~(f); } while (0)
 
-#define IS_THREAD_ALIVE(t) (rb_funcall((t), idAlive, 0) == Qtrue)
-
 /* types */
 typedef enum {
   CTX_STOP_NONE,

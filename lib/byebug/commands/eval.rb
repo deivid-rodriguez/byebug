@@ -34,7 +34,7 @@ module Byebug
     end
 
     # Set default value
-    Command.settings[:autoeval] = 1
+    Command.settings[:autoeval] = true
 
     def match(input)
       @input = input
