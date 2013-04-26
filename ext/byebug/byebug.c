@@ -160,24 +160,26 @@ call_at_line(debug_context_t *context, char *file, int line,
   rb_funcall(context_object, rb_intern("at_line"), 2, path, lineno);
 }
 
+#define EVENT_SETUP                                                        \
+  VALUE path, lineno, method_id, defined_class, binding, self;             \
+  VALUE context_object;                                                    \
+  debug_context_t *context;                                                \
+  context_object = Byebug_current_context(mByebug);                        \
+  Data_Get_Struct(context_object, debug_context_t, context);               \
+  if (!check_start_processing(context, rb_thread_current())) return;       \
+  load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class, \
+                               &binding, &self);                           \
+  if (debug == Qtrue)                                                      \
+    printf("%s (stack_size: %d)\n",                                        \
+            RSTRING_PTR(tp_inspect(trace_point)), context->stack_size);    \
+
 static void
 process_line_event(VALUE trace_point, void *data)
 {
-  VALUE path, lineno, method_id, defined_class, binding, self;
-  VALUE context_object;
+  EVENT_SETUP;
   VALUE breakpoint;
-  debug_context_t *context;
   int moved = 0;
 
-  context_object = Byebug_current_context(mByebug);
-  Data_Get_Struct(context_object, debug_context_t, context);
-  if (!check_start_processing(context, rb_thread_current())) return;
-
-  load_frame_info(
-      trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
-  if (debug == Qtrue)
-    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
-                                    context->stack_size);
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
@@ -228,19 +230,7 @@ process_line_event(VALUE trace_point, void *data)
 static void
 process_return_event(VALUE trace_point, void *data)
 {
-  VALUE path, lineno, method_id, defined_class, binding, self;
-  VALUE context_object;
-  debug_context_t *context;
-
-  context_object = Byebug_current_context(mByebug);
-  Data_Get_Struct(context_object, debug_context_t, context);
-  if (!check_start_processing(context, rb_thread_current())) return;
-
-  load_frame_info(
-      trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
-  if (debug == Qtrue)
-    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
-                                    context->stack_size);
+  EVENT_SETUP;
 
   if (context->stack_size == context->stop_frame)
   {
@@ -256,20 +246,9 @@ process_return_event(VALUE trace_point, void *data)
 static void
 process_call_event(VALUE trace_point, void *data)
 {
-  VALUE path, lineno, method_id, defined_class, binding, self;
-  VALUE context_object;
+  EVENT_SETUP;
   VALUE breakpoint;
-  debug_context_t *context;
 
-  context_object = Byebug_current_context(mByebug);
-  Data_Get_Struct(context_object, debug_context_t, context);
-  if (!check_start_processing(context, rb_thread_current())) return;
-
-  load_frame_info(
-      trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
-  if (debug == Qtrue)
-    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
-                                    context->stack_size);
   push_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                              defined_class, binding, self);
 
@@ -289,23 +268,12 @@ process_call_event(VALUE trace_point, void *data)
 static void
 process_raise_event(VALUE trace_point, void *data)
 {
-  VALUE path, lineno, method_id, defined_class, binding, self;
-  VALUE context_object;
+  EVENT_SETUP;
   VALUE expn_class, aclass;
   VALUE err = rb_errinfo();
   VALUE ancestors;
-  debug_context_t *context;
   int i;
 
-  context_object = Byebug_current_context(mByebug);
-  Data_Get_Struct(context_object, debug_context_t, context);
-  if (!check_start_processing(context, rb_thread_current())) return;
-
-  load_frame_info(
-      trace_point, &path, &lineno, &method_id, &defined_class, &binding, &self);
-  if (debug == Qtrue)
-    printf("%s (stack_size: %d)\n", RSTRING_PTR(tp_inspect(trace_point)),
-                                    context->stack_size);
   update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
