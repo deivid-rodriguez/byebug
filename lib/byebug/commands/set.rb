@@ -94,7 +94,7 @@ module Byebug
             Command.settings[:callstyle] = arg
           else
             print "Invalid call style #{arg}. Should be one of: " \
-                  "'short', 'last' or 'tracked'.\n"
+                  "\"short\", \"last\" or \"tracked\".\n"
           end
         end
       when /^trace$/
@@ -126,10 +126,10 @@ module Byebug
               File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
           else
             print "Invalid history parameter #{args[0]}. Should be " \
-                  "'filename', 'save' or 'size'.\n"
+                  "\"filename\", \"save\" or \"size\".\n"
           end
         else
-          print "Need two parameters for 'set history'; got " \
+          print 'Need two parameters for "set history"; got ' \
                 "#{args.size}.\n"
           return
         end
