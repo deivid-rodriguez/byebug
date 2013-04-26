@@ -104,12 +104,12 @@ describe "Variables Command" do
   # TODO: Need to write tests for 'var ct' command, but I can't install the
   # 'ruby-internal' gem on my machine, it fails to build gem native extension.
 
-  describe "Post Mortem" do
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
+  describe 'Post Mortem' do
+    it 'must work in post-mortem mode' do
+      skip('Not working yet')
       enter 'cont', 'var local'
       debug_file 'post_mortem'
-      check_output_includes "x => nil", "z => 4"
+      check_output_includes 'x => nil', 'z => 4'
     end
   end
 

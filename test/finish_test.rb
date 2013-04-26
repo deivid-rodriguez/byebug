@@ -37,12 +37,13 @@ describe 'Finish Command' do
   end
 
   describe 'Post Mortem' do
+    before { Byebug::Command.settings[:autoeval] = false }
+
     it 'must not work in post-mortem mode' do
-      skip('No post morten mode for now')
       enter 'cont', 'finish'
       debug_file 'post_mortem'
-      check_output_includes 'Unknown command: "finish".  Try "help".',
-                            interface.error_queue
+      check_output_includes \
+        'Unknown command: "finish".  Try "help".', interface.error_queue
     end
   end
 

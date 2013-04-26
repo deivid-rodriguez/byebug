@@ -37,12 +37,11 @@ describe "Kill Command" do
     end
   end
 
-  describe "Post Mortem" do
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
-      #Process.expects(:kill).with("USR1", Process.pid)
-      #enter 'cont', 'kill USR1'
-      #debug_file "post_mortem"
+  describe 'Post Mortem' do
+    it 'must work in post-mortem mode' do
+      Process.expects(:kill).with('USR1', Process.pid)
+      enter 'cont', 'kill USR1'
+      debug_file 'post_mortem'
     end
   end
 end

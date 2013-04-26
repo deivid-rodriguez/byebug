@@ -69,11 +69,11 @@ describe "Conditions" do
     end
   end
 
-  describe "Post Mortem" do
-    it "must be able to set conditions in post-mortem mode" do
-      skip("No post morten mode for now")
-      enter 'cont', 'break 12', ->{"cond #{breakpoint.id} true"}, 'cont'
-      debug_file("post_mortem") { state.line.must_equal 12 }
+  describe 'Post Mortem' do
+    it 'must be able to set conditions in post-mortem mode' do
+      enter 'cont', 'break 12', ->{ "cond #{Byebug.breakpoints.first.id} true" },
+            'cont'
+      debug_file('post_mortem') { state.line.must_equal 12 }
     end
   end
 

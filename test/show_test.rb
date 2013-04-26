@@ -269,12 +269,11 @@ describe "Show Command" do
     end
   end
 
-  describe "Post Mortem" do
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
-      enter 'cont', "show autolist"
+  describe 'Post Mortem' do
+    it 'must work in post-mortem mode' do
+      enter 'cont', 'show autolist'
       debug_file 'post_mortem'
-      check_output_includes "autolist is on."
+      check_output_includes 'autolist is on.'
     end
   end
 

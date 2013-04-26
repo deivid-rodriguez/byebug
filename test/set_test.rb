@@ -161,14 +161,13 @@ describe "Set Command" do
     end
   end
 
-  describe "Post Mortem" do
+  describe 'Post Mortem' do
     Byebug::Command.settings[:autolist] = 0
 
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
-      enter 'cont', "set autolist on"
+    it 'must work in post-mortem mode' do
+      enter 'cont', 'set autolist on'
       debug_file 'post_mortem'
-      check_output_includes "autolist is on."
+      check_output_includes 'autolist is on.'
     end
   end
 

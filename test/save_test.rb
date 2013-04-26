@@ -78,15 +78,14 @@ describe "Save Command" do
     end
   end
 
-  describe "Post Mortem" do
+  describe 'Post Mortem' do
     let(:file_name) { 'save_output.txt' }
-    #let(:file_contents) { File.read(file_name) }
-    #after { FileUtils.rm(file_name) }
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
+    let(:file_contents) { File.read(file_name) }
+    after { FileUtils.rm(file_name) }
+    it 'must work in post-mortem mode' do
       enter 'cont', "save #{file_name}"
       debug_file 'post_mortem'
-      file_contents.must_include "set autoirb off"
+      file_contents.must_include 'set autoirb off'
     end
   end
 

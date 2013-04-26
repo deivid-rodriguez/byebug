@@ -73,12 +73,11 @@ describe "Irb Command" do
     end
   end
 
-  describe "Post Mortem" do
-    it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
+  describe 'Post Mortem' do
+    it 'must work in post-mortem mode' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
       enter 'cont', 'break 12', 'irb'
-      debug_file("post_mortem") { state.line.must_equal 12 }
+      debug_file('post_mortem') { state.line.must_equal 12 }
     end
   end
 

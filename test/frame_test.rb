@@ -136,9 +136,9 @@ describe 'Frame Command' do
     # somehow, or forbid this command in the post mortem mode. Seems like
     # state.context.frame_file and state.context.frame_line cause that.
     it 'must work in post-mortem mode' do
-      skip('No post morten mode for now')
+      skip('Not working yet...')
       enter 'cont', 'frame'
-      debug_file 'post_mortem'
+      debug_file('post_mortem') { state.line.must_equal 8 }
     end
   end
 

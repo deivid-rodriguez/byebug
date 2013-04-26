@@ -369,7 +369,6 @@ describe 'Breakpoints' do
 
   describe 'Post Mortem' do
     it 'must be able to set breakpoints in post-mortem mode' do
-      skip('No post morten mode for now')
       enter 'cont', 'break 12', 'cont'
       debug_file('post_mortem') { state.line.must_equal 12 }
     end

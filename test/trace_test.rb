@@ -142,7 +142,7 @@ describe 'Trace Command' do
 
     describe 'Post Mortem' do
       it 'must work in post-mortem mode' do
-        skip('No post morten mode for now')
+        skip('It fails with weird error')
         enter 'cont', 'trace on'
         debug_file 'post_mortem'
         check_output_includes 'Tracing on on current thread.'

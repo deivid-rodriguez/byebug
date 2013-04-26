@@ -34,9 +34,9 @@ describe 'Reload Command' do
   end
 
   describe 'Post Mortem' do
-     after { change_line_in_file(fullpath('post_mortem'), 7, '        z = 4') }
+    after { change_line_in_file(fullpath('post_mortem'), 7, '        z = 4') }
+
     it 'must work in post-mortem mode' do
-      skip('No post morten mode for now')
       enter 'cont', -> do
         change_line_in_file(fullpath('post_mortem'), 7, 'z = 100')
         'reload'
