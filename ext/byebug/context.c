@@ -43,9 +43,9 @@ delete_frame(debug_context_t *context)
   xfree(frame);
 }
 
-static inline void
-fill_frame(debug_frame_t *frame, char* file, int lineno, VALUE method_id,
-                                 VALUE defined_class, VALUE binding, VALUE self)
+extern void
+update_frame(debug_frame_t *frame, char* file, int lineno, VALUE method_id,
+                                   VALUE defined_class, VALUE binding, VALUE self)
 {
   frame->file = file;
   frame->line = lineno;
@@ -90,46 +90,24 @@ Context_ignored(VALUE self)
 }
 
 extern void
-push_frame(VALUE context_object, char* file, int lineno, VALUE method_id,
+push_frame(debug_context_t *context, char* file, int lineno, VALUE method_id,
            VALUE defined_class, VALUE binding, VALUE self)
 {
-  debug_context_t *context;
   debug_frame_t *frame;
-  Data_Get_Struct(context_object, debug_context_t, context);
 
   frame = ALLOC(debug_frame_t);
-  fill_frame(frame, file, lineno, method_id, defined_class, binding, self);
+  update_frame(frame, file, lineno, method_id, defined_class, binding, self);
   frame->prev = context->stack;
   context->stack = frame;
   context->stack_size++;
 }
 
 extern void
-pop_frame(VALUE context_object)
+pop_frame(debug_context_t *context)
 {
-  debug_context_t *context;
-  Data_Get_Struct(context_object, debug_context_t, context);
-
   if (context->stack_size > 0) {
     delete_frame(context);
   }
-}
-
-extern void
-update_frame(VALUE context_object, char* file, int lineno, VALUE method_id,
-             VALUE defined_class, VALUE binding, VALUE self)
-{
-  debug_context_t *context;
-  Data_Get_Struct(context_object, debug_context_t, context);
-
-  if (context->stack_size == 0) {
-    push_frame(context_object, file, lineno, method_id, defined_class, binding,
-                               self);
-    return;
-  }
-  fill_frame(context->stack, file, lineno, method_id, defined_class, binding,
-                             self);
-
 }
 
 static void
@@ -148,14 +126,14 @@ Context_mark(debug_context_t *context)
 
 static void
 Context_free(debug_context_t *context) {
-  while(context->stack_size > 0) {
+  while (context->stack_size > 0) {
     delete_frame(context);
   }
   xfree(context);
 }
 
 extern VALUE
-context_create(VALUE thread, VALUE cDebugThread) {
+Context_create(VALUE thread, VALUE cDebugThread) {
   debug_context_t *context;
 
   context = ALLOC(debug_context_t);

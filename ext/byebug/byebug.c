@@ -15,7 +15,9 @@ static VALUE breakpoints;
 
 static VALUE tpLine;
 static VALUE tpCall;
+static VALUE tpCCall;
 static VALUE tpReturn;
+static VALUE tpCReturn;
 static VALUE tpRaise;
 
 static VALUE
@@ -58,7 +60,7 @@ Byebug_thread_context(VALUE self, VALUE thread)
 
   context = rb_hash_aref(contexts, thread);
   if (context == Qnil) {
-    context = context_create(thread, cDebugThread);
+    context = Context_create(thread, cDebugThread);
     rb_hash_aset(contexts, thread, context);
   }
   return context;
@@ -180,8 +182,12 @@ process_line_event(VALUE trace_point, void *data)
   VALUE breakpoint;
   int moved = 0;
 
-  update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                               defined_class, binding, self);
+  if (context->stack_size == 0)
+    push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                        defined_class, binding, self);
+  else
+    update_frame(context->stack, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                                 defined_class, binding, self);
 
   if (context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
        strcmp(context->last_file, RSTRING_PTR(path)))
@@ -228,6 +234,16 @@ process_line_event(VALUE trace_point, void *data)
 }
 
 static void
+process_c_return_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP;
+
+  pop_frame(context);
+
+  cleanup(context);
+}
+
+static void
 process_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
@@ -237,9 +253,18 @@ process_return_event(VALUE trace_point, void *data)
       context->stop_next = 1;
       context->stop_frame = 0;
   }
+  pop_frame(context);
 
-  pop_frame(context_object);
+  cleanup(context);
+}
 
+static void
+process_c_call_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP;
+
+  push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                      defined_class, binding, self);
   cleanup(context);
 }
 
@@ -249,8 +274,8 @@ process_call_event(VALUE trace_point, void *data)
   EVENT_SETUP;
   VALUE breakpoint;
 
-  push_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                             defined_class, binding, self);
+  push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+                      defined_class, binding, self);
 
   breakpoint = find_breakpoint_by_method(breakpoints, defined_class,
                                                       SYM2ID(method_id),
@@ -274,7 +299,7 @@ process_raise_event(VALUE trace_point, void *data)
   VALUE ancestors;
   int i;
 
-  update_frame(context_object, RSTRING_PTR(path), FIX2INT(lineno), method_id,
+  update_frame(context->stack, RSTRING_PTR(path), FIX2INT(lineno), method_id,
                                defined_class, binding, self);
 
   if (post_mortem == Qtrue && self)
@@ -289,8 +314,7 @@ process_raise_event(VALUE trace_point, void *data)
 
   expn_class = rb_obj_class(err);
 
-  if (catchpoints == Qnil ||
-      context->stack_size == 0 ||
+  if (catchpoints == Qnil || context->stack_size == 0 ||
       CTX_FL_TEST(context, CTX_FL_CATCHING) ||
       RHASH_TBL(catchpoints)->num_entries == 0) {
     cleanup(context);
@@ -332,21 +356,32 @@ Byebug_setup_tracepoints(VALUE self)
   tpLine = rb_tracepoint_new(Qnil,
     RUBY_EVENT_LINE,
     process_line_event, NULL);
-  rb_tracepoint_enable(tpLine);
-
-  tpReturn = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_RETURN | RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
-    process_return_event, NULL);
-  rb_tracepoint_enable(tpReturn);
 
   tpCall = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_CALL | RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
+    RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
     process_call_event, NULL);
-  rb_tracepoint_enable(tpCall);
+
+  tpCCall = rb_tracepoint_new(Qnil,
+    RUBY_EVENT_C_CALL,
+    process_c_call_event, NULL);
+
+  tpReturn = rb_tracepoint_new(Qnil,
+    RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
+    process_return_event, NULL);
+
+  tpCReturn = rb_tracepoint_new(Qnil,
+    RUBY_EVENT_C_RETURN,
+    process_c_return_event, NULL);
 
   tpRaise = rb_tracepoint_new(Qnil,
     RUBY_EVENT_RAISE,
     process_raise_event, NULL);
+
+  rb_tracepoint_enable(tpLine);
+  rb_tracepoint_enable(tpCall);
+  rb_tracepoint_enable(tpCCall);
+  rb_tracepoint_enable(tpReturn);
+  rb_tracepoint_enable(tpCReturn);
   rb_tracepoint_enable(tpRaise);
 
   return Qnil;
@@ -359,14 +394,30 @@ Byebug_remove_tracepoints(VALUE self)
   breakpoints = Qnil;
   catchpoints = Qnil;
 
-  if (tpLine != Qnil) rb_tracepoint_disable(tpLine);
-  tpLine = Qnil;
-  if (tpReturn != Qnil) rb_tracepoint_disable(tpReturn);
-  tpReturn = Qnil;
-  if (tpCall != Qnil) rb_tracepoint_disable(tpCall);
-  tpCall = Qnil;
-  if (tpRaise != Qnil) rb_tracepoint_disable(tpRaise);
-  tpRaise = Qnil;
+  if (tpLine != Qnil) {
+    rb_tracepoint_disable(tpLine);
+    tpLine = Qnil;
+  }
+  if (tpCall != Qnil) {
+    rb_tracepoint_disable(tpCall);
+    tpCall = Qnil;
+  }
+  if (tpCCall != Qnil) {
+    rb_tracepoint_disable(tpCCall);
+    tpCCall = Qnil;
+  }
+  if (tpReturn != Qnil) {
+    rb_tracepoint_disable(tpReturn);
+    tpReturn = Qnil;
+  }
+  if (tpCReturn != Qnil) {
+    rb_tracepoint_disable(tpCReturn);
+    tpCReturn = Qnil;
+  }
+  if (tpRaise != Qnil) {
+    rb_tracepoint_disable(tpRaise);
+    tpRaise = Qnil;
+  }
   return Qnil;
 }
 
@@ -460,8 +511,8 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
         return errinfo;
     }
 
-    /* We should run all at_exit handler's in order to provide, 
-     * for instance, a chance to run all defined test cases */
+    /* We should run all at_exit handler's in order to provide, for instance, a
+     * chance to run all defined test cases */
     rb_exec_end_proc();
 
     return Qnil;
@@ -489,8 +540,7 @@ static VALUE
 Byebug_at_exit(VALUE self)
 {
   VALUE proc;
-  if (!rb_block_given_p())
-    rb_raise(rb_eArgError, "called without a block");
+  if (!rb_block_given_p()) rb_raise(rb_eArgError, "called without a block");
   proc = rb_block_proc();
   rb_set_end_proc(debug_at_exit_i, proc);
   return proc;

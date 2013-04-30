@@ -62,20 +62,19 @@ typedef struct {
 
 /* functions */
 extern VALUE Init_context(VALUE mByebug);
-extern VALUE context_create(VALUE thread, VALUE cDebugThread);
+extern VALUE Context_create(VALUE thread, VALUE cDebugThread);
 extern void reset_stepping_stop_points(debug_context_t *context);
 extern VALUE Context_ignored(VALUE self);
 
-extern void push_frame(VALUE context_object, char* file, int lineno,
+extern void push_frame(debug_context_t *context, char* file, int lineno,
                        VALUE method_id, VALUE defined_class, VALUE binding,
                        VALUE self);
 
-extern void pop_frame(VALUE context_object);
+extern void pop_frame(debug_context_t *context);
 
-extern void update_frame(VALUE context_object, char* file, int lineno,
+extern void update_frame(debug_frame_t *context, char* file, int lineno,
                          VALUE method_id, VALUE defined_class, VALUE binding,
                          VALUE self);
-
 
 /* locked threads container */
 typedef struct locked_thread_t {
