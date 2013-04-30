@@ -1,14 +1,10 @@
 \input texinfo      @c -*-texinfo-*-
 @setfilename byebug.info
 
-@set DBG byebug
-@set ttbyebug @code{byebug}
-@set ttDBG @code{@value{DBG}}
-
 @set txicodequoteundirected
 @set txicodequotebacktick
-@set BYEBUG_VERSION 1.0.1
-@set EDITION 1.0.1
+@set BYEBUG_VERSION 1.0.3
+@set EDITION 1.0.3
 @set UPDATED April-2013
 
 @macro Example {}
@@ -23,14 +19,6 @@
 @end cartouche
 @end iftex
 @end smallexample
-@end macro
-
-@macro DBG {}
-@value{DBG}
-@end macro
-
-@macro ttDBG {}
-@value{ttbyebug}
 @end macro
 
 @c How to show optional variables.
@@ -87,7 +75,7 @@ This is the @value{EDITION} Edition, @value{UPDATED}
 * Byebug Module and Class::   Byebug's module and class
 
 Appendix
-* Using from GitHub::
+* Contributing::
 
 Indexes
 * Class Module Method Index:: An item for each Class, Module and Method.
@@ -102,11 +90,11 @@ Indexes
 @node Summary
 @chapter Summary of @code{byebug}
 
-The purpose of a debugger such as @DBG{} is to allow you to see what is going on
-``inside'' a Ruby program while it executes.
+The purpose of a debugger such as @code{byebug} is to allow you to see what is
+going on ``inside'' a Ruby program while it executes.
 
-@ttDBG{} can do four main kinds of things (plus other things in support of these)
-to help you catch bugs in the act:
+@code{byebug} can do four main kinds of things (plus other things in support of
+these) to help you catch bugs in the act:
 
 @itemize @bullet
 @item
@@ -119,48 +107,47 @@ Make your script stop on specified conditions.
 Examine what has happened, when your script has stopped.
 
 @item
-Change things in your script, so you can experiment with correcting the effects of
-one bug and go on to learn about another.
+Change things in your script, so you can experiment with correcting the effects
+of one bug and go on to learn about another.
 @end itemize
 
 Although you can use @value{byebug} to invoke your Ruby programs via a debugger
 at the outset, there are other ways to use and enter the debugger.
 
 @menu
-* First Sample Session::   A Simple Sample @code{byebug} session
-* Second Sample Session::  Second Session Delving a little deeper @code{byebug} session
-* Unit Testing Session::   Using byebug in unit testing
-* Byebug.start with a block::   Using the Byebug.start with a block
-* Debugging Oddities::     How debugging Ruby may be different...
+* First Sample Session::      A Simple Sample @code{byebug} session
+* Second Sample Session::     Second Session. Delving a little deeper
+* Unit Testing Session::      Using byebug in unit testing
+* Byebug.start with a block:: Using the Byebug.start with a block
+* Debugging Oddities::        How debugging Ruby may be different...
 @end menu
 
 @node First Sample Session
-@section The First Sample @code{byebug} Session (@code{list}, @code{display}, @code{print}, and @code{quit})
+@section The First Sample @code{byebug} Session (@code{list}, @code{display},
+@code{print}, and @code{quit})
 
-You can use this manual at your leisure to read all about @value{ttDBG}.
-However, a handful of commands are enough to get started using the
-byebug.  The following sections illustrates these commands.
+You can use this manual at your leisure to read all about @code{byebug}.
+However, a handful of commands are enough to get started using byebug. The
+following sections illustrates these commands.
 
 @iftex
-In this sample session, we emphasize user input like this: @b{input},
-to make it easier to pick out from the surrounding output.
+In this sample session, we emphasize user input like this: @b{input}, to make it
+easier to pick out from the surrounding output.
 @end iftex
 
-Below is Ruby code to compute a triangle number of a given
-length.@footnote{There are of course shorter ways to define @code{triangle}
-such as:
+Below is Ruby code to compute a triangle number of a given length.
+@footnote{There are of course shorter ways to define @code{triangle} such as:
 @smallexample
   def triangle(n) (n * (n+1)) / 2 end
 @end smallexample
-The code we use in this example and the next is more for pedagogical
-purposes than how to write short Ruby code.}
-
+The code we use in this example and the next is more for pedagogical purposes
+than how to write short Ruby code.}
 
 @smallexample
 $ @b{byebug triangle.rb}
 triangle.rb:4 def hanoi(n,a,b,c)
 (byebug:1) @b{list}
-[-1, 8] in ./triangle.rb
+[1, 8] in ./triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
    3  # triangle(n) == (n * (n+1)) / 2
@@ -170,7 +157,7 @@ triangle.rb:4 def hanoi(n,a,b,c)
    7      tri += i
    8    end
 (byebug:1) @b{l}
-[9, 18] in ./triangle.rb
+[9, 13] in ./triangle.rb
    9    tri
    10  end
    11
@@ -199,22 +186,22 @@ triangle.rb:4 def hanoi(n,a,b,c)
 There are lots of command options, but we don't need them for now. See
 @ref{byebug command-line options} for a full list of command options.
 
-Position information consists of a filename and line number, e.g.@:
-@code{triangle.rb:4}. We are currently stopped before the first executable line
-of the program; this is line 4 of @code{triangle.rb}. If you are used to less
-dynamic languages and have used debuggers for more statically compiled languages
-like C, C++, or Java, it may seem odd to be stopped before a function definition
-but in Ruby line 4 is executed, the name @code{triangle} (probably) does not
-exist so issuing a method call of @code{triangle} will raise a ``method not
-found'' error.
+Position information consists of a filename and line number, e.g.
+@:@code{triangle.rb:4}. We are currently stopped before the first executable
+line of the program; this is line 4 of @code{triangle.rb}. If you are used to
+less dynamic languages and have used debuggers for more statically compiled
+languages like C, C++, or Java, it may seem odd to be stopped before a function
+definition but in Ruby line 4 is executed, the name @code{triangle} (probably)
+does not exist so issuing a method call of @code{triangle} will raise a
+``method not found'' error.
 
-@DBG{}'s prompt is @code{(byebug:@emph{n})}. The @emph{n} is the thread number.
-Here it is 1 which is usually the case for the main thread. If the program has
-died and you are in post-mortem debugging, there is no thread number. In this
-situation, the string @code{post-mortem} is used in place of a thread number. If
-the program has terminated normally, the string this position will be
-@code{ctrl}. The commands which are available change depending on the program
-state.
+@code{byebug}'s prompt is @code{(byebug:@emph{n})}. The @emph{n} is the thread
+number. Here it is 1 which is usually the case for the main thread. If the
+program has died and you are in post-mortem debugging, there is no thread
+number. In this situation, the string @code{post-mortem} is used in place of a
+thread number. If the program has terminated normally, the string this position
+will be @code{ctrl}. The commands which are available change depending on the
+program state.
 
 The first command, @code{list} (@pxref{List}), prints 10 lines centered around
 the current line; the current line here is line 4 and is marked by @code{=>}, so
@@ -249,29 +236,26 @@ triangle.rb:6
 0
 @end smallexample
 
-The first @kbd{step} command (@pxref{Step}) runs the script one
-executable unit. The second command we entered was just hitting the
-return key; @ttDBG{} remembers the last command you entered was
-@code{step}, so it runs that last command again.
+The first @kbd{step} command (@pxref{Step}) runs the script one executable unit.
+The second command we entered was just hitting the return key; @code{byebug}
+remembers the last command you entered was @code{step}, so it runs that last
+command again.
 
-One way to print the values of variables uses @code{p}. (Of course,
-there are of course lots of other ways too.). When we look at the
-value of @code{tri} the first time, we see it is @code{nil}. Again we
-are stopped @emph{before} the assignment on line 5, and this variable
-hasn't been set previously. However after issuing another ``step''
-command we see that the value is 0 as expected.
-
-However if every time we stop we want to see the value of @code{tri}
-to see how things are going stop, there is a better way by setting a
-display expression (@pxref{DisplayCommands}).
+One way to print the values of variables uses @code{p} (of course, there are
+lots of other ways). When we look at the value of @code{tri} the first time, we
+see it is @code{nil}. Again we are stopped @emph{before} the assignment on line
+5, and this variable hasn't been set previously. However after issuing another
+@code{step} command we see that the value is 0 as expected. If every time we
+stop we want to see the value of @code{tri} to see how things are going, there
+is a better way by setting a display expression (@pxref{DisplayCommands}).
 
 @smallexample
 (byebug:1) @b{display tri}
 1: tri = 0
 @end smallexample
 
-Now let us run the program until we return from the function. However
-we'll want to see which lines get run.
+Now let us run the program until we return from the function. We'll want to see
+which lines get run.
 
 @smallexample
 (byebug:1) @b{display i}
@@ -306,9 +290,9 @@ puts t
 Really quit? (y/n) @b{y}
 @end smallexample
 
-So far, so good. A you can see from the above to get out of byebug, one can
-issue a @code{quit} command. (@code{q} and @code{exit} are just as good. If you
-want to quit without being prompted, suffix the command with an exclamation
+So far, so good. As you can see from the above to get out of @code{byebug}, one
+can issue a @code{quit} command (@code{q} and @code{exit} are just as good). If
+you want to quit without being prompted, suffix the command with an exclamation
 mark, e.g.\@code{q!}.
 
 @node Second Sample Session
@@ -927,29 +911,24 @@ To be continued...
 * Calling from Program:: Calling byebug from inside your program
 @end menu
 
-It is also possible to enter byebug when you have an uncaught
-exception. See See also @ref{Post-Mortem Debugging}.
+It is also possible to enter byebug when you have an uncaught exception (see
+@ref{Post-Mortem Debugging}).
 
 @node Starting byebug
 @section Starting byebug
 
-Although one can enter @DBG{} via Emacs (described in a later section)
-and possibly others interfaces, probably the most familiar thing to do
-is invoke byebug from a command line.
-
-A wrapper shell script called @code{byebug} basically @code{require}'s
-the gem package @code{byebug} and then loads @code{byebug}.
+Probably the most familiar thing to do is invoke byebug from a command line. A
+wrapper shell script called @code{byebug} basically @code{require}'s the gem
+package @code{byebug} and then loads @code{byebug}.
 
 @smallexample
 byebug [byebug-options] [--] @var{ruby-script} @var{ruby-script-arguments...}
 @end smallexample
 
-If you don't need to pass dash options to your program which might get
-confused with byebug options, then you don't need to add the
-@option{--}.
+If you don't need to pass dash options to your program which might get confused
+with byebug options, then you don't need to add the @option{--}.
 
-To get a brief list of options and descriptions, use the @code{--help}
-option.
+To get a brief list of options and descriptions, use the @code{--help} option.
 
 @smallexample
 $ @b{byebug --help}
@@ -997,42 +976,39 @@ Options for the @code{byebug} are shown in the following list.
 @node byebug command-line options
 @subsection Options you can pass to byebug
 
-You can run @DBG{} in various alternative modes---for example, as a
-program that interacts directly with the program in the same process
-on the same computer or via a socket to another process possibly on a
-different computer.
+You can run @code{byebug} in various alternative modes, for example, as a
+program that interacts directly with the program in the same process on the same
+computer or via a socket to another process possibly on a different computer.
 
-Many options appear as a long option name, such as @option{--help}, and
-a short one letter option name, such as @option{-h}. A double dash
-(@option{--} is used to separate options which go to @code{byebug} from
-options that are intended to go to your Ruby script. Options (if any)
-to @code{byebug} should come first. If there is no possibility of the
-Ruby script to be debugged getting confused with @code{byebug}'s
-option the double dash can be omitted.
+Many options appear as a long option name, such as @option{--help}, and a short
+one letter option name, such as @option{-h}. A double dash (@option{--} is used
+to separate options which go to @code{byebug} from options that are intended to
+go to your Ruby script. Options (if any) to @code{byebug} should come first. If
+there is no possibility of the Ruby script to be debugged getting confused with
+@code{byebug}'s option, the double dash can be omitted.
 
 @table @code
 @item --help
 @cindex @option{-h}
 @cindex @option{--help}
-This option causes @ttDBG{} to print some basic help and exit.
+This option causes @code{byebug} to print some basic help and exit.
 
 @item -v | --version
 @cindex @option{-v}
-This option causes @ttDBG{} to print its version number and exit.
+This option causes @code{byebug} to print its version number and exit.
 
 @item -A | --annotate @var{level}
 @cindex @option{-A}
 @cindex @option{--annotation} @var{level}
 Set gdb-style annotation @var{level}, a number. Additional information is output
-automatically when program state is changed. This can be used by
-front-ends such as GNU Emacs to post this updated information without
-having to poll for it.
+automatically when program state is changed. This can be used by front-ends such
+as GNU Emacs to post this updated information without having to poll for it.
+
 @item -c | --client
 @cindex @option{-c}
 @cindex @option{--client}
-Connect to remote byebug. The remote byebug should have been set
-up previously our you will get a connection error and @code{byebug}
-will terminate.
+Connect to remote byebug. The remote byebug should have been set up previously
+or you will get a connection error and @code{byebug} will terminate.
 
 @item --cport @var{port}
 @cindex @option{--cport} @var{port}
@@ -1040,8 +1016,7 @@ Port used for control commands.
 
 @item --debug
 @cindex @option{--debug}
-Set @code{$DEBUG} to @code{true}. This option is compatible with
-Ruby's.
+Set @code{$DEBUG} to @code{true}. This option is compatible with Ruby's.
 
 @item -h | --host @var{host-address}
 Connect host address for remote debugging.
@@ -1101,9 +1076,9 @@ the unlikely even you don't want this use this option.
 
 @item --no-stop
 @cindex @option{--no-stop}
-Normally the @code{byebug} stops before executing the first
-statement. If instead you want it to start running initially and will
-perhaps break it later in the running, use this options.
+Normally the @code{byebug} stops before executing the first statement. If
+instead you want it to start running initially and will perhaps break it later
+in the running, use this options.
 
 @item -p | --port @var{port}
 @cindex @option{-p} @var{port}
@@ -1113,27 +1088,27 @@ Port used for remote debugging.
 @item -r | --require @var{library}
 @cindex @option{-r}
 @cindex @option{--require}
-Require the library, before executing your script. However if the
-library happened to be @code{debug}, we'll just ignore the require
-(since we're already a byebug). This option is compatible with Ruby's.
+Require the library, before executing your script. However if the library
+happened to be @code{debug}, we'll just ignore the require (since we're already
+a debugger). This option is compatible with Ruby's.
 
 @item --script @var{file}
 @cindex @option{--script}
-Require the library, before executing your script. However if the
-library hap-pend to be @code{debug}, we'll just ignore the require
-(since we're already a byebug). This option is compatible with Ruby's.
+Require the library, before executing your script. However if the library
+happend to be @code{debug}, we'll just ignore the require (since we're already a
+debugger). This option is compatible with Ruby's.
 
 @item -s | --server
 @cindex @option{-s}
 @cindex @option{--server}
-Debug the program but listen for remote connections on the default
-port or port set up via the @option{--port} option. See also @option{--wait}.
+Debug the program but listen for remote connections on the default port or port
+set up via the @option{--port} option. See also @option{--wait}.
 
 @item -w | --wait
 @cindex @option{-w}
 @cindex @option{--wait}
-Debug the program but stop waiting for a client connection first. This
-option automatically sets @option{--server} option.
+Debug the program but stop waiting for a client connection first. This option
+automatically sets @option{--server} option.
 
 @item -x | --trace
 @cindex @option{-x}
@@ -1141,8 +1116,9 @@ option automatically sets @option{--server} option.
 Turn on line tracing. Running @command{byebug --trace @emph{rubyscript.rb}}
 is much like running: @command{ruby -rtracer @emph{rubyscript.rb}}
 
-If all you want to do however is get a linetrace, @code{tracer}, not
+If all you want to do however is get a linetrace, @code{tracer} and not
 @code{byebug}, may be faster:
+
 @smallexample
 $ @b{time ruby -rtracer gcd.rb 34 21 > /dev/null}
 
@@ -1156,27 +1132,24 @@ user  0m0.448s
 sys  0m0.056s
 $
 @end smallexample
-
 @end table
 
 @node byebug default options
 @subsection How to Set Default Command-Line Options
 
-@DBG{} has many command-line options; it seems that some people want
-to set them differently from the our defaults. For example, some
-people may want @option{--no-quit --no-control} to be the default
-behavior. One could write a wrapper script or set a shell alias to
-handle this. @DBG{} has another way to do this as well. Before
-processing command options if the file @code{$HOME/.rdboptrc} is found
-(or, on Windows, @code{$HOME/rdbopt.ini}, it is loaded.
-If you want to set the defaults in some other way, you
-can put Ruby code here and set variable @code{options} which is an
-OpenStruct. For example here's how you'd set @option{-no-quit} and
+@code{byebug} has many command-line options; it seems that some people want to
+set them differently from the defaults. For example, some people may want
+@option{--no-quit --no-control} to be the default behavior. One could write a
+wrapper script or set a shell alias to handle this. But @code{byebug} has
+another way to do this. Before processing command options, if the file
+@code{$HOME/.rdboptrc} is found, it is loaded. If you want to set the defaults
+in some other way, you can put Ruby code here and set variable @code{options}
+which is an OpenStruct. For example here's how you'd set @option{-no-quit} and
 change the default control port to 5000.
 
 @smallexample
-# This file contains how you want the default options to byebug
-# to be set. Any Ruby code can be put here.
+# This file contains how you want the default options to byebug to be set. Any
+# Ruby code can be put here.
 #
 # byebug # Uncomment if you want to debug byebug!
 options.control = false
@@ -1193,134 +1166,117 @@ Here are the default values in @code{options}
              host=nil, wait=false>
 @end smallexample
 
-
 @node Command Files
 @section Command files
 
 @cindex command files
-A command file for @DBG{} is a file of lines that are @DBG{}
-commands.  Comments (lines starting with @kbd{#}) may also be included.
-An empty line in a command file does nothing; it does not mean to repeat
-the last command, as it would from the terminal.
+A command file is a file of lines that are @code{byebug} commands. Comments
+(lines starting with @kbd{#}) may also be included. An empty line in a command
+file does nothing; it does not mean to repeat the last command, as it would from
+the terminal.
 
 @cindex init file
 @cindex @file{.byebugrc}
-When you start @value{DBG}, it automatically executes commands from its
-@dfn{init files}, normally called @file{.byebugrc}.
+When you start @code{byebug}, it automatically executes commands from its
+@dfn{init files}, normally called @file{.byebugrc}. On some configurations of
+@code{byebug}, the init file may be known by a different name.
 
-On some configurations of @value{DBG}, the init file may be known by a
-different name. In particular on MS-Windows (but not cygwin)
-@file{byebug.ini} is used.
-
-During startup, @DBG{} does the following:
+During startup, @code{byebug} does the following:
 
 @enumerate
 @item
 Processes command line options and operands.
 
 @item
-Reads the init file in your current directory, if any, and failing
-that the home directory. The home directory is the directory named in
-the @code{HOME} or @code{HOMEPATH} environment variable.
-
-Thus, you can have more than one init file, one generic in your home
-directory, and another, specific to the program you are debugging, in
-the directory where you invoke @DBG{}.
+Reads the init file in your current directory, if any, and then checks your home
+directory. The home directory is the directory named in the @code{HOME} or
+@code{HOMEPATH} environment variable. Thus, you can have more than one init
+file, one generic in your home directory, and another, specific to the program
+you are debugging, in the directory where you invoke @code{byebug}.
 
 @item
 Reads command files specified by the @samp{--script} option.
 @end enumerate
 
-You can also request the execution of a command file with the
-@code{source} command, @pxref{Source}.
+You can also request the execution of a command file with the @code{source}
+command, @pxref{Source}.
 
 @node Quitting byebug
 @section Quitting byebug
 
 @cindex interrupt
-An interrupt (often @kbd{C-c}) does not exit from @value{DBG}, but
-rather terminates the action of any @DBG command that is in
-progress and returns to @value{DBG} command level.  Inside a byebug
-command interpreter, use @code{quit} command (@pxref{Control, ,Quitting
-byebug}).
+An interrupt (often @kbd{C-c}) does not exit from @code{byebug}, but rather
+terminates the action of any @code{byebug} command that is in progress and
+returns to @code{byebug} command level.  Inside a debugger command interpreter,
+use @code{quit} command (@pxref{Control, ,Quitting byebug}).
 
-There way to terminate byebug is to use the @code{kill}
-command. This does more forceful @code{kill -9}. It can be used in
-cases where @code{quit} doesn't work.
+Another way to terminate byebug is to use the @code{kill} command. This does the
+more forceful @code{kill -9}. It can be used in cases where @code{quit} doesn't
+work.
 
 @node Calling from Program
 @section Calling byebug from inside your Ruby program
 
-Running a program from byebug adds a bit of overhead and slows
-down your program a little.
+Running a program from byebug adds a bit of overhead and slows down your program
+a little. Furthermore, by necessity, debuggers change the operation of the
+program they are debugging. And this can lead to unexpected and unwanted
+differences. It has happened so often that the term ``Heisenbugs'' (see
+@url{http://en.wikipedia.org/wiki/Heisenbug}) was coined to describe the
+situation where using a debugger (among other possibilities) changes the
+behavior of the program so that the bug doesn't manifest itself anymore.
 
-Furthermore, by necessity, byebugs change the operation of the
-program they are debugging. And this can lead to unexpected and
-unwanted differences. It has happened so often that the term
-``Heisenbugs'' (see @url{http://en.wikipedia.org/wiki/Heisenbug}) was
-coined to describe the situation where the addition of the use of a
-byebug (among other possibilities) changes behavior of the program
-so that the bug doesn't manifest itself anymore.
-
-There is another way to get into byebug which adds no overhead
-or slowdown until you reach the point at which you want to start
-debugging. However here you must change the script and make an
-explicit call to byebug. Because byebug isn't involved
-before the first call, there is no overhead and the script will run
+There is another way to get into byebug which adds no overhead or slowdown until
+you reach the point at which you want to start debugging. However here you must
+change the script and make an explicit call to byebug. Because byebug isn't
+involved before the first call, there is no overhead and the script will run
 at the same speed as if there were no byebug.
 
-There are three parts to calling byebug from inside the script,
-``requiring'' byebug code, telling byebug to start
-tracking things and then making the call calling byebug to
-stop.
+There are three parts to calling byebug from inside the script, ``requiring''
+the gem, telling byebug to start tracking things and then making an explicit
+breakpoints.
 
 To get byebug class accessible from your Ruby program:
-
 @smallexample
 require 'byebug'
 @end smallexample
-After @code{require 'byebug'}, it's possible to set some of the
-byebug variables influence preferences. For example if you want to
-have @ttDBG run a @code{list} command every time it stops you set the
-variable @code{Byebug.settings[:autolist]}. @pxref{Byebug.settings} has a
-list of variable settings and the default values. Byebug settings
-can also be set in @code{.byebugrc} as byebug
-commands. @pxref{Command Files}
+
+After @code{require 'byebug'}, it's possible to set some of the byebug variables
+influence preferences. For example if you want to have @code{byebug} run a
+@code{list} command every time it stops you set the variable
+@code{Byebug.settings[:autolist]}. @pxref{Byebug.settings} has a list of
+variable settings and the default values. Byebug settings can also be set in
+@code{.byebugrc} as byebug commands. @pxref{Command Files}
 
 To tell byebug to start tracking things:
-
 @smallexample
 Byebug.start
 @end smallexample
 
-There is also a @code{Byebug.stop} to turn off byebug tracking. If
-speed is crucial, you may want to start and stop this around certain
-sections of code. Alternatively, instead of issuing an explicit
-@code{Byebug.stop} you can add a block to the @code{Byebug.start}
-and debugging is turned on for that block. If the block of code raises
-an uncaught exception that would cause the block to terminate, the
-@code{stop} will occur.  See @ref{Byebug.start with a block}.
+There is also a @code{Byebug.stop} to turn off byebug tracking. If speed is
+crucial, you may want to start and stop this around certain sections of code.
+Alternatively, instead of issuing an explicit @code{Byebug.stop} you can add a
+block to the @code{Byebug.start} and debugging is turned on for that block. If
+the block of code raises an uncaught exception that would cause the block to
+terminate, the @code{stop} will occur.  See @ref{Byebug.start with a block}.
 
 And finally to enter byebug:
-
 @smallexample
 byebug
 @end smallexample
 
-As indicated above, when @code{byebug} is run a @code{.byebugrc}
-profile is read if that file exists.
+As indicated above, when @code{byebug} is run a @code{.byebugrc} profile is read
+if that file exists.
 
-You may want to do enter byebug at several points in the program
-where there is a problem you want to investigate. And since
-@code{byebug} is just a method call it's possible enclose it in a
-conditional expression, for example:
+You may want to enter byebug at several points in the program where there is a
+problem you want to investigate. And since @code{byebug} is just a method call
+it's possible enclose it in a conditional expression, for example:
 @smallexample
 byebug if 'bar' == foo and 20 == iter_count
 @end smallexample
 
-Although each step does a very specific thing which offers great
-flexibility, in order to make getting into byebug easier the
-three steps have been rolled into one command:
+Although each step does a very specific thing which offers great flexibility, in
+order to make getting into byebug easier the three steps have been rolled into
+one command:
 @smallexample
 require "byebug/byebug"
 @end smallexample
@@ -1329,57 +1285,54 @@ require "byebug/byebug"
 @chapter @code{byebug} Command Reference
 
 @menu
-* Command Interfaces::       The kinds of interface used to interact with byebug
-* Command Syntax::           How to give commands to byebug
-* Command Output::           How byebug presents its output
-* Help::                     How to ask for help (help)
-* Control::                  Controlling byebug (quit, restart, interrupt)
-* DisplayCommands::          Executing expressions on stop (display, undisplay)
-* PrintCommands::            Evaluating and Printing Expressions (p, pp, ps, pp, irb)
-* PrintVars::                Printing Variables (var)
-* List::                     Examining Program Source Files (list)
-* Edit::                     Editing source files (edit)
-* FrameCommands::            Examining the stack frame (where, up, down, frame)
-* Stopping::                 Stopping and continuing (break, watch, step, cont...)
-* byebug settings::      byebug-settings (set args, set autoeval, ...)
-* Program Information::      Program Status  (info)
+* Command Interfaces::  The kinds of interface used to interact with byebug
+* Command Syntax::      How to give commands to byebug
+* Command Output::      How byebug presents its output
+* Help::                How to ask for help (help)
+* Control::             Controlling byebug (quit, restart, interrupt)
+* DisplayCommands::     Executing expressions on stop (display, undisplay)
+* PrintCommands::       Evaluating and Printing Expressions (p, pp, ps, pp, irb)
+* PrintVars::           Printing Variables (var)
+* List::                Examining Program Source Files (list)
+* Edit::                Editing source files (edit)
+* FrameCommands::       Examining the stack frame (where, up, down, frame)
+* Stopping::            Stopping and continuing (break, watch, step, cont...)
+* byebug settings::     byebug-settings (set args, set autoeval, ...)
+* Program Information:: Program Status  (info)
 @end menu
 
 @node Command Interfaces
 @section Command Interfaces
-There are several ways one can talk to @code{byebug} and get
-results. The simplest way is via a command-line interface directly
-talking to byebug. This is referred to below as a ``Local
-Interface''. It's also possible to run byebug and set up a port
-by which some other process can connect and control the debug
-session. This is called a ``Remote Interface''. When you want to gain
-access to a remote interface you need to run @code{byebug} using a
-``Control Interface''. This interface might not be the same process as
-the process running the debugged program and might not even be
-running on the same computer.
+There are several ways one can talk to @code{byebug} and get results. The
+simplest way is via a command-line interface directly talking to byebug. This is
+referred to below as a ``Local Interface''. It's also possible to run byebug and
+set up a port by which some other process can connect and control the debug
+session. This is called a ``Remote Interface''. When you want to gain access to
+a remote interface you need to run @code{byebug} using a ``Control Interface''.
+This interface might not be the same process as the process running the debugged
+program and might not even be running on the same computer.
 
-Other front-ends may use one of these and build on top and provide
-other (richer) interfaces. Although many of the commands are available
-on all interfaces some are not. Most of the time in this manual when
-we talk about issuing commands describing the responses elicited,
-we'll assume we are working with the local interface.
+Other front-ends may use one of these and build on top and provide other
+(richer) interfaces. Although many of the commands are available on all
+interfaces some are not. Most of the time in this manual when we talk about
+issuing commands describing the responses elicited, we'll assume we are working
+with the local interface.
 
 @node Command Syntax
 @section Command Syntax
-Usually a command is put on a single line. There is no limit on how long
-it can be.  It starts with a command name, which is followed by
-arguments whose meaning depends on the command name.  For example, the
-command @code{step} accepts an argument which is the number of times to
-step, as in @code{step 5}.  You can also use the @code{step} command with no
-arguments.  Some commands do not allow any arguments.
+Usually a command is put on a single line. There is no limit on how long it can
+be. It starts with a command name, which is followed by arguments whose meaning
+depends on the command name. For example, the command @code{step} accepts an
+argument which is the number of times to step, as in @code{step 5}. You can also
+use the @code{step} command with no arguments. Some commands do not allow any
+arguments.
 
-Multiple commands can be put on a line by separating each with a
-semicolon (@code{;}). You can disable the meaning of a semicolon to
-separate commands by escaping it with a backslash.
+Multiple commands can be put on a line by separating each with a semicolon
+(@code{;}). You can disable the meaning of a semicolon to separate commands by
+escaping it with a backslash.
 
-For example, if you have @code{autoeval} (@ref{Autoeval}) set, you
-might want to enter the following code to compute the 5th Fibonacci
-number:
+For example, if you have @code{autoeval} (@ref{Autoeval}) set, you might want to
+enter the following code to compute the 5th Fibonacci number:
 @smallexample
 # Compute the 5 Fibonaci number
 (byebug:1) set autoeval on
@@ -1394,23 +1347,23 @@ SyntaxError Exception: compile error
 fib2
 8
 @end smallexample
-You might also consider using the @code{irb} command, @ref{irb}, and
-then you won't have to escape semicolons.
 
-A blank line as input (typing just @key{<RET>}) means to repeat the
-previous command.
+You might also consider using the @code{irb} command, @ref{irb}, and then you
+won't have to escape semicolons.
 
-In the ``local'' interface, the Ruby Readline module is used. It
-handles line editing and retrieval of previous commands. Up arrow, for
-example moves to the previous byebug command; down arrow moves to
-the next more recent command (provided you are not already at the last
-command). Command history is saved in file @code{.byebug_hist}. A
-limit is put on the history size. You can see this with the @code{show
-history size} command. See @ref{History} for history parameters.
+A blank line as input (typing just @key{<RET>}) means to repeat the previous
+command.
+
+In the ``local'' interface, the Ruby Readline module is used. It handles line
+editing and retrieval of previous commands. Up arrow, for example moves to the
+previous byebug command; down arrow moves to the next more recent command
+(provided you are not already at the last command). Command history is saved in
+file @code{.byebug_hist}. A limit is put on the history size. You can see this
+with the @code{show history size} command. See @ref{History} for history
+parameters.
 
 @node Command Output
 @section Command Output
-
 In the command-line interface, when @code{byebug} is waiting for input it
 presents a prompt of the form @code{(byebug:}@emph{x}@code{)}. If debugging
 locally, @emph{x} will be the thread number. Usual the main thread is 1, so
@@ -1460,7 +1413,7 @@ continue   edit     frame   kill  pp      restart  step    var
 
 @table @code
 @item help @var{command}
-With a command name as @code{help} argument, @DBG displays short
+With a command name as @code{help} argument, @code{byebug} displays short
 information on how to use that command.
 
 @smallexample
@@ -1516,15 +1469,15 @@ info variables -- Local and instance variables of the current stack frame
 @example
 (byebug:1) @b{help info breakpoints}
 Status of user-settable breakpoints.
-Without argument, list info about all breakpoints.  With an
-integer argument, list info on that breakpoint.
+Without argument, list info about all breakpoints.
+With an integer argument, list info on that breakpoint.
 @end example
 
 @example
 (byebug:1) @b{help info br}
 Status of user-settable breakpoints.
-Without argument, list info about all breakpoints.  With an
-integer argument, list info on that breakpoint.
+Without argument, list info about all breakpoints.
+With an integer argument, list info on that breakpoint.
 @end example
 
 @node Control
@@ -1539,6 +1492,7 @@ integer argument, list info on that breakpoint.
 
 @node Quit
 @subsection Quit (@samp{quit})
+
 @table @code
 @kindex quit @r{[}unconditionally@r{]}
 @kindex q @r{(@code{quit})}
@@ -1546,19 +1500,18 @@ integer argument, list info on that breakpoint.
 @item exit
 @itemx q
 
-To exit @value{DBG}, use the @code{quit} command (abbreviated
-@code{q}), or alias @code{exit}.
+To exit @code{byebug}, use the @code{quit} command (abbreviated @code{q}), or
+alias @code{exit}. A simple @code{quit} tries to terminate all threads in
+effect.
 
-A simple @code{quit} tries to terminate all threads in effect.
-
-Normally if you are in an interactive session, this command will
-prompt to ask if you really want to quit. If you don't want any
-questions asked, enter the ``unconditionally''.
-
+Normally if you are in an interactive session, this command will prompt to ask
+if you really want to quit. If you don't want any questions asked, enter
+``unconditionally''.
 @end table
 
 @node Restart
 @subsection Restart (@samp{restart})
+
 @table @code
 @kindex restart @r{[}@var{program args}@r{]}
 @kindex R @r{(@code{restart})}
@@ -1578,6 +1531,7 @@ available only if your OS supports @code{exec}; OSX for example does not (yet).
 
 @node Interrupt
 @subsection Interrupt (@samp{interrupt})
+
 @table @code
 @kindex interrupt
 @kindex i
@@ -1588,6 +1542,7 @@ Interrupt the program. Useful if there are multiple threads running.
 
 @node Source
 @subsection Running Byebug Commands (@samp{source})
+
 @table @code
 @kindex source @var{filename}
 @item source @var{filename}
@@ -1604,13 +1559,12 @@ startup, @pxref{Command Files}.
 @cindex automatic display
 @cindex display of expressions
 
-If you find that you want to print the value of an expression
-frequently (to see how it changes), you might want to add it to the
-@dfn{automatic display list} so that @value{DBG} evaluates a statement
-each time your program stops or the statement is shown in line tracing.
-Each expression added to the list is given a number to identify it; to
-remove an expression from the list, you specify that number.  The
-automatic display looks like this:
+If you find that you want to print the value of an expression frequently (to see
+how it changes), you might want to add it to the @dfn{automatic display list} so
+that @code{byebug} evaluates a statement each time your program stops or the
+statement is shown in line tracing. Each expression added to the list is given a
+number to identify it; to remove an expression from the list, you specify that
+number. The automatic display looks like this:
 
 @smallexample
 (byebug:1) display n
@@ -1618,9 +1572,9 @@ automatic display looks like this:
 @end smallexample
 
 @noindent
-This display shows item numbers, expressions and their current values.
-If the expression is undefined or illegal the expression will be
-printed but no value will appear.
+This display shows item numbers, expressions and their current values. If the
+expression is undefined or illegal the expression will be printed but no value
+will appear.
 
 @smallexample
 (byebug:1) display undefined_variable
@@ -1629,21 +1583,21 @@ printed but no value will appear.
 3: 1/0 =
 @end smallexample
 
-Note: this command uses @code{to_s} to in expressions; for example an
-array @code{[1, 2]} will appear as @code{12}. For some datatypes like
-an Array, you may want to call the @code{inspect} method, for example
+Note: this command uses @code{to_s} in expressions; for example an array
+@code{[1, 2]} will appear as @code{12}. For some datatypes like an Array, you
+may want to call the @code{inspect} method, for example
 @code{display ARGV.inspect} rather than @code{display ARGV}.
 
 @table @code
 @kindex display @ovar{expr}
 @item display @var{expr}
-Add the expression @var{expr} to the list of expressions to display
-each time your program stops or a line is printed when linetracing is
-on (@pxref{DisplayCommands}).
+Add the expression @var{expr} to the list of expressions to display each time
+your program stops or a line is printed when linetracing is on
+(@pxref{DisplayCommands}).
 
 @item display
-Display the current values of the expressions on the list, just as is
-done when your program stops.
+Display the current values of the expressions on the list, just as is done when
+your program stops.
 
 @kindex undisplay @ovar{num}
 @item undisplay @ovar{num}
@@ -1661,31 +1615,29 @@ Show all display expressions
 
 @kindex disable display
 @item disable display @var{dnums}@dots{}
-Disable the display of item numbers @var{dnums}.  A disabled display
-item is not printed automatically, but is not forgotten.  It may be
-enabled again later.
+Disable the display of item numbers @var{dnums}. A disabled display item is not
+printed automatically, but is not forgotten. It may be enabled again later.
 
 @kindex enable display
 @item enable display @var{dnums}@dots{}
-Enable display of item numbers @var{dnums}.  It becomes effective once
-again in auto display of its expression, until you specify otherwise.
+Enable display of item numbers @var{dnums}. It becomes effective once again in
+auto display of its expression, until you specify otherwise.
 
 @end table
 
 @node PrintCommands
 @section Evaluating and Printing Expressions (@samp{p}, @samp{pp}, @samp{putl}, @samp{ps}, @samp{irb})
 
-One way to examine and change data in your script is with the
-@code{eval} command (abbreviated @code{p}). A similar command is
-@code{pp} which tries to pretty print the result. Finally @code{irb} is
-useful when you anticipate examining or changing a number of things,
-and prefer not to have to preface each command, but rather work as one
-does in @code{irb}.
+One way to examine and change data in your script is with the @code{eval}
+command (abbreviated @code{p}). A similar command is @code{pp} which tries to
+pretty print the result. Finally @code{irb} is useful when you anticipate
+examining or changing a number of things and prefer not to have to preface each
+command, but rather work as one does in @code{irb}.
 
 @menu
-* eval::          eval or print an expression (eval, p)
-* pp::            pretty print an expression (pp, ps, putl)
-* irb::           running irb using the current context
+* eval:: eval or print an expression (eval, p)
+* pp::   pretty print an expression (pp, ps, putl)
+* irb::  running irb using the current context
 @end menu
 
 @node eval
@@ -1696,9 +1648,10 @@ does in @code{irb}.
 @item eval @var{expr}
 @itemx p @var{expr}
 
-Use @code{eval} or @code{p} to evaluate a Ruby expression, @var{expr},
-same as you would if you were in @code{irb}. If there are many expressions
-you want to look at, you may want to go into irb from byebug.
+Use @code{eval} or @code{p} to evaluate a Ruby expression, @var{expr}, same as
+you would if you were in @code{irb}. If there are many expressions you want to
+look at, you may want to go into irb from byebug.
+
 @smallexample
 @group
 (byebug:p) p n
@@ -1727,10 +1680,11 @@ Evaluates and pretty-prints @var{expr}
  "/usr/lib/ruby/1.8"]
 @end group
 @end smallexample
+
 @kindex putl
 @item putl
-If the value you want to print is an array, sometimes a columnized
-list looks nicer:
+If the value you want to print is an array, sometimes a columnized list looks
+nicer:
 @smallexample
 @group
 (byebug:1) @b{putl $LOAD_PATH}
@@ -1739,17 +1693,18 @@ list looks nicer:
 @end group
 @end smallexample
 
-Note however that entries are sorted to run down first rather than
-across. So in the example above the second entry in the list is
+Note however that entries are sorted to run down first rather than across. So
+in the example above the second entry in the list is
 @code{/usr/lib/ruby/site_ruby/1.8/i586-linux} and the @emph{third} entry is
 @code{/usr/lib/ruby/site_ruby/1.8}.
 
 If the value is not an array @code{putl} will just call pretty-print.
+
 @kindex ps
 @item ps
-Sometimes you may want to print the array not only columnized, but
-sorted as well. The list of byebug help commands appears this way,
-and so does the output of the @code{method} commands.
+Sometimes you may want to print the array not only columnized, but sorted as
+well. The list of byebug help commands appears this way, and so does the output
+of the @code{method} commands.
 
 @smallexample
 @group
@@ -1776,8 +1731,8 @@ included                 undef_method
 @end group
 @end smallexample
 
-If the value is not an array, @code{ps} will just call pretty-print.
-See also the @code{methods}.
+If the value is not an array, @code{ps} will just call pretty-print. See also
+the @code{methods}.
 @end table
 
 @node irb
@@ -1785,20 +1740,20 @@ See also the @code{methods}.
 @table @code
 @kindex irb
 @item irb
-Run an interactive ruby session (@code{irb}) with the bindings
-environment set to the state you are in the program.
+Run an interactive ruby session (@code{irb}) with the bindings environment set
+to the state you are in the program.
 
-When you leave irb and go back to byebug command prompt we show
-again the file, line and text position of the program in the same way
-as when entered byebug. If you issue a @command{list} without
-location information, the default location used is the current line
-rather than the position may have gotten updated via a prior
-@command{list} command.
+When you leave irb and go back to byebug command prompt we show again the file,
+line and text position of the program in the same way as when entered byebug. If
+you issue a @command{list} without location information, the default location
+used is the current line rather than the position may have gotten updated via a
+prior @command{list} command.
+
 @smallexample
 triangle.rb:4
 def triangle(n)
 (byebug:1) @b{list}
-[-1, 8] in /home/rocky/ruby/triangle.rb
+[1, 8] in /home/rocky/ruby/triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
    3  # triangle(n) == (n * (n+1)) / 2
@@ -1814,7 +1769,7 @@ def triangle(n)
 triangle.rb:4
 def triangle(n)
 (byebug:1) @b{list # Note we get the same line range as before going into irb}
-[-1, 8] in /home/rocky/ruby/triangle.rb
+[1, 8] in /home/rocky/ruby/triangle.rb
    1  #!/usr/bin/env ruby
    2  # Compute the n'th triangle number - the hard way
    3  # triangle(n) == (n * (n+1)) / 2
@@ -1857,7 +1812,8 @@ Show methods of @var{object}. Basically this is the same as running
 @code{ps object.instance_methods(false)} on @var{object}.
 @item method iv @var{object}
 @kindex method iv @var{object}
-Show method instance variables of @var{object}. Basically this is the same as running
+Show method instance variables of @var{object}. Basically this is the same as
+running
 @smallexample
   obj.instance_variables.each do |v|
      puts "%s = %s\n" % [v, obj.instance_variable_get(v)]
@@ -1877,30 +1833,24 @@ Show procedure signature of method @var{object}.
 on @var{object}.
 @item method @var{class-or-module}
 @kindex method @var{class-or-module}
-Show methods of the class or module, @var{class-or-module}. Basically
-this is the same as running @code{ps object.methods} on @var{class-or-module}.
-on @var{class-or-module}.
+Show methods of the class or module, @var{class-or-module}. Basically this is
+the same as running @code{ps object.methods} on @var{class-or-module}.
 @end table
 
 @node List
 @section Examining Program Source Files (@samp{list})
 
 @cindex current line
-@value{DBG} can print parts of your script's source.  When your script
-stops, @value{DBG} spontaneously prints the line where it stopped and
-the text of that line. Likewise, when you select a stack frame
-(@pxref{Selection}) @value{DBG} prints the line where execution in
-that frame has stopped.  Implicitly there is a default line
-location. Each time a list command is run that implicit location is
-updated, so that running several list commands in succession shows a
-contiguous block of program text.
+@code{byebug} can print parts of your script's source.  When your script stops,
+@code{byebug} spontaneously prints the line where it stopped and the text of
+that line. Likewise, when you select a stack frame (@pxref{Selection})
+@code{byebug} prints the line where execution in that frame has stopped.
+Implicitly there is a default line location. Each time a list command is run
+that implicit location is updated, so that running several list commands in
+succession shows a contiguous block of program text.
 
-You can print other portions of source files by giving an explicit
-position as a parameter to the list command.
-
-If you use @value{DBG} through its Emacs interface, you may prefer to
-use Emacs facilities to view source.
-@c @pxref{GNU Emacs}.
+You can print other portions of source files by giving an explicit position as a
+parameter to the list command.
 
 @kindex list @ovar{line-number}
 @kindex l @r{(@code{list})}
@@ -1958,8 +1908,9 @@ recognizes the following command-line syntax:
 ex +@var{number} file
 @end smallexample
 The optional numeric value +@var{number} specifies the number of the line in the
-file where to start editing.  For example, to configure @value{DBG} to use the
+file where to start editing. For example, to configure @code{byebug} to use the
 @code{vi} editor, you could use these commands with the @code{sh} shell:
+
 @smallexample
 EDITOR=/usr/bin/vi
 export EDITOR
@@ -1974,47 +1925,44 @@ gdb @dots{}
 @table @code
 @kindex edit @ovar{line-specification}
 @item edit @ovar{line specification}
-Edit line specification using the editor specified by the
-@code{EDITOR} environment variable.
+Edit line specification using the editor specified by the @code{EDITOR}
+environment variable.
 @end table
 
 @node FrameCommands
 @section Examining the Stack Frame (@samp{where}, @samp{up}, @samp{down}, @samp{frame})
 
-When your script has stopped, one thing you'll probably want to know
-is where it stopped and some idea of how it got there.
+When your script has stopped, one thing you'll probably want to know is where it
+stopped and some idea of how it got there.
 
 @cindex call stack
-Each time your script performs a function or sends a message to a
-method, or enters a block, information about this action is saved.
-The frame stack then is this a history of the blocks that got you to
-the point that you are currently stopped at.@footnote{More accurately
-we should call this a ``block stack''; but we'll use the name that is
-more commonly used. And internally in Ruby, there is ``FRAME''
-structure which is yet slightly different.}
+Each time your script performs a function or sends a message to a method, or
+enters a block, information about this action is saved. The frame stack then is
+a history of the blocks that got you to the point that you are currently stopped
+at.@footnote{More accurately we should call this a ``block stack''; but we'll
+use the name that is more commonly used. And internally in Ruby, there is
+``FRAME'' structure which is yet slightly different.}
 
 @cindex selected block
-One entry in call stack is @dfn{selected} by @DBG{} and many
-@DBG commands refer implicitly to the selected block.  In
-particular, whenever you ask @DBG to list lines without giving
-a line number or location the value is found in the selected frame.
-There are special @DBG commands to select whichever frame you
-are interested in. @xref{Selection, ,Selecting a frame}.
+One entry in call stack is @dfn{selected} by @code{byebug} and many
+@code{byebug} commands refer implicitly to the selected block.  In particular,
+whenever you ask @code{byebug} to list lines without giving a line number or
+location the value is found in the selected frame. There are special
+@code{byebug} commands to select whichever frame you are interested in.
+@xref{Selection, ,Selecting a frame}.
 
-When your program stops, @DBG{} automatically selects the
-currently executing frame and describes it briefly, similar to the
-@code{frame} command.
+When your program stops, @code{byebug} automatically selects the currently
+executing frame and describes it briefly, similarly to the @code{frame} command.
 
-After switching frames, when you issue a @code{list} command without
-any position information, the position used is location in the frame
-that you just switched between, rather than a location that got
-updated via a prior @code{list} command.
+After switching frames, when you issue a @code{list} command without any
+position information, the position used is the location in the frame that you
+just switched to, rather than a location that got updated via a prior
+@code{list} command.
 
 @menu
-* Frames::                      Stack frames
-* Backtrace::                   Backtraces (where)
-* Selection::                   Selecting a frame (up, down, frame)
-
+* Frames::    Stack frames
+* Backtrace:: Backtraces (where)
+* Selection:: Selecting a frame (up, down, frame)
 @end menu
 
 @node Frames
@@ -2022,30 +1970,29 @@ updated via a prior @code{list} command.
 
 @cindex frame, definition
 @cindex stack frame
-The block stack is divided up into contiguous pieces called @dfn{stack
-frames}, @dfn{frames}, or @dfn{blocks} for short; each frame/block has
-a scope associated with it; It contains a line number and the
-source-file name that the line refers. If the frame/block is the beginning
-of a method or function it also contains the function name.
+The block stack is divided up into contiguous pieces called @dfn{stack frames},
+@dfn{frames}, or @dfn{blocks} for short; each frame/block has a scope associated
+with itr. It contains a line number and the source-file name that the line
+refers to. If the frame/block is the beginning of a method or function it also
+contains the function name.
 
 @cindex initial frame
 @cindex outermost frame
 @cindex innermost frame
-When your script is started, the stack has only one frame, that of the
-function @code{main}.  This is called the @dfn{initial} frame or the
-@dfn{outermost} frame.  Each time a function is called, a new frame is
-made.  Each time a function returns, the frame for that function invocation
-is eliminated.  If a function is recursive, there can be many frames for
-the same function.  The frame for the function in which execution is
-actually occurring is called the @dfn{innermost} frame.  This is the most
-recently created of all the stack frames that still exist.
+When your script is started, the stack has only one frame, that of the function
+@code{main}.  This is called the @dfn{initial} frame or the @dfn{outermost}
+frame. Each time a function is called, a new frame is made. Each time a function
+returns, the frame for that function invocation is eliminated. If a function is
+recursive, there can be many frames for the same function. The frame for the
+function in which execution is actually occurring is called the @dfn{innermost}
+frame. This is the most recently created of all the stack frames that still
+exist.
 
 @cindex frame number
-@value{DBG} assigns numbers to all existing stack frames, starting with
-zero for the innermost frame, one for the frame that called it,
-and so on upward.  These numbers do not really exist in your script;
-they are assigned by @value{DBG} to give you a way of designating stack
-frames in @value{DBG} commands.
+@code{byebug} assigns numbers to all existing stack frames, starting with zero
+for the innermost frame, one for the frame that called it, and so on upward.
+These numbers do not really exist in your script; they are assigned by
+@code{byebug} to give you a way of designating stack frames inside commands.
 
 @node Backtrace
 @subsection Backtraces (@samp{where})
@@ -2090,7 +2037,6 @@ Similar, but print only the outermost @var{n} frames.
 
 @node Selection
 @subsection Selecting a frame (@samp{up}, @samp{down}, @samp{frame})
-
 Commands for listing source code in your script work on whichever stack frame is
 selected at the moment.  Here are the commands for selecting a stack frame; all
 of them finish by printing a brief description of the stack frame just selected.
@@ -2110,7 +2056,7 @@ a resynchronization if there is a front end also watching over things.
 @kindex down @ovar{n}
 @item down @ovar{n}
 Move @var{n} frames down the stack.  For positive numbers @var{n}, this advances
-toward the innermost frame, to lower frame numbers, to frames that were created
+towards the innermost frame, to lower frame numbers, to frames that were created
 more recently.  Using a negative @var{n} is the same as issuing a @code{up}
 command of the absolute value of the @var{n}.  Using zero for @var{n} does no
 frame adjustment, but since the current position is redisplayed, it may trigger
@@ -2142,46 +2088,42 @@ to that frame of that thread.
 
 @node Stopping
 @section Stopping and Resuming Execution
-
 One important use of a debugger is to stop your program @emph{before} it
 terminates, so that if your script runs into trouble you can investigate and
 find out why. However should your script accidentally continue to termination,
-it can be arranged for @value{DBG} to not to leave byebug without your explicit
-instruction. That way, you can restart the program using the same command
-arguments.
+it can be arranged for @code{byebug} to not to leave byebug without your
+explicit instruction. That way, you can restart the program using the same
+command arguments.
 
-Inside @value{DBG}, your script may stop for any of several reasons, such as a
-signal, a breakpoint, or reaching a new line after a byebug command such as
-@code{step}.  You may then examine and change variables, set new breakpoints or
-remove old ones, and then continue execution.
+Inside @code{byebug}, your script may stop for any of several reasons, such as a
+signal, a breakpoint, or reaching a new line after a @code{byebug} command such
+as @code{step}.  You may then examine and change variables, set new breakpoints
+or remove old ones, and then continue execution.
 
 @menu
-* Breakpoints::          Breakpoints (break, catch, delete)
-* Disabling::            Disabling breakpoints (disable, enable)
-* Conditions::           Break conditions (condition)
-* Resuming Execution::   Resuming execution (continue, step, next, finish)
+* Breakpoints::        Breakpoints (break, catch, delete)
+* Disabling::          Disabling breakpoints (disable, enable)
+* Conditions::         Break conditions (condition)
+* Resuming Execution:: Resuming execution (continue, step, next, finish)
 @end menu
 
 @node Breakpoints
 @subsection Breakpoints (@samp{break}, @samp{catch}, @samp{delete})
 
 @cindex breakpoints
-A @dfn{breakpoint} makes your script stop whenever a certain point in
-the program is reached.  For each breakpoint, you can add conditions to
-control in finer detail whether your script stops.
-
-You specify the place where your script should stop with the
-@code{break} command and its variants.
+A @dfn{breakpoint} makes your script stop whenever a certain point in the
+program is reached. For each breakpoint, you can add conditions to control in
+finer detail whether your script stops. You specify the place where your script
+should stop with the @code{break} command and its variants.
 
 @cindex breakpoint numbers
 @cindex numbers for breakpoints
-@value{ttDBG} assigns a number to each breakpoint when
-you create it; these numbers are successive integers starting with
-one.  In many of the commands for controlling various features of
-breakpoints you use the breakpoint number to say which breakpoint you
-want to change. Each breakpoint may be @dfn{enabled} or
-@dfn{disabled}; if disabled, it has no effect on your script until you
-enable it again.
+@code{byebug} assigns a number to each breakpoint when you create it; these
+numbers are successive integers starting with one. In many of the commands for
+controlling various features of breakpoints you use the breakpoint number to say
+which breakpoint you want to change. Each breakpoint may be @dfn{enabled} or
+@dfn{disabled}; if disabled, it has no effect on your script until you enable it
+again.
 
 
 @table @code
@@ -2191,20 +2133,19 @@ enable it again.
 Set a breakpoint at the current line.
 
 @item break @var{linenum}
-Set a breakpoint at line @var{linenum} in the current source file.
-The current source file is the last file whose source text was printed.
-The breakpoint will stop your script just before it executes any of the
-code on that line.
+Set a breakpoint at line @var{linenum} in the current source file. The current
+source file is the last file whose source text was printed. The breakpoint will
+stop your script just before it executes any of the code on that line.
 
 @item break @var{filename}:@var{linenum}
 Set a breakpoint at line @var{linenum} in source file @var{filename}.
 
-What may be a little tricky when specifying the filename is getting
-the name recognized by byebug. If you get a message the message
-``@code{No source file named ...}'', then you may need to qualify the
-name more fully. To see what files are loaded you can use the @code{info
-files} or @code{info file} commands. If you want the name @code{byebug} thinks
-of as the current file, use @code{info line}.
+What may be a little tricky when specifying the filename is getting the name
+recognized by @code{byebug}. If you get a message the message ``@code{No source
+file named ...}'', then you may need to qualify the name more fully. To see what
+files are loaded you can use the @code{info files} or @code{info file} commands.
+If you want the name @code{byebug} thinks of as the current file, use
+@code{info line}.
 
 Here's an example:
 @example
@@ -2227,20 +2168,19 @@ File /home/rocky/ruby/gcd.rb
 @end example
 
 @item break @var{class}:@var{method}
-Set a breakpoint in class @var{class} method @var{method}. You can
-also use a period @code{.} instead of a colon @code{:}. Note that two
-colons @code{::} are not used. Also note a class @emph{must} be
-specified here. If the method you want to stop in is in the main class
-(i.e. the class that @code{self} belongs to at the start of the
-program), then use the name @code{Object}.
+Set a breakpoint in class @var{class} method @var{method}. You can also use a
+period @code{.} instead of a colon @code{:}. Note that two colons @code{::} are
+not used. Also note a class @emph{must} be specified here. If the method you
+want to stop in is in the main class (i.e. the class that @code{self} belongs to
+at the start of the program), then use the name @code{Object}.
 
 @kindex catch @ovar{exception} @r{[} on | 1 | off | 0 @r{]}
 @kindex cat @r{(@code{catch})}
 @item catch @ovar{exception} @r{[} on | 1 | off | 0 @r{]}
 Set catchpoint to an exception. Without an exception name show catchpoints.
 
-With an ``on'' or ``off'' parameter, turn handling the exception on or
-off. To delete all exceptions type ``catch off''.
+With an ``on'' or ``off'' parameter, turn handling the exception on or off. To
+delete all exceptions type ``catch off''.
 
 @cindex delete breakpoints
 @kindex delete @ovar{breakpoints}
@@ -2248,34 +2188,34 @@ off. To delete all exceptions type ``catch off''.
 @item delete @ovar{breakpoints}
 Delete the breakpoints specified as arguments.
 
-If no argument is specified, delete all breakpoints (@DBG asks
-confirmation.  You can abbreviate this command as @code{del}.
+If no argument is specified, delete all breakpoints (@code{byebug} asks for
+confirmation.  You can abbreviate this command as @code{del}).
 @kindex info breakpoints
 @cindex @code{$_} and @code{info breakpoints}
 @item info breakpoints @ovar{n}
 @itemx info break @ovar{n}
-Print a table of all breakpoints set and not deleted, with the
-following columns for each breakpoint:
+Print a table of all breakpoints set and not deleted, with the following columns
+for each breakpoint:
 
 @table @emph
 @item Breakpoint Numbers (@samp{Num})
 @item Enabled or Disabled (@samp{Enb})
-Enabled breakpoints are marked with @samp{1}.  @samp{0} marks breakpoints
-that are disabled (not enabled).
+Enabled breakpoints are marked with @samp{1}. @samp{0} marks breakpoints that
+are disabled (not enabled).
 @item File and Line (@samp{file:line})
-The filename and line number inside that file where of breakpoint in
-the script. The file and line are separated with a colon.
+The filename and line number inside that file where of breakpoint in the script.
+The file and line are separated with a colon.
 @item Condition
-A condition (an arithmetic expression) which when true causes the
-breakpoint to take effect.
+A condition (an arithmetic expression) which when true causes the breakpoint to
+take effect.
 @end table
 @noindent
-If a breakpoint is conditional, @code{info break} shows the condition on
-the line following the affected breakpoint; breakpoint commands, if any,
-are listed after that.
+If a breakpoint is conditional, @code{info break} shows the condition on the
+line following the affected breakpoint; breakpoint commands, if any, are listed
+after that.
 
-@code{info break} with a breakpoint number @var{n} as argument lists
-only that breakpoint.
+@code{info break} with a breakpoint number @var{n} as argument lists only that
+breakpoint.
 
 Examples:
 @example
@@ -2292,19 +2232,16 @@ Num  Enb What
 @node Disabling
 @subsection Disabling breakpoints (@samp{disable}, @samp{enable})
 
-Rather than deleting a breakpoint, you might
-prefer to @dfn{disable} it.  This makes the breakpoint inoperative as if
-it had been deleted, but remembers the information on the breakpoint so
-that you can @dfn{enable} it again later.
+Rather than deleting a breakpoint, you might prefer to @dfn{disable} it. This
+makes the breakpoint inoperative as if it had been deleted, but remembers the
+information on the breakpoint so that you can @dfn{enable} it again later.
 
-You disable and enable breakpoints and catchpoints with the
-@code{enable} and @code{disable} commands, optionally specifying one
-or more breakpoint numbers as arguments.  Use @code{info break} to
-print a list of breakpoints and catchpoints if you do not know which
-numbers to use.
+You disable and enable breakpoints and catchpoints with the @code{enable} and
+@code{disable} commands, optionally specifying one or more breakpoint numbers as
+arguments. Use @code{info break} to print a list of breakpoints and catchpoints
+if you do not know which numbers to use.
 
-A breakpoint or catchpoint can have any different
-states of enablement:
+A breakpoint or catchpoint can have any different states of enablement:
 
 @itemize @bullet
 @item
@@ -2314,27 +2251,25 @@ with the @code{break} command starts out in this state.
 Disabled.  The breakpoint has no effect on your program.
 @end itemize
 
-You can use the following commands to enable or disable breakpoints
-and catchpoints:
+You can use the following commands to enable or disable breakpoints and
+catchpoints:
 
 @table @code
 @kindex disable breakpoints
 @item disable @var{breakpoints}
-Disable the specified breakpoints---or all breakpoints, if none are
-listed.  A disabled breakpoint has no effect but is not forgotten.  All
-options such as ignore-counts, conditions and commands are remembered in
-case the breakpoint is enabled again later.  You may abbreviate
-@code{disable} as @code{dis}.
+Disable the specified breakpoints or all breakpoints, if none are listed. A
+disabled breakpoint has no effect but it is not forgotten. All options such as
+ignore-counts, conditions and commands are remembered in case the breakpoint is
+enabled again later. You may abbreviate @code{disable} as @code{dis}.
 
 @kindex enable breakpoints
 @item enable @var{breakpoints}
-Enable the specified breakpoints (or all defined breakpoints).  They
-become effective once again in stopping your program.
-
+Enable the specified breakpoints (or all defined breakpoints). They become
+effective once again in stopping your program.
 @end table
 
 Breakpoints that you set are initially enabled; subsequently, they become
-disabled or enabled only when you use one of the commands above.  (The command
+disabled or enabled only when you use one of the commands above. (The command
 @code{until} can set and delete a breakpoint of its own, but it does not change
 the state of your other breakpoints; see @ref{Resuming Execution}.)
 
@@ -2343,42 +2278,40 @@ the state of your other breakpoints; see @ref{Resuming Execution}.)
 @cindex conditional breakpoints
 @cindex breakpoint conditions
 
-The simplest sort of breakpoint breaks every time your script reaches
-a specified place.  You can also specify a @dfn{condition} for a
-breakpoint.  A condition is just a Ruby expression.
+The simplest sort of breakpoint breaks every time your script reaches a
+specified place. You can also specify a @dfn{condition} for a breakpoint. A
+condition is just a Ruby expression.
 
-Break conditions can be specified when a breakpoint is set, by using
-@samp{if} in the arguments to the @code{break} command. A breakpoint
-with a condition evaluates the expression each time your script
-reaches it, and your script stops only if the condition is
-@emph{true}. They can also be changed at any time
-with the @code{condition} command.
+Break conditions can be specified when a breakpoint is set, by using @samp{if}
+in the arguments to the @code{break} command. A breakpoint with a condition
+evaluates the expression each time your script reaches it, and your script stops
+only if the condition is @emph{true}. They can also be changed at any time with
+the @code{condition} command.
 
 @ifset FINISHED
-You can also use the @code{if} keyword with the @code{watch} command.
-The @code{catch} command does not recognize the @code{if} keyword;
-@code{condition} is the only way to impose a further condition on a
-catchpoint.
+You can also use the @code{if} keyword with the @code{watch} command. The
+@code{catch} command does not recognize the @code{if} keyword; @code{condition}
+is the only way to impose a further condition on a catchpoint.
 @end ifset
 
 @table @code
 @kindex condition
 @item condition @var{bnum} @var{expression}
-Specify @var{expression} as the break condition for breakpoint
-@var{bnum}.  After you set a condition, breakpoint @var{bnum} stops
-your program only if the value of @var{expression} is true (nonzero).
+Specify @var{expression} as the break condition for breakpoint @var{bnum}. After
+you set a condition, breakpoint @var{bnum} stops your program only if the value
+of @var{expression} is true (nonzero).
 
 @item condition @var{bnum}
-Remove the condition from breakpoint number @var{bnum}.  It becomes
-an ordinary unconditional breakpoint.
+Remove the condition from breakpoint number @var{bnum}.  It becomes an ordinary
+unconditional breakpoint.
 @end table
 
 @ifset FINISHED
-When you use @code{condition}, @DBG checks @var{expression}
-immediately for syntactic correctness, and to determine whether
-symbols in it have referents in the context of your breakpoint.  If
-@var{expression} uses symbols not referenced in the context of the
-breakpoint, @DBG prints an error message:
+When you use @code{condition}, @code{byebug} checks @var{expression} immediately
+for syntactic correctness, and to determine whether symbols in it have referents
+in the context of your breakpoint. If @var{expression} uses symbols not
+referenced in the context of the breakpoint, @code{byebug} prints an error
+message:
 
 @example
 No symbol "foo" in current context.
@@ -2386,9 +2319,9 @@ No symbol "foo" in current context.
 @end ifset
 
 @noindent
-The byebug does not actually evaluate @var{expression} at the time
-the @code{condition} command (or a command that sets a breakpoint with
-a condition, like @code{break if @dots{}}) is given, however.
+The debugger does not actually evaluate @var{expression} at the time the
+@code{condition} command (or a command that sets a breakpoint with a condition,
+like @code{break if @dots{}}) is given, however.
 
 Examples;
 @example
@@ -2399,8 +2332,8 @@ condition 1       # Change that! Unconditionally stop on breakpoint 1.
 @node Resuming Execution
 @subsection Resuming Execution (@samp{step}, @samp{next}, @samp{finish}, @samp{continue}, @samp{jump})
 
-A typical technique for using stepping is to set a breakpoint (
-@pxref{Breakpoints}) at the beginning of the function or the section of your
+A typical technique for using stepping is to set a breakpoint
+(@pxref{Breakpoints}) at the beginning of the function or the section of your
 script where a problem is believed to lie, run your script until it stops at
 that breakpoint, and then step through the suspect area, examining the variables
 that are interesting, until you see the problem happen.
@@ -2409,17 +2342,17 @@ that are interesting, until you see the problem happen.
 @cindex continuing
 @cindex resuming execution
 @dfn{Continuing} means resuming program execution until your script completes
-normally.  In contrast, @dfn{stepping} means executing just one more ``step'' of
+normally. In contrast, @dfn{stepping} means executing just one more ``step'' of
 your script, where ``step'' may mean one line of source code.  Either when
 continuing or when stepping, your script may stop even sooner, due to a
 breakpoint or a signal.
 
 @menu
-* Step::          running the next statement (step)
-* Next::          running the next statement skipping over functions (next)
-* Finish::        running until the return of a function or ``source'' (finish)
-* Continue::      continuing execution (continue)
-* Jump::          jumping to a new line (jump)
+* Step::     running the next statement (step)
+* Next::     running the next statement skipping over functions (next)
+* Finish::   running until the return of a function or ``source'' (finish)
+* Continue:: continuing execution (continue)
+* Jump::     jumping to a new line (jump)
 @end menu
 
 @node Step
@@ -2430,7 +2363,7 @@ breakpoint or a signal.
 @kindex s @r{(@code{step})}
 @item step @r{[}+-@r{]} @ovar{count}
 Continue running your program until the next logical stopping point and return
-control to @value{DBG}. This command is abbreviated @code{s}.
+control to @code{byebug}. This command is abbreviated @code{s}.
 
 Just like int the programming language Lisp, Ruby tends to be implemented in a
 highly expression-oriented manner. Therefore things that in other languages may
@@ -2805,8 +2738,8 @@ ability to change that state inside byebug.
 @table @code
 @kindex set width @var{column-width}
 @item set width @var{column-width}
-Set number of characters byebug thinks are in a line.
-We also change OS environment variable @code{COLUMNS}.
+Set number of characters per line of byebug output. We also change OS
+environment variable @code{COLUMNS}.
 @kindex show width
 @item show width
 Shows the current width setting.
@@ -2815,70 +2748,70 @@ Shows the current width setting.
 @node Program Information
 @section Program Information (@samp{info})
 
-This @code{info} command (abbreviated @code{i}) is for describing the
-state of your program.  For example, you can list the current
-parameters with @code{info args}, or list the breakpoints you have set
-with @code{info breakpoints} or @code{info watchpoints}.  You can get
-a complete list of the @code{info} sub-commands with @w{@code{help
-info}}.
+This @code{info} command (abbreviated @code{i}) is for describing the state of
+your program.  For example, you can list the current parameters with
+@code{info args} or list the breakpoints you have set with
+@code{info breakpoints} or @code{info watchpoints}.  You can get a complete list
+of @code{info} sub-commands with @w{@code{help info}}.
 
 @table @code
 @kindex info args
-
 @item info args
 Method arguments of the current stack frame.
-@kindex info breakpoints
 
+@kindex info breakpoints
 @item info breakpoints
 Status of user-settable breakpoints
-@kindex info display
 
+@kindex info display
 @item info display
 All display expressions.
-@kindex info files
 
+@kindex info files
 @item info files
 Source files in the program.
-@kindex info file
 
-@item info file @var{filename} @ovar{all|lines|mtime|sha1}
-Information about a specific file. Parameter @code{lines} gives the
-number of lines in the file, @code{mtime} shows the modification time
-of the file (if available), @code{sha1} computes a SHA1 has of the
-data of the file. @code{all} gives all of the above information.
+@kindex info file
+@item info file @var{filename} @ovar{all|basic|path|lines|mtime|sha1}
+Information about a specific file. Parameter @code{path} gives the full path
+name of the file. Parameter @code{lines} gives the number of lines in the file,
+@code{mtime} shows the modification time of the file (if available), @code{sha1}
+computes a SHA1 hash of the data in the file. @code{all} gives all of the above
+information and @code{basic} is equivalent to @code{path} and @code{lines}.
 
 @kindex info line
 @item info line
 Line number and file name of current position in source.
+
 @kindex info locals
 @item info locals
 Local variables of the current stack frame.
+
 @kindex info program
 @item info program
-Display information about the status of your program: whether it is
-running or not and why it stopped. If an unhandled exception occurred,
-the exception class and @code{to_s} method is called.
+Display information about the status of your program: whether it is running or
+not and why it stopped. If an unhandled exception occurred, the exception class
+and @code{to_s} method is called.
+
 @kindex info stack
 @item info stack
 Backtrace of the stack. An alias for @code{where}. @xref{Backtrace}.
+
 @kindex info thread
 @item info thread @ovar{thread-number} @r{[} terse | verbose@r{]}
-If no thread number is given, we list info for all
-threads. @code{terse} and @code{verbose} options are possible. If terse,
-just give summary thread name information. See information under @code{info threads} for
-more detail about this summary information.
-
-If @code{verbose} is appended to the end of the command, then the entire
-stack trace is given for each thread.
+If no thread number is given, we list info for all threads. @code{terse} and
+@code{verbose} options are possible. If terse, just give summary thread name
+information. See information under @code{info threads} for more detail about
+this summary information.
+If @code{verbose} is appended to the end of the command, then the entire stack
+trace is given for each thread.
 
 @kindex info threads @r{[} terse | verbose@r{]}
 @item info threads
-
-List information about currently-known threads. This information
-includes whether the thread is current (+), if it is suspended ($), or
-ignored (!); the thread number and the top stack item. If
-@code{verbose} is given then the entire stack frame is shown. Here is
-an example:
+List information about currently-known threads. This information includes
+whether the thread is current (+), if it is suspended ($), or ignored (!); the
+thread number and the top stack item. If @code{verbose} is given then the entire
+stack frame is shown. Here it is an example:
 
 @smallexample
 (byebug:7) info threads
@@ -3463,117 +3396,13 @@ need to first call @samp{Byebug.start} before issuing this call.
 
 @end table
 
-@node Using from GitHub
-@appendix Building and Installing from the GitHub Repository
-
-Here are Unix-centric instructions. If you have Microsoft Windows or
-OSX some of the below may need adjusting.
+@node Contributing
+@appendix Guidelines for contributing
 
 @menu
-* Prerequisites::
-* Package Checkout::
-* Trying Out::
 * Running Regression Tests::
-* Building the Documentation and Emacs files::
-* Building for Microsoft Windows::
 @end menu
 
-@node Prerequisites
-@section Prerequisites: To build the package you'll need at a minimum:
-
-@itemize @bullet
-@item
-Ruby (of course). Currently only version 1.8.6 and above but not
-version 1.9.@emph{x} work.
-@item
-Ruby development headers. This typically includes a file called @file{ruby.h}
-@item
-A C compiler like GNU C (@code{gcc})
-@item
-Rake
-@item
-Subversion (@code{svn}).
-@end itemize
-
-If you want to build the documentation and install Emacs files, you'll
-also need:
-
-@itemize @bullet
-@item
- a POSIX shell like bash
-@item
- autoconf
-@item
- automake
-@item
- GNU Make
-@item
- texinfo
-@end itemize
-
-@node Package Checkout
-@section Basic Package Checkout and Installation
-
-Check out the trunk of repository following the instructions at
-@url{http://rubyforge.org/scm/?group_id=1900}  For example on a Unixy system,
-this may work:
-
-@smallexample
-  mkdir byebug
-  cd byebug
-  svn checkout svn://rubyforge.org/var/svn/byebug/trunk trunk
-@end smallexample
-
-In order to make the Ruby gems, @code{byebug} and
-@code{byebug-base}, get yourself into the trunk directory after
-the code has been checked out and run:
-
-@smallexample
-  cd trunk # This is the same trunk checked out above.
-  rake package
-@end smallexample
-
-If all goes well you should have some gem files put in the directory
-@code{pkg}. Use the gem command to install that.
-
-@smallexample
-  sudo gem install byebug-*.gem   # See gem help for other possibilities
-@end smallexample
-
-If all goes well byebug script has been installed byebug is
-now ready to run. But if everything goes well you might want to run
-the built-in regression tests to make sure everything is okay.
-See step 3 below.
-
-If the gem install didn't work,'t there may be a problem with your C
-compiler or the Ruby headers are not installed.
-
-@node Trying Out
-@section Trying Out without Installing
-
-You don't have to build a gem file to try out ruby debug. In fact when
-developing new features for byebug, developers often you want to
-try it out @emph{before} installing.  If you have a problem in the latter
-part of step 1 you may want to try this approach since we go into a
-little more detail as to what happens under the covers when you do the
-gem install.
-
-Run (from trunk)
-@smallexample
-  rake lib
-@end smallexample
-
-This creates a Makefile and builds byebug shared library. (On
-Unix the name is @code{byebug.so}).
-
-Once this is done you can run byebug as you would byebug using the
-script @code{runner.sh}. For example (again from trunk)
-
-@smallexample
-  ./runner.sh ~/my-ruby-program.rb
-@end smallexample
-
-@node Running Regression Tests
 @section Running the Regression Tests
 
 We've put together some basic tests to make sure byebug is doing
@@ -3588,87 +3417,13 @@ don't worry @code{rake test} will do step 2 for you. You should see a
 line that ends something like:
 
 @smallexample
-  Finished in 2.767579 seconds.
+Finished tests in 2.839674s, 130.6488 tests/s, 141.9177 assertions/s.
 
-  12 tests, 35 assertions, 0 failures, 0 errors
+371 tests, 403 assertions, 0 failures, 0 errors, 25 skips
 @end smallexample
 
-The number of seconds, tests, and assertions may be different from the
-above. However you @emph{should} see exactly ``0 failures, 0 errors.''
-
-@node Building the Documentation and Emacs files
-@section Building the Documentation and Testing/Installing Emacs Files
-
-Of course, I recommend you read byebug manual that comes with
-the package. If you have the prerequisites described above, run this
-once:
-@smallexample
-  sh ./autogen.sh
-@end smallexample
-
-Then run:
-@smallexample
-  ./configure
-  make
-  make test           # Runs Emacs regression tests
-  sudo make install   # Or arrange to do this as root
-@end smallexample
-
-@node Building for Microsoft Windows
-@section Building for Microsoft Windows
-
-Microsoft Windows is ``special'' and building @code{byebug-base}
-on it requires extra care. A problem here seems to be that the
-``One-click'' install is compiled using Microsoft Visual Studio C, version 6
-which is not sold anymore and is rather old.
-
-Instead I suggest building via mingw/msys.
-@url{http://eigenclass.org/hiki.rb?cmd=view&p=cross+compiling+rcovrt&key=mingw}
-has instructions on how to do. Some amendments to these instructions.
-
-First, those instructions are a little GNU/Linux centric. If you are
-using Ubuntu or Debian, then this should be the easiest to follow the
-instructions. On Ubuntu or Debian there is a mingw3 Debian
-package. Installing that will give you the cross compiler that is a
-prerequisite. Alternatively if you are running MS Windows I notice
-that cygwin also has a mingw package. Or possibly you could use MinGW
-directly. For other OS's you might have to build a cross-compiler,
-i.e. gcc which emits win32 code and can create a win32 DLL.
-
-After you have a cross compiler you need to download the Ruby source
-and basically build a ruby interpreter. The cross-compile.sh script
-works although when I downloaded it, it had lots of blank space at the
-beginning which will mess up the Unix magic interpretation. That is
-remove the blanks in front of @code{#/bin/sh}.
-
-On my system, this script fails in running @code{make ruby} because the
-fake.rb that got created needed to have a small change:
-
-@smallexample
-    ALT_SEPARATOR = "\"; \
-@end smallexample
-should be:
-@smallexample
-    ALT_SEPARATOR = "\\"; \
-@end smallexample
-
-After fixing this, run @code{make ruby}. Also, I needed to run
-@code{make rubyw}.
-
-And then @code{make install} as indicated.
-
-Once all of that's in place, the place you want be is in
-@code{byebug/trunk/ext/win32}, not @code{byebug/ext}.
-
-So let's say you've installed the cross-compiled install ruby in
-@code{/usr/local/ruby-mingw32/}. Here then are the commands to build @code{byebug-base-}@emph{xxx}@code{-mswin32.gem}:
-@smallexample
-   cd .../byebug/trunk/ext/win32
-   ruby -I /usr/local/ruby-mingw32/lib/ruby/1.8/i386-mingw32 ../extconf.rb
-   make # Not rake
-   cd ../..   # back in byebug/trunk
-   rake win32_gem
-@end smallexample
+The number of seconds, tests, and assertions may be different from the above.
+However you @emph{should} see exactly ``0 failures, 0 errors.''
 
 @node Class Module Method Index
 @unnumbered Class, Module and Method Index
@@ -3683,8 +3438,7 @@ So let's say you've installed the cross-compiled install ruby in
 @printindex cp
 
 @tex
-% I think something like @colophon should be in texinfo.  In the
-% meantime:
+% I think something like @colophon should be in texinfo.  In the meantime:
 \long\def\colophon{\hbox to0pt{}\vfill
 \centerline{The body of this manual is set in}
 \centerline{\fontname\tenrm,}
