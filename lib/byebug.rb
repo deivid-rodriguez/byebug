@@ -131,6 +131,7 @@ module Byebug
         Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
       end
       Byebug.tracing = options[:tracing] unless options[:tracing].nil?
+      Byebug.start_sentinal=caller(0)[1]
       if Byebug.started?
         retval = block && block.call(self)
       else
