@@ -117,7 +117,7 @@ module Byebug
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "#{vals.columnize(displaywidth: self.class.settings[:width])}\n"
+          print "#{columnize(vals, Command.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
@@ -156,7 +156,7 @@ module Byebug
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "#{columnize(vals.sort!, self.class.settings[:width])}\n"
+          print "#{columnize(vals.sort!, Command.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string

@@ -35,7 +35,7 @@ module Byebug
           print "Available commands:\n"
           cmds = @state.commands.map{ |cmd| cmd.help_command }
           cmds = cmds.flatten.uniq.sort
-          print columnize(cmds, self.class.settings[:width])
+          print columnize(cmds, Command.settings[:width])
         end
       end
       print "\n"

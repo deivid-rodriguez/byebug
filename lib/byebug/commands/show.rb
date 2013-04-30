@@ -138,7 +138,7 @@ module Byebug
       when /^version$/
         return "byebug #{Byebug::VERSION}"
       when /^width$/
-        return "width is #{self.class.settings[:width]}."
+        return "width is #{Command.settings[:width]}."
       else
         return "Unknown show subcommand #{setting_name}."
       end

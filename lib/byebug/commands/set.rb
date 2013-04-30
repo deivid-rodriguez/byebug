@@ -144,7 +144,7 @@ module Byebug
       when /^width$/
         width = get_int(args[0], "Set width", 10, nil, 80)
         return unless width
-        self.class.settings[:width] = width
+        Command.settings[:width] = width
         ENV['COLUMNS'] = width.to_s
       else
         return print "Unknown setting #{@match[1]}.\n"

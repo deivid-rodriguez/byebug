@@ -180,7 +180,7 @@ module Byebug
       breakpoints = LineCache.trace_line_numbers(file)
       if breakpoints
         print "\tbreakpoint line numbers:\n"
-        print columnize(breakpoints.to_a.sort, self.class.settings[:width])
+        print columnize(breakpoints.to_a.sort, Command.settings[:width])
       end
     end
     private :info_file_breakpoints
