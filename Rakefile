@@ -1,7 +1,7 @@
 # -*- Ruby -*-
 require 'rake/testtask'
 require 'rake/extensiontask'
-require 'rubygems/package_task'
+require 'bundler/gem_tasks'
 
 Rake::ExtensionTask.new('byebug')
 
@@ -16,10 +16,5 @@ task :test do
 end
 
 base_spec = eval(File.read('byebug.gemspec'), binding, 'byebug.gemspec')
-
-# Rake task to build the default package
-Gem::PackageTask.new(base_spec) do |pkg|
-  pkg.need_tar = true
-end
 
 task :default => :test

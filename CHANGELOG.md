@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Post mortem support
+
+
 ## 1.0.3
 
 * "autoreload" is set by default now
