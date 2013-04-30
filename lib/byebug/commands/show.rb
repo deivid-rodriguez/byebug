@@ -202,7 +202,7 @@ module Byebug
 
     def execute
       if not @match[1]
-        print_subcmds(Subcommands)
+        print format_subcmds(Subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
@@ -232,17 +232,10 @@ module Byebug
         end
 
         # general help
-        s = "
+        s = %{
           Generic command for showing things about byebug.
-
-          --
-          List of show subcommands:
-          --
-        "
-        for subcmd in Subcommands do
-          s += "show #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
-        return s
+        }
+        s += format_subcmds(Subcommands)
       end
     end
   end

@@ -18,7 +18,9 @@ module Byebug
 
   # Implements byebug "info" command.
   class InfoCommand < Command
+    include Columnize
     self.allow_in_control = true
+
     Subcommands =
       [
        ['args', 1, 'Argument variables of current stack frame'],
@@ -87,7 +89,7 @@ module Byebug
     end
 
     def execute
-      return print_subcmds(Subcommands) unless @match[1]
+      return print format_subcmds(Subcommands) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
@@ -336,7 +338,7 @@ module Byebug
         if verbose and not c.ignored?
           (0...c.stack_size).each do |idx|
             print "\t"
-            print_frame(idx, false, c)
+            print_frame(idx, true, c)
           end
         end
       end
@@ -355,7 +357,7 @@ module Byebug
       if verbose and not c.ignored?
         (0...c.stack_size).each do |idx|
           print "\t"
-          print_frame(idx, false, c)
+          print_frame(idx, true, c)
         end
       end
     end
@@ -413,24 +415,17 @@ module Byebug
             return str += "\nInvalid \"file\" attribute \"#{args[2]}\"." \
               unless subsubcmd
 
-            str += "\n" + subsubcmd.short_help + '.'
+            return str += "\n" + subsubcmd.short_help + '.'
           else
-            str += "\n" + subcmd.long_help if subcmd.long_help
+            return str += "\n" + subcmd.long_help if subcmd.long_help
           end
-          return str
         end
 
         # general help
-        s = %{
+        str = %{
           Generic command for showing things about the program being debugged.
-          --
-          List of info subcommands:
-          --
         }
-        for subcmd in Subcommands do
-          s += "info #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
-        return s
+        str += format_subcmds(Subcommands)
       end
     end
   end

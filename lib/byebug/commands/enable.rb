@@ -105,17 +105,11 @@ module Byebug
         end
 
         # general help
-        s = %{
+        str = %{
           Enable some things.
           This is used to cancel the effect of the "disable" command.
-          --
-          List of enable subcommands:
-          --
         }
-        for subcmd in Subcommands do
-          s += "enable #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
-        return s
+        str += format_subcmds(Subcommands)
       end
     end
   end
@@ -179,19 +173,13 @@ module Byebug
         end
 
         # general help
-        s = %{
+        str = %{
           Disable some things.
 
           A disabled item is not forgotten, but has no effect until reenabled.
           Use the "enable" command to have it take effect again.
-          --
-          List of disable subcommands:
-          --
         }
-        for subcmd in Subcommands do
-          s += "disable #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
-        return s
+        str += format_subcmds(Subcommads)
       end
     end
   end

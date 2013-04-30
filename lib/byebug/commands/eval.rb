@@ -104,6 +104,7 @@ module Byebug
   end
 
   class PutLCommand < Command
+    include Columnize
     self.allow_in_control = true
 
     def regexp
@@ -116,7 +117,7 @@ module Byebug
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "#{columnize(vals, self.class.settings[:width])}\n"
+          print "#{vals.columnize(displaywidth: self.class.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
@@ -140,6 +141,7 @@ module Byebug
   end
 
   class PSCommand < Command
+    include Columnize
     self.allow_in_control = true
 
     include EvalFunctions

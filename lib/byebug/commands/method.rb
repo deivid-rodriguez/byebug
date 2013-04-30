@@ -41,6 +41,8 @@ module Byebug
 
   # Implements byebug's 'method' command.
   class MethodCommand < Command
+    include Columnize
+
     def regexp
       /^\s*m(?:ethod)?\s+((iv)|(i(:?nstance)?)\s+)?/
     end

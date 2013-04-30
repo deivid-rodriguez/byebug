@@ -47,7 +47,7 @@ module Byebug
 
     def execute
       # "Set" alone just prints subcommands
-      return print_subcmds(Subcommands) unless @match[1]
+      return print format_subcmds(Subcommands) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       try_subcmd = args.shift
@@ -164,24 +164,15 @@ module Byebug
           return "Invalid \"set\" subcommand \"#{args[1]}\"." unless subcmd
 
           str = subcmd.short_help + '.'
-          str += "\n" + subcmd.long_help if subcmd.long_help
-          return str
+          return str += "\n" + subcmd.long_help if subcmd.long_help
         end
 
         # general help
-        s = %{
-          Modifies parts of byebug environment. Boolean values take
-          on, off, 1 or 0.
-          You can see these environment settings with the \"show\" command.
-
-          --
-          List of set subcommands:
-          --
+        str = %{
+          Modifies parts of byebug environment. Boolean values take on, off, 1
+          or 0. You can see these environment settings with the "show" command.
         }
-        for subcmd in Subcommands do
-          s += "set #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
-        return s
+        str += format_subcmds(Subcommands)
       end
     end
   end

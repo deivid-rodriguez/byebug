@@ -26,16 +26,16 @@ module Byebug
     ##
     # Print list of subcmds
     #
-    def print_subcmds(subcmds)
+    def format_subcmds(subcmds)
       cmd_name = self.class.name[/Byebug::(.*)Command/, 1].downcase
-      errmsg "\"#{cmd_name}\" must be followed by the name of a subcommand.\n"
-      print "List of \"#{cmd_name}\" subcommands:\n"
+      s = "\n"                                     \
+          "--\n"                                   \
+          "List of \"#{cmd_name}\" subcommands:\n" \
+          "--\n"
       for subcmd in subcmds do
-        print "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
+        s += "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
       end
     end
-
-    include Columnize
 
     ##
     # Find param in subcmds.
@@ -106,28 +106,14 @@ module Byebug
           @settings = Object.new
           map = settings_map
           c = class << @settings; self end
-          if c.respond_to?(:funcall)
-            c.funcall(:define_method, :[]) do |name|
-              raise "No such setting #{name}" unless map.has_key?(name)
-              map[name][:getter].call
-            end
-          else
-            c.send(:define_method, :[]) do |name|
-              raise "No such setting #{name}" unless map.has_key?(name)
-              map[name][:getter].call
-            end
+          c.send(:define_method, :[]) do |name|
+            raise "No such setting #{name}" unless map.has_key?(name)
+            map[name][:getter].call
           end
           c = class << @settings; self end
-          if c.respond_to?(:funcall)
-            c.funcall(:define_method, :[]=) do |name, value|
-              raise "No such setting #{name}" unless map.has_key?(name)
-              map[name][:setter].call(value)
-            end
-          else
-            c.send(:define_method, :[]=) do |name, value|
-              raise "No such setting #{name}" unless map.has_key?(name)
-              map[name][:setter].call(value)
-            end
+          c.send(:define_method, :[]=) do |name, value|
+            raise "No such setting #{name}" unless map.has_key?(name)
+            map[name][:setter].call(value)
           end
         end
         @settings

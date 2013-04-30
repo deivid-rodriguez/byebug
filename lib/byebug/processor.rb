@@ -197,13 +197,12 @@ module Byebug
         end if context.dead?
 
         state = State.new do |s|
-          s.context = context
-          s.file    = file
-          s.line    = line
-          s.binding = context.frame_binding(0)
-          s.display = display
+          s.context   = context
+          s.file      = file
+          s.line      = line
+          s.display   = display
           s.interface = interface
-          s.commands = event_cmds
+          s.commands  = event_cmds
         end
         @interface.state = state if @interface.respond_to?('state=')
 
@@ -357,7 +356,7 @@ module Byebug
       end
 
       class State
-        attr_accessor :binding, :commands, :context, :display, :file
+        attr_accessor :commands, :context, :display, :file
         attr_accessor :frame_pos, :interface, :line, :previous_line
 
         def initialize

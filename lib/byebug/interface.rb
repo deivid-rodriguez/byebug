@@ -192,7 +192,7 @@ module Byebug
       @out = out
       @verbose = verbose
       @history_save = false
-      @history_length = 256  # take gdb default
+      @history_length = 256
       @histfile = ''
     end
 

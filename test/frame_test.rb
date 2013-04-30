@@ -3,6 +3,11 @@ require_relative 'test_helper'
 describe 'Frame Command' do
   include TestDsl
 
+  def after_setup
+    Byebug::Command.settings[:width] =
+      "--> #0  A.d(e#String) at #{fullpath('frame')}:16".size
+  end
+
   it 'must go up' do
     enter 'break 16', 'cont', 'up'
     debug_file('frame') { state.line.must_equal 12 }
@@ -35,7 +40,7 @@ describe 'Frame Command' do
 
   it 'must print current stack frame when without arguments' do
     enter 'break A.d', 'cont', 'up', 'frame'
-    debug_file('frame') { check_output_includes '#0', 'A.d(e#String)' }
+    debug_file('frame') { check_output_includes "#0  A.d(e#String) at #{fullpath('frame')}:15" }
   end
 
   it 'must set frame to the first one' do
@@ -78,17 +83,16 @@ describe 'Frame Command' do
     it 'must display current backtrace with full path = true' do
       enter 'set fullpath', 'break 16', 'cont', 'where'
       debug_file 'frame'
-      check_output_includes \
-        '-->', '#0', 'A.d(e#String)', "at #{fullpath('frame')}:16",
-               '#1', 'A.c'          , "at #{fullpath('frame')}:12"
+      check_output_includes "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
+                            "    #1  A.c at #{fullpath('frame')}:12"
     end
 
     it 'must display current backtrace with full path = false' do
       enter 'set nofullpath', 'break 16', 'cont', 'where'
       debug_file 'frame'
       check_output_includes \
-        '-->', '#0', 'A.d(e#String)', "at #{short_path(fullpath('frame'))}:16",
-               '#1', 'A.c'          , "at #{short_path(fullpath('frame'))}:12"
+        "--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16",
+        "    #1  A.c at #{short_path(fullpath('frame'))}:12"
     end
   end
 
@@ -96,21 +100,19 @@ describe 'Frame Command' do
     it 'displays current backtrace with callstyle "last"' do
       enter 'set callstyle last', 'break 16', 'cont', 'where'
       debug_file 'frame'
-      check_output_includes \
-        '-->', '#0', 'A.d(e#String)', "at #{fullpath('frame')}:16",
-               '#1', 'A.c'          , "at #{fullpath('frame')}:12",
-               '#2', 'A.b'          , "at #{fullpath('frame')}:8" ,
-               '#3', 'A.a'          , "at #{fullpath('frame')}:5"
+      check_output_includes "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
+                            "    #1  A.c at #{fullpath('frame')}:12"          ,
+                            "    #2  A.b at #{fullpath('frame')}:8"           ,
+                            "    #3  A.a at #{fullpath('frame')}:5"
     end
 
     it 'displays current backtrace with callstyle "short"' do
       enter 'set callstyle short', 'break 16', 'cont', 'where'
       debug_file 'frame'
-      check_output_includes \
-        '-->', '#0', 'd(e)', "at #{fullpath('frame')}:16",
-               '#1', 'c'   , "at #{fullpath('frame')}:12",
-               '#2', 'b'   , "at #{fullpath('frame')}:8" ,
-               '#3', 'a'   , "at #{fullpath('frame')}:5"
+      check_output_includes "--> #0  d(e) at #{fullpath('frame')}:16",
+                            "    #1  c at #{fullpath('frame')}:12"   ,
+                            "    #2  b at #{fullpath('frame')}:8"    ,
+                            "    #3  a at #{fullpath('frame')}:5"
     end
 
     it 'displays current backtrace with callstyle "tracked"' do

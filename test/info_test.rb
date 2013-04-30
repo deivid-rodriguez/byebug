@@ -236,10 +236,9 @@ describe 'Info Command' do
     it 'must show stack info' do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
-      check_output_includes \
-        '-->', '#0', 'A.a', "at #{fullpath('info')}:20",
-               '#1', 'A.b', "at #{fullpath('info')}:30",
-               '#2',        "at #{fullpath('info')}:36"
+      check_output_includes "--> #0  A.a at #{fullpath('info')}:20",
+                            "    #1  A.b at #{fullpath('info')}:30",
+                            "    #2  <main> at #{fullpath('info')}:36"
     end
   end
 

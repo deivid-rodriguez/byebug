@@ -22,6 +22,7 @@ module Byebug
         errmsg "Adjusting would put us beyond the newest (innermost) frame.\n"
         return
       end
+
       if @state.frame_pos != abs_frame_pos then
         @state.previous_line = nil
         @state.frame_pos = abs_frame_pos
@@ -30,66 +31,60 @@ module Byebug
       @state.file = context.frame_file(@state.frame_pos)
       @state.line = context.frame_line(@state.frame_pos)
 
-      print_frame(@state.frame_pos, true)
+      print_frame(@state.frame_pos, false)
     end
 
     def get_frame_call(prefix, pos, context)
       id = context.frame_method(pos)
+      return "<main>" unless id
+
       klass = context.frame_class(pos)
-      call_str = ""
-      if id
-        args = context.frame_args(pos)
-        locals = context.frame_locals(pos)
-        if Command.settings[:callstyle] != :short && klass
-          if Command.settings[:callstyle] == :tracked
+      if Command.settings[:callstyle] != :short && klass
+        call_str = "#{klass}.#{id.id2name}"
+      else
+        call_str = "#{id.id2name}"
+      end
+
+      args = context.frame_args(pos)
+      locals = context.frame_locals(pos)
+      if args.any?
+        call_str += "("
+        args.each_with_index do |name, i|
+          case Command.settings[:callstyle]
+          when :short
+            call_str += "#{name}, "
+          when :last
+            klass = locals[name].class
+            if klass.inspect.size > 20 + 3
+              klass = klass.inspect[0..20] + "..."
+            end
+            call_str += "#{name}##{klass}, "
+          when :tracked
             arg_info = context.frame_args_info(pos)
-          end
-          call_str << "#{klass}."
-        end
-        call_str << id.id2name
-        if args.any?
-          call_str << "("
-          args.each_with_index do |name, i|
-            case Command.settings[:callstyle]
-            when :short
-              call_str += "%s, " % [name]
-            when :last
-              klass = locals[name].class
-              if klass.inspect.size > 20+3
-                klass = klass.inspect[0..20]+"..."
-              end
-              call_str += "%s#%s, " % [name, klass]
-            when :tracked
-              if arg_info && arg_info.size > i
-                call_str += "#{name}: #{arg_info[i].inspect}, "
-              else
-                call_str += "%s, " % name
-              end
-            end
-            if call_str.size > self.class.settings[:width] - prefix.size
-              # Strip off trailing ', ' if any but add stuff for later trunc
-              call_str[-2..-1] = ",...XX"
-              break
+            if arg_info && arg_info.size > i
+              call_str += "#{name}: #{arg_info[i].inspect}, "
+            else
+              call_str += "#{name}, "
             end
           end
-          call_str[-2..-1] = ")" # Strip off trailing ', ' if any
+          if call_str.size > Command.settings[:width] - prefix.size
+            # Strip off trailing ', ' if any but add stuff for later trunc
+            call_str[-2..-1] = ",...XX"
+            break
+          end
         end
+        call_str[-2..-1] = ")" # Strip off trailing ', ' if any
       end
       return call_str
     end
 
     def print_backtrace
       (0...@state.context.stack_size).each do |idx|
-        if idx == @state.frame_pos
-          print "--> "
-        else
-          print "    "
-        end
         print_frame(idx)
       end
     end
 
-    def print_frame(pos, adjust = false, context=@state.context)
+    def print_frame(pos, mark_current = true, context = @state.context)
       file = context.frame_file(pos)
       line = context.frame_line(pos)
       klass = context.frame_class(pos)
@@ -102,17 +97,22 @@ module Byebug
         end
       end
 
-      frame_num = "##{pos} "
-      call_str = get_frame_call(frame_num, pos, context)
-      file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}\n"
-      print frame_num
-      unless call_str.empty?
-        print "#{call_str} "
-        if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
-          print "\n       "
-        end
+      if mark_current
+        frame_str = (pos == @state.frame_pos) ? "--> " : "    "
+      else
+        frame_str = ""
       end
-      print file_line
+
+      frame_str += sprintf "#%-2d ", pos
+      frame_str += get_frame_call(frame_str, pos, context)
+      file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
+      if frame_str.size + file_line.size + 1 > Command.settings[:width]
+        frame_str += "\n      #{file_line}\n"
+      else
+        frame_str += " #{file_line}\n"
+      end
+
+      print frame_str
       #if ENV['EMACS'] && adjust
       #  fmt = (Byebug.annotate.to_i > 1 ?
       #         "\032\032source %s:%d\n" : "\032\032%s:%d\n")
@@ -183,13 +183,13 @@ module Byebug
 
       def help(cmd)
         s = if cmd == 'where'
-          %{
+            %{
             w[here]\tdisplay stack frames
-           }
+            }
             else
-          %{
+            %{
             bt|backtrace\t\talias for where - display stack frames
-           }
+            }
             end
         s += %{
             Print the entire stack frame. Each frame is numbered, the most
@@ -197,7 +197,7 @@ module Byebug
             command; "up" and "down" add or subtract respectively to frame
             numbers shown. The position of the current frame is marked with
             -->.
-              }
+            }
       end
     end
   end
@@ -226,7 +226,7 @@ module Byebug
     end
   end
 
-  class DownCommand < Command # :nodoc:
+  class DownCommand < Command
     def regexp
       /^\s* down (?:\s+(.*))? .*$/x
     end
@@ -250,7 +250,7 @@ module Byebug
     end
   end
 
-  class FrameCommand < Command # :nodoc:
+  class FrameCommand < Command
     def regexp
       / ^\s*
         f(?:rame)?
@@ -273,9 +273,9 @@ module Byebug
       #    return
       #  end
       #else
-        context = @state.context
+      # context = @state.context
       #end
-      adjust_frame(pos, true, context)
+      adjust_frame(pos, true)
     end
 
     class << self
@@ -286,17 +286,16 @@ module Byebug
       def help(cmd)
         %{
           f[rame] [frame-number [thread thread-number]]
-          Move the current frame to the specified frame number, or the
-          0 if no frame-number has been given.
 
-          A negative number indicates position from the other end.  So
-          'frame -1' moves to the oldest frame, and 'frame 0' moves to
-          the newest frame.
+          Move the current frame to the specified frame number, or the 0 if no
+          frame-number has been given.
 
-          Without an argument, the command prints the current stack
-          frame. Since the current position is redisplayed, it may trigger a
-          resyncronization if there is a front end also watching over
-          things.
+          A negative number indicates position from the other end, so "frame -1"
+          moves to the oldest frame, and "frame 0" moves to the newest frame.
+
+          Without an argument, the command prints the current stack frame. Since
+          the current position is redisplayed, it may trigger a resyncronization
+          if there is a front end also watching over things.
 
           If a thread number is given then we set the context for evaluating
           expressions to that frame of that thread.
