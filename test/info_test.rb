@@ -5,10 +5,8 @@ describe 'Info Command' do
   include Columnize
 
    describe 'Args info' do
-     before { Byebug::InfoCommand.settings[:width] = 15 }
-
      it 'must show info about all args' do
-       enter 'break 3', 'cont', 'info args'
+       enter 'set width 15', 'break 3', 'cont', 'info args'
        debug_file 'info'
        check_output_includes 'a = "aaaaaaa...', 'b = "b"'
      end
@@ -178,15 +176,13 @@ describe 'Info Command' do
 
   describe 'Locals info' do
     it 'must show the current local variables' do
-      Byebug::InfoCommand.settings[:width] = 12
-      enter 'break 21', 'cont', 'info locals'
+      enter 'set width 12', 'break 21', 'cont', 'info locals'
       debug_file 'info'
       check_output_includes 'a = "1111...', 'b = 2'
     end
 
     it 'must fail if local variable doesn\'t respond to #to_s or to #inspect' do
-      Byebug::InfoCommand.settings[:width] = 21
-      enter 'break 26', 'cont', 'info locals'
+      enter 'set width 21', 'break 26', 'cont', 'info locals'
       debug_file 'info'
       check_output_includes '*Error in evaluation*'
     end
@@ -231,10 +227,11 @@ describe 'Info Command' do
   end
 
   describe 'Stack info' do
-    before { Byebug::InfoCommand.settings[:full_path] = true }
+    let(:width) { "    #2  <main> at #{fullpath('info')}:36".size }
 
     it 'must show stack info' do
-      enter 'break 20', 'cont', 'info stack'
+      enter 'set fullpath', ->{ "set width #{width}"}, 'break 20', 'cont',
+            'info stack'
       debug_file 'info'
       check_output_includes "--> #0  A.a at #{fullpath('info')}:20",
                             "    #1  A.b at #{fullpath('info')}:30",
@@ -283,7 +280,7 @@ describe 'Info Command' do
   end
 
   describe 'Variables info' do
-    before { Byebug::InfoCommand.settings[:width] = 30 }
+    before { Byebug::Command.settings[:width] = 30 }
 
     it 'must show all variables' do
       enter 'break 21', 'cont', 'info variables'

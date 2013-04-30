@@ -53,7 +53,6 @@ describe 'Eval Command' do
     end
   end
 
-
   it 'must pretty print the expression result' do
     enter 'pp {a: \'3\' * 40, b: \'4\' * 30}'
     debug_file 'eval'
@@ -61,7 +60,7 @@ describe 'Eval Command' do
   end
 
   it 'must print expression and columnize the result' do
-    temporary_change_hash_value(Byebug::Command.settings, :width, 20) do
+    temporary_change_hash_value(Byebug::PutLCommand.settings, :width, 20) do
       enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_file 'eval'
       check_output_includes "1  3  5  8  6\n2  4  9  7"
@@ -69,7 +68,7 @@ describe 'Eval Command' do
   end
 
   it 'must print expression and sort and columnize the result' do
-    temporary_change_hash_value(Byebug::Command.settings, :width, 20) do
+    temporary_change_hash_value(Byebug::PSCommand.settings, :width, 20) do
       enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_file 'eval'
       check_output_includes "1  3  5  7  9\n2  4  6  8"
@@ -77,7 +76,7 @@ describe 'Eval Command' do
   end
 
   it 'must set width by the "set" command' do
-    temporary_change_hash_value(Byebug::Command.settings, :width, 20) do
+    temporary_change_hash_value(Byebug::PSCommand.settings, :width, 20) do
       enter 'set width 10', 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_file 'eval'
       check_output_includes "1  4  7\n2  5  8\n3  6  9"
