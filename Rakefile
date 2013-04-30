@@ -2,7 +2,6 @@
 require 'rake/testtask'
 require 'rake/extensiontask'
 require 'rubygems/package_task'
-require 'bundler/gem_tasks'
 
 Rake::ExtensionTask.new('byebug')
 
