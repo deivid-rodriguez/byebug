@@ -5,24 +5,26 @@ A Ruby 2.0 debugger.
 
 ## Install
 
-Just type
-
-    $ gem install byebug
-
-or if you use bundler, drop
-
-    gem 'byebug'
-
-in your Gemfile
+Just type `gem install byebug` or drop `gem 'byebug'` in your Gemfile and run
+`bundle install`.
 
 
 ## Usage
 
-Wherever you want to start debugging, simply drop:
+Simply drop `byebug` wherever you want to start debugging and the execution
+stop there. If you are debugging rails, start the server in normal mode with
+`rails server` and once the execution get to your `byebug` command you will get
+a debugging terminal.
 
-    byebug
 
-and the execution will stop and allow you to start debugging.
+## Configuration
+
+You can automatically load some configurations at startup by dropping them in
+the startup file `.byebugrc`, for example, `set listsize 20`. If you are coming
+from [debugger](https://github.com/cldwalker/debugger), notice however that you
+no longer need `set autolist`, `set autoreload` and `set autoeval` because they
+are default options in byebug.
+
 
 ## Credits
 
