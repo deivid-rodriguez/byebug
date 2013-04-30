@@ -63,6 +63,7 @@ typedef struct {
 /* functions */
 extern VALUE Init_context(VALUE mByebug);
 extern VALUE Context_create(VALUE thread, VALUE cDebugThread);
+extern VALUE Context_dup(debug_context_t *context);
 extern void reset_stepping_stop_points(debug_context_t *context);
 extern VALUE Context_ignored(VALUE self);
 

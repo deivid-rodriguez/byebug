@@ -305,11 +305,10 @@ process_raise_event(VALUE trace_point, void *data)
   if (post_mortem == Qtrue && self)
   {
     VALUE binding = rb_binding_new();
-    CTX_FL_SET(context, CTX_FL_DEAD);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_file"), path);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_line"), lineno);
     rb_ivar_set(rb_errinfo(), rb_intern("@__debug_binding"), binding);
-    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_context"), context_object);
+    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_context"), Context_dup(context));
   }
 
   expn_class = rb_obj_class(err);

@@ -109,7 +109,6 @@ describe 'Variables Command' do
 
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
-      skip('Not working yet')
       enter 'cont', 'var local'
       debug_file 'post_mortem'
       check_output_includes 'x => nil', 'z => 4'

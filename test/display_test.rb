@@ -139,7 +139,7 @@ describe 'Display Command' do
     before { Byebug::Command.settings[:autoeval] = false }
 
     it 'must be able to set display expressions in post-mortem mode' do
-      enter 'cont', 'display 2 + 2', 'cont'
+      enter 'cont', 'display 2 + 2'
       debug_file 'post_mortem'
       check_output_includes '1:', '2 + 2 = 4'
     end

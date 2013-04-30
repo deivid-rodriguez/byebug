@@ -115,7 +115,7 @@ Context_mark(debug_context_t *context)
 {
   debug_frame_t *frame;
 
-  rb_gc_mark(context->thread);
+//rb_gc_mark(context->thread);
   frame = context->stack;
   while (frame != NULL) {
     rb_gc_mark(frame->self);
@@ -148,6 +148,45 @@ Context_create(VALUE thread, VALUE cDebugThread) {
   reset_stepping_stop_points(context);
   if (rb_obj_class(thread) == cDebugThread) CTX_FL_SET(context, CTX_FL_IGNORE);
   return Data_Wrap_Struct(cContext, Context_mark, Context_free, context);
+}
+
+static void
+frame_copy(debug_frame_t *new_frame, debug_frame_t *old_frame)
+{
+  new_frame->file          = old_frame->file;
+  new_frame->line          = old_frame->line;
+  new_frame->method_id     = old_frame->method_id;
+  new_frame->defined_class = old_frame->defined_class;
+  new_frame->binding       = old_frame->binding;
+  new_frame->self          = old_frame->self;
+}
+
+extern VALUE
+Context_dup(debug_context_t *context)
+{
+    debug_context_t *new_context;
+    debug_frame_t *source_frame = context->stack, *dest_frame, *new_frame;
+
+    new_context = ALLOC(debug_context_t);
+    memcpy(new_context, context, sizeof(debug_context_t));
+    new_context->dest_frame = -1;
+    new_context->stop_line = -1;
+    new_context->stop_frame = -1;
+    new_context->stop_next = -1;
+    new_context->stack_size = context->stack_size;
+    CTX_FL_SET(new_context, CTX_FL_DEAD);
+    new_context->stack = ALLOC(debug_frame_t);
+    frame_copy(new_context->stack, context->stack);
+
+    new_frame = new_context->stack;
+    while ((source_frame = source_frame->prev))
+    {
+      dest_frame = new_frame;
+      new_frame = ALLOC(debug_frame_t);
+      frame_copy(new_frame, source_frame);
+      dest_frame->prev = new_frame;
+    }
+    return Data_Wrap_Struct(cContext, 0, Context_free, new_context);
 }
 
 static debug_frame_t*
