@@ -66,11 +66,11 @@ describe "Jump Command" do
   end
 
   describe "Post Mortem" do
-    # TODO: This test fails with "Segmentation fault". Probably need to fix it
-    # somehow or forbid this command in post mortem mode. Seems like
-    # state.context.frame_file and state.context.frame_line cause that.
     it "must work in post-mortem mode" do
-      skip("No post morten mode for now")
+      skip 'No jumping for now plus this test fails with "Segmentation '     \
+           'fault". Probably need to fix it somehow or forbid this command ' \
+           'in post mortem mode. Seems like state.context.frame_file and '   \
+           'state.context.frame_line cause that.'
       enter 'cont', 'jump 12'
       debug_file 'post_mortem'
     end

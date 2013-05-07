@@ -9,7 +9,7 @@ describe 'Irb Command' do
     Signal.trap('SIGINT', 'IGNORE')
   end
 
-  def after_teardown
+  def before_teardown
     Signal.trap('SIGINT', 'DEFAULT')
   end
 
@@ -35,9 +35,8 @@ describe 'Irb Command' do
 
   describe 'autoirb' do
     it 'must call irb automatically after breakpoint' do
-      skip('Segfaulting... skip until fixed')
       irb.expects(:eval_input)
-      enter 'set autoirb', 'break 4', 'cont'
+      enter 'set autoirb', 'break 4', 'cont', 'set noautoirb'
       debug_file 'irb'
     end
   end
