@@ -202,11 +202,8 @@ module Byebug
       end
 
       def get_binding
-        @state.context.frame_binding(@state.frame_pos)
-      end
-
-      def get_context(thnum)
-        Byebug.contexts.find{|c| c.thnum == thnum}
+        @state.context ? @state.context.frame_binding(@state.frame_pos) :
+          TOPLEVEL_BINDING
       end
   end
 

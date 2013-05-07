@@ -195,13 +195,11 @@ definition but in Ruby line 4 is executed, the name @code{triangle} (probably)
 does not exist so issuing a method call of @code{triangle} will raise a
 ``method not found'' error.
 
-@code{byebug}'s prompt is @code{(byebug:@emph{n})}. The @emph{n} is the thread
-number. Here it is 1 which is usually the case for the main thread. If the
-program has died and you are in post-mortem debugging, there is no thread
-number. In this situation, the string @code{post-mortem} is used in place of a
-thread number. If the program has terminated normally, the string this position
-will be @code{ctrl}. The commands which are available change depending on the
-program state.
+@code{byebug}'s prompt is @code{(byebug)}. If the program has died and you are
+in post-mortem debugging @code{byebug:post-mortem} is used instead. If the
+program has terminated normally, the string this position will be
+@code{byebug:ctrl}. The commands which are available change depending on the
+program's state.
 
 The first command, @code{list} (@pxref{List}), prints 10 lines centered around
 the current line; the current line here is line 4 and is marked by @code{=>}, so
@@ -844,8 +842,6 @@ candidate += 1
 The loop between lines 23--26 gets interleaved between those of
 @code{Sieve::next_prime}, lines 6--19 above.
 
-A similar kind of thing can occur when debugging programs with many threads.
-
 @node No Parameter Values in a Call Stack
 @subsection No Parameter Values in a Call Stack
 In traditional debuggers, in a call stack you can generally see the names of the
@@ -896,7 +892,6 @@ To be continued...
 @item line tracing and non-interactive tracing.
 @item mixing in Byebug.debug with byebug
 @item post-mortem debugging and setting up for that
-@item threading?
 @item references to videos
 @end itemize
 @end ifset
@@ -1322,10 +1317,9 @@ parameters.
 @node Command Output
 @section Command Output
 In the command-line interface, when @code{byebug} is waiting for input it
-presents a prompt of the form @code{(byebug:}@emph{x}@code{)}. If debugging
-locally, @emph{x} will be the thread number. Usual the main thread is 1, so
-often you'll see @code{(byebug:1)}. In the control interface though @emph{x}
-will be @code{ctrl} and in post-mortem debugging @code{post-mortem}.
+presents a prompt of the form @code{(byebug)}. If the program has terminated
+normally the prompt will be @code{(byebug:ctrl)} and in post-mortem debugging it
+will be @code{(byebug:post-mortem)}.
 
 In the local interface, whenever @code{byebug} gives an error message such as
 for an invalid command, or an invalid location position, it will generally
@@ -1357,7 +1351,7 @@ byebug help v@value{BYEBUG_VERSION}
 Type 'help <command-name>' for help on a specific command
 
 Available commands:
-backtrace  delete   enable  help  list    ps       save    thread     where
+backtrace  delete   enable  help  list    ps       save    where
 break      disable  eval    info  method  putl     set     trace
 catch      display  exit    irb   next    quit     show    undisplay
 condition  down     finish  jump  p       reload   source  up
@@ -1418,8 +1412,6 @@ info line -- Line number and file name of current position in source file
 info locals -- Local variables of the current stack frame
 info program -- Execution status of the program
 info stack -- Backtrace of the stack
-info thread -- List info about thread NUM
-info threads -- information of currently-known threads
 info variables -- Local and instance variables of the current stack frame
 @end example
 
@@ -1458,8 +1450,7 @@ With an integer argument, list info on that breakpoint.
 @itemx q
 
 To exit @code{byebug}, use the @code{quit} command (abbreviated @code{q}), or
-alias @code{exit}. A simple @code{quit} tries to terminate all threads in
-effect.
+alias @code{exit}.
 
 Normally if you are in an interactive session, this command will prompt to ask
 if you really want to quit. If you don't want any questions asked, enter
@@ -1484,17 +1475,6 @@ inside your program or invoked as a result of post-mortem handling.
 
 Also, since this relies on the the OS @code{exec} call, this command is
 available only if your OS supports @code{exec}; OSX for example does not (yet).
-@end table
-
-@node Interrupt
-@subsection Interrupt (@samp{interrupt})
-
-@table @code
-@kindex interrupt
-@kindex i
-@item interrupt
-@itemx i
-Interrupt the program. Useful if there are multiple threads running.
 @end table
 
 @node Source
@@ -2023,9 +2003,9 @@ a resynchronization if there is a front end also watching over things.
 @end table
 
 @table @code
-@kindex frame @r{[}@ovar{n} @r{[}thread @var{thread-num}@r{]}@r{]}
+@kindex frame @r{[} @ovar{n}@r{]}
 @cindex current stack frame
-@item frame @ovar{n} @r{[}thread @var{thread-num}@r{]}
+@item frame@r{[} @ovar{n}@r{]}
 The @code{frame} command allows you to move from one stack frame to another, and
 to print the stack frame you select.  @var{n} is the the stack frame number or 0
 if no frame number is given; @code{frame 0} then will always show the current
@@ -2038,9 +2018,6 @@ stack frame.
 Without an argument, @code{frame} prints the current stack frame. Since the
 current position is redisplayed, it may trigger a resynchronization if there is
 a front end also watching over things.
-
-If a thread number is given then we set the context for evaluating expressions
-to that frame of that thread.
 @end table
 
 @node Stopping
@@ -2754,64 +2731,6 @@ and @code{to_s} method is called.
 @item info stack
 Backtrace of the stack. An alias for @code{where}. @xref{Backtrace}.
 
-@kindex info thread
-@item info thread @ovar{thread-number} @r{[} terse | verbose@r{]}
-If no thread number is given, we list info for all threads. @code{terse} and
-@code{verbose} options are possible. If terse, just give summary thread name
-information. See information under @code{info threads} for more detail about
-this summary information.
-If @code{verbose} is appended to the end of the command, then the entire stack
-trace is given for each thread.
-
-@kindex info threads @r{[} terse | verbose@r{]}
-@item info threads
-List information about currently-known threads. This information includes
-whether the thread is current (+), if it is suspended ($), or ignored (!); the
-thread number and the top stack item. If @code{verbose} is given then the entire
-stack frame is shown. Here it is an example:
-
-@smallexample
-(byebug:7) info threads
-  1 #<Thread:0xb7d08704 sleep>  ./test/thread1.rb:27
- !2 #<Byebug::DebugThread:0xb7782e4c sleep>  
-  3 #<Thread:0xb777e220 sleep>  ./test/thread1.rb:11
-  4 #<Thread:0xb777e144 sleep>  ./test/thread1.rb:11
-  5 #<Thread:0xb777e07c sleep>  ./test/thread1.rb:11
-  6 #<Thread:0xb777dfb4 sleep>  ./test/thread1.rb:11
-+ 7 #<Thread:0xb777deec run>  ./test/thread1.rb:14
-(byebug:1)
-@end smallexample
-
-Thread 7 is the current thread since it has a plus sign in front. Thread 2 is
-ignored since it has a @code{!}. A ``verbose'' listing of the above:
-
-@smallexample
-(byebug:7) info threads verbose
-  1 #<Thread:0xb7d08704 sleep>  
-  #0 Integer.join at test/thread1.rb:27
-  #1 at test/thread1.rb:27
- !2 #<Byebug::DebugThread:0xb7782e4c sleep>  
-  3 #<Thread:0xb777e220 sleep>  
-  #0 sleep(count#Fixnum) at test/thread1.rb:11
-  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
-  #2 at test/thread1.rb:23
-  4 #<Thread:0xb777e144 sleep>  
-  #0 sleep(count#Fixnum) at test/thread1.rb:11
-  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
-  #2 at test/thread1.rb:23
-  5 #<Thread:0xb777e07c sleep>  
-  #0 sleep(count#Fixnum) at test/thread1.rb:11
-  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
-  #2 at test/thread1.rb:23
-  6 #<Thread:0xb777dfb4 sleep>  
-  #0 sleep(count#Fixnum) at test/thread1.rb:11
-  #1 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:11
-  #2 at test/thread1.rb:23
-+ 7 #<Thread:0xb777deec run>  
-  #0 Object.fn(count#Fixnum, i#Fixnum) at test/thread1.rb:14
-  #1 at test/thread1.rb:23
-@end smallexample
-
 @kindex info variables
 @item info variables
 Local and instance variables.
@@ -2922,21 +2841,18 @@ be @code{(byebug:post-mortem)}.
 @node Byebug.run
 @subsection @code{Byebug.start}, @code{Byebug.started?}, @code{Byebug.stop}, @code{Byebug.run_script}
 
-In order to provide better debugging information regarding the stack
-frame(s) across all threads, byebug has to intercept each call,
-save some information and on return remove it. Possibly, in Ruby 1.9
-possibly this will not be needed. Therefore one has to issue call to
-indicate start saving information and another call to stop. Of course,
-If you call byebug from the outset via @code{byebug} this is done
-for you.
+In order to provide better debugging information regarding the stack frame(s),
+byebug has to intercept each call, save some information and on return remove
+it. Therefore one has to issue a call to indicate byebug to start saving
+information and another call to stop. Of course, if you call byebug from the
+outset via @code{byebug} this is done for you.
 
 @table @code
 @item Byebug.start(@ovar{options}) @ovar{block}
 @vindex @code{Byebug.start(options)}
 @vindex @code{Byebug.start(block)}
 Turn on add additional instrumentation code to facilitate debugging. A
-system even table hook is installed and some variables are set up to
-access thread frames.
+system even table hook is installed and some variables are set up.
 
 This needs to be done before entering byebug; therefore a call
 to byebug issue a @code{Byebug.start} call if necessary.
@@ -3266,7 +3182,7 @@ backtrace delete  enable help method putl    set    trace
 break     disable eval   info next   quit    show   undisplay
 catch     display exit   irb  p      reload  source up
 condition down    finish list pp     restart step   var
-continue edit     frame  me   ps     save    thread where
+continue edit     frame  me   ps     save    where
                   ^^ This is you
 
 (byebug:1) help me
@@ -3283,8 +3199,8 @@ hi
 
 @item byebug @ovar{steps=1}
 @vindex @code{Kernel::byebug}
-Enters byebug in the current thread after a stepping @var{steps} line-event
-steps. Before entering byebug startup script is read.
+Enters byebug after @var{steps} line-event steps. Before entering byebug, the
+startup script is read.
 
 Setting @var{steps} to 0 will cause a break in byebug subroutine and not wait
 for any line event to occur. This could be useful you want to stop right after
@@ -3327,7 +3243,7 @@ y = 1
 
 $ scope-test.rb:8
 ../lib/byebug.rb:386
-Byebug.current_context.stop_frame = 0
+Byebug.context.stop_frame = 0
 (byebug:1) where
 --> #0 Kernel.byebug(steps#Fixnum) at ../lib/byebug-base.rb:386
     #1 at scope-test.rb:6

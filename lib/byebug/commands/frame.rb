@@ -250,7 +250,6 @@ module Byebug
       / ^\s*
         f(?:rame)?
         (?: \s+ (\S+))? \s*
-        (?: thread \s+ (.*))? \s*
         $/x
     end
 
@@ -261,15 +260,6 @@ module Byebug
         pos = get_int(@match[1], "Frame")
         return unless pos
       end
-      #if @match[2]
-      #  context = parse_thread_num('frame', @match[2])
-      #  unless context
-      #    errmsg "Thread #{@match[2]} doesn't exist.\n"
-      #    return
-      #  end
-      #else
-      # context = @state.context
-      #end
       adjust_frame(pos, true)
     end
 
@@ -280,7 +270,7 @@ module Byebug
 
       def help(cmd)
         %{
-          f[rame] [frame-number [thread thread-number]]
+          f[rame][ frame-number]
 
           Move the current frame to the specified frame number, or the 0 if no
           frame-number has been given.
@@ -291,9 +281,6 @@ module Byebug
           Without an argument, the command prints the current stack frame. Since
           the current position is redisplayed, it may trigger a resyncronization
           if there is a front end also watching over things.
-
-          If a thread number is given then we set the context for evaluating
-          expressions to that frame of that thread.
         }
       end
     end

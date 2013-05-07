@@ -35,7 +35,7 @@ module Byebug
       file = @match[2]
       file = @state.context.frame_file(file.to_i) if numeric?(file)
       file = @state.context.frame_file(0) if !file
-      case Byebug.current_context.jump(line, file)
+      case Byebug.context.jump(line, file)
       when 0
         @state.proceed
       when 1

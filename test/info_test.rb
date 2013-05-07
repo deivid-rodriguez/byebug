@@ -239,38 +239,6 @@ describe 'Info Command' do
     end
   end
 
-   describe 'Thread info' do
-     it 'must show threads info when without args' do
-       enter 'break 48', 'cont', 'info threads'
-       debug_file 'info_threads'
-       check_output_includes /#<Thread:\S+ run>/
-     end
-
-     it 'must show thread info' do
-       skip('XXX: Unreliable due to race conditions, needs fix to be reliable')
-       thread_number = nil
-       enter ->{ thread_number = context.thnum; "info thread #{context.thnum}" }
-       debug_file 'info'
-       check_output_includes '+', thread_number.to_s, /#<Thread:\S+ run>/
-     end
-
-     it 'must show verbose thread info' do
-       skip('XXX: Unreliable due to race conditions, needs fix to be reliable')
-       enter 'break 20', 'cont', ->{ "info thread #{context.thnum} verbose" }
-       debug_file 'info'
-       check_output_includes \
-         /#<Thread:\S+ run>/, '#0', 'A.a', "at #{fullpath('info')}:20"
-     end
-
-     it 'must show error when unknown parameter is used' do
-       skip('No thread support')
-       enter ->{'info thread #{context.thnum} blabla'}
-       debug_file 'info'
-       check_output_includes \
-         '"terse" or "verbose" expected. Got "blabla"', interface.error_queue
-     end
-   end
-
   describe 'Global Variables info' do
     it 'must show global variables' do
       enter 'info global_variables'

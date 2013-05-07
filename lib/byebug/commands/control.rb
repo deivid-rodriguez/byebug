@@ -69,33 +69,4 @@ module Byebug
     end
   end
 
-  class InterruptCommand < Command
-    self.allow_in_control     = true
-    self.allow_in_post_mortem = false
-    self.event                = false
-    self.need_context         = true
-
-    def regexp
-      /^\s*i(?:nterrupt)?\s*$/
-    end
-
-    def execute
-      unless Byebug.interrupt_last
-        context = Byebug.thread_context(Thread.main)
-        context.interrupt
-      end
-    end
-
-    class << self
-      def help_command
-        'interrupt'
-      end
-
-      def help(cmd)
-        %{
-          i[nterrupt]\tinterrupt the program
-        }
-      end
-    end
-  end
 end

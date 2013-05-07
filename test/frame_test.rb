@@ -125,14 +125,6 @@ describe 'Frame Command' do
     end
   end
 
-  it 'must change to frame in another thread' do
-    skip('No threads supported')
-  end
-
-  it 'must not change to frame in another thread if thread doesn\'t exist' do
-    skip('No threads supported')
-  end
-
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
       #skip 'TODO: This test fails with \'Segmentation fault\'.'

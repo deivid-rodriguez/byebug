@@ -1,19 +1,6 @@
 #include <byebug.h>
 
 static VALUE cContext;
-static int thnum_current = 0;
-
-static VALUE
-id2ref(VALUE id)
-{
-    return id;
-}
-
-static VALUE
-context_thread_0(debug_context_t *context)
-{
-    return id2ref(context->thread);
-}
 
 /* "Step", "Next" and "Finish" do their work by saving information about where
  * to stop next. reset_stepping_stop_points removes/resets this information. */
@@ -23,13 +10,6 @@ reset_stepping_stop_points(debug_context_t *context)
   context->dest_frame = -1;
   context->stop_line  = -1;
   context->stop_next  = -1;
-}
-
-static inline VALUE
-Context_thnum(VALUE self) {
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return INT2FIX(context->thnum);
 }
 
 static inline void
@@ -64,29 +44,11 @@ Context_stack_size(VALUE self)
 }
 
 static inline VALUE
-Context_thread(VALUE self)
-{
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return context->thread;
-}
-
-static inline VALUE
 Context_dead(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
-}
-
-extern VALUE
-Context_ignored(VALUE self)
-{
-  debug_context_t *context;
-
-  if (self == Qnil) return Qtrue;
-  Data_Get_Struct(self, debug_context_t, context);
-  return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
 extern void
@@ -115,7 +77,6 @@ Context_mark(debug_context_t *context)
 {
   debug_frame_t *frame;
 
-//rb_gc_mark(context->thread);
   frame = context->stack;
   while (frame != NULL) {
     rb_gc_mark(frame->self);
@@ -133,20 +94,18 @@ Context_free(debug_context_t *context) {
 }
 
 extern VALUE
-Context_create(VALUE thread, VALUE cDebugThread) {
+Context_create()
+{
   debug_context_t *context;
 
   context = ALLOC(debug_context_t);
   context->stack_size = 0;
   context->stack = NULL;
-  context->thnum = ++thnum_current;
-  context->thread = thread;
   context->flags = 0;
   context->last_file = NULL;
   context->last_line = -1;
   context->stop_frame = -1;
   reset_stepping_stop_points(context);
-  if (rb_obj_class(thread) == cDebugThread) CTX_FL_SET(context, CTX_FL_IGNORE);
   return Data_Wrap_Struct(cContext, Context_mark, Context_free, context);
 }
 
@@ -364,44 +323,6 @@ Context_stop_reason(VALUE self)
   return ID2SYM(rb_intern(symbol));
 }
 
-static void
-context_suspend_0(debug_context_t *context)
-{
-    VALUE status;
-
-    status = rb_funcall(context_thread_0(context), rb_intern("status"), 0);
-    if (rb_str_cmp(status, rb_str_new2("run")) == 0)
-      CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
-    else if(rb_str_cmp(status, rb_str_new2("sleep")) == 0)
-      CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
-    else
-      return;
-    CTX_FL_SET(context, CTX_FL_SUSPEND);
-}
-
-static VALUE
-Context_suspend(VALUE self)
-{
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
-
-  if (CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    rb_raise(rb_eRuntimeError, "Already suspended.");
-  context_suspend_0(context);
-
-  return Qnil;
-}
-
-static VALUE
-Context_is_suspended(VALUE self)
-{
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
-  return CTX_FL_TEST(context, CTX_FL_SUSPEND) ? Qtrue : Qfalse;
-}
-
 #if 0
 
 static VALUE
@@ -490,20 +411,15 @@ Context_stop_frame(VALUE self, VALUE frame)
  *
  *   == Summary
  *
- *   Byebug keeps a single instance of this class for each Ruby thread.
+ *   Byebug keeps a single instance of this class.
  */
 VALUE
 Init_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
   rb_define_method(cContext, "stack_size", Context_stack_size, 0);
-  rb_define_method(cContext, "thread", Context_thread, 0);
   rb_define_method(cContext, "dead?", Context_dead, 0);
-  rb_define_method(cContext, "ignored?", Context_ignored, 0);
-  rb_define_method(cContext, "thnum", Context_thnum, 0);
   rb_define_method(cContext, "stop_reason", Context_stop_reason, 0);
-  rb_define_method(cContext, "suspend", Context_suspend, 0);
-  rb_define_method(cContext, "suspended?", Context_is_suspended, 0);
   rb_define_method(cContext, "tracing", Context_tracing, 0);
   rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
   rb_define_method(cContext, "frame_file", Context_frame_file, -1);

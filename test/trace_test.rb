@@ -54,51 +54,6 @@ describe 'Trace Command' do
       end
     end
 
-    describe 'tracing on all threads' do
-      describe 'enabling' do
-        it 'must trace execution by setting trace to on' do
-          skip('XXX: No thread support')
-          th = nil
-          enter 'trace on all'
-          debug_file('trace_threads') { th = context.thnum }
-          check_output_includes \
-            "Tracing(#{th}):#{fullpath('trace_threads')}:4 @break1 = false",
-            "Tracing(#{th}):#{fullpath('trace_threads')}:5 @break2 = false"
-          check_output_includes \
-            /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
-        end
-
-        it 'must show a message it is on' do
-          skip('XXX: No thread support')
-          enter 'trace on all'
-          debug_file 'trace'
-          check_output_includes 'Tracing on all threads.'
-        end
-      end
-
-      describe 'disabling' do
-        it 'must stop tracing by setting trace to off' do
-          skip('XXX: No thread support')
-          th = nil
-          enter 'trace on all', 'break 19', 'cont', 'trace off all'
-          debug_file('trace_threads') { th = context.thnum }
-          check_output_includes \
-            /Tracing\(\d+\):#{fullpath('trace_threads')}:8 until @break1/
-          check_output_includes \
-            "Tracing(#{th}):#{fullpath('trace_threads')}:19 t1.join"
-          check_output_doesnt_include \
-            "Tracing(#{th}):#{fullpath('trace_threads')}:20 t1"
-        end
-
-        it 'must show a message it is off' do
-          skip('XXX: No thread support')
-          enter 'trace off'
-          debug_file 'trace'
-          check_output_includes 'Tracing off on current thread.'
-        end
-      end
-    end
-
     describe 'tracing global variables' do
       it 'must track global variable' do
         enter 'trace variable $bla'

@@ -2,14 +2,12 @@
 
 static VALUE mByebug; /* Ruby Byebug Module object */
 static VALUE cContext;
-static VALUE cDebugThread;
 
 static VALUE tracing     = Qfalse;
 static VALUE post_mortem = Qfalse;
 static VALUE debug       = Qfalse;
-static VALUE locker      = Qnil;
 
-static VALUE contexts;
+static VALUE context;
 static VALUE catchpoints;
 static VALUE breakpoints;
 
@@ -54,78 +52,23 @@ tp_inspect(VALUE trace_point) {
 }
 
 static VALUE
-Byebug_thread_context(VALUE self, VALUE thread)
+Byebug_context(VALUE self)
 {
-  VALUE context;
-
-  context = rb_hash_aref(contexts, thread);
   if (context == Qnil) {
-    context = Context_create(thread, cDebugThread);
-    rb_hash_aset(contexts, thread, context);
+    context = Context_create();
   }
   return context;
 }
 
-static VALUE
-Byebug_current_context(VALUE self)
-{
-  return Byebug_thread_context(self, rb_thread_current());
-}
-
-/*
-static int
-remove_dead_threads(VALUE thread, VALUE context, VALUE ignored)
-{
-  return (IS_THREAD_ALIVE(thread)) ? ST_CONTINUE : ST_DELETE;
-}
-*/
-
 static void
 cleanup(debug_context_t *context)
 {
-  VALUE thread;
-
   context->stop_reason = CTX_STOP_NONE;
-
-  /* release a lock */
-  locker = Qnil;
-
-  /* let the next thread run */
-  thread = remove_from_locked();
-  if(thread != Qnil)
-    rb_thread_run(thread);
 }
 
 static int
-check_start_processing(debug_context_t *context, VALUE thread)
+check_start_processing(debug_context_t *context)
 {
-  /* return if thread is marked as 'ignored' */
-  if(CTX_FL_TEST(context, CTX_FL_IGNORE)) return 0;
-
-  while(1)
-  {
-    /* halt execution of the current thread if byebug is activated in another */
-    while(locker != Qnil && locker != thread)
-    {
-      add_to_locked(thread);
-      rb_thread_stop();
-    }
-
-    /* stop the current thread if it's marked as suspended */
-    if(CTX_FL_TEST(context, CTX_FL_SUSPEND) && locker != thread)
-    {
-      CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
-      rb_thread_stop();
-    }
-    else break;
-  }
-
-  /* return if the current thread is the locker */
-  if(locker != Qnil) return 0;
-
-  /* only the current thread can proceed */
-  locker = thread;
-
   /* ignore a skipped section of code */
   if(CTX_FL_TEST(context, CTX_FL_SKIPPED)) {
     cleanup(context);
@@ -166,9 +109,9 @@ call_at_line(debug_context_t *context, char *file, int line,
   VALUE path, lineno, method_id, defined_class, binding, self;             \
   VALUE context_object;                                                    \
   debug_context_t *context;                                                \
-  context_object = Byebug_current_context(mByebug);                        \
+  context_object = Byebug_context(mByebug);                                \
   Data_Get_Struct(context_object, debug_context_t, context);               \
-  if (!check_start_processing(context, rb_thread_current())) return;       \
+  if (!check_start_processing(context)) return;                            \
   load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class, \
                                &binding, &self);                           \
   if (debug == Qtrue)                                                      \
@@ -348,7 +291,6 @@ Byebug_setup_tracepoints(VALUE self)
 {
   if (catchpoints != Qnil) return Qnil;
 
-  contexts = rb_hash_new();
   breakpoints = rb_ary_new();
   catchpoints = rb_hash_new();
 
@@ -389,7 +331,7 @@ Byebug_setup_tracepoints(VALUE self)
 static VALUE
 Byebug_remove_tracepoints(VALUE self)
 {
-  contexts = Qnil;
+  context = Qnil;
   breakpoints = Qnil;
   catchpoints = Qnil;
 
@@ -418,13 +360,6 @@ Byebug_remove_tracepoints(VALUE self)
     tpRaise = Qnil;
   }
   return Qnil;
-}
-
-static int
-values_i(VALUE key, VALUE value, VALUE ary)
-{
-    rb_ary_push(ary, value);
-    return ST_CONTINUE;
 }
 
 #define BYEBUG_STARTED (catchpoints != Qnil)
@@ -470,7 +405,7 @@ set_current_skipped_status(VALUE status)
   VALUE context_object;
   debug_context_t *context;
 
-  context_object = Byebug_current_context(mByebug);
+  context_object = Byebug_context(mByebug);
   Data_Get_Struct(context_object, debug_context_t, context);
   if (status)
     CTX_FL_SET(context, CTX_FL_SKIPPED);
@@ -493,7 +428,7 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
 
     Byebug_start(self);
 
-    context_object = Byebug_current_context(self);
+    context_object = Byebug_context(self);
     Data_Get_Struct(context_object, debug_context_t, context);
     context->stack_size = 0;
     if (RTEST(stop)) context->stop_next = 1;
@@ -572,21 +507,6 @@ Byebug_set_post_mortem(VALUE self, VALUE value)
 }
 
 static VALUE
-Byebug_contexts(VALUE self)
-{
-  VALUE ary;
-
-  ary = rb_ary_new();
-
-  /* check that all contexts point to alive threads */
-  /*rb_hash_foreach(contexts, remove_dead_threads, self);*/
-
-  rb_hash_foreach(contexts, values_i, ary);
-
-  return ary;
-}
-
-static VALUE
 Byebug_breakpoints(VALUE self)
 {
   return breakpoints;
@@ -626,9 +546,7 @@ Init_byebug()
                                      Byebug_setup_tracepoints, 0);
   rb_define_module_function(mByebug, "remove_tracepoints",
                                      Byebug_remove_tracepoints, 0);
-  rb_define_module_function(mByebug, "current_context",
-                                     Byebug_current_context, 0);
-  rb_define_module_function(mByebug, "contexts", Byebug_contexts, 0);
+  rb_define_module_function(mByebug, "context", Byebug_context, 0);
   rb_define_module_function(mByebug, "breakpoints", Byebug_breakpoints, 0);
   rb_define_module_function(mByebug, "add_catchpoint",
                                      Byebug_add_catchpoint, 1);
@@ -647,13 +565,11 @@ Init_byebug()
 
   Init_breakpoint(mByebug);
 
-  cDebugThread  = rb_define_class_under(mByebug, "DebugThread", rb_cThread);
-  contexts = Qnil;
+  context = Qnil;
   catchpoints = Qnil;
   breakpoints = Qnil;
 
-  rb_global_variable(&locker);
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
-  rb_global_variable(&contexts);
+  rb_global_variable(&context);
 }

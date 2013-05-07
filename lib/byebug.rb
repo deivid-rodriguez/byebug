@@ -5,7 +5,6 @@ require_relative 'byebug/processor'
 require 'pp'
 require 'stringio'
 require 'socket'
-require 'thread'
 require 'linecache19'
 
 module Byebug
@@ -38,26 +37,6 @@ module Byebug
 
     # A string to look for in caller() to see if the call stack is truncated
     attr_accessor :start_sentinal
-
-    attr_reader :thread, :control_thread, :cmd_port, :ctrl_port
-
-    #
-    # Interrupts the current thread
-    #
-    def interrupt
-      current_context.interrupt
-    end
-
-    #
-    # Interrupts the last debugged thread
-    #
-    def interrupt_last
-      if context = last_context
-        return nil unless context.thread.alive?
-        context.interrupt
-      end
-      context
-    end
 
     def source_reload
       Object.send(:remove_const, "SCRIPT_LINES__") if
@@ -217,25 +196,16 @@ module Byebug
     def handle_post_mortem(exp)
       return if !exp || !exp.__debug_context ||
         exp.__debug_context.stack_size == 0
-      #Byebug.suspend
-      orig_tracing = Byebug.tracing?, Byebug.current_context.tracing
-      Byebug.tracing = Byebug.current_context.tracing = false
+      orig_tracing = Byebug.tracing?
+      Byebug.tracing = false
       Byebug.last_exception = exp
       handler.at_line(exp.__debug_context, exp.__debug_file, exp.__debug_line)
     ensure
-      Byebug.tracing, Byebug.current_context.tracing = orig_tracing
-      #Byebug.resume
+      Byebug.tracing = orig_tracing
     end
     private :handle_post_mortem
 
   end
-
-  class DebugThread # :nodoc:
-  end
-
-  class ThreadsTable # :nodoc:
-  end
-
 end
 
 class Exception
@@ -282,7 +252,7 @@ end
 module Kernel
 
   ##
-  # Enters byebug in the current thread after _steps_ line events occur.
+  # Enters byebug after _steps_ line events occur.
   #
   # Before entering byebug startup, the init script is read. Setting _steps_ to
   # 0 will cause a break in byebug's subroutine and not wait for a line event to
@@ -306,7 +276,7 @@ module Kernel
   #
   def binding_n(n = 0)
     Byebug.skip do
-      Byebug.current_context.frame_binding(n+1)
+      Byebug.context.frame_binding(n+1)
     end
   end
 end

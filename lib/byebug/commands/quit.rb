@@ -15,7 +15,7 @@ module Byebug
     def execute
       if @match[1] or confirm("Really quit? (y/n) ") 
         @state.interface.finalize
-        exit! # exit -> exit!: No graceful way to stop threads...
+        exit! # exit -> exit!: No graceful way to stop...
       end
     end
 

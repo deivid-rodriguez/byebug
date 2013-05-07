@@ -245,7 +245,7 @@ if options.script
 end
 
 options.stop = false if options.tracing
-Byebug.current_context.tracing = options.tracing
+Byebug.tracing = options.tracing
 
 if !options.quit
   if Byebug.started?

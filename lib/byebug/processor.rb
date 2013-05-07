@@ -167,12 +167,11 @@ module Byebug
     end
 
     private
-
       ##
       # Prompt shown before reading a command.
       #
       def prompt(context)
-        p = '(byebug:%s) ' % (context.dead?  ? 'post-mortem' : context.thnum)
+        p = "(byebug#{context.dead?  ? ':post-mortem' : ''}) "
         p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if Byebug.annotate.to_i > 2
         return p
       end

@@ -10,13 +10,8 @@ module Byebug
     def execute
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1]
-        #if @match[2]
-          Byebug.tracing = onoff
-          print "Tracing is #{onoff ? 'on' : 'off'}\n"
-        #else
-        #  Byebug.current_context.tracing = onoff
-        #  print "Tracing #{onoff ? 'on' : 'off'} on current thread.\n"
-        #end
+        Byebug.tracing = onoff
+        print "Tracing is #{onoff ? 'on' : 'off'}\n"
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]
         if debug_eval("defined?(#{varname})")
@@ -45,8 +40,7 @@ module Byebug
 
       def help(cmd)
         %{
-          tr[ace] (on|off)\tset trace mode of current thread
-          tr[ace] (on|off) all\tset trace mode of all threads
+          tr[ace] (on|off)\tset trace mode
           tr[ace] var(iable) VARNAME [stop|nostop]\tset trace variable on VARNAME
         }
       end
