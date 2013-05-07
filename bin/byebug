@@ -7,7 +7,7 @@
 #Command invocation:
 #
 #   byebug [options] [--] [script-options] ruby-script-to-debug
-#   byebug [options] [script-options] [--client]
+#   byebug [options] [script-options]
 #   byebug [--version | --help]
 #
 #=== Options
@@ -18,19 +18,8 @@
 #    front-ends such as GNU Emacs to post this updated information without
 #    having to poll for it.
 #
-#<tt>--client</tt>::
-#    Connect to a remote byebug. Used with another byebug invocation using
-#    <tt>--server</tt>.  See also <tt>--host</tt>, <tt>--port</tt> and
-#    <tt>--cport</tt> options.
-#
-#<tt>--cport=</tt><i>port</i>::
-#    Use port <i>port</i> for access to byebug control.
-#
 #<tt>-d | --debug</tt>::
 #    Set $DEBUG true.
-#
-#<tt>-h | --host=</tt><i>host</i>::
-#    Use host name <i>host</i> for remote debugging.
 #
 #<tt>--help</tt>::
 #      Show invocation help and exit.
@@ -44,9 +33,6 @@
 #<tt>-m | --post-mortem</tt>::
 #    Activate post-mortem mode.
 #
-#<tt>--no-control</tt>::
-#    Do not automatically start control thread.
-#
 #<tt>--no-quit</tt>::
 #    Do not quit when script terminates. Instead rerun the program.
 #
@@ -57,16 +43,8 @@
 #    Don’t execute commands found in any initialization files like
 #    <tt>.byebugrc</tt>.
 #
-#<tt>-p | --port=PORT</tt>::
-#    Use port <i>port</i> for remote debugging.
-#
 #<tt>-r | --require</tt><i>script</i>::
 #    Require the library, before executing your script.
-#
-#<tt>-s | --server</tt>::
-#    Listen for remote connections. Another byebug session accesses using the
-#    <tt>--client</tt>  option. See also the <tt>--host</tt>, <tt>--port</tt>
-#    and <tt>--cport</tt> options
 #
 #<tt>--script</tt>=<i>file</i>::
 #    Run script file <i>file</i>
@@ -81,9 +59,6 @@
 #
 #<tt>--version</tt>::
 #    Show the version number and exit.
-#
-#<tt>-w | --wait</tt>::
-#      Wait for a client connection; implies <tt>-s</tt> option.
 #
 #<tt>-x | --trace</tt>::
 #    Show lines before executing them.
@@ -130,21 +105,14 @@ end
 
 options = OpenStruct.new(
   'annotate'           => Byebug.annotate,
-  'client'             => false,
-  'cport'              => Byebug::PORT + 1,
-  'host'               => nil,
-  'control'            => true,
   'quit'               => true,
   'no_rewrite_program' => false,
   'stop'               => true,
   'nx'                 => false,
-  'port'               => Byebug::PORT,
   'restart_script'     => nil,
   'script'             => nil,
-  'server'             => false,
   'tracing'            => false,
   'verbose_long'       => false,
-  'wait'               => false
 )
 
 def process_options(options)
@@ -158,18 +126,10 @@ EOB
     opts.separator "Options:"
     opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") {
       |annotate| Byebug.annotate = annotate }
-    opts.on("-c", "--client", "Connect to remote byebug") {
-      options.client = true }
-    opts.on("--cport PORT", Integer, "Port used for control commands") {
-      |cport| options.cport = cport }
     opts.on("-d", "--debug", "Set $DEBUG=true") {
       $DEBUG = true }
-    opts.on('-h', '--host HOST', 'Host name used for remote debugging') {
-      |host| options.host = host }
     opts.on('-I', '--include PATH', String, 'Add PATH to $LOAD_PATH') {
       |path| $LOAD_PATH.unshift(path) }
-    opts.on('--no-control', 'Do not automatically start control thread') {
-      options.control = false }
     opts.on('--no-quit', 'Do not quit when script finishes') {
       options.quit = false }
     opts.on('--no-rewrite-program', 'Don\'t set $0 to the program debugged') {
@@ -178,8 +138,6 @@ EOB
       options.stop = false }
     opts.on('-nx', 'Don\'t run any byebug initialization files') {
       options.nx = true }
-    opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') {
-      |port| options.port = port }
     opts.on('-r', '--require SCRIPT', String, 'Require library before script') {
       |name| if name == 'debug'
         puts 'byebug not compatible with Ruby\'s \'debug\' lib, option ignored'
@@ -202,10 +160,6 @@ EOB
         exit
       end
     end
-    opts.on('-s', '--server', 'Listen for remote connections') {
-      options.server = true }
-    opts.on('-w', '--wait', 'Wait for a client connection, implies -s option') {
-      options.wait = true }
     opts.on('-x', '--trace', 'Turn on line tracing') {
       options.tracing = true }
     opts.separator ''
@@ -256,80 +210,63 @@ rescue StandardError => e
   exit(-1)
 end
 
-if options.client
-  Byebug.start_client(options.host, options.port)
-else
-  if ARGV.empty?
-    exit if $VERBOSE and not options.verbose_long
-    puts opts
-    puts
-    puts 'Must specify a script to run'
-    exit(-1)
+if ARGV.empty?
+  exit if $VERBOSE and not options.verbose_long
+  puts opts
+  puts
+  puts 'Must specify a script to run'
+  exit(-1)
+end
+
+# save script name
+prog_script = ARGV.shift
+prog_script = whence_file(prog_script) unless File.exist?(prog_script)
+Byebug::PROG_SCRIPT = File.expand_path prog_script
+
+# install interruption handler
+trap('INT') { Byebug.interrupt_last }
+
+# Set up trace hook for byebug
+Byebug.start
+
+# load initrc script (e.g. .byebugrc)
+Byebug.run_init_script(StringIO.new) unless options.nx
+
+# run restore-settings startup script if specified
+if options.restart_script
+  require 'fileutils'
+  Byebug.run_script(options.restart_script)
+  FileUtils.rm(options.restart_script)
+end
+
+# run startup script if specified
+if options.script
+  Byebug.run_script(options.script)
+end
+
+options.stop = false if options.tracing
+Byebug.current_context.tracing = options.tracing
+
+if !options.quit
+  if Byebug.started?
+    until Byebug.stop do end
   end
-
-  # save script name
-  prog_script = ARGV.shift
-  prog_script = whence_file(prog_script) unless File.exist?(prog_script)
-  Byebug::PROG_SCRIPT = File.expand_path prog_script
-
-  # install interruption handler
-  trap('INT') { Byebug.interrupt_last }
-
-  # set options
-  Byebug.wait_connection = options.wait
-
-  if options.server
-    Byebug.start_remote(options.host, [options.port, options.cport]) do
-      Byebug.run_init_script(StringIO.new) unless options.nx
-    end
+  begin
     debug_program(options)
-  else
-    # Set up trace hook for byebug
-    Byebug.start
-
-    # start control thread
-    Byebug.start_control(options.host, options.cport) if options.control
-
-    # load initrc script (e.g. .byebugrc)
-    Byebug.run_init_script(StringIO.new) unless options.nx
-
-    # run restore-settings startup script if specified
-    if options.restart_script
-      require 'fileutils'
-      Byebug.run_script(options.restart_script)
-      FileUtils.rm(options.restart_script)
-    end
-
-    # run startup script if specified
-    if options.script
-      Byebug.run_script(options.script)
-    end
-
-    options.stop = false if options.tracing
-    Byebug.current_context.tracing = options.tracing
-
-    if !options.quit
-      if Byebug.started?
-        until Byebug.stop do end
-      end
-      begin
-        debug_program(options)
-      rescue SyntaxError
-        puts $!.backtrace.map{|l| "\t#{l}"}.join("\n")
-        puts "Uncaught Syntax Error\n"
-      rescue
-        print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
-        print "Uncaught exception: #{$!}\n"
-      end
-      print "The program finished.\n" unless
-        Byebug.annotate.to_i > 1 # annotate has its own way
-      interface = Byebug::LocalInterface.new
-      # Not sure if ControlCommandProcessor is really the right
-      # thing to use. CommandProcessor requires a state.
-      processor = Byebug::ControlCommandProcessor.new(interface)
-      processor.process_commands
-    else
-      debug_program(options)
-    end
+  rescue SyntaxError
+    puts $!.backtrace.map{|l| "\t#{l}"}.join("\n")
+    puts "Uncaught Syntax Error\n"
+  rescue
+    print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
+    print "Uncaught exception: #{$!}\n"
   end
+  print "The program finished.\n" unless
+    Byebug.annotate.to_i > 1 # annotate has its own way
+  interface = Byebug::LocalInterface.new
+  # Not sure if ControlCommandProcessor is really the right
+  # thing to use. CommandProcessor requires a state.
+  processor = Byebug::ControlCommandProcessor.new(interface)
+  processor.process_commands
+else
+  debug_program(options)
 end

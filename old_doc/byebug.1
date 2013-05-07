@@ -154,18 +154,8 @@ automatically when program state is changed. This can be used by
 front-ends such as GNU Emacs to post this updated information without
 having to poll for it.
 .TP
-.B \-\-client
-Connect to a remote byebug. Used with another byebug invocation using \-\-server.
-See also \-\-host and \-\-cport options
-.TP
-.B \-\-cport=PORT
-Port used for control commands.
-.TP
 .B \-d | \-\-debug
 Set $DEBUG true.
-.TP
-.B \-h | \-\-host=HOST
-Host name used for remote debugging.
 .TP
 .B \-I | \-\-include PATH
 Add PATH to $LOAD_PATH
@@ -173,14 +163,8 @@ Add PATH to $LOAD_PATH
 .B \-m | \-\-post-mortem
 Activate post-mortem mode.
 .TP
-.B \-\-no-control
-Do not automatically start control thread.
-.TP
 .B \-\-no\-stop
 Do not stop when script is loaded.
-.TP
-.B \-p | \-\-port=PORT
-Host name used for remote debugging.
 .TP
 .B \-r | \-\-require SCRIPT
 Require the library, before executing your script.
@@ -213,13 +197,6 @@ Keep frame bindings.
 .TP
 .B \-\-script=FILE
 Name of the script file to run
-.B \-s | \-\-server
-Listen for remote connections. Another byebug session accesses using the \-\-client option.
-See also the \-\-host, \-\-port and
-\-\-cport options
-.TP
-.B \-w | \-\-wait
-Wait for a client connection, implies -s option.
 .TP
 .B \-\-help
 Show invocation help and exit.

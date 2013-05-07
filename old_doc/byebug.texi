@@ -937,24 +937,17 @@ Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
 Options:
     -A, --annotate LEVEL             Set annotation level
-    -c, --client                     Connect to remote byebug
-        --cport PORT                 Port used for control commands
     -d, --debug                      Set $DEBUG=true
-    -h, --host HOST                  Host name used for remote debugging
     -I, --include PATH               Add PATH to $LOAD_PATH
         --keep-frame-binding         Keep frame bindings
     -m, --post-mortem                Activate post-mortem mode
-        --no-control                 Do not automatically start control thread
         --no-quit                    Do not quit when script finishes
         --no-rewrite-program         Do not set $0 to the program being debugged
         --no-stop                    Do not stop when script is loaded
     -nx                              Not run byebug initialization files (e.g. .byebugrc
-    -p, --port PORT                  Port used for remote debugging
     -r, --require SCRIPT             Require the library, before executing your script
         --restart-script FILE        Name of the script file to run. Erased after read
         --script FILE                Name of the script file to run
-    -s, --server                     Listen for remote connections
-    -w, --wait                       Wait for a client connection, implies -s option
     -x, --trace                      Turn on line tracing
 
 Common options:
@@ -1002,22 +995,9 @@ Set gdb-style annotation @var{level}, a number. Additional information is output
 automatically when program state is changed. This can be used by front-ends such
 as GNU Emacs to post this updated information without having to poll for it.
 
-@item -c | --client
-@cindex @option{-c}
-@cindex @option{--client}
-Connect to remote byebug. The remote byebug should have been set up previously
-or you will get a connection error and @code{byebug} will terminate.
-
-@item --cport @var{port}
-@cindex @option{--cport} @var{port}
-Port used for control commands.
-
 @item --debug
 @cindex @option{--debug}
 Set @code{$DEBUG} to @code{true}. This option is compatible with Ruby's.
-
-@item -h | --host @var{host-address}
-Connect host address for remote debugging.
 
 @item -I --include @var{PATH}
 @cindex @option{-I} @var{PATH}
@@ -1058,10 +1038,6 @@ If your program raises an exception that isn't caught you can enter byebug for
 inspection of what went wrong. You may also want to use this option in
 conjunction with @option{--no-stop}. See also @ref{Post-Mortem Debugging}.
 
-@item --no-control
-@cindex @option{--no-control}
-Do not automatically start control thread.
-
 @item --no-quit
 @cindex @option{--no-quit}
 Restart byebug when your program terminates normally.
@@ -1078,11 +1054,6 @@ Normally the @code{byebug} stops before executing the first statement. If
 instead you want it to start running initially and will perhaps break it later
 in the running, use this options.
 
-@item -p | --port @var{port}
-@cindex @option{-p} @var{port}
-@cindex @option{--port} @var{port}
-Port used for remote debugging.
-
 @item -r | --require @var{library}
 @cindex @option{-r}
 @cindex @option{--require}
@@ -1095,18 +1066,6 @@ a debugger). This option is compatible with Ruby's.
 Require the library, before executing your script. However if the library
 happend to be @code{debug}, we'll just ignore the require (since we're already a
 debugger). This option is compatible with Ruby's.
-
-@item -s | --server
-@cindex @option{-s}
-@cindex @option{--server}
-Debug the program but listen for remote connections on the default port or port
-set up via the @option{--port} option. See also @option{--wait}.
-
-@item -w | --wait
-@cindex @option{-w}
-@cindex @option{--wait}
-Debug the program but stop waiting for a client connection first. This option
-automatically sets @option{--server} option.
 
 @item -x | --trace
 @cindex @option{-x}
