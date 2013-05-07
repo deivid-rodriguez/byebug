@@ -27,8 +27,8 @@ tp_inspect(VALUE trace_point) {
         ID2SYM(rb_intern("specified_line")) == event)
     {
        VALUE sym = rb_tracearg_method_id(trace_arg);
-       if (!NIL_P(sym))
-         return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
+       if (NIL_P(sym)) sym = rb_str_new_cstr("<main>");
+       return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
                            rb_tracearg_event(trace_arg),
                            rb_tracearg_path(trace_arg),
                            FIX2INT(rb_tracearg_lineno(trace_arg)),
