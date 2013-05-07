@@ -2,8 +2,12 @@ module Byebug
 
   # Implements byebug "set" command.
   class SetCommand < Command
-    SubcmdStruct2=Struct.new(:name, :min, :is_bool, :short_help,
-                             :long_help) unless defined?(SubcmdStruct2)
+    SubcmdStruct2 = Struct.new(:name,
+                               :min,
+                               :is_bool,
+                               :short_help,
+                               :long_help) unless defined?(SubcmdStruct2)
+
     Subcommands =
       [
        ['annotate', 2, false, 'Set annotation level',

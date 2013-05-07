@@ -44,9 +44,9 @@ module Byebug
       handler.at_line(self, file, line)
     end
 
-    def at_return(file, line)
-      handler.at_return(self, file, line)
-    end
+    #def at_return(file, line)
+    #  handler.at_return(self, file, line)
+    #end
 
   end
 end

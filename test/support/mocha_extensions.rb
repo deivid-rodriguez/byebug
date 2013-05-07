@@ -21,33 +21,34 @@ module Mocha
     alias_method :invoke, :invoke_with_calls
   end
 
-  class Mock
 
+  class Mock
     # We monkey-patch that method to be able to pass arguments to
     # Expectation#invoke method
     def method_missing(symbol, *arguments, &block)
       if @responder and not @responder.respond_to?(symbol)
-        raise NoMethodError, "undefined method `#{symbol}' for #{self.mocha_inspect} which responds like #{@responder.mocha_inspect}"
+        raise NoMethodError,
+              "undefined method `#{symbol}' for #{self.mocha_inspect} which " \
+              "responds like #{@responder.mocha_inspect}"
       end
-      if matching_expectation_allowing_invocation = @expectations.match_allowing_invocation(symbol, *arguments)
+      if matching_expectation_allowing_invocation =
+          @expectations.match_allowing_invocation(symbol, *arguments)
         # We change this line - added arguments
         matching_expectation_allowing_invocation.invoke(arguments, &block)
-      else
-        if (matching_expectation = @expectations.match(symbol, *arguments)) || (!matching_expectation && !@everything_stubbed)
-          # We change this line - added arguments
-          matching_expectation.invoke(arguments, &block) if matching_expectation
-          message = UnexpectedInvocation.new(self, symbol, *arguments).to_s
-          require 'mocha/mockery'
-          message << Mockery.instance.mocha_inspect
-          raise ExpectationError.new(message, caller)
-        end
+      elsif (matching_expectation = @expectations.match(symbol, *arguments)) ||
+            (!matching_expectation && !@everything_stubbed)
+        # We change this line - added arguments
+        matching_expectation.invoke(arguments, &block) if matching_expectation
+        message = UnexpectedInvocation.new(self, symbol, *arguments).to_s
+        require 'mocha/mockery'
+        message << Mockery.instance.mocha_inspect
+        raise ExpectationError.new(message, caller)
       end
     end
-
   end
 
-  class Call
 
+  class Call
     attr_reader :blocks
 
     def initialize(*blocks)
@@ -65,6 +66,6 @@ module Mocha
     def +(other)
       self.class.new(*(@blocks + other.blocks))
     end
-
   end
+
 end

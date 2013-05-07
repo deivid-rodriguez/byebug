@@ -397,8 +397,9 @@ Context_step_out(VALUE self, VALUE frame)
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
-  if(FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
+  if (FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
+
   context->stop_frame = context->stack_size - FIX2INT(frame);
 
   return frame;

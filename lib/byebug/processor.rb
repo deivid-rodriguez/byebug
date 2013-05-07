@@ -52,9 +52,9 @@ module Byebug
       @display = []
 
       @mutex = Mutex.new
-      @last_cmd  = nil
-      @last_file = nil   # Filename the last time we stopped
-      @last_line = nil   # line number the last time we stopped
+      @last_cmd                      = nil
+      @last_file                     = nil   # Filename the last time we stopped
+      @last_line                     = nil   # line number the last time we stopped
       @byebug_breakpoints_were_empty = false # Show breakpoints 1st time
       @byebug_displays_were_empty    = true  # No display 1st time
       @byebug_context_was_dead       = true  # Assume we haven't started.
@@ -162,10 +162,6 @@ module Byebug
     end
     protect :at_line
 
-    def at_return(context, file, line)
-      #context.stop_frame = -1
-    end
-
     private
       ##
       # Prompt shown before reading a command.
@@ -244,11 +240,9 @@ module Byebug
         end
 
         while !state.proceed?
-          input = if @interface.command_queue.empty?
-                    @interface.read_command(prompt(context))
-                  else
-                    @interface.command_queue.shift
-                  end
+          input = @interface.command_queue.empty? ?
+                  @interface.read_command(prompt(context)) :
+                  @interface.command_queue.shift
           break unless input
           catch(:debug_error) do
             if input == ""

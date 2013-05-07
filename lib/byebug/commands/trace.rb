@@ -1,5 +1,6 @@
 module Byebug
-  class TraceCommand < Command # :nodoc:
+
+  class TraceCommand < Command
     def regexp
       /^\s* tr(?:ace)? (?: \s+ (\S+))      # on | off | var(iable)
                        (?: \s+ (\S+))?     # (all | variable-name)?

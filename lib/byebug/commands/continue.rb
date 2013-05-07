@@ -4,6 +4,7 @@ module Byebug
   class ContinueCommand < Command
     self.allow_in_post_mortem = true
     self.need_context         = false
+
     def regexp
       /^\s* c(?:ont(?:inue)?)? (?:\s+(.*))? $/x
     end

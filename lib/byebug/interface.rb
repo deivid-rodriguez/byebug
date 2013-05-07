@@ -28,26 +28,21 @@ module Byebug
     def aprint(msg)
       print afmt(msg)
     end
-
   end
 
   class LocalInterface < Interface
     attr_accessor :command_queue, :history_length, :history_save, :histfile
     attr_accessor :restart_file
 
-    unless defined?(FILE_HISTORY)
-      FILE_HISTORY = ".byebug_hist"
-    end
+    FILE_HISTORY = ".byebug_hist" unless defined?(FILE_HISTORY)
 
     def initialize()
       super
       @command_queue = []
       @have_readline = false
       @history_save = true
-      # take gdb's default
       @history_length = ENV["HISTSIZE"] ? ENV["HISTSIZE"].to_i : 256
-      @histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".",
-                            FILE_HISTORY)
+      @histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", FILE_HISTORY)
       open(@histfile, 'r') do |file|
         file.each do |line|
           line.chomp!

@@ -931,25 +931,25 @@ byebug @value{BYEBUG_VERSION}
 Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
 Options:
-    -A, --annotate LEVEL             Set annotation level
-    -d, --debug                      Set $DEBUG=true
-    -I, --include PATH               Add PATH to $LOAD_PATH
-        --keep-frame-binding         Keep frame bindings
-    -m, --post-mortem                Activate post-mortem mode
-        --no-quit                    Do not quit when script finishes
-        --no-rewrite-program         Do not set $0 to the program being debugged
-        --no-stop                    Do not stop when script is loaded
-    -nx                              Not run byebug initialization files (e.g. .byebugrc
-    -r, --require SCRIPT             Require the library, before executing your script
-        --restart-script FILE        Name of the script file to run. Erased after read
-        --script FILE                Name of the script file to run
-    -x, --trace                      Turn on line tracing
+    -A, --annotate LEVEL       Set annotation level
+    -d, --debug                Set $DEBUG=true
+    -I, --include PATH         Add PATH to $LOAD_PATH
+        --keep-frame-binding   Keep frame bindings
+    -m, --post-mortem          Activate post-mortem mode
+        --no-quit              Do not quit when script finishes
+        --no-rewrite-program   Do not set $0 to the program being debugged
+        --no-stop              Do not stop when script is loaded
+    -nx                        Don't run any initialization files like .byebugrc
+    -r, --require SCRIPT       Require the library, before executing your script
+        --restart-script FILE  Name of the script file to run. Erased after read
+        --script FILE          Name of the script file to run
+    -x, --trace                Turn on line tracing
 
 Common options:
-        --verbose                    Turn on verbose mode
-        --help                       Show this message
-        --version                    Print the version
-    -v                               Print version number, then turn on verbose mode
+        --verbose              Turn on verbose mode
+        --help                 Show this message
+        --version              Print the version
+    -v                         Print version number, then turn on verbose mode
 @end smallexample
 
 Options for the @code{byebug} are shown in the following list.
@@ -3209,16 +3209,14 @@ the last statement in some scope.
 Consider this example:
 @smallexample
 $ cat scope-test.rb
-
-require 'rubygems'
 require 'byebug' ; Byebug.start
 1.times do
-   a = 1
-   byebug   # implied steps=1
- end
+  a = 1
+  byebug   # implied steps=1
+end
 y = 1
 
-$ scope-test.rb:8
+$ ruby scope-test.rb
 y = 1
 (byebug:1) p a
 NameError Exception: undefined local variable or method `a' for main:Object
@@ -3227,13 +3225,11 @@ NameError Exception: undefined local variable or method `a' for main:Object
 
 Byebug will stop at the line event which follows @samp{a=1}. This is outside the
 @code{do} block scope where @var{a} is defined. If instead you want to stop
-before leaving the @code{do} loop it is possibly to stop right inside
-@code{byebug}; call with 0 zero parameter:
+before leaving the @code{do} loop it is possible to stop right inside
+@code{byebug}; call byebug with 0 zero parameter:
 
 @smallexample
 $ cat scope-test.rb
-
-require 'rubygems'
 require 'byebug' ; Byebug.start
 1.times do
    a = 1
@@ -3241,15 +3237,15 @@ require 'byebug' ; Byebug.start
 end
 y = 1
 
-$ scope-test.rb:8
+$ ruby scope-test.rb
 ../lib/byebug.rb:386
 Byebug.context.stop_frame = 0
 (byebug:1) where
 --> #0 Kernel.byebug(steps#Fixnum) at ../lib/byebug-base.rb:386
-    #1 at scope-test.rb:6
-    #2 at scope-test.rb:4
+    #1 at scope-test.rb:4
+    #2 at scope-test.rb:2
 (byebug:1) up
-#1 at scope-test.rb:6
+#1 at scope-test.rb:4
 (byebug:1) p a
 1
 (byebug:1)

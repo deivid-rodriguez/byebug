@@ -77,7 +77,7 @@ module Byebug
     # Byebug.start(options) -> bool
     # Byebug.start(options) { ... } -> obj
     #
-    # If it's called without a block it returns +true+, unless byebug was
+    # If it's called without a block, it returns +true+ unless byebug was
     # already started.
     #
     # If a block is given, it starts byebug and yields block. After the block is

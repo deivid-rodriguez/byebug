@@ -14,7 +14,7 @@ module Byebug
 
     def execute
       puts @match[1]
-      if @match[1] 
+      if @match[1]
         signame = @match[1]
         unless Signal.list.member?(signame)
           errmsg("signal name #{signame} is not a signal I know about\n")
@@ -26,7 +26,7 @@ module Byebug
       else
         if not confirm("Really kill? (y/n) ")
           return
-        else 
+        else
           signame = 'KILL'
         end
       end

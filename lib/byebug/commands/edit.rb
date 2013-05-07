@@ -1,15 +1,17 @@
 module Byebug
-  class Edit < Command # :nodoc:
+
+  class Edit < Command
     self.allow_in_control = true
+
     def regexp
       /^\s* ed(?:it)? (?:\s+(.*))?$/ix
     end
-    
+
     def execute
       if not @match[1] or @match[1].strip.empty?
         unless @state.context
           errmsg "We are not in a state that has an associated file.\n"
-          return 
+          return
         end
         file = @state.file
         line_number = @state.line

@@ -42,7 +42,6 @@ module Byebug
         @state.display[pos-1][0] = ('Enable' == is_enable)
       end
     end
-
   end
 
   class EnableCommand < Command

@@ -238,7 +238,6 @@ describe 'Breakpoints' do
         check_output_includes \
           '"disable" must be followed by "display", "breakpoints" or ' \
           'breakpoint numbers.', interface.error_queue
-
       end
 
       it 'must show an error if no breakpoints is set' do

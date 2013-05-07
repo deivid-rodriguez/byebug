@@ -13,7 +13,7 @@ module Byebug
     end
 
     def execute
-      if @match[1] or confirm("Really quit? (y/n) ") 
+      if @match[1] or confirm("Really quit? (y/n) ")
         @state.interface.finalize
         exit! # exit -> exit!: No graceful way to stop...
       end
@@ -26,12 +26,12 @@ module Byebug
 
       def help(cmd)
         %{
-          q[uit] [!|unconditionally]\texit from byebug. 
+          q[uit] [!|unconditionally]\texit from byebug.
           exit[!]\talias to quit
 
           Normally we prompt before exiting. However if the parameter
-          "unconditionally" or is given or suffixed with !, we stop
-          without asking further questions.  
+          "unconditionally" is given or command is suffixed with !, we exit
+          without asking further questions.
          }
       end
     end
