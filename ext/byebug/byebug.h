@@ -1,5 +1,5 @@
-#ifndef RUBY_DEBUG
-#define RUBY_DEBUG
+#ifndef BYEBUG
+#define BYEBUG
 
 #include <ruby.h>
 #include <ruby/debug.h>

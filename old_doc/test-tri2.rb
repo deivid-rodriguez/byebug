@@ -2,7 +2,7 @@
 require "test/unit"
 require "tri2.rb"
 require "rubygems"
-require "ruby-debug"
+require "byebug"
 Byebug.start
 
 class TestTri < Test::Unit::TestCase
