@@ -940,8 +940,6 @@ Options:
     -c, --client                     Connect to remote byebug
         --cport PORT                 Port used for control commands
     -d, --debug                      Set $DEBUG=true
-        --emacs                      Activates full Emacs support
-        --emacs-basic                Activates basic Emacs mode
     -h, --host HOST                  Host name used for remote debugging
     -I, --include PATH               Add PATH to $LOAD_PATH
         --keep-frame-binding         Keep frame bindings

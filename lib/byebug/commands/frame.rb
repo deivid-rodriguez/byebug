@@ -113,11 +113,6 @@ module Byebug
       end
 
       print frame_str
-      #if ENV['EMACS'] && adjust
-      #  fmt = (Byebug.annotate.to_i > 1 ?
-      #         "\032\032source %s:%d\n" : "\032\032%s:%d\n")
-      #  print fmt % [CommandProcessor.canonic_file(file), line]
-      #end
     end
 
     ##

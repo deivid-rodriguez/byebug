@@ -92,8 +92,6 @@ module Byebug
       # FIXME: use annotations routines
       if Byebug.annotate.to_i > 2
         file_line = "\032\032source #{file_line}"
-      #elsif ENV['EMACS']
-      #  file_line = "\032\032#{file_line}"
       end
       print file_line
     end
@@ -133,7 +131,6 @@ module Byebug
       aprint 'stopped' if Byebug.annotate.to_i > 2
       file = CommandProcessor.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
-      #print afmt("%s:%d" % [file, line]) if ENV['EMACS']
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
       fs = context.stack_size
       tb = caller(0)[-fs..-1]

@@ -1,4 +1,3 @@
-# -*- Ruby -*-
 require 'rake/testtask'
 require 'rake/extensiontask'
 require 'bundler/gem_tasks'
