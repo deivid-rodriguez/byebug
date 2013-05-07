@@ -63,23 +63,23 @@ describe 'Set Command' do
     end
   end
 
-  describe 'byebugtesting' do
-    it 'must set $byebug_state if byebugsetting is on' do
-      enter 'set byebugtesting', 'break 3', 'cont'
+  describe 'testing' do
+    it '$byebug_state must get set if "testing" is on' do
+      enter 'set testing', 'break 3', 'cont'
       debug_file('set') {
-        state.must_be_kind_of Byebug::CommandProcessor::State }
+        $byebug_state.must_be_kind_of Byebug::CommandProcessor::State }
     end
 
-    it 'must set basename on too' do
+    it 'basename must get set if "testing" is on' do
       temporary_change_hash_value(Byebug::Command.settings, :basename, false) do
-        enter 'set byebugtesting', 'show basename'
+        enter 'set testing', 'show basename'
         debug_file('set')
         check_output_includes 'basename is on.'
       end
     end
 
-    it 'must not set $byebug_state if byebugsetting is off' do
-      enter 'set nobyebugtesting', 'break 3', 'cont'
+    it '$byebug_state must get unset if "testing" is off' do
+      enter 'set notesting', 'break 3', 'cont'
       debug_file('set') { $byebug_state.must_be_nil }
     end
   end

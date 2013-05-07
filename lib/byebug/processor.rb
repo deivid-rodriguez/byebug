@@ -212,11 +212,8 @@ module Byebug
       #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
-        if Command.settings[:byebugtesting]
-          $byebug_state = state
-        else
-          $byebug_state = nil
-        end
+        $byebug_state = Command.settings[:testing] ? state : nil
+
         splitter = lambda do |str|
           str.split(/;/).inject([]) do |m, v|
             if m.empty?

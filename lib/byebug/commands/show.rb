@@ -73,8 +73,8 @@ module Byebug
           s='No readline support'
         end
         return s
-      when /^byebugtesting$/
-        on_off = Command.settings[:byebugtesting]
+      when /^testing$/
+        on_off = Command.settings[:testing]
         return "Currently testing byebug is #{show_onoff(on_off)}."
       when /^forcestep$/
         on_off = self.class.settings[:force_stepping]

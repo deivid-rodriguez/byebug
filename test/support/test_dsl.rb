@@ -22,7 +22,7 @@ module TestDsl
   # Loads byebug default settings
   #
   def load_defaults
-    Byebug::Command.settings[:byebugtesting] = true
+    Byebug::Command.settings[:testing] = true
     Byebug::Command.settings[:basename] = false
     Byebug::Command.settings[:callstyle] = :last
     Byebug::Command.settings[:force_stepping] = false
@@ -146,7 +146,7 @@ module TestDsl
   end
 
   def context
-    state.context
+    $byebug_state.context
   end
 
   def force_set_const(klass, const, value)

@@ -2978,7 +2978,7 @@ Fixnum: 1 if on or 0 if off.
 Boolean. True if basename on. @xref{Basename}.
 @item :callstyle
 Symbol: @code{:short} or @code{:last}. @xref{Callstyle}.
-@item :byebugtesting
+@item :testing
 Boolean. True if currently testing byebug.
 @item :force_stepping
 Boolean. True if stepping should go to a line different from the last

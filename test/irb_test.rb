@@ -55,7 +55,7 @@ describe 'Irb Command' do
   describe 'setting context to $byebug_state' do
     before do
       $byebug_state = nil
-      Byebug::Command.settings[:byebugtesting] = false
+      Byebug::Command.settings[:testing] = false
     end
 
     it 'must set $byebug_state if irb is in the debug mode' do

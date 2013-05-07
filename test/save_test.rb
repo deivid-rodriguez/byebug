@@ -42,8 +42,8 @@ describe 'Save Command' do
         file_contents.must_include 'set basename off'
       end
 
-      it 'must save byebugtesting' do
-        file_contents.must_include 'set byebugtesting on'
+      it 'must save testing' do
+        file_contents.must_include 'set testing on'
       end
 
       it 'must save autolist' do

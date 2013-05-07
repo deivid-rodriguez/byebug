@@ -22,7 +22,7 @@ module Byebug
        ['autoreload', 4, true, 'Reload source code when changed'],
        ['basename', 1, true, 'Report file basename only showing file names'],
        ['callstyle', 2, false, 'Set how you want call parameters displayed'],
-       ['byebugtesting', 8, false, 'Used when testing byebug'],
+       ['testing', 2, false, 'Used when testing byebug'],
        ['forcestep', 2, true,
         'Make sure "next/step" commands always move to a new line'],
        ['fullpath', 2, true, 'Display full file names in frames'],
@@ -108,11 +108,9 @@ module Byebug
         Command.settings[:reload_source_on_change] = set_on
       when /^autoirb$/
         Command.settings[:autoirb] = (set_on ? 1 : 0)
-      when /^byebugtesting$/
-        Command.settings[:byebugtesting] = set_on
-        if set_on
-          Command.settings[:basename] = true
-        end
+      when /^testing$/
+        Command.settings[:testing] = set_on
+        Command.settings[:basename] = true if set_on
       when /^forcestep$/
         self.class.settings[:force_stepping] = set_on
       when /^history$/
