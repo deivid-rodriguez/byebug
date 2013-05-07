@@ -13,29 +13,6 @@ module Byebug
         string[Command.settings[:width]-3 .. -1] = "..."
       end
     end
-  end
-
-  # Root dir for byebug
-  BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
-    defined?(BYEBUG_DIR)
-
-  class Command
-    SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
-      defined?(SubcmdStruct)
-
-    ##
-    # Print list of subcmds
-    #
-    def format_subcmds(subcmds)
-      cmd_name = self.class.name[/Byebug::(.*)Command/, 1].downcase
-      s = "\n"                                     \
-          "--\n"                                   \
-          "List of \"#{cmd_name}\" subcommands:\n" \
-          "--\n"
-      for subcmd in subcmds do
-        s += "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
-      end
-    end
 
     ##
     # Find param in subcmds.
@@ -54,6 +31,31 @@ module Byebug
       return nil
     end
 
+    ##
+    # Build formatted list of subcmds
+    #
+    def format_subcmds(subcmds)
+      cmd_name = self.class.names.join("|")
+      s = "\n"                                     \
+          "--\n"                                   \
+          "List of \"#{cmd_name}\" subcommands:\n" \
+          "--\n"
+      for subcmd in subcmds do
+        s += "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
+      end
+      return s
+    end
+
+  end
+
+  # Root dir for byebug
+  BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
+    defined?(BYEBUG_DIR)
+
+  class Command
+    SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
+      defined?(SubcmdStruct)
+
     class << self
       def commands
         @commands ||= []
@@ -65,6 +67,13 @@ module Byebug
                       always_run:           0    ,
                       unknown:              false,
                       need_context:         false } unless defined?(DEF_OPTIONS)
+
+      def help(args)
+        output = description.split("\n").map{|l| l.gsub(/^ +/, '')}
+        output.shift if output.first && output.first.empty?
+        output.pop if output.last && output.last.empty?
+        output.join("\n") + "\n"
+      end
 
       def inherited(klass)
         DEF_OPTIONS.each do |o, v|

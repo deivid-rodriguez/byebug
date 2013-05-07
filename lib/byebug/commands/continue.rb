@@ -25,13 +25,15 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'continue'
+      def names
+        %w(continue)
       end
 
-      def help(cmd)
+      def description
         %{
-          c[ont[inue]][ nnn]\trun until program ends, hits a breakpoint or reaches line nnn
+          c[ont[inue]][ nnn]
+
+          Run until program ends, hits a breakpoint or reaches line nnn
         }
       end
     end

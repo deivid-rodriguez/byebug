@@ -17,19 +17,19 @@ module Byebug
     end
 
     class << self
-      def help_command
-        %w[skip]
+      def names
+        %w(skip)
       end
 
-      def help(cmd)
+      def description
         %{
           sk[ip]\tskip the next thrown exception
 
-          This is useful if you've explicitly caught an exception through
-          the "catch" command, and wish to pass the exception on to the
-          code that you're debugging.
-         }
-     end
+          This is useful if you've explicitly caught an exception through the
+          "catch" command, and wish to pass the exception on to the code that
+           you're debugging.
+        }
+      end
     end
   end
 end

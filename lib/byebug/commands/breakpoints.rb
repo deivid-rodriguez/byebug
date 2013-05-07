@@ -14,6 +14,9 @@ module Byebug
     end
 
     def execute
+      return print AddBreakpoint.help(nil) if
+        AddBreakpoint.names.include?(@match[0])
+
       if @match[1]
         line, _, _, expr = @match.captures
       else
@@ -95,15 +98,16 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'break'
+      def names
+        %w(break)
       end
 
-      def help(cmd)
+      def description
         %{
           b[reak] file:line [if expr]
           b[reak] class(.|#)method [if expr]
-          \tset breakpoint to some position, (optionally) if expr == true
+
+          Set breakpoint to some position, (optionally) if expr == true
         }
       end
     end
@@ -136,15 +140,19 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'delete'
+      def names
+        %w(delete)
       end
 
-      def help(cmd)
+      def description
         %{
-          del[ete][ nnn...]\tdelete some or all breakpoints
+          del[ete][ nnn...]
+
+          Without argumen, deletes all breakpoints. With integer numbers,
+          deletes specific breakpoints.
         }
       end
     end
   end
+
 end

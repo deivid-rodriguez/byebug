@@ -1,36 +1,38 @@
 module Byebug
+
   # Implements byebug "source" command.
   class SourceCommand < Command
     self.allow_in_control = true
-    
+
     def regexp
-      /^\s* so(?:urce)? \s+ (.+) $/x
+      /^\s* so(?:urce)? (?:\s+ (.+))? $/x
     end
-    
+
     def execute
+      return print SourceCommand.help(nil) if
+        SourceCommand.names.include?(@match[0])
+
       file = File.expand_path(@match[1]).strip
-      unless File.exist?(file)
-        errmsg "Command file '#{file}' is not found\n"
-        return
-      end
+      return errmsg "File \"#{file}\" not found\n" unless File.exist?(file)
+
       if @state and @state.interface
         @state.interface.command_queue += File.open(file).readlines
       else
         Byebug.run_script(file, @state)
       end
     end
-    
+
     class << self
-      def help_command
-        'source'
+      def names
+        %w(source)
       end
-      
-      def help(cmd)
+
+      def description
         %{
           source FILE\texecutes a file containing byebug commands
         }
       end
     end
   end
-  
+
 end

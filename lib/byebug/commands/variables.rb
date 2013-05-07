@@ -41,11 +41,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] cl[ass] \t\t\tshow class variables of self
         }
@@ -74,11 +74,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] co[nst] <object>\t\tshow constants of object
         }
@@ -96,11 +96,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] g[lobal]\t\t\tshow global variables
         }
@@ -119,11 +119,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] i[nstance] <object>\tshow instance variables of object
         }
@@ -146,11 +146,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] l[ocal]\t\t\tshow local variables
         }
@@ -186,11 +186,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'var'
+      def names
+        %w(var)
       end
 
-      def help(cmd)
+      def description
         %{
           v[ar] ct\t\t\tshow class heirarchy of object
         }

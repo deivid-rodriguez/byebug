@@ -215,27 +215,26 @@ module Byebug
       end
     end
 
+    def help(args)
+      if args[1]
+        subcmd = find(Subcommands, args[1])
+        return "Invalid \"show\" subcommand \"#{args[1]}\"." unless subcmd
+        str = subcmd.short_help + '.'
+        str += "\n" + subcmd.long_help if subcmd.long_help
+        return str
+      end
+      ShowCommad.description + format_subcmds(Subcommands)
+    end
+
     class << self
-      def help_command
-        "show"
+      def names
+        %w(show)
       end
 
-      def help(args)
-        # specific subcommand help
-        if args[1]
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"show\" subcommand \"#{args[1]}\"." unless subcmd
-
-          str = subcmd.short_help + '.'
-          str += "\n" + subcmd.long_help if subcmd.long_help
-          return str
-        end
-
-        # general help
-        s = %{
+      def description
+        %{
           Generic command for showing things about byebug.
         }
-        s += format_subcmds(Subcommands)
       end
     end
   end

@@ -48,11 +48,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        %w[jump]
+      def names
+        %w(jump)
       end
 
-      def help(cmd)
+      def description
         %{
           j[ump] line\tjump to line number (absolute)
           j[ump] -line\tjump back to line (relative)

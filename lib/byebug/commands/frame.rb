@@ -167,37 +167,29 @@ module Byebug
     def execute
       print_backtrace
       if truncated_callstack?(@state.context, Byebug.start_sentinal)
-         print "Warning: saved frames may be incomplete; compare with caller(0).\n"
+         print "Warning: saved frames may be incomplete; compare with caller(0)"
       end
     end
 
     class << self
-      def help_command
-        %w|where backtrace|
+      def names
+        %w(where backtrace)
       end
 
-      def help(cmd)
-        s = if cmd == 'where'
-            %{
-            w[here]\tdisplay stack frames
-            }
-            else
-            %{
-            bt|backtrace\t\talias for where - display stack frames
-            }
-            end
-        s += %{
-            Print the entire stack frame. Each frame is numbered, the most
-            recent frame is 0. frame number can be referred to in the "frame"
-            command; "up" and "down" add or subtract respectively to frame
-            numbers shown. The position of the current frame is marked with
-            -->.
-            }
+      def description
+        %{
+          w[here]|bt|backtrace\tdisplay stack frames
+
+          Print the entire stack frame. Each frame is numbered, the most recent
+          frame is 0. frame number can be referred to in the "frame" command;
+          "up" and "down" add or subtract respectively to frame numbers shown.
+          The position of the current frame is marked with -->.
+        }
       end
     end
   end
 
-  class UpCommand < Command # :nodoc:
+  class UpCommand < Command
     def regexp
       /^\s* u(?:p)? (?:\s+(.*))?$/x
     end
@@ -209,13 +201,13 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'up'
+      def names
+        %w(up)
       end
 
-      def help(cmd)
+      def description
         %{
-          up[count]\tmove to higher frame
+          up[ count]\tmove to higher frame
         }
       end
     end
@@ -233,13 +225,13 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'down'
+      def names
+        %w(down)
       end
 
-      def help(cmd)
+      def description
         %{
-          down[count]\tmove to lower frame
+          down[ count]\tmove to lower frame
         }
       end
     end
@@ -264,8 +256,8 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'frame'
+      def names
+        %w(frame)
       end
 
       def help(cmd)

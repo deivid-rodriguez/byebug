@@ -33,7 +33,16 @@ describe 'Source Command' do
   it 'must show an error if file is not found' do
     enter 'source blabla'
     debug_file 'source'
-    check_output_includes /Command file '.*blabla' is not found/, interface.error_queue
+    check_output_includes /File ".*blabla" not found/, interface.error_queue
+  end
+
+  describe 'Help' do
+    it 'must show help when used without arguments' do
+      enter 'source'
+      debug_file 'source'
+      check_output_includes \
+        "source FILE\texecutes a file containing byebug commands"
+    end
   end
 
   describe 'Post Mortem' do

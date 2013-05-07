@@ -50,8 +50,7 @@ module Byebug
     end
 
     def execute
-      # "Set" alone just prints subcommands
-      return print format_subcmds(Subcommands) unless @match[1]
+      return print SetCommand.help(nil) if SetCommand.names.include?(@match[0])
 
       args = @match[1].split(/[ \t]+/)
       try_subcmd = args.shift
@@ -157,27 +156,29 @@ module Byebug
     end
 
     class << self
-      def help_command
-        "set"
+      def names
+        %w(set)
+      end
+
+      def description
+        %{
+          Modifies parts of byebug environment. Boolean values take on, off, 1
+          or 0. You can see these environment settings with the "show" command
+        }
       end
 
       def help(args)
-        # specific subcommand help
-        if args[1]
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"set\" subcommand \"#{args[1]}\"." unless subcmd
-
-          str = subcmd.short_help + '.'
-          return str += "\n" + subcmd.long_help if subcmd.long_help
+        if args && args[1]
+          subcmd = SetCommand.new(nil).find(Subcommands, args[1])
+          if subcmd
+            return "#{subcmd.short_help}.\n#{subcmd.long_help ? subcmd.long_help : ''}"
+          else
+            return "Invalid \"set\" subcommand \"#{args[1]}\".\n"
+          end
         end
-
-        # general help
-        str = %{
-          Modifies parts of byebug environment. Boolean values take on, off, 1
-          or 0. You can see these environment settings with the "show" command.
-        }
-        str += format_subcmds(Subcommands)
+        description + SetCommand.new(nil).format_subcmds(Subcommands)
       end
     end
+
   end
 end

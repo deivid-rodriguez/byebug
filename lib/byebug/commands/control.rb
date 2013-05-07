@@ -55,13 +55,14 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'restart'
+      def names
+        %w(restart)
       end
 
-      def help(cmd)
+      def description
         %{
           restart|R [args]
+
           Restart the program. This is a re-exec - all byebug state
           is lost. If command arguments are passed those are used.
         }

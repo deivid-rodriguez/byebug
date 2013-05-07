@@ -103,20 +103,18 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'irb'
+      def names
+        %w(irb)
       end
 
-      def help(cmd)
+      def description
         %{
-          irb [-d]\tstarts an Interactive Ruby (IRB) session.
+          irb[ -d]\tstarts an Interactive Ruby (IRB) session.
 
-If -d is added you can get access to byebug's state via the global variable
-$byebug_state.
-
-irb is extended with methods "cont", "n" and "step" which
-run the corresponding byebug commands. In contrast to the real byebug
-commands these commands don't allow command arguments.
+          If -d is added you can get access to byebug's state via the global
+          variable $byebug_state. IRB is extended with methods "cont", "n" and
+          "step" which run the corresponding byebug commands. In contrast to the
+          real byebug commands these commands don't allow arguments.
         }
       end
     end

@@ -38,16 +38,16 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'catch'
+      def names
+        %w(catch)
       end
 
-      def help(cmd)
+      def description
         %{
           cat[ch]\t\tsame as "info catch"
           cat[ch] <exception-name> [on|off]
-\tIntercept <exception-name> when there would otherwise be no handler.
-\tWith an "on" or "off", turn handling the exception on or off.
+          \tIntercept <exception-name> when there would otherwise be no handler.
+          \tWith an "on" or "off", turn handling the exception on or off.
           cat[ch] off\tdelete all catchpoints
         }
       end

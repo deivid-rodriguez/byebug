@@ -276,6 +276,14 @@ describe 'Info Command' do
     end
   end
 
+  describe 'Help' do
+    it 'must show help when typing just "info"' do
+      enter 'info', 'cont'
+      debug_file 'info'
+      check_output_includes /List of "info" subcommands:/
+    end
+  end
+
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
       enter 'cont', 'info line'

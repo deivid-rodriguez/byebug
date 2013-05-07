@@ -35,11 +35,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'trace'
+      def names
+        %w(trace)
       end
 
-      def help(cmd)
+      def description
         %{
           tr[ace] (on|off)\tset trace mode
           tr[ace] var(iable) VARNAME [stop|nostop]\tset trace variable on VARNAME

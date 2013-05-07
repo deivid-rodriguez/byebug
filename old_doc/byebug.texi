@@ -3127,33 +3127,32 @@ another one. If it does, it's undefined which one will get matched and run.
 In addition the instance needs these methods:
 @table @code
 @item execute
-Code which gets run when you type a command (string) that matches the commands
+Code which gets run when you type a command (string) that matches the command's
 regular expression.
-@item help
+@item description
 A string which gets displayed when folks ask for help on that command.
-@item help_command
-A name the help system uses to show what commands are available.
+@item names
+Names and aliases of the command as an array of strings.
 @end table
 
 Here's a small example of a new command:
 @smallexample
 module Byebug
   class MyCommand < Command
-  def regexp
-    /^\s*me$/ # Regexp that will match your command
-  end
-
-  def execute
-    puts "hi" # What you want to happen when your command runs
-  end
-  class << self
-    def help_command
-      'me' # String name of command
+    def regexp
+      /^\s*me$/ # Regexp that will match your command
     end
-    def help(cmd)
-   # Some sort of help text.
-   %@{This does whatever it is I want to do@}
-   end
+
+    def execute
+      puts "hi" # What you want to happen when your command runs
+    end
+    class << self
+      def names
+        %w(me)
+      end
+      def description
+        %@{This does whatever it is I want to do@}
+     end
   end
 end
 @end smallexample
@@ -3175,7 +3174,7 @@ ruby /tmp/testit.rb:
 /tmp/testit.rb:7
 y=2
 (byebug:1) help
-byebug help v0.10.3
+byebug help v1.1.0
 Type 'help <command-name>' for help on a specific command
 Available commands:
 backtrace delete  enable help method putl    set    trace
@@ -3286,9 +3285,9 @@ don't worry @code{rake test} will do step 2 for you. You should see a
 line that ends something like:
 
 @smallexample
-Finished tests in 2.839674s, 130.6488 tests/s, 141.9177 assertions/s.
+Finished tests in 2.358177s, 155.2046 tests/s, 172.1669 assertions/s.
 
-371 tests, 403 assertions, 0 failures, 0 errors, 25 skips
+366 tests, 406 assertions, 0 failures, 0 errors, 17 skips
 @end smallexample
 
 The number of seconds, tests, and assertions may be different from the above.

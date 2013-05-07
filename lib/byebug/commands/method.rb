@@ -27,11 +27,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'method'
+      def names
+        %w(method)
       end
 
-      def help(cmd)
+      def description
         %{
           m[ethod] sig[nature] <obj>\tshow the signature of a method
         }
@@ -68,11 +68,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'method'
+      def names
+        %w(method)
       end
 
-      def help(cmd)
+      def description
         %{
           m[ethod] i[nstance] <obj>\tshow methods of object
           m[ethod] iv <obj>\t\tshow instance variables of object

@@ -29,11 +29,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'reload'
+      def names
+        %w(reload)
       end
 
-      def help(cmd)
+      def description
         %{
           r[eload]\tforces source code reloading
         }

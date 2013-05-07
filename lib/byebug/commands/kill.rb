@@ -34,17 +34,17 @@ module Byebug
     end
 
     class << self
-      def help_command
-        %w[kill]
+      def names
+        %w(kill)
       end
 
-      def help(cmd)
+      def description
         %{
-          kill [SIGNAL]
+          kill[ SIGNAL]
 
           Send [signal] to Process.pid
-Equivalent of Process.kill(Process.pid)
-         }
+          Equivalent of Process.kill(Process.pid)
+        }
       end
     end
   end

@@ -69,7 +69,7 @@ module Byebug
     end
 
     def execute
-      return print format_subcmds(Subcommands) unless @match[1]
+      return help(@match) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
@@ -327,35 +327,43 @@ module Byebug
       var_class_self
     end
 
-    class << self
-      def help_command
-        'info'
-      end
-
-      def help(args)
-        # specific subcommand help
-        if args[1]
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"info\" subcommand \"#{args[1]}\"." unless subcmd
-
+    def help(args)
+      if args[1]
+        subcmd = find(Subcommands, args[1])
+        if subcmd
           str = subcmd.short_help + '.'
           if 'file' == subcmd.name and args[2]
             subsubcmd = find(InfoFileSubcommands, args[2])
-            return str += "\nInvalid \"file\" attribute \"#{args[2]}\"." \
-              unless subsubcmd
-
-            return str += "\n" + subsubcmd.short_help + '.'
+            if subsubcmd
+              str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
+            else
+              str += "\n" + subsubcmd.short_help + '.'
+            end
           else
-            return str += "\n" + subcmd.long_help if subcmd.long_help
+            str += "\n" + subcmd.long_help if subcmd.long_help
           end
+        else
+          str = "Invalid \"info\" subcommand \"#{args[1]}\"."
         end
+      else
+        str = InfoCommand.description + format_subcmds(Subcommands)
+      end
+      print str
+    end
 
-        # general help
-        str = %{
-          Generic command for showing things about the program being debugged.
+    class << self
+      def names
+        %w(info)
+      end
+
+      def description
+        %{
+          info[ subcommand]
+
+          Generic command for showing things about the program being
         }
-        str += format_subcmds(Subcommands)
       end
     end
   end
+
 end

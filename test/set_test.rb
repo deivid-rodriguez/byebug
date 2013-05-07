@@ -165,6 +165,14 @@ describe 'Set Command' do
     end
   end
 
+  describe 'Help' do
+    it 'must show help when typing just "set"' do
+      enter 'set', 'cont'
+      debug_file 'set'
+      check_output_includes /List of "set" subcommands:/
+    end
+  end
+
   describe 'Post Mortem' do
     Byebug::Command.settings[:autolist] = 0
 

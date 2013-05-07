@@ -34,8 +34,8 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'list'
+      def names
+        %w(list)
       end
 
       def help(cmd)

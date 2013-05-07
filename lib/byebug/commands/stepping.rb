@@ -34,11 +34,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'next'
+      def names
+        %w(next)
       end
 
-      def help(cmd)
+      def description
         %{
           n[ext][+-]?[ nnn]\tstep over once or nnn times,
           \t\t'+' forces to move to another line.
@@ -67,11 +67,11 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'step'
+      def names
+        %w(step)
       end
 
-      def help(cmd)
+      def description
         %{
           s[tep][+-]?[ nnn]\tstep (into methods) once or nnn times
           \t\t'+' forces to move to another line.

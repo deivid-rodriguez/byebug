@@ -4,30 +4,26 @@ describe 'Help Command' do
   include TestDsl
   include Columnize
 
-  let(:available_commands) do
-    Byebug::Command.commands.select(&:event).
-                             map(&:help_command).flatten.uniq.sort
+  let(:available_commands) {
+    Byebug::Command.commands.select(&:event).map(&:names).flatten.uniq.sort
+  }
+
+  it '"help" alone must show how to use "help"' do
+    enter 'set width 50', 'help'
+    debug_file 'help'
+    check_output_includes \
+      'Type "help <command-name>" for help on a specific command',
+      'Available commands:', columnize(available_commands, 50)
   end
 
-  it 'must show help how to use "help"' do
-    temporary_change_hash_value(Byebug::HelpCommand.settings, :width, 50) do
-      enter 'help'
-      debug_file 'help'
-      check_output_includes \
-        'Type \'help <command-name>\' for help on a specific command',
-        'Available commands:',
-        columnize(available_commands, 50)
-    end
-  end
-
-  it 'must show help when use shortcut' do
+  it 'must work when shortcut used' do
     enter 'h'
     debug_file 'help'
     check_output_includes \
-      'Type \'help <command-name>\' for help on a specific command'
+      'Type "help <command-name>" for help on a specific command'
   end
 
-  it 'must show an error if undefined command is specified' do
+  it 'must show an error if an undefined command is specified' do
     enter 'help foobar'
     debug_file 'help'
     check_output_includes \
@@ -37,9 +33,7 @@ describe 'Help Command' do
   it 'must show a command\'s help' do
     enter 'help break'
     debug_file 'help'
-    check_output_includes \
-      Byebug::AddBreakpoint.help(nil).split('\n').
-                            map { |l| l.gsub(/^ +/, '') }.join('\n')
+    check_output_includes Byebug::AddBreakpoint.help(nil)
   end
 
   describe 'Post Mortem' do

@@ -20,13 +20,13 @@ module Byebug
     end
 
     class << self
-      def help_command
-        %w[quit exit]
+      def names
+        %w(quit exit)
       end
 
-      def help(cmd)
+      def description
         %{
-          q[uit] [!|unconditionally]\texit from byebug.
+          q[uit][ !| unconditionally]\texit from byebug.
           exit[!]\talias to quit
 
           Normally we prompt before exiting. However if the parameter

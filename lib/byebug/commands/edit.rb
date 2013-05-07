@@ -28,23 +28,22 @@ module Byebug
         errmsg "File \"#{file}\" is not readable.\n"
       end
     end
-    
+
     class << self
-      def help_command
-        'edit'
+      def names
+        %w(edit)
       end
 
-      def help(cmd)
+      def description
         %{
-          Edit specified file.
+          edit[ file:lineno]\tEdit specified file.
 
-With no argument, edits file containing most recent line listed.
-Editing targets can also be specified in this:
-  FILE:LINENUM, to edit at that line in that file,
+          With no argument, edits file containing most recent line listed.
+          Editing targets can also be specified to start editing at a specific
+          line in a specific file.
         }
       end
     end
   end
 
-
-end # module Byebug
+end

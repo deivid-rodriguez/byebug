@@ -87,28 +87,27 @@ module Byebug
       enable_disable_display('Enable', args)
     end
 
+    def help
+      if args[1]
+        subcmd = find(Subcommands, args[1])
+        return "Invalid \"enable\" subcommand \"#{args[1]}\"." unless subcmd
+        str = subcmd.short_help + '.'
+        str += '\n' + subcmd.long_help if subcmd.long_help
+        return str
+      end
+      EnableCommand.description + format_subcmds(Subcommands)
+    end
+
     class << self
-      def help_command
-        'enable'
+      def names
+        %w(enable)
       end
 
-      def help(args)
-        # specific subcommand help
-        if args[1]
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"enable\" subcommand \"#{args[1]}\"." unless subcmd
-
-          str = subcmd.short_help + '.'
-          str += '\n' + subcmd.long_help if subcmd.long_help
-          return str
-        end
-
-        # general help
-        str = %{
+      def description
+        %{
           Enable some things.
           This is used to cancel the effect of the "disable" command.
         }
-        str += format_subcmds(Subcommands)
       end
     end
   end
@@ -155,32 +154,32 @@ module Byebug
       enable_disable_display('Disable', args)
     end
 
+    def help(args)
+      if args[1]
+        subcmd = find(Subcommands, args[1])
+        return "Invalid \"disable\" subcommand \"#{args[1]}\"." unless subcmd
+
+        str = subcmd.short_help + '.'
+        str += '\n' + subcmd.long_help if subcmd.long_help
+        return str
+      end
+      DisableCommand.description + format_subcmds(Subcommads)
+    end
+
     class << self
-      def help_command
-        'disable'
+      def names
+        %w(disable)
       end
 
-      def help(args)
-        # specific subcommand help
-        if args[1]
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"disable\" subcommand \"#{args[1]}\"." unless subcmd
-
-          str = subcmd.short_help + '.'
-          str += '\n' + subcmd.long_help if subcmd.long_help
-          return str
-        end
-
-        # general help
-        str = %{
+      def description
+        %{
           Disable some things.
 
           A disabled item is not forgotten, but has no effect until reenabled.
           Use the "enable" command to have it take effect again.
-        }
-        str += format_subcmds(Subcommads)
+         }
       end
     end
   end
 
-end # module Byebug
+end

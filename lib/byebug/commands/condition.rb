@@ -31,16 +31,18 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'condition'
+      def names
+        %w(condition)
       end
 
-      def help(cmd)
+      def description
         %{
-          Condition breakpoint-number expression
-Specify breakpoint number N to break only if COND is true. N is an integer and
-COND is an expression to be evaluated whenever breakpoint N is reached. If the
-empty string is used, the condition is removed.
+          cond[ition] nnn[ expr]
+
+          Specify breakpoint number nnn to break only if expr is true. nnn is an
+          integer and expr is an expression to be evaluated whenever breakpoint
+          nnn is reached. If no expression is specified, the condition is
+          removed.
         }
       end
     end

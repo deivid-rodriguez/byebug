@@ -366,6 +366,14 @@ describe 'Breakpoints' do
     end
   end
 
+  describe 'Help' do
+    it 'must show info about setting breakpoints when using just "break"' do
+      enter 'break', 'cont'
+      debug_file 'breakpoint1'
+      check_output_includes /b\[reak\] file:line \[if expr\]/
+    end
+  end
+
   describe 'Post Mortem' do
     it 'must be able to set breakpoints in post-mortem mode' do
       enter 'cont', 'break 12', 'cont'

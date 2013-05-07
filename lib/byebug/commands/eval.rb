@@ -53,22 +53,15 @@ module Byebug
     end
 
     class << self
-      def help_command
-        %w|p eval|
+      def names
+        %w(p eval)
       end
 
-      def help(cmd)
-        if cmd == 'p'
-          %{
-           p expression\tevaluate expression and print its value
-           }
-        else
-          %{
-           e[val] expression\tevaluate expression and print its value,
-           \t\t\talias for p.
-           * NOTE - to turn on autoeval, use 'set autoeval'
-           }
-        end
+      def description
+        %{
+          (p|e[val]) expression\tevaluate expression and print its value
+          * NOTE - to turn on autoeval, use 'set autoeval'
+         }
       end
     end
   end
@@ -91,14 +84,14 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'pp'
+      def names
+        %w(pp)
       end
 
-      def help(cmd)
+      def description
         %{
-         pp expression\tevaluate expression and pretty-print its value
-         }
+          pp expression\tevaluate expression and pretty-print its value
+        }
       end
     end
   end
@@ -128,14 +121,14 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'putl'
+      def names
+        %w(putl)
       end
 
-      def help(cmd)
+      def description
         %{
-         putl expression\tevaluate expression, an array, and columnize its value
-         }
+          putl expression\tevaluate expression, an array, and columnize its value
+        }
       end
     end
   end
@@ -167,14 +160,14 @@ module Byebug
     end
 
     class << self
-      def help_command
-        'ps'
+      def names
+        %w(ps)
       end
 
-      def help(cmd)
+      def description
         %{
-         ps expression\tevaluate expression, an array, sort and columnize its value
-         }
+          ps expression\tevaluate expression, an array, sort and columnize its value
+        }
       end
     end
   end
