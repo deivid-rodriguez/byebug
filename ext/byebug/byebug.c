@@ -144,17 +144,18 @@ process_line_event(VALUE trace_point, void *data)
 
   if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
-    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE)) {
-      context->stop_next = context->stop_next <= 0 ? -1 : context->stop_next-1;
-      context->stop_line = context->stop_line <= 0 ? -1 : context->stop_line-1;
+    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+    {
+      context->steps = context->steps <= 0 ? -1 : context->steps - 1;
+      context->lines = context->lines <= 0 ? -1 : context->lines - 1;
     }
   }
   else if (context->stack_size < context->dest_frame)
   {
-      context->stop_next = 0;
+      context->steps = 0;
   }
 
-  if (context->stop_next == 0 || context->stop_line == 0)
+  if (context->steps == 0 || context->lines == 0)
   {
     context->stop_reason = CTX_STOP_STEP;
     reset_stepping_stop_points(context);
@@ -193,8 +194,8 @@ process_return_event(VALUE trace_point, void *data)
 
   if (context->stack_size == context->stop_frame)
   {
-      context->stop_next = 1;
-      context->stop_frame = 0;
+      context->steps      = 1;
+      context->stop_frame = -1;
   }
   pop_frame(context);
 
@@ -431,7 +432,7 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
     context_object = Byebug_context(self);
     Data_Get_Struct(context_object, debug_context_t, context);
     context->stack_size = 0;
-    if (RTEST(stop)) context->stop_next = 1;
+    if (RTEST(stop)) context->steps = 1;
 
     /* Initializing $0 to the script's path */
     ruby_script(RSTRING_PTR(file));

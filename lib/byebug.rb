@@ -264,9 +264,9 @@ module Kernel
     Byebug.start
     Byebug.run_init_script(StringIO.new)
     if 0 == steps
-      Byebug.current_context.stop_frame = 0
+      Byebug.context.step_out
     else
-      Byebug.current_context.stop_next = steps
+      Byebug.context.step_into steps
     end
   end
   alias breakpoint byebug unless respond_to?(:breakpoint)

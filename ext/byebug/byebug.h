@@ -43,10 +43,10 @@ typedef struct {
   int stack_size;
   int flags;
   ctx_stop_reason stop_reason;
-  int stop_next;
   int dest_frame;
-  int stop_line;
-  int stop_frame;
+  int lines;                   /* # of lines in dest_frame before stopping */
+  int steps;                   /* # of steps before stopping */
+  int stop_frame;              /* frame number after which we must stop */
   char *last_file;
   int last_line;
 } debug_context_t;

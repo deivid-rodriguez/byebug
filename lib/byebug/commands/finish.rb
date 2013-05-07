@@ -17,7 +17,7 @@ module Byebug
         frame_pos = get_int(@match[1], "Finish", 0, max_frame-1, 0)
         return nil unless frame_pos
       end
-      @state.context.stop_frame = frame_pos
+      @state.context.step_out frame_pos
       @state.frame_pos = 0
       @state.proceed
     end

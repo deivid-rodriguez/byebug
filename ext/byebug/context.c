@@ -8,8 +8,9 @@ extern void
 reset_stepping_stop_points(debug_context_t *context)
 {
   context->dest_frame = -1;
-  context->stop_line  = -1;
-  context->stop_next  = -1;
+  context->lines      = -1;
+  context->steps      = -1;
+  context->stop_frame = -1;
 }
 
 static inline void
@@ -104,7 +105,6 @@ Context_create()
   context->flags = 0;
   context->last_file = NULL;
   context->last_line = -1;
-  context->stop_frame = -1;
   reset_stepping_stop_points(context);
   return Data_Wrap_Struct(cContext, Context_mark, Context_free, context);
 }
@@ -128,10 +128,7 @@ Context_dup(debug_context_t *context)
 
     new_context = ALLOC(debug_context_t);
     memcpy(new_context, context, sizeof(debug_context_t));
-    new_context->dest_frame = -1;
-    new_context->stop_line = -1;
-    new_context->stop_frame = -1;
-    new_context->stop_next = -1;
+    reset_stepping_stop_points(new_context);
     new_context->stack_size = context->stack_size;
     CTX_FL_SET(new_context, CTX_FL_DEAD);
     new_context->stack = ALLOC(debug_frame_t);
@@ -348,7 +345,7 @@ Context_jump(VALUE self, VALUE line, VALUE file)
 #endif
 
 static VALUE
-Context_stop_next(int argc, VALUE *argv, VALUE self)
+Context_step_into(int argc, VALUE *argv, VALUE self)
 {
   VALUE steps;
   VALUE force;
@@ -359,7 +356,8 @@ Context_stop_next(int argc, VALUE *argv, VALUE self)
     rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
 
   Data_Get_Struct(self, debug_context_t, context);
-  context->stop_next = FIX2INT(steps);
+  context->steps = FIX2INT(steps);
+
   if(RTEST(force))
       CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
@@ -379,7 +377,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
   rb_scan_args(argc, argv, "12", &lines, &frame, &force);
-  context->stop_line = FIX2INT(lines);
+  context->lines = FIX2INT(lines);
 
   if (FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Destination frame is out of range.");
@@ -394,7 +392,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-Context_stop_frame(VALUE self, VALUE frame)
+Context_step_out(VALUE self, VALUE frame)
 {
   debug_context_t *context;
 
@@ -430,10 +428,9 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_class", Context_frame_class, -1);
   rb_define_method(cContext, "frame_args_info", Context_frame_args_info, -1);
   rb_define_method(cContext, "frame_locals", Context_frame_locals, -1);
-  rb_define_method(cContext, "stop_next=", Context_stop_next, -1);
-  rb_define_method(cContext, "step", Context_stop_next, -1);
+  rb_define_method(cContext, "step_into", Context_step_into, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);
-  rb_define_method(cContext, "stop_frame=", Context_stop_frame, 1);
+  rb_define_method(cContext, "step_out", Context_step_out, 1);
 
   return cContext;
 }

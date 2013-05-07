@@ -83,7 +83,7 @@ module Byebug
         @state.proceed
       when :step
         force = Command.settings[:force_stepping]
-        @state.context.step 1, force
+        @state.context.step_into 1, force
         @state.proceed
       when :next
         force = Command.settings[:force_stepping]
