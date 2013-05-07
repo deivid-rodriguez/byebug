@@ -1,12 +1,21 @@
 # Byebug [![Gem Version](https://badge.fury.io/rb/byebug.png)](http://badge.fury.io/rb/byebug) [![Build Status](https://secure.travis-ci.org/deivid-rodriguez/byebug.png)](http://travis-ci.org/deivid-rodriguez/byebug) [![Code Climate](https://codeclimate.com/github/deivid-rodriguez/byebug.png)](https://codeclimate.com/github/deivid-rodriguez/byebug) [![Dependency Status](https://gemnasium.com/deivid-rodriguez/byebug.png)](https://gemnasium.com/deivid-rodriguez/byebug)
 
-A Ruby 2.0 debugger.
+_Debugging in Ruby 2.0_
 
+Byebug is a simple to use, feature rich debugger for Ruby 2.0. It uses the new
+TracePoint API, so it doesn't depend on internal core sources. It's developed as
+a C extension, so it's fast. And it has a full test suite so it's (I hope)
+reliable.
 
 ## Install
 
-Just type `gem install byebug` or drop `gem 'byebug'` in your Gemfile and run
-`bundle install`.
+Just drop
+
+    gem 'byebug'
+
+in your Gemfile and run
+
+    bundle install
 
 
 ## Usage
@@ -20,10 +29,25 @@ a debugging terminal.
 ## Configuration
 
 You can automatically load some configurations at startup by dropping them in
-the startup file `.byebugrc`, for example, `set listsize 20`. If you are coming
-from [debugger](https://github.com/cldwalker/debugger), notice however that you
-no longer need `set autolist`, `set autoreload` and `set autoeval` because they
-are default options in byebug.
+the startup file `.byebugrc`. For example, you can change the number of lines
+listed whenever byebug stops like this:
+
+    set listsize 20
+
+If you are coming from [debugger](https://github.com/cldwalker/debugger), notice
+however that you no longer need
+
+    set autolist
+    set autoreload
+    set autoeval
+
+because they are default options in byebug.
+
+
+## Related projects
+
+* [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) adds `next`,
+  `step`, `finish`, `continue` and `break` commands to pry using byebug.
 
 
 ## Credits
