@@ -1,3 +1,9 @@
+## 1.1.1
+
+* Better help system
+* Code cleanup
+* First version compatible with pry-byebug
+
 ## 1.1.0
 
 * Post mortem support
