@@ -3,7 +3,7 @@ module Byebug
   class TraceCommand < Command
     def regexp
       /^\s* tr(?:ace)? (?: \s+ (\S+))      # on | off | var(iable)
-                       (?: \s+ (\S+))?     # (all | variable-name)?
+                       (?: \s+ (\S+))?     # (variable-name)?
                        (?: \s+ (\S+))? \s* # (stop | nostop)?
        $/ix
     end
@@ -12,7 +12,7 @@ module Byebug
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1]
         Byebug.tracing = onoff
-        print "Tracing is #{onoff ? 'on' : 'off'}\n"
+        print "#{show_setting('linetrace')}\n"
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]
         if debug_eval("defined?(#{varname})")

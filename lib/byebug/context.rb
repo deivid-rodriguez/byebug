@@ -41,7 +41,9 @@ module Byebug
     end
 
     def at_line(file, line)
-      handler.at_line(self, file, line)
+      handler.at_line(self, file, line) unless
+        defined?(Byebug::BYEBUG_SCRIPT) and
+        File.identical?(file, Byebug::BYEBUG_SCRIPT)
     end
 
     #def at_return(file, line)

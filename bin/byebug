@@ -199,8 +199,7 @@ end
 opts = process_options(options)
 begin
   Byebug::ARGV = ARGV.clone if not defined? Byebug::ARGV
-  byebug_path = File.expand_path($0)
-  Byebug::BYEBUG_SCRIPT = byebug_path
+  Byebug::BYEBUG_SCRIPT = File.expand_path(__FILE__)
   Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
 rescue StandardError => e

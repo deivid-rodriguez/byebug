@@ -6,7 +6,8 @@ def triangle(n)
   0.upto(n) do |i|
     tri += i
   end
-  return tri
- end
- 
-puts triangle(3)
+  tri
+end
+
+t = triangle(3)
+puts t

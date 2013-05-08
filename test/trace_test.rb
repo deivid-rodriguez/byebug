@@ -16,7 +16,7 @@ describe 'Trace Command' do
         it 'must trace execution by setting trace to on' do
           enter 'trace on', 'cont 7', 'trace off'
           debug_file 'trace'
-          check_output_includes 'Tracing is on',
+          check_output_includes 'line tracing is on.',
                                 "Tracing: #{fullpath('trace')}:4 $bla = 4",
                                 "Tracing: #{fullpath('trace')}:7 $bla = 7"
         end
@@ -24,7 +24,7 @@ describe 'Trace Command' do
         it 'must be able to use a shortcut' do
           enter 'tr on', 'cont 7', 'trace off'
           debug_file 'trace'
-          check_output_includes 'Tracing is on',
+          check_output_includes 'line tracing is on.',
                                 "Tracing: #{fullpath('trace')}:4 $bla = 4",
                                 "Tracing: #{fullpath('trace')}:7 $bla = 7"
         end
@@ -49,7 +49,7 @@ describe 'Trace Command' do
         it 'must show a message when turned off' do
           enter 'trace off'
           debug_file 'trace'
-          check_output_includes 'Tracing is off'
+          check_output_includes 'line tracing is off.'
         end
       end
     end
@@ -99,7 +99,7 @@ describe 'Trace Command' do
       it 'must work in post-mortem mode' do
         enter 'cont', 'trace on'
         debug_file 'post_mortem'
-        check_output_includes 'Tracing is on'
+        check_output_includes 'line tracing is on.'
       end
     end
 

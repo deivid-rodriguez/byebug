@@ -1,11 +1,8 @@
-\input texinfo      @c -*-texinfo-*-
+\input texinfo
 @setfilename byebug.info
 
-@set txicodequoteundirected
-@set txicodequotebacktick
-@set BYEBUG_VERSION 1.0.3
-@set EDITION 1.0.3
-@set UPDATED April-2013
+@set BYEBUG_VERSION 1.1.1
+@set UPDATED May-2013
 
 @macro Example {}
 @iftex
@@ -42,19 +39,10 @@
 @titlepage
 @title Debugging with @code{byebug}
 @sp 1
-@subtitle @value{EDITION} Edition
+@subtitle @value{BYEBUG_VERSION} Edition
 @subtitle @value{UPDATED-MONTH}
-@author Rocky Bernstein, Kent Sibilev, and Mark Moseley
+@author David Rodríguez, Rocky Bernstein, Kent Sibilev, and Mark Moseley
 @page
-@ifset WHERETO
-@tex
-{\parskip=0pt
-\hfill (Send bugs and comments on byebug to fill in...)\par
-\hfill {\it Debugging with {\tt byebug}\par
-\hfill \TeX{}info \texinfoversion\par
-}
-@end tex
-@end ifset
 @end titlepage
 @page
 
@@ -64,7 +52,7 @@
 
 This file describes Byebug, a Ruby 2.0 debugger, version @value{BYEBUG_VERSION}
 
-This is the @value{EDITION} Edition, @value{UPDATED}
+Last updated: @value{UPDATED}
 @c Copyleft (U+0254) 2013
 
 @menu
@@ -91,10 +79,9 @@ Indexes
 @chapter Summary of @code{byebug}
 
 The purpose of a debugger such as @code{byebug} is to allow you to see what is
-going on ``inside'' a Ruby program while it executes.
-
-@code{byebug} can do four main kinds of things (plus other things in support of
-these) to help you catch bugs in the act:
+going on ``inside'' a Ruby program while it executes. @code{byebug} can do four
+main kinds of things (plus other things in support of these) to help you catch
+ bugs in the act:
 
 @itemize @bullet
 @item
@@ -111,20 +98,19 @@ Change things in your script, so you can experiment with correcting the effects
 of one bug and go on to learn about another.
 @end itemize
 
-Although you can use @value{byebug} to invoke your Ruby programs via a debugger
+Although you can use @code{byebug} to invoke your Ruby programs via a debugger
 at the outset, there are other ways to use and enter the debugger.
 
 @menu
-* First Sample Session::      A Simple Sample @code{byebug} session
-* Second Sample Session::     Second Session. Delving a little deeper
+* First Sample Session::      @code{display}, @code{print}, @code{quit}
+* Second Sample Session::     @code{where}, @code{frame}, @code{restart}, @code{autoeval}, @code{break}, @code{ps}
 * Unit Testing Session::      Using byebug in unit testing
 * Byebug.start with a block:: Using the Byebug.start with a block
 * Debugging Oddities::        How debugging Ruby may be different...
 @end menu
 
 @node First Sample Session
-@section The First Sample @code{byebug} Session (@code{list}, @code{display},
-@code{print}, and @code{quit})
+@section First Sample Session
 
 You can use this manual at your leisure to read all about @code{byebug}.
 However, a handful of commands are enough to get started using byebug. The
@@ -145,40 +131,18 @@ than how to write short Ruby code.}
 
 @smallexample
 $ @b{byebug triangle.rb}
-triangle.rb:4 def hanoi(n,a,b,c)
-(byebug:1) @b{list}
-[1, 8] in ./triangle.rb
-   1  #!/usr/bin/env ruby
-   2  # Compute the n'th triangle number - the hard way
-   3  # triangle(n) == (n * (n+1)) / 2
-=> 4  def triangle(n)
-   5    tri = 0
-   6    0.upto(n) do |i|
-   7      tri += i
-   8    end
-(byebug:1) @b{l}
-[9, 13] in ./triangle.rb
-   9    tri
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   1   #!/usr/bin/env ruby
+   2   # Compute the n'th triangle number - the hard way
+   3   # triangle(n) == (n * (n+1)) / 2
+=> 4   def triangle(n)
+   5     tri = 0
+   6     0.upto(n) do |i|
+   7       tri += i
+   8     end
+   9     tri
    10  end
-   11
-   12  t = triangle(3)
-   13  puts t
-(byebug:1) @b{list 1,100}
-[1, 100] in ./triangle.rb
-   1  #!/usr/bin/env ruby
-   2  # Compute the n'th triangle number - the hard way
-   3  # triangle(n) == (n * (n+1)) / 2
-=> 4  def triangle(n)
-   5    tri = 0
-   6    0.upto(n) do |i|
-   7      tri += i
-   8    end
-   9    tri
-   10  end
-   11
-   12  t = triangle(3)
-   13  puts t
-(byebug:1)
+(byebug)
 @end smallexample
 
 @noindent
@@ -186,51 +150,67 @@ triangle.rb:4 def hanoi(n,a,b,c)
 There are lots of command options, but we don't need them for now. See
 @ref{byebug command-line options} for a full list of command options.
 
-Position information consists of a filename and line number, e.g.
-@:@code{triangle.rb:4}. We are currently stopped before the first executable
-line of the program; this is line 4 of @code{triangle.rb}. If you are used to
-less dynamic languages and have used debuggers for more statically compiled
-languages like C, C++, or Java, it may seem odd to be stopped before a function
-definition but in Ruby line 4 is executed, the name @code{triangle} (probably)
-does not exist so issuing a method call of @code{triangle} will raise a
-``method not found'' error.
+We are currently stopped before the first executable line of the program; this
+is line 4 of @code{triangle.rb}. If you are used to less dynamic languages and
+have used debuggers for more statically compiled languages like C, C++, or Java,
+it may seem odd to be stopped before a function definition but in Ruby line 4 is
+executed, the name @code{triangle} (probably) does not exist so issuing a method
+call of @code{triangle} will raise a ``method not found'' error.
 
 @code{byebug}'s prompt is @code{(byebug)}. If the program has died and you are
-in post-mortem debugging @code{byebug:post-mortem} is used instead. If the
+in post-mortem debugging @code{(byebug:post-mortem)} is used instead. If the
 program has terminated normally, the string this position will be
-@code{byebug:ctrl}. The commands which are available change depending on the
+@code{(byebug:ctrl)}. The commands which are available change depending on the
 program's state.
 
-The first command, @code{list} (@pxref{List}), prints 10 lines centered around
-the current line; the current line here is line 4 and is marked by @code{=>}, so
-the range byebug would like to show is -1..8. However since there aren't 5 lines
-before the current line, those additional lines---``lines'' -1 and 0---are
-dropped and we print the remaining 8 lines.  The @code{list} command can be
-abbreviated with @code{l} which is what we use next. Notice that when we use
-this a second time, we continue listing from the place we last left off. The
-desired range of lines this time is lines 9 to 18; but since the program ends at
-line 13, only the remaining 5 lines are shown.
-
-If you want to set how many lines to print by default rather than use the
-initial number of lines, 10, use the @code{set listsize} command
-(@pxref{Listsize}). To see the entire program in one shot, we gave an explicit
-starting and ending line number.
+Byebug automatically lists 10 lines of code centered around the current line
+everytime it is stopped. The current line here is line 4 and is marked with
+@code{=>}, so the range byebug would like to show is [-1..8]. However since
+there aren't 5 lines before the current line, the range is moved ``up'' so we
+can actually display 10 lines of code.
 
 Now let us step through the program.
 
 @smallexample
-(byebug:1) @b{step}
-triangle.rb:12
-t = triangle(3)
-(byebug:1) @b{@key{<RET>}}
-triangle.rb:5
-tri = 0
-(byebug:1) @b{p tri}
+(byebug) @b{step}
+[4, 13] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   4   def triangle(n)
+   5     tri = 0
+   6     0.upto(n) do |i|
+   7       tri += i
+   8     end
+   9     tri
+   10  end
+   11
+=> 12  t = triangle(3)
+   13  puts t
+(byebug) @b{@key{<RET>}}
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   1  #!/usr/bin/env ruby
+   2  # Compute the n'th triangle number - the hard way
+   3  # triangle(n) == (n * (n+1)) / 2
+   4  def triangle(n)
+=> 5    tri = 0
+   6    0.upto(n) do |i|
+   7      tri += i
+   8    end
+   9    tri
+   10  end
+(byebug) @b{p tri}
 nil
-(byebug:1) @b{step}
-triangle.rb:6
-0.upto(n) do |i|
-(byebug:1) @b{p tri}
+(byebug) @b{step}
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   1   #!/usr/bin/env ruby
+   2   # Compute the n'th triangle number - the hard way
+   3   # triangle(n) == (n * (n+1)) / 2
+   4   def triangle(n)
+   5     tri = 0
+=> 6     0.upto(n) do |i|
+   7       tri += i
+   8     end
+   9     tri
+   10  end
+(byebug) @b{p tri}
 0
 @end smallexample
 
@@ -256,45 +236,53 @@ Now let us run the program until we return from the function. We'll want to see
 which lines get run.
 
 @smallexample
-(byebug:1) @b{display i}
+(byebug) @b{display i}
 2: i =
-(byebug:1) @b{set linetrace on}
+(byebug) @b{set linetrace on}
 line tracing is on.
-(byebug:1) @b{finish}
-Tracing(1):triangle.rb:7 tri += i
+(byebug) @b{finish}
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
 1: tri = 0
 2: i = 0
-Tracing(1):triangle.rb:7 tri += i
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
 1: tri = 0
 2: i = 1
-Tracing(1):triangle.rb:7 tri += i
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
 1: tri = 1
 2: i = 2
-Tracing(1):triangle.rb:7 tri += i
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
 1: tri = 3
 2: i = 3
-Tracing(1):triangle.rb:9 tri
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:9 tri
 1: tri = 6
-2: i = 3
-6
-Tracing(1):triangle.rb:13 puts t
+2: i =
+Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:13 puts t
 1: tri =
 2: i =
+[4, 13] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   4  def triangle(n)
+   5    tri = 0
+   6    0.upto(n) do |i|
+   7      tri += i
+   8    end
+   9    tri
+   10  end
+   11  
+   12  t = triangle(3)
+=> 13  puts t
 1: tri =
 2: i =
-triangle.rb:13
-puts t
-(byebug:1) @b{quit}
+(byebug) @b{quit}
 Really quit? (y/n) @b{y}
 @end smallexample
 
 So far, so good. As you can see from the above to get out of @code{byebug}, one
 can issue a @code{quit} command (@code{q} and @code{exit} are just as good). If
 you want to quit without being prompted, suffix the command with an exclamation
-mark, e.g.\@code{q!}.
+mark, e.g. @code{q!}.
 
 @node Second Sample Session
-@section Sample Session 2: Delving Deeper (@code{where}, @code{frame}, @code{restart}, @code{autoeval}, @code{break}, @code{ps})
+@section Second Sample Session 2: Delving Deeper
 
 In this section we'll introduce breakpoints, the call stack and restarting. So
 far we've been doing pretty good in that we've not encountered a bug to fix.
@@ -897,7 +885,7 @@ To be continued...
 @end ifset
 
 @node Invocation
-@chapter Getting in and out
+@chapter Getting in & out
 
 @menu
 * Starting byebug::      How to enter byebug
@@ -1434,8 +1422,7 @@ With an integer argument, list info on that breakpoint.
 
 @menu
 * Quit::      Quitting byebug (quit)
-* Restart::   Restarting Script execution (restart)
-* Interrupt:: Interrupting byebug (interrupt)
+* Restart::   Restarting script execution (restart)
 * Source::    Running Byebug commands (source)
 @end menu
 
@@ -1458,7 +1445,7 @@ if you really want to quit. If you don't want any questions asked, enter
 @end table
 
 @node Restart
-@subsection Restart (@samp{restart})
+@subsection Restartng script execution (@samp{restart})
 
 @table @code
 @kindex restart @r{[}@var{program args}@r{]}
@@ -1785,6 +1772,20 @@ that line. Likewise, when you select a stack frame (@pxref{Selection})
 Implicitly there is a default line location. Each time a list command is run
 that implicit location is updated, so that running several list commands in
 succession shows a contiguous block of program text.
+
+If you don't need code context displayed every time, you can issue the @code{set
+noautolist} command. Now whenever you want code listed, you can explicitly issue
+the @code{list} or it abbreviation @code{l}. Notice that a second listing is
+displayed, we continue listing from the place we last left off. The desired
+range of lines this time is lines 9 to 18; but since the program ends at line
+13, the range is moved down so 10 lines can be shown. You can set the
+@code{noautolist} option by default by dropping @code{set noautolist} in
+byebug's startup file @code{.byebugrc}.
+
+If you want to set how many lines to print by default rather than use the
+initial number of lines, 10, use the @code{set listsize} command
+(@pxref{Listsize}). To see the entire program in one shot, we gave an explicit
+starting and ending line number.
 
 You can print other portions of source files by giving an explicit position as a
 parameter to the list command.
@@ -3268,10 +3269,11 @@ need to first call @samp{Byebug.start} before issuing this call.
 @appendix Guidelines for contributing
 
 @menu
-* Running Regression Tests::
+* Testing Byebug:: Running Regression Tests
 @end menu
 
-@section Running the Regression Tests
+@node Testing Byebug
+@section Testing Byebug
 
 We've put together some basic tests to make sure byebug is doing
 what we think it should do. To run these (from @code{trunk}):

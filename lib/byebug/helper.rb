@@ -43,13 +43,13 @@ module Byebug
         return false
       else
         if print_error
-          print "Expecting 'on', 1, 'off', or 0. Got: %s.\n" % arg.to_s
+          print "Expecting 'on', 1, 'off', or 0. Got: #{arg.to_s}.\n"
           raise RuntimeError
         end
       end
     end
 
-    # Return 'on' or 'off' for supplied parameter. The parmeter should
+    # Return 'on' or 'off' for supplied parameter. The parameter should
     # be true, false or nil.
     def show_onoff(bool)
       if not [TrueClass, FalseClass, NilClass].member?(bool.class)

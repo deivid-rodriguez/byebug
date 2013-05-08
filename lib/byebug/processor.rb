@@ -86,7 +86,7 @@ module Byebug
     end
 
     def self.print_location_and_text(file, line)
-      file_line = "#{canonic_file(file)}:#{line}\n" \
+      file_line = "#{canonic_file(file)} @ #{line}\n" \
                   "#{Byebug.line_at(file, line)}\n"
 
       # FIXME: use annotations routines
@@ -232,7 +232,7 @@ module Byebug
 
         preloop(commands, context)
 
-        if not Command.settings[:autolist]
+        if Command.settings[:autolist] == 0
           CommandProcessor.print_location_and_text(file, line)
         end
 

@@ -67,7 +67,11 @@ module Byebug
       # Subcommand not found...
       return print "Unknown set command \"#{try_subcmd}\"\n" unless subcmd
 
-      set_on = get_onoff(args[0]) if subcmd.is_bool and args.size > 0
+      begin
+        set_on = get_onoff(args[0]) if subcmd.is_bool and args.size > 0
+      rescue RuntimeError
+        return
+      end
 
       case subcmd.name
       when /^annotate$/
@@ -137,7 +141,7 @@ module Byebug
       when /^linetrace\+$/
         self.class.settings[:tracing_plus] = set_on
       when /^linetrace$/
-        Command.settings[:tracing] = set_on
+        Byebug.tracing = set_on
       when /^listsize$/
         listsize = get_int(args[0], "Set listsize", 1, nil, 10)
         return unless listsize
