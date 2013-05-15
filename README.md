@@ -37,11 +37,9 @@ listed whenever byebug stops like this:
 If you are coming from [debugger](https://github.com/cldwalker/debugger), notice
 however that you no longer need
 
-    set autolist
     set autoreload
-    set autoeval
 
-because they are default options in byebug.
+because it is a default option in byebug.
 
 
 ## Related projects
