@@ -129,8 +129,6 @@ module Byebug
       when /^listsize$/
         listlines = Command.settings[:listsize]
         return "Number of source lines to list is #{listlines}."
-      when /^port$/
-        return "server port is #{Byebug::PORT}."
       when /^trace$/
         on_off = Command.settings[:stack_trace_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."

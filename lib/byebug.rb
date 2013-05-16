@@ -18,9 +18,6 @@ module Byebug
     tracing:     nil    # Byebug.tracing? value. true/false resets
   } unless defined?(DEFAULT_START_SETTINGS)
 
-  # Port number used for remote debugging
-  PORT = 8989 unless defined?(PORT)
-
   # Configuration file used for startup commands. Default value is .byebugrc
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
