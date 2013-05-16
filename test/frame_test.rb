@@ -3,6 +3,10 @@ require_relative 'test_helper'
 describe 'Frame Command' do
   include TestDsl
 
+  # XXX: Calculate magic number dinamically, like
+  # "longest_string_in_test_output".size
+  temporary_change_hash Byebug::Command.settings, :width, 90
+
   it 'must go up' do
     enter 'break 16', 'cont', 'up'
     debug_file('frame') { state.line.must_equal 12 }

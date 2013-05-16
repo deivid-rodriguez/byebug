@@ -1,13 +1,5 @@
 module TestDsl
 
-  module Shared
-    def fullpath(filename)
-      (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
-    end
-  end
-
-  include Shared
-
   def self.included(base)
     base.class_eval do
       extend ClassUtils
@@ -16,6 +8,13 @@ module TestDsl
         Byebug.handler.display.clear
       end
     end
+  end
+
+  ##
+  # Expand fullpath of a given example file
+  #
+  def fullpath(filename)
+    (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
   end
 
   ##
@@ -144,12 +143,15 @@ module TestDsl
         extend Minitest::Spec::DSL
 
         before do
-          @old_value = hash[key]
+          @old_hashes ||= {}
+          @old_hashes.merge!({ hash => { key => hash[key] } }) do |k, v1, v2|
+            v1.merge(v2)
+          end
           hash[key] = value
         end
 
         after do
-          hash[key] = @old_value
+          hash[key] = @old_hashes[hash][key]
         end
       end
 
@@ -161,19 +163,20 @@ module TestDsl
         extend Minitest::Spec::DSL
 
         before do
-          old_value = { const => klass.const_defined?(const) ?
-                                 klass.const_get(const) : :__undefined__ }
-          @old_consts ||= old_value
-          @old_consts.merge!(old_value)
+          @old_consts ||= {}
+          old_value = klass.const_defined?(const) ?
+                      klass.const_get(const) : :__undefined__
+          @old_consts.merge!({ klass => { const => old_value } }) do |k, v1, v2|
+            v1.merge(v2)
+          end
           klass.send :remove_const, const if klass.const_defined?(const)
           klass.const_set const, value unless value == :__undefined__
         end
 
         after do
           klass.send :remove_const, const if klass.const_defined?(const)
-          klass.const_set const, @old_consts[const] unless
-            @old_consts[const] == :__undefined__
-          @old_consts.delete(const)
+          klass.const_set const, @old_consts[klass][const] unless
+            @old_consts[klass][const] == :__undefined__
         end
       end
 
