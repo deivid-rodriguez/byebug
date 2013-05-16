@@ -5,7 +5,7 @@ describe 'Frame Command' do
 
   # XXX: Calculate magic number dinamically, like
   # "longest_string_in_test_output".size
-  temporary_change_hash Byebug::Command.settings, :width, 90
+  temporary_change_hash Byebug::Command.settings, :width, 96
 
   it 'must go up' do
     enter 'break 16', 'cont', 'up'

@@ -231,7 +231,9 @@ describe 'Info Command' do
   end
 
   describe 'Stack info' do
-    temporary_change_hash Byebug::Command.settings, :width, 72
+    # XXX: Calculate magic number dinamically, like
+    # "longest_string_in_test_output".size
+    temporary_change_hash Byebug::Command.settings, :width, 83
 
     it 'must show stack info' do
       enter 'set fullpath', 'break 20', 'cont', 'info stack'
