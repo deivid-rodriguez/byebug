@@ -109,9 +109,9 @@ module Byebug
         b.upto(e) do |n|
           if n > 0 && lines[n-1]
             if n == current
-              print "=> %d  %s\n", n, lines[n-1].chomp
+              print "=> %-4d %s\n", n, lines[n-1].chomp
             else
-              print "   %d  %s\n", n, lines[n-1].chomp
+              print "   %-4d %s\n", n, lines[n-1].chomp
             end
           end
         end

@@ -29,7 +29,7 @@ describe 'Reload Command' do
         'reload'
       end, 'l 4-4'
       debug_file 'reload'
-      check_output_includes '4  100'
+      check_output_includes '4    100'
     end
   end
 
@@ -42,7 +42,7 @@ describe 'Reload Command' do
         'reload'
       end, 'l 7-7'
       debug_file 'post_mortem'
-      check_output_includes '7  z = 100'
+      check_output_includes '7    z = 100'
     end
   end
 
