@@ -4,7 +4,7 @@ describe 'Set Command' do
   include TestDsl
 
   describe 'setting to on' do
-    Byebug::Command.settings[:autolist] = 0
+    temporary_change_hash Byebug::Command.settings, :autolist, 0
 
     it 'must set a setting to on' do
       enter 'set autolist on'
@@ -32,7 +32,7 @@ describe 'Set Command' do
   end
 
   describe 'setting to off' do
-    Byebug::Command.settings[:autolist] = 1
+    temporary_change_hash Byebug::Command.settings, :autolist, 1
 
     it 'must set a setting to off' do
       enter 'set autolist off'
@@ -51,10 +51,16 @@ describe 'Set Command' do
       debug_file 'set'
       Byebug::Command.settings[:autolist].must_equal 0
     end
+
+    it 'must set a setting to off by "no" prefix and shortcut' do
+      enter 'set noautol'
+      debug_file 'set'
+      Byebug::Command.settings[:autolist].must_equal 0
+    end
   end
 
   describe 'messages' do
-    Byebug::Command.settings[:autolist] = 0
+    temporary_change_hash Byebug::Command.settings, :autolist, 0
 
     it 'must show a message after setting' do
       enter 'set autolist on'
@@ -64,23 +70,35 @@ describe 'Set Command' do
   end
 
   describe 'testing' do
-    it '$byebug_state must get set if "testing" is on' do
-      enter 'set testing', 'break 3', 'cont'
-      debug_file('set') {
-        $byebug_state.must_be_kind_of Byebug::CommandProcessor::State }
-    end
+    describe '$byebug_state' do
+      describe 'when setting "testing" to on' do
+        temporary_change_hash Byebug::Command.settings, :testing, 0
 
-    it 'basename must get set if "testing" is on' do
-      temporary_change_hash_value(Byebug::Command.settings, :basename, false) do
-        enter 'set testing', 'show basename'
-        debug_file('set')
-        check_output_includes 'basename is on.'
+        it 'must get set' do
+          enter 'set testing', 'break 3', 'cont'
+          debug_file('set') {
+            $byebug_state.must_be_kind_of Byebug::CommandProcessor::State }
+        end
+      end
+
+      describe 'when setting "testing" to off' do
+        temporary_change_hash Byebug::Command.settings, :testing, 1
+
+        it 'must get unset' do
+          enter 'set notesting', 'break 3', 'cont'
+          debug_file('set') { $byebug_state.must_be_nil }
+        end
       end
     end
 
-    it '$byebug_state must get unset if "testing" is off' do
-      enter 'set notesting', 'break 3', 'cont'
-      debug_file('set') { $byebug_state.must_be_nil }
+    describe 'basename' do
+      temporary_change_hash Byebug::Command.settings, :basename, false
+
+      it 'must get set if "testing" is on' do
+        enter 'set testing'
+        debug_file('set')
+        Byebug::Command.settings[:basename].must_equal true
+      end
     end
   end
 
@@ -120,19 +138,19 @@ describe 'Set Command' do
     end
 
     describe 'filename' do
+      let(:filename) {
+        File.join(ENV['HOME']||ENV['HOMEPATH']||'.', '.byebug-hist') }
+
       it 'must set history filename' do
         enter 'set history filename .byebug-hist'
         debug_file 'set'
-        interface.histfile.must_equal \
-          File.join(ENV['HOME']||ENV['HOMEPATH']||'.', '.byebug-hist')
+        interface.histfile.must_equal filename
       end
 
       it 'must show a message' do
         enter 'set history filename .byebug-hist'
         debug_file 'set'
-        check_output_includes \
-          'The filename in which to record the command history is ' \
-          "\"#{File.join(ENV['HOME']||ENV['HOMEPATH']||'.', '.byebug-hist')}\""
+        check_output_includes "The command history file is \"#{filename}\""
       end
     end
 
@@ -151,14 +169,13 @@ describe 'Set Command' do
   end
 
   describe 'width' do
-    Byebug::Command.settings[:width] = 20
+    temporary_change_hash Byebug::Command.settings, :width, 20
+    let(:old_columns) { ENV['COLUMNS'] }
 
     it 'must set ENV[\'COLUMNS\'] by the "set width" command' do
-      old_columns = ENV['COLUMNS']
       begin
         enter 'set width 10'
-        debug_file 'set'
-        ENV['COLUMNS'].must_equal '10'
+        debug_file('set') { ENV['COLUMNS'].must_equal '10' }
       ensure
         ENV['COLUMNS'] = old_columns
       end
@@ -174,7 +191,7 @@ describe 'Set Command' do
   end
 
   describe 'Post Mortem' do
-    Byebug::Command.settings[:autolist] = 0
+    temporary_change_hash Byebug::Command.settings, :autolist, 0
 
     it 'must work in post-mortem mode' do
       enter 'cont', 'set autolist on'
@@ -182,5 +199,4 @@ describe 'Set Command' do
       check_output_includes 'autolist is on.'
     end
   end
-
 end

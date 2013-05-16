@@ -13,19 +13,21 @@ describe 'Show Command' do
   end
 
   describe 'args' do
-    before do
-      Byebug::Command.settings[:argv] = %w{foo bar}
-    end
+    temporary_change_hash Byebug::Command.settings, :argv, %w{foo bar}
 
-    it 'must show args' do
-      enter 'show args'
-      debug_file 'show'
-      check_output_includes 'Argument list to give program being debugged ' \
+    describe 'default behaviour' do
+      it 'must show args' do
+        enter 'show args'
+        debug_file 'show'
+        check_output_includes 'Argument list to give program being debugged ' \
                             'when it is started is "foo bar".'
+      end
     end
 
-    it 'must not show the first arg if BYEBUG_SCRIPT is defined' do
-      temporary_set_const(Byebug, 'BYEBUG_SCRIPT', 'bla') do
+    describe 'when BYEBUG_SCRIPT is defined' do
+      temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'bla'
+
+      it 'must not show the first arg' do
         enter 'show args'
         debug_file 'show'
         check_output_includes 'Argument list to give program being debugged ' \
@@ -34,140 +36,127 @@ describe 'Show Command' do
     end
   end
 
-
-  it 'must show autolist' do
-    temporary_change_hash_value(Byebug::Command.settings, :autolist, 1) do
+  describe 'autolist' do
+    it 'must show default value' do
       enter 'show autolist'
       debug_file 'show'
       check_output_includes 'autolist is on.'
     end
   end
 
-  it 'must show autoeval' do
-    temporary_change_hash_value(Byebug::Command.settings, :autoeval, true) do
+  describe 'autoeval' do
+    it 'must show default value' do
       enter 'show autoeval'
       debug_file 'show'
       check_output_includes 'autoeval is on.'
     end
   end
 
-  it 'must show autoreload' do
-    temporary_change_hash_value(Byebug::Command.settings, :reload_source_on_change, true) do
+  describe 'autoreload' do
+    it 'must show default value' do
       enter 'show autoreload'
       debug_file 'show'
       check_output_includes 'autoreload is on.'
     end
   end
 
-  it 'must show autoirb' do
-    Byebug::IRBCommand.any_instance.stubs(:execute)
-    temporary_change_hash_value(Byebug::Command.settings, :autoirb, 1) do
+  describe 'autoirb' do
+    before { Byebug::IRBCommand.any_instance.stubs(:execute) }
+
+    it 'must show default value' do
       enter 'show autoirb'
       debug_file 'show'
-      check_output_includes 'autoirb is on.'
+      check_output_includes 'autoirb is off.'
     end
   end
 
-  it 'must show basename' do
-    temporary_change_hash_value(Byebug::Command.settings, :basename, true) do
+  describe 'basename' do
+    it 'must show default value' do
       enter 'show basename'
       debug_file 'show'
-      check_output_includes 'basename is on.'
+      check_output_includes 'basename is off.'
     end
   end
 
-  it 'must show callstyle' do
-    temporary_change_hash_value(Byebug::Command.settings, :callstyle, :short) do
+  describe 'callstyle' do
+    it 'must show default value' do
       enter 'show callstyle'
       debug_file 'show'
-      check_output_includes 'Frame call-display style is short.'
+      check_output_includes 'Frame call-display style is last.'
     end
   end
 
-  it 'must show forcestep' do
-    temporary_change_hash_value(Byebug::Command.settings, :force_stepping, true) do
+  describe 'forcestep' do
+    it 'must show default value' do
       enter 'show forcestep'
       debug_file 'show'
-      check_output_includes 'force-stepping is on.'
+      check_output_includes 'force-stepping is off.'
     end
   end
 
-  it 'must show fullpath' do
-    temporary_change_hash_value(Byebug::Command.settings, :full_path, true) do
+  describe 'fullpath' do
+    it 'must show default value' do
       enter 'show fullpath'
       debug_file 'show'
       check_output_includes 'Displaying frame\'s full file names is on.'
     end
   end
 
-  it 'must show linetrace' do
-    enter 'trace on', 'show linetrace', 'trace off'
-    debug_file 'show'
-    check_output_includes 'line tracing is on.'
+  describe 'linetrace' do
+    it 'must show default value' do
+      enter 'show linetrace'
+      debug_file 'show'
+      check_output_includes 'line tracing is off.'
+    end
   end
 
   describe 'linetrace+' do
-    it 'must show a message when linetrace+ is on' do
-      temporary_change_hash_value(Byebug::Command.settings, :tracing_plus, true) do
-        enter 'show linetrace+'
-        debug_file 'show'
-        check_output_includes 'line tracing style is different consecutive lines.'
-      end
-    end
-
-    it 'must show a message when linetrace+ is off' do
-      temporary_change_hash_value(Byebug::Command.settings, :tracing_plus, false) do
-        enter 'show linetrace+'
-        debug_file 'show'
-        check_output_includes 'line tracing style is every line.'
-      end
+    it 'must show default value' do
+      enter 'show linetrace+'
+      debug_file 'show'
+      check_output_includes 'line tracing style is every line.'
     end
   end
 
-  it 'must show listsize' do
-    temporary_change_hash_value(Byebug::Command.settings, :listsize, 10) do
+  describe 'listsize' do
+    it 'must show listsize' do
       enter 'show listsize'
       debug_file 'show'
       check_output_includes 'Number of source lines to list is 10.'
     end
   end
 
-  it 'must show port' do
-    temporary_set_const(Byebug, 'PORT', 12345) do
-      enter 'show port'
-      debug_file 'show'
-      check_output_includes 'server port is 12345.'
-    end
-  end
-
-  it 'must show trace' do
-    temporary_change_hash_value(Byebug::Command.settings, :stack_trace_on_error, true) do
+  describe 'trace' do
+    it 'must show trace' do
       enter 'show trace'
       debug_file 'show'
-      check_output_includes 'Displaying stack trace is on.'
+      check_output_includes 'Displaying stack trace is off.'
     end
   end
 
-  it 'must show version' do
-    enter 'show version'
-    debug_file 'show'
-    check_output_includes "byebug #{Byebug::VERSION}"
+  describe 'version' do
+    it 'must show version' do
+      enter 'show version'
+      debug_file 'show'
+      check_output_includes "byebug #{Byebug::VERSION}"
+    end
   end
 
-  it 'must show forcestep' do
-    temporary_change_hash_value(Byebug::Command.settings, :width, 35) do
+  describe 'width' do
+    it 'must show width' do
       enter 'show width'
       debug_file 'show'
-      check_output_includes 'width is 35.'
+      check_output_includes 'width is 80.'
     end
   end
 
-  it 'must show a message about unknown command' do
-    enter 'show bla'
-    debug_file 'show'
-    check_output_includes 'Unknown show command bla'
+  describe 'unknown command' do
+    it 'must show a message' do
+      enter 'show bla'
+      debug_file 'show'
+      check_output_includes 'Unknown show command bla'
+    end
   end
-
 
   describe 'history' do
     describe 'without arguments' do
@@ -181,7 +170,7 @@ describe 'Show Command' do
 
       it 'must show history file' do
         check_output_includes \
-          /The filename in which to record the command history is "hist_file\.txt"/
+          /filename: The command history file is "hist_file\.txt"/
       end
 
       it 'must show history save setting' do
@@ -198,8 +187,7 @@ describe 'Show Command' do
         interface.histfile = 'hist_file.txt'
         enter 'show history filename'
         debug_file 'show'
-        check_output_includes 'The filename in which to record the command ' \
-                              'history is "hist_file.txt"'
+        check_output_includes 'The command history file is "hist_file.txt"'
       end
 
       it 'must show history save setting' do
@@ -219,37 +207,46 @@ describe 'Show Command' do
   end
 
   describe 'commands' do
-    before { interface.readline_support = true }
+    describe 'no readline support' do
+      before { interface.readline_support = false }
 
-    it 'must not show records from readline if there is no readline support' do
-      interface.readline_support = false
-      enter 'show commands'
-      debug_file 'show'
-      check_output_includes 'No readline support'
-    end
-
-    it 'must show records from readline history' do
-      temporary_set_const(Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff}) do
+      it 'must not show records from readline' do
         enter 'show commands'
         debug_file 'show'
-        check_output_includes /1  aaa/
-        check_output_includes /6  fff/
+        check_output_includes 'No readline support'
       end
     end
 
-    it 'must show last 10 records from readline history' do
-      temporary_set_const(Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}) do
-        enter 'show commands'
-        debug_file 'show'
-        check_output_doesnt_include /3  ccc/
-        check_output_includes /4  eee/
-        check_output_includes /13  nnn/
-      end
-    end
+    describe 'readline support' do
+      before { interface.readline_support = true }
 
-    describe 'with specified positions' do
-      it 'must show records within boundaries' do
-        temporary_set_const(Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}) do
+      describe 'show records' do
+        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff}
+
+        it 'must show records from readline history' do
+          enter 'show commands'
+          debug_file 'show'
+          check_output_includes /1  aaa/
+          check_output_includes /6  fff/
+        end
+      end
+
+      describe 'max records' do
+        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}
+
+        it 'must show last 10 records from readline history' do
+          enter 'show commands'
+          debug_file 'show'
+          check_output_doesnt_include /3  ddd/
+          check_output_includes /4  eee/
+          check_output_includes /13  nnn/
+        end
+      end
+
+      describe 'with specified positions' do
+        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}
+
+        it 'must show records within boundaries' do
           # Really don't know why it substracts 4, and shows starting from position 6
           enter 'show commands 10'
           debug_file 'show'
@@ -257,10 +254,8 @@ describe 'Show Command' do
           check_output_includes /6  ggg/
           check_output_includes /13  nnn/
         end
-      end
 
-      it 'must adjust first line if it is < 0' do
-        temporary_set_const(Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}) do
+        it 'must adjust first line if it is < 0' do
           enter 'show commands 3'
           debug_file 'show'
           check_output_includes /1  bbb/

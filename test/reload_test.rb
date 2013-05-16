@@ -4,7 +4,7 @@ describe 'Reload Command' do
   include TestDsl
 
   describe 'autoreloading' do
-    after { Byebug::Command.settings[:reload_source_on_change] = true }
+    after { Byebug::Command.settings[:autoreload] = true }
 
     it 'must notify that automatic reloading is on by default' do
       enter 'reload'

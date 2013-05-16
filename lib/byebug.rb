@@ -48,8 +48,8 @@ module Byebug
     # Get line +line_number+ from file named +filename+.
     # @return "\n" if there was a problem. Leaking blanks are stripped off.
     def line_at(filename, line_number)
-      @@reload_source_on_change = nil unless defined?(@@reload_source_on_change)
-      line = LineCache::getline(filename, line_number, @@reload_source_on_change)
+      @@autoreload = nil unless defined?(@@autoreload)
+      line = LineCache::getline filename, line_number, @@autoreload
       return "\n" unless line
       return "#{line.gsub(/^\s+/, '').chomp}"
     end

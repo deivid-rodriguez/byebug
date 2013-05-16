@@ -3,15 +3,13 @@ require_relative 'test_helper'
 describe 'Irb Command' do
   include TestDsl
 
-  def after_setup
+  before do
     interface.stubs(:kind_of?).with(Byebug::LocalInterface).returns(true)
     IRB::Irb.stubs(:new).returns(irb)
     Signal.trap('SIGINT', 'IGNORE')
   end
 
-  def before_teardown
-    Signal.trap('SIGINT', 'DEFAULT')
-  end
+  after { Signal.trap('SIGINT', 'DEFAULT') }
 
   let(:irb) { stub(context: ->{}) }
 
@@ -52,16 +50,13 @@ describe 'Irb Command' do
   end
 
   describe 'setting context to $byebug_state' do
-    before do
-      $byebug_state = nil
-      Byebug::Command.settings[:testing] = false
-    end
+    temporary_change_hash Byebug::Command.settings, :testing, false
 
     it 'must set $byebug_state if irb is in the debug mode' do
       byebug_state = nil
       irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
       enter 'irb -d'
-      debug_file('irb')
+      debug_file 'irb'
       byebug_state.must_be_kind_of Byebug::CommandProcessor::State
     end
 
@@ -69,7 +64,7 @@ describe 'Irb Command' do
       byebug_state = nil
       irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
       enter 'irb'
-      debug_file('irb')
+      debug_file 'irb'
       byebug_state.must_be_nil
     end
   end

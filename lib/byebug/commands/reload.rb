@@ -4,14 +4,14 @@ module Byebug
   class ReloadCommand < Command
     self.allow_in_control = true
 
-    register_setting_get(:reload_source_on_change) do
-      Byebug.class_variable_get(:@@reload_source_on_change)
+    register_setting_get(:autoreload) do
+      Byebug.class_variable_get(:@@autoreload)
     end
 
-    register_setting_set(:reload_source_on_change) do |value|
-      Byebug.class_variable_set(:@@reload_source_on_change, value)
+    register_setting_set(:autoreload) do |value|
+      Byebug.class_variable_set(:@@autoreload, value)
     end
-    Command.settings[:reload_source_on_change] = true
+    Command.settings[:autoreload] = true
 
     def regexp
       /^\s*r(?:eload)?$/
@@ -19,14 +19,11 @@ module Byebug
 
     def execute
       Byebug.source_reload
-      print "Source code is reloaded. Automatic reloading is #{source_reloading}.\n"
+      print "Source code is reloaded. Automatic reloading is "   \
+            "#{Command.settings[:autoreload] ? 'on' : 'off'}.\n"
     end
 
     private
-
-    def source_reloading
-      Command.settings[:reload_source_on_change] ? 'on' : 'off'
-    end
 
     class << self
       def names

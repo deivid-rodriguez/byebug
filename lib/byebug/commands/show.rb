@@ -28,7 +28,7 @@ module Byebug
         on_off = Command.settings[:autoeval]
         return "autoeval is #{show_onoff(on_off)}."
       when /^autoreload$/
-        on_off = Command.settings[:reload_source_on_change]
+        on_off = Command.settings[:autoreload]
         return "autoreload is #{show_onoff(on_off)}."
       when /^autoirb$/
         on_off = Command.settings[:autoirb] > 0
@@ -80,7 +80,7 @@ module Byebug
         on_off = self.class.settings[:force_stepping]
         return "force-stepping is #{show_onoff(on_off)}."
       when /^fullpath$/
-        on_off = Command.settings[:full_path]
+        on_off = Command.settings[:frame_fullpath]
         return "Displaying frame's full file names is #{show_onoff(on_off)}."
       when /^history(:?\s+(filename|save|size))?$/
         args = @match[1].split
@@ -101,9 +101,8 @@ module Byebug
         end
         s = []
         if show_filename
-          msg = (prefix ? "filename: " : "") +
-            "The filename in which to record the command history is " +
-                      "#{interface.histfile.inspect}"
+          msg = "#{prefix ? 'filename:' : ''} The command history file is " \
+                "#{interface.histfile.inspect}"
           s << msg
         end
         if show_save

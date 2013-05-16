@@ -3,8 +3,10 @@ require_relative 'test_helper'
 describe 'Edit Command' do
   include TestDsl
 
-  it 'must open an editor with current file and line' do
-    temporary_change_hash_value(ENV, 'EDITOR', 'editr') do
+  describe 'open configured editor' do
+    temporary_change_hash ENV, 'EDITOR', 'editr'
+
+    it 'must open current file in current line in configured editor' do
       Byebug::Edit.any_instance.expects(:system).
                                 with("editr +2 #{fullpath('edit')}")
       enter 'edit'
@@ -12,8 +14,10 @@ describe 'Edit Command' do
     end
   end
 
-  it 'must open a default editor with current file and line' do
-    temporary_change_hash_value(ENV, 'EDITOR', nil) do
+  describe 'open default editor' do
+    temporary_change_hash ENV, 'EDITOR', nil
+
+    it 'must call "ex" with current line and file if EDITOR env not set' do
       Byebug::Edit.any_instance.expects(:system).
                                 with("ex +2 #{fullpath('edit')}")
       enter 'edit'
@@ -21,11 +25,13 @@ describe 'Edit Command' do
     end
   end
 
-  it 'must open an editor with specified file and line' do
-    temporary_change_hash_value(ENV, 'EDITOR', 'editr') do
+  describe 'open configured editor specifying line and file' do
+    temporary_change_hash ENV, 'EDITOR', 'editr'
+
+    it 'must open specified line in specified file with configured editor' do
       Byebug::Edit.any_instance.expects(:system).
-                                with("editr +3 #{fullpath('edit2')}")
-      enter "edit #{fullpath('edit2')}:3"
+                                with("editr +3 #{fullpath('breakpoint1')}")
+      enter "edit #{fullpath('breakpoint1')}:3"
       debug_file 'edit'
     end
   end
@@ -44,15 +50,14 @@ describe 'Edit Command' do
       'Invalid file/line number specification: blabla', interface.error_queue
   end
 
-
   describe 'Post Mortem' do
+    temporary_change_hash ENV, 'EDITOR', 'editr'
+
     it 'must work in post-mortem mode' do
-      temporary_change_hash_value(ENV, 'EDITOR', 'editr') do
-        Byebug::Edit.any_instance.expects(:system).
-                                  with("editr +2 #{fullpath('edit')}")
-        enter 'cont', "edit #{fullpath('edit')}:2", 'cont'
-        debug_file 'post_mortem'
-      end
+      Byebug::Edit.any_instance.expects(:system).
+                                with("editr +2 #{fullpath('edit')}")
+      enter 'cont', "edit #{fullpath('edit')}:2", 'cont'
+      debug_file 'post_mortem'
     end
   end
 

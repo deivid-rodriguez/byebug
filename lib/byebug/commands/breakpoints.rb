@@ -59,7 +59,7 @@ module Byebug
 
       if line =~ /^\d+$/
         line = line.to_i
-        if LineCache.cache(brkpt_filename, Command.settings[:reload_source_on_change])
+        if LineCache.cache(brkpt_filename, Command.settings[:autoreload])
           last_line = LineCache.size(brkpt_filename)
           if line > last_line
             errmsg \

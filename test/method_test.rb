@@ -3,9 +3,7 @@ require_relative 'test_helper'
 describe 'Method Command' do
   include TestDsl
 
-  def after_setup
-    Byebug::Command.settings[:autolist] = 0
-  end
+  temporary_change_hash Byebug::Command.settings, :autolist, 0
 
   describe 'show instance method of a class' do
     it 'must show using full command name' do

@@ -38,48 +38,54 @@ describe 'Eval Command' do
   end
 
   describe 'stack trace on error' do
-    it 'must show a stack trace if showing trace on error is enabled' do
-      enter 'set notrace', 'eval 2 / 0'
-      debug_file 'eval'
-      check_output_includes 'ZeroDivisionError Exception: divided by 0'
-      check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/
+    describe 'when enabled' do
+      temporary_change_hash Byebug::Command.settings, :stack_trace_on_error, true
+
+      it 'must show a stack trace' do
+        enter 'eval 2 / 0'
+        debug_file 'eval'
+        check_output_includes /\S+:\d+:in `eval':divided by 0/
+        check_output_doesnt_include 'ZeroDivisionError Exception: divided by 0'
+      end
     end
 
-    it 'must show a stack trace if showing trace on error is enabled' do
-      enter 'set trace', 'eval 2 / 0'
-      debug_file 'eval'
-      check_output_includes /\S+:\d+:in `eval':divided by 0/
-      check_output_doesnt_include 'ZeroDivisionError Exception: divided by 0'
+    describe 'when disabled' do
+      temporary_change_hash Byebug::Command.settings, :stack_trace_on_error, false
+
+      it 'must only show exception' do
+        enter 'eval 2 / 0'
+        debug_file 'eval'
+        check_output_includes 'ZeroDivisionError Exception: divided by 0'
+        check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/
+      end
     end
   end
 
-  it 'must pretty print the expression result' do
-    enter 'pp {a: \'3\' * 40, b: \'4\' * 30}'
-    debug_file 'eval'
-    check_output_includes "{:a=>\"#{'3' * 40}\",\n :b=>\"#{'4' * 30}\"}"
+  describe 'pp' do
+    it 'must pretty print the expression result' do
+      enter 'pp {a: \'3\' * 40, b: \'4\' * 30}'
+      debug_file 'eval'
+      check_output_includes "{:a=>\"#{'3' * 40}\",\n :b=>\"#{'4' * 30}\"}"
+    end
   end
 
-  it 'must print expression and columnize the result' do
-    temporary_change_hash_value(Byebug::PutLCommand.settings, :width, 20) do
+  describe 'putl' do
+    temporary_change_hash Byebug::Command.settings, :width, 20
+
+    it 'must print expression and columnize the result' do
       enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_file 'eval'
       check_output_includes "1  3  5  8  6\n2  4  9  7"
     end
   end
 
-  it 'must print expression and sort and columnize the result' do
-    temporary_change_hash_value(Byebug::PSCommand.settings, :width, 20) do
+  describe 'ps' do
+    temporary_change_hash Byebug::Command.settings, :width, 20
+
+    it 'must print expression and sort and columnize the result' do
       enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_file 'eval'
       check_output_includes "1  3  5  7  9\n2  4  6  8"
-    end
-  end
-
-  it 'must set width by the "set" command' do
-    temporary_change_hash_value(Byebug::PSCommand.settings, :width, 20) do
-      enter 'set width 10', 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-      debug_file 'eval'
-      check_output_includes "1  4  7\n2  5  8\n3  6  9"
     end
   end
 

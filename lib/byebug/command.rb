@@ -151,7 +151,7 @@ module Byebug
     register_setting_var(:callstyle, :last)
     register_setting_var(:testing, false)
     register_setting_var(:force_stepping, false)
-    register_setting_var(:full_path, true)
+    register_setting_var(:frame_fullpath, true)
     register_setting_var(:listsize, 10)
     register_setting_var(:stack_trace_on_error, false)
     register_setting_var(:tracing_plus, false)
@@ -223,18 +223,18 @@ module Byebug
   # Use Byebug.settings[] and Byebug.settings[]= methods to query and set
   # byebug settings. These settings are available:
   #
-  #  :autolist                - automatically calls 'list' command on breakpoint
-  #  :autoeval                - evaluates input in the current binding if it's
-  #                             not recognized as a byebug command
-  #  :autoirb                 - automatically calls 'irb' command on breakpoint
-  #  :stack_trace_on_error    - shows full stack trace if eval command results
-  #                             in an exception
-  #  :frame_full_path         - displays full paths when showing frame stack
-  #  :frame_class_names       - displays method's class name when showing frame
-  #                             stack
-  #  :reload_source_on_change - makes 'list' command always display up-to-date
-  #                             source code
-  #  :force_stepping          - stepping command always move to the new line
+  #  :autolist             - automatically calls 'list' command on breakpoint
+  #  :autoeval             - evaluates input in the current binding if it's not
+  #                          recognized as a byebug command
+  #  :autoirb              - automatically calls 'irb' command on breakpoint
+  #  :stack_trace_on_error - shows full stack trace if eval command results in
+  #                          an exception
+  #  :frame_fullpath       - displays full paths when showing frame stack
+  #  :frame_class_names    - displays method's class name when showing frame
+  #                          stack
+  #  :autoreload           - makes 'list' command always display up-to-date
+  #                          source code
+  #  :force_stepping       - stepping command always move to the new line
   #
   def self.settings
     Command.settings

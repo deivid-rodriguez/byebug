@@ -18,9 +18,8 @@ module Byebug
     end
 
     def execute
-      Byebug.source_reload if Command.settings[:reload_source_on_change]
-      lines = LineCache::getlines(@state.file,
-                                  Command.settings[:reload_source_on_change])
+      Byebug.source_reload if Command.settings[:autoreload]
+      lines = LineCache::getlines @state.file, Command.settings[:autoreload]
       if !lines
         errmsg "No sourcefile available for #{@state.file}\n"
         return @state.previous_line

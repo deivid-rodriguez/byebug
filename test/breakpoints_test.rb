@@ -77,47 +77,57 @@ describe 'Breakpoints' do
     end
 
     describe 'show a message' do
-      it 'must show a message with full filename' do
-        enter 'break 14', 'cont'
-        debug_file('breakpoint1') { @id = Byebug.breakpoints.first.id }
-        check_output_includes \
-          "Created breakpoint #{@id} at #{fullpath('breakpoint1')}:14"
+      describe 'with full filename' do
+        temporary_change_hash Byebug::Command.settings, :basename, false
+
+        it 'must show a message with full filename' do
+          enter 'break 14', 'cont'
+          debug_file('breakpoint1') { @id = Byebug.breakpoints.first.id }
+          check_output_includes \
+            "Created breakpoint #{@id} at #{fullpath('breakpoint1')}:14"
+        end
       end
 
-      it 'must show a message with basename' do
-        enter 'set basename', 'break 14', 'cont'
-        debug_file('breakpoint1') { @id = Byebug.breakpoints.first.id }
-        check_output_includes "Created breakpoint #{@id} at breakpoint1.rb:14"
+      describe 'with basename' do
+        temporary_change_hash Byebug::Command.settings, :basename, true
+
+        it 'must show a message with basename' do
+          enter 'break 14', 'cont'
+          debug_file('breakpoint1') { @id = Byebug.breakpoints.first.id }
+          check_output_includes "Created breakpoint #{@id} at breakpoint1.rb:14"
+        end
       end
     end
   end
 
   describe 'reloading source on change' do
-    it 'must not reload source if autoreload is not set' do
-      id = nil
-      enter \
-        'set noautoreload',
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
+    describe 'autoreload not set' do
+      temporary_change_hash Byebug::Command.settings, :autoreload, false
+
+      it 'must not reload source' do
+        id = nil
+        enter \
+          ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
+          ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
           'cont'}
-      debug_file('breakpoint1') { id = Byebug.breakpoints.first.id }
-      check_output_includes \
-        "Created breakpoint #{id} at #{fullpath('breakpoint1')}:14"
+        debug_file('breakpoint1') { id = Byebug.breakpoints.first.id }
+        check_output_includes \
+          "Created breakpoint #{id} at #{fullpath('breakpoint1')}:14"
+      end
     end
 
-    it 'must reload source if autoreload is set' do
-      enter \
-        'set autoreload',
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        # Setting second breakpoint just to reload the source code after rolling
-        # the file changes back
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
-          'break 15'},
-        'cont'
-      debug_file 'breakpoint1'
-      check_output_includes \
-        "Line 14 is not a stopping point in file #{fullpath('breakpoint1')}",
-        interface.error_queue
+    describe 'autoreload set' do
+      it 'must reload source' do
+        enter \
+          ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
+          # 2nd breakpoint just to reload source code after rolling changes back
+          ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b');
+            'break 15'}, 'cont'
+        debug_file 'breakpoint1'
+        check_output_includes \
+          "Line 14 is not a stopping point in file #{fullpath('breakpoint1')}",
+          interface.error_queue
+      end
     end
   end
 

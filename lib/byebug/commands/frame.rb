@@ -89,7 +89,7 @@ module Byebug
       line = context.frame_line(pos)
       klass = context.frame_class(pos)
 
-      unless Command.settings[:full_path]
+      unless Command.settings[:frame_fullpath]
         path_components = file.split(/[\\\/]/)
         if path_components.size > 3
           path_components[0...-3] = '...'

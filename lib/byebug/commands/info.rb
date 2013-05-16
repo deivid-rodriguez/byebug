@@ -189,7 +189,7 @@ module Byebug
         unless LineCache::cached_script?(file)
           return print "File #{file} is not cached\n"
         end
-        LineCache::cache(file, Command.settings[:reload_source_on_change])
+        LineCache::cache(file, Command.settings[:autoreload])
       end
 
       print "File #{file}"

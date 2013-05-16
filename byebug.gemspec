@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require 'rubygems'
 require File.dirname(__FILE__) + "/lib/byebug/version"
 
@@ -28,8 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency "debugger-linecache", '~> 1.2.0'
   s.add_development_dependency 'rake', '~> 10.0.4'
   s.add_development_dependency 'rake-compiler', '~> 0.8.3'
-  s.add_development_dependency 'mocha', '~> 0.13.3'
-  s.add_development_dependency 'minitest', '~> 4.7.4'
+  s.add_development_dependency 'mocha', '~> 0.14.0'
+  s.add_development_dependency 'minitest', '~> 5.0.1'
 
   s.license = "BSD"
 end

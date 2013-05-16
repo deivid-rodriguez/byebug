@@ -5,8 +5,10 @@ describe 'Info Command' do
   include Columnize
 
    describe 'Args info' do
+     temporary_change_hash Byebug::Command.settings, :width, 15
+
      it 'must show info about all args' do
-       enter 'set width 15', 'break 3', 'cont', 'info args'
+       enter 'break 3', 'cont', 'info args'
        debug_file 'info'
        check_output_includes 'a = "aaaaaaa...', 'b = "b"'
      end
@@ -91,14 +93,14 @@ describe 'Info Command' do
   end
 
   describe 'File info' do
-    let(:file) { fullpath('info') }
+    let(:file)     { fullpath('info') }
     let(:filename) { "File #{file}" }
-    let(:lines) { "#{LineCache.size(file)} lines" }
-    let(:mtime) { LineCache.stat(file).mtime.to_s }
-    let(:sha1) { LineCache.sha1(file) }
+    let(:lines)    { "#{LineCache.size(file)} lines" }
+    let(:mtime)    { LineCache.stat(file).mtime.to_s }
+    let(:sha1)     { LineCache.sha1(file) }
     let(:breakpoint_line_numbers) {
       columnize(LineCache.trace_line_numbers(file).to_a.sort,
-                Byebug::InfoCommand.settings[:width]) }
+                Byebug::Command.settings[:width]) }
 
     it 'must show basic info about the file' do
       enter "info file #{file} basic"
@@ -175,14 +177,16 @@ describe 'Info Command' do
   end
 
   describe 'Locals info' do
+    temporary_change_hash Byebug::Command.settings, :width, 21
+
     it 'must show the current local variables' do
-      enter 'set width 12', 'break 21', 'cont', 'info locals'
+      enter 'break 21', 'cont', 'info locals'
       debug_file 'info'
-      check_output_includes 'a = "1111...', 'b = 2'
+      check_output_includes 'a = "1111111111111...', 'b = 2'
     end
 
     it 'must fail if local variable doesn\'t respond to #to_s or to #inspect' do
-      enter 'set width 21', 'break 26', 'cont', 'info locals'
+      enter 'break 26', 'cont', 'info locals'
       debug_file 'info'
       check_output_includes '*Error in evaluation*'
     end
@@ -227,11 +231,10 @@ describe 'Info Command' do
   end
 
   describe 'Stack info' do
-    let(:width) { "    #2  <main> at #{fullpath('info')}:36".size }
+    temporary_change_hash Byebug::Command.settings, :width, 72
 
     it 'must show stack info' do
-      enter 'set fullpath', ->{ "set width #{width}"}, 'break 20', 'cont',
-            'info stack'
+      enter 'set fullpath', 'break 20', 'cont', 'info stack'
       debug_file 'info'
       check_output_includes "--> #0  A.a at #{fullpath('info')}:20",
                             "    #1  A.b at #{fullpath('info')}:30",
@@ -248,7 +251,7 @@ describe 'Info Command' do
   end
 
   describe 'Variables info' do
-    before { Byebug::Command.settings[:width] = 30 }
+    temporary_change_hash Byebug::Command.settings, :width, 30
 
     it 'must show all variables' do
       enter 'break 21', 'cont', 'info variables'

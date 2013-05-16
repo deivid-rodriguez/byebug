@@ -20,7 +20,7 @@ module Byebug
        ['autolist', 4, true, 'Execute "list" command on every breakpoint'],
        ['autoirb', 4, true, 'Invoke IRB on every stop'],
        ['autoreload', 4, true, 'Reload source code when changed'],
-       ['basename', 1, true, 'Report file basename only showing file names'],
+       ['basename', 1, true, 'Set filename display style.'],
        ['callstyle', 2, false, 'Set how you want call parameters displayed'],
        ['testing', 2, false, 'Used when testing byebug'],
        ['forcestep', 2, true,
@@ -107,14 +107,14 @@ module Byebug
       when /^trace$/
         Command.settings[:stack_trace_on_error] = set_on
       when /^fullpath$/
-        Command.settings[:full_path] = set_on
+        Command.settings[:frame_fullpath] = set_on
       when /^autoreload$/
-        Command.settings[:reload_source_on_change] = set_on
+        Command.settings[:autoreload] = set_on
       when /^autoirb$/
         Command.settings[:autoirb] = (set_on ? 1 : 0)
       when /^testing$/
         Command.settings[:testing] = set_on
-        Command.settings[:basename] = true if set_on
+        Command.settings[:basename] = set_on
       when /^forcestep$/
         self.class.settings[:force_stepping] = set_on
       when /^history$/

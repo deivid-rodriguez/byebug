@@ -3,18 +3,14 @@ require_relative 'test_helper'
 describe 'Source Command' do
   include TestDsl
 
+  before { File.open(filename, 'w') do |f|
+             f.puts 'break 2'
+             f.puts 'break 3 if true'
+           end }
+
+  after { FileUtils.rm(filename) }
+
   let(:filename) { 'source_example.txt' }
-
-  def after_setup
-    File.open(filename, 'w') do |f|
-      f.puts 'break 2'
-      f.puts 'break 3 if true'
-    end
-  end
-
-  def before_teardown
-    FileUtils.rm(filename)
-  end
 
   it 'must run commands from file' do
     enter "source #{filename}"

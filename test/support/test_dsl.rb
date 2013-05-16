@@ -10,39 +10,12 @@ module TestDsl
 
   def self.included(base)
     base.class_eval do
+      extend ClassUtils
       before do
-        load_defaults
         Byebug.interface = TestInterface.new
         Byebug.handler.display.clear
       end
     end
-  end
-
-  ##
-  # Loads byebug default settings
-  #
-  def load_defaults
-    Byebug::Command.settings[:testing] = true
-    Byebug::Command.settings[:basename] = false
-    Byebug::Command.settings[:callstyle] = :last
-    Byebug::Command.settings[:force_stepping] = false
-    Byebug::Command.settings[:full_path] = true
-    Byebug::Command.settings[:listsize] = 10
-    Byebug::Command.settings[:stack_trace_on_error] = false
-    Byebug::Command.settings[:tracing_plus] = false
-    Byebug::Command.settings[:width] =
-      ENV['COLUMNS'].to_i > 10 ? ENV['COLUMNS'].to_i : 80
-    Byebug::Command.settings[:argv] = Byebug::ARGV
-    Byebug::Command.settings[:autolist] = 1
-    Byebug::Command.settings[:autoeval] = true
-    Byebug::Command.settings[:reload_source_on_change] = 1
-    force_unset_const Byebug, 'BYEBUG_SCRIPT'
-    force_set_const Byebug, 'DEFAULT_START_SETTINGS',
-                    init: true, post_mortem: false, tracing: nil
-    force_set_const Byebug, 'ARGV', ARGV.clone
-    force_set_const Byebug, 'PROG_SCRIPT', $0
-    force_set_const Byebug, 'INITIAL_DIR', Dir.pwd
-    Byebug.annotate = 0
   end
 
   ##
@@ -164,31 +137,47 @@ module TestDsl
     File.open(file, 'w') { |f| f.write(new_content) }
   end
 
-  def temporary_change_method_value(item, method, value)
-    old = item.send(method)
-    item.send("#{method}=", value)
-    yield
-  ensure
-    item.send("#{method}=", old)
-  end
 
-  def temporary_change_hash_value(item, key, value)
-    old_value = item[key]
-    item[key] = value
-    yield
-  ensure
-    item[key] = old_value
-  end
+  module ClassUtils
+    def temporary_change_hash hash, key, value
+      mod = Module.new do
+        extend Minitest::Spec::DSL
 
-  def temporary_set_const(klass, const, value)
-    old_value = klass.const_defined?(const) ? klass.const_get(const) : :__undefined__
-    force_set_const(klass, const, value)
-    yield
-  ensure
-    if old_value == :__undefined__
-      klass.send(:remove_const, const)
-    else
-     force_set_const(klass, const, old_value)
+        before do
+          @old_value = hash[key]
+          hash[key] = value
+        end
+
+        after do
+          hash[key] = @old_value
+        end
+      end
+
+      include mod
+    end
+
+    def temporary_change_const klass, const, value
+      mod = Module.new do
+        extend Minitest::Spec::DSL
+
+        before do
+          old_value = { const => klass.const_defined?(const) ?
+                                 klass.const_get(const) : :__undefined__ }
+          @old_consts ||= old_value
+          @old_consts.merge!(old_value)
+          klass.send :remove_const, const if klass.const_defined?(const)
+          klass.const_set const, value unless value == :__undefined__
+        end
+
+        after do
+          klass.send :remove_const, const if klass.const_defined?(const)
+          klass.const_set const, @old_consts[const] unless
+            @old_consts[const] == :__undefined__
+          @old_consts.delete(const)
+        end
+      end
+
+      include mod
     end
   end
 

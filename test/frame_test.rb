@@ -3,11 +3,6 @@ require_relative 'test_helper'
 describe 'Frame Command' do
   include TestDsl
 
-  def after_setup
-    Byebug::Command.settings[:width] =
-      "--> #0  A.d(e#String) at #{fullpath('frame')}:16".size
-  end
-
   it 'must go up' do
     enter 'break 16', 'cont', 'up'
     debug_file('frame') { state.line.must_equal 12 }
@@ -40,7 +35,8 @@ describe 'Frame Command' do
 
   it 'must print current stack frame when without arguments' do
     enter 'break A.d', 'cont', 'up', 'frame'
-    debug_file('frame') { check_output_includes "#0  A.d(e#String) at #{fullpath('frame')}:15" }
+    debug_file('frame') {
+      check_output_includes "#0  A.d(e#String) at #{fullpath('frame')}:15" }
   end
 
   it 'must set frame to the first one' do
@@ -70,64 +66,77 @@ describe 'Frame Command' do
       interface.error_queue
   end
 
-  describe 'full path settings' do
+  describe 'fullpath' do
     def short_path(fullpath)
       separator = File::ALT_SEPARATOR || File::SEPARATOR
       "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
     end
 
-    before do
-      Byebug::Command.settings[:callstyle] = :last
+    describe 'when set' do
+      temporary_change_hash Byebug::Command.settings, :frame_fullpath, true
+
+      it 'must display current backtrace with fullpaths' do
+        enter 'break 16', 'cont', 'where'
+        debug_file 'frame'
+        check_output_includes \
+          "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
+          "    #1  A.c at #{fullpath('frame')}:12"
+      end
     end
 
-    it 'must display current backtrace with full path = true' do
-      enter 'set fullpath', 'break 16', 'cont', 'where'
-      debug_file 'frame'
-      check_output_includes "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
-                            "    #1  A.c at #{fullpath('frame')}:12"
-    end
+    describe 'when unset' do
+      temporary_change_hash Byebug::Command.settings, :frame_fullpath, false
 
-    it 'must display current backtrace with full path = false' do
-      enter 'set nofullpath', 'break 16', 'cont', 'where'
-      debug_file 'frame'
-      check_output_includes \
-        "--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16",
-        "    #1  A.c at #{short_path(fullpath('frame'))}:12"
+      it 'must display current backtrace with shortpaths' do
+        enter 'set nofullpath', 'break 16', 'cont', 'where'
+        debug_file 'frame'
+        check_output_includes \
+          "--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16",
+          "    #1  A.c at #{short_path(fullpath('frame'))}:12"
+      end
     end
   end
 
-  describe 'callstyles' do
-    it 'displays current backtrace with callstyle "last"' do
-      enter 'set callstyle last', 'break 16', 'cont', 'where'
-      debug_file 'frame'
-      check_output_includes "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
-                            "    #1  A.c at #{fullpath('frame')}:12"          ,
-                            "    #2  A.b at #{fullpath('frame')}:8"           ,
-                            "    #3  A.a at #{fullpath('frame')}:5"
+  describe 'callstyle' do
+    describe 'last' do
+      temporary_change_hash Byebug::Command.settings, :callstyle, :last
+
+      it 'displays current backtrace with callstyle "last"' do
+        enter 'break 16', 'cont', 'where'
+        debug_file 'frame'
+        check_output_includes \
+          "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
+          "    #1  A.c at #{fullpath('frame')}:12"          ,
+          "    #2  A.b at #{fullpath('frame')}:8"           ,
+          "    #3  A.a at #{fullpath('frame')}:5"
+      end
     end
 
-    it 'displays current backtrace with callstyle "short"' do
-      enter 'set callstyle short', 'break 16', 'cont', 'where'
-      debug_file 'frame'
-      check_output_includes "--> #0  d(e) at #{fullpath('frame')}:16",
-                            "    #1  c at #{fullpath('frame')}:12"   ,
-                            "    #2  b at #{fullpath('frame')}:8"    ,
-                            "    #3  a at #{fullpath('frame')}:5"
+    describe 'short' do
+      temporary_change_hash Byebug::Command.settings, :callstyle, :short
+
+      it 'displays current backtrace with callstyle "short"' do
+          enter 'break 16', 'cont', 'where'
+          debug_file 'frame'
+          check_output_includes "--> #0  d(e) at #{fullpath('frame')}:16",
+                                "    #1  c at #{fullpath('frame')}:12"   ,
+                                "    #2  b at #{fullpath('frame')}:8"    ,
+                                "    #3  a at #{fullpath('frame')}:5"
+      end
     end
 
-    it 'displays current backtrace with callstyle "tracked"' do
-      skip('XXX: Style supported but not working....')
-      enter 'set callstyle tracked'
-      debug_file 'frame'
-      check_output_includes \
-        'Invalid call style tracked. Should be one of: "last".'
-      Byebug::Command.settings[:callstyle].must_equal :last
+    describe 'tracked' do
+      temporary_change_hash Byebug::Command.settings, :callstyle, :tracked
+
+      it 'displays current backtrace with callstyle "tracked"' do
+        skip 'XXX: Style supported but not working....'
+        debug_file 'frame'
+      end
     end
   end
 
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
-      #skip 'TODO: This test fails with \'Segmentation fault\'.'
       enter 'cont', 'frame'
       debug_file('post_mortem') { state.line.must_equal 8 }
     end

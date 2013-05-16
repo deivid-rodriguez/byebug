@@ -2984,11 +2984,11 @@ Boolean. True if currently testing byebug.
 @item :force_stepping
 Boolean. True if stepping should go to a line different from the last
 step. @xref{Forcestep}.
-@item :full_path
+@item :frame_fullpath
 Boolean. @xref{Fullpath}.
 @item :listsize
 Fixnum. Number of lines to show in a @code{list} command. @xref{Listsize}.
-@item :reload_source_on_change
+@item :autoreload
 Boolean. True if we should reread the source every time it changes. @xref{Autoreload}.
 @item :stack_trace_on_error
 Boolean. True if we should produce a stack trace on error. @xref{Trace}.

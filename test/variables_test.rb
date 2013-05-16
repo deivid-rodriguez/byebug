@@ -3,9 +3,7 @@ require_relative 'test_helper'
 describe 'Variables Command' do
   include TestDsl
 
-  def after_setup
-    Byebug::Command.settings[:width] = 40
-  end
+  temporary_change_hash Byebug::Command.settings, :width, 40
 
   describe 'class variables' do
     it 'must show variables' do
@@ -80,14 +78,18 @@ describe 'Variables Command' do
       check_output_includes '@inst_a = 1', '@inst_b = 2'
     end
 
-    it 'must cut long variable values according to :width setting' do
-      enter 'set width 20', 'break 25', 'cont', 'var instance v'
-      debug_file 'variables'
-      check_output_includes '@inst_c = "1111111111111111...'
+    describe 'when width is too small' do
+      temporary_change_hash Byebug::Command.settings, :width, 20
+
+      it 'must cut long variable values according it' do
+        enter 'break 25', 'cont', 'var instance v'
+        debug_file 'variables'
+        check_output_includes '@inst_c = "1111111111111111...'
+      end
     end
 
     it 'must show error if value doesn\'t have #to_s/#inspect methods' do
-      enter 'set width 21', 'break 25', 'cont', 'var instance v'
+      enter 'break 25', 'cont', 'var instance v'
       debug_file 'variables'
       check_output_includes '@inst_d = *Error in evaluation*'
     end
