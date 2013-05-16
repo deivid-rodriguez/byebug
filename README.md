@@ -7,6 +7,20 @@ TracePoint API, so it doesn't depend on internal core sources. It's developed as
 a C extension, so it's fast. And it has a full test suite so it's (I hope)
 reliable.
 
+It allows you to see what is going on _inside_ a Ruby program while it executes
+and can do four main kinds of things (plus other things in support of these) to
+help you catch bugs in the act:
+
+* Start your script, specifying anything that might affect its behavior.
+* Make your script stop on specified conditions.
+* Examine what has happened, when your script has stopped.
+* Change things in your script, so you can experiment with correcting the
+effects of one bug and go on to learn about another.
+
+Although you can use `byebug` to invoke your Ruby programs via a debugger at the
+outset, there are other ways to use and enter the debugger.
+
+
 ## Install
 
 Just drop
@@ -26,24 +40,6 @@ stop there. If you are debugging rails, start the server in normal mode with
 a debugging terminal.
 
 ## Getting Started
-
-### Summary
-
-The purpose of a debugger such as *byebug* is to allow you to see what is going
-on _inside_ a Ruby program while it executes. `byebug` can do four main kinds of
-things (plus other things in support of these) to help you catch bugs in the
-act:
-
-* Start your script, specifying anything that might affect its behavior.
-* Make your script stop on specified conditions.
-* Examine what has happened, when your script has stopped.
-* Change things in your script, so you can experiment with correcting the
-effects of one bug and go on to learn about another.
-
-Although you can use `byebug` to invoke your Ruby programs via a debugger at the
-outset, there are other ways to use and enter the debugger.
-
-### First Sample Session
 
 A handful of commands are enough to get started using `byebug`. The following
 session illustrates these commands. Below is Ruby code to compute a triangle
@@ -79,7 +75,7 @@ commands available change depending on the program's state.
 Byebug automatically lists 10 lines of code centered around the current line
 everytime it is stopped. The current line is marked with `=>`, so the range
 byebug would like to show is [-1..8]. However since there aren't 5 lines before
-the current line, the range is moved ``up'' so we can actually display 10 lines
+the current line, the range is moved _up_ so we can actually display 10 lines
 of code.
 
 Now let us step through the program.
@@ -139,35 +135,38 @@ is 0 as expected. If every time we stop we want to see the value of `tri` to see
 how things are going, there is a better way by setting a display expression:
 
 ```
-(byebug:1) display tri
+(byebug) display tri
 1: tri = 0
 ```
 
 Now let us run the program until we return from the function. We'll want to see
-which lines get run.
+which lines get run, so we turn on _line tracing_. If we don't want whole paths
+to be displayed when tracing, we can turn on _basename_.
 
 ```
 (byebug) display i
 2: i =
 (byebug) set linetrace on
 line tracing is on.
+(byebug) set basename on
+basename is on.
 (byebug) finish
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
+Tracing: triangle.rb:7 tri += i
 1: tri = 0
 2: i = 0
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
+Tracing: triangle.rb:7 tri += i
 1: tri = 0
 2: i = 1
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
+Tracing: triangle.rb:7 tri += i
 1: tri = 1
 2: i = 2
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:7 tri += i
+Tracing: triangle.rb:7 tri += i
 1: tri = 3
 2: i = 3
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:9 tri
+Tracing: triangle.rb:9 tri
 1: tri = 6
 2: i =
-Tracing: /home/davidr/Proyectos/byebug/old_doc/triangle.rb:13 puts t
+Tracing: triangle.rb:13 puts t
 1: tri =
 2: i =
 [4, 13] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
