@@ -107,6 +107,9 @@ module Byebug
 
         def readline(prompt, hist)
           Readline::readline(prompt, hist)
+        rescue Interrupt => e
+          print "^C\n"
+          retry
         end
       rescue LoadError
         def readline(prompt, hist)

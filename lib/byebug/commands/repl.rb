@@ -1,7 +1,6 @@
 require 'irb'
 
 module IRB
-
   module ExtendCommand
     class Continue
       def self.execute(conf)
@@ -33,11 +32,14 @@ module IRB
     end
 
     workspace = WorkSpace.new(binding)
-
     irb = Irb.new(workspace)
 
     @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
     @CONF[:MAIN_CONTEXT] = irb.context
+
+    trap("SIGINT") do
+      irb.signal_handle
+    end
 
     catch(:IRB_EXIT) do
       irb.eval_input
@@ -69,13 +71,9 @@ module Byebug
         throw :debug_error
       end
 
-      save_trap = trap("SIGINT") do
-        throw :IRB_EXIT, :cont if $byebug_in_irb
-      end
-
       add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
       $byebug_state = @state if add_debugging
-      $byebug_in_irb = true
+
       cont = IRB.start_session(get_binding)
       case cont
       when :cont
@@ -94,12 +92,9 @@ module Byebug
         CommandProcessor.print_location_and_text(file, line)
         @state.previous_line = nil
       end
-
-    ensure
-      $byebug_in_irb = nil
       $byebug_state = nil if add_debugging
-      trap("SIGINT", save_trap) if save_trap
     end
+
 
     class << self
       def names
@@ -140,7 +135,12 @@ module Byebug
         throw :debug_error
       end
 
+      add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
+      $byebug_state = @state if add_debugging
+
       get_binding.pry
+
+      $byebug_state = nil if add_debugging
     end
 
     class << self

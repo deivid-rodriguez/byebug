@@ -20,10 +20,6 @@ module Byebug
       end
     end
 
-    def interrupt
-      self.stop_next = 1
-    end
-
     def handler
       Byebug.handler or raise 'No interface loaded'
     end

@@ -1144,11 +1144,8 @@ command, @pxref{Source}.
 @node Quitting byebug
 @section Quitting byebug
 
-@cindex interrupt
-An interrupt (often @kbd{C-c}) does not exit from @code{byebug}, but rather
-terminates the action of any @code{byebug} command that is in progress and
-returns to @code{byebug} command level.  Inside a debugger command interpreter,
-use @code{quit} command (@pxref{Control, ,Quitting byebug}).
+Inside a byebug interpreter, use @code{quit} command (
+@pxref{Control, ,Quitting byebug}).
 
 Another way to terminate byebug is to use the @code{kill} command. This does the
 more forceful @code{kill -9}. It can be used in cases where @code{quit} doesn't
@@ -1229,7 +1226,7 @@ require "byebug/byebug"
 * Command Syntax::      How to give commands to byebug
 * Command Output::      How byebug presents its output
 * Help::                How to ask for help (help)
-* Control::             Controlling byebug (quit, restart, interrupt)
+* Control::             Controlling byebug (quit, restart)
 * DisplayCommands::     Executing expressions on stop (display, undisplay)
 * PrintCommands::       Evaluating and Printing Expressions (p, pp, ps, pp, irb)
 * PrintVars::           Printing Variables (var)
@@ -1418,7 +1415,7 @@ With an integer argument, list info on that breakpoint.
 @end example
 
 @node Control
-@section Controlling byebug (@samp{quit}, @samp{restart}, @samp{interrupt}, @samp{source})
+@section Controlling byebug (@samp{quit}, @samp{restart}, @samp{source})
 
 @menu
 * Quit::      Quitting byebug (quit)

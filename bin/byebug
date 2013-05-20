@@ -222,9 +222,6 @@ prog_script = ARGV.shift
 prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 Byebug::PROG_SCRIPT = File.expand_path prog_script
 
-# install interruption handler
-trap('INT') { Byebug.interrupt_last }
-
 # Set up trace hook for byebug
 Byebug.start
 
