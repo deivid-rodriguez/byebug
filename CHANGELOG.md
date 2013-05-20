@@ -1,8 +1,15 @@
+## 1.2.0
+
+* Added 'pry' command.
+* Ctrl+C during command line editing is handled and works like pry/irb
+
+
 ## 1.1.1
 
 * Better help system
 * Code cleanup
 * First version compatible with pry-byebug
+
 
 ## 1.1.0
 
