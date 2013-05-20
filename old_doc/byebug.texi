@@ -1445,7 +1445,7 @@ if you really want to quit. If you don't want any questions asked, enter
 @end table
 
 @node Restart
-@subsection Restartng script execution (@samp{restart})
+@subsection Restarting script execution (@samp{restart})
 
 @table @code
 @kindex restart @r{[}@var{program args}@r{]}

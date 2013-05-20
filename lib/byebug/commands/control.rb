@@ -29,7 +29,7 @@ module Byebug
           cmd = Byebug::PROG_SCRIPT
         end
       else
-        cmd = Byebug::BYEBUG_SCRIPT
+        cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT}"
       end
 
       begin

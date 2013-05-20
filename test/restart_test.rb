@@ -13,7 +13,7 @@ describe 'Restart Command' do
 
     it 'must be restarted with arguments' do
       Byebug::RestartCommand.any_instance.expects(:exec).
-        with("#{Byebug::BYEBUG_SCRIPT} 1 2 3")
+        with("#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3")
       enter 'restart 1 2 3'
       debug_file 'restart'
     end
@@ -22,9 +22,8 @@ describe 'Restart Command' do
       temporary_change_hash Byebug::Command.settings, :argv, ['argv1', 'argv 2']
 
       it 'must be correctly escaped' do
-      # Byebug::Command.settings[:argv] = ['argv1', 'argv 2']
         Byebug::RestartCommand.any_instance.expects(:exec).with \
-          "#{Byebug::BYEBUG_SCRIPT} argv1 argv\\ 2"
+          "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} argv1 argv\\ 2"
         enter 'restart'
         debug_file 'restart'
       end
@@ -34,9 +33,8 @@ describe 'Restart Command' do
       temporary_change_hash Byebug::Command.settings, :argv, []
 
       it 'must specify arguments by "set" command' do
-      # Byebug::Command.settings[:argv] = []
         Byebug::RestartCommand.any_instance.expects(:exec).
-          with("#{Byebug::BYEBUG_SCRIPT} 1 2 3")
+          with("#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3")
         enter 'set args 1 2 3', 'restart'
         debug_file 'restart'
       end
@@ -56,7 +54,8 @@ describe 'Restart Command' do
           must_restart
           debug_file 'restart'
           check_output_includes \
-            "Re exec'ing:\n\t#{Byebug::BYEBUG_SCRIPT} argv"
+            "Re exec'ing:\n"    \
+            "\t#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} argv"
         end
       end
     end

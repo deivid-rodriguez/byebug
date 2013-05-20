@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
-# Compute the n'th triangle number - the hard way
-# triangle(n) == (n * (n+1)) / 2
+# Compute the n'th triangle number, the hard way: triangle(n) == (n*(n+1))/2
 def triangle(n)
   tri = 0
   0.upto(n) do |i|

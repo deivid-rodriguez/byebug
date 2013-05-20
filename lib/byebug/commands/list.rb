@@ -106,12 +106,13 @@ module Byebug
       # otherwise we return the previous line @state.previous_line.
       #
       def display_list(b, e, lines, current)
+        width = e.to_s.size
         b.upto(e) do |n|
           if n > 0 && lines[n-1]
             if n == current
-              print "=> %-4d %s\n", n, lines[n-1].chomp
+              print "=> %#{width}d: %s\n", n, lines[n-1].chomp
             else
-              print "   %-4d %s\n", n, lines[n-1].chomp
+              print "   %#{width}d: %s\n", n, lines[n-1].chomp
             end
           end
         end

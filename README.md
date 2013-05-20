@@ -11,14 +11,12 @@ It allows you to see what is going on _inside_ a Ruby program while it executes
 and can do four main kinds of things (plus other things in support of these) to
 help you catch bugs in the act:
 
-* Start your script, specifying anything that might affect its behavior.
-* Make your script stop on specified conditions.
-* Examine what has happened, when your script has stopped.
-* Change things in your script, so you can experiment with correcting the
+* Start your program or attach to it, specifying anything that might affect its
+behavior.
+* Make your program stop on specified conditions.
+* Examine what has happened when your program has stopped.
+* Change things in your program, so you can experiment with correcting the
 effects of one bug and go on to learn about another.
-
-Although you can use `byebug` to invoke your Ruby programs via a debugger at the
-outset, there are other ways to use and enter the debugger.
 
 
 ## Install
@@ -48,33 +46,33 @@ number of a given length (there are shorter ways to do it, of course).
 ```
 $ byebug triangle.rb
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   1    #!/usr/bin/env ruby
-   2    # Compute the n\'th triangle number - the hard way
-   3    # triangle(n) == (n * (n+1)) / 2
-=> 4    def triangle(n)
-   5      tri = 0
-   6      0.upto(n) do |i|
-   7        tri += i
-   8      end
-   9      tri
-   10   end
+   1:  # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+=> 2:  def triangle(n)
+   3:    tri = 0
+   4:    0.upto(n) do |i|
+   5:      tri += i
+   6:    end
+   7:    tri
+   8:  end
+   9:
+   10: t = triangle(3)
 (byebug)
 ```
 
-We are currently stopped before the first executable line of the program: line 4
+We are currently stopped before the first executable line of the program: line 2
 of `triangle.rb`. If you are used to less dynamic languages and have used
 debuggers for more statically compiled languages like C, C++, or Java, it may
-seem odd to be stopped before a function definition but in Ruby line 4 is
+seem odd to be stopped before a function definition but in Ruby line 2 is
 executed.
 
-byebug's prompt is `(byebug)`. If the program has died and you are in
+Byebug's prompt is `(byebug)`. If the program has died and you are in
 post-mortem debugging, `(byebug:post-mortem)` is used instead. If the program
 has terminated normally, the string this position will be `(byebug:ctrl)`. The
 commands available change depending on the program's state.
 
 Byebug automatically lists 10 lines of code centered around the current line
 everytime it is stopped. The current line is marked with `=>`, so the range
-byebug would like to show is [-1..8]. However since there aren't 5 lines before
+byebug would like to show is [-3..6]. However since there aren't 5 lines before
 the current line, the range is moved _up_ so we can actually display 10 lines
 of code.
 
@@ -82,43 +80,43 @@ Now let us step through the program.
 
 ```
 (byebug) step
-[4, 13] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   4    def triangle(n)
-   5      tri = 0
-   6      0.upto(n) do |i|
-   7        tri += i
-   8      end
-   9      tri
-   10   end
-   11
-=> 12   t = triangle(3)
-   13   puts t
+[2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   2:  def triangle(n)
+   3:    tri = 0
+   4:    0.upto(n) do |i|
+   5:      tri += i
+   6:    end
+   7:    tri
+   8:  end
+   9:
+=> 10: t = triangle(3)
+   11: puts t
 (byebug) <RET> # hit enter
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   1    #!/usr/bin/env ruby
-   2    # Compute the n'th triangle number - the hard way
-   3    # triangle(n) == (n * (n+1)) / 2
-   4    def triangle(n)
-=> 5      tri = 0
-   6      0.upto(n) do |i|
-   7        tri += i
-   8      end
-   9      tri
-   10   end
+   1:  # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+   2:  def triangle(n)
+=> 3:    tri = 0
+   4:    0.upto(n) do |i|
+   5:      tri += i
+   6:    end
+   7:    tri
+   8:  end
+   9:
+   10: t = triangle(3)
 (byebug) p tri
 nil
 (byebug) step
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   1    #!/usr/bin/env ruby
-   2    # Compute the n'th triangle number - the hard way
-   3    # triangle(n) == (n * (n+1)) / 2
-   4    def triangle(n)
-   5      tri = 0
-=> 6      0.upto(n) do |i|
-   7        tri += i
-   8      end
-   9      tri
-   10   end
+   1:  # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+   2:  def triangle(n)
+   3:    tri = 0
+=> 4:    0.upto(n) do |i|
+   5:      tri += i
+   6:    end
+   7:    tri
+   8:  end
+   9:
+   10: t = triangle(3)
 (byebug) p tri
 0
 ```
@@ -129,7 +127,7 @@ you entered was `step` and it runs it again.
 
 One way to print the values of variables is `p` (there are other ways). When we
 look at the value of `tri` the first time, we see it is `nil`. Again we are
-stopped _before_ the assignment on line 5, and this variable hasn't been set
+stopped _before_ the assignment on line 3, and this variable hasn't been set
 previously. However after issuing another `step` command we see that the value
 is 0 as expected. If every time we stop we want to see the value of `tri` to see
 how things are going, there is a better way by setting a display expression:
@@ -151,35 +149,35 @@ line tracing is on.
 (byebug) set basename on
 basename is on.
 (byebug) finish
-Tracing: triangle.rb:7 tri += i
+Tracing: triangle.rb:5 tri += i
 1: tri = 0
 2: i = 0
-Tracing: triangle.rb:7 tri += i
+Tracing: triangle.rb:5 tri += i
 1: tri = 0
 2: i = 1
-Tracing: triangle.rb:7 tri += i
+Tracing: triangle.rb:5 tri += i
 1: tri = 1
 2: i = 2
-Tracing: triangle.rb:7 tri += i
+Tracing: triangle.rb:5 tri += i
 1: tri = 3
 2: i = 3
-Tracing: triangle.rb:9 tri
+Tracing: triangle.rb:7 tri
 1: tri = 6
 2: i =
-Tracing: triangle.rb:13 puts t
+Tracing: triangle.rb:11 puts t
 1: tri =
 2: i =
-[4, 13] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   4    def triangle(n)
-   5      tri = 0
-   6      0.upto(n) do |i|
-   7        tri += i
-   8      end
-   9      tri
-   10   end
-   11
-   12   t = triangle(3)
-=> 13   puts t
+[2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+   2:  def triangle(n)
+   3:    tri = 0
+   4:    0.upto(n) do |i|
+   5:      tri += i
+   6:    end
+   7:    tri
+   8:  end
+   9:
+   10: t = triangle(3)
+=> 11: puts t
 1: tri =
 2: i =
 (byebug) quit
@@ -191,7 +189,8 @@ can issue a `quit` command (`q` and `exit` are just as good). If you want to
 quit without being prompted, suffix the command with an exclamation mark, e.g.,
 `q!`.
 
-### The rest of the tutorial is available [here]()
+### The rest of the tutorial is available
+[here](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md)
 
 ## Configuration
 

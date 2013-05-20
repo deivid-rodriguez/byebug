@@ -1,5 +1,4 @@
-#!/usr/bin/ruby
-
+# Solves the classic Towers of Hanoi puzzle.
 def hanoi(n,a,b,c)
   if n-1 > 0
     hanoi(n-1, a, c, b)
@@ -21,7 +20,7 @@ n=3
 if i_args > 0
   begin
     n = ARGV[0].to_i
-  rescue ValueError, msg:
+  rescue ValueError, :msg
       print "** Expecting an integer, got: %s" % ARGV[0].to_s
     exit 2
   end
