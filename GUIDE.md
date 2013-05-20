@@ -223,7 +223,7 @@ NameError Exception: undefined local variable or method `i_args' for main:Object
 
 Notice in the above to get the value of variable `n` we had to use a print
 command like `p n`. If we entered just `n`, that would be taken to mean byebug
-command ``next''. In the current scope, variable `i_args` is not defined.
+command `next`. In the current scope, variable `i_args` is not defined.
 However I can change to the top-most frame by using the `frame` command. Just as
 with arrays, -1 means the last one. Alternatively using frame number 3 would
 have been the same thing; so would issuing `up 3`. Note that in the outside

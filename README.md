@@ -189,8 +189,7 @@ can issue a `quit` command (`q` and `exit` are just as good). If you want to
 quit without being prompted, suffix the command with an exclamation mark, e.g.,
 `q!`.
 
-### The rest of the tutorial is available
-[here](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md)
+### The rest of the tutorial is available [here](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md)
 
 ## Configuration
 
