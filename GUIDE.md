@@ -190,7 +190,7 @@ resumes execution.  Notice the difference between `display a` and
 after it is evaluated. To remove a display expression `undisplay` is used. If we
 give a display number, just that display expression is removed.
 
-We also used a new command `where`(see [Backtrace]()) to show the call stack. In
+We also used a new command `where`(see [backtrace]()) to show the call stack. In
 the above situation, starting from the bottom line we see we called the `hanoi`
 method from line 34 of the file `hanoi.rb` and the `hanoi` method called itself
 two more times at line 4.
@@ -200,9 +200,9 @@ being called, the names of the parameters, the types those parameters
 _currently_ have and the file-line position. Remember it's possible that when
 the program was called the parameters had different types, since the types of
 variables can change dynamically. You can alter the style of what to show in the
-trace (see [Callstyle]()).
+trace (see [callstyle]()).
 
-Now let's more around the callstack.
+Now let's move around the callstack.
 
 ```
 (byebug) undisplay

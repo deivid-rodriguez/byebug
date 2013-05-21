@@ -167,7 +167,8 @@ module Byebug
     def execute
       print_backtrace
       if truncated_callstack?(@state.context, Byebug.start_sentinal)
-         print "Warning: saved frames may be incomplete; compare with caller(0)"
+         print \
+           "Warning: saved frames may be incomplete; compare with caller(0)\n"
       end
     end
 

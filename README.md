@@ -46,15 +46,15 @@ number of a given length (there are shorter ways to do it, of course).
 ```
 $ byebug triangle.rb
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   1:  # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
-=> 2:  def triangle(n)
-   3:    tri = 0
-   4:    0.upto(n) do |i|
-   5:      tri += i
-   6:    end
-   7:    tri
-   8:  end
-   9:
+    1: # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+=>  2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
    10: t = triangle(3)
 (byebug)
 ```
@@ -81,27 +81,27 @@ Now let us step through the program.
 ```
 (byebug) step
 [2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   2:  def triangle(n)
-   3:    tri = 0
-   4:    0.upto(n) do |i|
-   5:      tri += i
-   6:    end
-   7:    tri
-   8:  end
-   9:
+    2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
 => 10: t = triangle(3)
    11: puts t
 (byebug) <RET> # hit enter
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   1:  # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
-   2:  def triangle(n)
-=> 3:    tri = 0
-   4:    0.upto(n) do |i|
-   5:      tri += i
-   6:    end
-   7:    tri
-   8:  end
-   9:
+    1: # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+    2: def triangle(n)
+=>  3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
    10: t = triangle(3)
 (byebug) p tri
 nil
@@ -168,14 +168,14 @@ Tracing: triangle.rb:11 puts t
 1: tri =
 2: i =
 [2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
-   2:  def triangle(n)
-   3:    tri = 0
-   4:    0.upto(n) do |i|
-   5:      tri += i
-   6:    end
-   7:    tri
-   8:  end
-   9:
+    2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
    10: t = triangle(3)
 => 11: puts t
 1: tri =
