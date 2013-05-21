@@ -155,8 +155,8 @@ module Byebug
     register_setting_var(:listsize, 10)
     register_setting_var(:stack_trace_on_error, false)
     register_setting_var(:tracing_plus, false)
-    register_setting_var(:width,
-                         ENV['COLUMNS'].to_i > 10 ? ENV['COLUMNS'].to_i : 80)
+    cols = `stty size`.scan(/\d+/)[1].to_i
+    register_setting_var(:width, cols > 10 ? cols : 80)
     Byebug::ARGV = ARGV.clone unless defined? Byebug::ARGV
     register_setting_var(:argv, Byebug::ARGV)
 

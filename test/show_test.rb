@@ -143,10 +143,12 @@ describe 'Show Command' do
   end
 
   describe 'width' do
-    it 'must show width' do
+    let(:cols) { `stty size`.scan(/\d+/)[1].to_i }
+
+    it 'must show default width' do
       enter 'show width'
       debug_file 'show'
-      check_output_includes 'width is 80.'
+      check_output_includes "width is #{cols}."
     end
   end
 

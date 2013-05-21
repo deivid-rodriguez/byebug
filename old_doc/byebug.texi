@@ -2670,8 +2670,8 @@ ability to change that state inside byebug.
 @table @code
 @kindex set width @var{column-width}
 @item set width @var{column-width}
-Set number of characters per line of byebug output. We also change OS
-environment variable @code{COLUMNS}.
+Set number of characters per line of byebug output. By default it is the number
+of columns in the current terminal.
 @kindex show width
 @item show width
 Shows the current width setting.

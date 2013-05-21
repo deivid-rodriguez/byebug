@@ -150,7 +150,6 @@ module Byebug
         width = get_int(args[0], "Set width", 10, nil, 80)
         return unless width
         Command.settings[:width] = width
-        ENV['COLUMNS'] = width.to_s
       else
         return print "Unknown setting #{@match[1]}.\n"
       end

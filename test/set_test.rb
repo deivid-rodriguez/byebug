@@ -170,15 +170,11 @@ describe 'Set Command' do
 
   describe 'width' do
     temporary_change_hash Byebug::Command.settings, :width, 20
-    let(:old_columns) { ENV['COLUMNS'] }
 
-    it 'must set ENV[\'COLUMNS\'] by the "set width" command' do
-      begin
-        enter 'set width 10'
-        debug_file('set') { ENV['COLUMNS'].must_equal '10' }
-      ensure
-        ENV['COLUMNS'] = old_columns
-      end
+    it 'must get correctly set' do
+      enter 'set width 10'
+      debug_file('set')
+      Byebug::Command.settings[:width].must_equal 10
     end
   end
 
