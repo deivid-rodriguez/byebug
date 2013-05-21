@@ -18,4 +18,8 @@ class SteppingExample
 end
 
 ex = SteppingExample.new.a
+2.times do
+  ex += 1
+end
+
 ex
