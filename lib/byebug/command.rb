@@ -40,8 +40,10 @@ module Byebug
           "--\n"                                   \
           "List of \"#{cmd_name}\" subcommands:\n" \
           "--\n"
+      width = subcmds.map(&:name).max_by(&:size).size
       for subcmd in subcmds do
-        s += "#{cmd_name} #{subcmd.name} -- #{subcmd.short_help}\n"
+        s += sprintf \
+          "%s %-#{width}s -- %s\n", cmd_name, subcmd.name, subcmd.short_help
       end
       return s
     end

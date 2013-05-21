@@ -11,16 +11,16 @@ module Byebug
     Subcommands =
       [
        ['annotate', 2, false, 'Set annotation level',
-        '0 == normal. '                                                    \
+        '0 == normal; '                                                    \
         '2 == output annotated suitably for use by programs that control ' \
-        'byebug.'],
+        'byebug'],
        ['args', 2, false,
         'Set argument list to give program being debugged when it is started'],
        ['autoeval', 4, true, 'Evaluate every unrecognized command'],
        ['autolist', 4, true, 'Execute "list" command on every breakpoint'],
        ['autoirb', 4, true, 'Invoke IRB on every stop'],
        ['autoreload', 4, true, 'Reload source code when changed'],
-       ['basename', 1, true, 'Set filename display style.'],
+       ['basename', 1, true, 'Set filename display style'],
        ['callstyle', 2, false, 'Set how you want call parameters displayed'],
        ['testing', 2, false, 'Used when testing byebug'],
        ['forcestep', 2, true,
@@ -29,8 +29,8 @@ module Byebug
        ['history', 2, false,
         'Generic command for setting command history parameters',
         'set history filename -- Set the filename in which to record the ' \
-        'command history. '                                                \
-        'set history save -- Set saving of the history record on exit. '   \
+        'command history'                                                  \
+        'set history save -- Set saving of the history record on exit'     \
         'set history size -- Set the size of the command history'],
        ['linetrace+', 10, true,
         'Set line execution tracing to show different lines'],

@@ -148,14 +148,14 @@ module Byebug
     Subcommands =
       [
        ['annotate', 2, 'Show annotation level',
-        '0 == normal;' \
+        '0 == normal; '                                                    \
         '2 == output annotated suitably for use by programs that control ' \
-        'byebug.'],
+        'byebug'],
         ['args', 2,
-         'Show argument list to give to the program being debugged when it ' \
-         'is started',
-         'Follow this command with any number of args to be passed to the '  \
-         'program.'],
+         'Show argument list to give to the program being debugged when it is' \
+         ' started',
+         'Follow this command with any number of args to be passed to the '    \
+         'program'],
         ['autoeval', 4, 'Show whether unrecognized commands are evaluated'],
         ['autolist', 4, 'Show whether "list" command is run on stopping'],
         ['autoirb', 4, 'Show whether IRB is invoked on stopping'],
@@ -163,21 +163,21 @@ module Byebug
         ['basename',  1, 'Show whether basename is used when reporting files'],
         ['callstyle', 2, 'Show paramater style used when showing call frames'],
         ['commands',  2, 'Show the history of commands you typed',
-         'You can supply a command number to start with.'],
+         'You can supply a command number to start with'],
         ['forcestep', 1, 'Show whether "next/step" force to move onto a new ' \
          'line'],
         ['fullpath',  2, 'Show whether full paths are displayed in frames'],
         ['history', 2, 'Generic command to show command history parameters',
          'show history filename -- Show the filename in which to record the ' \
-         'command history.'                                                   \
+         'command history'                                                    \
          'show history save -- Show whether history record should be saved '  \
-         'on exit.'                                                           \
-         'show history size -- Show the size of the command history.'],
+         'on exit'                                                            \
+         'show history size -- Show the size of the command history'],
         ['keep-frame-bindings', 1, 'Save frame binding on each call'],
         ['linetrace', 3, 'Show line execution tracing'],
         ['linetrace+', 10,
          'Show whether different consecutive lines are shown in tracing'],
-        ['listsize', 3, 'Show number of source lines to list by default.'],
+        ['listsize', 3, 'Show number of source lines to list by default'],
         ['port', 3, 'Show server port'],
         ['post-mortem', 3,
          'Show whether we go into post-mortem debugging on an uncaught ' \
