@@ -24,7 +24,7 @@ describe 'Conditions' do
       end
     end
 
-    describe 'unsucessfully' do
+    describe 'unsuccessfully' do
       before { enter 'break 4' }
 
       it 'must not stop at the breakpoint if condition is false' do
@@ -53,7 +53,7 @@ describe 'Conditions' do
       debug_file('conditions') { Byebug.breakpoints.first.expr.must_be_nil }
     end
 
-    it 'must not stop on the breakpoint' do
+    it 'must unconditionally stop on the breakpoint' do
       debug_file('conditions') { state.line.must_equal 3 }
     end
   end
