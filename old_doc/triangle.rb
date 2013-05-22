@@ -7,5 +7,7 @@ def triangle(n)
   tri
 end
 
-t = triangle(3)
-puts t
+if __FILE__ == $0
+  t = triangle(3)
+  puts t
+end

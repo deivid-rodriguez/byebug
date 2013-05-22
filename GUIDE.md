@@ -229,3 +229,209 @@ with arrays, -1 means the last one. Alternatively using frame number 3 would
 have been the same thing; so would issuing `up 3`. Note that in the outside
 frame #3, the value of `i_args` can be shown. Also note that the value of
 variable `n` is different.
+
+
+## Unit Testing Session
+
+In the previous sessions we've been calling byebug right at the outset, but this
+is probably not the mode of operation you will use the most. There are a number
+of situations where calling byebug at the outset is impractical for a couple of
+reasons:
+
+* Byebug just doesn't work when run at the outset. Any debugging changes the
+behavior or the program in slight and subtle ways, and sometimes this can hinder
+finding bugs.
+* There's a lot of code that needs to be run before the part you want to
+inspect.  Running this code takes time and you don't want the overhead of
+byebug.
+
+In this section we'll show how to enter the code in the middle of your program,
+while delving more into byebug's operation. We will also use unit testing. Using
+unit tests will greatly reduce the amount of debugging needed, while at the same
+time, will increase the quality of your program.
+
+What we'll do is take the `triangle` code from the first session and write a
+unit test for that. In a sense we did write a tiny test for the program which
+was basically the last line where we printed the value of `triangle(3)`. This
+test however wasn't automated: the expectation is that someone would look at the
+output and verify that what was printed is what was expected.
+
+Before we can turn that into something that can be `required`, we probably want
+to remove that output. However I like to keep in that line so that when I
+look at the file, I have an example of how to run it.  Therefore we will
+conditionally run this line if that file is invoked directly, but skip it if it
+is not. _NOTE: `byebug` resets `$0` to try to make things like this work._
+
+```
+if __FILE__ == $0
+  t = triangle(3)
+  puts t
+end
+```
+
+Okay, we're now ready to write our unit test. We'll use `test/unit` which comes
+with the standard Ruby distribution.  Here's the test code; it should be in the
+same directory as `triangle.rb`.
+
+```
+require 'test/unit'
+require_relative 'triangle.rb'
+
+class TestTri < Test::Unit::TestCase
+  def test_basic
+    solutions = []
+    0.upto(5) do |i|
+      solutions << triangle(i)
+    end
+    assert_equal([0, 1, 3, 6, 10, 15], solutions,
+                 'Testing the first 5 triangle numbers')
+  end
+end
+```
+
+Let's say we want to stop before the first statement in our test method, we'll
+add the following:
+
+```
+...
+def test_basic
+  require 'byebug'
+  byebug
+  solutions = []
+...
+```
+
+Now we run the program..
+```
+$ ruby test-triangle.rb
+Run options:
+
+# Running tests:
+
+[1/1] TestTri#test_basic[5, 14] in test-triangle.rb
+    5: 
+    6: class TestTri < Test::Unit::TestCase
+    7:   def test_basic
+    8:     require 'byebug'
+    9:     byebug
+=> 10:     solutions = []
+   11:     0.upto(5) do |i|
+   12:       solutions << triangle(i)
+   13:     end
+   14:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
+(byebug)
+```
+
+and we see that we are stopped at line 10 just before the initialization of the
+list `solutions`.
+
+Now let's see where we are...
+```
+(byebug) where
+--> #0  TestTri.test_basic at test-tri2.rb:10
+Warning: saved frames may be incomplete; compare with caller(0)
+(byebug)
+```
+
+Something seems wrong here; `TestTri.test_basic` indicates that we are in class
+`TestTri` in method `test_basic`. However we don't see the call to this like we
+did in the last example when we used the `where` command. This is because byebug
+really didn't spring into existence until after we already had entered that
+method, and Ruby doesn't keep call stack information around in a way that would
+give the information we show when running `where`.
+
+If we want call stack information, we have to turn call-stack tracking on
+_beforehand_. This is done by adding `Byebug.start`.
+
+Here's what our test program looks like after we modify it to start tracking
+calls from the outset
+
+```
+require 'test/unit'
+require_relative 'triangle.rb'
+require 'byebug'
+Byebug.start
+
+class TestTri < Test::Unit::TestCase
+  def test_basic
+    byebug
+    solutions = []
+    0.upto(5) do |i|
+      solutions << triangle(i)
+    end
+    assert_equal([0, 1, 3, 6, 10, 15], solutions,
+                 "Testing the first 5 triangle numbers")
+  end
+end
+```
+
+Now when we run this:
+```
+$ ruby test-triangle.rb
+Run options:
+
+# Running tests:
+
+[1/1] TestTri#test_basic[5, 14] in test-triangle.rb
+    5: 
+    6: class TestTri < Test::Unit::TestCase
+    7:   def test_basic
+    8:     require 'byebug'
+    9:     byebug
+=> 10:     solutions = []
+   11:     0.upto(5) do |i|
+   12:       solutions << triangle(i)
+   13:     end
+   14:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
+(byebug) where
+--> #0  TestTri.test_basic at test-triangle.rb:10
+    #1  MiniTest::Unit::TestCase.run_test(name#String)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:858
+    #2  MiniTest::Unit::TestCase.run(runner#Test::Unit::Runner)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1301
+    #3  Test::Unit::TestCase.run(runner#Test::Unit::Runner)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit/testcase.rb:17
+    #4  MiniTest::Unit._run_suite(suite#Class, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:919
+    #5  Array.map(suite#Class, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:912
+    #6  MiniTest::Unit._run_suite(suite#Class, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:912
+    #7  Test::Unit::Runner._run_suites(suites#Array, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:657
+    #8  Array.each(suites#Array, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:655
+    #9  Test::Unit::Runner._run_suites(suites#Array, type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:655
+    #10 MiniTest::Unit._run_anything(type#Symbol)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:867
+    #11 MiniTest::Unit.run_tests
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1060
+    #12 MiniTest::Unit._run(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1047
+    #13 Array.each(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1046
+    #14 MiniTest::Unit._run(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1046
+    #15 MiniTest::Unit._run(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1042
+    #16 MiniTest::Unit.run(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1035
+    #17 Test::Unit::RunCount.run(args#NilClass)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:21
+    #18 Test::Unit::Runner.run(args#Array)
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:774
+    #19 #<Class:Test::Unit::Runner>.autorun
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:366
+    #20 Test::Unit::RunCount.run_once
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:27
+    #21 #<Class:Test::Unit::Runner>.autorun
+      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:367
+    #22 <main> at test-triangle.rb:6
+(byebug)
+```
+
+Much better. But again let me emphasize that the parameter types are those of
+the corresponding variables that _currently_ exist, and this might have changed
+since the time when the call was made.
+
