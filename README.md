@@ -1,5 +1,8 @@
 # Byebug [![Gem Version](https://badge.fury.io/rb/byebug.png)](http://badge.fury.io/rb/byebug) [![Build Status](https://secure.travis-ci.org/deivid-rodriguez/byebug.png)](http://travis-ci.org/deivid-rodriguez/byebug) [![Code Climate](https://codeclimate.com/github/deivid-rodriguez/byebug.png)](https://codeclimate.com/github/deivid-rodriguez/byebug) [![Dependency Status](https://gemnasium.com/deivid-rodriguez/byebug.png)](https://gemnasium.com/deivid-rodriguez/byebug)
 
+<img src="https://github.com/deivid-rodriguez/byebug/blob/master/logo.png"
+     alt="Byebug logo" align="right" />
+
 _Debugging in Ruby 2.0_
 
 Byebug is a simple to use, feature rich debugger for Ruby 2.0. It uses the new
@@ -224,3 +227,4 @@ software, specially:
 * Koichi Sasada, author of the new C debugging API for Ruby.
 * Dennis Ushakov, author of [debase](https://github.com/denofevil/debase), the
 starting point of this.
+* Logo by [Ivlichev Victor Petrovich](http://www.aha-soft.com/)

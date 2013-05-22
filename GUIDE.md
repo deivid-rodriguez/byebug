@@ -273,7 +273,7 @@ Okay, we're now ready to write our unit test. We'll use `test/unit` which comes
 with the standard Ruby distribution.  Here's the test code; it should be in the
 same directory as `triangle.rb`.
 
-```
+```ruby
 require 'test/unit'
 require_relative 'triangle.rb'
 
@@ -292,7 +292,7 @@ end
 Let's say we want to stop before the first statement in our test method, we'll
 add the following:
 
-```
+```ruby
 ...
 def test_basic
   require 'byebug'
@@ -346,7 +346,7 @@ _beforehand_. This is done by adding `Byebug.start`.
 Here's what our test program looks like after we modify it to start tracking
 calls from the outset
 
-```
+```ruby
 require 'test/unit'
 require_relative 'triangle.rb'
 require 'byebug'
