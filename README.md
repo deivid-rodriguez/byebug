@@ -35,10 +35,17 @@ in your Gemfile and run
 
 ## Usage
 
-Simply drop `byebug` wherever you want to start debugging and the execution
-stop there. If you are debugging rails, start the server in normal mode with
-`rails server` and once the execution get to your `byebug` command you will get
-a debugging terminal.
+Simply drop
+
+    byebug
+
+wherever you want to start debugging and the execution will stop there. If you
+are debugging rails, start the server in normal mode with `rails server` and
+once the execution get to your `byebug` command you will get a debugging
+terminal.
+
+_If you are coming from debugger, notice that stopping execution using the word
+ `debugger` don't work anymore unless you explicitly alias it._
 
 ## Getting Started
 
