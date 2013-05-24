@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'minitest/autorun'
 require 'pathname'
 require 'mocha/setup'
