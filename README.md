@@ -45,7 +45,7 @@ once the execution get to your `byebug` command you will get a debugging
 terminal.
 
 _If you are coming from debugger, notice that stopping execution using the word
- `debugger` don't work anymore unless you explicitly alias it._
+ `debugger` doesn't work anymore unless you explicitly alias it._
 
 ## Getting Started
 
