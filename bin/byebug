@@ -25,7 +25,8 @@
 #      Show invocation help and exit.
 #
 #<tt>-I | --include</tt> <i>path</i>
-#    Add <i>path</i> to <tt>$LOAD_PATH</tt>
+#    Add <i>path</i> to <tt>$LOAD_PATH</tt>. Like the <tt>ruby -I</tt> command,
+#    it supports multiple load paths separated by colons.
 #
 #<tt>--keep-frame-binding</tt>::
 #    Keep frame bindings.
@@ -124,12 +125,14 @@ Usage: #{program} [options] <script.rb> -- <script.rb parameters>
 EOB
     opts.separator ""
     opts.separator "Options:"
+
     opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") {
       |annotate| Byebug.annotate = annotate }
     opts.on("-d", "--debug", "Set $DEBUG=true") {
       $DEBUG = true }
-    opts.on('-I', '--include PATH', String, 'Add PATH to $LOAD_PATH') {
-      |path| $LOAD_PATH.unshift(path) }
+    opts.on('-I', '--include PATH', String,
+            'Add PATH (single or multiple:path:list) to $LOAD_PATH.') {
+      |path| $LOAD_PATH.unshift(*path.split(':')) }
     opts.on('--no-quit', 'Do not quit when script finishes') {
       options.quit = false }
     opts.on('--no-rewrite-program', 'Don\'t set $0 to the program debugged') {
@@ -144,7 +147,8 @@ EOB
       else
         require name
       end }
-    opts.on('--restart-script FILE', String, 'Name of the script file to run. Erased after read') do
+    opts.on('--restart-script FILE', String,
+            'Name of the script file to run. Erased after read') do
       |restart_script|
       options.restart_script = restart_script
       unless File.exists?(options.restart_script)
@@ -162,6 +166,7 @@ EOB
     end
     opts.on('-x', '--trace', 'Turn on line tracing') {
       options.tracing = true }
+
     opts.separator ''
     opts.separator 'Common options:'
     opts.on_tail('--help', 'Show this message') do
@@ -197,6 +202,7 @@ rescue
 end
 
 opts = process_options(options)
+
 begin
   Byebug::ARGV = ARGV.clone if not defined? Byebug::ARGV
   Byebug::BYEBUG_SCRIPT = File.expand_path(__FILE__)
