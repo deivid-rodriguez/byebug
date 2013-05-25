@@ -47,6 +47,23 @@ terminal.
 _If you are coming from debugger, notice that stopping execution using the word
  `debugger` doesn't work anymore unless you explicitly alias it._
 
+
+## What's different from debugger
+
+* Works on 2.0.0 and it doesn't on 1.9.x.
+* Has no MRI internal source code dependencies, just a clean API.
+* Fixes most of debugger's current open issues:
+  - Post mortem mode segfaulting.
+  - Line number wrongly shown as zero in backtrace.
+  - Line tracing.
+  - Colon delimited include paths.
+  - Nice markdow guide.
+  - Ruby 2.0 support.
+* Very actively mantained.
+* Editor agnostic: no external editor built-in support.
+* No thread support as not supported by the new API yet (I hope it will come
+  soon!).
+
 ## Getting Started
 
 A handful of commands are enough to get started using `byebug`. The following
