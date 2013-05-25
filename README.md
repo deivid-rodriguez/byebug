@@ -47,6 +47,21 @@ terminal.
 _If you are coming from debugger, notice that stopping execution using the word
  `debugger` doesn't work anymore unless you explicitly alias it._
 
+### Configuration
+
+You can automatically load some configurations at startup by dropping them in
+the startup file `.byebugrc`. For example, you can change the number of lines
+listed whenever byebug stops like this:
+
+    set listsize 20
+
+If you are coming from [debugger](https://github.com/cldwalker/debugger), notice
+however that you no longer need
+
+    set autoreload
+
+because it is a default option in byebug.
+
 
 ## What's different from debugger
 
@@ -63,6 +78,8 @@ _If you are coming from debugger, notice that stopping execution using the word
 * Editor agnostic: no external editor built-in support.
 * No thread support as not supported by the new API yet (I hope it will come
   soon!).
+* Pry command is built-in. No need of external gem like debugger-pry.
+
 
 ## Getting Started
 
@@ -217,21 +234,6 @@ quit without being prompted, suffix the command with an exclamation mark, e.g.,
 `q!`.
 
 ### The rest of the tutorial is available [here](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md)
-
-## Configuration
-
-You can automatically load some configurations at startup by dropping them in
-the startup file `.byebugrc`. For example, you can change the number of lines
-listed whenever byebug stops like this:
-
-    set listsize 20
-
-If you are coming from [debugger](https://github.com/cldwalker/debugger), notice
-however that you no longer need
-
-    set autoreload
-
-because it is a default option in byebug.
 
 
 ## Related projects
