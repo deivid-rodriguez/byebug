@@ -18,12 +18,11 @@ class TestContinue < TestDsl::TestCase
       debug_file('continue') { state.line.must_equal 4 }
     end
 
-    # XXX: Decide whether to keep original behaviour (i don't like it but maybe
-    # I'm wrong) or make the test below pass
-    #it "must not keep temporal breakpoint when line specified" do
-    #  enter 'cont 4'
-    #  debug_file('continue') { Byebug.breakpoints.size.must_equal 0 }
-    #end
+    it "must not keep temporal breakpoint when line specified" do
+      skip 'Not working yet, breakpoint is currently kept'
+      enter 'cont 4'
+      debug_file('continue') { Byebug.breakpoints.size.must_equal 0 }
+    end
   end
 
   describe "unsuccessful" do
