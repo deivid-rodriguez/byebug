@@ -1,3 +1,8 @@
+## 1.3.0
+
+* Support colon-delimited include paths in command-line front-end (@ender672)
+
+
 ## 1.2.0
 
 * Added 'pry' command.
