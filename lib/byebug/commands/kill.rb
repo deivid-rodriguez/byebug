@@ -13,7 +13,6 @@ module Byebug
     end
 
     def execute
-      puts @match[1]
       if @match[1]
         signame = @match[1]
         unless Signal.list.member?(signame)
