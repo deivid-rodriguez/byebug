@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Conditions' do
-  include TestDsl
+class TestConditions < TestDsl::TestCase
 
   describe 'setting condition' do
     before { enter 'break 3' }

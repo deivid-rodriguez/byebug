@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Repl commands' do
-  include TestDsl
+class TestRepl < TestDsl::TestCase
 
   describe 'Irb Command' do
     before do

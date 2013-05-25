@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Finish Command' do
-  include TestDsl
+class TestFinish < TestDsl::TestCase
 
   it 'must stop at the next frame by default' do
     enter 'break 16', 'cont', 'finish'

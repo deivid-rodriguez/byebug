@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Frame Command' do
-  include TestDsl
+class TestFrame < TestDsl::TestCase
 
   # XXX: Calculate magic number dinamically, like
   # "longest_string_in_test_output".size

@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Info Command' do
-  include TestDsl
+class TestInfo < TestDsl::TestCase
   include Columnize
 
    describe 'Args info' do

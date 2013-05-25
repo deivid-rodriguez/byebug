@@ -1,108 +1,103 @@
 require_relative 'test_helper'
 
-describe 'Trace Command' do
-  include TestDsl
+class TestTrace < TestDsl::TestCase
 
-  describe 'Trace Command Setup' do
+  before do
+    Byebug::Command.settings[:basename] = false
+    untrace_var(:$bla) if defined?($bla)
+  end
 
-    before do
-      Byebug::Command.settings[:basename] = false
-      untrace_var(:$bla) if defined?($bla)
-    end
+  describe 'tracing' do
 
-    describe 'tracing' do
-
-      describe 'enabling' do
-        it 'must trace execution by setting trace to on' do
-          enter 'trace on', 'cont 7', 'trace off'
-          debug_file 'trace'
-          check_output_includes 'line tracing is on.',
-                                "Tracing: #{fullpath('trace')}:4 $bla = 4",
-                                "Tracing: #{fullpath('trace')}:7 $bla = 7"
-        end
-
-        it 'must be able to use a shortcut' do
-          enter 'tr on', 'cont 7', 'trace off'
-          debug_file 'trace'
-          check_output_includes 'line tracing is on.',
-                                "Tracing: #{fullpath('trace')}:4 $bla = 4",
-                                "Tracing: #{fullpath('trace')}:7 $bla = 7"
-        end
-      end
-
-      it 'must show an error message if given subcommand is incorrect' do
-        enter 'trace bla'
+    describe 'enabling' do
+      it 'must trace execution by setting trace to on' do
+        enter 'trace on', 'cont 7', 'trace off'
         debug_file 'trace'
-        check_output_includes \
-          'expecting "on", "off", "var" or "variable"; got: "bla"',
-          interface.error_queue
-      end
-
-      describe 'disabling' do
-        it 'must stop tracing by setting trace to off' do
-          enter 'trace on', 'next', 'trace off'
-          debug_file 'trace'
-          check_output_includes "Tracing: #{fullpath('trace')}:4 $bla = 4"
-          check_output_doesnt_include "Tracing: #{fullpath('trace')}:5 $bla = 5"
-        end
-
-        it 'must show a message when turned off' do
-          enter 'trace off'
-          debug_file 'trace'
-          check_output_includes 'line tracing is off.'
-        end
-      end
-    end
-
-    describe 'tracing global variables' do
-      it 'must track global variable' do
-        enter 'trace variable $bla'
-        debug_file 'trace'
-        check_output_includes 'traced variable $bla has value 3',
-                              'traced variable $bla has value 7'
+        check_output_includes 'line tracing is on.',
+                              "Tracing: #{fullpath('trace')}:4 $bla = 4",
+                              "Tracing: #{fullpath('trace')}:7 $bla = 7"
       end
 
       it 'must be able to use a shortcut' do
-        enter 'trace var $bla'
+        enter 'tr on', 'cont 7', 'trace off'
         debug_file 'trace'
-        check_output_includes 'traced variable $bla has value 3'
-      end
-
-      it 'must track global variable with stop' do
-        enter 'trace variable $bla stop', 'break 7', 'cont'
-        debug_file('trace') { state.line.must_equal 4 }
-      end
-
-      it 'must track global variable with nostop' do
-        enter 'trace variable $bla nostop', 'break 7', 'cont'
-        debug_file('trace') { state.line.must_equal 7 }
-      end
-
-      describe 'errors' do
-        it 'must show an error message if there is no such global variable' do
-          enter 'trace variable $foo'
-          debug_file 'trace'
-          check_output_includes \
-            '$foo is not a global variable.', interface.error_queue
-        end
-
-        it 'must show an error message if subcommand is invalid' do
-          enter 'trace variable $bla foo'
-          debug_file 'trace'
-          check_output_includes \
-            'expecting "stop" or "nostop"; got "foo"', interface.error_queue
-        end
+        check_output_includes 'line tracing is on.',
+                              "Tracing: #{fullpath('trace')}:4 $bla = 4",
+                              "Tracing: #{fullpath('trace')}:7 $bla = 7"
       end
     end
 
-    describe 'Post Mortem' do
-      it 'must work in post-mortem mode' do
-        enter 'cont', 'trace on'
-        debug_file 'post_mortem'
-        check_output_includes 'line tracing is on.'
-      end
+    it 'must show an error message if given subcommand is incorrect' do
+      enter 'trace bla'
+      debug_file 'trace'
+      check_output_includes \
+        'expecting "on", "off", "var" or "variable"; got: "bla"',
+        interface.error_queue
     end
 
+    describe 'disabling' do
+      it 'must stop tracing by setting trace to off' do
+        enter 'trace on', 'next', 'trace off'
+        debug_file 'trace'
+        check_output_includes "Tracing: #{fullpath('trace')}:4 $bla = 4"
+        check_output_doesnt_include "Tracing: #{fullpath('trace')}:5 $bla = 5"
+      end
+
+      it 'must show a message when turned off' do
+        enter 'trace off'
+        debug_file 'trace'
+        check_output_includes 'line tracing is off.'
+      end
+    end
+  end
+
+  describe 'tracing global variables' do
+    it 'must track global variable' do
+      enter 'trace variable $bla'
+      debug_file 'trace'
+      check_output_includes 'traced variable $bla has value 3',
+                            'traced variable $bla has value 7'
+    end
+
+    it 'must be able to use a shortcut' do
+      enter 'trace var $bla'
+      debug_file 'trace'
+      check_output_includes 'traced variable $bla has value 3'
+    end
+
+    it 'must track global variable with stop' do
+      enter 'trace variable $bla stop', 'break 7', 'cont'
+      debug_file('trace') { state.line.must_equal 4 }
+    end
+
+    it 'must track global variable with nostop' do
+      enter 'trace variable $bla nostop', 'break 7', 'cont'
+      debug_file('trace') { state.line.must_equal 7 }
+    end
+
+    describe 'errors' do
+      it 'must show an error message if there is no such global variable' do
+        enter 'trace variable $foo'
+        debug_file 'trace'
+        check_output_includes \
+          '$foo is not a global variable.', interface.error_queue
+      end
+
+      it 'must show an error message if subcommand is invalid' do
+        enter 'trace variable $bla foo'
+        debug_file 'trace'
+        check_output_includes \
+          'expecting "stop" or "nostop"; got "foo"', interface.error_queue
+      end
+    end
+  end
+
+  describe 'Post Mortem' do
+    it 'must work in post-mortem mode' do
+      enter 'cont', 'trace on'
+      debug_file 'post_mortem'
+      check_output_includes 'line tracing is on.'
+    end
   end
 
 end

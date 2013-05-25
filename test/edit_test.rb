@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Edit Command' do
-  include TestDsl
+class TestEdit < TestDsl::TestCase
 
   describe 'open configured editor' do
     temporary_change_hash ENV, 'EDITOR', 'editr'

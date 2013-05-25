@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Source Command' do
-  include TestDsl
+class TestSource < TestDsl::TestCase
 
   before { File.open(filename, 'w') do |f|
              f.puts 'break 2'

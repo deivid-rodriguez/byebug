@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Stepping Commands' do
-  include TestDsl
+class TestStepping < TestDsl::TestCase
 
   describe 'Next Command' do
 

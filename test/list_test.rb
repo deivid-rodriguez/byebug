@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'List Command' do
-  include TestDsl
+class TestList < TestDsl::TestCase
 
   describe 'listsize' do
     it 'must show lines according to :listsize setting' do

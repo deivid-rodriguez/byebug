@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Eval Command' do
-  include TestDsl
+class TestEval < TestDsl::TestCase
 
   it 'must evaluate an expression' do
     enter 'eval 3 + 2'

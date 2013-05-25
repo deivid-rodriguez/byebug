@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Save Command' do
-  include TestDsl
+class TestSave < TestDsl::TestCase
 
   describe 'successful saving' do
     let(:file_name) { 'save_output.txt' }

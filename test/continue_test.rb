@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe "Continue Command" do
-  include TestDsl
+class TestContinue < TestDsl::TestCase
 
   describe "successful" do
     it "must continue up to breakpoint if no line specified" do

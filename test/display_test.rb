@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Display Command' do
-  include TestDsl
+class TestDisplay < TestDsl::TestCase
 
   it 'must show expressions' do
     enter 'break 3', 'cont', 'display d + 1'

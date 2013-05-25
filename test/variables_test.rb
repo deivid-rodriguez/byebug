@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Variables Command' do
-  include TestDsl
+class TestVariables < TestDsl::TestCase
 
   temporary_change_hash Byebug::Command.settings, :width, 40
 

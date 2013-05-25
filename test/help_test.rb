@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Help Command' do
-  include TestDsl
+class TestHelp < TestDsl::TestCase
   include Columnize
 
   let(:available_commands) {

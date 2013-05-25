@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Kill Command' do
-  include TestDsl
+class TestKill < TestDsl::TestCase
 
   it 'must send signal to some pid' do
     Process.expects(:kill).with('USR1', Process.pid)

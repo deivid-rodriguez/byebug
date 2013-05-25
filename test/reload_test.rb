@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Reload Command' do
-  include TestDsl
+class TestReload < TestDsl::TestCase
 
   describe 'autoreloading' do
     after { Byebug::Command.settings[:autoreload] = true }

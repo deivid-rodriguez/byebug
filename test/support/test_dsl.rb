@@ -1,12 +1,60 @@
 module TestDsl
 
-  def self.included(base)
-    base.class_eval do
-      extend ClassUtils
-      before do
-        Byebug.interface = TestInterface.new
-        Byebug.handler.display.clear
+  module ClassUtils
+
+    def temporary_change_hash hash, key, value
+      mod = Module.new do
+        extend Minitest::Spec::DSL
+
+        before do
+          @old_hashes ||= {}
+          @old_hashes.merge!({ hash => { key => hash[key] } }) do |k, v1, v2|
+            v1.merge(v2)
+          end
+          hash[key] = value
+        end
+
+        after do
+          hash[key] = @old_hashes[hash][key]
+        end
       end
+
+      include mod
+    end
+
+    def temporary_change_const klass, const, value
+      mod = Module.new do
+        extend Minitest::Spec::DSL
+
+        before do
+          @old_consts ||= {}
+          old_value = klass.const_defined?(const) ?
+                      klass.const_get(const) : :__undefined__
+          @old_consts.merge!({ klass => { const => old_value } }) do |k, v1, v2|
+            v1.merge(v2)
+          end
+          klass.send :remove_const, const if klass.const_defined?(const)
+          klass.const_set const, value unless value == :__undefined__
+        end
+
+        after do
+          klass.send :remove_const, const if klass.const_defined?(const)
+          klass.const_set const, @old_consts[klass][const] unless
+            @old_consts[klass][const] == :__undefined__
+        end
+      end
+
+      include mod
+    end
+  end
+
+  class TestCase < Minitest::Spec
+    extend TestDsl::ClassUtils
+    include TestDsl
+
+    def setup
+      Byebug.interface = TestInterface.new
+      Byebug.handler.display.clear
     end
   end
 
@@ -134,54 +182,6 @@ module TestDsl
     old_content = File.read(file)
     new_content = old_content.split("\n").tap { |c| c[line - 1] = new_line_content }.join("\n")
     File.open(file, 'w') { |f| f.write(new_content) }
-  end
-
-
-  module ClassUtils
-    def temporary_change_hash hash, key, value
-      mod = Module.new do
-        extend Minitest::Spec::DSL
-
-        before do
-          @old_hashes ||= {}
-          @old_hashes.merge!({ hash => { key => hash[key] } }) do |k, v1, v2|
-            v1.merge(v2)
-          end
-          hash[key] = value
-        end
-
-        after do
-          hash[key] = @old_hashes[hash][key]
-        end
-      end
-
-      include mod
-    end
-
-    def temporary_change_const klass, const, value
-      mod = Module.new do
-        extend Minitest::Spec::DSL
-
-        before do
-          @old_consts ||= {}
-          old_value = klass.const_defined?(const) ?
-                      klass.const_get(const) : :__undefined__
-          @old_consts.merge!({ klass => { const => old_value } }) do |k, v1, v2|
-            v1.merge(v2)
-          end
-          klass.send :remove_const, const if klass.const_defined?(const)
-          klass.const_set const, value unless value == :__undefined__
-        end
-
-        after do
-          klass.send :remove_const, const if klass.const_defined?(const)
-          klass.const_set const, @old_consts[klass][const] unless
-            @old_consts[klass][const] == :__undefined__
-        end
-      end
-
-      include mod
-    end
   end
 
 end

@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Breakpoints' do
-  include TestDsl
+class TestBreakpoints < TestDsl::TestCase
 
   describe 'setting breakpoint in the current file' do
     before { enter 'break 10' }

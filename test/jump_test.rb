@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe "Jump Command" do
-  include TestDsl
+class TestJump < TestDsl::TestCase
 
   describe "successful" do
     it "must jump with absolute line number" do

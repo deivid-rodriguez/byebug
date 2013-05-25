@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Post Mortem' do
-  include TestDsl
+class TestPostMortem < TestDsl::TestCase
 
   it 'must enter into post mortem mode' do
     enter 'cont'

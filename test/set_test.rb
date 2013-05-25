@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Set Command' do
-  include TestDsl
+class TestSet < TestDsl::TestCase
 
   describe 'setting to on' do
     temporary_change_hash Byebug::Command.settings, :autolist, 0

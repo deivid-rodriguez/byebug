@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Restart Command' do
-  include TestDsl
+class TestRestart < TestDsl::TestCase
 
   def must_restart
     Byebug::RestartCommand.any_instance.unstub(:exec)

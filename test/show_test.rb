@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
-describe 'Show Command' do
-  include TestDsl
+class TestShow < TestDsl::TestCase
 
   describe 'annotate' do
     it 'must show annotate setting' do
