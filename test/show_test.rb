@@ -267,6 +267,14 @@ class TestShow < TestDsl::TestCase
     end
   end
 
+  describe 'Help' do
+    it 'must show help when typing just "show"' do
+      enter 'show', 'cont'
+      debug_file 'show'
+      check_output_includes /List of "show" subcommands:/
+    end
+  end
+
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
       enter 'cont', 'show autolist'

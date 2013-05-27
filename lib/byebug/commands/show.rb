@@ -198,29 +198,16 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        print format_subcmds(Subcommands)
-      else
-        args = @match[1].split(/[ \t]+/)
-        param = args.shift
-        subcmd = find(Subcommands, param)
-        if subcmd
-          print "%s\n" % show_setting(subcmd.name)
-        else
-          print "Unknown show command #{param}\n"
-        end
-      end
-    end
+      return print ShowCommand.help(nil) unless @match[1]
 
-    def help(args)
-      if args[1]
-        subcmd = find(Subcommands, args[1])
-        return "Invalid \"show\" subcommand \"#{args[1]}\"." unless subcmd
-        str = subcmd.short_help + '.'
-        str += "\n" + subcmd.long_help if subcmd.long_help
-        return str
+      args = @match[1].split(/[ \t]+/)
+      param = args.shift
+      subcmd = find(Subcommands, param)
+      if subcmd
+        print "%s\n" % show_setting(subcmd.name)
+      else
+        print "Unknown show command #{param}\n"
       end
-      ShowCommad.description + format_subcmds(Subcommands)
     end
 
     class << self
@@ -234,5 +221,6 @@ module Byebug
         }
       end
     end
+
   end
 end

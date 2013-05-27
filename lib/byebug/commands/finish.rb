@@ -11,7 +11,7 @@ module Byebug
 
     def execute
       max_frame = @state.context.stack_size - @state.frame_pos
-      if !@match[1] or @match[1].empty?
+      if not @match[1]
         frame_pos = @state.frame_pos
       else
         frame_pos = get_int(@match[1], "Finish", 0, max_frame-1, 0)

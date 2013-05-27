@@ -31,22 +31,6 @@ module Byebug
       return nil
     end
 
-    ##
-    # Build formatted list of subcmds
-    #
-    def format_subcmds(subcmds)
-      cmd_name = self.class.names.join("|")
-      s = "\n"                                     \
-          "--\n"                                   \
-          "List of \"#{cmd_name}\" subcommands:\n" \
-          "--\n"
-      width = subcmds.map(&:name).max_by(&:size).size
-      for subcmd in subcmds do
-        s += sprintf \
-          "%s %-#{width}s -- %s\n", cmd_name, subcmd.name, subcmd.short_help
-      end
-      return s
-    end
 
   end
 
@@ -74,7 +58,37 @@ module Byebug
         output = description.split("\n").map{|l| l.gsub(/^ +/, '')}
         output.shift if output.first && output.first.empty?
         output.pop if output.last && output.last.empty?
-        output.join("\n") + "\n"
+        output = output.join("\n") + "\n"
+
+        if defined? self::Subcommands
+          return output += format_subcmds(self::Subcommands) unless args and args[1]
+
+          subcmd = find(Subcommands, args[1])
+          return "Invalid \"#{names.join("|")}\" " \
+                 "subcommand \"#{args[1]}\"." unless subcmd
+
+          output += "#{subcmd.short_help}.\n" \
+                    "#{subcmd.long_help || '' }"
+        end
+
+        return output
+      end
+
+      ##
+      # Build formatted list of subcmds
+      #
+      def format_subcmds(subcmds)
+        cmd_name = names.join("|")
+        s = "\n"                                     \
+            "--\n"                                   \
+            "List of \"#{cmd_name}\" subcommands:\n" \
+            "--\n"
+        width = subcmds.map(&:name).max_by(&:size).size
+        for subcmd in subcmds do
+          s += sprintf \
+            "%s %-#{width}s -- %s\n", cmd_name, subcmd.name, subcmd.short_help
+        end
+        return s
       end
 
       def inherited(klass)

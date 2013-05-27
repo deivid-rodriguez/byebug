@@ -37,7 +37,7 @@ module Byebug
         %w(list)
       end
 
-      def help(cmd)
+      def description
         %{
           l[ist]\t\tlist forward
           l[ist] -\tlist backward

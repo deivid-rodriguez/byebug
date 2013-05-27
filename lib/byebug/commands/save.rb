@@ -55,7 +55,7 @@ module Byebug
     end
 
     def execute
-      if not @match[1] or @match[1].strip.empty?
+      if not @match[1]
         file = open_save()
       else
         file = open(@match[1], 'w')

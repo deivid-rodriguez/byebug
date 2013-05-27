@@ -69,7 +69,7 @@ module Byebug
     end
 
     def execute
-      return help(@match) unless @match[1]
+      return print InfoCommand.help(nil) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
@@ -95,6 +95,20 @@ module Byebug
       end
     end
 
+    def info_breakpoint(brkpt)
+      print "%-3d %-3s at %s:%s%s\n", brkpt.id,
+                                      brkpt.enabled? ? 'y' : 'n',
+                                      brkpt.source,
+                                      brkpt.pos,
+                                      brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+      hits = brkpt.hit_count
+      if hits > 0
+        s = (hits > 1) ? 's' : ''
+        print "\tbreakpoint already hit #{hits} time#{s}\n"
+      end
+    end
+    private :info_breakpoint
+
     def info_breakpoints(*args)
       return print "\"info breakpoints\" not available here.\n" unless
         @state.context
@@ -109,18 +123,7 @@ module Byebug
           brkpts.empty?
       end
       print "Num Enb What\n"
-      brkpts.each do |b|
-        print "%-3d %-3s at %s:%s%s\n", b.id,
-                                        b.enabled? ? 'y' : 'n',
-                                        b.source,
-                                        b.pos,
-                                        b.expr.nil? ? '' : " if #{b.expr}"
-        hits = b.hit_count
-        if hits > 0
-          s = (hits > 1) ? 's' : ''
-          print "\tbreakpoint already hit #{hits} time#{s}\n"
-        end
-      end
+      brkpts.each { |b| info_breakpoint(b) }
     end
 
     def info_display(*args)
@@ -178,28 +181,27 @@ module Byebug
 
     def info_file(*args)
       return info_files unless args[0]
-      file = args[0]
 
-      param =  args[1] ? args[1] : 'basic'
+      param =  args[1] || 'basic'
 
       subcmd = find(InfoFileSubcommands, param)
       return errmsg "Invalid parameter #{param}\n" unless subcmd
 
-      unless LineCache::cached?(file)
-        unless LineCache::cached_script?(file)
-          return print "File #{file} is not cached\n"
+      unless LineCache::cached?(args[0])
+        unless LineCache::cached_script?(args[0])
+          return print "File #{args[0]} is not cached\n"
         end
-        LineCache::cache(file, Command.settings[:autoreload])
+        LineCache::cache(args[0], Command.settings[:autoreload])
       end
 
-      print "File #{file}"
-      info_file_path(file) if %w(all basic path).member?(subcmd.name)
+      print "File #{args[0]}"
+      info_file_path(args[0]) if %w(all basic path).member?(subcmd.name)
       print "\n"
 
-      info_file_lines(file) if %w(all basic lines).member?(subcmd.name)
-      info_file_breakpoints(file) if %w(all breakpoints).member?(subcmd.name)
-      info_file_mtime(file) if %w(all mtime).member?(subcmd.name)
-      info_file_sha1(file) if %w(all sha1).member?(subcmd.name)
+      info_file_lines(args[0]) if %w(all basic lines).member?(subcmd.name)
+      info_file_breakpoints(args[0]) if %w(all breakpoints).member?(subcmd.name)
+      info_file_mtime(args[0]) if %w(all mtime).member?(subcmd.name)
+      info_file_sha1(args[0]) if %w(all sha1).member?(subcmd.name)
     end
 
     def info_files(*args)
@@ -327,29 +329,6 @@ module Byebug
       var_class_self
     end
 
-    def help(args)
-      if args[1]
-        subcmd = find(Subcommands, args[1])
-        if subcmd
-          str = subcmd.short_help + '.'
-          if 'file' == subcmd.name and args[2]
-            subsubcmd = find(InfoFileSubcommands, args[2])
-            if subsubcmd
-              str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
-            else
-              str += "\n" + subsubcmd.short_help + '.'
-            end
-          else
-            str += "\n" + subcmd.long_help if subcmd.long_help
-          end
-        else
-          str = "Invalid \"info\" subcommand \"#{args[1]}\"."
-        end
-      else
-        str = InfoCommand.description + format_subcmds(Subcommands)
-      end
-      print str
-    end
 
     class << self
       def names
@@ -360,10 +339,32 @@ module Byebug
         %{
           info[ subcommand]
 
-          Generic command for showing things about the program being
+          Generic command for showing things about the program being debugged.
         }
       end
+
+      def help(args)
+        return description + format_subcmds(Subcommands) unless args && args[1]
+
+        subcmd = find(Subcommands, args[1])
+        return "Invalid \"info\" subcommand \"#{args[1]}\"." unless subcmd
+
+        str = subcmd.short_help + '.'
+        if 'file' == subcmd.name and args[2]
+          subsubcmd = find(InfoFileSubcommands, args[2])
+          if subsubcmd
+            str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
+          else
+            str += "\n" + subsubcmd.short_help + '.'
+          end
+        else
+          str += "\n" + "#{subcmd.long_help || ''}"
+        end
+
+        return str
+      end
     end
+
   end
 
 end

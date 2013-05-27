@@ -261,7 +261,7 @@ module Byebug
         %w(frame)
       end
 
-      def help(cmd)
+      def description
         %{
           f[rame][ frame-number]
 

@@ -18,14 +18,9 @@ module Byebug
     end
 
     def execute
-      if !@match[1]
-        errmsg "\"jump\" must be followed by a line number\n"
-        return
-      end
-      if !numeric?(@match[1])
-        errmsg "Bad line number: " + @match[1]
-        return
-      end
+      return errmsg "\"jump\" must be followed by a line number\n" unless @match[1]
+      return errmsg "Bad line number: " + @match[1] unless numeric?(@match[1])
+
       line = @match[1].to_i
       line = @state.context.frame_line(0) + line if @match[1][0] == '+' or @match[1][0] == '-'
       if line == @state.context.frame_line(0)

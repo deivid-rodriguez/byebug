@@ -7,26 +7,21 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        errmsg "\"condition\" must be followed by breakpoint number and expression\n"
-      else
-        breakpoints = Byebug.breakpoints.sort_by{|b| b.id }
-        largest = breakpoints.inject(0) do |tally, b|
-          tally = b.id if b.id > tally
-        end
-        if 0 == largest
-          print "No breakpoints have been set.\n"
-          return
-        end
-        pos = get_int(@match[1], "Condition", 1, largest)
-        return unless pos
-        breakpoints.each do |b|
-          if b.id == pos
-            b.expr = @match[2].empty? ? nil : @match[2]
-            break
-          end
-        end
+      return errmsg "\"condition\" must be followed by " \
+                    "breakpoint number and expression\n" unless @match[1]
 
+      breakpoints = Byebug.breakpoints.sort_by{|b| b.id }
+      largest = breakpoints.inject(0) do |tally, b|
+        tally = b.id if b.id > tally
+      end
+
+      return print "No breakpoints have been set.\n" if 0 == largest
+      return unless pos = get_int(@match[1], "Condition", 1, largest)
+      breakpoints.each do |b|
+        if b.id == pos
+          b.expr = @match[2].empty? ? nil : @match[2]
+          break
+        end
       end
     end
 

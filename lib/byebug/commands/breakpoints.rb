@@ -61,27 +61,20 @@ module Byebug
         line = line.to_i
         if LineCache.cache(brkpt_filename, Command.settings[:autoreload])
           last_line = LineCache.size(brkpt_filename)
-          if line > last_line
-            errmsg \
-              "There are only %d lines in file %s\n",
-              last_line, brkpt_filename
-            return
-          end
-          unless LineCache.trace_line_numbers(brkpt_filename).member?(line)
-            errmsg \
-              "Line %d is not a stopping point in file %s\n",
-               line, brkpt_filename
-            return
-          end
+          return errmsg "There are only %d lines in file %s\n",
+                        last_line, brkpt_filename if line > last_line
+
+          return errmsg "Line %d is not a stopping point in file %s\n",
+                        line, brkpt_filename unless
+            LineCache.trace_line_numbers(brkpt_filename).member?(line)
         else
-          errmsg("No source file named %s\n", brkpt_filename)
+          errmsg "No source file named #{brkpt_filename}\n"
           return unless confirm("Set breakpoint anyway? (y/n) ")
         end
 
-        unless @state.context
-          errmsg "We are not in a state we can add breakpoints.\n"
-          return
-        end
+        return errmsg "We are not in a state we can add breakpoints.\n" unless
+          @state.context
+
         b = Byebug.add_breakpoint brkpt_filename, line, expr
         print "Created breakpoint #{b.id} at " \
               "#{CommandProcessor.canonic_file(brkpt_filename)}:#{line.to_s}\n"
@@ -122,19 +115,16 @@ module Byebug
     end
 
     def execute
-      return errmsg "We are not in a state we can delete breakpoints.\n" unless @state.context
-      brkpts = @match[1]
-      unless brkpts
-        if confirm("Delete all breakpoints? (y or n) ")
-          Byebug.breakpoints.clear
-        end
+      return errmsg "We are not in a state we can delete breakpoints.\n" unless
+        @state.context
+
+      if not @match[1]
+        Byebug.breakpoints.clear if confirm("Delete all breakpoints? (y or n) ")
       else
-        brkpts.split(/[ \t]+/).each do |pos|
-          pos = get_int(pos, "Delete", 1)
-          return unless pos
-          unless Byebug.remove_breakpoint(pos)
-            errmsg "No breakpoint number %d\n", pos
-          end
+        @match[1].split(/[ \t]+/).each do |pos|
+          return unless pos = get_int(pos, "Delete", 1)
+          errmsg "No breakpoint number %d\n", pos unless
+            Byebug.remove_breakpoint(pos)
         end
       end
     end
@@ -148,8 +138,8 @@ module Byebug
         %{
           del[ete][ nnn...]
 
-          Without argumen, deletes all breakpoints. With integer numbers,
-          deletes specific breakpoints.
+          Without and argument, deletes all breakpoints. With integer arguments,
+          it deletes specific breakpoints.
         }
       end
     end

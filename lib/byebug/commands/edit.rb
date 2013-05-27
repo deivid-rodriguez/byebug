@@ -8,7 +8,7 @@ module Byebug
     end
 
     def execute
-      if not @match[1] or @match[1].strip.empty?
+      if not @match[1]
         unless @state.context
           errmsg "We are not in a state that has an associated file.\n"
           return

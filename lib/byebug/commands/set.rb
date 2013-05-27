@@ -167,18 +167,6 @@ module Byebug
           or 0. You can see these environment settings with the "show" command
         }
       end
-
-      def help(args)
-        if args && args[1]
-          subcmd = SetCommand.new(nil).find(Subcommands, args[1])
-          if subcmd
-            return "#{subcmd.short_help}.\n#{subcmd.long_help ? subcmd.long_help : ''}"
-          else
-            return "Invalid \"set\" subcommand \"#{args[1]}\".\n"
-          end
-        end
-        description + SetCommand.new(nil).format_subcmds(Subcommands)
-      end
     end
 
   end
