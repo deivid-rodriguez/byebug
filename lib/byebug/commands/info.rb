@@ -344,21 +344,16 @@ module Byebug
       end
 
       def help(args)
-        return description + format_subcmds(Subcommands) unless args && args[1]
+        return description + format_subcmds unless args and args[1]
 
-        subcmd = find(Subcommands, args[1])
-        return "Invalid \"info\" subcommand \"#{args[1]}\"." unless subcmd
+        return format_subcmd(args[1]) unless 'file' == args[1] and args[2]
 
         str = subcmd.short_help + '.'
-        if 'file' == subcmd.name and args[2]
-          subsubcmd = find(InfoFileSubcommands, args[2])
-          if subsubcmd
-            str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
-          else
-            str += "\n" + subsubcmd.short_help + '.'
-          end
+        subsubcmd = find(InfoFileSubcommands, args[2])
+        if subsubcmd
+          str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
         else
-          str += "\n" + "#{subcmd.long_help || ''}"
+          str += "\n" + subsubcmd.short_help + '.'
         end
 
         return str

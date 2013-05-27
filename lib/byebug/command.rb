@@ -30,8 +30,6 @@ module Byebug
       end
       return nil
     end
-
-
   end
 
   # Root dir for byebug
@@ -61,30 +59,30 @@ module Byebug
         output = output.join("\n") + "\n"
 
         if defined? self::Subcommands
-          return output += format_subcmds(self::Subcommands) unless args and args[1]
-
-          subcmd = find(Subcommands, args[1])
-          return "Invalid \"#{names.join("|")}\" " \
-                 "subcommand \"#{args[1]}\"." unless subcmd
-
-          output += "#{subcmd.short_help}.\n" \
-                    "#{subcmd.long_help || '' }"
+          return output += format_subcmds unless args and args[1]
+          output += format_subcmd(args[1])
         end
 
         return output
       end
 
-      ##
-      # Build formatted list of subcmds
-      #
-      def format_subcmds(subcmds)
+      def format_subcmd(subcmd_name)
+        subcmd = find(self::Subcommands, subcmd_name)
+        return "Invalid \"#{names.join("|")}\" " \
+               "subcommand \"#{args[1]}\"." unless subcmd
+
+        return "#{subcmd.short_help}.\n" \
+               "#{subcmd.long_help || '' }"
+      end
+
+      def format_subcmds
         cmd_name = names.join("|")
         s = "\n"                                     \
             "--\n"                                   \
             "List of \"#{cmd_name}\" subcommands:\n" \
             "--\n"
-        width = subcmds.map(&:name).max_by(&:size).size
-        for subcmd in subcmds do
+        width = self::Subcommands.map(&:name).max_by(&:size).size
+        for subcmd in self::Subcommands do
           s += sprintf \
             "%s %-#{width}s -- %s\n", cmd_name, subcmd.name, subcmd.short_help
         end

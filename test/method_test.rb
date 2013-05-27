@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
 class TestMethod < TestDsl::TestCase
-
   temporary_change_hash Byebug::Command.settings, :autolist, 0
 
   describe 'show instance method of a class' do
