@@ -435,3 +435,53 @@ Much better. But again let me emphasize that the parameter types are those of
 the corresponding variables that _currently_ exist, and this might have changed
 since the time when the call was made.
 
+
+## Byebug.start with a block
+
+We saw that `Byebug.start()` and `Byebug.stop()` allow fine-grain control over
+where byebug tracking should occur.
+
+Rather than use an explicit `stop()`, you can also pass a block to the `start()`
+method. This causes `start()` to run and then `yield` to that block. When the
+block is finished, `stop()` is run. In other words, this wraps a
+`Byebug.start()` and `Byebug.stop()` around the block of code. But it also has a
+side benefit of ensuring that in the presence of an uncaught exception `stop` is
+run, without having to explicitly use `begin ... ensure Byebug.stop() end`.
+
+For example, in Ruby on Rails you might want to debug code in one of the
+controllers without causing any slowdown to any other code. And this can be done
+by wrapping the controller in a `start()` with a block; when the method wrapped
+this way finishes, byebug is turned off and the application proceeds at regular
+speed.
+
+Of course, inside the block you will probably want to enter the byebug using
+`Byebug.byebug()`, otherwise there would be little point in using the `start`.
+For example, you can do this in `irb`:
+
+```
+$ irb
+2.0.0p195 :001 > require 'byebug'
+ => true 
+2.0.0p195 :002 > def foo
+2.0.0p195 :003?>   x=1
+2.0.0p195 :004?>   puts 'foo'
+2.0.0p195 :005?>   end
+ => nil 
+2.0.0p195 :006 > Byebug.start{byebug; foo}
+(irb) @ 6
+(byebug) s
+(irb) @ 3
+(byebug) s
+(irb) @ 4
+(byebug) p x
+1
+(byebug) s
+foo
+ => true 
+2.0.0p195 :007 > 
+```
+
+There is a counter inside of `Byebug.start` method to make sure that this works
+when another `Byebug.start` method is called inside of the outer one. However,
+if you are stopped inside byebug, issuing another `byebug` call will not have
+any effect even if it is nested inside another `Byebug.start`.

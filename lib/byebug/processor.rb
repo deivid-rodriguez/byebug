@@ -86,8 +86,12 @@ module Byebug
     end
 
     def self.print_location_and_text(file, line)
-      file_line = "#{canonic_file(file)} @ #{line}\n" \
-                  "#{Byebug.line_at(file, line)}\n"
+      if file == '(irb)'
+        file_line = "#{canonic_file(file)} @ #{line}\n"
+      else
+        file_line = "#{canonic_file(file)} @ #{line}\n" \
+                    "#{Byebug.line_at(file, line)}\n"
+      end
 
       # FIXME: use annotations routines
       if Byebug.annotate.to_i > 2
@@ -232,7 +236,7 @@ module Byebug
 
         preloop(commands, context)
 
-        if Command.settings[:autolist] == 0
+        if Command.settings[:autolist] == 0 || file == '(irb)'
           CommandProcessor.print_location_and_text(file, line)
         end
 
