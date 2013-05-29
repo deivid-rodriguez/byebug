@@ -1,7 +1,7 @@
-# Byebug [![Gem Version](https://badge.fury.io/rb/byebug.png)](http://badge.fury.io/rb/byebug) [![Build Status](https://secure.travis-ci.org/deivid-rodriguez/byebug.png)](http://travis-ci.org/deivid-rodriguez/byebug) [![Code Climate](https://codeclimate.com/github/deivid-rodriguez/byebug.png)](https://codeclimate.com/github/deivid-rodriguez/byebug) [![Dependency Status](https://gemnasium.com/deivid-rodriguez/byebug.png)](https://gemnasium.com/deivid-rodriguez/byebug)
+# Byebug [![Gem Version][1]][2] [![Build Status][3]][4] [![Code Climate][5]][6] [![Dependency Status][7]][8]
 
 <img src="https://raw.github.com/deivid-rodriguez/byebug/master/logo.png"
-     alt="Byebug logo" align="right" />
+     alt="Byebug logo" align="right" style="margin-left: 10px" />
 
 _Debugging in Ruby 2.0_
 
@@ -254,3 +254,12 @@ software, specially:
 * Dennis Ushakov, author of [debase](https://github.com/denofevil/debase), the
 starting point of this.
 * Logo by [Ivlichev Victor Petrovich](http://www.aha-soft.com/)
+
+[1]: https://badge.fury.io/rb/byebug.png
+[2]: http://badge.fury.io/rb/byebug
+[3]: https://secure.travis-ci.org/deivid-rodriguez/byebug.png
+[4]: http://travis-ci.org/deivid-rodriguez/byebug
+[5]: https://codeclimate.com/github/deivid-rodriguez/byebug.png
+[6]: https://codeclimate.com/github/deivid-rodriguez/byebug
+[7]: https://gemnasium.com/deivid-rodriguez/byebug.png
+[8]: https://gemnasium.com/deivid-rodriguez/byebug
