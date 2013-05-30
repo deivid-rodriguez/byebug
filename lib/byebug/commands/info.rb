@@ -2,10 +2,8 @@ module Byebug
 
   module InfoFunctions
     def info_catch(*args)
-      unless @state.context
-        print "No frame selected.\n"
-        return
-      end
+      return print "No frame selected.\n" unless @state.context
+
       if Byebug.catchpoints and not Byebug.catchpoints.empty?
         Byebug.catchpoints.each do |exception, hits|
           print "#{exception}: #{exception.is_a?(Class)}\n"
@@ -82,12 +80,11 @@ module Byebug
     end
 
     def info_args(*args)
-      unless @state.context
-        print "No frame selected.\n"
-        return
-      end
+      return errmsg "No frame selected.\n" unless @state.context
+
       locals = @state.context.frame_locals
       args = @state.context.frame_args
+
       args.each do |name|
         s = "#{name} = #{locals[name].inspect}"
         pad_with_dots(s)
@@ -110,7 +107,7 @@ module Byebug
     private :info_breakpoint
 
     def info_breakpoints(*args)
-      return print "\"info breakpoints\" not available here.\n" unless
+      return errmsg "\"info breakpoints\" not available here.\n" unless
         @state.context
 
       return print "No breakpoints.\n" if Byebug.breakpoints.empty?
@@ -127,21 +124,18 @@ module Byebug
     end
 
     def info_display(*args)
-      unless @state.context
-        print "info display not available here.\n"
-        return
-      end
-      if @state.display.find{|d| d[0]}
-        print "Auto-display expressions now in effect:\n"
-        print "Num Enb Expression\n"
-        n = 1
-        for d in @state.display
-          print "%3d: %s  %s\n", n, (d[0] ? 'y' : 'n'), d[1] if
-            d[0] != nil
-          n += 1
-        end
-      else
-        print "There are no auto-display expressions now.\n"
+      return errmsg "\"info display\" not available here.\n" unless
+        @state.context
+
+      return print "There are no auto-display expressions now.\n" unless
+        @state.display.find{|d| d[0]}
+
+      print "Auto-display expressions now in effect:\n" \
+            "Num Enb Expression\n"
+      n = 1
+      for d in @state.display
+        print "%3d: %s  %s\n", n, (d[0] ? 'y' : 'n'), d[1] if d[0] != nil
+        n += 1
       end
     end
 
@@ -221,27 +215,23 @@ module Byebug
     end
 
     def info_instance_variables(*args)
-      unless @state.context
-        print "info instance_variables not available here.\n"
-        return
-      end
+      return errmsg "\"info instance_variables\" not available here.\n" unless
+        @state.context
+
       obj = debug_eval('self')
       var_list(obj.instance_variables)
     end
 
     def info_line(*args)
-      unless @state.context
-        errmsg "info line not available here.\n"
-        return
-      end
+      return errmsg "\"info line\" not available here.\n" unless @state.context
+
       print "Line %d of \"%s\"\n",  @state.line, @state.file
     end
 
     def info_locals(*args)
-      unless @state.context
-        errmsg "info line not available here.\n"
-        return
-      end
+      return errmsg "\"info locals\" not available here.\n" unless
+        @state.context
+
       locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
         ### FIXME: make a common routine
@@ -274,8 +264,8 @@ module Byebug
     private :info_stop_reason
 
     def info_program(*args)
-      return print "The program being debugged is not being run.\n" if
-        not @state.context
+      return errmsg "The program being debugged is not being run.\n" unless
+        @state.context
 
       return print "The program crashed.\n" + Byebug.last_exception ?
                    "Exception: #{Byebug.last_exception.inspect}" : "" + "\n" if
@@ -286,31 +276,26 @@ module Byebug
     end
 
     def info_stack(*args)
-      if not @state.context
-        errmsg "info stack not available here.\n"
-        return
-      end
+      return errmsg "\"info stack\" not available here.\n" unless @state.context
+
       print_backtrace
     end
 
     def info_global_variables(*args)
-      unless @state.context
-        errmsg "info global_variables not available here.\n"
-        return
-      end
+      return errmsg "\"info global_variables\" not available here.\n" unless
+        @state.context
+
       var_global
     end
 
     def info_variables(*args)
-      if not @state.context
-        errmsg "info variables not available here.\n"
-        return
-      end
+      return errmsg "\"info variables\" not available here.\n" unless
+        @state.context
+
       obj = debug_eval('self')
       locals = @state.context.frame_locals
       locals[:self] = @state.context.frame_self(@state.frame_pos)
       locals.keys.sort.each do |name|
-        next if name =~ /^__dbg_/ # skip byebug pollution
         ### FIXME: make a common routine
         begin
           s = "#{name} = #{locals[name].inspect}"

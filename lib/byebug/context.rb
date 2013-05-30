@@ -25,7 +25,7 @@ module Byebug
       eval "local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}", bind
     end
 
-    def frame_args_info bind
+    def frame_args_info
       bind = frame_binding frame_no
       return [] unless eval "__method__", bind
       eval "self.method(__method__).parameters", bind

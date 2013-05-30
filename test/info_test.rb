@@ -55,7 +55,7 @@ class TestInfo < TestDsl::TestCase
     it 'must show all display expressions' do
       enter 'display 3 + 3', 'display a + b', 'info display'
       debug_file 'info'
-      check_output_includes 'Auto-display expressions now in effect:',
+      check_output_includes "Auto-display expressions now in effect:\n" \
                             'Num Enb Expression',
                             '1: y  3 + 3',
                             '2: y  a + b'

@@ -16,10 +16,11 @@ module Byebug
       end
 
       if abs_frame_pos >= context.stack_size then
-        errmsg "Adjusting would put us beyond the oldest (initial) frame.\n"
-        return
+        return \
+          errmsg "Adjusting would put us beyond the oldest (initial) frame.\n"
       elsif abs_frame_pos < 0 then
-        errmsg "Adjusting would put us beyond the newest (innermost) frame.\n"
+        return \
+          errmsg "Adjusting would put us beyond the newest (innermost) frame.\n"
         return
       end
 
@@ -28,17 +29,18 @@ module Byebug
         @state.frame_pos = abs_frame_pos
       end
 
-      @state.file = context.frame_file(@state.frame_pos)
-      @state.line = context.frame_line(@state.frame_pos)
+      @state.file = @state.context.frame_file @state.frame_pos
+      @state.line = @state.context.frame_line @state.frame_pos
 
-      print_frame(@state.frame_pos, false)
+      print_frame @state.frame_pos, false
     end
 
-    def get_frame_call(prefix, pos, context)
-      id = context.frame_method(pos)
+    def get_frame_call(prefix, pos)
+      id = @state.context.frame_method(pos)
       return "<main>" unless id
 
-      klass = context.frame_class(pos)
+      klass = @state.context.frame_class(pos)
+
       if Command.settings[:callstyle] != :short && klass
         call_str = "#{klass}.#{id.id2name}"
       else
@@ -84,10 +86,9 @@ module Byebug
       end
     end
 
-    def print_frame(pos, mark_current = true, context = @state.context)
-      file = context.frame_file(pos)
-      line = context.frame_line(pos)
-      klass = context.frame_class(pos)
+    def print_frame(pos, mark_current = true)
+      file = @state.context.frame_file pos
+      line = @state.context.frame_line pos
 
       unless Command.settings[:frame_fullpath]
         path_components = file.split(/[\\\/]/)
@@ -104,7 +105,7 @@ module Byebug
       end
 
       frame_str += sprintf "#%-2d ", pos
-      frame_str += get_frame_call(frame_str, pos, context)
+      frame_str += get_frame_call frame_str, pos
       file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
       if frame_str.size + file_line.size + 1 > Command.settings[:width]
         frame_str += "\n      #{file_line}\n"
@@ -129,9 +130,10 @@ module Byebug
     # ignoring additional caller entries. sentinal is set by byebug, but if it's
     # nil then additional entries are presumably ones that we haven't recorded
     # in context
-    def truncated_callstack?(context, sentinal=nil, cs=caller)
-      recorded_size = context.stack_size
-      to_find_fl = "#{context.frame_file(0)}:#{context.frame_line(0)}"
+    def truncated_callstack?(sentinal=nil, cs=caller)
+      recorded_size = @state.context.stack_size
+      to_find_fl =
+        "#{@state.context.frame_file(0)}:#{@state.context.frame_line(0)}"
       top_discard = false
       cs.each_with_index do |fl, i|
         fl.gsub!(/in `.*'$/, '')
@@ -166,7 +168,7 @@ module Byebug
 
     def execute
       print_backtrace
-      if truncated_callstack?(@state.context, Byebug.start_sentinal)
+      if truncated_callstack?(Byebug.start_sentinal)
          print \
            "Warning: saved frames may be incomplete; compare with caller(0)\n"
       end
