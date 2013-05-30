@@ -95,22 +95,22 @@ load_frame_info(VALUE trace_point, VALUE *path, VALUE *lineno, VALUE *method_id,
 }
 
 static void
-call_at_line(debug_context_t *context, VALUE context_object,
+call_at_line(debug_context_t *context, VALUE context_obj,
                                        VALUE path, VALUE lineno)
 {
   CTX_FL_UNSET(context, CTX_FL_ENABLE_BKPT);
   CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
   context->last_file = RSTRING_PTR(path);
   context->last_line = FIX2INT(lineno);
-  rb_funcall(context_object, rb_intern("at_line"), 2, path, lineno);
+  rb_funcall(context_obj, rb_intern("at_line"), 2, path, lineno);
 }
 
 #define EVENT_SETUP                                                        \
   VALUE path, lineno, method_id, defined_class, binding, self;             \
-  VALUE context_object;                                                    \
+  VALUE context_obj;                                                       \
   debug_context_t *context;                                                \
-  context_object = Byebug_context(mByebug);                                \
-  Data_Get_Struct(context_object, debug_context_t, context);               \
+  context_obj = Byebug_context(mByebug);                                   \
+  Data_Get_Struct(context_obj, debug_context_t, context);                  \
   if (!check_start_processing(context)) return;                            \
   load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class, \
                                &binding, &self);                           \
@@ -140,7 +140,7 @@ process_line_event(VALUE trace_point, void *data)
   }
 
   if (RTEST(tracing))
-    rb_funcall(context_object, rb_intern("at_tracing"), 2, path, lineno);
+    rb_funcall(context_obj, rb_intern("at_tracing"), 2, path, lineno);
 
   if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
   {
@@ -159,7 +159,7 @@ process_line_event(VALUE trace_point, void *data)
   {
     context->stop_reason = CTX_STOP_STEP;
     reset_stepping_stop_points(context);
-    call_at_line(context, context_object, path, lineno);
+    call_at_line(context, context_obj, path, lineno);
   }
   else if (CTX_FL_TEST(context, CTX_FL_ENABLE_BKPT))
   {
@@ -168,8 +168,8 @@ process_line_event(VALUE trace_point, void *data)
     {
       context->stop_reason = CTX_STOP_BREAKPOINT;
       reset_stepping_stop_points(context);
-      rb_funcall(context_object, rb_intern("at_breakpoint"), 1, breakpoint);
-      call_at_line(context, context_object, path, lineno);
+      rb_funcall(context_obj, rb_intern("at_breakpoint"), 1, breakpoint);
+      call_at_line(context, context_obj, path, lineno);
     }
   }
 
@@ -226,8 +226,8 @@ process_call_event(VALUE trace_point, void *data)
   if (breakpoint != Qnil)
   {
     context->stop_reason = CTX_STOP_BREAKPOINT;
-    rb_funcall(context_object, rb_intern("at_breakpoint"), 1, breakpoint);
-    call_at_line(context, context_object, path, lineno);
+    rb_funcall(context_obj, rb_intern("at_breakpoint"), 1, breakpoint);
+    call_at_line(context, context_obj, path, lineno);
   }
 
   cleanup(context);
@@ -276,8 +276,8 @@ process_raise_event(VALUE trace_point, void *data)
       /* increment exception */
       rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
       context->stop_reason = CTX_STOP_CATCHPOINT;
-      rb_funcall(context_object, rb_intern("at_catchpoint"), 1, rb_errinfo());
-      call_at_line(context, context_object, path, lineno);
+      rb_funcall(context_obj, rb_intern("at_catchpoint"), 1, rb_errinfo());
+      call_at_line(context, context_obj, path, lineno);
       break;
     }
   }
@@ -401,11 +401,11 @@ Byebug_start(VALUE self)
 static VALUE
 set_current_skipped_status(VALUE status)
 {
-  VALUE context_object;
+  VALUE context_obj;
   debug_context_t *context;
 
-  context_object = Byebug_context(mByebug);
-  Data_Get_Struct(context_object, debug_context_t, context);
+  context_obj = Byebug_context(mByebug);
+  Data_Get_Struct(context_obj, debug_context_t, context);
   if (status)
     CTX_FL_SET(context, CTX_FL_SKIPPED);
   else
@@ -416,39 +416,38 @@ set_current_skipped_status(VALUE status)
 static VALUE
 Byebug_load(int argc, VALUE *argv, VALUE self)
 {
-    VALUE file, stop, context_object;
-    debug_context_t *context;
-    int state = 0;
+  VALUE file, stop, context_obj;
+  debug_context_t *context;
+  int state = 0;
 
-    if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
-    {
-        stop = Qfalse;
-    }
+  if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
+  {
+      stop = Qfalse;
+  }
 
-    Byebug_start(self);
+  Byebug_start(self);
 
-    context_object = Byebug_context(self);
-    Data_Get_Struct(context_object, debug_context_t, context);
-    context->stack_size = 0;
-    if (RTEST(stop)) context->steps = 1;
+  context_obj = Byebug_context(self);
+  Data_Get_Struct(context_obj, debug_context_t, context);
+  context->stack_size = 0;
+  if (RTEST(stop)) context->steps = 1;
 
-    /* Initializing $0 to the script's path */
-    ruby_script(RSTRING_PTR(file));
-    rb_load_protect(file, 0, &state);
-    if (0 != state)
-    {
-        VALUE errinfo = rb_errinfo();
-        //debug_suspend(self);
-        reset_stepping_stop_points(context);
-        rb_set_errinfo(Qnil);
-        return errinfo;
-    }
+  /* Initializing $0 to the script's path */
+  ruby_script(RSTRING_PTR(file));
+  rb_load_protect(file, 0, &state);
+  if (0 != state)
+  {
+      VALUE errinfo = rb_errinfo();
+      reset_stepping_stop_points(context);
+      rb_set_errinfo(Qnil);
+      return errinfo;
+  }
 
-    /* We should run all at_exit handler's in order to provide, for instance, a
-     * chance to run all defined test cases */
-    rb_exec_end_proc();
+  /* We should run all at_exit handler's in order to provide, for instance, a
+   * chance to run all defined test cases */
+  rb_exec_end_proc();
 
-    return Qnil;
+  return Qnil;
 }
 
 static VALUE
