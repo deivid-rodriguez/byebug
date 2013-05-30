@@ -2,7 +2,7 @@ module Byebug
 
   module EvalFunctions
     def run_with_binding
-      binding = @state.context ? get_binding : TOPLEVEL_BINDING
+      binding = get_binding
       $__dbg_interface = @state.interface
       eval(<<-EOC, binding)
         __dbg_verbose_save=$VERBOSE; $VERBOSE=false

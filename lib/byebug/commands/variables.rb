@@ -138,8 +138,8 @@ module Byebug
     end
 
     def execute
-      locals = @state.context.frame_locals(@state.frame_pos)
       _self = @state.context.frame_self(@state.frame_pos)
+      locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
         print "  %s => %p\n", name, locals[name]
       end

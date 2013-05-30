@@ -86,8 +86,8 @@ module Byebug
         print "No frame selected.\n"
         return
       end
-      locals = @state.context.frame_locals(@state.frame_pos)
-      args = @state.context.frame_args(@state.frame_pos)
+      locals = @state.context.frame_locals
+      args = @state.context.frame_args
       args.each do |name|
         s = "#{name} = #{locals[name].inspect}"
         pad_with_dots(s)
@@ -242,7 +242,7 @@ module Byebug
         errmsg "info line not available here.\n"
         return
       end
-      locals = @state.context.frame_locals(@state.frame_pos)
+      locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
         ### FIXME: make a common routine
         begin
@@ -307,7 +307,7 @@ module Byebug
         return
       end
       obj = debug_eval('self')
-      locals = @state.context.frame_locals(@state.frame_pos)
+      locals = @state.context.frame_locals
       locals[:self] = @state.context.frame_self(@state.frame_pos)
       locals.keys.sort.each do |name|
         next if name =~ /^__dbg_/ # skip byebug pollution
@@ -328,7 +328,6 @@ module Byebug
       var_list(obj.instance_variables, obj.instance_eval{binding()})
       var_class_self
     end
-
 
     class << self
       def names

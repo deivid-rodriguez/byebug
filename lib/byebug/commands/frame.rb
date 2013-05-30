@@ -45,8 +45,8 @@ module Byebug
         call_str = "#{id.id2name}"
       end
 
-      args = context.frame_args(pos)
-      locals = context.frame_locals(pos)
+      args = @state.context.frame_args pos
+      locals = @state.context.frame_locals pos
       if args.any?
         call_str += "("
         args.each_with_index do |name, i|
@@ -60,7 +60,7 @@ module Byebug
             end
             call_str += "#{name}##{klass}, "
           when :tracked
-            arg_info = context.frame_args_info(pos)
+            arg_info = context.frame_args_info pos
             if arg_info && arg_info.size > i
               call_str += "#{name}: #{arg_info[i].inspect}, "
             else

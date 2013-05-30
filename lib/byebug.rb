@@ -247,7 +247,6 @@ class Module
 end
 
 module Kernel
-
   ##
   # Enters byebug after _steps_ line events occur.
   #
@@ -267,13 +266,4 @@ module Kernel
     end
   end
   alias breakpoint byebug unless respond_to?(:breakpoint)
-
-  ##
-  # Returns a binding of n-th call frame
-  #
-  def binding_n(n = 0)
-    Byebug.skip do
-      Byebug.context.frame_binding(n+1)
-    end
-  end
 end

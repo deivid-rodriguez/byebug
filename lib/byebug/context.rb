@@ -8,8 +8,8 @@ module Byebug
   end
 
   class Context
-    def frame_args(frame_no=0)
-      bind = frame_binding(frame_no)
+    def frame_args frame_no = 0
+      bind = frame_binding frame_no
       return [] unless eval "__method__", bind
       begin
         eval "self.method(__method__).parameters.map{|(attr, mid)| mid}", bind
@@ -18,6 +18,17 @@ module Byebug
               "#{e.class} Exception: #{e.message})\n     "
         return []
       end
+    end
+
+    def frame_locals frame_no = 0
+      bind = frame_binding frame_no
+      eval "local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}", bind
+    end
+
+    def frame_args_info bind
+      bind = frame_binding frame_no
+      return [] unless eval "__method__", bind
+      eval "self.method(__method__).parameters", bind
     end
 
     def handler

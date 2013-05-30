@@ -224,9 +224,8 @@ module Byebug
         end
       end
 
-      def get_binding
-        @state.context ? @state.context.frame_binding(@state.frame_pos) :
-          TOPLEVEL_BINDING
+      def get_binding pos = @state.frame_pos
+        @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
       end
   end
 
