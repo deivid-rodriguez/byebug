@@ -297,7 +297,6 @@ module Byebug
           end
         end
         pad_with_dots(s)
-        s.gsub!('%', '%%')  # protect against printf format strings
         print "#{s}\n"
       end
       var_list(obj.instance_variables, obj.instance_eval{binding()})

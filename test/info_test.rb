@@ -273,10 +273,10 @@ class TestInfo < TestDsl::TestCase
                             '@foo = "bar"'
     end
 
-    it 'must handle printf strings correctly' do
+    it 'must correctly print variables containing % sign' do
       enter 'break 32', 'cont', 'info variables'
       debug_file 'info'
-      check_output_includes 'e = "%%.2f"'
+      check_output_includes 'e = "%.2f"'
     end
   end
 

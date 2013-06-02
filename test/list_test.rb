@@ -165,6 +165,12 @@ class TestList < TestDsl::TestCase
                           interface.error_queue
   end
 
+  it 'must correctly print lines containing % sign' do
+    enter 'list 23'
+    debug_file 'list'
+    check_output_includes "23: a = '%23'"
+  end
+
   describe 'Post Mortem' do
     it 'must work in post-mortem mode' do
       enter 'cont'

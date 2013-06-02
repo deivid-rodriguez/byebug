@@ -25,6 +25,13 @@ class TestTrace < TestDsl::TestCase
                               "Tracing: #{fullpath('trace')}:4 $bla = 4",
                               "Tracing: #{fullpath('trace')}:7 $bla = 7"
       end
+
+      it 'must correctly print lines containing % sign' do
+        enter 'cont 7', 'trace on', 'next', 'trace off'
+        debug_file 'trace'
+        check_output_includes \
+          "Tracing: #{fullpath('trace')}:8 $bla = (0 == (7 % $bla))"
+      end
     end
 
     it 'must show an error message if given subcommand is incorrect' do
