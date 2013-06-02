@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # Enumerator for primes
 class SievePrime
   @@odd_primes = []
@@ -14,7 +13,7 @@ class SievePrime
       end
       unless not_prime
         @@odd_primes << candidate
-        yield candidate 
+        yield candidate
       end
       candidate += 2
     end
@@ -24,5 +23,3 @@ SievePrime.next_prime do |prime|
   puts prime
   break if prime > 10
 end
-
-    

@@ -485,3 +485,162 @@ There is a counter inside of `Byebug.start` method to make sure that this works
 when another `Byebug.start` method is called inside of the outer one. However,
 if you are stopped inside byebug, issuing another `byebug` call will not have
 any effect even if it is nested inside another `Byebug.start`.
+
+## Debugging Oddities: How debugging Ruby may be different from debugging other
+languages
+
+If you are used to debugging in other languages like C, C++, Perl, Java or even
+Bash (see [bashdb](http://bashdb.sf.net)), there may be a number of things that
+seem or feel a little bit different and may confuse you. A number of these
+things aren't oddities of the debugger per se but differences in how Ruby works
+compared to those other languages. Because Ruby works a little differently from
+those other languages, writing a debugger has to also be a little different as
+well if it is to be useful. In this respect, using byebug may help you
+understand Ruby better.
+
+We've already seen two examples of such differences. One difference is the fact
+that we stop on method definitions or `def`'s and that is because these are in
+fact executable statements. In other compiled languages this would not happen
+because that's already been done when you compile the program (or in Perl when
+it scans in the program). The other difference we saw was our inability to show
+call stack parameter types without having made arrangements for byebug to track
+this. In other languages call stack information is usually available without
+asking assistance of the debugger (in C and C++, however, you generally have to
+ask the compiler to add such information.).
+
+In this section we'll consider some other things that might throw off new users
+to Ruby who are familiar with other languages and debugging in them.
+
+* Bouncing Around in Blocks (iterators)
+* No Parameter Values in a Call Stack
+* Lines You Can Stop At
+
+## Bouncing Around in Blocks (iterators)
+
+When debugging languages with coroutines like Python and Ruby, a method call may
+not necessarily go to the first statement after the method header. It's possible
+that the call will continue after a `yield` statement from a prior call.
+
+```ruby
+
+# Enumerator for primes
+class SievePrime
+  @@odd_primes = []
+  def self.next_prime(&block)
+    candidate = 2
+    yield candidate
+    not_prime = false
+    candidate += 1
+    while true do
+      @@odd_primes.each do |p|
+        not_prime = (0 == (candidate % p))
+        break if not_prime
+      end
+      unless not_prime
+        @@odd_primes << candidate
+        yield candidate
+      end
+      candidate += 2
+    end
+  end
+end
+SievePrime.next_prime do |prime|
+  puts prime
+  break if prime > 10
+end
+```
+
+```
+$ byebug primes.rb
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/primes.rb
+    1: # Enumerator for primes
+=>  2: class SievePrime
+    3:   @@odd_primes = []
+    4:   def self.next_prime(&block)
+    5:     candidate = 2
+    6:     yield candidate
+    7:     not_prime = false
+    8:     candidate += 1
+    9:     while true do
+   10:       @@odd_primes.each do |p|
+(byebug) set linetrace
+line tracing is on.
+(byebug) set basename
+basename in on.
+(byebug) step 9
+Tracing: primes.rb:3 @@odd_primes = []
+Tracing: primes.rb:4 def self.next_prime(&block)
+Tracing: primes.rb:22 SievePrime.next_prime do |prime|
+Tracing: primes.rb:5 candidate = 2
+Tracing: primes.rb:6 yield candidate
+Tracing: primes.rb:23 puts prime
+2
+Tracing: primes.rb:24 break if prime > 10
+Tracing: primes.rb:7 not_prime = false
+Tracing: primes.rb:8 candidate += 1
+[3, 12] in /home/davidr/Proyectos/byebug/old_doc/primes.rb
+    3:   @@odd_primes = []
+    4:   def self.next_prime(&block)
+    5:     candidate = 2
+    6:     yield candidate
+    7:     not_prime = false
+=>  8:     candidate += 1
+    9:     while true do
+   10:       @@odd_primes.each do |p|
+   11:         not_prime = (0 == (candidate % p))
+   12:         break if not_prime
+(byebug)
+```
+
+The loop between lines 23-26 gets interleaved between those of
+`Sieve::next_prime`, lines 6-19 above.
+
+
+### No Parameter Values in a Call Stack
+
+In traditional debuggers, in a call stack you can generally see the names of the
+parameters and the values that were passed in.
+
+Ruby is a very dynamic language and it tries to be efficient within the confines
+of the language definition. Values generally aren't taken out of a variable or
+expression and pushed onto a stack. Instead a new scope is created and the
+parameters are given initial values. Parameter passing is by _reference_ not by
+_value_ as it is say Algol, C, or Perl. During the execution of a method,
+parameter values can change (and often do). In fact even the _class_ of the
+object can change.
+
+So at present, the name of the parameter is shown. The call-style setting
+([callstyle]()) can be used to set whether the name is shown or the name and the
+_current_ class of the object. It has been contemplated that a style might be
+added which saves on call shorter "scalar" types of values and the class name.
+
+
+### Lines You Can Stop At
+
+As with the duplicate stops per control (e.g. `if` statement), until tools like
+debuggers get more traction among core ruby developers there are going to be
+weirdness. Here we describe the stopping locations which effects the breakpoint
+line numbers you can stop at.
+
+Consider the following little Ruby program.
+
+```ruby
+'Yes it does' =~ /
+(Yes) \s+
+it  \s+
+does
+/ix
+puts $1
+```
+
+The stopping points that Ruby records are the last two lines, lines 5 and 6.
+
+Inside `byebug` you can get a list of stoppable lines for a file using the `info
+file` command with the attribute `breakpoints`.
+
+To be continued...
+* more complex example with objects, pretty printing and irb.
+* line tracing and non-interactive tracing.
+* mixing in Byebug.debug with byebug
+* post-mortem debugging and setting up for that
+* references to videos
