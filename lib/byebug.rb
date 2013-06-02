@@ -267,3 +267,29 @@ module Kernel
   end
   alias breakpoint byebug unless respond_to?(:breakpoint)
 end
+
+module Rails
+  module Rack
+    class Debugger
+      def initialize(app)
+        @app = app
+
+        # clear ARGV so that rails server options aren't passed to IRB
+        ARGV.clear
+
+        require 'byebug'
+
+        ::Byebug.start
+        puts "=> Byebug enabled"
+      rescue LoadError
+        puts "You're missing the 'byebug' gem. Add it to your Gemfile, bundle " \
+             "it and try again."
+        exit(1)
+      end
+
+      def call(env)
+        @app.call(env)
+      end
+    end
+  end
+end
