@@ -25,26 +25,20 @@ module Byebug
   class CommandProcessor < Processor
     attr_reader :display
 
-    # FIXME: get from Command regexp method.
-    @@Show_breakpoints_postcmd = [
-                                  /^\s*b(?:reak)?/,
-                                  /^\s* cond(?:ition)? (?:\s+(\d+)\s*(.*))?$/ix,
-                                  /^\s*del(?:ete)?(?:\s+(.*))?$/ix,
-                                  /^\s* dis(?:able)? (?:\s+(.*))?$/ix,
-                                  /^\s* en(?:able)? (?:\s+(.*))?$/ix
-                                  # "tbreak", "clear",
+    @@Show_breakpoints_postcmd = [ Byebug::BreakCommand.new(nil).regexp,
+                                   Byebug::ConditionCommand.new(nil).regexp,
+                                   Byebug::DeleteCommand.new(nil).regexp,
+                                   Byebug::DisableCommand.new(nil).regexp,
+                                   Byebug::EnableCommand.new(nil).regexp
                                  ]
-    @@Show_annotations_run = [
-                              /^\s*c(?:ont(?:inue)?)?(?:\s+(.*))?$/,
-                              /^\s*fin(?:ish)?$/,
-                              /^\s*n(?:ext)?([+-])?(?:\s+(.*))?$/,
-                              /^\s*s(?:tep)?([+-])?(?:\s+(.*))?$/
-                            ]
-
-    @@Show_annotations_postcmd = [
-                                  /^\s* down (?:\s+(.*))? .*$/x,
-                                  /^\s* f(?:rame)? (?:\s+ (.*))? \s*$/x,
-                                  /^\s* u(?:p)? (?:\s+(.*))?$/x
+    @@Show_annotations_run = [ Byebug::ContinueCommand.new(nil).regexp,
+                               Byebug::FinishCommand.new(nil).regexp,
+                               Byebug::NextCommand.new(nil).regexp,
+                               Byebug::StepCommand.new(nil).regexp
+                             ]
+    @@Show_annotations_postcmd = [ Byebug::DownCommand.new(nil).regexp,
+                                   Byebug::FrameCommand.new(nil).regexp,
+                                   Byebug::UpCommand.new(nil).regexp
                                  ]
 
     def initialize(interface = LocalInterface.new)

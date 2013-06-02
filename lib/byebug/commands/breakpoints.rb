@@ -1,7 +1,7 @@
 module Byebug
 
   # Implements byebug "break" command.
-  class AddBreakpoint < Command
+  class BreakCommand < Command
     self.allow_in_control = true
 
     def regexp
@@ -14,8 +14,7 @@ module Byebug
     end
 
     def execute
-      return print AddBreakpoint.help(nil) if
-        AddBreakpoint.names.include?(@match[0])
+      return print self.class.help(nil) if self.class.names.include?(@match[0])
 
       if @match[1]
         line, _, _, expr = @match.captures
@@ -107,7 +106,7 @@ module Byebug
   end
 
   # Implements byebug "delete" command.
-  class DeleteBreakpointCommand < Command
+  class DeleteCommand < Command
     self.allow_in_control = true
 
     def regexp

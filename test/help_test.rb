@@ -35,7 +35,7 @@ class TestHelp < TestDsl::TestCase
   it 'must show a command\'s help' do
     enter 'help break'
     debug_file 'help'
-    check_output_includes Byebug::AddBreakpoint.help(nil)
+    check_output_includes Byebug::BreakCommand.help(nil)
   end
 
   describe 'Post Mortem' do
