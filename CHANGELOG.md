@@ -1,3 +1,11 @@
+## 1.3.1
+
+* Byebug now works with Rails debugging flag
+* Fix bug which would make byebug crash when trying to print lines of code
+containing the character '%'
+* Fix bug which prevented basename and linetrace options from working together
+
+
 ## 1.3.0
 
 * Support colon-delimited include paths in command-line front-end (@ender672)
