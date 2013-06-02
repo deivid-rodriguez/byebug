@@ -8,7 +8,7 @@ module Byebug
     end
 
     # Common routine for reporting byebug error messages.
-    # Derived classed may want to override this to capture output.
+    # Derived classes may want to override this to capture output.
     def errmsg(*args)
       if Byebug.annotate.to_i > 2
         aprint 'error-begin'

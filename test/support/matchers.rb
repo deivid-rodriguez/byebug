@@ -11,14 +11,16 @@ module MiniTest::Assertions
   #
   def assert_includes_in_order(given_collection, original_collection, msg = nil)
     msg = message(msg) do
-      "Expected #{mu_pp(original_collection)} to include #{mu_pp(given_collection)} in order"
+      "Expected #{mu_pp(original_collection)} " \
+      "to include #{mu_pp(given_collection)} in order"
     end
     assert includes_in_order_result(original_collection, given_collection), msg
   end
 
   def refute_includes_in_order(given_collection, original_collection, msg = nil)
     msg = message(msg) do
-      "Expected #{mu_pp(original_collection)} to not include #{mu_pp(given_collection)} in order"
+      "Expected #{mu_pp(original_collection)} " \
+      "to not include #{mu_pp(given_collection)} in order"
     end
     refute includes_in_order_result(original_collection, given_collection), msg
   end

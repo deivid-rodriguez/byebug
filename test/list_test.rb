@@ -56,7 +56,7 @@ class TestList < TestDsl::TestCase
     end
   end
 
-  describe 'list backward' do
+  describe 'list backwards' do
     temporary_change_hash Byebug::Command.settings, :autolist, 0
 
     it 'must show surrounding lines with the first call' do
