@@ -51,19 +51,17 @@ module Byebug
       if @match[1] == "iv"
         obj = debug_eval(@match.post_match)
         obj.instance_variables.sort.each do |v|
-          print "%s = %s\n", v, obj.instance_variable_get(v).inspect
+          print "#{v} = #{obj.instance_variable_get(v).inspect}\n"
         end
       elsif @match[1]
         obj = debug_eval(@match.post_match)
-        print "%s\n", columnize(obj.methods.sort(), Command.settings[:width])
+        print "#{columnize(obj.methods.sort(), Command.settings[:width])}\n"
       else
         obj = debug_eval(@match.post_match)
-        unless obj.kind_of? Module
-          print "Should be Class/Module: %s\n", @match.post_match
-        else
-          print "%s\n", columnize(obj.instance_methods(false).sort(),
-                                  Command.settings[:width])
-        end
+        return print "Should be Class/Module: #{@match.post_match}\n" unless
+          obj.kind_of? Module
+        print "#{columnize(obj.instance_methods(false).sort(),
+                           Command.settings[:width])}\n"
       end
     end
 

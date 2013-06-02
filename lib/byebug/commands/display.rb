@@ -2,7 +2,7 @@ module Byebug
 
   module DisplayFunctions
     def display_expression(exp)
-      print "%s = %s\n", exp, debug_silent_eval(exp).to_s
+      print "#{exp} = #{debug_silent_eval(exp).to_s}\n"
     end
 
     def active_display_expressions?
@@ -13,7 +13,7 @@ module Byebug
       n = 1
       for d in @state.display
         if d[0]
-          print "%d: ", n
+          print "#{n}: "
           display_expression(d[1])
         end
         n += 1
@@ -29,7 +29,7 @@ module Byebug
     def execute
       exp = @match[1]
       @state.display.push [true, exp]
-      print "%d: ", @state.display.size
+      print "#{@state.display.size}: "
       display_expression(exp)
     end
 

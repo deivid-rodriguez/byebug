@@ -11,29 +11,25 @@ module Byebug
 
     def execute
       excn = @match[1]
-      if not excn
-        # No args given.
-        info_catch
-      elsif not @match[2]
-        # One arg given.
-        if 'off' == excn
+      return info_catch unless excn
+
+      if not @match[2]
+        if 'off' == @match[1]
           Byebug.catchpoints.clear if
             confirm("Delete all catchpoints? (y or n) ")
         else
-          binding = @state.context ? get_binding : TOPLEVEL_BINDING
-          unless debug_eval("#{excn}.is_a?(Class)", binding)
-            print "Warning #{excn} is not known to be a Class\n"
-          end
-          Byebug.add_catchpoint(excn)
-          print "Catch exception %s.\n", excn
+          print "Warning #{@match[1]} is not known to be a Class\n" unless
+            debug_eval "#{@match[1]}.is_a?(Class)", get_binding
+          Byebug.add_catchpoint @match[1]
+          print "Catch exception #{@match[1]}.\n"
         end
       elsif @match[2] != 'off'
-        errmsg "Off expected. Got %s\n", @match[2]
-      elsif Byebug.catchpoints.member?(excn)
-        Byebug.catchpoints.delete(excn)
-        print "Catch for exception %s removed.\n", excn
+        errmsg "Off expected. Got #{@match[2]}\n"
+      elsif Byebug.catchpoints.member?(@match[1])
+        Byebug.catchpoints.delete @match[1]
+        print "Catch for exception #{match[1]} removed.\n"
       else
-        errmsg "Catch for exception %s not found.\n", excn
+        return errmsg "Catch for exception #{@match[1]} not found\n"
       end
     end
 

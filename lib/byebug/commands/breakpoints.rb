@@ -61,11 +61,11 @@ module Byebug
         line = line.to_i
         if LineCache.cache(brkpt_filename, Command.settings[:autoreload])
           last_line = LineCache.size(brkpt_filename)
-          return errmsg "There are only %d lines in file %s\n",
-                        last_line, brkpt_filename if line > last_line
+          return errmsg "There are only #{last_line} lines in file " \
+                        "#{brkpt_filename}\n" if line > last_line
 
-          return errmsg "Line %d is not a stopping point in file %s\n",
-                        line, brkpt_filename unless
+          return errmsg "Line #{line} is not a stopping point in file " \
+                        "#{brkpt_filename}\n" unless
             LineCache.trace_line_numbers(brkpt_filename).member?(line)
         else
           errmsg "No source file named #{brkpt_filename}\n"

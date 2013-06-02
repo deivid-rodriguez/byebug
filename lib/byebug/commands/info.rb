@@ -93,11 +93,9 @@ module Byebug
     end
 
     def info_breakpoint(brkpt)
-      print "%-3d %-3s at %s:%s%s\n", brkpt.id,
-                                      brkpt.enabled? ? 'y' : 'n',
-                                      brkpt.source,
-                                      brkpt.pos,
-                                      brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+      expr = brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+      print "%-3d %-3s at %s:%s%s\n" %
+        [brkpt.id, brkpt.enabled? ? 'y' : 'n', brkpt.source, brkpt.pos, expr]
       hits = brkpt.hit_count
       if hits > 0
         s = (hits > 1) ? 's' : ''
@@ -141,15 +139,13 @@ module Byebug
 
     def info_file_path(file)
       path = LineCache.path(file)
-      if path != file
-        print " - #{path}"
-      end
+      print " - #{path}" if path and path != file
     end
     private :info_file_path
 
     def info_file_lines(file)
       lines = LineCache.size(file)
-      print "\t %d lines\n", lines if lines
+      print "\t #{lines} lines\n" if lines
     end
     private :info_file_lines
 
@@ -164,12 +160,12 @@ module Byebug
 
     def info_file_mtime(file)
       stat = LineCache.stat(file)
-      print "\t%s\n", stat.mtime if stat
+      print "\t#{stat.mtime}\n" if stat
     end
     private :info_file_mtime
 
     def info_file_sha1(file)
-      print "\t%s\n", LineCache.sha1(file)
+      print "\t#{LineCache.sha1(file)}\n"
     end
     private :info_file_sha1
 
@@ -202,15 +198,10 @@ module Byebug
       files = LineCache::cached_files
       files += SCRIPT_LINES__.keys unless 'stat' == args[0]
       files.uniq.sort.each do |file|
-        stat = LineCache::stat(file)
-        path = LineCache::path(file)
-        print "File %s", file
-        if path and path != file
-          print " - %s\n", path
-        else
-          print "\n"
-        end
-        print "\t%s\n", stat.mtime if stat
+        print "File #{file}"
+        info_file_path(file)
+        print "\n"
+        info_file_mtime(file)
       end
     end
 
@@ -224,8 +215,7 @@ module Byebug
 
     def info_line(*args)
       return errmsg "\"info line\" not available here.\n" unless @state.context
-
-      print "Line %d of \"%s\"\n",  @state.line, @state.file
+      print "Line #{@state.line} of \"#{@state.file}\"\n"
     end
 
     def info_locals(*args)

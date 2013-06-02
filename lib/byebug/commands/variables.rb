@@ -14,7 +14,7 @@ module Byebug
           end
         end
         pad_with_dots(s)
-        print "%s = %s\n", v, s
+        print "#{v} = #{s}\n"
       end
     end
     def var_class_self
@@ -69,7 +69,7 @@ module Byebug
           print " %s => %p\n", c, value
         end
       else
-        print "Should be Class/Module: %s\n", @match.post_match
+        print "Should be Class/Module: #{@match.post_match}\n"
       end
     end
 
