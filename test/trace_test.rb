@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class TestTrace < TestDsl::TestCase
 
   before do
-    Byebug::Command.settings[:basename] = false
     untrace_var(:$bla) if defined?($bla)
   end
 
@@ -31,6 +30,17 @@ class TestTrace < TestDsl::TestCase
         debug_file 'trace'
         check_output_includes \
           "Tracing: #{fullpath('trace')}:8 $bla = (0 == (7 % $bla))"
+      end
+
+      describe 'when basename set' do
+        temporary_change_hash Byebug::Command.settings, :basename, true
+
+        it 'must correctly print file lines' do
+          enter 'tr on', 'cont 7', 'trace off'
+          debug_file 'trace'
+          check_output_includes \
+            "Tracing: #{File.basename(fullpath('trace'))}:7 $bla = 7"
+        end
       end
     end
 
