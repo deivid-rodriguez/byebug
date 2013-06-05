@@ -4,8 +4,6 @@
 #include <ruby.h>
 #include <ruby/debug.h>
 
-typedef struct rb_trace_arg_struct rb_trace_point_t;
-
 /* flags */
 #define CTX_FL_SUSPEND      (1<<1)
 #define CTX_FL_TRACING      (1<<2)
@@ -28,44 +26,46 @@ typedef enum {
   CTX_STOP_CATCHPOINT
 } ctx_stop_reason;
 
-typedef struct debug_frame_t {
-    struct debug_frame_t *prev;
-    char *file;
-    int line;
-    VALUE method_id;
-    VALUE defined_class;
-    VALUE binding;
-    VALUE self;
-} debug_frame_t;
-
 typedef struct {
-  debug_frame_t *stack;
   int stack_size;
   int flags;
   ctx_stop_reason stop_reason;
+
   int dest_frame;
   int lines;                   /* # of lines in dest_frame before stopping */
   int steps;                   /* # of steps before stopping */
   int stop_frame;              /* frame number after which we must stop */
-  char *last_file;
-  int last_line;
+
+  VALUE last_file;
+  VALUE last_line;
+
+  VALUE backtrace;             /* [[loc, self, klass, binding], ...] */
 } debug_context_t;
+
+enum frame_component { LOCATION, SELF, CLASS, BINDING };
+
+struct call_with_inspection_data {
+  debug_context_t *dc;
+  VALUE context_obj;
+  ID id;
+  int argc;
+  VALUE *argv;
+};
+
 
 /* functions */
 extern VALUE Init_context(VALUE mByebug);
-extern VALUE Context_create();
-extern VALUE Context_dup(debug_context_t *context);
+
+extern VALUE context_create();
+
+extern VALUE context_dup(debug_context_t *context);
+
 extern void reset_stepping_stop_points(debug_context_t *context);
 
-extern void push_frame(debug_context_t *context, char* file, int lineno,
-                       VALUE method_id, VALUE defined_class, VALUE binding,
-                       VALUE self);
+extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
 
-extern void pop_frame(debug_context_t *context);
-
-extern void update_frame(debug_frame_t *context, char* file, int lineno,
-                         VALUE method_id, VALUE defined_class, VALUE binding,
-                         VALUE self);
+extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
+                                   void *data);
 
 /* utility functions */
 static inline int
@@ -79,8 +79,9 @@ classname_cmp(VALUE name, VALUE klass)
 }
 
 /* breakpoints & catchpoints */
-enum bp_type {BP_POS_TYPE, BP_METHOD_TYPE};
-enum hit_condition {HIT_COND_NONE, HIT_COND_GE, HIT_COND_EQ, HIT_COND_MOD};
+enum bp_type { BP_POS_TYPE, BP_METHOD_TYPE };
+
+enum hit_condition { HIT_COND_NONE, HIT_COND_GE, HIT_COND_EQ, HIT_COND_MOD };
 
 typedef struct {
   int id;
@@ -88,8 +89,8 @@ typedef struct {
   VALUE source;
   union
   {
-      int line;
-      ID  mid;
+    int line;
+    ID  mid;
   } pos;
   VALUE expr;
   VALUE enabled;

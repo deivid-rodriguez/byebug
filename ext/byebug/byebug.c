@@ -19,8 +19,7 @@ static VALUE tpCReturn;
 static VALUE tpRaise;
 
 static VALUE
-tp_inspect(VALUE trace_point) {
-  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point);
+tp_inspect(rb_trace_arg_t *trace_arg) {
   if (trace_arg) {
     VALUE event = rb_tracearg_event(trace_arg);
     if (ID2SYM(rb_intern("line")) == event ||
@@ -55,216 +54,265 @@ static VALUE
 Byebug_context(VALUE self)
 {
   if (context == Qnil) {
-    context = Context_create();
+    context = context_create();
   }
   return context;
 }
 
 static void
-cleanup(debug_context_t *context)
+cleanup(debug_context_t *dc)
 {
-  context->stop_reason = CTX_STOP_NONE;
-}
-
-static int
-check_start_processing(debug_context_t *context)
-{
-  /* ignore a skipped section of code */
-  if(CTX_FL_TEST(context, CTX_FL_SKIPPED)) {
-    cleanup(context);
-    return 0;
-  }
-  return 1;
-}
-
-static inline void
-load_frame_info(VALUE trace_point, VALUE *path, VALUE *lineno, VALUE *method_id,
-                                   VALUE *defined_class, VALUE *binding,
-                                   VALUE *self)
-{
-  rb_trace_point_t *tp;
-
-  tp = rb_tracearg_from_tracepoint(trace_point);
-
-  *path = rb_tracearg_path(tp);
-  *lineno = rb_tracearg_lineno(tp);
-  *binding = rb_tracearg_binding(tp);
-  *self = rb_tracearg_self(tp);
-  *method_id = rb_tracearg_method_id(tp);
-  *defined_class = rb_tracearg_defined_class(tp);
+  dc->stop_reason = CTX_STOP_NONE;
 }
 
 static void
-call_at_line(debug_context_t *context, VALUE context_obj,
-                                       VALUE path, VALUE lineno)
+save_current_position(debug_context_t *dc, VALUE file, VALUE line)
 {
-  CTX_FL_UNSET(context, CTX_FL_ENABLE_BKPT);
-  CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
-  context->last_file = RSTRING_PTR(path);
-  context->last_line = FIX2INT(lineno);
-  rb_funcall(context_obj, rb_intern("at_line"), 2, path, lineno);
+  dc->last_file = file;
+  dc->last_line = line;
+  CTX_FL_UNSET(dc, CTX_FL_ENABLE_BKPT);
+  CTX_FL_UNSET(dc, CTX_FL_FORCE_MOVE);
 }
 
-#define EVENT_SETUP                                                        \
-  VALUE path, lineno, method_id, defined_class, binding, self;             \
-  VALUE context_obj;                                                       \
-  debug_context_t *context;                                                \
-  context_obj = Byebug_context(mByebug);                                   \
-  Data_Get_Struct(context_obj, debug_context_t, context);                  \
-  if (!check_start_processing(context)) return;                            \
-  load_frame_info(trace_point, &path, &lineno, &method_id, &defined_class, \
-                               &binding, &self);                           \
-  if (debug == Qtrue)                                                      \
-    printf("%s (stack_size: %d)\n",                                        \
-            RSTRING_PTR(tp_inspect(trace_point)), context->stack_size);    \
+static VALUE
+call_at(VALUE context_obj, debug_context_t *dc, ID mid, int argc, VALUE a0,
+                                                                  VALUE a1)
+{
+  struct call_with_inspection_data cwi;
+  VALUE argv[2];
+
+  argv[0] = a0;
+  argv[1] = a1;
+
+  cwi.dc          = dc;
+  cwi.context_obj = context_obj;
+  cwi.id          = mid;
+  cwi.argc        = argc;
+  cwi.argv        = &argv[0];
+
+  return call_with_debug_inspector(&cwi);
+}
+
+static VALUE
+call_at_line(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+{
+  save_current_position(dc, file, line);
+  return call_at(context_obj, dc, rb_intern("at_line"), 2, file, line);
+}
+
+static VALUE
+call_at_tracing(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+{
+  return call_at(context_obj, dc, rb_intern("at_tracing"), 2, file, line);
+}
+
+static VALUE
+call_at_breakpoint(VALUE context_obj, debug_context_t *dc, VALUE breakpoint)
+{
+  dc->stop_reason = CTX_STOP_BREAKPOINT;
+  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
+}
+
+static VALUE
+call_at_catchpoint(VALUE context_obj, debug_context_t *dc, VALUE exp)
+{
+  dc->stop_reason = CTX_STOP_CATCHPOINT;
+  return call_at(context_obj, dc, rb_intern("at_catchpoint"), 1, exp, 0);
+}
+
+static void
+call_at_line_check(VALUE context_obj, debug_context_t *dc,
+                   VALUE breakpoint, VALUE file, VALUE line)
+{
+  dc->stop_reason = CTX_STOP_STEP;
+
+  if (breakpoint != Qnil)
+    call_at_breakpoint(context_obj, dc, breakpoint);
+
+  reset_stepping_stop_points(dc);
+  call_at_line(context_obj, dc, file, line);
+}
+
+#define EVENT_SETUP                                                     \
+  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
+  VALUE context_obj;                                                    \
+  debug_context_t *dc;                                                  \
+  context_obj = Byebug_context(mByebug);                                \
+  Data_Get_Struct(context_obj, debug_context_t, dc);                    \
+  if (debug == Qtrue)                                                   \
+    printf("%s (stack_size: %d)\n",                                     \
+            RSTRING_PTR(tp_inspect(trace_arg)), dc->stack_size);        \
+
+#define EVENT_COMMON() \
+  if (trace_common(trace_arg, dc) == 0) { return; }
+
+static int
+trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
+{
+  /* ignore a skipped section of code */
+  if (CTX_FL_TEST(dc, CTX_FL_SKIPPED))
+  {
+    cleanup(dc);
+    return 0;
+  }
+
+  /* Many events per line, but only *one* breakpoint */
+  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
+      dc->last_file != rb_tracearg_path(trace_arg))
+  {
+    CTX_FL_SET(dc, CTX_FL_ENABLE_BKPT);
+  }
+
+  return 1;
+}
 
 static void
 process_line_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
-  VALUE breakpoint;
+  VALUE breakpoint = Qnil;
+  VALUE file    = rb_tracearg_path(trace_arg);
+  VALUE line    = rb_tracearg_lineno(trace_arg);
+  VALUE binding = rb_tracearg_binding(trace_arg);
   int moved = 0;
 
-  if (context->stack_size == 0)
-    push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                        defined_class, binding, self);
-  else
-    update_frame(context->stack, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                                 defined_class, binding, self);
+  EVENT_COMMON();
 
-  if (context->last_line != FIX2INT(lineno) || context->last_file == NULL ||
-       strcmp(context->last_file, RSTRING_PTR(path)))
+  if (dc->stack_size == 0) dc->stack_size++;
+
+  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
+      dc->last_file != rb_tracearg_path(trace_arg))
   {
-    CTX_FL_SET(context, CTX_FL_ENABLE_BKPT);
     moved = 1;
   }
 
   if (RTEST(tracing))
-    rb_funcall(context_obj, rb_intern("at_tracing"), 2, path, lineno);
+    call_at_tracing(context_obj, dc, file, line);
 
-  if (context->dest_frame == -1 || context->stack_size == context->dest_frame)
+  if (moved || !CTX_FL_TEST(dc, CTX_FL_FORCE_MOVE))
   {
-    if (moved || !CTX_FL_TEST(context, CTX_FL_FORCE_MOVE))
+    dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
+    if (dc->stack_size <= dc->dest_frame)
     {
-      context->steps = context->steps <= 0 ? -1 : context->steps - 1;
-      context->lines = context->lines <= 0 ? -1 : context->lines - 1;
-    }
-  }
-  else if (context->stack_size < context->dest_frame)
-  {
-      context->steps = 0;
-  }
-
-  if (context->steps == 0 || context->lines == 0)
-  {
-    context->stop_reason = CTX_STOP_STEP;
-    reset_stepping_stop_points(context);
-    call_at_line(context, context_obj, path, lineno);
-  }
-  else if (CTX_FL_TEST(context, CTX_FL_ENABLE_BKPT))
-  {
-    breakpoint = find_breakpoint_by_pos(breakpoints, path, lineno, binding);
-    if (breakpoint != Qnil)
-    {
-      context->stop_reason = CTX_STOP_BREAKPOINT;
-      reset_stepping_stop_points(context);
-      rb_funcall(context_obj, rb_intern("at_breakpoint"), 1, breakpoint);
-      call_at_line(context, context_obj, path, lineno);
+      dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
+      dc->dest_frame = dc->stack_size;
     }
   }
 
-  cleanup(context);
+  if (dc->steps == 0 || dc->lines == 0 ||
+      (CTX_FL_TEST(dc, CTX_FL_ENABLE_BKPT) &&
+      (!NIL_P(
+       breakpoint = find_breakpoint_by_pos(breakpoints, file, line, binding)))))
+  {
+    call_at_line_check(context_obj, dc, breakpoint, file, line);
+  }
+
+  cleanup(dc);
 }
 
 static void
 process_c_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
+  if (dc->stack_size > 0) dc->stack_size--;
+  EVENT_COMMON();
 
-  pop_frame(context);
-
-  cleanup(context);
+  cleanup(dc);
 }
 
 static void
 process_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
+  if (dc->stack_size > 0) dc->stack_size--;
+  EVENT_COMMON();
 
-  if (context->stack_size == context->stop_frame)
+  if (dc->stack_size + 1 == dc->stop_frame)
   {
-      context->steps      = 1;
-      context->stop_frame = -1;
+    dc->steps      = 1;
+    dc->stop_frame = -1;
   }
-  pop_frame(context);
 
-  cleanup(context);
+  cleanup(dc);
 }
 
 static void
 process_c_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
+  dc->stack_size++;
+  EVENT_COMMON();
 
-  push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                      defined_class, binding, self);
-  cleanup(context);
+  cleanup(dc);
 }
 
 static void
 process_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
-  VALUE breakpoint;
+  dc->stack_size++;
+  EVENT_COMMON();
 
-  push_frame(context, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                      defined_class, binding, self);
+  VALUE breakpoint = Qnil;
+  VALUE klass   = rb_tracearg_defined_class(trace_arg);
+  VALUE mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
+  VALUE binding = rb_tracearg_binding(trace_arg);
+  VALUE self    = rb_tracearg_self(trace_arg);
+  VALUE file    = rb_tracearg_path(trace_arg);
+  VALUE line    = rb_tracearg_lineno(trace_arg);
 
-  breakpoint = find_breakpoint_by_method(breakpoints, defined_class,
-                                                      SYM2ID(method_id),
-                                                      binding, self);
+  breakpoint =
+    find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
   if (breakpoint != Qnil)
   {
-    context->stop_reason = CTX_STOP_BREAKPOINT;
-    rb_funcall(context_obj, rb_intern("at_breakpoint"), 1, breakpoint);
-    call_at_line(context, context_obj, path, lineno);
+    call_at_breakpoint(context_obj, dc, breakpoint);
+    call_at_line(context_obj, dc, file, line);
   }
 
-  cleanup(context);
+  cleanup(dc);
 }
 
 static void
 process_raise_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP;
+  EVENT_SETUP
   VALUE expn_class, aclass;
   VALUE err = rb_errinfo();
   VALUE ancestors;
   int i;
+  debug_context_t *new_dc;
 
-  update_frame(context->stack, RSTRING_PTR(path), FIX2INT(lineno), method_id,
-                               defined_class, binding, self);
+  EVENT_COMMON();
 
-  if (post_mortem == Qtrue && self)
+  VALUE binding = rb_tracearg_binding(trace_arg);
+  VALUE path    = rb_tracearg_path(trace_arg);
+  VALUE lineno  = rb_tracearg_lineno(trace_arg);
+
+  if (post_mortem == Qtrue)
   {
-    VALUE binding = rb_binding_new();
-    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_file"), path);
-    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_line"), lineno);
-    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_binding"), binding);
-    rb_ivar_set(rb_errinfo(), rb_intern("@__debug_context"), Context_dup(context));
+    context = context_dup(dc);
+    rb_ivar_set(err, rb_intern("@__debug_file")   , path);
+    rb_ivar_set(err, rb_intern("@__debug_line")   , lineno);
+    rb_ivar_set(err, rb_intern("@__debug_binding"), binding);
+    rb_ivar_set(err, rb_intern("@__debug_context"), context);
+
+    Data_Get_Struct(context, debug_context_t, new_dc);
+    rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
   expn_class = rb_obj_class(err);
 
-  if (catchpoints == Qnil || context->stack_size == 0 ||
-      CTX_FL_TEST(context, CTX_FL_CATCHING) ||
-      RHASH_TBL(catchpoints)->num_entries == 0) {
-    cleanup(context);
+  if (catchpoints == Qnil || dc->stack_size == 0 ||
+      CTX_FL_TEST(dc, CTX_FL_CATCHING) ||
+      RHASH_TBL(catchpoints)->num_entries == 0)
+  {
+    cleanup(dc);
     return;
   }
 
   ancestors = rb_mod_ancestors(expn_class);
-  for (i = 0; i < RARRAY_LEN(ancestors); i++) {
+  for (i = 0; i < RARRAY_LEN(ancestors); i++)
+  {
     VALUE mod_name;
     VALUE hit_count;
 
@@ -272,17 +320,17 @@ process_raise_event(VALUE trace_point, void *data)
     mod_name  = rb_mod_name(aclass);
     hit_count = rb_hash_aref(catchpoints, mod_name);
 
-    if (hit_count != Qnil) {
-      /* increment exception */
+    /* increment exception */
+    if (hit_count != Qnil)
+    {
       rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
-      context->stop_reason = CTX_STOP_CATCHPOINT;
-      rb_funcall(context_obj, rb_intern("at_catchpoint"), 1, rb_errinfo());
-      call_at_line(context, context_obj, path, lineno);
+      call_at_catchpoint(context_obj, dc, err);
+      call_at_line(context_obj, dc, path, lineno);
       break;
     }
   }
 
-  cleanup(context);
+  cleanup(dc);
 }
 
 static VALUE
@@ -371,45 +419,45 @@ Byebug_started(VALUE self)
 static VALUE
 Byebug_stop(VALUE self)
 {
-    if (BYEBUG_STARTED)
-    {
-        Byebug_remove_tracepoints(self);
-        return Qfalse;
-    }
-    return Qtrue;
+  if (BYEBUG_STARTED)
+  {
+    Byebug_remove_tracepoints(self);
+    return Qfalse;
+  }
+  return Qtrue;
 }
 
 static VALUE
 Byebug_start(VALUE self)
 {
-    VALUE result;
+  VALUE result;
 
-    if (BYEBUG_STARTED)
-        result = Qfalse;
-    else
-    {
-        Byebug_setup_tracepoints(self);
-        result = Qtrue;
-    }
+  if (BYEBUG_STARTED)
+    result = Qfalse;
+  else
+  {
+    Byebug_setup_tracepoints(self);
+    result = Qtrue;
+  }
 
-    if (rb_block_given_p())
-      rb_ensure(rb_yield, self, Byebug_stop, self);
+  if (rb_block_given_p())
+    rb_ensure(rb_yield, self, Byebug_stop, self);
 
-    return result;
+  return result;
 }
 
 static VALUE
 set_current_skipped_status(VALUE status)
 {
   VALUE context_obj;
-  debug_context_t *context;
+  debug_context_t *dc;
 
   context_obj = Byebug_context(mByebug);
-  Data_Get_Struct(context_obj, debug_context_t, context);
+  Data_Get_Struct(context_obj, debug_context_t, dc);
   if (status)
-    CTX_FL_SET(context, CTX_FL_SKIPPED);
+    CTX_FL_SET(dc, CTX_FL_SKIPPED);
   else
-    CTX_FL_UNSET(context, CTX_FL_SKIPPED);
+    CTX_FL_UNSET(dc, CTX_FL_SKIPPED);
   return Qnil;
 }
 
@@ -417,7 +465,7 @@ static VALUE
 Byebug_load(int argc, VALUE *argv, VALUE self)
 {
   VALUE file, stop, context_obj;
-  debug_context_t *context;
+  debug_context_t *dc;
   int state = 0;
 
   if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
@@ -428,9 +476,11 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
   Byebug_start(self);
 
   context_obj = Byebug_context(self);
-  Data_Get_Struct(context_obj, debug_context_t, context);
-  context->stack_size = 0;
-  if (RTEST(stop)) context->steps = 1;
+  Data_Get_Struct(context_obj, debug_context_t, dc);
+  if (RTEST(stop)) dc->steps = 1;
+
+  /* Resetting stack size */
+  dc->stack_size = 0;
 
   /* Initializing $0 to the script's path */
   ruby_script(RSTRING_PTR(file));
@@ -438,7 +488,7 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
   if (0 != state)
   {
       VALUE errinfo = rb_errinfo();
-      reset_stepping_stop_points(context);
+      reset_stepping_stop_points(dc);
       rb_set_errinfo(Qnil);
       return errinfo;
   }

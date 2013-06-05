@@ -13,29 +13,6 @@ reset_stepping_stop_points(debug_context_t *context)
   context->stop_frame = -1;
 }
 
-static inline void
-delete_frame(debug_context_t *context)
-{
-  debug_frame_t *frame;
-
-  frame = context->stack;
-  context->stack = frame->prev;
-  context->stack_size--;
-  xfree(frame);
-}
-
-extern void
-update_frame(debug_frame_t *frame, char* file, int lineno, VALUE method_id,
-                                   VALUE defined_class, VALUE binding, VALUE self)
-{
-  frame->file = file;
-  frame->line = lineno;
-  frame->method_id = method_id;
-  frame->defined_class = defined_class;
-  frame->binding = binding;
-  frame->self = self;
-}
-
 static inline VALUE
 Context_stack_size(VALUE self)
 {
@@ -52,199 +29,220 @@ Context_dead(VALUE self)
   return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
 }
 
-extern void
-push_frame(debug_context_t *context, char* file, int lineno, VALUE method_id,
-           VALUE defined_class, VALUE binding, VALUE self)
+static void
+context_mark(void *data)
 {
-  debug_frame_t *frame;
-
-  frame = ALLOC(debug_frame_t);
-  update_frame(frame, file, lineno, method_id, defined_class, binding, self);
-  frame->prev = context->stack;
-  context->stack = frame;
-  context->stack_size++;
-}
-
-extern void
-pop_frame(debug_context_t *context)
-{
-  if (context->stack_size > 0) {
-    delete_frame(context);
-  }
+  debug_context_t *context = (debug_context_t *)data;
+  rb_gc_mark(context->backtrace);
 }
 
 static void
-Context_mark(debug_context_t *context)
+context_free(void *data)
 {
-  debug_frame_t *frame;
 
-  frame = context->stack;
-  while (frame != NULL) {
-    rb_gc_mark(frame->self);
-    rb_gc_mark(frame->binding);
-    frame = frame->prev;
-  }
-}
-
-static void
-Context_free(debug_context_t *context) {
-  while (context->stack_size > 0) {
-    delete_frame(context);
-  }
-  xfree(context);
 }
 
 extern VALUE
-Context_create()
+context_create()
 {
-  debug_context_t *context;
+  debug_context_t *context = ALLOC(debug_context_t);
 
-  context = ALLOC(debug_context_t);
+  context->last_file  = Qnil;
+  context->last_line  = Qnil;
+  context->flags      = 0;
   context->stack_size = 0;
-  context->stack = NULL;
-  context->flags = 0;
-  context->last_file = NULL;
-  context->last_line = -1;
   reset_stepping_stop_points(context);
-  return Data_Wrap_Struct(cContext, Context_mark, Context_free, context);
-}
+  context->stop_reason = CTX_STOP_NONE;
+  context->backtrace = Qnil;
 
-static void
-frame_copy(debug_frame_t *new_frame, debug_frame_t *old_frame)
-{
-  new_frame->file          = old_frame->file;
-  new_frame->line          = old_frame->line;
-  new_frame->method_id     = old_frame->method_id;
-  new_frame->defined_class = old_frame->defined_class;
-  new_frame->binding       = old_frame->binding;
-  new_frame->self          = old_frame->self;
+  return Data_Wrap_Struct(cContext, context_mark, context_free, context);
 }
 
 extern VALUE
-Context_dup(debug_context_t *context)
+context_dup(debug_context_t *context)
 {
-    debug_context_t *new_context;
-    debug_frame_t *source_frame = context->stack, *dest_frame, *new_frame;
+  debug_context_t *new_context = ALLOC(debug_context_t);
 
-    new_context = ALLOC(debug_context_t);
-    memcpy(new_context, context, sizeof(debug_context_t));
-    reset_stepping_stop_points(new_context);
-    new_context->stack_size = context->stack_size;
-    CTX_FL_SET(new_context, CTX_FL_DEAD);
-    new_context->stack = ALLOC(debug_frame_t);
-    frame_copy(new_context->stack, context->stack);
+  memcpy(new_context, context, sizeof(debug_context_t));
+  reset_stepping_stop_points(new_context);
+  new_context->backtrace = context->backtrace;
+  CTX_FL_SET(new_context, CTX_FL_DEAD);
 
-    new_frame = new_context->stack;
-    while ((source_frame = source_frame->prev))
-    {
-      dest_frame = new_frame;
-      new_frame = ALLOC(debug_frame_t);
-      frame_copy(new_frame, source_frame);
-      dest_frame->prev = new_frame;
-    }
-    return Data_Wrap_Struct(cContext, 0, Context_free, new_context);
+  return Data_Wrap_Struct(cContext, context_mark, context_free, new_context);
 }
 
-static debug_frame_t*
-get_frame_no(debug_context_t *context, int frame_n)
+static VALUE
+dc_backtrace(const debug_context_t *context)
 {
-  debug_frame_t *frame;
+  if (NIL_P(context->backtrace))
+    rb_raise(rb_eRuntimeError, "Backtrace information is not available");
+
+  return context->backtrace;
+}
+
+static VALUE
+dc_frame_get(const debug_context_t *context, int frame_index,
+                                             enum frame_component type)
+{
+  if (frame_index >= RARRAY_LEN(dc_backtrace(context)))
+    rb_raise(rb_eRuntimeError, "That frame doesn't exist!");
+
+  VALUE frame = rb_ary_entry(dc_backtrace(context), frame_index);
+  return rb_ary_entry(frame, type);
+}
+
+static VALUE
+dc_frame_location(const debug_context_t *context, int frame_index)
+{
+  return dc_frame_get(context, frame_index, LOCATION);
+}
+
+static VALUE
+dc_frame_self(const debug_context_t *context, int frame_index)
+{
+  return dc_frame_get(context, frame_index, SELF);
+}
+
+static VALUE
+dc_frame_class(const debug_context_t *context, int frame_index)
+{
+  return dc_frame_get(context, frame_index, CLASS);
+}
+
+static VALUE
+dc_frame_binding(const debug_context_t *context, int frame_index)
+{
+  return dc_frame_get(context, frame_index, BINDING);
+}
+
+static VALUE
+load_backtrace(const rb_debug_inspector_t *inspector)
+{
+  VALUE backtrace = rb_ary_new();
+  VALUE locs = rb_debug_inspector_backtrace_locations(inspector);
   int i;
 
-  if (frame_n < 0 || frame_n >= context->stack_size) {
-    rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)",
-        frame_n, context->stack_size);
+  for (i=0; i<RARRAY_LEN(locs); i++)
+  {
+    VALUE frame = rb_ary_new();
+    rb_ary_push(frame, rb_ary_entry(locs, i));
+    rb_ary_push(frame, rb_debug_inspector_frame_self_get(inspector, i));
+    rb_ary_push(frame, rb_debug_inspector_frame_class_get(inspector, i));
+    rb_ary_push(frame, rb_debug_inspector_frame_binding_get(inspector, i));
+
+    rb_ary_push(backtrace, frame);
   }
 
-  frame = context->stack;
-  for (i = 0; i < frame_n; i++) {
-    frame = frame->prev;
-  }
-  return frame;
+  return backtrace;
 }
+
+extern VALUE
+context_backtrace_set(const rb_debug_inspector_t *inspector, void *data)
+{
+  debug_context_t *dc = (debug_context_t *)data;
+  dc->backtrace = load_backtrace(inspector);
+
+  return Qnil;
+}
+
+static VALUE
+open_debug_inspector_i(const rb_debug_inspector_t *inspector, void *data)
+{
+  struct call_with_inspection_data *cwi =
+    (struct call_with_inspection_data *)data;
+  cwi->dc->backtrace = load_backtrace(inspector);
+
+  return rb_funcall2(cwi->context_obj, cwi->id, cwi->argc, cwi->argv);
+}
+
+static VALUE
+open_debug_inspector(struct call_with_inspection_data *cwi)
+{
+  return rb_debug_inspector_open(open_debug_inspector_i, cwi);
+}
+
+static VALUE
+close_debug_inspector(struct call_with_inspection_data *cwi)
+{
+  cwi->dc->backtrace = Qnil;
+  return Qnil;
+}
+
+extern VALUE
+call_with_debug_inspector(struct call_with_inspection_data *data)
+{
+  return rb_ensure(open_debug_inspector, (VALUE)data,
+                   close_debug_inspector, (VALUE)data);
+}
+
+#define FRAME_SETUP                                                   \
+  debug_context_t *context;                                           \
+  VALUE frame_no;                                                     \
+  int frame_n;                                                        \
+  Data_Get_Struct(self, debug_context_t, context);                    \
+  if (!rb_scan_args(argc, argv, "01", &frame_no))                     \
+    frame_n = 0;                                                      \
+  else                                                                \
+    frame_n = FIX2INT(frame_no);                                      \
+  if (frame_n < 0 || frame_n >= context->stack_size)                  \
+  {                                                                   \
+    rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
+        frame_n, context->stack_size-1);                              \
+  }                                                                   \
 
 static VALUE
 Context_frame_file(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
+  VALUE loc;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return rb_str_new2(frame->file);
+  loc = dc_frame_location(context, frame_n);
+  return rb_funcall(loc, rb_intern("absolute_path"), 0);
 }
 
 static VALUE
 Context_frame_line(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
+  VALUE loc;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return INT2FIX(frame->line);
+  loc = dc_frame_location(context, frame_n);
+  return rb_funcall(loc, rb_intern("lineno"), 0);
 }
 
 static VALUE
 Context_frame_method(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
+  VALUE loc;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return frame->method_id;
+  loc = dc_frame_location(context, frame_n);
+  return rb_str_intern(rb_funcall(loc, rb_intern("label"), 0));
+
 }
 
 static VALUE
 Context_frame_binding(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return frame->binding;
+  return dc_frame_binding(context, frame_n);
 }
 
 static VALUE
 Context_frame_self(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return frame->self;
+  return dc_frame_self(context, frame_n);
 }
 
 static VALUE
 Context_frame_class(int argc, VALUE *argv, VALUE self)
 {
-  debug_context_t *context;
-  debug_frame_t *frame;
-  VALUE frame_no;
-  int frame_n;
+  FRAME_SETUP;
 
-  Data_Get_Struct(self, debug_context_t, context);
-  frame_n = rb_scan_args(argc, argv, "01", &frame_no) == 0 ? 0 : FIX2INT(frame_no);
-  frame = get_frame_no(context, frame_n);
-  return frame->defined_class;
+  return dc_frame_class(context, frame_n);
 }
 
 static VALUE
@@ -336,7 +334,7 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
   Data_Get_Struct(self, debug_context_t, context);
   context->steps = FIX2INT(steps);
 
-  if(RTEST(force))
+  if (RTEST(force))
       CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
       CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
