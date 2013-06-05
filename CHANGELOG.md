@@ -1,3 +1,9 @@
+## 1.4.0
+
+* Byebug now uses the Debug Inspector API: faster and nicer!
+* Fixes bug that prevents some random crashes
+
+
 ## 1.3.1
 
 * Byebug now works with Rails debugging flag
