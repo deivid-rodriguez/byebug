@@ -7,16 +7,16 @@ static VALUE tracing     = Qfalse;
 static VALUE post_mortem = Qfalse;
 static VALUE debug       = Qfalse;
 
-static VALUE context;
-static VALUE catchpoints;
-static VALUE breakpoints;
+static VALUE context     = Qnil;
+static VALUE catchpoints = Qnil;
+static VALUE breakpoints = Qnil;
 
-static VALUE tpLine;
-static VALUE tpCall;
-static VALUE tpCCall;
-static VALUE tpReturn;
-static VALUE tpCReturn;
-static VALUE tpRaise;
+static VALUE tpLine    = Qnil;
+static VALUE tpCall    = Qnil;
+static VALUE tpCCall   = Qnil;
+static VALUE tpReturn  = Qnil;
+static VALUE tpCReturn = Qnil;
+static VALUE tpRaise   = Qnil;
 
 static VALUE
 tp_inspect(rb_trace_arg_t *trace_arg) {
@@ -378,34 +378,17 @@ Byebug_setup_tracepoints(VALUE self)
 static VALUE
 Byebug_remove_tracepoints(VALUE self)
 {
+  rb_tracepoint_disable(tpRaise);
+  rb_tracepoint_disable(tpCReturn);
+  rb_tracepoint_disable(tpReturn);
+  rb_tracepoint_disable(tpCCall);
+  rb_tracepoint_disable(tpCall);
+  rb_tracepoint_disable(tpLine);
+
   context = Qnil;
   breakpoints = Qnil;
   catchpoints = Qnil;
 
-  if (tpLine != Qnil) {
-    rb_tracepoint_disable(tpLine);
-    tpLine = Qnil;
-  }
-  if (tpCall != Qnil) {
-    rb_tracepoint_disable(tpCall);
-    tpCall = Qnil;
-  }
-  if (tpCCall != Qnil) {
-    rb_tracepoint_disable(tpCCall);
-    tpCCall = Qnil;
-  }
-  if (tpReturn != Qnil) {
-    rb_tracepoint_disable(tpReturn);
-    tpReturn = Qnil;
-  }
-  if (tpCReturn != Qnil) {
-    rb_tracepoint_disable(tpCReturn);
-    tpCReturn = Qnil;
-  }
-  if (tpRaise != Qnil) {
-    rb_tracepoint_disable(tpRaise);
-    tpRaise = Qnil;
-  }
   return Qnil;
 }
 
