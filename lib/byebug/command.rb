@@ -193,7 +193,7 @@ module Byebug
 
       def debug_eval(str, b = get_binding)
         begin
-          val = eval(str, b)
+          eval(str, b)
         rescue StandardError, ScriptError => e
           if Command.settings[:stack_trace_on_error]
             at = eval("caller(1)", b)
@@ -204,13 +204,12 @@ module Byebug
           else
             print "#{e.class} Exception: #{e.message}\n"
           end
-          throw :debug_error
         end
       end
 
-      def debug_silent_eval(str)
+      def debug_silent_eval(str, b = get_binding)
         begin
-          eval(str, get_binding)
+          eval(str, b)
         rescue StandardError, ScriptError
           nil
         end
@@ -218,8 +217,8 @@ module Byebug
 
       def debug_warning_eval(str, b = get_binding)
         begin
-          debug_eval(str, b)
-        rescue :debug_error => e
+          eval(str, b)
+        rescue StandardError, ScriptError => e
           print "#{e.class} Exception: #{e.message}\n"
         end
       end

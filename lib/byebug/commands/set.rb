@@ -116,7 +116,7 @@ module Byebug
         Command.settings[:testing] = set_on
         Command.settings[:basename] = set_on
       when /^forcestep$/
-        self.class.settings[:force_stepping] = set_on
+        Command.settings[:force_stepping] = set_on
       when /^history$/
         if 2 == args.size
           interface = @state.interface

@@ -77,7 +77,7 @@ module Byebug
         on_off = Command.settings[:testing]
         return "Currently testing byebug is #{show_onoff(on_off)}."
       when /^forcestep$/
-        on_off = self.class.settings[:force_stepping]
+        on_off = Command.settings[:force_stepping]
         return "force-stepping is #{show_onoff(on_off)}."
       when /^fullpath$/
         on_off = Command.settings[:frame_fullpath]

@@ -135,8 +135,6 @@ class TestDisplay < TestDsl::TestCase
   end
 
   describe 'Post Mortem' do
-    temporary_change_hash Byebug::Command.settings, :autoeval, false
-
     it 'must be able to set display expressions in post-mortem mode' do
       enter 'cont', 'display 2 + 2'
       debug_file 'post_mortem'
