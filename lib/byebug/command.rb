@@ -133,7 +133,6 @@ module Byebug
             raise "No such setting #{name}" unless map.has_key?(name)
             map[name][:getter].call
           end
-          c = class << @settings; self end
           c.send(:define_method, :[]=) do |name, value|
             raise "No such setting #{name}" unless map.has_key?(name)
             map[name][:setter].call(value)
