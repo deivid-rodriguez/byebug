@@ -100,10 +100,9 @@ Breakpoint_mark(breakpoint_t *breakpoint)
 static VALUE
 Breakpoint_create(VALUE klass)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = ALLOC(breakpoint_t);
 
-    breakpoint = ALLOC(breakpoint_t);
-    return Data_Wrap_Struct(klass, Breakpoint_mark, xfree, breakpoint);
+  return Data_Wrap_Struct(klass, Breakpoint_mark, xfree, breakpoint);
 }
 
 static VALUE
@@ -179,10 +178,10 @@ Breakpoint_pos(VALUE self)
   breakpoint_t *breakpoint;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
-  if(breakpoint->type == BP_METHOD_TYPE)
-      return rb_str_new2(rb_id2name(breakpoint->pos.mid));
+  if (breakpoint->type == BP_METHOD_TYPE)
+    return rb_str_new2(rb_id2name(breakpoint->pos.mid));
   else
-      return INT2FIX(breakpoint->pos.line);
+    return INT2FIX(breakpoint->pos.line);
 }
 
 
@@ -198,11 +197,11 @@ Breakpoint_expr(VALUE self)
 static VALUE
 Breakpoint_set_expr(VALUE self, VALUE expr)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    breakpoint->expr = NIL_P(expr) ? expr: StringValue(expr);
-    return expr;
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  breakpoint->expr = NIL_P(expr) ? expr: StringValue(expr);
+  return expr;
 }
 
 static VALUE
@@ -318,19 +317,19 @@ check_breakpoint_by_hit_condition(VALUE breakpoint_object)
 static int
 check_breakpoint_by_pos(VALUE breakpoint_object, char *file, int line)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    if (breakpoint_object == Qnil)
-      return 0;
+  if (breakpoint_object == Qnil)
+    return 0;
 
-    Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
 
-    if ( (Qtrue != breakpoint->enabled)    ||
-         (breakpoint->type != BP_POS_TYPE) ||
-         (breakpoint->pos.line != line) )
-      return 0;
+  if ( (Qtrue != breakpoint->enabled)    ||
+       (breakpoint->type != BP_POS_TYPE) ||
+       (breakpoint->pos.line != line) )
+    return 0;
 
-    return filename_cmp(breakpoint->source, file);
+  return filename_cmp(breakpoint->source, file);
 }
 
 static int
@@ -362,7 +361,7 @@ check_breakpoint_by_expr(VALUE breakpoint_object, VALUE binding)
   breakpoint_t *breakpoint;
   VALUE args, expr_result;
 
-  if (breakpoint_object == Qnil)
+  if (NIL_P(breakpoint_object))
     return 0;
 
   Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
@@ -390,12 +389,12 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
 
   file = RSTRING_PTR(source);
   line = FIX2INT(pos);
-  for(i = 0; i < RARRAY_LEN(breakpoints); i++)
+  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
-    if ( check_breakpoint_by_pos(breakpoint_object, file, line) &&
-         check_breakpoint_by_expr(breakpoint_object, binding)   &&
-         check_breakpoint_by_hit_condition(breakpoint_object) )
+    if (check_breakpoint_by_pos(breakpoint_object, file, line) &&
+        check_breakpoint_by_expr(breakpoint_object, binding)   &&
+        check_breakpoint_by_hit_condition(breakpoint_object))
     {
       return breakpoint_object;
     }
@@ -410,13 +409,15 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
   VALUE breakpoint_object;
   int i;
 
-  for(i = 0; i < RARRAY_LEN(breakpoints); i++)
+  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
-    if ( check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
-         check_breakpoint_by_expr(breakpoint_object, binding)            &&
-         check_breakpoint_by_hit_condition(breakpoint_object) )
+    if (check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
+        check_breakpoint_by_expr(breakpoint_object, binding)            &&
+        check_breakpoint_by_hit_condition(breakpoint_object))
+    {
       return breakpoint_object;
+    }
   }
   return Qnil;
 }
