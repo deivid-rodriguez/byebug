@@ -11,6 +11,10 @@ module Byebug
 
   self.handler = CommandProcessor.new
 
+  # List of files byebug will ignore while debugging
+  IGNORED_FILES = Dir[Pathname.new(__FILE__) + "../**/*.rb"].map {
+    |f| File.expand_path(f) }
+
   # Default options to Byebug.start
   DEFAULT_START_SETTINGS = {
     init:        true,  # Set $0 and save ARGV?

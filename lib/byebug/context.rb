@@ -36,7 +36,8 @@ module Byebug
     end
 
     def at_breakpoint(breakpoint)
-      handler.at_breakpoint(self, breakpoint)
+      handler.at_breakpoint(self, breakpoint) unless
+        IGNORED_FILES.include?(breakpoint.source)
     end
 
     def at_catchpoint(excpt)
@@ -44,18 +45,12 @@ module Byebug
     end
 
     def at_tracing(file, line)
-      handler.at_tracing(self, file, line)
+      handler.at_tracing(self, file, line) unless IGNORED_FILES.include?(file)
     end
 
     def at_line(file, line)
-      handler.at_line(self, file, line) unless
-        defined?(Byebug::BYEBUG_SCRIPT) and
-        File.identical?(file, Byebug::BYEBUG_SCRIPT)
+      handler.at_line(self, file, line) unless IGNORED_FILES.include?(file)
     end
-
-    #def at_return(file, line)
-    #  handler.at_return(self, file, line)
-    #end
 
   end
 end
