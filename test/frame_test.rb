@@ -117,10 +117,10 @@ class TestFrame < TestDsl::TestCase
       it 'displays current backtrace with callstyle "short"' do
           enter 'break 16', 'cont', 'where'
           debug_file 'frame'
-          check_output_includes "--> #0  d(e) at #{fullpath('frame')}:16",
-                                "    #1  c at #{fullpath('frame')}:12"   ,
-                                "    #2  b at #{fullpath('frame')}:8"    ,
-                                "    #3  a at #{fullpath('frame')}:5"
+          check_output_includes /--> #0  d(e) at #{fullpath('frame')}:16/x,
+                                /#1  c at #{fullpath('frame')}:12/x,
+                                /#2  b at #{fullpath('frame')}:8/x,
+                                /#3  a at #{fullpath('frame')}:5/x
       end
     end
 
