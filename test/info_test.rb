@@ -230,16 +230,12 @@ class TestInfo < TestDsl::TestCase
   end
 
   describe 'Stack info' do
-    # XXX: Calculate magic number dinamically, like
-    # "longest_string_in_test_output".size
-    temporary_change_hash Byebug::Command.settings, :width, 87
-
     it 'must show stack info' do
       enter 'set fullpath', 'break 20', 'cont', 'info stack'
       debug_file 'info'
-      check_output_includes "--> #0  A.a at #{fullpath('info')}:20",
-                            "    #1  A.b at #{fullpath('info')}:30",
-                            "    #2  <main> at #{fullpath('info')}:36"
+      check_output_includes /--> #0  A.a at #{fullpath('info')}:20/x,
+                                /#1  A.b at #{fullpath('info')}:30/x,
+                                /#2  <main> at #{fullpath('info')}:36/x
     end
   end
 

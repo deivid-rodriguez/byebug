@@ -2,10 +2,6 @@ require_relative 'test_helper'
 
 class TestFrame < TestDsl::TestCase
 
-  # XXX: Calculate magic number dinamically, like
-  # "longest_string_in_test_output".size
-  temporary_change_hash Byebug::Command.settings, :width, 96
-
   it 'must go up' do
     enter 'break 16', 'cont', 'up'
     debug_file('frame') { state.line.must_equal 12 }
@@ -38,8 +34,8 @@ class TestFrame < TestDsl::TestCase
 
   it 'must print current stack frame when without arguments' do
     enter 'break A.d', 'cont', 'up', 'frame'
-    debug_file('frame') {
-      check_output_includes "#0  A.d(e#String) at #{fullpath('frame')}:15" }
+    debug_file('frame')
+    check_output_includes /#0  A.d(e#String) at #{fullpath('frame')}:15/x
   end
 
   it 'must set frame to the first one' do
@@ -82,8 +78,8 @@ class TestFrame < TestDsl::TestCase
         enter 'break 16', 'cont', 'where'
         debug_file 'frame'
         check_output_includes \
-          "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
-          "    #1  A.c at #{fullpath('frame')}:12"
+          /--> #0  A.d(e#String) at #{fullpath('frame')}:16/x,
+              /#1  A.c at #{fullpath('frame')}:12/x
       end
     end
 
@@ -94,8 +90,8 @@ class TestFrame < TestDsl::TestCase
         enter 'set nofullpath', 'break 16', 'cont', 'where'
         debug_file 'frame'
         check_output_includes \
-          "--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16",
-          "    #1  A.c at #{short_path(fullpath('frame'))}:12"
+          /--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16/x,
+              /#1  A.c at #{short_path(fullpath('frame'))}:12/x
       end
     end
   end
@@ -108,10 +104,10 @@ class TestFrame < TestDsl::TestCase
         enter 'break 16', 'cont', 'where'
         debug_file 'frame'
         check_output_includes \
-          "--> #0  A.d(e#String) at #{fullpath('frame')}:16",
-          "    #1  A.c at #{fullpath('frame')}:12"          ,
-          "    #2  A.b at #{fullpath('frame')}:8"           ,
-          "    #3  A.a at #{fullpath('frame')}:5"
+          /--> #0  A.d(e#String) at #{fullpath('frame')}:16/x,
+              /#1  A.c at #{fullpath('frame')}:12/x          ,
+              /#2  A.b at #{fullpath('frame')}:8/x           ,
+              /#3  A.a at #{fullpath('frame')}:5/x
       end
     end
 
