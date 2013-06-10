@@ -12,8 +12,7 @@ as a C extension, so it's fast. And it has a full test suite so it's (I hope)
 reliable.
 
 It allows you to see what is going on _inside_ a Ruby program while it executes
-and can do four main kinds of things (plus other things in support of these) to
-help you catch bugs in the act:
+and can do four main kinds of things to help you catch bugs in the act:
 
 * Start your program or attach to it, specifying anything that might affect its
 behavior.
@@ -41,9 +40,8 @@ Simply drop
     byebug
 
 wherever you want to start debugging and the execution will stop there. If you
-are debugging rails, start the server in normal mode with `rails server` and
-once the execution get to your `byebug` command you will get a debugging
-terminal.
+are debugging rails, start the server and once the execution get to your
+`byebug` command you will get a debugging prompt.
 
 _If you are coming from debugger, notice that stopping execution using the word
  `debugger` doesn't work anymore unless you explicitly alias it._

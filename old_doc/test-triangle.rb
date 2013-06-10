@@ -1,7 +1,5 @@
 require 'test/unit'
 require_relative 'triangle.rb'
-require 'byebug'
-Byebug.start
 
 class TestTri < Test::Unit::TestCase
   def test_basic
