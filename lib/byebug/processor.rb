@@ -273,19 +273,15 @@ module Byebug
       end
 
       def preloop(commands, context)
-        aprint('stopped') if Byebug.annotate.to_i > 2
-        if context.dead? and not @byebug_context_was_dead
-          if Byebug.annotate.to_i > 2
+        @byebug_context_was_dead = true if context.dead? and not
+          @byebug_context_was_dead
+
+        if Byebug.annotate.to_i > 2
+          aprint('stopped')
+          if @byebug_context_was_dead
             aprint('exited')
             print "The program finished.\n"
           end
-          @byebug_context_was_dead = true
-        end
-
-        if Byebug.annotate.to_i > 2
-          # if we are here, the stack frames have changed outside the command
-          # loop (e.g. after a "continue" command), so we show the annotations
-          # again
           breakpoint_annotations(commands, context)
           display_annotations(commands, context)
           annotation('stack', commands, context, "where")
@@ -307,8 +303,7 @@ module Byebug
               context.dead?
           end
           if not context.dead? and @@Show_annotations_run.find{|pat| cmd =~ pat}
-            aprint 'starting'  if Byebug.annotate.to_i > 2
-
+            aprint 'starting'
             @byebug_context_was_dead = false
           end
         end
