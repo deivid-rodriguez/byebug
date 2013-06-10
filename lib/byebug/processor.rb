@@ -141,7 +141,6 @@ module Byebug
     protect :at_catchpoint
 
     def at_tracing(context, file, line)
-      tracing_plus = Command.settings[:tracing_plus]
       if file != @last_file || line != @last_line ||
          Command.settings[:tracing_plus] == false
         @last_file = file
