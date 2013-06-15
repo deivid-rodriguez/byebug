@@ -1,4 +1,4 @@
-## Second Sample Session: Delving Deeper
+### Second Sample Session: Delving Deeper
 
 In this section we'll introduce breakpoints, the call stack and restarting.
 Below we will debug a simple Ruby program to solve the classic Towers of Hanoi
@@ -172,14 +172,14 @@ Stopped by breakpoint 1 at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:3
 1: n = 1
 3: a.inspect = :a
 4: b.inspect = :b
+(byebug) set nofullpath
+Displaying frame's full file names is off.
 (byebug) where
 --> #0  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol)
-      at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:3
+      at .../byebug/old_doc/hanoi.rb:4
     #1  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol)
-      at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:4
-    #2  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol)
-      at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:4
-    #3  <main> at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:34
+      at .../byebug/old_doc/hanoi.rb:8
+    #2  <top (required)> at .../byebug/old_doc/hanoi.rb:34
 (byebug)
 ```
 
@@ -231,7 +231,7 @@ frame #3, the value of `i_args` can be shown. Also note that the value of
 variable `n` is different.
 
 
-## Unit Testing Session
+### Unit Testing Session
 
 In the previous sessions we've been calling byebug right at the outset, but this
 is probably not the mode of operation you will use the most. There are a number
@@ -436,7 +436,7 @@ the corresponding variables that _currently_ exist, and this might have changed
 since the time when the call was made.
 
 
-## Byebug.start with a block
+### Byebug.start with a block
 
 We saw that `Byebug.start()` and `Byebug.stop()` allow fine-grain control over
 where byebug tracking should occur.
@@ -486,8 +486,7 @@ when another `Byebug.start` method is called inside of the outer one. However,
 if you are stopped inside byebug, issuing another `byebug` call will not have
 any effect even if it is nested inside another `Byebug.start`.
 
-## Debugging Oddities: How debugging Ruby may be different from debugging other
-languages
+### Debugging Oddities: How debugging Ruby may be different from other languages
 
 If you are used to debugging in other languages like C, C++, Perl, Java or even
 Bash (see [bashdb](http://bashdb.sf.net)), there may be a number of things that
@@ -515,7 +514,7 @@ to Ruby who are familiar with other languages and debugging in them.
 * No Parameter Values in a Call Stack
 * Lines You Can Stop At
 
-## Bouncing Around in Blocks (iterators)
+#### Bouncing Around in Blocks (iterators)
 
 When debugging languages with coroutines like Python and Ruby, a method call may
 not necessarily go to the first statement after the method header. It's possible
@@ -596,7 +595,7 @@ The loop between lines 23-26 gets interleaved between those of
 `Sieve::next_prime`, lines 6-19 above.
 
 
-### No Parameter Values in a Call Stack
+#### No Parameter Values in a Call Stack
 
 In traditional debuggers, in a call stack you can generally see the names of the
 parameters and the values that were passed in.
@@ -615,7 +614,7 @@ _current_ class of the object. It has been contemplated that a style might be
 added which saves on call shorter "scalar" types of values and the class name.
 
 
-### Lines You Can Stop At
+#### Lines You Can Stop At
 
 As with the duplicate stops per control (e.g. `if` statement), until tools like
 debuggers get more traction among core ruby developers there are going to be
@@ -644,3 +643,116 @@ To be continued...
 * mixing in Byebug.debug with byebug
 * post-mortem debugging and setting up for that
 * references to videos
+
+## Getting in & out
+
+### Starting byebug
+
+There is a wrapper script called `byebug` which basically `require`'s the gem
+then loads `byebug` before its argument (the program to be debugged) is started.
+
+```
+byebug [byebug-options] [--] ruby-script ruby-script-arguments
+```
+
+If you don't need to pass dash options to your program, which might be confused
+with byebug options, then you don't need to add the `--`. To get a brief list of
+options and descriptions, use the `--help` option.
+
+```
+$ byebug --help
+byebug 1.4.0
+Usage: byebug [options] <script.rb> -- <script.rb parameters>
+
+Options:
+ -A, --annotate LEVEL      Set annotation level
+ -d, --debug               Set $DEBUG=true
+ -I, --include PATH        Add PATH (single or multiple:path:list) to $LOAD_PATH
+     --no-quit             Do not quit when script finishes
+     --no-rewrite-program  Don't set $0 to the program debugged
+     --no-stop             Do not stop when script is loaded
+ -nx                       Don't run any byebug initialization files
+ -r, --require SCRIPT      Require library before script
+     --restart-script FILE Name of the script file to run. Erased after read
+     --script FILE         Name of the script file to run
+    -x, --trace            Turn on line tracing
+
+Common options:
+        --verbose          Turn on verbose mode
+        --help             Show this message
+        --version          Print program version
+    -v                     Print version number, then turn on verbose mode
+```
+
+Many options appear as a long option name, such as `--help` and a short one
+letter option name, such as `-h`. The list of options is detailed below:
+
+* **-h | --help**. It causes `byebug` to print some basic help and exit
+* **-v | --version**. It causes `byebug` to print its version number and
+exit.
+* **-A | --annotate <level>**. Set gdb-style annotation `level`, a number.
+Additional information is output automatically when program state is changed.
+This can be used by front-ends such as GNU Emacs to post this updated
+information without having to poll for it.
+* **-d | --debug**. Set `$DEBUG` to `true`. Compatible with Ruby's.
+* **-I | --include <path>**. Add `path` to load path. `path` can be a single
+path ar a colon separated path list.
+* **-m | --post-mortem**. If your program raises an exception that isn't caught
+you can enter byebug for inspection of what went wrong. You may also want to use
+this option in conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
+* **--no-quit**. Restart `byebug` when your program terminates normally.
+* **--no-rewrite-program**. Normally `byebug` will reset the program's name `$0`
+from its name to the debugged program, and set the name in variable
+`$BYEBUG_SCRIPT`. In the unlikely event you don't want to use this option.
+* **--no-stop**. Normally `byebug` stops before executing the first statement.
+If instead you want it to start running initially and perhaps break it later in
+the execution, use this option.
+* **--require | -r**. Require the library before executing the script. However,
+if the library happened to be `debug`, we'll just ignore the require since we're
+already a debugger. This option is compatible with Ruby's.
+* **--script <file>**. Script to run before byebug's execution.
+* **-x | --trace**. Turn on line tracing. Running `byebug --trace
+<rubyscript>.rb` is pretty much like running `ruby -rtracer
+<rubyscript>.rb`. If all you want to do however is get a linetrace, `tracer` is
+most likely faster than `byebug`
+
+```
+$ time ruby -rtracer old_doc/gcd.rb 24 31 >/dev/null
+
+real  0m0.066s
+user  0m0.048s
+sys 0m0.016s
+
+$ time byebug --trace old_doc/gcd.rb 24 31 >/dev/null
+
+real  0m0.660s
+user  0m0.588s
+sys 0m0.056s
+```
+
+### Byebug default options
+
+Byebug has many command-line options,; it seems that some people want to set
+them differently from the defaults. For example, some people may want
+`--no-quit` to be the default behavior. One could write a wrapper script or set
+a shell alias to handle this. But `byebug` has another way to do it. Before
+processing command options, if the file `$HOME/.byebugoptrc` is found, it is
+loaded. If you want to set the defaults in some other way, you can put Ruby code
+here and set variable `options` which is an OpenStruct. For example here's how
+you'd set `-no-quit` and a personal message.
+
+```ruby
+# This file contains how you want the default options to byebug to be set. Any
+# Ruby code can be put here.
+#
+# byebug # Uncomment if you want to debug byebug!
+options.control = false
+puts "rocky's byebugrc run"
+```
+
+Here are the default values in `options`
+
+```ruby
+#<OpenStruct annotate=nil, no_rewrite_program=false, nx=false, quit=true,
+restart_script=nil, script=nil, stop=true, tracing=false, verbose_long=false>
+```

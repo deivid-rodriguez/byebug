@@ -892,10 +892,8 @@ To be continued...
 * Command Files::        Command files
 * Quitting byebug::      How to leave byebug (quit, kill)
 * Calling from Program:: Calling byebug from inside your program
+* Post-Mortem Debugging:: Enter byebug after an uncaught exception
 @end menu
-
-It is also possible to enter byebug when you have an uncaught exception (see
-@ref{Post-Mortem Debugging}).
 
 @node Starting byebug
 @section Starting byebug
