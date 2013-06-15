@@ -1,6 +1,8 @@
 ## 1.4.1
 
 * Fixes crash when printing some filenames in backtraces
+* Allows byebug developers to easily use compilers different from gcc (thanks
+@GarthSnyder!)
 
 
 ## 1.4.0
