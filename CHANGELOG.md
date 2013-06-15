@@ -1,3 +1,8 @@
+## 1.4.1
+
+* Fixes crash when printing some filenames in backtraces
+
+
 ## 1.4.0
 
 * Byebug now uses the Debug Inspector API: faster and nicer!
