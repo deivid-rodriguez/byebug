@@ -70,6 +70,8 @@ module Byebug
     # are working remotely and want to change the basename. Or we are eliding
     # filenames.
     def self.canonic_file(filename)
+      return '(nil)' if not filename
+
       # For now we want resolved filenames
       if Command.settings[:basename]
         File.basename(filename)
