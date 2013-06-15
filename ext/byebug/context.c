@@ -197,7 +197,7 @@ Context_frame_file(int argc, VALUE *argv, VALUE self)
   VALUE loc;
 
   loc = dc_frame_location(context, frame_n);
-  return rb_funcall(loc, rb_intern("absolute_path"), 0);
+  return rb_funcall(loc, rb_intern("path"), 0);
 }
 
 static VALUE
