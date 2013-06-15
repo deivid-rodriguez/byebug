@@ -173,7 +173,6 @@ module Byebug
          'show history save -- Show whether history record should be saved '  \
          'on exit'                                                            \
          'show history size -- Show the size of the command history'],
-        ['keep-frame-bindings', 1, 'Save frame binding on each call'],
         ['linetrace', 3, 'Show line execution tracing'],
         ['linetrace+', 10,
          'Show whether different consecutive lines are shown in tracing'],

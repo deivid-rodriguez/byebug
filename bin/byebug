@@ -28,9 +28,6 @@
 #    Add <i>path</i> to <tt>$LOAD_PATH</tt>. Like the <tt>ruby -I</tt> command,
 #    it supports multiple load paths separated by colons.
 #
-#<tt>--keep-frame-binding</tt>::
-#    Keep frame bindings.
-#
 #<tt>-m | --post-mortem</tt>::
 #    Activate post-mortem mode.
 #
@@ -106,14 +103,14 @@ end
 
 options = OpenStruct.new(
   'annotate'           => Byebug.annotate,
-  'quit'               => true,
   'no_rewrite_program' => false,
-  'stop'               => true,
   'nx'                 => false,
+  'quit'               => true,
   'restart_script'     => nil,
   'script'             => nil,
+  'stop'               => true,
   'tracing'            => false,
-  'verbose_long'       => false,
+  'verbose_long'       => false
 )
 
 def process_options(options)
