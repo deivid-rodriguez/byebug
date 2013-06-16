@@ -36,7 +36,7 @@ class TestFinish < TestDsl::TestCase
   end
 
   describe 'Post Mortem' do
-    before { Byebug::Command.settings[:autoeval] = false }
+    temporary_change_hash Byebug::Command.settings, :autoeval, false
 
     it 'must not work in post-mortem mode' do
       enter 'cont', 'finish'
