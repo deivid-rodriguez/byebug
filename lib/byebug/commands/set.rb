@@ -114,7 +114,6 @@ module Byebug
         Command.settings[:autoirb] = (set_on ? 1 : 0)
       when /^testing$/
         Command.settings[:testing] = set_on
-        Command.settings[:basename] = set_on
       when /^forcestep$/
         Command.settings[:force_stepping] = set_on
       when /^history$/

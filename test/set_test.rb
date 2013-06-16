@@ -71,7 +71,7 @@ class TestSet < TestDsl::TestCase
   describe 'testing' do
     describe '$byebug_state' do
       describe 'when setting "testing" to on' do
-        temporary_change_hash Byebug::Command.settings, :testing, 0
+        temporary_change_hash Byebug::Command.settings, :testing, false
 
         it 'must get set' do
           enter 'set testing', 'break 3', 'cont'
@@ -81,22 +81,12 @@ class TestSet < TestDsl::TestCase
       end
 
       describe 'when setting "testing" to off' do
-        temporary_change_hash Byebug::Command.settings, :testing, 1
+        temporary_change_hash Byebug::Command.settings, :testing, true
 
         it 'must get unset' do
           enter 'set notesting', 'break 3', 'cont'
           debug_file('set') { $byebug_state.must_be_nil }
         end
-      end
-    end
-
-    describe 'basename' do
-      temporary_change_hash Byebug::Command.settings, :basename, false
-
-      it 'must get set if "testing" is on' do
-        enter 'set testing'
-        debug_file('set')
-        Byebug::Command.settings[:basename].must_equal true
       end
     end
   end
