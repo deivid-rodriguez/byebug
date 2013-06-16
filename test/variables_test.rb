@@ -2,8 +2,6 @@ require_relative 'test_helper'
 
 class TestVariables < TestDsl::TestCase
 
-  temporary_change_hash Byebug::Command.settings, :width, 40
-
   describe 'class variables' do
     it 'must show variables' do
       enter 'break 19', 'cont', 'var class'
