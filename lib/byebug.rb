@@ -286,14 +286,25 @@ module Rails
         ::Byebug.start
         puts "=> Byebug enabled"
       rescue LoadError
-        puts "You're missing the 'byebug' gem. Add it to your Gemfile, bundle " \
-             "it and try again."
-        exit(1)
+        puts "You're missing the 'byebug' gem. Add it to your Gemfile, " \
+             "bundle it and try again."
+        exit
       end
 
       def call(env)
         @app.call(env)
       end
+    end
+  end
+
+  class Console
+    def require_debugger
+      require 'byebug'
+      puts "=> Byebug enabled"
+    rescue LoadError
+      puts "You're missing the 'byebug' gem. Add it to your Gemfile, bundle, " \
+           "it and try again."
+      exit
     end
   end
 end
