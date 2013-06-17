@@ -102,7 +102,6 @@ end
 
 options = OpenStruct.new(
   'annotate'           => Byebug.annotate,
-  'no_rewrite_program' => false,
   'nx'                 => false,
   'post_mortem'        => false,
   'quit'               => true,
@@ -132,8 +131,6 @@ EOB
       |path| $LOAD_PATH.unshift(*path.split(':')) }
     opts.on('--no-quit', 'Do not quit when script finishes') {
       options.quit = false }
-    opts.on('--no-rewrite-program', 'Don\'t set $0 to the program debugged') {
-      options.no_rewrite_program = true }
     opts.on('--no-stop', 'Do not stop when script is loaded') {
       options.stop = false }
     opts.on('-nx', 'Don\'t run any byebug initialization files') {

@@ -669,7 +669,6 @@ Options:
  -d, --debug               Set $DEBUG=true
  -I, --include PATH        Add PATH (single or multiple:path:list) to $LOAD_PATH
      --no-quit             Do not quit when script finishes
-     --no-rewrite-program  Don't set $0 to the program debugged
      --no-stop             Do not stop when script is loaded
  -nx                       Don't run any byebug initialization files
  -r, --require SCRIPT      Require library before script
@@ -701,9 +700,6 @@ path ar a colon separated path list.
 you can enter byebug for inspection of what went wrong. You may also want to use
 this option in conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
 * **--no-quit**. Restart `byebug` when your program terminates normally.
-* **--no-rewrite-program**. Normally `byebug` will reset the program's name `$0`
-from its name to the debugged program, and set the name in variable
-`$BYEBUG_SCRIPT`. In the unlikely event you don't want to use this option.
 * **--no-stop**. Normally `byebug` stops before executing the first statement.
 If instead you want it to start running initially and perhaps break it later in
 the execution, use this option.
@@ -753,6 +749,6 @@ puts "rocky's byebugrc run"
 Here are the default values in `options`
 
 ```ruby
-#<OpenStruct annotate=nil, no_rewrite_program=false, nx=false, quit=true,
-restart_script=nil, script=nil, stop=true, tracing=false, verbose_long=false>
+#<OpenStruct annotate=nil, nx=false, quit=true, restart_script=nil, script=nil,
+stop=true, tracing=false, verbose_long=false>
 ```

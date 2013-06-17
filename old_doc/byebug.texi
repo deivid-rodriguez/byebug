@@ -923,7 +923,6 @@ Options:
         --keep-frame-binding   Keep frame bindings
     -m, --post-mortem          Activate post-mortem mode
         --no-quit              Do not quit when script finishes
-        --no-rewrite-program   Do not set $0 to the program being debugged
         --no-stop              Do not stop when script is loaded
     -nx                        Don't run any initialization files like .byebugrc
     -r, --require SCRIPT       Require the library, before executing your script
@@ -1023,12 +1022,6 @@ conjunction with @option{--no-stop}. See also @ref{Post-Mortem Debugging}.
 @cindex @option{--no-quit}
 Restart byebug when your program terminates normally.
 
-@item --no-rewrite-program
-@cindex @option{--no-rewrite-program}
-Normally @code{byebug} will reset the program name @code{$0} from its name to
-the debugged program, and set the its name in variable @code{$BYEBUG_SCRIPT}. In
-the unlikely even you don't want this use this option.
-
 @item --no-stop
 @cindex @option{--no-stop}
 Normally the @code{byebug} stops before executing the first statement. If
@@ -1100,8 +1093,7 @@ Here are the default values in @code{options}
 #<OpenStruct server=false, client=false, frame_bind=false, cport=8990,
              tracing=false, nx=false, post_mortem=false, port=8989,
              verbose_long=false, annotate=nil, control=true, restart_script=nil,
-             quit=true, no_rewrite_program=false, stop=true, script=nil,
-             host=nil, wait=false>
+             quit=true, stop=true, script=nil, host=nil, wait=false>
 @end smallexample
 
 @node Command Files
