@@ -2,3 +2,6 @@ before_script: rake compile
 rvm:
 - 2.0.0
 - ruby-head
+matrix:
+  allow_failures:
+  - rvm: ruby-head
