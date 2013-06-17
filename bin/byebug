@@ -28,7 +28,7 @@
 #    Add <i>path</i> to <tt>$LOAD_PATH</tt>. Like the <tt>ruby -I</tt> command,
 #    it supports multiple load paths separated by colons.
 #
-#<tt>-m | --post-mortem</tt>::
+#<tt>--post-mortem</tt>::
 #    Activate post-mortem mode.
 #
 #<tt>--no-quit</tt>::

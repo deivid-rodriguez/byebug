@@ -670,7 +670,8 @@ Options:
  -I, --include PATH        Add PATH (single or multiple:path:list) to $LOAD_PATH
      --no-quit             Do not quit when script finishes
      --no-stop             Do not stop when script is loaded
- -nx                       Don't run any byebug initialization files
+     --nx                  Don't run any byebug initialization files
+     --post-mortem         Enable post-mortem mode for uncaught exceptions
  -r, --require SCRIPT      Require library before script
      --restart-script FILE Name of the script file to run. Erased after read
      --script FILE         Name of the script file to run
@@ -696,8 +697,8 @@ information without having to poll for it.
 * **-d | --debug**. Set `$DEBUG` to `true`. Compatible with Ruby's.
 * **-I | --include <path>**. Add `path` to load path. `path` can be a single
 path ar a colon separated path list.
-* **-m | --post-mortem**. If your program raises an exception that isn't caught
-you can enter byebug for inspection of what went wrong. You may also want to use
+* **--post-mortem**. If your program raises an exception that isn't caught you
+can enter byebug for inspection of what went wrong. You may also want to use
 this option in conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
 * **--no-quit**. Restart `byebug` when your program terminates normally.
 * **--no-stop**. Normally `byebug` stops before executing the first statement.
