@@ -13,26 +13,26 @@ class TestRepl < TestDsl::TestCase
     it 'must support next command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :next)
       enter 'irb'
-      debug_file('irb') { state.line.must_equal 3 }
+      debug_file('repl') { state.line.must_equal 3 }
     end
 
     it 'must support step command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :step)
       enter 'irb'
-      debug_file('irb') { state.line.must_equal 3 }
+      debug_file('repl') { state.line.must_equal 3 }
     end
 
     it 'must support cont command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
       enter 'break 4', 'irb'
-      debug_file('irb') { state.line.must_equal 4 }
+      debug_file('repl') { state.line.must_equal 4 }
     end
 
     describe 'autoirb' do
       it 'must call irb automatically after breakpoint' do
         irb.expects(:eval_input)
         enter 'set autoirb', 'break 4', 'cont', 'set noautoirb'
-        debug_file 'irb'
+        debug_file 'repl'
       end
     end
 
@@ -43,7 +43,7 @@ class TestRepl < TestDsl::TestCase
         byebug_state = nil
         irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
         enter 'irb -d'
-        debug_file 'irb'
+        debug_file 'repl'
         byebug_state.must_be_kind_of Byebug::CommandProcessor::State
       end
 
@@ -51,7 +51,7 @@ class TestRepl < TestDsl::TestCase
         byebug_state = nil
         irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
         enter 'irb'
-        debug_file 'irb'
+        debug_file 'repl'
         byebug_state.must_be_nil
       end
     end
@@ -91,13 +91,13 @@ class TestRepl < TestDsl::TestCase
 
       it 'must set $byebug_state if irb is in the debug mode' do
         enter 'pry -d'
-        debug_file 'irb'
+        debug_file 'repl'
         $byebug_state.must_be_kind_of Byebug::CommandProcessor::State
       end
 
       it 'must not set $byebug_state if irb is not in the debug mode' do
         enter 'pry'
-        debug_file 'pry'
+        debug_file 'repl'
         $byebug_state.must_be_nil
       end
     end

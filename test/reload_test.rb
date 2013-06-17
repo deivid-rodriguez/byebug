@@ -21,14 +21,14 @@ class TestReload < TestDsl::TestCase
   end
 
   describe 'reloading' do
-    after { change_line_in_file(fullpath('reload'), 4, '4') }
+    after { change_line_in_file(fullpath('reload'), 4, 'a = 4') }
     it 'must reload the code' do
       enter 'break 3', 'cont', 'l 4-4', -> do
-        change_line_in_file(fullpath('reload'), 4, '100')
+        change_line_in_file(fullpath('reload'), 4, 'a = 100')
         'reload'
       end, 'l 4-4'
       debug_file 'reload'
-      check_output_includes '4: 100'
+      check_output_includes '4: a = 100'
     end
   end
 

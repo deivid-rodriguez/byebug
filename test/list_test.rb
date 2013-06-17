@@ -43,16 +43,16 @@ class TestList < TestDsl::TestCase
       enter 'break 5', 'cont'
       debug_file 'list'
       check_output_includes "[1, 10] in #{fullpath('list')}", '1: byebug',
-        '2: 2', '3: 3', '4: 4', '=>  5: 5', '6: 6', '7: 7', '8: 8', '9: 9',
-        '10: 10'
+        '2: a = 2', '3: a = 3', '4: a = 4', '=>  5: a = 5', '6: a = 6',
+        '7: a = 7', '8: a = 8', '9: a = 9', '10: a = 10'
     end
 
     it 'must list forward after second call' do
       enter 'break 5', 'cont', 'list'
       debug_file 'list'
-      check_output_includes "[11, 20] in #{fullpath('list')}", '11: 11',
-        '12: 12', '13: 13', '14: 14', '15: 15', '16: 16', '17: 17', '18: 18',
-        '19: 19', '20: 20'
+      check_output_includes "[11, 20] in #{fullpath('list')}", '11: a = 11',
+        '12: a = 12', '13: a = 13', '14: a = 14', '15: a = 15', '16: a = 16',
+        '17: a = 17', '18: a = 18', '19: a = 19', '20: a = 20'
     end
   end
 
@@ -62,17 +62,17 @@ class TestList < TestDsl::TestCase
     it 'must show surrounding lines with the first call' do
       enter 'break 15', 'cont', 'list -'
       debug_file 'list'
-      check_output_includes "[10, 19] in #{fullpath('list')}", '10: 10',
-        '11: 11', '12: 12', '13: 13', '14: 14', '=> 15: 15', '16: 16', '17: 17',
-        '18: 18', '19: 19'
+      check_output_includes "[10, 19] in #{fullpath('list')}", '10: a = 10',
+        '11: a = 11', '12: a = 12', '13: a = 13', '14: a = 14', '=> 15: a = 15',
+        '16: a = 16', '17: a = 17', '18: a = 18', '19: a = 19'
     end
 
     it 'must list backward after second call' do
       enter 'break 15', 'cont', 'list -', 'list -'
       debug_file 'list'
       check_output_includes "[1, 10] in #{fullpath('list')}", '1: byebug',
-        '2: 2', '3: 3', '4: 4', '5: 5', '6: 6', '7: 7', '8: 8', '9: 9',
-        '10: 10'
+        '2: a = 2', '3: a = 3', '4: a = 4', '5: a = 5', '6: a = 6', '7: a = 7',
+        '8: a = 8', '9: a = 9', '10: a = 10'
     end
   end
 
@@ -83,8 +83,8 @@ class TestList < TestDsl::TestCase
       enter 'break 5', 'cont', 'list ='
       debug_file 'list'
       check_output_includes "[1, 10] in #{fullpath('list')}", '1: byebug',
-        '2: 2', '3: 3', '4: 4', '=>  5: 5', '6: 6', '7: 7', '8: 8', '9: 9',
-        '10: 10'
+        '2: a = 2', '3: a = 3', '4: a = 4', '=>  5: a = 5', '6: a = 6',
+        '7: a = 7', '8: a = 8', '9: a = 9', '10: a = 10'
     end
   end
 
@@ -93,14 +93,14 @@ class TestList < TestDsl::TestCase
       enter 'list 4-6'
       debug_file 'list'
       check_output_includes \
-        "[4, 6] in #{fullpath('list')}", '4: 4', '5: 5', '6: 6'
+        "[4, 6] in #{fullpath('list')}", '4: a = 4', '5: a = 5', '6: a = 6'
     end
 
     it 'must show with mm,nn' do
       enter 'list 4,6'
       debug_file 'list'
       check_output_includes \
-        "[4, 6] in #{fullpath('list')}", '4: 4', '5: 5', '6: 6'
+        "[4, 6] in #{fullpath('list')}", '4: a = 4', '5: a = 5', '6: a = 6'
     end
 
     it 'must show nothing if there is no such lines' do
@@ -122,38 +122,40 @@ class TestList < TestDsl::TestCase
     it 'must show surroundings with mm-' do
       enter 'list 14-'
       debug_file 'list'
-      check_output_includes "[9, 18] in #{fullpath('list')}", '9: 9', '10: 10',
-        '11: 11', '12: 12', '13: 13', '14: 14', '15: 15', '16: 16', '17: 17',
-        '18: 18'
+      check_output_includes "[9, 18] in #{fullpath('list')}", '9: a = 9',
+        '10: a = 10', '11: a = 11', '12: a = 12', '13: a = 13', '14: a = 14',
+        '15: a = 15', '16: a = 16', '17: a = 17', '18: a = 18'
     end
 
     it 'must show surroundings with mm,' do
       enter 'list 14,'
       debug_file 'list'
-      check_output_includes "[9, 18] in #{fullpath('list')}", '9: 9', '10: 10',
-        '11: 11', '12: 12', '13: 13', '14: 14', '15: 15', '16: 16', '17: 17',
-        '18: 18'
+      check_output_includes "[9, 18] in #{fullpath('list')}", '9: a = 9',
+        '10: a = 10', '11: a = 11', '12: a = 12', '13: a = 13', '14: a = 14',
+        '15: a = 15', '16: a = 16', '17: a = 17', '18: a = 18'
     end
   end
 
   describe 'reload source' do
-    after  { change_line_in_file(fullpath('list'), 4, '4')   }
+    after  { change_line_in_file(fullpath('list'), 4, 'a = 4')   }
 
     describe 'when autoreload is false' do
       temporary_change_hash Byebug::Command.settings, :autoreload, false
 
       it 'must not reload listing with file changes' do
-        enter -> { change_line_in_file fullpath('list'), 4, '100' ; 'list 4-4' }
+        enter -> { change_line_in_file fullpath('list'), 4, 'a = 100' ;
+                   'list 4-4' }
         debug_file 'list'
-        check_output_includes '4: 4'
+        check_output_includes '4: a = 4'
       end
     end
 
     describe 'when autoreload is true' do
       it 'must reload listing with file changes' do
-        enter -> { change_line_in_file fullpath('list'), 4, '100' ; 'list 4-4' }
+        enter -> { change_line_in_file fullpath('list'), 4, 'a = 100' ;
+                   'list 4-4' }
         debug_file 'list'
-        check_output_includes '4: 100'
+        check_output_includes '4: a = 100'
       end
     end
   end
