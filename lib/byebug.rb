@@ -189,7 +189,7 @@ module Byebug
         return if self.post_mortem?
         self.post_mortem = true
         debug_at_exit do
-          handle_post_mortem($!) if $! && post_mortem?
+          handle_post_mortem($!) if post_mortem?
         end
       end
     end

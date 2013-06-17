@@ -449,11 +449,12 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
 {
   VALUE file, stop, context_obj;
   debug_context_t *dc;
+  VALUE status = Qnil;
   int state = 0;
 
   if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
   {
-      stop = Qfalse;
+    stop = Qfalse;
   }
 
   Byebug_start(self);
@@ -470,17 +471,15 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
   rb_load_protect(file, 0, &state);
   if (0 != state)
   {
-      VALUE errinfo = rb_errinfo();
-      reset_stepping_stop_points(dc);
-      rb_set_errinfo(Qnil);
-      return errinfo;
+    status = rb_errinfo();
+    reset_stepping_stop_points(dc);
   }
 
   /* We should run all at_exit handler's in order to provide, for instance, a
    * chance to run all defined test cases */
   rb_exec_end_proc();
 
-  return Qnil;
+  return status;
 }
 
 static VALUE

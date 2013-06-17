@@ -79,8 +79,7 @@ def debug_program(options)
   # Record where we are we can know if the call stack has been truncated or not.
   Byebug.start_sentinal=caller(0)[1]
 
-  bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
-  if bt
+  if bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
     print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{bt}\n"
   end
@@ -105,6 +104,7 @@ options = OpenStruct.new(
   'annotate'           => Byebug.annotate,
   'no_rewrite_program' => false,
   'nx'                 => false,
+  'post_mortem'        => false,
   'quit'               => true,
   'restart_script'     => nil,
   'script'             => nil,
@@ -138,6 +138,8 @@ EOB
       options.stop = false }
     opts.on('-nx', 'Don\'t run any byebug initialization files') {
       options.nx = true }
+    opts.on('--post-mortem', 'Run byebug in post-mortem mode') {
+      options.post_mortem = true }
     opts.on('-r', '--require SCRIPT', String, 'Require library before script') {
       |name| if name == 'debug'
         puts 'byebug not compatible with Ruby\'s \'debug\' lib, option ignored'
@@ -227,7 +229,7 @@ prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 Byebug::PROG_SCRIPT = File.expand_path prog_script
 
 # Set up trace hook for byebug
-Byebug.start
+Byebug.start post_mortem: options.post_mortem
 
 # load initrc script (e.g. .byebugrc)
 Byebug.run_init_script(StringIO.new) unless options.nx
