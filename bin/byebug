@@ -246,10 +246,7 @@ end
 options.stop = false if options.tracing
 Byebug.tracing = options.tracing
 
-if !options.quit
-  if Byebug.started?
-    until Byebug.stop do end
-  end
+loop do
   begin
     debug_program(options)
   rescue SyntaxError
@@ -259,13 +256,13 @@ if !options.quit
     print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{$!}\n"
   end
-  print "The program finished.\n" unless
-    Byebug.annotate.to_i > 1 # annotate has its own way
+  print "The program finished.\n" unless Byebug.annotate.to_i > 1
+
+  break if options.quit
+
   interface = Byebug::LocalInterface.new
   # Not sure if ControlCommandProcessor is really the right
   # thing to use. CommandProcessor requires a state.
   processor = Byebug::ControlCommandProcessor.new(interface)
   processor.process_commands
-else
-  debug_program(options)
 end
