@@ -753,3 +753,88 @@ Here are the default values in `options`
 #<OpenStruct annotate=nil, nx=false, quit=true, restart_script=nil, script=nil,
 stop=true, tracing=false, verbose_long=false>
 ```
+
+## Command Files
+
+A command file is a file of lines that are `byebug` commands. Comments (lines
+starting with `#`) may also be included. An empty line in a command file does
+nothing; it does not mean to repeat the last command, as it would from the
+terminal.
+
+When you start `byebug`, it automatically executes commands from its
+_init file_, called `.byebugrc`. During startup, `byebug` does the following:
+
+* __Processes command line options and operands.__ Reads the init file in your
+current directory, if any, and then checks your home directory. The home
+directory is the directory named in the `$HOME` or `$HOMEPATH` environment
+variable. Thus, you can have more than one init file, one generic in your home
+directory, and another, specific to the program you are debugging, in the
+directory where you invoke `byebug`.
+
+* __Reads command files specified by the `--script` option.__
+
+You can also request the execution of a command file with the `source` command
+(see [Source]()).
+
+## Quitting byebug
+
+Inside a byebug interpreter, use `quit` command to finish execution. Another way
+to terminate byebug is to use the `kill` command. This does the more forceful
+`kill -9`. It can be used in cases where `quit` doesn't work (I haven't seen it
+yet).
+
+## Calling byebug from inside your program
+
+Running a program from byebug adds a bit of overhead and slows it down a little.
+Furthermore, by necessity, debuggers change the operation of the program they
+are debugging. And this can lead to unexpected and unwanted differences. It has
+happened so often that the term
+[Heisenbugs](http://en.wikipedia.org/wiki/Heisenbug}) was coined to describe the
+situation where using a debugger (among other possibilities) changes the
+behavior of the program so that the bug doesn't manifest itself anymore.
+
+There is another way to get into byebug which adds no overhead or slowdown until
+you reach the point at which you want to start debugging. However here you must
+change the script and make an explicit call to byebug. Because byebug isn't
+involved before the first call, there is no overhead and the script will run
+at the same speed as if there were no byebug.
+
+There are three parts to calling byebug from inside the script, ``requiring''
+the gem, telling byebug to start tracking things and then making an explicit
+breakpoints.
+
+Unless you're using bundler, do this to get byebug class accessible from your
+Ruby program
+
+```ruby
+require 'byebug'
+```
+
+To tell byebug to start tracking things, do
+
+```ruby
+Byebug.start
+```
+
+There is also a `Byebug.stop` to turn off byebug tracking. If speed is crucial,
+you may want to start and stop this around certain sections of code.
+Alternatively, instead of issuing an explicit `Byebug.stop` you can add a block
+to the `Byebug.start` and debugging is turned on for that block. If the block of
+code raises an uncaught exception that would cause the block to terminate, the
+`stop` will occur.  See [here](Byebug.start with a block).
+
+And finally to enter byebug
+
+```ruby
+byebug
+```
+
+When `byebug`is run, `.byebugrc` is read.
+
+You may want to enter byebug at several points in the program where there is a
+problem you want to investigate. And since `byebug` is just a method call it's
+possible to enclose it in a conditional expression, for example
+
+```ruby
+byebug if 'bar' == foo and 20 == iter_count
+```
