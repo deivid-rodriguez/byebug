@@ -22,13 +22,11 @@ module Byebug
       end
 
       def description
-        %{
-          sk[ip]\tskip the next thrown exception
+        %{sk[ip]\tskip the next thrown exception
 
           This is useful if you've explicitly caught an exception through the
           "catch" command, and wish to pass the exception on to the code that
-           you're debugging.
-        }
+          you're debugging.}
       end
     end
   end

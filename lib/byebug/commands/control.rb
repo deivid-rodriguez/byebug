@@ -60,12 +60,10 @@ module Byebug
       end
 
       def description
-        %{
-          restart|R [args]
+        %{restart|R [args]
 
           Restart the program. This is a re-exec - all byebug state
-          is lost. If command arguments are passed those are used.
-        }
+          is lost. If command arguments are passed those are used.}
       end
     end
   end

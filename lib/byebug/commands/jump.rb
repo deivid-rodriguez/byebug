@@ -48,13 +48,11 @@ module Byebug
       end
 
       def description
-        %{
-          j[ump] line\tjump to line number (absolute)
+        %{j[ump] line\tjump to line number (absolute)
           j[ump] -line\tjump back to line (relative)
           j[ump] +line\tjump ahead to line (relative)
 
-          Change the next line of code to be executed.
-         }
+          Change the next line of code to be executed.}
       end
     end
   end

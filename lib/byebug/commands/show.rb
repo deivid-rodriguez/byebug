@@ -201,7 +201,7 @@ module Byebug
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
-      subcmd = find(Subcommands, param)
+      subcmd = Command.find(Subcommands, param)
       if subcmd
         print "%s\n" % show_setting(subcmd.name)
       else
@@ -215,9 +215,7 @@ module Byebug
       end
 
       def description
-        %{
-          Generic command for showing things about byebug.
-        }
+        %{Generic command for showing things about byebug.}
       end
     end
 

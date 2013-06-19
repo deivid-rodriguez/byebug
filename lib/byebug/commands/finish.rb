@@ -28,16 +28,14 @@ module Byebug
       end
 
       def description
-        %{
-          fin[ish][ frame-number]\tExecute until selected stack frame returns.
+        %{fin[ish][ frame-number]\tExecute until selected stack frame returns.
 
           If no frame number is given, we run until the currently selected frame
           returns. The currently selected frame starts out the most-recent frame
           or 0 if no frame positioning (e.g "up", "down" or "frame") has been
           performed.
 
-          If a frame number is given we run until that frame returns.
-        }
+          If a frame number is given we run until that frame returns.}
       end
     end
   end

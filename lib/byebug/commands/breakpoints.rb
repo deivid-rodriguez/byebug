@@ -14,7 +14,7 @@ module Byebug
     end
 
     def execute
-      return print self.class.help(nil) if self.class.names.include?(@match[0])
+      return print BreakCommand.help(nil) if BreakCommand.names.include?(@match[0])
 
       if @match[1]
         line, _, _, expr = @match.captures
@@ -95,12 +95,10 @@ module Byebug
       end
 
       def description
-        %{
-          b[reak] file:line [if expr]
+        %{b[reak] file:line [if expr]
           b[reak] class(.|#)method [if expr]
 
-          Set breakpoint to some position, (optionally) if expr == true
-        }
+          Set breakpoint to some position, (optionally) if expr == true}
       end
     end
   end
@@ -134,12 +132,10 @@ module Byebug
       end
 
       def description
-        %{
-          del[ete][ nnn...]
+        %{del[ete][ nnn...]
 
           Without and argument, deletes all breakpoints. With integer arguments,
-          it deletes specific breakpoints.
-        }
+          it deletes specific breakpoints.}
       end
     end
   end

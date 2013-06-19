@@ -16,26 +16,42 @@ class TestHelp < TestDsl::TestCase
         'Type "help <command-name>" for help on a specific command',
         'Available commands:', columnize(available_commands, 50)
     end
+
+    it 'must work when shortcut used' do
+      enter 'h'
+      debug_file 'help'
+      check_output_includes \
+        'Type "help <command-name>" for help on a specific command'
+    end
   end
 
-  it 'must work when shortcut used' do
-    enter 'h'
-    debug_file 'help'
-    check_output_includes \
-      'Type "help <command-name>" for help on a specific command'
+  describe 'when typed with a command'  do
+    it 'must show an error if an undefined command is specified' do
+      enter 'help foobar'
+      debug_file 'help'
+      check_output_includes \
+        'Undefined command: "foobar".  Try "help".', interface.error_queue
+    end
+
+    it "must show a command's help" do
+      enter 'help break'
+      debug_file 'help'
+      check_output_includes \
+        "b[reak] file:line [if expr]\n" \
+        "b[reak] class(.|#)method [if expr]\n\n" \
+        "Set breakpoint to some position, (optionally) if expr == true\n"
+    end
   end
 
-  it 'must show an error if an undefined command is specified' do
-    enter 'help foobar'
-    debug_file 'help'
-    check_output_includes \
-      'Undefined command: "foobar".  Try "help".', interface.error_queue
-  end
-
-  it 'must show a command\'s help' do
-    enter 'help break'
-    debug_file 'help'
-    check_output_includes Byebug::BreakCommand.help(nil)
+  describe 'when typed with command and subcommand' do
+    it "must show subcommand's long help" do
+      enter 'help info breakpoints'
+      debug_file 'help'
+      check_output_includes \
+        "Status of user-settable breakpoints.\n" \
+        "Without argument, list info about all breakpoints. " \
+        "With an integer argument, list info on that breakpoint."
+    end
   end
 
   describe 'Post Mortem' do

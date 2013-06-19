@@ -39,11 +39,9 @@ module Byebug
       end
 
       def description
-        %{
-          n[ext][+-]?[ nnn]\tstep over once or nnn times,
+        %{n[ext][+-]?[ nnn]\tstep over once or nnn times,
           \t\t'+' forces to move to another line.
-          \t\t'-' is the opposite of '+' and disables the force_stepping setting.
-        }
+          \t\t'-' is the opposite of '+' and disables the force_stepping setting.}
       end
     end
   end

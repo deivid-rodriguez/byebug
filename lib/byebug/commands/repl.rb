@@ -102,14 +102,12 @@ module Byebug
       end
 
       def description
-        %{
-          irb[ -d]\tstarts an Interactive Ruby (IRB) session.
+        %{irb[ -d]\tstarts an Interactive Ruby (IRB) session.
 
           If -d is added you can get access to byebug's state via the global
           variable $byebug_state. IRB is extended with methods "cont", "n" and
           "step" which run the corresponding byebug commands. In contrast to the
-          real byebug commands these commands don't allow arguments.
-        }
+          real byebug commands these commands don't allow arguments.}
       end
     end
   end
@@ -149,9 +147,7 @@ module Byebug
       end
 
       def description
-        %{
-          pry[ -d]\tstarts a Pry session.
-        }
+        %{pry[ -d]\tstarts a Pry session.}
       end
     end
   end if has_pry

@@ -40,10 +40,8 @@ module Byebug
       end
 
       def description
-        %{
-          tr[ace] (on|off)\tset trace mode
-          tr[ace] var(iable) VARNAME [stop|nostop]\tset trace variable on VARNAME
-        }
+        %{tr[ace] (on|off)\tset trace mode
+          tr[ace] var(iable) VARNAME [stop|nostop]\tset trace variable on VARNAME}
       end
     end
   end

@@ -1,6 +1,6 @@
 module Byebug
 
-  class ConditionCommand < Command # :nodoc:
+  class ConditionCommand < Command
 
     def regexp
       /^\s* cond(?:ition)? (?:\s+(\d+)\s*(.*))?$/ix
@@ -31,16 +31,14 @@ module Byebug
       end
 
       def description
-        %{
-          cond[ition] nnn[ expr]
+        %{cond[ition] nnn[ expr]
 
           Specify breakpoint number nnn to break only if expr is true. nnn is an
           integer and expr is an expression to be evaluated whenever breakpoint
           nnn is reached. If no expression is specified, the condition is
-          removed.
-        }
+          removed.}
       end
     end
   end
 
-end # module Byebug
+end

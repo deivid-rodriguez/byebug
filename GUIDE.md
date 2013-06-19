@@ -838,3 +838,147 @@ possible to enclose it in a conditional expression, for example
 ```ruby
 byebug if 'bar' == foo and 20 == iter_count
 ```
+
+## Byebug Command Reference
+
+## Command Syntax
+Usually a command is put on a single line. There is no limit on how long it can be.
+It starts with a command name, which is followed by arguments whose meaning depends
+on the command name. For example, the command `step` accepts an argument which is the
+number of times to step, as in `step 5`. You can also use the `step` command with no
+arguments. Some commands do not allow any arguments.
+
+Multiple commands can be put on a line by separating each with a semicolon `;`. You
+can disable the meaning of a semicolon to separate commands by escaping it with a
+backslash.
+
+For example, if you have [autoeval]() set, which is the default, you might want to
+enter the following code to compute the 5th Fibonacci number.
+
+```
+(byebug) fib1=0; fib2=1; 5.times {|temp| temp=fib1; fib1=fib2; fib2 += temp }
+0
+1
+SyntaxError Exception: /home/davidr/Proyectos/sample_app/trace.rb:1: syntax
+error, unexpected end-of-input, expecting '}'
+ 5.times { |temp| temp=fib1
+                           ^
+nil
+1
+SyntaxError Exception: /home/davidr/Proyectos/sample_app/trace.rb:1: syntax
+error, unexpected tSTRING_DEND, expecting end-of-input
+ fib2 += temp }
+               ^
+nil
+(byebug) fib1=0\; fib2=1\; 5.times {|temp| temp=fib1\; fib1=fib2\; fib2 += temp }
+5
+(byebug) fib2
+8
+```
+
+You might also consider using the [irb]() or [pry]() commands and then you won't have
+to escape semicolons.
+
+A blank line as input (typing just `<RET>`) means to repeat the previous command.
+
+Byebug uses readline, which handles line editing and retrieval of previous commands.
+Up arrow, for example, moves to the previous byebug command; down arrow moves to the
+next more recent command (provided you are not already at the last command). Command
+history is saved in file `.byebug_hist`. A limit is put on the history size. You
+can see this with the `show history size` command. See [history]() for history
+parameters.
+
+### Command Output
+In the command-line interface, when `byebug` is waiting for input it presents a
+prompt of the form `(byebug)`. If the program has terminated normally the prompt will
+be `(byebug:ctrl)` and in post-mortem debugging it will be
+`(byebug:post-mortem)`.
+
+Whenever `byebug` gives an error message such as for an invalid command or an invalid
+location position, it will generally preface the message with `***`. However if
+annotation mode is on then the message is put in a `begin-error` annotation and no
+`***` appears.
+
+### Help
+Once inside `byebug` you can always ask it for information on its commands using the
+`help` command. You can use `help` (abbreviated `h`) with no arguments to display a
+short list of named classes of commands
+
+```
+(byebug) `help`
+Type "help <command-name>" for help on a specific command
+
+Available commands:
+backtrace  catch   continue  disable  down   enable  exit       frame
+info       jump    list      next     pp     putl    reload     save
+show       source  trace     up       where  break   condition  delete
+display    edit    eval      finish   help   irb     kill       method
+p          ps      quit      restart  set    skip    step       undisplay
+var
+```
+
+With a command name as `help` argument, `byebug` displays short information on how to
+use that command.
+
+```
+(byebug) help list
+l[ist]    list forward
+l[ist] -  list backward
+l[ist] =  list current line
+l[ist] nn-mm  list given lines
+* NOTE - to turn on autolist, use 'set autolist'
+(byebug)
+```
+
+A number of commands, namely `info`, `set`, `show`, `enable` and `disable`, have many
+sub-parameters or _subcommands_. When you ask for help for one of these commands, you
+will get help for all of the subcommands that command offers. Sometimes you may want
+help only on a subcommand and to do this just follow the command with its subcommand
+name. For example `help set annotate` will just give help about the annotate command.
+Furthermore it will give longer help than the summary information that appears when
+you ask for help. You don't need to list the full subcommand name, just enough
+letters to make that subcommand distinct from others will do. For example,
+`help set an` is the same as `help set annotate`.
+
+Some examples follow.
+
+```
+(byebug) help info
+info[ subcommand]
+
+Generic command for showing things about the program being debugged.
+
+--
+List of "info" subcommands:
+--
+info args               -- Argument variables of current stack frame
+info breakpoints        -- Status of user-settable breakpoints
+info catch              -- Exceptions that can be caught in the current stack
+frame
+info display            -- Expressions to display when program stops
+info file               -- Info about a particular file read in
+info files              -- File names and timestamps of files read in
+info global_variables   -- Global variables
+info instance_variables -- Instance variables of the current stack frame
+info line               -- Line number and file name of current position in
+source file
+info locals             -- Local variables of the current stack frame
+info program            -- Execution status of the program
+info stack              -- Backtrace of the stack
+info variables          -- Local and instance variables of the current stack
+frame
+```
+
+```
+(byebug) help info breakpoints
+Status of user-settable breakpoints.
+Without argument, list info about all breakpoints.
+With an integer argument, list info on that breakpoint.
+```
+
+```
+(byebug) help info br
+Status of user-settable breakpoints.
+Without argument, list info about all breakpoints.
+With an integer argument, list info on that breakpoint.
+```

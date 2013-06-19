@@ -69,7 +69,7 @@ module Byebug
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
-      subcmd = find(Subcommands, param)
+      subcmd = Command.find(Subcommands, param)
       if subcmd
         send("enable_#{subcmd.name}", args)
       else
@@ -91,10 +91,8 @@ module Byebug
       end
 
       def description
-        %{
-          Enable some things.
-          This is used to cancel the effect of the "disable" command.
-        }
+        %{Enable some things.
+          This is used to cancel the effect of the "disable" command.}
       end
     end
   end
@@ -123,7 +121,7 @@ module Byebug
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
-      subcmd = find(Subcommands, param)
+      subcmd = Command.find(Subcommands, param)
       if subcmd
         send("disable_#{subcmd.name}", args)
       else
@@ -145,12 +143,10 @@ module Byebug
       end
 
       def description
-        %{
-          Disable some things.
+        %{Disable some things.
 
           A disabled item is not forgotten, but has no effect until reenabled.
-          Use the "enable" command to have it take effect again.
-         }
+          Use the "enable" command to have it take effect again.}
       end
     end
   end

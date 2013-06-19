@@ -13,23 +13,6 @@ module Byebug
         string[Command.settings[:width]-3 .. -1] = "..."
       end
     end
-
-    ##
-    # Find param in subcmds.
-    #
-    # @param is downcased and can be abbreviated to the minimum length listed in
-    # the subcommands.
-    #
-    def find(subcmds, param)
-      param.downcase!
-      for try_subcmd in subcmds do
-        if (param.size >= try_subcmd.min) and
-            (try_subcmd.name[0..param.size-1] == param)
-          return try_subcmd
-        end
-      end
-      return nil
-    end
   end
 
   # Root dir for byebug
@@ -53,10 +36,7 @@ module Byebug
                       need_context:         false } unless defined?(DEF_OPTIONS)
 
       def help(args)
-        output = description.split("\n").map{|l| l.gsub(/^ +/, '')}
-        output.shift if output.first && output.first.empty?
-        output.pop if output.last && output.last.empty?
-        output = output.join("\n") + "\n"
+        output = description.gsub(/^ +/, '')
 
         if defined? self::Subcommands
           return output += format_subcmds unless args and args[1]
@@ -64,6 +44,17 @@ module Byebug
         end
 
         return output
+      end
+
+      def find(subcmds, param)
+        param.downcase!
+        for try_subcmd in subcmds do
+          if (param.size >= try_subcmd.min) and
+              (try_subcmd.name[0..param.size-1] == param)
+            return try_subcmd
+          end
+        end
+        return nil
       end
 
       def format_subcmd(subcmd_name)

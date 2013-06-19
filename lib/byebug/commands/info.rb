@@ -71,7 +71,7 @@ module Byebug
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
-      subcmd = find(Subcommands, param)
+      subcmd = Command.find(Subcommands, param)
       if subcmd
         send("info_#{subcmd.name}", *args)
       else
@@ -174,7 +174,7 @@ module Byebug
 
       param =  args[1] || 'basic'
 
-      subcmd = find(InfoFileSubcommands, param)
+      subcmd = Command.find(InfoFileSubcommands, param)
       return errmsg "Invalid parameter #{param}\n" unless subcmd
 
       unless LineCache::cached?(args[0])
@@ -309,11 +309,9 @@ module Byebug
       end
 
       def description
-        %{
-          info[ subcommand]
+        %{info[ subcommand]
 
-          Generic command for showing things about the program being debugged.
-        }
+          Generic command for showing things about the program being debugged.}
       end
 
       def help(args)
@@ -322,7 +320,7 @@ module Byebug
         return format_subcmd(args[1]) unless 'file' == args[1] and args[2]
 
         str = subcmd.short_help + '.'
-        subsubcmd = find(InfoFileSubcommands, args[2])
+        subsubcmd = Command.find(InfoFileSubcommands, args[2])
         if subsubcmd
           str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
         else

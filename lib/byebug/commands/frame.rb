@@ -157,7 +157,6 @@ module Byebug
       end
       return nil
     end
-
   end
 
   # Implements byebug "where" or "backtrace" command.
@@ -180,14 +179,12 @@ module Byebug
       end
 
       def description
-        %{
-          w[here]|bt|backtrace\tdisplay stack frames
+        %{w[here]|bt|backtrace\tdisplay stack frames
 
           Print the entire stack frame. Each frame is numbered, the most recent
           frame is 0. frame number can be referred to in the "frame" command;
           "up" and "down" add or subtract respectively to frame numbers shown.
-          The position of the current frame is marked with -->.
-        }
+          The position of the current frame is marked with -->.}
       end
     end
   end
@@ -209,9 +206,7 @@ module Byebug
       end
 
       def description
-        %{
-          up[ count]\tmove to higher frame
-        }
+        %{up[ count]\tmove to higher frame}
       end
     end
   end
@@ -233,9 +228,7 @@ module Byebug
       end
 
       def description
-        %{
-          down[ count]\tmove to lower frame
-        }
+        %{down[ count]\tmove to lower frame}
       end
     end
   end
@@ -264,8 +257,7 @@ module Byebug
       end
 
       def description
-        %{
-          f[rame][ frame-number]
+        %{f[rame][ frame-number]
 
           Move the current frame to the specified frame number, or the 0 if no
           frame-number has been given.
@@ -275,8 +267,7 @@ module Byebug
 
           Without an argument, the command prints the current stack frame. Since
           the current position is redisplayed, it may trigger a resyncronization
-          if there is a front end also watching over things.
-        }
+          if there is a front end also watching over things.}
       end
     end
   end

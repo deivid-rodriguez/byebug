@@ -41,10 +41,9 @@ module Byebug
       end
 
       def description
-        %{
-          h[elp]\t\tprint this help
+        %{h[elp]\t\tprint this help
           h[elp] command\tprint help on command
-        }
+          h[elp] command subcommand\tprint help on subcommand}
       end
     end
   end

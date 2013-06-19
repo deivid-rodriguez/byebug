@@ -62,7 +62,7 @@ module Byebug
         set_on = true
       end
 
-      subcmd = find(Subcommands, try_subcmd)
+      subcmd = Command.find(Subcommands, try_subcmd)
 
       # Subcommand not found...
       return print "Unknown set command \"#{try_subcmd}\"\n" unless subcmd
@@ -160,10 +160,8 @@ module Byebug
       end
 
       def description
-        %{
-          Modifies parts of byebug environment. Boolean values take on, off, 1
-          or 0. You can see these environment settings with the "show" command
-        }
+        %{Modifies parts of byebug environment. Boolean values take on, off, 1
+          or 0. You can see these environment settings with the "show" command.}
       end
     end
 

@@ -32,9 +32,7 @@ module Byebug
       end
 
       def description
-        %{
-          m[ethod] sig[nature] <obj>\tshow the signature of a method
-        }
+        %{m[ethod] sig[nature] <obj>\tshow the signature of a method}
       end
     end
   end if have_methodsig
@@ -71,11 +69,9 @@ module Byebug
       end
 
       def description
-        %{
-          m[ethod] i[nstance] <obj>\tshow methods of object
+        %{m[ethod] i[nstance] <obj>\tshow methods of object
           m[ethod] iv <obj>\t\tshow instance variables of object
-          m[ethod] <class|module>\t\tshow instance methods of class or module
-        }
+          m[ethod] <class|module>\t\tshow instance methods of class or module}
       end
     end
   end

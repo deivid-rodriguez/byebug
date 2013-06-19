@@ -28,9 +28,7 @@ module Byebug
       end
 
       def description
-        %{
-          source FILE\texecutes a file containing byebug commands
-        }
+        %{source FILE\texecutes a file containing byebug commands}
       end
     end
   end

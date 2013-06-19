@@ -38,12 +38,10 @@ module Byebug
       end
 
       def description
-        %{
-          kill[ SIGNAL]
+        %{kill[ SIGNAL]
 
           Send [signal] to Process.pid
-          Equivalent of Process.kill(Process.pid)
-        }
+          Equivalent of Process.kill(Process.pid)}
       end
     end
   end

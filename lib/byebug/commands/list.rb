@@ -38,13 +38,11 @@ module Byebug
       end
 
       def description
-        %{
-          l[ist]\t\tlist forward
+        %{l[ist]\t\tlist forward
           l[ist] -\tlist backward
           l[ist] =\tlist current line
           l[ist] nn-mm\tlist given lines
-          * NOTE - to turn on autolist, use 'set autolist'
-        }
+          * NOTE - to turn on autolist, use 'set autolist'}
       end
     end
 

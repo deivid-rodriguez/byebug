@@ -46,9 +46,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] cl[ass] \t\t\tshow class variables of self
-        }
+        %{v[ar] cl[ass] \t\t\tshow class variables of self}
       end
     end
   end
@@ -79,9 +77,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] co[nst] <object>\t\tshow constants of object
-        }
+        %{v[ar] co[nst] <object>\t\tshow constants of object}
       end
     end
   end
@@ -101,9 +97,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] g[lobal]\t\t\tshow global variables
-        }
+        %{v[ar] g[lobal]\t\t\tshow global variables}
       end
     end
   end
@@ -124,9 +118,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] i[nstance] <object>\tshow instance variables of object
-        }
+        %{v[ar] i[nstance] <object>\tshow instance variables of object}
       end
     end
   end
@@ -151,9 +143,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] l[ocal]\t\t\tshow local variables
-        }
+        %{v[ar] l[ocal]\t\t\tshow local variables}
       end
     end
   end
@@ -191,9 +181,7 @@ module Byebug
       end
 
       def description
-        %{
-          v[ar] ct\t\t\tshow class heirarchy of object
-        }
+        %{v[ar] ct\t\t\tshow class heirarchy of object}
       end
     end
   end if have_classtree
