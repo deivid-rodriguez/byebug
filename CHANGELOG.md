@@ -1,3 +1,11 @@
+## 1.4.2
+
+* Fixes crash when using "help command subcommand"
+* Byebug now works with Rails Console debugging flag
+* Fix post-mortem mode when running byebug from the outset
+* Fix --no-quit flag when running byebug from the outset
+
+
 ## 1.4.1
 
 * Fixes crash when printing some filenames in backtraces
