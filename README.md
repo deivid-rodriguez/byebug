@@ -73,6 +73,7 @@ because it is a default option in byebug.
   - Colon delimited include paths.
   - Nice markdow guide.
   - Ruby 2.0 support.
+  - where/bt does not in fact give a backtrace.
 * Very actively mantained.
 * Editor agnostic: no external editor built-in support.
 * No thread support as not supported by the new API yet (I hope it will come
