@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency "columnize", "~> 0.3.6"
   s.add_dependency "debugger-linecache", '~> 1.2.0'
 
-  s.add_development_dependency 'rake', '~> 10.0.4'
+  s.add_development_dependency 'rake', '~> 10.1.0'
   s.add_development_dependency 'rake-compiler', '~> 0.8.3'
   s.add_development_dependency 'mocha', '~> 0.14.0'
 end
