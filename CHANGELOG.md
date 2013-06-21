@@ -1,3 +1,9 @@
+## 1.5.0
+
+* No more Byebug.start to get correct callstack information! Dropping `byebug`
+anywhere and inmediately printing the stack just works now. :)
+
+
 ## 1.4.2
 
 * Fixes crash when using "help command subcommand"
