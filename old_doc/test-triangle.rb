@@ -1,9 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative 'triangle.rb'
 
-class TestTri < Test::Unit::TestCase
+class TestTri < MiniTest::Unit::TestCase
   def test_basic
-    require 'byebug'
     byebug
     solutions = []
     0.upto(5) do |i|

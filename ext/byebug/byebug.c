@@ -25,13 +25,13 @@ tp_inspect(rb_trace_arg_t *trace_arg) {
     if (ID2SYM(rb_intern("line")) == event ||
         ID2SYM(rb_intern("specified_line")) == event)
     {
-       VALUE sym = rb_tracearg_method_id(trace_arg);
-       if (NIL_P(sym)) sym = rb_str_new_cstr("<main>");
-       return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
-                           rb_tracearg_event(trace_arg),
-                           rb_tracearg_path(trace_arg),
-                           FIX2INT(rb_tracearg_lineno(trace_arg)),
-                           sym);
+      VALUE sym = rb_tracearg_method_id(trace_arg);
+      if (NIL_P(sym)) sym = rb_str_new_cstr("<main>");
+      return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
+                          rb_tracearg_event(trace_arg),
+                          rb_tracearg_path(trace_arg),
+                          FIX2INT(rb_tracearg_lineno(trace_arg)),
+                          sym);
     }
     if (ID2SYM(rb_intern("call")) == event ||
         ID2SYM(rb_intern("c_call")) == event ||
@@ -53,9 +53,6 @@ tp_inspect(rb_trace_arg_t *trace_arg) {
 static VALUE
 Byebug_context(VALUE self)
 {
-  if (context == Qnil) {
-    context = context_create();
-  }
   return context;
 }
 
@@ -133,15 +130,17 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
   call_at_line(context_obj, dc, file, line);
 }
 
+#define BYEBUG_STARTED (catchpoints != Qnil)
+
 #define EVENT_SETUP                                                     \
   rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
-  VALUE context_obj;                                                    \
   debug_context_t *dc;                                                  \
-  context_obj = Byebug_context(mByebug);                                \
-  Data_Get_Struct(context_obj, debug_context_t, dc);                    \
+  if (!BYEBUG_STARTED)                                                  \
+    rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
+  Data_Get_Struct(context, debug_context_t, dc);                        \
   if (debug == Qtrue)                                                   \
     printf("%s (stack_size: %d)\n",                                     \
-            RSTRING_PTR(tp_inspect(trace_arg)), dc->stack_size);        \
+           RSTRING_PTR(tp_inspect(trace_arg)), dc->stack_size);         \
 
 #define EVENT_COMMON() \
   if (trace_common(trace_arg, dc) == 0) { return; }
@@ -187,7 +186,7 @@ process_line_event(VALUE trace_point, void *data)
   }
 
   if (RTEST(tracing))
-    call_at_tracing(context_obj, dc, file, line);
+    call_at_tracing(context, dc, file, line);
 
   if (moved || !CTX_FL_TEST(dc, CTX_FL_FORCE_MOVE))
   {
@@ -204,7 +203,7 @@ process_line_event(VALUE trace_point, void *data)
       (!NIL_P(
        breakpoint = find_breakpoint_by_pos(breakpoints, file, line, binding)))))
   {
-    call_at_line_check(context_obj, dc, breakpoint, file, line);
+    call_at_line_check(context, dc, breakpoint, file, line);
   }
 
   cleanup(dc);
@@ -265,8 +264,8 @@ process_call_event(VALUE trace_point, void *data)
     find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
   if (breakpoint != Qnil)
   {
-    call_at_breakpoint(context_obj, dc, breakpoint);
-    call_at_line(context_obj, dc, file, line);
+    call_at_breakpoint(context, dc, breakpoint);
+    call_at_line(context, dc, file, line);
   }
 
   cleanup(dc);
@@ -324,8 +323,8 @@ process_raise_event(VALUE trace_point, void *data)
     if (hit_count != Qnil)
     {
       rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
-      call_at_catchpoint(context_obj, dc, err);
-      call_at_line(context_obj, dc, path, lineno);
+      call_at_catchpoint(context, dc, err);
+      call_at_line(context, dc, path, lineno);
       break;
     }
   }
@@ -340,6 +339,7 @@ Byebug_setup_tracepoints(VALUE self)
 
   breakpoints = rb_ary_new();
   catchpoints = rb_hash_new();
+  context = context_create();
 
   tpLine = rb_tracepoint_new(Qnil,
     RUBY_EVENT_LINE,
@@ -392,7 +392,6 @@ Byebug_remove_tracepoints(VALUE self)
   return Qnil;
 }
 
-#define BYEBUG_STARTED (catchpoints != Qnil)
 static VALUE
 Byebug_started(VALUE self)
 {
@@ -463,7 +462,7 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
   Data_Get_Struct(context_obj, debug_context_t, dc);
   if (RTEST(stop)) dc->steps = 1;
 
-  /* Resetting stack size */
+  /* Reset stack size to ignore byebug's own frames */
   dc->stack_size = 0;
 
   /* Initializing $0 to the script's path */
@@ -545,8 +544,6 @@ Byebug_breakpoints(VALUE self)
 static VALUE
 Byebug_catchpoints(VALUE self)
 {
-  if (catchpoints == Qnil)
-    rb_raise(rb_eRuntimeError, "Byebug.start is not called yet.");
   return catchpoints;
 }
 
@@ -595,7 +592,7 @@ Init_byebug()
 
   Init_breakpoint(mByebug);
 
-  context = Qnil;
+  context     = Qnil;
   catchpoints = Qnil;
   breakpoints = Qnil;
 

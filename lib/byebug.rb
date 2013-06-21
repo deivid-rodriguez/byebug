@@ -36,9 +36,6 @@ module Byebug
     # If in remote mode, wait for the remote connection
     attr_accessor :wait_connection
 
-    # A string to look for in caller() to see if the call stack is truncated
-    attr_accessor :start_sentinal
-
     def source_reload
       Object.send(:remove_const, "SCRIPT_LINES__") if
         Object.const_defined?("SCRIPT_LINES__")
@@ -111,7 +108,6 @@ module Byebug
         Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
       end
       Byebug.tracing = options[:tracing] unless options[:tracing].nil?
-      Byebug.start_sentinal = caller[0]
       if Byebug.started?
         retval = block && block.call(self)
       else
@@ -268,41 +264,4 @@ module Kernel
     end
   end
   alias breakpoint byebug unless respond_to?(:breakpoint)
-end
-
-module Rails
-  module Rack
-    class Debugger
-      def initialize(app)
-        @app = app
-
-        # clear ARGV so that rails server options aren't passed to IRB
-        ARGV.clear
-
-        require 'byebug'
-
-        ::Byebug.start
-        puts "=> Byebug enabled"
-      rescue LoadError
-        puts "You're missing the 'byebug' gem. Add it to your Gemfile, " \
-             "bundle it and try again."
-        exit
-      end
-
-      def call(env)
-        @app.call(env)
-      end
-    end
-  end
-
-  class Console
-    def require_debugger
-      require 'byebug'
-      puts "=> Byebug enabled"
-    rescue LoadError
-      puts "You're missing the 'byebug' gem. Add it to your Gemfile, bundle, " \
-           "it and try again."
-      exit
-    end
-  end
 end

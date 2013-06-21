@@ -115,48 +115,6 @@ module Byebug
 
       print frame_str
     end
-
-    ##
-    # Check if call stack is truncated. This can happen if Byebug.start is not
-    # called low enough in the call stack. An array of additional callstack
-    # lines from caller is returned if definitely truncated, false if not, and
-    # nil if we don't know.
-    #
-    # We determine truncation based on a passed in sentinal set via caller which
-    # can be nil.
-    #
-    # First we see if we can find our position in caller. If so, then we compare
-    # context position to that in caller using sentinal as a place to start
-    # ignoring additional caller entries. sentinal is set by byebug, but if it's
-    # nil then additional entries are presumably ones that we haven't recorded
-    # in context
-    def truncated_callstack?(sentinal=nil, cs=caller)
-      recorded_size = @state.context.stack_size
-      to_find_fl =
-        "#{@state.context.frame_file(0)}:#{@state.context.frame_line(0)}"
-      top_discard = false
-      cs.each_with_index do |fl, i|
-        fl.gsub!(/in `.*'$/, '')
-        fl.gsub!(/:$/, '')
-        if fl == to_find_fl
-          top_discard = i
-          break
-        end
-      end
-      if top_discard
-        cs = cs[top_discard..-1]
-        return false unless cs
-        return cs unless sentinal
-        if cs.size > recorded_size+2 && cs[recorded_size+2] != sentinal
-          # caller seems to truncate recursive calls and we don't.
-          # See if we can find sentinal in the first 0..recorded_size+1 entries
-          return false if cs[0..recorded_size+1].any?{ |f| f==sentinal }
-          return cs
-        end
-        return false
-      end
-      return nil
-    end
   end
 
   # Implements byebug "where" or "backtrace" command.
@@ -167,10 +125,6 @@ module Byebug
 
     def execute
       print_backtrace
-      if truncated_callstack?(Byebug.start_sentinal)
-         print \
-           "Warning: saved frames may be incomplete; compare with caller(0)\n"
-      end
     end
 
     class << self

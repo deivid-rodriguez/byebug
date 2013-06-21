@@ -358,7 +358,7 @@ module Byebug
         end
       end
 
-  end # end class CommandProcessor
+  end # class CommandProcessor
 
 
   class ControlCommandProcessor < Processor

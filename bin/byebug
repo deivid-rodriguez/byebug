@@ -76,9 +76,6 @@ def debug_program(options)
   end
   print "\032\032starting\n" if Byebug.annotate and Byebug.annotate > 2
 
-  # Record where we are we can know if the call stack has been truncated or not.
-  Byebug.start_sentinal = caller[0]
-
   if bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
     print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{bt}\n"

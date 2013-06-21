@@ -44,8 +44,8 @@ class TestFrame < TestDsl::TestCase
   end
 
   it 'must set frame to the last one' do
-    enter 'break 16', 'cont', 'frame -1'
-    debug_file('frame') { state.file.must_match /test_dsl.rb/ }
+    enter 'break 16', 'cont', 'bt', 'frame -1'
+    debug_file('frame') { state.file.must_match /minitest\/unit.rb/ }
     check_output_doesnt_include "at #{fullpath('frame')}:"
   end
 
@@ -65,6 +65,38 @@ class TestFrame < TestDsl::TestCase
       interface.error_queue
   end
 
+  describe 'when byebug is started deep in the callstack' do
+    it 'must print backtrace' do
+      enter 'break 16', 'cont', 'where'
+      debug_file 'frame_deep'
+      check_output_includes \
+        /--> #0  A.d(e#String) at #{fullpath('frame_deep')}:16/x,
+            /#1  A.c at #{fullpath('frame_deep')}:13/x,
+            /#2  A.b at #{fullpath('frame_deep')}:8/x
+    end
+
+    it 'must go up' do
+      enter 'break 16', 'cont', 'up'
+      debug_file('frame_deep') { state.line.must_equal 13 }
+    end
+
+    it 'must go down' do
+      enter 'break 16', 'cont', 'up', 'down'
+      debug_file('frame_deep') { state.line.must_equal 16 }
+    end
+
+    it 'must set frame' do
+      enter 'break 16', 'cont', 'frame 2'
+      debug_file('frame_deep') { state.line.must_equal 8 }
+    end
+
+    it 'must eval properly when scaling the stack' do
+      enter 'break 16', 'cont', 'p z', 'up', 'p z', 'up', 'p z'
+      debug_file('frame_deep')
+      check_output_includes 'nil', '3', '2'
+    end
+  end
+
   describe 'fullpath' do
     def short_path(fullpath)
       separator = File::ALT_SEPARATOR || File::SEPARATOR
@@ -79,7 +111,8 @@ class TestFrame < TestDsl::TestCase
         debug_file 'frame'
         check_output_includes \
           /--> #0  A.d(e#String) at #{fullpath('frame')}:16/x,
-              /#1  A.c at #{fullpath('frame')}:12/x
+              /#1  A.c at #{fullpath('frame')}:12/x,
+              /#2  A.b at #{fullpath('frame')}:8/x
       end
     end
 
@@ -91,7 +124,8 @@ class TestFrame < TestDsl::TestCase
         debug_file 'frame'
         check_output_includes \
           /--> #0  A.d(e#String) at #{short_path(fullpath('frame'))}:16/x,
-              /#1  A.c at #{short_path(fullpath('frame'))}:12/x
+              /#1  A.c at #{short_path(fullpath('frame'))}:12/x,
+              /#2  A.b at #{short_path(fullpath('frame'))}:8/x
       end
     end
   end

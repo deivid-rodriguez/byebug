@@ -42,6 +42,13 @@ context_free(void *data)
 
 }
 
+static int
+real_stack_size()
+{
+  VALUE locs = rb_funcall(rb_cObject, rb_intern("caller_locations"), 1, INT2FIX(0));
+  return (int)RARRAY_LEN(locs);
+}
+
 extern VALUE
 context_create()
 {
@@ -50,7 +57,7 @@ context_create()
   context->last_file  = Qnil;
   context->last_line  = Qnil;
   context->flags      = 0;
-  context->stack_size = 0;
+  context->stack_size = real_stack_size();
   reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
   context->backtrace = Qnil;
@@ -187,7 +194,7 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
   if (frame_n < 0 || frame_n >= context->stack_size)                  \
   {                                                                   \
     rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
-        frame_n, context->stack_size-1);                              \
+             frame_n, context->stack_size - 1);                       \
   }                                                                   \
 
 static VALUE
@@ -335,9 +342,9 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
   context->steps = FIX2INT(steps);
 
   if (RTEST(force))
-      CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
+    CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
-      CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
+    CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
 
   return steps;
 }
@@ -349,13 +356,14 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
+
   if (context->stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
   rb_scan_args(argc, argv, "12", &lines, &frame, &force);
   context->lines = FIX2INT(lines);
 
-  if (FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Destination frame is out of range.");
   context->dest_frame = context->stack_size - FIX2INT(frame);
 
@@ -371,9 +379,9 @@ static VALUE
 Context_step_out(VALUE self, VALUE frame)
 {
   debug_context_t *context;
-
   Data_Get_Struct(self, debug_context_t, context);
-  if (FIX2INT(frame) < 0 && FIX2INT(frame) >= context->stack_size)
+
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
 
   context->stop_frame = context->stack_size - FIX2INT(frame);

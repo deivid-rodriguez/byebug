@@ -98,8 +98,8 @@ Okay, lets go on and talk about program arguments.
 []
 ```
 
-Ooops. We forgot to specify any parameters to this program. Let's try again. We can
-use the `restart` command here.
+Ooops. We forgot to specify any parameters to this program. Let's try again. We
+can use the `restart` command here.
 
 ```
 (byebug) restart 3
@@ -175,10 +175,8 @@ Stopped by breakpoint 1 at /home/davidr/Proyectos/byebug/old_doc/hanoi.rb:3
 (byebug) set nofullpath
 Displaying frame's full file names is off.
 (byebug) where
---> #0  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol)
-      at .../byebug/old_doc/hanoi.rb:4
-    #1  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol)
-      at .../byebug/old_doc/hanoi.rb:8
+--> #0  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at .../byebug/old_doc/hanoi.rb:4
+    #1  Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at .../byebug/old_doc/hanoi.rb:8
     #2  <top (required)> at .../byebug/old_doc/hanoi.rb:34
 (byebug)
 ```
@@ -231,19 +229,12 @@ frame #3, the value of `i_args` can be shown. Also note that the value of
 variable `n` is different.
 
 
-### Unit Testing Session
+### Attaching to a running program with `byebug`
 
-In the previous sessions we've been calling byebug right at the outset, but this
-is probably not the mode of operation you will use the most. There are a number
-of situations where calling byebug at the outset is impractical for a couple of
-reasons:
-
-* Byebug just doesn't work when run at the outset. Any debugging changes the
-behavior or the program in slight and subtle ways, and sometimes this can hinder
-finding bugs.
-* There's a lot of code that needs to be run before the part you want to
-inspect.  Running this code takes time and you don't want the overhead of
-byebug.
+In the previous sessions we've been calling byebug right at the outset, but
+there is another mode of operation you might use. If there's a lot of code that
+needs to be run before the part you want to inspect, it might not be efficient
+or convenient to run byebug from the outset.
 
 In this section we'll show how to enter the code in the middle of your program,
 while delving more into byebug's operation. We will also use unit testing. Using
@@ -269,15 +260,15 @@ if __FILE__ == $0
 end
 ```
 
-Okay, we're now ready to write our unit test. We'll use `test/unit` which comes
+Okay, we're now ready to write our unit test. We'll use `minitest` which comes
 with the standard Ruby distribution.  Here's the test code; it should be in the
 same directory as `triangle.rb`.
 
 ```ruby
-require 'test/unit'
+require 'minitest/autorun'
 require_relative 'triangle.rb'
 
-class TestTri < Test::Unit::TestCase
+class TestTri < MiniTest::Unit::TestCase
   def test_basic
     solutions = []
     0.upto(5) do |i|
@@ -295,145 +286,62 @@ add the following:
 ```ruby
 ...
 def test_basic
-  require 'byebug'
   byebug
   solutions = []
 ...
 ```
 
-Now we run the program..
+Now we run the program, requiring `byebug`
 ```
-$ ruby test-triangle.rb
-Run options:
+$ ruby -rbyebug test-triangle.rb
+Run options: --seed 13073
 
 # Running tests:
 
-[1/1] TestTri#test_basic[5, 14] in test-triangle.rb
-    5: 
-    6: class TestTri < Test::Unit::TestCase
-    7:   def test_basic
-    8:     require 'byebug'
-    9:     byebug
-=> 10:     solutions = []
-   11:     0.upto(5) do |i|
-   12:       solutions << triangle(i)
-   13:     end
-   14:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
+[2, 11] in test-triangle.rb
+    2: require_relative 'triangle.rb'
+    3: 
+    4: class TestTri < MiniTest::Unit::TestCase
+    5:   def test_basic
+    6:     byebug
+=>  7:     solutions = []
+    8:     0.upto(5) do |i|
+    9:       solutions << triangle(i)
+   10:     end
+   11:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
 (byebug)
 ```
 
-and we see that we are stopped at line 10 just before the initialization of the
+and we see that we are stopped at line 7 just before the initialization of the
 list `solutions`.
 
 Now let's see where we are...
 ```
-(byebug) where
---> #0  TestTri.test_basic at test-tri2.rb:10
-Warning: saved frames may be incomplete; compare with caller(0)
+(byebug) set nofullpath
+Displaying frame's full file names is off.
+(byebug) bt
+--> #0  TestTri.test_basic at test-triangle.rb:7
+    #1  MiniTest::Unit::TestCase.run(runner#MiniTest::Unit) at .../2.0.0/minitest/unit.rb:1301
+    #2  MiniTest::Unit.block in _run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:919
+    #3  Array.map(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:912
+    #4  MiniTest::Unit._run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:912
+    #5  MiniTest::Unit.block in _run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
+    #6  Array.map(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:899
+    #7  MiniTest::Unit._run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
+    #8  MiniTest::Unit._run_anything(type#Symbol) at .../2.0.0/minitest/unit.rb:867
+    #9  MiniTest::Unit.run_tests at .../2.0.0/minitest/unit.rb:1060
+    #10 MiniTest::Unit.block in _run(args#Array) at .../2.0.0/minitest/unit.rb:1047
+    #11 Array.each(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:1046
+    #12 MiniTest::Unit._run(args#Array) at .../2.0.0/minitest/unit.rb:1046
+    #13 MiniTest::Unit.run(args#Array) at .../2.0.0/minitest/unit.rb:1035
+    #14 #<Class:MiniTest::Unit>.block in autorun at .../2.0.0/minitest/unit.rb:789
 (byebug)
 ```
 
-Something seems wrong here; `TestTri.test_basic` indicates that we are in class
-`TestTri` in method `test_basic`. However we don't see the call to this like we
-did in the last example when we used the `where` command. This is because byebug
-really didn't spring into existence until after we already had entered that
-method, and Ruby doesn't keep call stack information around in a way that would
-give the information we show when running `where`.
+We get the same result as if we had run byebug from the outset, just faster!
 
-If we want call stack information, we have to turn call-stack tracking on
-_beforehand_. This is done by adding `Byebug.start`.
-
-Here's what our test program looks like after we modify it to start tracking
-calls from the outset
-
-```ruby
-require 'test/unit'
-require_relative 'triangle.rb'
-require 'byebug'
-Byebug.start
-
-class TestTri < Test::Unit::TestCase
-  def test_basic
-    byebug
-    solutions = []
-    0.upto(5) do |i|
-      solutions << triangle(i)
-    end
-    assert_equal([0, 1, 3, 6, 10, 15], solutions,
-                 "Testing the first 5 triangle numbers")
-  end
-end
-```
-
-Now when we run this:
-```
-$ ruby test-triangle.rb
-Run options:
-
-# Running tests:
-
-[1/1] TestTri#test_basic[5, 14] in test-triangle.rb
-    5: 
-    6: class TestTri < Test::Unit::TestCase
-    7:   def test_basic
-    8:     require 'byebug'
-    9:     byebug
-=> 10:     solutions = []
-   11:     0.upto(5) do |i|
-   12:       solutions << triangle(i)
-   13:     end
-   14:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
-(byebug) where
---> #0  TestTri.test_basic at test-triangle.rb:10
-    #1  MiniTest::Unit::TestCase.run_test(name#String)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:858
-    #2  MiniTest::Unit::TestCase.run(runner#Test::Unit::Runner)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1301
-    #3  Test::Unit::TestCase.run(runner#Test::Unit::Runner)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit/testcase.rb:17
-    #4  MiniTest::Unit._run_suite(suite#Class, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:919
-    #5  Array.map(suite#Class, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:912
-    #6  MiniTest::Unit._run_suite(suite#Class, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:912
-    #7  Test::Unit::Runner._run_suites(suites#Array, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:657
-    #8  Array.each(suites#Array, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:655
-    #9  Test::Unit::Runner._run_suites(suites#Array, type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:655
-    #10 MiniTest::Unit._run_anything(type#Symbol)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:867
-    #11 MiniTest::Unit.run_tests
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1060
-    #12 MiniTest::Unit._run(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1047
-    #13 Array.each(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1046
-    #14 MiniTest::Unit._run(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1046
-    #15 MiniTest::Unit._run(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1042
-    #16 MiniTest::Unit.run(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/minitest/unit.rb:1035
-    #17 Test::Unit::RunCount.run(args#NilClass)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:21
-    #18 Test::Unit::Runner.run(args#Array)
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:774
-    #19 #<Class:Test::Unit::Runner>.autorun
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:366
-    #20 Test::Unit::RunCount.run_once
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:27
-    #21 #<Class:Test::Unit::Runner>.autorun
-      at /home/davidr/.rvm/rubies/ruby-2.0.0-p195/lib/ruby/2.0.0/test/unit.rb:367
-    #22 <main> at test-triangle.rb:6
-(byebug)
-```
-
-Much better. But again let me emphasize that the parameter types are those of
-the corresponding variables that _currently_ exist, and this might have changed
-since the time when the call was made.
+__NOTICE: In ruby-debug, debugger and older versions of byebug, this would not
+work as expected. If you are having issues, please upgrade to byebug >= 1.5.0__
 
 
 ### Byebug.start with a block
@@ -461,12 +369,12 @@ For example, you can do this in `irb`:
 ```
 $ irb
 2.0.0p195 :001 > require 'byebug'
- => true 
+ => true
 2.0.0p195 :002 > def foo
 2.0.0p195 :003?>   x=1
 2.0.0p195 :004?>   puts 'foo'
 2.0.0p195 :005?>   end
- => nil 
+ => nil
 2.0.0p195 :006 > Byebug.start{byebug; foo}
 (irb) @ 6
 (byebug) s
@@ -477,14 +385,15 @@ $ irb
 1
 (byebug) s
 foo
- => true 
-2.0.0p195 :007 > 
+ => true
+2.0.0p195 :007 >
 ```
 
 There is a counter inside of `Byebug.start` method to make sure that this works
 when another `Byebug.start` method is called inside of the outer one. However,
 if you are stopped inside byebug, issuing another `byebug` call will not have
 any effect even if it is nested inside another `Byebug.start`.
+
 
 ### Debugging Oddities: How debugging Ruby may be different from other languages
 
@@ -497,18 +406,12 @@ those other languages, writing a debugger has to also be a little different as
 well if it is to be useful. In this respect, using byebug may help you
 understand Ruby better.
 
-We've already seen two examples of such differences. One difference is the fact
-that we stop on method definitions or `def`'s and that is because these are in
-fact executable statements. In other compiled languages this would not happen
-because that's already been done when you compile the program (or in Perl when
-it scans in the program). The other difference we saw was our inability to show
-call stack parameter types without having made arrangements for byebug to track
-this. In other languages call stack information is usually available without
-asking assistance of the debugger (in C and C++, however, you generally have to
-ask the compiler to add such information.).
-
-In this section we'll consider some other things that might throw off new users
-to Ruby who are familiar with other languages and debugging in them.
+We've already seen one such difference: the fact that we stop on method
+definitions or `def`'s and that is because these are in fact executable
+statements. In other compiled languages this would not happen because that's
+already been done when you compile the program (or in Perl when it scans in the
+program). In this section we'll consider some other things that might throw off
+new users to Ruby who are familiar with other languages and debugging in them.
 
 * Bouncing Around in Blocks (iterators)
 * No Parameter Values in a Call Stack
@@ -642,7 +545,7 @@ To be continued...
 * line tracing and non-interactive tracing.
 * mixing in Byebug.debug with byebug
 * post-mortem debugging and setting up for that
-* references to videos
+
 
 ## Getting in & out
 
@@ -751,7 +654,7 @@ Here are the default values in `options`
 
 ```ruby
 #<OpenStruct annotate=nil, nx=false, quit=true, restart_script=nil, script=nil,
-stop=true, tracing=false, verbose_long=false>
+             stop=true, tracing=false, verbose_long=false>
 ```
 
 ## Command Files
@@ -799,35 +702,17 @@ change the script and make an explicit call to byebug. Because byebug isn't
 involved before the first call, there is no overhead and the script will run
 at the same speed as if there were no byebug.
 
-There are three parts to calling byebug from inside the script, ``requiring''
-the gem, telling byebug to start tracking things and then making an explicit
-breakpoints.
+To enter byebug this way, just drop `byebug` in whichever line you want to start
+debugging at. You also have to require byebug somehow. If using bundler, it will
+take care of that for you, otherwise you can use the ruby `-r` flag or add
+`require 'byebug'` in the line previous to the `byebug` call.
 
-Unless you're using bundler, do this to get byebug class accessible from your
-Ruby program
-
-```ruby
-require 'byebug'
-```
-
-To tell byebug to start tracking things, do
-
-```ruby
-Byebug.start
-```
-
-There is also a `Byebug.stop` to turn off byebug tracking. If speed is crucial,
-you may want to start and stop this around certain sections of code.
-Alternatively, instead of issuing an explicit `Byebug.stop` you can add a block
-to the `Byebug.start` and debugging is turned on for that block. If the block of
-code raises an uncaught exception that would cause the block to terminate, the
-`stop` will occur.  See [here](Byebug.start with a block).
-
-And finally to enter byebug
-
-```ruby
-byebug
-```
+If speed is crucial, you may want to start and stop this around certain sections
+of code, using `Byebug.start` and `Byebug.stop`. Alternatively, instead of
+issuing an explicit `Byebug.stop` you can add a block to the `Byebug.start` and
+debugging is turned on for that block. If the block of code raises an uncaught
+exception that would cause the block to terminate, the `stop` will occur.  See
+[Byebug.start with a block]().
 
 When `byebug`is run, `.byebugrc` is read.
 
