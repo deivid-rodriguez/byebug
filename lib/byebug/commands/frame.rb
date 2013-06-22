@@ -48,36 +48,36 @@ module Byebug
       end
 
       args = @state.context.frame_args pos
-      locals = @state.context.frame_locals pos
-      if args.any?
-        call_str += "("
-        args.each_with_index do |name, i|
-          case Command.settings[:callstyle]
-          when :short
-            call_str += "#{name}, "
-          when :last
-            klass = locals[name].class
-            if klass.inspect.size > 20 + 3
-              klass = klass.inspect[0..20] + "..."
-            end
-            call_str += "#{name}##{klass}, "
-          when :tracked
-            arg_info = context.frame_args_info pos
-            if arg_info && arg_info.size > i
-              call_str += "#{name}: #{arg_info[i].inspect}, "
-            else
-              call_str += "#{name}, "
-            end
+
+      return call_str unless args.any?
+
+      call_str += "("
+      args.each_with_index do |name, i|
+        case Command.settings[:callstyle]
+        when :short
+          call_str += "#{name}, "
+        when :last
+          locals = @state.context.frame_locals pos
+          klass = locals[name].class
+          if klass.inspect.size > 20 + 3
+            klass = klass.inspect[0..20] + "..."
           end
-          if call_str.size > Command.settings[:width] - prefix.size
-            # Strip off trailing ', ' if any but add stuff for later trunc
-            call_str[-2..-1] = ",...XX"
-            break
+          call_str += "#{name}##{klass}, "
+        when :tracked
+          arg_info = context.frame_args_info pos
+          if arg_info && arg_info.size > i
+            call_str += "#{name}: #{arg_info[i].inspect}, "
+          else
+            call_str += "#{name}, "
           end
         end
-        call_str[-2..-1] = ")" # Strip off trailing ', ' if any
+        if call_str.size > Command.settings[:width] - prefix.size
+          # Strip off trailing ', ' if any but add stuff for later trunc
+          call_str[-2..-1] = ",...XX"
+          break
+        end
       end
-      return call_str
+      call_str[-2..-1] = ")" # Strip off trailing ', ' if any
     end
 
     def print_backtrace

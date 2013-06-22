@@ -1,4 +1,3 @@
-before_install: gem install bundler
 before_script: rake compile
 rvm:
 - 2.0.0
