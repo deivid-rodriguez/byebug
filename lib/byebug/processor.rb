@@ -185,15 +185,7 @@ module Byebug
           cmd.allow_in_post_mortem
         end if context.dead?
 
-        state = State.new do |s|
-          s.context   = context
-          s.file      = file
-          s.line      = line
-          s.display   = display
-          s.interface = interface
-          s.commands  = event_cmds
-        end
-        @interface.state = state if @interface.respond_to?('state=')
+        state = State.new(event_cmds, context, display, file, interface, line)
 
         # Bind commands to the current state.
         commands = event_cmds.map{|cmd| cmd.new(state)}
@@ -338,12 +330,10 @@ module Byebug
         attr_accessor :commands, :context, :display, :file
         attr_accessor :frame_pos, :interface, :line, :previous_line
 
-        def initialize
-          super()
-          @frame_pos = 0
-          @previous_line = nil
-          @proceed = false
-          yield self
+        def initialize(commands, context, display, file, interface, line)
+          @commands, @context, @display = commands, context, display
+          @file, @interface, @line = file, interface, line
+          @frame_pos, @previous_line, @proceed = 0, nil, false
         end
 
         extend Forwardable
