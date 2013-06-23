@@ -1,6 +1,12 @@
 module TestDsl
 
-  class TestBase < MiniTest::Spec
+  class TestCase < MiniTest::Spec
+    include TestDsl
+
+    def setup
+      Byebug.interface = TestInterface.new
+      Byebug.handler.display.clear
+    end
 
     def self.temporary_change_hash hash, key, value
       before do
@@ -33,15 +39,6 @@ module TestDsl
         klass.const_set const, @old_consts[klass][const] unless
           @old_consts[klass][const] == :__undefined__
       end
-    end
-  end
-
-  class TestCase < TestBase
-    include TestDsl
-
-    def setup
-      Byebug.interface = TestInterface.new
-      Byebug.handler.display.clear
     end
   end
 
