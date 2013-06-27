@@ -82,7 +82,7 @@ module Byebug
     end
 
     def self.print_location_and_text(file, line)
-      if file == '(irb)'
+      if file == '(irb)' || file == '-e'
         file_line = "#{canonic_file(file)} @ #{line}\n"
       else
         file_line = "#{canonic_file(file)} @ #{line}\n" \
@@ -187,6 +187,9 @@ module Byebug
 
         state = State.new(event_cmds, context, display, file, interface, line)
 
+        # Change default when in irb or code included in command line
+        Command.settings[:autolist] = 0 if file == '(irb)' or file == '-e'
+
         # Bind commands to the current state.
         commands = event_cmds.map{|cmd| cmd.new(state)}
 
@@ -221,7 +224,7 @@ module Byebug
 
         preloop(commands, context)
 
-        if Command.settings[:autolist] == 0 || file == '(irb)'
+        if Command.settings[:autolist] == 0
           CommandProcessor.print_location_and_text(file, line)
         end
 
