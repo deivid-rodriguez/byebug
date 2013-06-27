@@ -9,6 +9,8 @@ doc
 .gdb_history
 .bundle
 .tags
+.ackrc
+.jrubyrc
 
 Gemfile.lock
 
