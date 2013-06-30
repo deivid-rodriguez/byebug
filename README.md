@@ -32,6 +32,8 @@ in your Gemfile and run
 
     bundle install
 
+**Please upgrade your ruby to 2.0.0-p247 or higher - a bugfix in ruby-core was
+released with this patchlevel and it was directly affecting byebug (see #5)**
 
 ## Usage
 
