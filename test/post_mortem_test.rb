@@ -9,7 +9,7 @@ class TestPostMortem < TestDsl::TestCase
 
   it 'must stop at the correct line' do
     enter 'cont'
-    debug_file('post_mortem') { state.line.must_equal 8 }
+    debug_file('post_mortem') { $state.line.must_equal 8 }
   end
 
   it 'must exit from post mortem mode after stepping command' do

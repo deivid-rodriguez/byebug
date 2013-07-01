@@ -60,9 +60,7 @@ module Byebug
     end
 
     def regexp
-      /^\s* irb
-        (?:\s+(-d))?
-        \s*$/x
+      /^\s* irb \s*$/x
     end
 
     def execute
@@ -70,9 +68,6 @@ module Byebug
         print "Command is available only in local mode.\n"
         throw :debug_error
       end
-
-      add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
-      $byebug_state = @state if add_debugging
 
       cont = IRB.start_session(get_binding)
       case cont
@@ -92,7 +87,6 @@ module Byebug
         CommandProcessor.print_location_and_text(file, line)
         @state.previous_line = nil
       end
-      $byebug_state = nil if add_debugging
     end
 
 
@@ -102,12 +96,11 @@ module Byebug
       end
 
       def description
-        %{irb[ -d]\tstarts an Interactive Ruby (IRB) session.
+        %{irb\tstarts an Interactive Ruby (IRB) session.
 
-          If -d is added you can get access to byebug's state via the global
-          variable $byebug_state. IRB is extended with methods "cont", "n" and
-          "step" which run the corresponding byebug commands. In contrast to the
-          real byebug commands these commands don't allow arguments.}
+          IRB is extended with methods "cont", "n" and "step" which run the
+          corresponding byebug commands. In contrast to the real byebug commands
+          these commands don't allow arguments.}
       end
     end
   end
@@ -122,9 +115,7 @@ module Byebug
   # Implements byebug's "pry" command
   class PryCommand < Command
     def regexp
-      /^\s* pry
-        (?:\s+(-d))?
-        \s*$/x
+      /^\s* pry \s*$/x
     end
 
     def execute
@@ -133,12 +124,7 @@ module Byebug
         throw :debug_error
       end
 
-      add_debugging = @match.is_a?(MatchData) && '-d' == @match[1]
-      $byebug_state = @state if add_debugging
-
       get_binding.pry
-
-      $byebug_state = nil if add_debugging
     end
 
     class << self
@@ -147,7 +133,7 @@ module Byebug
       end
 
       def description
-        %{pry[ -d]\tstarts a Pry session.}
+        %{pry\tstarts a Pry session.}
       end
     end
   end if has_pry

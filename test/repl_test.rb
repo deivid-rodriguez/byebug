@@ -13,19 +13,19 @@ class TestRepl < TestDsl::TestCase
     it 'must support next command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :next)
       enter 'irb'
-      debug_file('repl') { state.line.must_equal 3 }
+      debug_file('repl') { $state.line.must_equal 3 }
     end
 
     it 'must support step command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :step)
       enter 'irb'
-      debug_file('repl') { state.line.must_equal 3 }
+      debug_file('repl') { $state.line.must_equal 3 }
     end
 
     it 'must support cont command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
       enter 'break 4', 'irb'
-      debug_file('repl') { state.line.must_equal 4 }
+      debug_file('repl') { $state.line.must_equal 4 }
     end
 
     describe 'autoirb' do
@@ -36,31 +36,11 @@ class TestRepl < TestDsl::TestCase
       end
     end
 
-    describe 'setting context to $byebug_state' do
-      temporary_change_hash Byebug::Command.settings, :testing, false
-
-      it 'must set $byebug_state if irb is in the debug mode' do
-        byebug_state = nil
-        irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
-        enter 'irb -d'
-        debug_file 'repl'
-        byebug_state.must_be_kind_of Byebug::CommandProcessor::State
-      end
-
-      it 'must not set $byebug_state if irb is not in the debug mode' do
-        byebug_state = nil
-        irb.stubs(:eval_input).calls { byebug_state = $byebug_state }
-        enter 'irb'
-        debug_file 'repl'
-        byebug_state.must_be_nil
-      end
-    end
-
     describe 'Post Mortem' do
       it 'must work in post-mortem mode' do
         irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
         enter 'cont', 'break 12', 'irb'
-        debug_file('post_mortem') { state.line.must_equal 12 }
+        debug_file('post_mortem') { $state.line.must_equal 12 }
       end
     end
   end
@@ -83,22 +63,6 @@ class TestRepl < TestDsl::TestCase
     describe 'autopry' do
       it 'must call pry automatically after breakpoint' do
         skip 'TODO'
-      end
-    end
-
-    describe 'setting context to $byebug_state' do
-      temporary_change_hash Byebug::Command.settings, :testing, false
-
-      it 'must set $byebug_state if irb is in the debug mode' do
-        enter 'pry -d'
-        debug_file 'repl'
-        $byebug_state.must_be_kind_of Byebug::CommandProcessor::State
-      end
-
-      it 'must not set $byebug_state if irb is not in the debug mode' do
-        enter 'pry'
-        debug_file 'repl'
-        $byebug_state.must_be_nil
       end
     end
 

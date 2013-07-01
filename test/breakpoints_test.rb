@@ -66,13 +66,13 @@ class TestBreakpoints < TestDsl::TestCase
   describe 'stopping at breakpoint' do
     it 'must stop at the correct line' do
       enter 'break 14', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 14 }
+      debug_file('breakpoint1') { $state.line.must_equal 14 }
     end
 
     it 'must stop at the correct file' do
       enter 'break 14', 'cont'
       debug_file('breakpoint1') {
-        state.file.must_equal fullpath('breakpoint1') }
+        $state.file.must_equal fullpath('breakpoint1') }
     end
 
     describe 'show a message' do
@@ -134,12 +134,12 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter "break #{fullpath('breakpoint2')}:3", 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint1') { state.line.must_equal 3 }
+        debug_file('breakpoint1') { $state.line.must_equal 3 }
       end
 
       it 'must stop at the correct file' do
         debug_file('breakpoint1') {
-          state.file.must_equal fullpath('breakpoint2') }
+          $state.file.must_equal fullpath('breakpoint2') }
       end
     end
 
@@ -164,12 +164,12 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break A#b', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint1') { state.line.must_equal 5 }
+        debug_file('breakpoint1') { $state.line.must_equal 5 }
       end
 
       it 'must stop at the correct file' do
         debug_file('breakpoint1') {
-          state.file.must_equal fullpath('breakpoint1') }
+          $state.file.must_equal fullpath('breakpoint1') }
       end
     end
 
@@ -177,12 +177,12 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break A.a', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint1') { state.line.must_equal 2 }
+        debug_file('breakpoint1') { $state.line.must_equal 2 }
       end
 
       it 'must stop at the correct file' do
         debug_file('breakpoint1') {
-          state.file.must_equal fullpath('breakpoint1') }
+          $state.file.must_equal fullpath('breakpoint1') }
       end
     end
 
@@ -224,7 +224,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must not stop on the disabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint1') { state.line.must_equal 15 }
+          debug_file('breakpoint1') { $state.line.must_equal 15 }
         end
       end
 
@@ -280,7 +280,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must stop on the enabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint1') { state.line.must_equal 14 }
+          debug_file('breakpoint1') { $state.line.must_equal 14 }
         end
       end
 
@@ -316,24 +316,24 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must not stop on the disabled breakpoint' do
       enter 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 15 }
+      debug_file('breakpoint1') { $state.line.must_equal 15 }
     end
   end
 
   describe 'Conditional breakpoints' do
     it 'must stop if the condition is true' do
       enter 'break 14 if b == 5', 'break 15', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 14 }
+      debug_file('breakpoint1') { $state.line.must_equal 14 }
     end
 
     it 'must skip if the condition is false' do
       enter 'break 14 if b == 3', 'break 15', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 15 }
+      debug_file('breakpoint1') { $state.line.must_equal 15 }
     end
 
     it 'must show an error when conditional syntax is wrong' do
       enter 'break 14 ifa b == 3', 'break 15', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 15 }
+      debug_file('breakpoint1') { $state.line.must_equal 15 }
       check_output_includes \
         'Expecting "if" in breakpoint condition; got: ifa b == 3.',
         interface.error_queue
@@ -360,14 +360,14 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must show an error if no file or line is specified' do
       enter 'break ifa b == 3', 'break 15', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 15 }
+      debug_file('breakpoint1') { $state.line.must_equal 15 }
       check_output_includes \
         'Invalid breakpoint location: ifa b == 3.', interface.error_queue
     end
 
     it 'must show an error if expression syntax is invalid' do
       enter 'break if b -=) 3', 'break 15', 'cont'
-      debug_file('breakpoint1') { state.line.must_equal 15 }
+      debug_file('breakpoint1') { $state.line.must_equal 15 }
       check_output_includes \
         'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.',
         interface.error_queue
@@ -385,7 +385,7 @@ class TestBreakpoints < TestDsl::TestCase
   describe 'Post Mortem' do
     it 'must be able to set breakpoints in post-mortem mode' do
       enter 'cont', 'break 12', 'cont'
-      debug_file('post_mortem') { state.line.must_equal 12 }
+      debug_file('post_mortem') { $state.line.must_equal 12 }
     end
   end
 

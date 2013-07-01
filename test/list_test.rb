@@ -161,7 +161,7 @@ class TestList < TestDsl::TestCase
   end
 
   it 'must show an error when there is no such file' do
-    enter ->{state.file = 'blabla'; 'list 4-4'}
+    enter -> { $state.file = 'blabla'; 'list 4-4' }
     debug_file 'list'
     check_output_includes 'No sourcefile available for blabla',
                           interface.error_queue

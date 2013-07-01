@@ -6,7 +6,7 @@ class TestJump < TestDsl::TestCase
     it "must jump with absolute line number" do
       skip("No jumping for now")
       enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}"
-      debug_file('jump') { state.line.must_equal 8 }
+      debug_file('jump') { $state.line.must_equal 8 }
     end
 
     it "must not initialize skipped variables during jump" do
@@ -20,13 +20,13 @@ class TestJump < TestDsl::TestCase
     it "must jump with relative line number (-)" do
       skip("No jumping for now")
       enter 'break 8', 'cont', "jump -2 #{fullpath('jump')}"
-      debug_file('jump') { state.line.must_equal 6 }
+      debug_file('jump') { $state.line.must_equal 6 }
     end
 
     it "must jump with relative line number (+)" do
       skip("No jumping for now")
       enter 'break 8', 'cont', "jump +2 #{fullpath('jump')}"
-      debug_file('jump') { state.line.must_equal 10 }
+      debug_file('jump') { $state.line.must_equal 10 }
     end
   end
 
@@ -50,7 +50,7 @@ class TestJump < TestDsl::TestCase
       it "must not jump to there" do
         skip("No jumping for now")
         enter "jump 13 #{fullpath('jump')}"
-        debug_file('jump') { state.line.must_equal 3 }
+        debug_file('jump') { $state.line.must_equal 3 }
       end
 
       it "must show an error" do
@@ -68,11 +68,10 @@ class TestJump < TestDsl::TestCase
     it "must work in post-mortem mode" do
       skip 'No jumping for now plus this test fails with "Segmentation '     \
            'fault". Probably need to fix it somehow or forbid this command ' \
-           'in post mortem mode. Seems like state.context.frame_file and '   \
-           'state.context.frame_line cause that.'
+           'in post mortem mode. Seems like $state.context.frame_file and '  \
+           '$state.context.frame_line cause that.'
       enter 'cont', 'jump 12'
       debug_file 'post_mortem'
     end
   end
-
 end

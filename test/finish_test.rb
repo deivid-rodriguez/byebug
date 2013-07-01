@@ -4,22 +4,22 @@ class TestFinish < TestDsl::TestCase
 
   it 'must stop at the next frame by default' do
     enter 'break 16', 'cont', 'finish'
-    debug_file('finish') { state.line.must_equal 13 }
+    debug_file('finish') { $state.line.must_equal 13 }
   end
 
   it 'must stop at the #0 frame by default' do
     enter 'break 16', 'cont', 'finish 0'
-    debug_file('finish') { state.line.must_equal 13 }
+    debug_file('finish') { $state.line.must_equal 13 }
   end
 
   it 'must stop at the specified frame' do
     enter 'break 16', 'cont', 'finish 1'
-    debug_file('finish') { state.line.must_equal 9 }
+    debug_file('finish') { $state.line.must_equal 9 }
   end
 
   it 'must stop at the next frame if the current frame was changed' do
     enter 'break 16', 'cont', 'up', 'finish'
-    debug_file('finish') { state.line.must_equal 9 }
+    debug_file('finish') { $state.line.must_equal 9 }
   end
 
   describe 'not a number is specified for frame' do
@@ -31,7 +31,7 @@ class TestFinish < TestDsl::TestCase
     end
 
     it 'must be on the same line' do
-      debug_file('finish') { state.line.must_equal 16 }
+      debug_file('finish') { $state.line.must_equal 16 }
     end
   end
 

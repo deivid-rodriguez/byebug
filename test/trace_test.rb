@@ -84,12 +84,12 @@ class TestTrace < TestDsl::TestCase
 
     it 'must track global variable with stop' do
       enter 'trace variable $bla stop', 'break 7', 'cont'
-      debug_file('trace') { state.line.must_equal 4 }
+      debug_file('trace') { $state.line.must_equal 4 }
     end
 
     it 'must track global variable with nostop' do
       enter 'trace variable $bla nostop', 'break 7', 'cont'
-      debug_file('trace') { state.line.must_equal 7 }
+      debug_file('trace') { $state.line.must_equal 7 }
     end
 
     describe 'errors' do
