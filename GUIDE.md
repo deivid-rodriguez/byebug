@@ -5,7 +5,7 @@ Below we will debug a simple Ruby program to solve the classic Towers of Hanoi
 puzzle. It is augmented by the bane of programming: some command-parameter
 processing with error checking.
 
-```
+```bash
 $ byebug hanoi.rb
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/hanoi.rb
     1: # Solves the classic Towers of Hanoi puzzle.
@@ -25,7 +25,7 @@ Recall in the first section iwe said that before the `def` is run, the method it
 names is undefined. Let's check that out. First let's see what private methods
 we can call before running `def hanoi`.
 
-```
+```bash
 (byebug) private_methods
 [:public, :private, :include, :using, :define_method, :default_src_encoding, ...
 ```
@@ -39,7 +39,7 @@ whether `hanoi` method is in the list. Fortunately, byebug has nice formatting
 features: we can sort the output and put it into columns list using the print
 command `ps`.
 
-```
+```bash
 (byebug) ps private_methods
 Array             debug_program         open                        sprintf    
 Complex           default_src_encoding  p                           srand      
@@ -71,7 +71,7 @@ dbg_puts          method_missing        spawn
 
 Now let's see what happens after stepping:
 
-```
+```bash
 (byebug) private_methods.member?(:hanoi)
 false
 (byebug:1) step
@@ -93,7 +93,7 @@ true
 
 Okay, lets go on and talk about program arguments.
 
-```
+```bash
 (byebug) ARGV
 []
 ```
@@ -101,7 +101,7 @@ Okay, lets go on and talk about program arguments.
 Ooops. We forgot to specify any parameters to this program. Let's try again. We
 can use the `restart` command here.
 
-```
+```bash
 (byebug) restart 3
 Re exec'ing:
   /home/davidr/.rvm/gems/ruby-2.0.0-p195@byebug/gems/byebug-1.1.1/bin/byebug /home/davidr/Proyectos/byebug/old_doc/hanoi.rb 3
@@ -202,7 +202,7 @@ trace (see [callstyle]()).
 
 Now let's move around the callstack.
 
-```
+```bash
 (byebug) undisplay
 Clear all expressions? (y/n) y
 (byebug:1) i_args
@@ -253,7 +253,7 @@ look at the file, I have an example of how to run it.  Therefore we will
 conditionally run this line if that file is invoked directly, but skip it if it
 is not. _NOTE: `byebug` resets `$0` to try to make things like this work._
 
-```
+```ruby
 if __FILE__ == $0
   t = triangle(3)
   puts t
@@ -292,7 +292,8 @@ def test_basic
 ```
 
 Now we run the program, requiring `byebug`
-```
+
+```bash
 $ ruby -rbyebug test-triangle.rb
 Run options: --seed 13073
 
@@ -316,7 +317,8 @@ and we see that we are stopped at line 7 just before the initialization of the
 list `solutions`.
 
 Now let's see where we are...
-```
+
+```bash
 (byebug) set nofullpath
 Displaying frame's full file names is off.
 (byebug) bt
@@ -366,7 +368,7 @@ Of course, inside the block you will probably want to enter the byebug using
 `Byebug.byebug()`, otherwise there would be little point in using the `start`.
 For example, you can do this in `irb`:
 
-```
+```bash
 $ irb
 2.0.0p195 :001 > require 'byebug'
  => true
@@ -424,7 +426,6 @@ not necessarily go to the first statement after the method header. It's possible
 that the call will continue after a `yield` statement from a prior call.
 
 ```ruby
-
 # Enumerator for primes
 class SievePrime
   @@odd_primes = []
@@ -452,7 +453,7 @@ SievePrime.next_prime do |prime|
 end
 ```
 
-```
+```bash
 $ byebug primes.rb
 [1, 10] in /home/davidr/Proyectos/byebug/old_doc/primes.rb
     1: # Enumerator for primes
@@ -554,7 +555,7 @@ To be continued...
 There is a wrapper script called `byebug` which basically `require`'s the gem
 then loads `byebug` before its argument (the program to be debugged) is started.
 
-```
+```bash
 byebug [byebug-options] [--] ruby-script ruby-script-arguments
 ```
 
@@ -562,7 +563,7 @@ If you don't need to pass dash options to your program, which might be confused
 with byebug options, then you don't need to add the `--`. To get a brief list of
 options and descriptions, use the `--help` option.
 
-```
+```bash
 $ byebug --help
 byebug 1.4.0
 Usage: byebug [options] <script.rb> -- <script.rb parameters>
@@ -616,7 +617,7 @@ already a debugger. This option is compatible with Ruby's.
 <rubyscript>.rb`. If all you want to do however is get a linetrace, `tracer` is
 most likely faster than `byebug`
 
-```
+```bash
 $ time ruby -rtracer old_doc/gcd.rb 24 31 >/dev/null
 
 real  0m0.066s
@@ -657,7 +658,7 @@ Here are the default values in `options`
              stop=true, tracing=false, verbose_long=false>
 ```
 
-## Command Files
+### Command Files
 
 A command file is a file of lines that are `byebug` commands. Comments (lines
 starting with `#`) may also be included. An empty line in a command file does
@@ -679,14 +680,18 @@ directory where you invoke `byebug`.
 You can also request the execution of a command file with the `source` command
 (see [Source]()).
 
-## Quitting byebug
 
-Inside a byebug interpreter, use `quit` command to finish execution. Another way
-to terminate byebug is to use the `kill` command. This does the more forceful
-`kill -9`. It can be used in cases where `quit` doesn't work (I haven't seen it
-yet).
+### Quitting byebug
 
-## Calling byebug from inside your program
+To exit `byebug`, use the `quit` command (abbreviated `q` and aliased `exit`).
+Normally if you are in an interactive session, this command will prompt to ask
+if you really want to quit. If you don't want any questions asked, enter
+`quit unconditionally` (abbreviated `q!`). Another way to terminate byebug is to
+use the `kill` command. This does the more forceful `kill -9`. It can be used in
+cases where `quit` doesn't work (I haven't seen those yet).
+
+
+### Calling byebug from inside your program
 
 Running a program from byebug adds a bit of overhead and slows it down a little.
 Furthermore, by necessity, debuggers change the operation of the program they
@@ -724,9 +729,23 @@ possible to enclose it in a conditional expression, for example
 byebug if 'bar' == foo and 20 == iter_count
 ```
 
+### Restarting Byebug
+
+You can restart the program using `restart [program args]`. This is a re-exec -
+all byebug state is lost. If command arguments are passed, those are used.
+Otherwise program arguments from the last invocation are used.
+
+You won't be able to restart your program in all cases. First, the program
+should have been invoked at the outset rather than having been called from
+inside your program or invoked as a result of post-mortem handling.
+
+Also, since this relies on the OS `exec` call, this command is available only if
+your OS supports `exec`.
+
+
 ## Byebug Command Reference
 
-## Command Syntax
+### Command Syntax
 Usually a command is put on a single line. There is no limit on how long it can be.
 It starts with a command name, which is followed by arguments whose meaning depends
 on the command name. For example, the command `step` accepts an argument which is the
@@ -740,7 +759,7 @@ backslash.
 For example, if you have [autoeval]() set, which is the default, you might want to
 enter the following code to compute the 5th Fibonacci number.
 
-```
+```bash
 (byebug) fib1=0; fib2=1; 5.times {|temp| temp=fib1; fib1=fib2; fib2 += temp }
 0
 1
@@ -784,13 +803,14 @@ location position, it will generally preface the message with `***`. However if
 annotation mode is on then the message is put in a `begin-error` annotation and no
 `***` appears.
 
-### Help
+### Command Help
+
 Once inside `byebug` you can always ask it for information on its commands using the
 `help` command. You can use `help` (abbreviated `h`) with no arguments to display a
 short list of named classes of commands
 
-```
-(byebug) `help`
+```bash
+(byebug) help
 Type "help <command-name>" for help on a specific command
 
 Available commands:
@@ -805,7 +825,7 @@ var
 With a command name as `help` argument, `byebug` displays short information on how to
 use that command.
 
-```
+```bash
 (byebug) help list
 l[ist]    list forward
 l[ist] -  list backward
@@ -827,7 +847,7 @@ letters to make that subcommand distinct from others will do. For example,
 
 Some examples follow.
 
-```
+```bash
 (byebug) help info
 info[ subcommand]
 
@@ -854,14 +874,14 @@ info variables          -- Local and instance variables of the current stack
 frame
 ```
 
-```
+```bash
 (byebug) help info breakpoints
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
 With an integer argument, list info on that breakpoint.
 ```
 
-```
+```bash
 (byebug) help info br
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
