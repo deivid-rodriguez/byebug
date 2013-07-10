@@ -16,12 +16,9 @@ module Byebug
       end
 
       if abs_frame_pos >= context.stack_size then
-        return \
-          errmsg "Adjusting would put us beyond the oldest (initial) frame.\n"
+        return errmsg "Adjusting would put us beyond the oldest frame.\n"
       elsif abs_frame_pos < 0 then
-        return \
-          errmsg "Adjusting would put us beyond the newest (innermost) frame.\n"
-        return
+        return errmsg "Adjusting would put us beyond the newest frame.\n"
       end
 
       if @state.frame_pos != abs_frame_pos then
@@ -35,28 +32,31 @@ module Byebug
       print_frame @state.frame_pos, false
     end
 
-    def get_frame_call(prefix, pos)
-      if Command.settings[:callstyle] == :short
-        frame_class = ''
-      else
-        klass = @state.context.frame_class pos
-        frame_class = klass ? "#{klass}." : ''
-      end
+    def get_frame_class(style, pos)
+      frame_class = style == :short ? '' : "#{@state.context.frame_class pos}"
+      return frame_class == '' ? '' : "#{frame_class}."
+    end
 
-      frame_method = "#{@state.context.frame_method pos}"
-
+    def get_frame_args(style, pos)
       args = @state.context.frame_args pos
       if args == [[:rest]]
         frame_args = ''
-      elsif Command.settings[:callstyle] == :short
+      elsif style == :short
         frame_args = args.map { |_, name| name }.join(', ')
       else
         locals = @state.context.frame_locals pos
-        frame_args = args.map { |_, arg| "#{arg}##{locals[arg].class}" }.join(', ')
+        frame_args = args.map { |_, a| "#{a}##{locals[a].class}" }.join(', ')
       end
-      frame_args = "(#{frame_args})" unless frame_args == ''
+      return frame_args == '' ? '' :  "(#{frame_args})"
+    end
+
+    def get_frame_call(prefix, pos)
+      frame_class = get_frame_class(Command.settings[:callstyle], pos)
+      frame_method = "#{@state.context.frame_method pos}"
+      frame_args = get_frame_args(Command.settings[:callstyle], pos)
 
       call_str = frame_class + frame_method + frame_args
+
       max_call_str_size = Command.settings[:width] - prefix.size
       if call_str.size > max_call_str_size
         call_str = call_str[0..max_call_str_size - 5] + "...)"
@@ -184,8 +184,7 @@ module Byebug
       if not @match[1]
         pos = 0
       else
-        pos = get_int(@match[1], "Frame")
-        return unless pos
+        return unless pos = get_int(@match[1], "Frame")
       end
       adjust_frame(pos, true)
     end

@@ -53,16 +53,14 @@ class TestFrame < TestDsl::TestCase
     enter 'break 16', 'cont', 'down'
     debug_file('frame') { $state.line.must_equal 16 }
     check_output_includes \
-      'Adjusting would put us beyond the newest (innermost) frame.',
-      interface.error_queue
+      'Adjusting would put us beyond the newest frame.', interface.error_queue
   end
 
   it 'must not set frame if the frame number is too high' do
     enter 'break 16', 'cont', 'up 100'
     debug_file('frame') { $state.line.must_equal 16 }
     check_output_includes \
-      'Adjusting would put us beyond the oldest (initial) frame.',
-      interface.error_queue
+      'Adjusting would put us beyond the oldest frame.', interface.error_queue
   end
 
   describe 'when byebug is started deep in the callstack' do
