@@ -131,17 +131,17 @@ class TestFrame < TestDsl::TestCase
   end
 
   describe 'callstyle' do
-    describe 'last' do
-      temporary_change_hash Byebug::Command.settings, :callstyle, :last
+    describe 'long' do
+      temporary_change_hash Byebug::Command.settings, :callstyle, :long
 
-      it 'displays current backtrace with callstyle "last"' do
+      it 'displays current backtrace with callstyle "long"' do
         enter 'break 16', 'cont', 'where'
         debug_file 'frame'
         check_output_includes \
-          /--> #0  A.d(e#String) at #{fullpath('frame')}:16/x,
-              /#1  A.c at #{fullpath('frame')}:12/x          ,
-              /#2  A.b at #{fullpath('frame')}:8/x           ,
-              /#3  A.a at #{fullpath('frame')}:5/x
+          /--> #0 A.d(e#String) at #{fullpath('frame')}:16/x,
+              /#1 A.c at #{fullpath('frame')}:12/x          ,
+              /#2 A.b at #{fullpath('frame')}:8/x           ,
+              /#3 A.a at #{fullpath('frame')}:5/x
       end
     end
 
@@ -151,19 +151,10 @@ class TestFrame < TestDsl::TestCase
       it 'displays current backtrace with callstyle "short"' do
           enter 'break 16', 'cont', 'where'
           debug_file 'frame'
-          check_output_includes /--> #0  d(e) at #{fullpath('frame')}:16/x,
-                                /#1  c at #{fullpath('frame')}:12/x,
-                                /#2  b at #{fullpath('frame')}:8/x,
-                                /#3  a at #{fullpath('frame')}:5/x
-      end
-    end
-
-    describe 'tracked' do
-      temporary_change_hash Byebug::Command.settings, :callstyle, :tracked
-
-      it 'displays current backtrace with callstyle "tracked"' do
-        skip 'XXX: Style supported but not working....'
-        debug_file 'frame'
+          check_output_includes /--> #0 d(e) at #{fullpath('frame')}:16/x,
+                                    /#1 c at #{fullpath('frame')}:12/x,
+                                    /#2 b at #{fullpath('frame')}:8/x,
+                                    /#3 a at #{fullpath('frame')}:5/x
       end
     end
   end

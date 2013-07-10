@@ -152,7 +152,7 @@ module Byebug
 
     # Register default settings
     register_setting_var(:basename, false)
-    register_setting_var(:callstyle, :last)
+    register_setting_var(:callstyle, :long)
     register_setting_var(:testing, false)
     register_setting_var(:force_stepping, false)
     register_setting_var(:frame_fullpath, true)

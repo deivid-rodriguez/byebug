@@ -94,15 +94,10 @@ module Byebug
       when /^basename$/
         Command.settings[:basename] = set_on
       when /^callstyle$/
-        if args[0]
-          arg = args[0].downcase.to_sym
-          case arg
-          when :short, :last, :tracked
-            Command.settings[:callstyle] = arg
-          else
-            print "Invalid call style #{arg}. Should be one of: " \
-                  "\"short\", \"last\" or \"tracked\".\n"
-          end
+        if args[0] and (args[0] == 'short' or arg[0] == 'long')
+          Command.settings[:callstyle] = arg[0].to_sym
+        else
+          print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
       when /^trace$/
         Command.settings[:stack_trace_on_error] = set_on

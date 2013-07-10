@@ -2519,24 +2519,19 @@ Shows the whether filename display shows just the file basename or not.
 
 @table @code
 @ifset FINISHED
-@kindex set callstyle @r{[} short | last | tracked @r{]}
-@item set forcestep @r{[} short | last | tracked @r{]}
+@kindex set callstyle @r{[} short | long @r{]}
+@item set callstyle @r{[} short | long @r{]}
 @else
-@kindex set callstyle @r{[} short | last
-@item set forcestep @r{[} short | last
+@kindex set callstyle @r{[} short | long
+@item set callstyle @r{[} short | long
 @end ifset
 
-Sets how you want call parameters displayed; @code{short} shows just
-the parameter names;
-@ifset FINISHED
-@code{last} shows the parameter names and the
-class of these variables as they currently exist. Note the type could
-have changed between when the call and its current
-values.
-@end ifset
-@code{tracked} is the most accurate but this adds
-overhead. On every call, scalar values of the parameters get
-saved. For non-scalar values the class is saved.
+Sets how you want call parameters displayed
+
+@code{short} shows current method and parameter names.
+@code{long} shows current class, current method, parameter names and the class
+of each parameter as it currently exist. Note the type could have changed
+since the call was made.
 @end table
 
 @node Forcestep
@@ -2965,7 +2960,7 @@ Fixnum: 1 if on or 0 if off.
 @item :basename
 Boolean. True if basename on. @xref{Basename}.
 @item :callstyle
-Symbol: @code{:short} or @code{:last}. @xref{Callstyle}.
+Symbol: @code{:short} or @code{:long}. @xref{Callstyle}.
 @item :testing
 Boolean. True if currently testing byebug.
 @item :force_stepping

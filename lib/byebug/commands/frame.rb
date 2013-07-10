@@ -36,48 +36,33 @@ module Byebug
     end
 
     def get_frame_call(prefix, pos)
-      id = @state.context.frame_method(pos)
-      return "<main>" unless id
-
-      klass = @state.context.frame_class(pos)
-
-      if Command.settings[:callstyle] != :short && klass
-        call_str = "#{klass}.#{id.id2name}"
+      if Command.settings[:callstyle] == :short
+        frame_class = ''
       else
-        call_str = "#{id.id2name}"
+        klass = @state.context.frame_class pos
+        frame_class = klass ? "#{klass}." : ''
       end
+
+      frame_method = "#{@state.context.frame_method pos}"
 
       args = @state.context.frame_args pos
-
-      return call_str unless args.any?
-
-      call_str += "("
-      args.each_with_index do |name, i|
-        case Command.settings[:callstyle]
-        when :short
-          call_str += "#{name}, "
-        when :last
-          locals = @state.context.frame_locals pos
-          klass = locals[name].class
-          if klass.inspect.size > 20 + 3
-            klass = klass.inspect[0..20] + "..."
-          end
-          call_str += "#{name}##{klass}, "
-        when :tracked
-          arg_info = context.frame_args_info pos
-          if arg_info && arg_info.size > i
-            call_str += "#{name}: #{arg_info[i].inspect}, "
-          else
-            call_str += "#{name}, "
-          end
-        end
-        if call_str.size > Command.settings[:width] - prefix.size
-          # Strip off trailing ', ' if any but add stuff for later trunc
-          call_str[-2..-1] = ",...XX"
-          break
-        end
+      if args == [[:rest]]
+        frame_args = ''
+      elsif Command.settings[:callstyle] == :short
+        frame_args = args.map { |_, name| name }.join(', ')
+      else
+        locals = @state.context.frame_locals pos
+        frame_args = args.map { |_, arg| "#{arg}##{locals[arg].class}" }.join(', ')
       end
-      call_str[-2..-1] = ")" # Strip off trailing ', ' if any
+      frame_args = "(#{frame_args})" unless frame_args == ''
+
+      call_str = frame_class + frame_method + frame_args
+      max_call_str_size = Command.settings[:width] - prefix.size
+      if call_str.size > max_call_str_size
+        call_str = call_str[0..max_call_str_size - 5] + "...)"
+      end
+
+      return call_str
     end
 
     def print_backtrace

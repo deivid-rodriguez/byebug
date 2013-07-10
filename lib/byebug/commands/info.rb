@@ -84,8 +84,9 @@ module Byebug
 
       locals = @state.context.frame_locals
       args = @state.context.frame_args
+      return if args == [[:rest]]
 
-      args.each do |name|
+      args.map do |_, name|
         s = "#{name} = #{locals[name].inspect}"
         pad_with_dots(s)
         print "#{s}\n"

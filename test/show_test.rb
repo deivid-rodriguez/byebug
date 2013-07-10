@@ -81,7 +81,7 @@ class TestShow < TestDsl::TestCase
     it 'must show default value' do
       enter 'show callstyle'
       debug_file 'show'
-      check_output_includes 'Frame call-display style is last.'
+      check_output_includes 'Frame call-display style is long.'
     end
   end
 
