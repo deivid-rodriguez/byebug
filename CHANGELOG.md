@@ -1,3 +1,11 @@
+## 1.6.0
+
+* `byebug` placed at the end of a block or method call now works as expected
+* Don't autolist when ruby '-e' option is used
+* Fixes callstyles. From now on, use 'long' for detailed frames in callstack and
+'short' for more concise frames
+
+
 ## 1.5.0
 
 * No more Byebug.start to get correct callstack information! Dropping `byebug`

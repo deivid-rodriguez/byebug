@@ -78,6 +78,7 @@ because it is a default option in byebug.
   - Nice markdow guide.
   - Ruby 2.0 support.
   - where/bt does not in fact give a backtrace.
+  - `byebug` can now be placed at the end of a block or method call.
 * Very actively mantained.
 * Editor agnostic: no external editor built-in support.
 * No thread support as not supported by the new API yet (I hope it will come
