@@ -148,6 +148,22 @@ module Byebug
         settings_map[name] ||= {}
         settings_map[name][:setter] = block
       end
+
+      def command_exists?(command)
+        ENV['PATH'].split(File::PATH_SEPARATOR).any? {
+          |d| File.exists? File.join(d, command) }
+      end
+
+      def terminal_width
+        if ENV['COLUMNS'] =~ /^\d+$/
+          ENV['COLUMNS'].to_i
+        elsif STDIN.tty? && command_exists?('stty')
+          `stty size`.scan(/\d+/)[1].to_i
+        else
+          nil
+        end
+      end
+
     end
 
     # Register default settings
@@ -159,7 +175,7 @@ module Byebug
     register_setting_var(:listsize, 10)
     register_setting_var(:stack_trace_on_error, false)
     register_setting_var(:tracing_plus, false)
-    cols = `stty size`.scan(/\d+/)[1].to_i
+    cols = terminal_width
     register_setting_var(:width, cols > 10 ? cols : 80)
     Byebug::ARGV = ARGV.clone unless defined? Byebug::ARGV
     register_setting_var(:argv, Byebug::ARGV)
