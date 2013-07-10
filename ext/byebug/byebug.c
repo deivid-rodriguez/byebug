@@ -117,6 +117,14 @@ call_at_catchpoint(VALUE context_obj, debug_context_t *dc, VALUE exp)
   return call_at(context_obj, dc, rb_intern("at_catchpoint"), 1, exp, 0);
 }
 
+static VALUE
+call_at_return(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+{
+  dc->stop_reason = CTX_STOP_BREAKPOINT;
+  return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
+
+}
+
 static void
 call_at_line_check(VALUE context_obj, debug_context_t *dc,
                    VALUE breakpoint, VALUE file, VALUE line)
@@ -226,10 +234,18 @@ process_return_event(VALUE trace_point, void *data)
   if (dc->stack_size > 0) dc->stack_size--;
   EVENT_COMMON();
 
-  if (dc->stack_size + 1 == dc->stop_frame)
+  if (dc->stack_size + 1 == dc->before_frame)
   {
-    dc->steps      = 1;
-    dc->stop_frame = -1;
+    reset_stepping_stop_points(dc);
+    VALUE file = rb_tracearg_path(trace_arg);
+    VALUE line = rb_tracearg_lineno(trace_arg);
+    call_at_return(context, dc, file, line);
+  }
+
+  if (dc->stack_size + 1 == dc->after_frame)
+  {
+    reset_stepping_stop_points(dc);
+    dc->steps = 1;
   }
 
   cleanup(dc);

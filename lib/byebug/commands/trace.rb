@@ -14,12 +14,12 @@ module Byebug
         Byebug.tracing = onoff
         print "#{show_setting('linetrace')}\n"
       elsif @match[1] =~ /var(?:iable)?/
-        varname=@match[2]
+        varname = @match[2]
         if debug_eval("defined?(#{varname})")
           if @match[3] && @match[3] !~ /(:?no)?stop/
             errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[3]}\"\n"
           else
-            dbg_cmd = (@match[3] && (@match[3] !~ /nostop/)) ? 'byebug' : ''
+            dbg_cmd = (@match[3] && @match[3] !~ /nostop/) ? 'byebug(1,0)' : ''
           end
           eval("trace_var(:#{varname}) do |val|
                   print \"traced variable \#{varname} has value \#{val}\n\"

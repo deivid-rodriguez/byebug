@@ -29,8 +29,8 @@ class TestEdit < TestDsl::TestCase
 
     it 'must open specified line in specified file with configured editor' do
       Byebug::Edit.any_instance.expects(:system).
-                                with("editr +3 #{fullpath('breakpoint1')}")
-      enter "edit #{fullpath('breakpoint1')}:3"
+                                with("editr +3 #{fullpath('breakpoint')}")
+      enter "edit #{fullpath('breakpoint')}:3"
       debug_file 'edit'
     end
   end

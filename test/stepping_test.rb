@@ -123,7 +123,6 @@ class TestStepping < TestDsl::TestCase
           debug_file('stepping') { $state.line.must_equal 22 }
         end
       end
-
     end
 
     describe 'Post Mortem' do

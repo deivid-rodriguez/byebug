@@ -246,22 +246,13 @@ end
 
 module Kernel
   ##
-  # Enters byebug after _steps_ line events occur.
+  # Enters byebug after _steps_into_ line events and _steps_out_ return events
+  # occur. Before entering byebug startup, the init script is read.
   #
-  # Before entering byebug startup, the init script is read. Setting _steps_ to
-  # 0 will cause a break in byebug's subroutine and not wait for a line event to
-  # occur. You will have to go "up 1" in order to be back to your debugged
-  # program from byebug. Setting _steps_ to 0 could be useful if you want to
-  # stop right after the last statement in some scope, because the next step
-  # will take you out of some scope.
-  def byebug(steps = 1)
+  def byebug(steps_into = 1, steps_out = 2)
     Byebug.start
     Byebug.run_init_script(StringIO.new)
-    if 0 == steps
-      Byebug.context.step_out
-    else
-      Byebug.context.step_into steps
-    end
+    Byebug.context.stop_return steps_out if steps_out >= 1
+    Byebug.context.step_into steps_into if steps_into >= 0
   end
-  alias breakpoint byebug unless respond_to?(:breakpoint)
 end

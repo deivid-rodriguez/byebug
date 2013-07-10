@@ -32,9 +32,10 @@ typedef struct {
   ctx_stop_reason stop_reason;
 
   int dest_frame;
-  int lines;                   /* # of lines in dest_frame before stopping */
-  int steps;                   /* # of steps before stopping */
-  int stop_frame;              /* frame number after which we must stop */
+  int lines;                   /* # of lines in dest_frame before stopping    */
+  int steps;                   /* # of steps before stopping                  */
+  int after_frame;             /* stop rigth after returning from this frame  */
+  int before_frame;            /* stop right before returning from this frame */
 
   VALUE last_file;
   VALUE last_line;

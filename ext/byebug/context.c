@@ -7,10 +7,11 @@ static VALUE cContext;
 extern void
 reset_stepping_stop_points(debug_context_t *context)
 {
-  context->dest_frame = -1;
-  context->lines      = -1;
-  context->steps      = -1;
-  context->stop_frame = -1;
+  context->dest_frame   = -1;
+  context->lines        = -1;
+  context->steps        = -1;
+  context->after_frame  = -1;
+  context->before_frame = -1;
 }
 
 static inline VALUE
@@ -384,7 +385,21 @@ Context_step_out(VALUE self, VALUE frame)
   if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
 
-  context->stop_frame = context->stack_size - FIX2INT(frame);
+  context->after_frame = context->stack_size - FIX2INT(frame);
+
+  return frame;
+}
+
+static VALUE
+Context_stop_return(VALUE self, VALUE frame)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
+    rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
+
+  context->before_frame = context->stack_size - FIX2INT(frame);
 
   return frame;
 }
@@ -414,6 +429,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "step_into", Context_step_into, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);
   rb_define_method(cContext, "step_out", Context_step_out, 1);
+  rb_define_method(cContext, "stop_return", Context_stop_return, 1);
 
   return cContext;
 }

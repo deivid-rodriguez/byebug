@@ -3221,7 +3221,7 @@ y = 1
 
 $ ruby scope-test.rb
 ../lib/byebug.rb:386
-Byebug.context.stop_frame = 0
+Byebug.context.after_frame = 0
 (byebug:1) where
 --> #0 Kernel.byebug(steps#Fixnum) at ../lib/byebug-base.rb:386
     #1 at scope-test.rb:4

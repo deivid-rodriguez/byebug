@@ -159,6 +159,11 @@ module Byebug
     end
     protect :at_line
 
+    def at_return(context, file, line)
+      process_commands(context, file, line)
+    end
+    protect :at_return
+
     private
       ##
       # Prompt shown before reading a command.

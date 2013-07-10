@@ -23,9 +23,8 @@ module Byebug
       Byebug.handler or raise 'No interface loaded'
     end
 
-    def at_breakpoint(breakpoint)
-      handler.at_breakpoint(self, breakpoint) unless
-        IGNORED_FILES.include?(breakpoint.source)
+    def at_breakpoint(brkpnt)
+      handler.at_breakpoint(self, brkpnt)
     end
 
     def at_catchpoint(excpt)
@@ -38,6 +37,10 @@ module Byebug
 
     def at_line(file, line)
       handler.at_line(self, file, line) unless IGNORED_FILES.include?(file)
+    end
+
+    def at_return(file, line)
+      handler.at_return(self, file, line) unless IGNORED_FILES.include?(file)
     end
   end
 end
