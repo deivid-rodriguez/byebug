@@ -205,30 +205,33 @@ module Byebug
       end
 
       ##
+      # Splits a command line of the form "cmd1 ; cmd2 ; ... ; cmdN" into an
+      # array of commands: [cmd1, cmd2, ..., cmdN]
+      #
+      def split_commands(cmd_line)
+        cmd_line.split(/;/).inject([]) do |m, v|
+          if m.empty?
+            m << v
+          else
+            if m.last[-1] == ?\\
+              m.last[-1,1] = ''
+              m.last << ';' << v
+            else
+              m << v
+            end
+          end
+          m
+        end
+      end
+
+      ##
       # Handle byebug commands.
       #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
         $state = Command.settings[:testing] ? state : nil
 
-        splitter = lambda do |str|
-          str.split(/;/).inject([]) do |m, v|
-            if m.empty?
-              m << v
-            else
-              if m.last[-1] == ?\\
-                m.last[-1,1] = ''
-                m.last << ';' << v
-              else
-                m << v
-              end
-            end
-            m
-          end
-        end
-
         preloop(commands, context)
-
         if Command.settings[:autolist] == 0
           CommandProcessor.print_location_and_text(file, line)
         end
@@ -245,14 +248,14 @@ module Byebug
             else
               @last_cmd = input
             end
-            splitter[input].each do |cmd|
+            split_commands(input).each do |cmd|
               one_cmd(commands, context, cmd)
               postcmd(commands, context, cmd)
             end
           end
         end
         postloop(commands, context)
-      end # process_commands
+      end
 
       ##
       # Executes a single byebug command
