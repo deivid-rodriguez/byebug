@@ -1,3 +1,8 @@
+## 1.6.1
+
+* Windows compatibiliy: compilation and terminal width issues
+
+
 ## 1.6.0
 
 * `byebug` placed at the end of a block or method call now works as expected
