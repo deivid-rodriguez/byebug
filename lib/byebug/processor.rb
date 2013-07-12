@@ -46,12 +46,12 @@ module Byebug
       @display = []
 
       @mutex = Mutex.new
-      @last_cmd                      = nil
-      @last_file                     = nil   # Filename the last time we stopped
-      @last_line                     = nil   # line number the last time we stopped
-      @byebug_breakpoints_were_empty = false # Show breakpoints 1st time
-      @byebug_displays_were_empty    = true  # No display 1st time
-      @byebug_context_was_dead       = true  # Assume we haven't started.
+      @last_cmd               = nil   # To allow empty (just <RET>) commands
+      @last_file              = nil   # Filename the last time we stopped
+      @last_line              = nil   # line number the last time we stopped
+      @breakpoints_were_empty = false # Show breakpoints 1st time
+      @displays_were_empty    = true  # No display 1st time
+      @context_was_dead       = true  # Assume we haven't started.
     end
 
     def interface=(interface)
@@ -278,12 +278,11 @@ module Byebug
       end
 
       def preloop(commands, context)
-        @byebug_context_was_dead = true if context.dead? and not
-          @byebug_context_was_dead
+        @context_was_dead = true if context.dead? and not @context_was_dead
 
         if Byebug.annotate.to_i > 2
           aprint('stopped')
-          if @byebug_context_was_dead
+          if @context_was_dead
             aprint('exited')
             print "The program finished.\n"
           end
@@ -309,7 +308,7 @@ module Byebug
           end
           if not context.dead? and @@Show_annotations_run.find{|pat| cmd =~ pat}
             aprint 'starting'
-            @byebug_context_was_dead = false
+            @context_was_dead = false
           end
         end
       end
@@ -323,23 +322,23 @@ module Byebug
       end
 
       def breakpoint_annotations(commands, context)
-        unless Byebug.breakpoints.empty? and @byebug_breakpoints_were_empty
+        unless Byebug.breakpoints.empty? and @breakpoints_were_empty
           annotation('breakpoints', commands, context, "info breakpoints")
-          @byebug_breakpoints_were_empty = Byebug.breakpoints.empty?
+          @breakpoints_were_empty = Byebug.breakpoints.empty?
         end
       end
 
       def display_annotations(commands, context)
         return if display.empty?
-        #have_display = display.find{|d| d[0]}
-        #return unless have_display and @byebug_displays_were_empty
-        #@byebug_displays_were_empty = have_display
+        have_display = display.find{|d| d[0]}
+        return unless have_display and @displays_were_empty
+        @displays_were_empty = have_display
         annotation('display', commands, context, "display")
       end
 
       class State
-        attr_accessor :commands, :context, :display, :file
-        attr_accessor :frame_pos, :interface, :line, :previous_line
+        attr_accessor :commands, :context, :display, :file, :frame_pos
+        attr_accessor :interface, :line, :previous_line
 
         def initialize(commands, context, display, file, interface, line)
           @commands, @context, @display = commands, context, display
@@ -367,7 +366,7 @@ module Byebug
     def initialize(interface)
       super()
       @interface = interface
-      @byebug_context_was_dead = true # Assume we haven't started.
+      @context_was_dead = true # Assume we haven't started.
     end
 
     def process_commands(verbose=false)
@@ -377,12 +376,12 @@ module Byebug
       state = State.new(@interface, control_cmds)
       commands = control_cmds.map{|cmd| cmd.new(state) }
 
-      unless @byebug_context_was_dead
+      unless @context_was_dead
         if Byebug.annotate.to_i > 2
           aprint 'exited'
           print "The program finished.\n"
         end
-        @byebug_context_was_dead = true
+        @context_was_dead = true
       end
 
       while input = @interface.read_command(prompt(nil))
@@ -407,7 +406,7 @@ module Byebug
     # Note: have an unused 'context' parameter to match the local interface.
     def prompt(context)
       p = '(byebug:ctrl) '
-      p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if
+      p = afmt("pre-prompt") + p + "\n" + afmt("prompt") if
         Byebug.annotate.to_i > 2
       return p
     end
