@@ -29,7 +29,7 @@ module Byebug
       @state.file = @state.context.frame_file @state.frame_pos
       @state.line = @state.context.frame_line @state.frame_pos
 
-      print_frame @state.frame_pos, false
+      ListCommand.new(@state).execute
     end
 
     def get_frame_class(style, pos)
