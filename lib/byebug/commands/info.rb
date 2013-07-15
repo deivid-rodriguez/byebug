@@ -139,8 +139,9 @@ module Byebug
     end
 
     def info_file_path(file)
+      print "File #{file}"
       path = LineCache.path(file)
-      print " - #{path}" if path and path != file
+      print " - #{path}\n" if path and path != file
     end
     private :info_file_path
 
@@ -173,35 +174,34 @@ module Byebug
     def info_file(*args)
       return info_files unless args[0]
 
-      param =  args[1] || 'basic'
-
-      subcmd = Command.find(InfoFileSubcommands, param)
-      return errmsg "Invalid parameter #{param}\n" unless subcmd
+      subcmd = Command.find(InfoFileSubcommands, args[1] || 'basic')
+      return errmsg "Invalid parameter #{args[1]}\n" unless subcmd
 
       unless LineCache::cached?(args[0])
-        unless LineCache::cached_script?(args[0])
-          return print "File #{args[0]} is not cached\n"
-        end
+        return print "File #{args[0]} is not cached\n" unless
+          LineCache::cached_script?(args[0])
         LineCache::cache(args[0], Command.settings[:autoreload])
       end
 
-      print "File #{args[0]}"
-      info_file_path(args[0]) if %w(all basic path).member?(subcmd.name)
-      print "\n"
-
-      info_file_lines(args[0]) if %w(all basic lines).member?(subcmd.name)
-      info_file_breakpoints(args[0]) if %w(all breakpoints).member?(subcmd.name)
-      info_file_mtime(args[0]) if %w(all mtime).member?(subcmd.name)
-      info_file_sha1(args[0]) if %w(all sha1).member?(subcmd.name)
+      if %w(all basic).member?(subcmd.name)
+        info_file_path(args[0])
+        info_file_lines(args[0])
+        if subcmd.name == 'all'
+          info_file_breakpoints(args[0])
+          info_file_mtime(args[0])
+          info_file_sha1(args[0])
+        end
+      else
+        print "File #{args[0]}\n" if subcmd.name != 'path'
+        send("info_file_#{subcmd.name}", args[0])
+      end
     end
 
     def info_files(*args)
       files = LineCache::cached_files
       files += SCRIPT_LINES__.keys unless 'stat' == args[0]
       files.uniq.sort.each do |file|
-        print "File #{file}"
         info_file_path(file)
-        print "\n"
         info_file_mtime(file)
       end
     end
