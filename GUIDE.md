@@ -188,12 +188,12 @@ resumes execution.  Notice the difference between `display a` and
 after it is evaluated. To remove a display expression `undisplay` is used. If we
 give a display number, just that display expression is removed.
 
-We also used a new command `where`(see [backtrace]()) to show the call stack. In
+We also used a new command `where`(see [backtrace]()) to show the callstack. In
 the above situation, starting from the bottom line we see we called the `hanoi`
 method from line 34 of the file `hanoi.rb` and the `hanoi` method called itself
 two more times at line 4.
 
-In the call stack we show a _current frame_ mark, the frame number, the method
+In the callstack we show a _current frame_ mark, the frame number, the method
 being called, the names of the parameters, the types those parameters
 _currently_ have and the file-line position. Remember it's possible that when
 the program was called the parameters had different types, since the types of
@@ -205,16 +205,36 @@ Now let's move around the callstack.
 ```bash
 (byebug) undisplay
 Clear all expressions? (y/n) y
-(byebug:1) i_args
+(byebug) i_args
 NameError Exception: undefined local variable or method `i_args' for main:Object
-(byebug:1) frame -1
-#3 at hanoi.rb:34
-(byebug:1) i_args
-1
-(byebug:1) p n
+(byebug) frame -1
+[25, 34] in /home/davidr/Proyectos/byebug/old_doc/hanoi.rb
+   25:     exit 2
+   26:   end
+   27: end
+   28:
+   29: if n < 1 or n > 100
+   30:   puts "*** number of disks should be between 1 and 100"
+   31:   exit 2
+   32: end
+   33:
+=> 34: hanoi(n, :a, :b, :c)
+(byebug) i_args
+0
+(byebug) p n
 3
-(byebug:1) down 2
-#1 Object.hanoi(n#Fixnum, a#Symbol, b#Symbol, c#Symbol) at hanoi.rb:4
+(byebug) down 2
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/hanoi.rb
+    1: # Solves the classic Towers of Hanoi puzzle.
+    2: def hanoi(n,a,b,c)
+    3:   if n-1 > 0
+=>  4:     hanoi(n-1, a, c, b)
+    5:   end
+    6:   puts "Move disk %s to %s" % [a, b]
+    7:   if n-1 > 0
+    8:     hanoi(n-1, c, b, a)
+    9:   end
+   10: end
 (byebug:1) p n
 2
 ```
@@ -325,15 +345,15 @@ Displaying frame's full file names is off.
 --> #0  TestTri.test_basic at test-triangle.rb:7
     #1  MiniTest::Unit::TestCase.run(runner#MiniTest::Unit) at .../2.0.0/minitest/unit.rb:1301
     #2  MiniTest::Unit.block in _run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:919
-    #3  Array.map(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:912
+     +-- #3  Array.map at .../2.0.0/minitest/unit.rb:912
     #4  MiniTest::Unit._run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:912
     #5  MiniTest::Unit.block in _run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
-    #6  Array.map(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:899
+     +-- #6  Array.map at .../2.0.0/minitest/unit.rb:899
     #7  MiniTest::Unit._run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
     #8  MiniTest::Unit._run_anything(type#Symbol) at .../2.0.0/minitest/unit.rb:867
     #9  MiniTest::Unit.run_tests at .../2.0.0/minitest/unit.rb:1060
     #10 MiniTest::Unit.block in _run(args#Array) at .../2.0.0/minitest/unit.rb:1047
-    #11 Array.each(frame_no#Fixnum) at .../2.0.0/minitest/unit.rb:1046
+     +-- #11 Array.each at .../2.0.0/minitest/unit.rb:1046
     #12 MiniTest::Unit._run(args#Array) at .../2.0.0/minitest/unit.rb:1046
     #13 MiniTest::Unit.run(args#Array) at .../2.0.0/minitest/unit.rb:1035
     #14 #<Class:MiniTest::Unit>.block in autorun at .../2.0.0/minitest/unit.rb:789
@@ -565,7 +585,7 @@ options and descriptions, use the `--help` option.
 
 ```bash
 $ byebug --help
-byebug 1.4.0
+byebug 1.6.1
 Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
 Options:
