@@ -35,7 +35,7 @@ class TestFrame < TestDsl::TestCase
     it 'must print current stack frame when without arguments' do
       enter 'up', 'frame'
       debug_file('frame')
-      check_output_includes /#1  FrameExample\.c at #{@tst_file}:18/
+      check_output_includes /#1  FrameExample\.c\s+at #{@tst_file}:18/
     end
 
     it 'must set frame to the first one' do
@@ -76,9 +76,9 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0  FrameExample\.d\(e#String\) at #{@tst_file}:23/,
-                /#1  FrameExample\.c at #{@tst_file}:18/,
-                /#2  FrameExample\.b at #{@tst_file}:13/
+            /--> #0  FrameExample\.d\(e#String\)\s+at #{@tst_file}:23/,
+                /#1  FrameExample\.c\s+at #{@tst_file}:18/,
+                /#2  FrameExample\.b\s+at #{@tst_file}:13/
         end
       end
 
@@ -89,10 +89,10 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0  FrameExample\.d\(e#String\) at #{short_path(@tst_file)}:23/,
-                /#1  FrameExample\.c at #{short_path(@tst_file)}:18/,
-                /#2  FrameExample\.b at #{short_path(@tst_file)}:13/,
-                /#3  FrameExample\.a at #{short_path(@tst_file)}:9/
+            /--> #0  FrameExample\.d\(e#String\)\s+at #{short_path(@tst_file)}:23/,
+                /#1  FrameExample\.c\s+at #{short_path(@tst_file)}:18/,
+                /#2  FrameExample\.b\s+at #{short_path(@tst_file)}:13/,
+                /#3  FrameExample\.a\s+at #{short_path(@tst_file)}:9/
         end
       end
     end
@@ -105,10 +105,10 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0  FrameExample\.d\(e#String\) at #{@tst_file}:23/,
-                /#1  FrameExample\.c at #{@tst_file}:18/,
-                /#2  FrameExample\.b at #{@tst_file}:13/,
-                /#3  FrameExample\.a at #{@tst_file}:9/
+            /--> #0  FrameExample\.d\(e#String\)\s+at #{@tst_file}:23/,
+                /#1  FrameExample\.c\s+at #{@tst_file}:18/,
+                /#2  FrameExample\.b\s+at #{@tst_file}:13/,
+                /#3  FrameExample\.a\s+at #{@tst_file}:9/
         end
       end
 
@@ -118,10 +118,10 @@ class TestFrame < TestDsl::TestCase
         it 'displays current backtrace with callstyle "short"' do
             enter 'where'
             debug_file 'frame'
-            check_output_includes /--> #0  d\(e\) at #{@tst_file}:23/,
-                                      /#1  c at #{@tst_file}:18/,
-                                      /#2  b at #{@tst_file}:13/,
-                                      /#3  a at #{@tst_file}:9/
+            check_output_includes /--> #0  d\(e\)\s+at #{@tst_file}:23/,
+                                      /#1  c\s+at #{@tst_file}:18/,
+                                      /#2  b\s+at #{@tst_file}:13/,
+                                      /#3  a\s+at #{@tst_file}:9/
         end
       end
     end
@@ -134,9 +134,9 @@ class TestFrame < TestDsl::TestCase
       enter 'break 16', 'cont', 'where'
       debug_file 'frame_deep'
       check_output_includes \
-        /--> #0  FrameDeepExample\.d\(e#String\) at #{@tst_file}:16/,
-            /#1  FrameDeepExample\.c at #{@tst_file}:13/,
-            /#2  FrameDeepExample\.b at #{@tst_file}:8/
+        /--> #0  FrameDeepExample\.d\(e#String\)\s+at #{@tst_file}:16/,
+            /#1  FrameDeepExample\.c\s+at #{@tst_file}:13/,
+            /#2  FrameDeepExample\.b\s+at #{@tst_file}:8/
     end
 
     it 'must go up' do
@@ -171,9 +171,9 @@ class TestFrame < TestDsl::TestCase
       enter 'where'
       debug_file 'frame'
       check_output_includes \
-        /--> #0  FrameExample.initialize\(f#String\) at #{@tst_file}:5/,
-            /\+-- #1  Class.new\(\*args\) at #{@tst_file}:28/,
-            /#2  <top \(required\)> at #{@tst_file}:28/
+        /--> #0  FrameExample.initialize\(f#String\)\s+at #{@tst_file}:5/,
+            /\+-- #1  Class.new\(\*args\)\s+at #{@tst_file}:28/,
+            /#2  <top \(required\)>\s+at #{@tst_file}:28/
     end
 
     it 'must not navigate "up" to c-frames' do
