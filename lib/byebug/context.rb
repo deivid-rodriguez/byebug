@@ -13,10 +13,24 @@ module Byebug
       eval "local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}", bind
     end
 
+    def c_frame_args frame_no
+      myself = frame_self frame_no
+      return [] unless myself.to_s != 'main'
+      myself.send(:method, frame_method(frame_no)).parameters
+    end
+
+    def ruby_frame_args bind
+      return [] unless eval '__method__', bind
+      eval "self.method(__method__).parameters", bind
+    end
+
     def frame_args frame_no = 0
       bind = frame_binding frame_no
-      return [] unless eval "__method__", bind
-      eval "self.method(__method__).parameters", bind
+      if bind.nil?
+        c_frame_args frame_no
+      else
+        ruby_frame_args bind
+      end
     end
 
     def handler

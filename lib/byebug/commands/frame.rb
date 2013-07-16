@@ -39,15 +39,23 @@ module Byebug
 
     def get_frame_args(style, pos)
       args = @state.context.frame_args pos
-      if args == [[:rest]]
-        frame_args = ''
-      elsif style == :short
-        frame_args = args.map { |_, name| name }.join(', ')
-      else
-        locals = @state.context.frame_locals pos
-        frame_args = args.map { |_, a| "#{a}##{locals[a].class}" }.join(', ')
+      return '' if args.empty?
+
+      locals = @state.context.frame_locals pos if style == :long
+      my_args = args.map do |arg|
+        case arg[0]
+          when :block
+            prefix, default = '&', 'block'
+          when :rest
+            prefix, default = '*', 'args'
+          else
+            prefix, default = '', nil
+        end
+        klass = style == :long && arg[1] ? "##{locals[arg[1]].class}" : ''
+        "#{prefix}#{arg[1] || default}#{klass}"
       end
-      return frame_args == '' ? '' :  "(#{frame_args})"
+
+      return "(#{my_args.join(', ')})"
     end
 
     def get_frame_call(prefix, pos)
