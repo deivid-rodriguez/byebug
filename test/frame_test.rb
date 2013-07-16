@@ -3,6 +3,7 @@ require_relative 'test_helper'
 class TestFrame < TestDsl::TestCase
   describe 'when byebug started at the beginning' do
     before do
+      @tst_file = fullpath('frame')
       enter 'break 23', 'cont'
     end
 
@@ -31,16 +32,10 @@ class TestFrame < TestDsl::TestCase
       debug_file('frame') { $state.line.must_equal 13 }
     end
 
-    it 'must set frame to the first one by default' do
-      enter 'up', 'frame'
-      debug_file('frame') { $state.line.must_equal 23 }
-    end
-
     it 'must print current stack frame when without arguments' do
       enter 'up', 'frame'
       debug_file('frame')
-      check_output_includes \
-        /#0  FrameExample.d(e#String) at #{fullpath('frame')}:23/x
+      check_output_includes /#1  FrameExample\.c at #{@tst_file}:18/
     end
 
     it 'must set frame to the first one' do
@@ -51,7 +46,7 @@ class TestFrame < TestDsl::TestCase
     it 'must set frame to the last one' do
       enter 'bt', 'frame -1'
       debug_file('frame') { $state.file.must_match /minitest\/unit.rb/ }
-      check_output_doesnt_include "at #{fullpath('frame')}:"
+      check_output_doesnt_include "at #{@tst_file}:"
     end
 
     it 'must not set frame if the frame number is too low' do
@@ -81,9 +76,9 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0  FrameExample.d(e#String) at #{fullpath('frame')}:23/x,
-                /#1  FrameExample.c at #{fullpath('frame')}:18/x,
-                /#2  FrameExample.b at #{fullpath('frame')}:13/x
+            /--> #0  FrameExample\.d\(e#String\) at #{@tst_file}:23/,
+                /#1  FrameExample\.c at #{@tst_file}:18/,
+                /#2  FrameExample\.b at #{@tst_file}:13/
         end
       end
 
@@ -94,10 +89,10 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0 FrameExample.d(e#String) at #{short_path(fullpath('frame'))}:23/x,
-                /#1 FrameExample.c at #{short_path(fullpath('frame'))}:18/x,
-                /#2 FrameExample.b at #{short_path(fullpath('frame'))}:13/x,
-                /#3 FrameExample.a at #{fullpath('frame')}:9/x
+            /--> #0  FrameExample\.d\(e#String\) at #{short_path(@tst_file)}:23/,
+                /#1  FrameExample\.c at #{short_path(@tst_file)}:18/,
+                /#2  FrameExample\.b at #{short_path(@tst_file)}:13/,
+                /#3  FrameExample\.a at #{short_path(@tst_file)}:9/
         end
       end
     end
@@ -110,10 +105,10 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes \
-            /--> #0 FrameExample.d(e#String) at #{fullpath('frame')}:23/x,
-                /#1 FrameExample.c at #{fullpath('frame')}:18/x,
-                /#2 FrameExample.b at #{fullpath('frame')}:13/x,
-                /#3 FrameExample.a at #{fullpath('frame')}:9/x
+            /--> #0  FrameExample\.d\(e#String\) at #{@tst_file}:23/,
+                /#1  FrameExample\.c at #{@tst_file}:18/,
+                /#2  FrameExample\.b at #{@tst_file}:13/,
+                /#3  FrameExample\.a at #{@tst_file}:9/
         end
       end
 
@@ -123,23 +118,25 @@ class TestFrame < TestDsl::TestCase
         it 'displays current backtrace with callstyle "short"' do
             enter 'where'
             debug_file 'frame'
-            check_output_includes /--> #0 d(e) at #{fullpath('frame')}:23/x,
-                                      /#1 c at #{fullpath('frame')}:18/x,
-                                      /#2 b at #{fullpath('frame')}:13/x,
-                                      /#3 a at #{fullpath('frame')}:9/x
+            check_output_includes /--> #0  d\(e\) at #{@tst_file}:23/,
+                                      /#1  c at #{@tst_file}:18/,
+                                      /#2  b at #{@tst_file}:13/,
+                                      /#3  a at #{@tst_file}:9/
         end
       end
     end
   end
 
   describe 'when byebug is started deep in the callstack' do
+    before { @tst_file = fullpath('frame_deep') }
+
     it 'must print backtrace' do
       enter 'break 16', 'cont', 'where'
       debug_file 'frame_deep'
       check_output_includes \
-        /--> #0  FrameExample.d(e#String) at #{fullpath('frame_deep')}:16/x,
-            /#1  FrameExample.c at #{fullpath('frame_deep')}:13/x,
-            /#2  FrameExample.b at #{fullpath('frame_deep')}:8/x
+        /--> #0  FrameDeepExample\.d\(e#String\) at #{@tst_file}:16/,
+            /#1  FrameDeepExample\.c at #{@tst_file}:13/,
+            /#2  FrameDeepExample\.b at #{@tst_file}:8/
     end
 
     it 'must go up' do
@@ -166,6 +163,7 @@ class TestFrame < TestDsl::TestCase
 
   describe 'c-frames (issue #10)' do
     before do
+      @tst_file = fullpath('frame')
       enter 'break 5', 'cont'
     end
 
@@ -173,9 +171,9 @@ class TestFrame < TestDsl::TestCase
       enter 'where'
       debug_file 'frame'
       check_output_includes \
-        /--> #0  FrameExample.initialize\(f#String\) at #{fullpath('frame')}:5/,
-            /\+-- #1  Class.new\(\*args\) at #{fullpath('frame')}:28/,
-            /#2  <top \(required\)> at #{fullpath('frame')}:28/
+        /--> #0  FrameExample.initialize\(f#String\) at #{@tst_file}:5/,
+            /\+-- #1  Class.new\(\*args\) at #{@tst_file}:28/,
+            /#2  <top \(required\)> at #{@tst_file}:28/
     end
 
     it 'must not navigate "up" to c-frames' do
@@ -203,5 +201,4 @@ class TestFrame < TestDsl::TestCase
       debug_file('post_mortem') { $state.line.must_equal 8 }
     end
   end
-
 end

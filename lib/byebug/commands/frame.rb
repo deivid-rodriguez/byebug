@@ -215,11 +215,8 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        pos = 0
-      else
-        return unless pos = get_int(@match[1], "Frame")
-      end
+      return print_frame @state.frame_pos unless @match[1]
+      return unless pos = get_int(@match[1], "Frame")
       adjust_frame(pos, true)
     end
 

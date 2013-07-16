@@ -233,9 +233,9 @@ class TestInfo < TestDsl::TestCase
     it 'must show stack info' do
       enter 'set fullpath', 'break 20', 'cont', 'info stack'
       debug_file 'info'
-      check_output_includes /--> #0  A.a at #{fullpath('info')}:20/x,
-                                /#1  A.b at #{fullpath('info')}:30/x,
-                                /#2  <main> at #{fullpath('info')}:36/x
+      check_output_includes /--> #0  InfoExample.a at #{fullpath('info')}:20/,
+                                /#1  InfoExample.b at #{fullpath('info')}:30/,
+                                /#2  <top \(required\)> at #{fullpath('info')}:36/
     end
   end
 
