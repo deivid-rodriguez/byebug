@@ -3,25 +3,48 @@ module Byebug
   # Mix-in module to assist in command parsing.
   module FrameFunctions
 
-    def adjust_frame(frame_pos, absolute, context=@state.context)
-      @state.frame_pos = 0 if context != @state.context
-      if absolute
-        if frame_pos < 0
-          abs_frame_pos = context.stack_size + frame_pos
-        else
-          abs_frame_pos = frame_pos
-        end
+    def c_frame?(frame_no)
+      @state.context.frame_binding(frame_no).nil?
+    end
+
+    def switch_to_frame(frame_no)
+      if frame_no < 0
+        abs_frame_no = @state.context.stack_size + frame_no
       else
-        abs_frame_pos = @state.frame_pos + frame_pos
+        abs_frame_no = frame_no
+      end
+    end
+
+    def navigate_to_frame(jump_no)
+      return if jump_no == 0
+      total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame_pos
+      step = jump_no/total_jumps
+      loop do
+        new_pos += step
+        return new_pos if new_pos < 0 || new_pos >= @state.context.stack_size
+
+        next if c_frame?(new_pos)
+
+        current_jumps += 1
+        break if current_jumps == total_jumps
+      end
+      return new_pos
+    end
+
+    def adjust_frame(frame_pos, absolute)
+      if absolute
+        abs_frame_pos = switch_to_frame(frame_pos)
+        return errmsg "Can't navigate to c-frame\n" if c_frame?(abs_frame_pos)
+      else
+        abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
-      if abs_frame_pos >= context.stack_size then
-        return errmsg "Adjusting would put us beyond the oldest frame.\n"
-      elsif abs_frame_pos < 0 then
-        return errmsg "Adjusting would put us beyond the newest frame.\n"
-      end
+      return errmsg "Can't navigate beyond the oldest frame\n" if
+        abs_frame_pos >= @state.context.stack_size
+      return errmsg "Can't navigate beyond the newest frame\n" if
+        abs_frame_pos < 0
 
-      if @state.frame_pos != abs_frame_pos then
+      if @state.frame_pos != abs_frame_pos
         @state.previous_line = nil
         @state.frame_pos = abs_frame_pos
       end
@@ -92,10 +115,11 @@ module Byebug
       end
 
       if mark_current
-        frame_str = (pos == @state.frame_pos) ? "--> " : "    "
+        frame_str = (pos == @state.frame_pos) ? '--> ' : '    '
       else
         frame_str = ""
       end
+      frame_str += c_frame?(pos) ? ' +-- ' : ''
 
       frame_str += sprintf "#%-2d ", pos
       frame_str += get_frame_call frame_str, pos
@@ -129,9 +153,11 @@ module Byebug
         %{w[here]|bt|backtrace\tdisplay stack frames
 
           Print the entire stack frame. Each frame is numbered, the most recent
-          frame is 0. frame number can be referred to in the "frame" command;
+          frame is 0. Frame number can be referred to in the "frame" command;
           "up" and "down" add or subtract respectively to frame numbers shown.
-          The position of the current frame is marked with -->.}
+          The position of the current frame is marked with -->. C-frames hang
+          from their most inmediate ruby frame to indicate that they are not
+          navigable}
       end
     end
   end

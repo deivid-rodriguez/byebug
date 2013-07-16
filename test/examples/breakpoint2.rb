@@ -3,5 +3,5 @@ c = 3
 e = 3 + 4
 f = e + 5
 
-A.a
-A.new.b
+BreakpointExample.a
+BreakpointExample.new.b

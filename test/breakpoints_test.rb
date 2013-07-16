@@ -71,8 +71,7 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must stop at the correct file' do
       enter 'break 14', 'cont'
-      debug_file('breakpoint') {
-        $state.file.must_equal fullpath('breakpoint') }
+      debug_file('breakpoint') { $state.file.must_equal fullpath('breakpoint') }
     end
 
     describe 'show a message' do
@@ -161,7 +160,7 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'set breakpoint to a method' do
     describe 'set breakpoint to an instance method' do
-      before { enter 'break A#b', 'cont' }
+      before { enter 'break BreakpointExample#b', 'cont' }
 
       it 'must stop at the correct line' do
         debug_file('breakpoint') { $state.line.must_equal 5 }
@@ -174,7 +173,7 @@ class TestBreakpoints < TestDsl::TestCase
     end
 
     describe 'set breakpoint to a class method' do
-      before { enter 'break A.a', 'cont' }
+      before { enter 'break BreakpointExample.a', 'cont' }
 
       it 'must stop at the correct line' do
         debug_file('breakpoint') { $state.line.must_equal 2 }

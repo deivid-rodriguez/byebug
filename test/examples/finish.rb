@@ -1,6 +1,6 @@
 byebug
 
-class A
+class FinishExample
   def a
     b
   end
@@ -17,4 +17,4 @@ class A
   end
 end
 
-A.new.a
+FinishExample.new.a

@@ -255,7 +255,7 @@ class TestInfo < TestDsl::TestCase
       debug_file 'info'
       check_output_includes 'a = "1111111111111111111111...',
                             'b = 2',
-                            /self = #<A:\S+.../,
+                            /self = #<InfoExample:\S+.../,
                             '@bla = "blabla"',
                             '@foo = "bar"'
     end
@@ -264,7 +264,7 @@ class TestInfo < TestDsl::TestCase
       enter 'break 26', 'cont', 'info variables'
       debug_file 'info'
       check_output_includes 'a = *Error in evaluation*',
-                            /self = #<A:\S+.../,
+                            /self = #<InfoExample:\S+.../,
                             '@bla = "blabla"',
                             '@foo = "bar"'
     end

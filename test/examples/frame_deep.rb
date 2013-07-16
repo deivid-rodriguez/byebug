@@ -1,4 +1,4 @@
-class A
+class FrameDeepExample
   def a
     z = 1
     z += b
@@ -17,4 +17,4 @@ class A
   end
 end
 
-A.new.a
+FrameDeepExample.new.a

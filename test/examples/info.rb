@@ -9,7 +9,7 @@ z = 8
 z = 9
 bla("a" * 30, "b")
 
-class A
+class InfoExample
   def initialize
     @foo = "bar"
     @bla = "blabla"
@@ -33,6 +33,6 @@ class A
   end
 end
 
-A.new.b
-A.new.a
-A.new.c
+InfoExample.new.b
+InfoExample.new.a
+InfoExample.new.c

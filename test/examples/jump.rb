@@ -1,6 +1,6 @@
 byebug
 
-class A
+class JumpExample
   def a
     a = 2
     b = 3
@@ -11,4 +11,4 @@ class A
   end
 end
 
-A.new.a
+JumpExample.new.a

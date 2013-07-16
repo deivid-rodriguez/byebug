@@ -1,5 +1,5 @@
 byebug
-class MethodEx
+class MethodExample
   def initialize
     @a = 'b'
     @c = 'd'
@@ -11,5 +11,5 @@ class MethodEx
     "asdf"
   end
 end
-a = MethodEx.new
+a = MethodExample.new
 a

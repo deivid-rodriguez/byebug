@@ -5,14 +5,14 @@ class TestMethod < TestDsl::TestCase
 
   describe 'show instance method of a class' do
     it 'must show using full command name' do
-      enter 'break 15', 'cont', 'method MethodEx'
+      enter 'break 15', 'cont', 'method MethodExample'
       debug_file 'method'
       check_output_includes /bla/
       check_output_doesnt_include /foo/
     end
 
     it 'must show using shortcut' do
-      enter 'break 15', 'cont', 'm MethodEx'
+      enter 'break 15', 'cont', 'm MethodExample'
       debug_file 'method'
       check_output_includes /bla/
     end

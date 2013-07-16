@@ -1,4 +1,4 @@
-class A
+class BreakpointExample
   def self.a
     4
   end
