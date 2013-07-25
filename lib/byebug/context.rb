@@ -21,7 +21,13 @@ module Byebug
 
     def ruby_frame_args bind
       return [] unless eval '__method__', bind
-      eval "self.method(__method__).parameters", bind
+      begin
+        eval "self.method(__method__).parameters", bind
+      rescue NameError => e
+        print "WARNING: Got exception #{e.class}: \"#{e.message}\" " \
+              "while retreving parameters from frame\n"
+        return []
+      end
     end
 
     def frame_args frame_no = 0
