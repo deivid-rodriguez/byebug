@@ -94,8 +94,8 @@ module Byebug
       when /^basename$/
         Command.settings[:basename] = set_on
       when /^callstyle$/
-        if args[0] and (args[0] == 'short' or arg[0] == 'long')
-          Command.settings[:callstyle] = arg[0].to_sym
+        if args[0] and (args[0] == 'short' or args[0] == 'long')
+          Command.settings[:callstyle] = args[0].to_sym
         else
           print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
