@@ -60,6 +60,13 @@ module Byebug
       return frame_class == '' ? '' : "#{frame_class}."
     end
 
+    def get_frame_block_and_method(pos)
+      frame_deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
+      frame_deco_method = "#{@state.context.frame_method pos}"
+      frame_block_and_method = frame_deco_regexp.match(frame_deco_method)[1..2]
+      return frame_block_and_method.map{ |x| x.nil? ? '' : x }
+    end
+
     def get_frame_args(style, pos)
       args = @state.context.frame_args pos
       return '' if args.empty?
@@ -82,11 +89,11 @@ module Byebug
     end
 
     def get_frame_call(prefix, pos)
+      frame_block, frame_method = get_frame_block_and_method(pos)
       frame_class = get_frame_class(Command.settings[:callstyle], pos)
-      frame_method = "#{@state.context.frame_method pos}"
       frame_args = get_frame_args(Command.settings[:callstyle], pos)
 
-      call_str = frame_class + frame_method + frame_args
+      call_str = frame_block + frame_class + frame_method + frame_args
 
       max_call_str_size = Command.settings[:width] - prefix.size
       if call_str.size > max_call_str_size

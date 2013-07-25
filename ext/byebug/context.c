@@ -226,7 +226,6 @@ Context_frame_method(int argc, VALUE *argv, VALUE self)
 
   loc = dc_frame_location(context, frame_n);
   return rb_str_intern(rb_funcall(loc, rb_intern("label"), 0));
-
 }
 
 static VALUE
