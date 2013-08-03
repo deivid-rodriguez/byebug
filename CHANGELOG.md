@@ -1,3 +1,10 @@
+## 1.7.0
+
+* Callstack display: specifically mark c-frames
+* Callstack navigation: skip c-frames
+* Callstack navigation: autolist after navigation commands
+
+
 ## 1.6.1
 
 * Windows compatibiliy: compilation and terminal width issues
@@ -16,7 +23,7 @@
 * No more Byebug.start to get correct callstack information! Dropping `byebug`
 anywhere and inmediately printing the stack just works now. :)
 
-
+ 
 ## 1.4.2
 
 * Fixes crash when using "help command subcommand"
