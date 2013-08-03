@@ -172,7 +172,7 @@ class TestFrame < TestDsl::TestCase
       debug_file 'frame'
       check_output_includes \
         /--> #0  FrameExample.initialize\(f#String\)\s+at #{@tst_file}:5/,
-            /\+-- #1  Class.new\(\*args\)\s+at #{@tst_file}:28/,
+            /ͱ-- #1  Class.new\(\*args\)\s+at #{@tst_file}:28/,
             /#2  <top \(required\)>\s+at #{@tst_file}:28/
     end
 

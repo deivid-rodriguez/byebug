@@ -126,7 +126,7 @@ module Byebug
       else
         frame_str = ""
       end
-      frame_str += c_frame?(pos) ? ' +-- ' : ''
+      frame_str += c_frame?(pos) ? ' ͱ-- ' : ''
 
       frame_str += sprintf "#%-2d ", pos
       frame_str += get_frame_call frame_str, pos
