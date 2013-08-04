@@ -89,8 +89,7 @@ because it is a default option in byebug.
 ## Getting Started
 
 A handful of commands are enough to get started using `byebug`. The following
-session illustrates these commands. Below is Ruby code to compute a triangle
-number of a given length (there are shorter ways to do it, of course).
+session illustrates these commands.
 
 ```
 $ byebug triangle.rb

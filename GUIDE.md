@@ -907,3 +907,184 @@ Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
 With an integer argument, list info on that breakpoint.
 ```
+
+### Control Commands: quit, restart, source
+
+#### Quit
+
+To exit `byebug`, type `quit` (abbreviated `q` and aliased `exit`). Normally if
+you are in an interactive session, this command will prompt you to confirm you
+really want to quit. If you don't want any questions asked, enter
+`quit unconditionally` (abbreviated `q!`).
+
+#### Restart
+
+To restart the program, use the `restart|r` command. This is a re-exec - all
+`byebug` state is lost. If command arguments are passed, those are used.
+Otherwise program arguments from the last invocation are used.
+
+You won't be able to restart your program in all cases. First, the program
+should have been invoked at the outset rather than having been called from
+inside your program or invoked as a result of post-mortem handling.
+
+#### Source
+
+You can run `byebug` commands inside a file, using the command `source <file>`.
+The lines in a command file are executed sequentially. They are not printed as
+they are executed. If there is an error, execution proceeds to the next command
+in the file. For information about command files that get run automatically on
+startup see [Command Files]().
+
+
+### Display Commands: display, undisplay
+
+#### Display
+
+If you find that you want to print the value of an expression frequently (to see
+how it changes), you might want to add it to the *automatic display list** so
+that `byebug` evaluates it each time your program stops or after a line is
+printed if line tracing is enabled. Each expression added to the list is given a
+number to identify it; to remove an expression from the list, you specify that
+number. The automatic display looks like this:
+
+```bash
+(byebug) display n
+1: n = 3
+```
+
+This display shows item numbers, expressions and their current values. If the
+expression is undefined or illegal the expression will be printed but no value
+will appear.
+
+```bash
+(byebug) display undefined_variable
+2: undefined_variable =
+(byebug) display 1/0
+3: 1/0 =
+```
+
+If you use `display` with no argument, `byebug` will display the current values
+of the expressions in the list, just as it is done when your program stops.
+Using `info display` has the same effect.
+
+#### Undisplay
+
+To remove an item from the list, use `undisplay` followed by the number
+identifying the expression you want to remove. `undisplay` does not repeat if
+you press `<RET>`after using it (otherwise you would just get the error _No
+display number n_)
+
+You can also temporarily disable or enable display expressions, so that the will
+not be printed but they won't be forgotten either, so you can toggle them again
+later. To do that, use `disable display` or `enable display` followed by the
+expression number.
+
+
+### Print Commands
+
+One way to examine and change data in your script is with the `eval` command
+(abbreviated `p`). `byebug` by default evaluates any input that is not
+recognized as a command, so in most situations `eval` is not necessary and
+`byebug` will work like a REPL. One case where it's necessary could be when
+trying to print a variable called `n`. In this case, you have no choice because
+typing just `n` will execute `byebug`'s command `next`.
+
+A similar command to `eval|p` is `pp` which tries to pretty print the result.
+
+If the value you want to print is an array, sometimes a columnized list looks
+nicer. Use `putl` for that. Notice however that entries are sorted to run down
+first rather than across. If the value is not an array `putl` will just call
+pretty-print.
+
+Sometimes you may want to print the array not only columnized, but sorted as
+well. The list of byebug help commands appears this way, and so does the output
+of the `method` commands. Use `ps` for that. If the value is not an array `ps`
+will just call pretty-print.
+
+Finally, if you need more advanced functionality from REPL's, you can enter
+`irb` or `pry` using `irb` or `pry` commands.
+
+```bash
+(byebug) Kernel.instance_methods
+[:nil?, :===, :=~, :!~, :eql?, :hash, :<=>, :class, :singleton_class, :clone,
+:dup, :taint, :tainted?, :untaint, :untrust, :untrusted?, :trust, :freeze,
+:frozen?, :to_s, :inspect, :methods, :singleton_methods, :protected_methods,
+:private_methods, :public_methods, :instance_variables, :instance_variable_get,
+:instance_variable_set, :instance_variable_defined?, :remove_instance_variable,
+:instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?,
+:extend, :display, :method, :public_method, :define_singleton_method,
+:object_id, :to_enum, :enum_for, :gem, :pretty_inspect, :byebug]
+(byebug) p Kernel.instance_methods
+[:nil?, :===, :=~, :!~, :eql?, :hash, :<=>, :class, :singleton_class, :clone,
+:dup, :taint, :tainted?, :untaint, :untrust, :untrusted?, :trust, :freeze,
+:frozen?, :to_s, :inspect, :methods, :singleton_methods, :protected_methods,
+:private_methods, :public_methods, :instance_variables, :instance_variable_get,
+:instance_variable_set, :instance_variable_defined?, :remove_instance_variable,
+:instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?,
+:extend, :display, :method, :public_method, :define_singleton_method,
+:object_id, :to_enum, :enum_for, :gem, :pretty_inspect, :byebug]
+(byebug) pp Kernel.instance_methods
+[:nil?,
+ :===,
+ :=~,
+ :!~,
+ :eql?,
+ :hash,
+ :<=>,
+ :class,
+ :singleton_class,
+ :clone,
+ :dup,
+ :taint,
+ :tainted?,
+ :untaint,
+ :untrust,
+ :untrusted?,
+ :trust,
+ :freeze,
+ :frozen?,
+ :to_s,
+ :inspect,
+ :methods,
+ :singleton_methods,
+ :protected_methods,
+ :private_methods,
+ :public_methods,
+ :instance_variables,
+ :instance_variable_get,
+ :instance_variable_set,
+ :instance_variable_defined?,
+ :remove_instance_variable,
+ :instance_of?,
+ :kind_of?,
+ :is_a?,
+ :tap,
+ :send,
+ :public_send,
+ :respond_to?,
+ :extend,
+ :display,
+ :method,
+ :public_method,
+ :define_singleton_method,
+ :object_id,
+ :to_enum,
+ :enum_for,
+ :gem,
+ :pretty_inspect,
+ :byebug]
+(byebug) putl Kernel.instance_methods
+nil?  <=>              tainted?    frozen?            private_methods             remove_instance_variable  public_send    define_singleton_method  byebug
+===   class            untaint     to_s               public_methods              instance_of?              respond_to?    object_id
+=~    singleton_class  untrust     inspect            instance_variables          kind_of?                  extend         to_enum
+!~    clone            untrusted?  methods            instance_variable_get       is_a?                     display        enum_for
+eql?  dup              trust       singleton_methods  instance_variable_set       tap                       method         gem
+hash  taint            freeze      protected_methods  instance_variable_defined?  send                      public_method  pretty_inspect
+(byebug) ps Kernel.instance_methods
+!~      clone                    extend   instance_of?                kind_of?        private_methods           respond_to?        tap      untrusted?
+<=>     define_singleton_method  freeze   instance_variable_defined?  method          protected_methods         send               to_enum
+===     display                  frozen?  instance_variable_get       methods         public_method             singleton_class    to_s   
+=~      dup                      gem      instance_variable_set       nil?            public_methods            singleton_methods  trust  
+byebug  enum_for                 hash     instance_variables          object_id       public_send               taint              untaint
+class   eql?                     inspect  is_a?                       pretty_inspect  remove_instance_variable  tainted?           untrust
+```
