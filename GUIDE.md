@@ -1001,9 +1001,6 @@ well. The list of byebug help commands appears this way, and so does the output
 of the `method` commands. Use `ps` for that. If the value is not an array `ps`
 will just call pretty-print.
 
-Finally, if you need more advanced functionality from REPL's, you can enter
-`irb` or `pry` using `irb` or `pry` commands.
-
 ```bash
 (byebug) Kernel.instance_methods
 [:nil?, :===, :=~, :!~, :eql?, :hash, :<=>, :class, :singleton_class, :clone,
@@ -1088,3 +1085,77 @@ hash  taint            freeze      protected_methods  instance_variable_defined?
 byebug  enum_for                 hash     instance_variables          object_id       public_send               taint              untaint
 class   eql?                     inspect  is_a?                       pretty_inspect  remove_instance_variable  tainted?           untrust
 ```
+
+Finally, if you need more advanced functionality from REPL's, you can enter
+`irb` or `pry` using `irb` or `pry` commands. The bindings environment will be
+set to the current state in the program.  When you leave the repl and go back to
+`byebug`'s command prompt we show the file, line and text position of the
+program. If you issue a `list` without location information, the default
+location used is the current line rather than the current position that may have
+got updated via a prior `list` command.
+
+```
+$ byebug triangle.rb
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    1: # Compute the n'th triangle number, the hard way: triangle(n) == (n*(n+1))/2
+=>  2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: if __FILE__ == $0
+(byebug) irb
+2.0.0-p247 :001 > (0..6).inject{|sum, i| sum +=i}
+ => 21
+2.0.0-p247 :002 > exit
+/home/davidr/Proyectos/byebug/old_doc/triangle.rb @ 2
+def triangle(n)
+(byebug) list # same line range as before going into irb
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    1: # Compute the n'th triangle number, the hard way: triangle(n) == (n*(n+1))/2
+=>  2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: if __FILE__ == $0
+(byebug)
+```
+
+### Printing variables
+
+Byebug can print many different information about variables. Such as
+* `var const <object>`. Show the constants of `<object>`. This is basically
+listing variables and their values in `<object>.constant`.
+* `var instance <object>`. Show the instance variables of `<object>`. This is
+basically listing `<object>.instance_variables`.
+* `info instance_variables`. Show instance_variables of `self`.
+* `info locals`. Show local variables.
+* `info globals`. Show global variables.
+* `info variables`. Show local and instance variables of `self`.
+* `method instance <object>`. Show methods of `<object>`. Basically this is the
+same as running `ps <object>.instance_methods(false)`.
+* `method iv <object>`. Show method instance variables of `object`. Basically
+this is the same as running
+```
+  <object>.instance_variables.each do |v|
+     puts "%s = %s\n" % [v, <object>.instance_variable_get(v)]
+  end
+```
+* `signature <object>`. Show signature of method `<object>`. _This command is
+available only if the nodewrap gem is installed_.
+```
+  def mymethod(a, b=5, &bock)
+  end
+  (byebug) method sig mymethod
+  Mine#mymethod(a, b=5, &bock)
+```
+* `method <class-or-module>`. Show methods of the class or module
+`<class-or-module>`. Basically this is the same as running
+`ps <class-or-module>.methods`.
