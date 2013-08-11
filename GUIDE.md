@@ -673,7 +673,7 @@ puts "rocky's byebugrc run"
 
 Here are the default values in `options`
 
-```ruby
+```
 #<OpenStruct annotate=nil, nx=false, quit=true, restart_script=nil, script=nil,
              stop=true, tracing=false, verbose_long=false>
 ```
@@ -1150,12 +1150,14 @@ this is the same as running
 ```
 * `signature <object>`. Show signature of method `<object>`. _This command is
 available only if the nodewrap gem is installed_.
-```
+
+```ruby
   def mymethod(a, b=5, &bock)
   end
   (byebug) method sig mymethod
   Mine#mymethod(a, b=5, &bock)
 ```
+
 * `method <class-or-module>`. Show methods of the class or module
 `<class-or-module>`. Basically this is the same as running
 `ps <class-or-module>.methods`.
