@@ -4,7 +4,6 @@ require_relative 'byebug/context'
 require_relative 'byebug/processor'
 require 'pp'
 require 'stringio'
-require 'socket'
 require 'linecache19'
 
 module Byebug
