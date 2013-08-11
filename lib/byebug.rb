@@ -2,8 +2,6 @@ require_relative 'byebug.so'
 require_relative 'byebug/version'
 require_relative 'byebug/context'
 require_relative 'byebug/processor'
-require 'pp'
-require 'stringio'
 require 'linecache19'
 
 module Byebug

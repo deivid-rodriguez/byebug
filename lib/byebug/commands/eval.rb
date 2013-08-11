@@ -1,5 +1,6 @@
-module Byebug
+require 'pp'
 
+module Byebug
   module EvalFunctions
     def run_with_binding
       binding = get_binding
@@ -135,8 +136,6 @@ module Byebug
   class PSCommand < Command
     include Columnize
     self.allow_in_control = true
-
-    include EvalFunctions
 
     def regexp
       /^\s*ps\s+/
