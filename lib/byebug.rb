@@ -2,6 +2,7 @@ require_relative 'byebug.so'
 require_relative 'byebug/version'
 require_relative 'byebug/context'
 require_relative 'byebug/processor'
+require_relative 'byebug/remote'
 require 'linecache19'
 
 module Byebug
@@ -29,9 +30,6 @@ module Byebug
 
     # gdb-style annotation mode. Used in GNU Emacs interface
     attr_accessor :annotate
-
-    # If in remote mode, wait for the remote connection
-    attr_accessor :wait_connection
 
     def source_reload
       Object.send(:remove_const, "SCRIPT_LINES__") if
