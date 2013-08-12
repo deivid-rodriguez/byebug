@@ -175,8 +175,8 @@ module Byebug
     register_setting_var(:listsize, 10)
     register_setting_var(:stack_trace_on_error, false)
     register_setting_var(:tracing_plus, false)
-    cols = terminal_width || 80
-    register_setting_var(:width, cols > 10 ? cols : 80)
+    cols = terminal_width || 160
+    register_setting_var(:width, cols > 10 ? cols : 160)
     Byebug::ARGV = ARGV.clone unless defined? Byebug::ARGV
     register_setting_var(:argv, Byebug::ARGV)
 
