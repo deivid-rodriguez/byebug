@@ -1,3 +1,8 @@
+## 1.8.1
+
+* Bugfix release
+
+
 ## 1.8.0
 
 * Remote debugging support
