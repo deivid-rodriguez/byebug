@@ -3,15 +3,15 @@ require_relative 'test_helper'
 class TestInfo < TestDsl::TestCase
   include Columnize
 
-   describe 'Args info' do
-     temporary_change_hash Byebug::Command.settings, :width, 15
+  describe 'Args info' do
+    temporary_change_hash Byebug::Command.settings, :width, 15
 
-     it 'must show info about all args' do
-       enter 'break 3', 'cont', 'info args'
-       debug_file 'info'
-       check_output_includes 'a = "aaaaaaa...', 'b = "b"'
-     end
-   end
+    it 'must show info about all args' do
+      enter 'break 3', 'cont', 'info args'
+      debug_file 'info'
+      check_output_includes 'a = "aaaaaaa...', 'b = "b"'
+    end
+  end
 
   describe 'Breakpoints info' do
     it 'must show info about all breakpoints' do
