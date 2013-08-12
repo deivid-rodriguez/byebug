@@ -1,3 +1,8 @@
+## 1.8.0
+
+* Remote debugging support
+
+
 ## 1.7.0
 
 * Callstack display: specifically mark c-frames
