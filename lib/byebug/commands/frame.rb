@@ -104,7 +104,13 @@ module Byebug
     end
 
     def print_backtrace
-      (0...@state.context.stack_size).each do |idx|
+      realsize = caller.drop_while {|e| e[/\(eval\)|byebug/] }.size
+      if @state.context.stack_size != realsize
+        errmsg "Warning, Byebug's stacksize (#{@state.context.stack_size}) is" \
+               " incorrect (must be #{realsize}). This might be a bug in " \
+               "byebug or ruby's debugging API's\n"
+      end
+      (0...realsize).each do |idx|
         print_frame(idx)
       end
     end
