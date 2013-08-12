@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/lib/byebug/version'
 Gem::Specification.new do |s|
   s.name        = 'byebug'
   s.version     = Byebug::VERSION
-  s.authors     = ['David Rodríguez', 'Kent Sibilev', 'Mark Moseley']
+  s.authors     = ['David Rodriguez', 'Kent Sibilev', 'Mark Moseley']
   s.email       = 'deivid.rodriguez@mail.com'
   s.license     = 'BSD'
   s.homepage    = 'http://github.com/deivid-rodriguez/byebug'
