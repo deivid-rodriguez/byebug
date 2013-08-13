@@ -75,7 +75,7 @@ because it is a default option in byebug.
   - Line number wrongly shown as zero in backtrace.
   - Line tracing.
   - Colon delimited include paths.
-  - Nice markdow guide.
+  - Nice markdown guide.
   - Ruby 2.0 support.
   - where/bt does not in fact give a backtrace.
   - `byebug` can now be placed at the end of a block or method call.
