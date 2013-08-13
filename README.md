@@ -244,6 +244,8 @@ quit without being prompted, suffix the command with an exclamation mark, e.g.,
 
 * [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) adds `next`,
   `step`, `finish`, `continue` and `break` commands to pry using byebug.
+* [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger)
+Adds a rake task that restarts Passenger with byebug connected.
 
 
 ## Credits
