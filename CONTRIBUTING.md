@@ -1,1 +1,9 @@
-Thanks for trying out this project! [See here for contribution guidelines.](http://tagaholic.me/contributing.html)
+Thanks for your interest in contributing to ByeBug!
+
+To make your changes, follow this steps:
+
+* [Fork the project](https://help.github.com/fork-a-repo)
+* Create a topic branch - `git checkout -b my_branch`
+* Insert awesome code
+* Push your branch to your forked repo - `git push origin my_branch`
+* [Make a pull request](https://help.github.com/articles/using-pull-requests)
