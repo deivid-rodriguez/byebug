@@ -29,16 +29,20 @@ module Byebug
       print afmt(msg) if Byebug.annotate.to_i > 2
     end
 
-    protected
-      def format(*args)
-        if args.is_a?(Array)
-          new_args = args.first
-          new_args = new_args % args[1..-1] unless args[1..-1].empty?
-        else
-          new_args = args
-        end
-        new_args.gsub('%', '%%')
+
+    def format(*args)
+      if args.is_a?(Array)
+        new_args = args.first
+        new_args = new_args % args[1..-1] unless args[1..-1].empty?
+      else
+        new_args = args
       end
+      new_args
+    end
+
+    def escape(msg)
+      msg.gsub('%', '%%')
+    end
   end
 
   class LocalInterface < Interface
@@ -72,7 +76,7 @@ module Byebug
     end
 
     def print(*args)
-      STDOUT.printf(format(*args))
+      STDOUT.printf(escape(format(*args)))
     end
 
     def close

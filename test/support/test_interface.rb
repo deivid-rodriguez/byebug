@@ -14,7 +14,7 @@ class TestInterface < Byebug::Interface
   end
 
   def errmsg(*args)
-    @error_queue << format(args)
+    @error_queue << format(*args)
   end
 
   def read_command(*args)
@@ -30,7 +30,7 @@ class TestInterface < Byebug::Interface
   end
 
   def print(*args)
-    @output_queue << format(args)
+    @output_queue << format(*args)
   end
 
   def confirm(message)
@@ -56,14 +56,4 @@ class TestInterface < Byebug::Interface
       "confirm_queue: #{confirm_queue.inspect}"
     ].join("\n")
   end
-
-  private
-
-    def format(args)
-      if args.size > 1
-        args.first % args[1..-1]
-      else
-        args.first
-      end
-    end
 end
