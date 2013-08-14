@@ -45,7 +45,7 @@ module Byebug
       @last_line              = nil   # Line number the last time we stopped
       @breakpoints_were_empty = false # Show breakpoints 1st time
       @displays_were_empty    = true  # No display 1st time
-      @context_was_dead       = true  # Assume we haven't started.
+      @context_was_dead       = false  # Assume we haven't started.
     end
 
     def interface=(interface)
@@ -259,6 +259,7 @@ module Byebug
         if @context_was_dead
           aprint 'exited'
           print "The program finished.\n"
+          @context_was_dead = false
         end
 
         if Byebug.annotate.to_i > 2
@@ -346,8 +347,8 @@ module Byebug
   class ControlCommandProcessor < Processor
 
     def initialize(interface)
-      @context_was_dead = true # Assume we haven't started.
       super(interface)
+      @context_was_dead = false # Assume we haven't started.
     end
 
     def process_commands(verbose=false)

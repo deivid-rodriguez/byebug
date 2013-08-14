@@ -29,7 +29,6 @@ module Byebug
       print afmt(msg) if Byebug.annotate.to_i > 2
     end
 
-
     def format(*args)
       if args.is_a?(Array)
         new_args = args.first
