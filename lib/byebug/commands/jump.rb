@@ -23,10 +23,8 @@ module Byebug
 
       line = @match[1].to_i
       line = @state.context.frame_line(0) + line if @match[1][0] == '+' or @match[1][0] == '-'
-      if line == @state.context.frame_line(0)
-        CommandProcessor.print_location_and_text(@state.context.frame_file(0), line)
-        return
-      end
+      return aprint @state.location if line == @state.context.frame_line(0)
+
       file = @match[2]
       file = @state.context.frame_file(file.to_i) if numeric?(file)
       file = @state.context.frame_file(0) if !file

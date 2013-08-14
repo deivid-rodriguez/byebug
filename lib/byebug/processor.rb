@@ -81,21 +81,6 @@ module Byebug
       end
     end
 
-    def self.print_location_and_text(file, line)
-      if file == '(irb)' || file == '-e'
-        file_line = "#{canonic_file(file)} @ #{line}\n"
-      else
-        file_line = "#{canonic_file(file)} @ #{line}\n" \
-                    "#{Byebug.line_at(file, line)}\n"
-      end
-
-      # FIXME: use annotations routines
-      if Byebug.annotate.to_i > 2
-        file_line = "\032\032source #{file_line}"
-      end
-      print file_line
-    end
-
     def self.protect(mname)
       alias_method "__#{mname}", mname
       module_eval %{
@@ -232,9 +217,7 @@ module Byebug
         $state = Command.settings[:testing] ? state : nil
 
         preloop(commands, context)
-        if Command.settings[:autolist] == 0
-          CommandProcessor.print_location_and_text(file, line)
-        end
+        aprint state.location if Command.settings[:autolist] == 0
 
         while !state.proceed?
           input = @interface.command_queue.empty? ?
@@ -355,6 +338,12 @@ module Byebug
 
         def proceed
           @proceed = true
+        end
+
+        def location
+          loc = "#{CommandProcessor.canonic_file(@file)} @ #{@line}\n"
+          loc += "#{Byebug.line_at(@file, @line)}\n" unless
+            ['(irb)', '-e'].include? @file
         end
       end
 

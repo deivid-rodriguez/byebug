@@ -84,7 +84,7 @@ module Byebug
       else
         file = @state.context.frame_file(0)
         line = @state.context.frame_line(0)
-        CommandProcessor.print_location_and_text(file, line)
+        print @state.location
         @state.previous_line = nil
       end
     end
