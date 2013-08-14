@@ -26,7 +26,7 @@ module Byebug
     end
 
     def aprint(msg)
-      print afmt(msg)
+      print afmt(msg) if Byebug.annotate.to_i > 2
     end
 
     protected

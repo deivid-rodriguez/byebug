@@ -9,17 +9,11 @@ module Byebug
     attr_accessor :interface
 
     extend Forwardable
-    def_delegators :@interface, :errmsg, :print
+    def_delegators :@interface, :errmsg, :print, :aprint, :afmt
 
-    # Format msg with gdb-style annotation header
-    def afmt(msg, newline="\n")
-      "\032\032#{msg}#{newline}"
+    def initialize(interface)
+      @interface = interface
     end
-
-    def aprint(msg)
-      print afmt(msg) if Byebug.annotate.to_i > 2
-    end
-
   end
 
   class CommandProcessor < Processor
@@ -42,13 +36,13 @@ module Byebug
                                  ]
 
     def initialize(interface = LocalInterface.new)
-      @interface = interface
-      @display = []
+      super(interface)
 
+      @display = []
       @mutex = Mutex.new
       @last_cmd               = nil   # To allow empty (just <RET>) commands
       @last_file              = nil   # Filename the last time we stopped
-      @last_line              = nil   # line number the last time we stopped
+      @last_line              = nil   # Line number the last time we stopped
       @breakpoints_were_empty = false # Show breakpoints 1st time
       @displays_were_empty    = true  # No display 1st time
       @context_was_dead       = true  # Assume we haven't started.
@@ -101,19 +95,17 @@ module Byebug
     end
 
     def at_breakpoint(context, breakpoint)
-      aprint 'stopped' if Byebug.annotate.to_i > 2
+      aprint 'stopped'
       n = Byebug.breakpoints.index(breakpoint) + 1
       file = CommandProcessor.canonic_file(breakpoint.source)
       line = breakpoint.pos
-      if Byebug.annotate.to_i > 2
-        print afmt("source #{file}:#{line}")
-      end
+      aprint "source #{file}:#{line}"
       print "Stopped by breakpoint #{n} at #{file}:#{line}\n"
     end
     protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
-      aprint 'stopped' if Byebug.annotate.to_i > 2
+      aprint 'stopped'
       file = CommandProcessor.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
@@ -175,7 +167,7 @@ module Byebug
           cmd.allow_in_post_mortem
         end if context.dead?
 
-        state = State.new(event_cmds, context, display, file, interface, line)
+        state = State.new(event_cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
         Command.settings[:autolist] = 0 if file == '(irb)' or file == '-e'
@@ -263,12 +255,13 @@ module Byebug
       def preloop(commands, context)
         @context_was_dead = true if context.dead? and not @context_was_dead
 
+        aprint 'stopped'
+        if @context_was_dead
+          aprint 'exited'
+          print "The program finished.\n"
+        end
+
         if Byebug.annotate.to_i > 2
-          aprint('stopped')
-          if @context_was_dead
-            aprint('exited')
-            print "The program finished.\n"
-          end
           breakpoint_annotations(commands, context)
           display_annotations(commands, context)
           annotation('stack', commands, context, "where")
@@ -290,7 +283,7 @@ module Byebug
               context.dead?
           end
           if not context.dead? and @@Show_annotations_run.find{|pat| cmd =~ pat}
-            aprint 'starting'
+            afmt 'starting'
             @context_was_dead = false
           end
         end
@@ -330,7 +323,7 @@ module Byebug
         end
 
         extend Forwardable
-        def_delegators :@interface, :errmsg, :print, :confirm
+        def_delegators :@interface, :aprint, :errmsg, :print, :confirm
 
         def proceed?
           @proceed
@@ -353,9 +346,8 @@ module Byebug
   class ControlCommandProcessor < Processor
 
     def initialize(interface)
-      super()
-      @interface = interface
       @context_was_dead = true # Assume we haven't started.
+      super(interface)
     end
 
     def process_commands(verbose=false)
@@ -365,12 +357,10 @@ module Byebug
       state = State.new(@interface, control_cmds)
       commands = control_cmds.map{|cmd| cmd.new(state) }
 
-      unless @context_was_dead
-        if Byebug.annotate.to_i > 2
-          aprint 'exited'
-          print "The program finished.\n"
-        end
-        @context_was_dead = true
+      if @context_was_dead
+        aprint 'exited'
+        print "The program finished.\n"
+        @context_was_dead = false
       end
 
       while input = @interface.read_command(prompt(nil))
@@ -395,8 +385,7 @@ module Byebug
     # Note: have an unused 'context' parameter to match the local interface.
     def prompt(context)
       p = '(byebug:ctrl) '
-      p = afmt("pre-prompt") + p + "\n" + afmt("prompt") if
-        Byebug.annotate.to_i > 2
+      p = afmt("pre-prompt") +p+"\n"+ afmt("prompt") if Byebug.annotate.to_i > 2
       return p
     end
 

@@ -2,7 +2,7 @@ class TestInterface < Byebug::Interface
   attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue
 
   attr_accessor :command_queue, :histfile, :history_length, :history_save
-  attr_accessor :print_queue, :readline_support, :restart_file, :test_block
+  attr_accessor :readline_support, :restart_file, :test_block
 
   def initialize
     @input_queue = []
@@ -10,7 +10,6 @@ class TestInterface < Byebug::Interface
     @error_queue = []
     @confirm_queue = []
     @command_queue = []
-    @print_queue = []
     @readline_support = false
   end
 
@@ -54,8 +53,7 @@ class TestInterface < Byebug::Interface
       "input_queue: #{input_queue.inspect}",
       "output_queue: #{output_queue.inspect}",
       "error_queue: #{error_queue.inspect}",
-      "confirm_queue: #{confirm_queue.inspect}",
-      "print_queue: #{print_queue.inspect}"
+      "confirm_queue: #{confirm_queue.inspect}"
     ].join("\n")
   end
 
