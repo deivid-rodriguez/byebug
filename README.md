@@ -37,6 +37,7 @@ directly affecting byebug and a fix for it has been released with this
 patchlevel (see [#5](https://github.com/deivid-rodriguez/byebug/issues/5) for
 more information)
 
+
 ## Usage
 
 Simply drop
@@ -47,8 +48,13 @@ wherever you want to start debugging and the execution will stop there. If you
 are debugging rails, start the server and once the execution get to your
 `byebug` command you will get a debugging prompt.
 
-_If you are coming from debugger, notice that stopping execution using the word
- `debugger` doesn't work anymore unless you explicitly alias it._
+Former `debugger` or `ruby-debug` users, notice:
+_Stopping execution using the word `debugger` doesn't work anymore unless you
+explicitly alias it._
+_Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
+require and start the debugger. This flags are a performance penalty and Byebug
+doesn't need them anymore so my recommendation is not to use them._
+
 
 ### Configuration
 
