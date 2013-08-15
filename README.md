@@ -48,28 +48,17 @@ wherever you want to start debugging and the execution will stop there. If you
 are debugging rails, start the server and once the execution get to your
 `byebug` command you will get a debugging prompt.
 
-Former `debugger` or `ruby-debug` users, notice:
-_Stopping execution using the word `debugger` doesn't work anymore unless you
-explicitly alias it._
-_Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
+Former [debugger](https://github.com/cldwalker/debugger) or
+[ruby-debug](https://github.com/mark-moseley/ruby-debug) users, notice:
+
+* Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
 require and start the debugger. This flags are a performance penalty and Byebug
-doesn't need them anymore so my recommendation is not to use them._
-
-
-### Configuration
-
-You can automatically load some configurations at startup by dropping them in
-the startup file `.byebugrc`. For example, you can change the number of lines
-listed whenever byebug stops like this:
-
-    set listsize 20
-
-If you are coming from [debugger](https://github.com/cldwalker/debugger), notice
-however that you no longer need
-
-    set autoreload
-
-because it is a default option in byebug.
+doesn't need them anymore so my recommendation is not to use them.
+* Stopping execution using the word `debugger` doesn't work anymore unless you
+explicitly alias it. Similarly, the startup configuration file is now called
+`.byebugrc` instead of `.rdebugrc`.
+* `autoreload`, `autoeval` and `autolist` are default options in Byebug so you
+no longer need to set them in the startup file.
 
 
 ## What's different from debugger
