@@ -19,8 +19,7 @@ module Byebug
         if not File.executable?(Byebug::PROG_SCRIPT)
           print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
                 "We'll add a call to Ruby.\n"
-          ruby = begin defined?(Gem) ? Gem.ruby : "ruby" rescue "ruby" end
-          cmd = "#{ruby} -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
+          cmd = "ruby -rbyebug -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
         else
           cmd = Byebug::PROG_SCRIPT
         end
