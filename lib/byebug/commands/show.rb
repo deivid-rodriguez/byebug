@@ -132,7 +132,7 @@ module Byebug
         on_off = Command.settings[:stack_trace_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."
       when /^version$/
-        return "byebug #{Byebug::VERSION}"
+        return "Byebug #{Byebug::VERSION}"
       when /^width$/
         return "width is #{Command.settings[:width]}."
       else

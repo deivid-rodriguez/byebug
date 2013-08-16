@@ -137,7 +137,7 @@ class TestShow < TestDsl::TestCase
     it 'must show version' do
       enter 'show version'
       debug_file 'show'
-      check_output_includes "byebug #{Byebug::VERSION}"
+      check_output_includes "Byebug #{Byebug::VERSION}"
     end
   end
 
