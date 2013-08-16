@@ -2,7 +2,6 @@ module Byebug
 
   # Mix-in module to assist in command parsing.
   module FrameFunctions
-
     def c_frame?(frame_no)
       @state.context.frame_binding(frame_no).nil?
     end

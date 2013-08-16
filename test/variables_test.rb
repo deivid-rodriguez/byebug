@@ -29,7 +29,7 @@ class TestVariables < TestDsl::TestCase
       check_output_includes 'SOMECONST => "foo"'
     end
 
-    it 'must show error message if given object is not a Class or a Module' do
+    it 'must show error message if given object is not a class or a module' do
       enter 'break 25', 'cont', 'var const v'
       debug_file 'variables'
       check_output_includes 'Should be Class/Module: v'
