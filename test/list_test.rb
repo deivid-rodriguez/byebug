@@ -28,7 +28,7 @@ class TestList < TestDsl::TestCase
     end
 
     describe 'very large' do
-      temporary_change_hash Byebug::Command.settings, :listsize, 50
+      temporary_change_hash Byebug.settings, :listsize, 50
 
       it 'must list whole file if number of lines is smaller than listsize' do
         enter 'break 3', 'cont'
@@ -57,7 +57,7 @@ class TestList < TestDsl::TestCase
   end
 
   describe 'list backwards' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 0
+    temporary_change_hash Byebug.settings, :autolist, 0
 
     it 'must show surrounding lines with the first call' do
       enter 'break 15', 'cont', 'list -'
@@ -77,7 +77,7 @@ class TestList < TestDsl::TestCase
   end
 
   describe 'list surrounding' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 0
+    temporary_change_hash Byebug.settings, :autolist, 0
 
     it 'must show the surrounding lines with =' do
       enter 'break 5', 'cont', 'list ='
@@ -140,7 +140,7 @@ class TestList < TestDsl::TestCase
     after  { change_line_in_file(fullpath('list'), 4, 'a = 4')   }
 
     describe 'when autoreload is false' do
-      temporary_change_hash Byebug::Command.settings, :autoreload, false
+      temporary_change_hash Byebug.settings, :autoreload, false
 
       it 'must not reload listing with file changes' do
         enter -> { change_line_in_file fullpath('list'), 4, 'a = 100' ;

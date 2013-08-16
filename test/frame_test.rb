@@ -70,7 +70,7 @@ class TestFrame < TestDsl::TestCase
       end
 
       describe 'when set' do
-        temporary_change_hash Byebug::Command.settings, :fullpath, true
+        temporary_change_hash Byebug.settings, :fullpath, true
 
         it 'must display current backtrace with fullpaths' do
           enter 'where'
@@ -83,7 +83,7 @@ class TestFrame < TestDsl::TestCase
       end
 
       describe 'when unset' do
-        temporary_change_hash Byebug::Command.settings, :fullpath, false
+        temporary_change_hash Byebug.settings, :fullpath, false
 
         it 'must display current backtrace with shortpaths' do
           enter 'where'
@@ -99,7 +99,7 @@ class TestFrame < TestDsl::TestCase
 
     describe 'callstyle' do
       describe 'long' do
-        temporary_change_hash Byebug::Command.settings, :callstyle, :long
+        temporary_change_hash Byebug.settings, :callstyle, :long
 
         it 'displays current backtrace with callstyle "long"' do
           enter 'where'
@@ -113,7 +113,7 @@ class TestFrame < TestDsl::TestCase
       end
 
       describe 'short' do
-        temporary_change_hash Byebug::Command.settings, :callstyle, :short
+        temporary_change_hash Byebug.settings, :callstyle, :short
 
         it 'displays current backtrace with callstyle "short"' do
             enter 'where'

@@ -3,7 +3,7 @@ require_relative 'test_helper'
 class TestReload < TestDsl::TestCase
 
   describe 'autoreloading' do
-    after { Byebug::Command.settings[:autoreload] = true }
+    after { Byebug.settings[:autoreload] = true }
 
     it 'must notify that automatic reloading is on by default' do
       enter 'reload'

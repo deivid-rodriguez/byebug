@@ -3,63 +3,63 @@ require_relative 'test_helper'
 class TestSet < TestDsl::TestCase
 
   describe 'setting to on' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 0
+    temporary_change_hash Byebug.settings, :autolist, 0
 
     it 'must set a setting to on' do
       enter 'set autolist on'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 1
+      Byebug.settings[:autolist].must_equal 1
     end
 
     it 'must set a setting to on by 1' do
       enter 'set autolist 1'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 1
+      Byebug.settings[:autolist].must_equal 1
     end
 
     it 'must set a setting to on by default' do
       enter 'set autolist'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 1
+      Byebug.settings[:autolist].must_equal 1
     end
 
     it 'must set a setting using shortcut' do
       enter 'set autol'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 1
+      Byebug.settings[:autolist].must_equal 1
     end
   end
 
   describe 'setting to off' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 1
+    temporary_change_hash Byebug.settings, :autolist, 1
 
     it 'must set a setting to off' do
       enter 'set autolist off'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 0
+      Byebug.settings[:autolist].must_equal 0
     end
 
     it 'must set a setting to off by 0' do
       enter 'set autolist 0'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 0
+      Byebug.settings[:autolist].must_equal 0
     end
 
     it 'must set a setting to off by "no" prefix' do
       enter 'set noautolist'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 0
+      Byebug.settings[:autolist].must_equal 0
     end
 
     it 'must set a setting to off by "no" prefix and shortcut' do
       enter 'set noautol'
       debug_file 'set'
-      Byebug::Command.settings[:autolist].must_equal 0
+      Byebug.settings[:autolist].must_equal 0
     end
   end
 
   describe 'messages' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 0
+    temporary_change_hash Byebug.settings, :autolist, 0
 
     it 'must show a message after setting' do
       enter 'set autolist on'
@@ -71,7 +71,7 @@ class TestSet < TestDsl::TestCase
   describe 'testing' do
     describe '$state' do
       describe 'when setting "testing" to on' do
-        temporary_change_hash Byebug::Command.settings, :testing, false
+        temporary_change_hash Byebug.settings, :testing, false
 
         it 'must get set' do
           enter 'set testing', 'break 3', 'cont'
@@ -81,7 +81,7 @@ class TestSet < TestDsl::TestCase
       end
 
       describe 'when setting "testing" to off' do
-        temporary_change_hash Byebug::Command.settings, :testing, true
+        temporary_change_hash Byebug.settings, :testing, true
 
         it 'must get unset' do
           enter 'set notesting', 'break 3', 'cont'
@@ -158,12 +158,12 @@ class TestSet < TestDsl::TestCase
   end
 
   describe 'width' do
-    temporary_change_hash Byebug::Command.settings, :width, 20
+    temporary_change_hash Byebug.settings, :width, 20
 
     it 'must get correctly set' do
       enter 'set width 10'
       debug_file('set')
-      Byebug::Command.settings[:width].must_equal 10
+      Byebug.settings[:width].must_equal 10
     end
   end
 
@@ -176,7 +176,7 @@ class TestSet < TestDsl::TestCase
   end
 
   describe 'Post Mortem' do
-    temporary_change_hash Byebug::Command.settings, :autolist, 0
+    temporary_change_hash Byebug.settings, :autolist, 0
 
     it 'must work in post-mortem mode' do
       enter 'cont', 'set autolist on'

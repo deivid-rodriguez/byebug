@@ -33,7 +33,7 @@ class TestTrace < TestDsl::TestCase
       end
 
       describe 'when basename set' do
-        temporary_change_hash Byebug::Command.settings, :basename, true
+        temporary_change_hash Byebug.settings, :basename, true
 
         it 'must correctly print file lines' do
           enter 'tr on', 'cont 7', 'trace off'

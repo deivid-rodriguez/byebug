@@ -7,7 +7,7 @@ class TestHelp < TestDsl::TestCase
     Byebug::Command.commands.select(&:event).map(&:names).flatten.uniq.sort }
 
   describe 'when typed alone' do
-    temporary_change_hash Byebug::Command.settings, :width, 50
+    temporary_change_hash Byebug.settings, :width, 50
 
     it 'must show self help when typed alone' do
       enter 'help'

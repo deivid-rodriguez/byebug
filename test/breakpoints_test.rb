@@ -86,7 +86,7 @@ class TestBreakpoints < TestDsl::TestCase
       end
 
       describe 'with basename' do
-        temporary_change_hash Byebug::Command.settings, :basename, true
+        temporary_change_hash Byebug.settings, :basename, true
 
         it 'must show a message with basename' do
           enter 'break 14', 'cont'
@@ -99,7 +99,7 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'reloading source on change' do
     describe 'autoreload not set' do
-      temporary_change_hash Byebug::Command.settings, :autoreload, false
+      temporary_change_hash Byebug.settings, :autoreload, false
 
       it 'must not reload source' do
         id = nil

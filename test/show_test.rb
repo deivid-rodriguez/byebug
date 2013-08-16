@@ -12,7 +12,7 @@ class TestShow < TestDsl::TestCase
   end
 
   describe 'args' do
-    temporary_change_hash Byebug::Command.settings, :argv, %w{foo bar}
+    temporary_change_hash Byebug.settings, :argv, %w{foo bar}
 
     describe 'default behaviour' do
       it 'must show args' do

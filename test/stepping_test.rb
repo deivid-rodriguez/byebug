@@ -25,7 +25,7 @@ class TestStepping < TestDsl::TestCase
         end
 
         describe 'when forcestep is set' do
-          temporary_change_hash Byebug::Command.settings, :forcestep, true
+          temporary_change_hash Byebug.settings, :forcestep, true
 
           it 'must go to the next line' do
             enter 'next'
@@ -61,7 +61,7 @@ class TestStepping < TestDsl::TestCase
     end
 
     describe 'Post Mortem' do
-      temporary_change_hash Byebug::Command.settings, :autoeval, false
+      temporary_change_hash Byebug.settings, :autoeval, false
 
       it 'must not work in post-mortem mode' do
         enter 'cont', 'next'
@@ -96,7 +96,7 @@ class TestStepping < TestDsl::TestCase
         end
 
         describe 'when forcestep is set' do
-          temporary_change_hash Byebug::Command.settings, :forcestep, true
+          temporary_change_hash Byebug.settings, :forcestep, true
 
           it 'must go to the step line if forced by a setting' do
             enter 'step'
@@ -126,7 +126,7 @@ class TestStepping < TestDsl::TestCase
     end
 
     describe 'Post Mortem' do
-      temporary_change_hash Byebug::Command.settings, :autoeval, false
+      temporary_change_hash Byebug.settings, :autoeval, false
 
       it 'must not work in post-mortem mode' do
         enter 'cont', 'step'

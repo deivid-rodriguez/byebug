@@ -18,7 +18,7 @@ class TestRestart < TestDsl::TestCase
     end
 
     describe 'when arguments have spaces' do
-      temporary_change_hash Byebug::Command.settings, :argv, ['argv1', 'argv 2']
+      temporary_change_hash Byebug.settings, :argv, ['argv1', 'argv 2']
 
       it 'must be correctly escaped' do
         Byebug::RestartCommand.any_instance.expects(:exec).with \
@@ -29,7 +29,7 @@ class TestRestart < TestDsl::TestCase
     end
 
     describe 'when arguments specified by set command' do
-      temporary_change_hash Byebug::Command.settings, :argv, []
+      temporary_change_hash Byebug.settings, :argv, []
 
       it 'must specify arguments by "set" command' do
         Byebug::RestartCommand.any_instance.expects(:exec).
@@ -47,7 +47,7 @@ class TestRestart < TestDsl::TestCase
       temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
 
       describe 'with set args' do
-        temporary_change_hash Byebug::Command.settings, :argv, ['argv']
+        temporary_change_hash Byebug.settings, :argv, ['argv']
 
         it 'must restart and show a message about reexecing' do
           must_restart

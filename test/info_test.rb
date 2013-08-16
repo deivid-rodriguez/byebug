@@ -4,7 +4,7 @@ class TestInfo < TestDsl::TestCase
   include Columnize
 
   describe 'Args info' do
-    temporary_change_hash Byebug::Command.settings, :width, 15
+    temporary_change_hash Byebug.settings, :width, 15
 
     it 'must show info about all args' do
       enter 'break 3', 'cont', 'info args'
@@ -99,7 +99,7 @@ class TestInfo < TestDsl::TestCase
     let(:sha1)     { LineCache.sha1(file) }
     let(:breakpoint_line_numbers) {
       columnize(LineCache.trace_line_numbers(file).to_a.sort,
-                Byebug::Command.settings[:width]) }
+                Byebug.settings[:width]) }
 
     it 'must show basic info about the file' do
       enter "info file #{file} basic"
@@ -176,7 +176,7 @@ class TestInfo < TestDsl::TestCase
   end
 
   describe 'Locals info' do
-    temporary_change_hash Byebug::Command.settings, :width, 28
+    temporary_change_hash Byebug.settings, :width, 28
 
     it 'must show the current local variables' do
       enter 'break 21', 'cont', 'info locals'
@@ -248,7 +248,7 @@ class TestInfo < TestDsl::TestCase
   end
 
   describe 'Variables info' do
-    temporary_change_hash Byebug::Command.settings, :width, 30
+    temporary_change_hash Byebug.settings, :width, 30
 
     it 'must show all variables' do
       enter 'break 21', 'cont', 'info variables'

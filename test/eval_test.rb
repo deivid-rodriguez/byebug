@@ -38,7 +38,7 @@ class TestEval < TestDsl::TestCase
 
   describe 'stack trace on error' do
     describe 'when enabled' do
-      temporary_change_hash Byebug::Command.settings, :stack_trace_on_error, true
+      temporary_change_hash Byebug.settings, :stack_trace_on_error, true
 
       it 'must show a stack trace' do
         enter 'eval 2 / 0'
@@ -49,7 +49,7 @@ class TestEval < TestDsl::TestCase
     end
 
     describe 'when disabled' do
-      temporary_change_hash Byebug::Command.settings, :stack_trace_on_error, false
+      temporary_change_hash Byebug.settings, :stack_trace_on_error, false
 
       it 'must only show exception' do
         enter 'eval 2 / 0'
@@ -69,7 +69,7 @@ class TestEval < TestDsl::TestCase
   end
 
   describe 'putl' do
-    temporary_change_hash Byebug::Command.settings, :width, 20
+    temporary_change_hash Byebug.settings, :width, 20
 
     it 'must print expression and columnize the result' do
       enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
@@ -79,7 +79,7 @@ class TestEval < TestDsl::TestCase
   end
 
   describe 'ps' do
-    temporary_change_hash Byebug::Command.settings, :width, 20
+    temporary_change_hash Byebug.settings, :width, 20
 
     it 'must print expression and sort and columnize the result' do
       enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
