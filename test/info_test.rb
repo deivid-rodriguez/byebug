@@ -176,18 +176,18 @@ class TestInfo < TestDsl::TestCase
   end
 
   describe 'Locals info' do
-    temporary_change_hash Byebug::Command.settings, :width, 21
+    temporary_change_hash Byebug::Command.settings, :width, 28
 
     it 'must show the current local variables' do
       enter 'break 21', 'cont', 'info locals'
       debug_file 'info'
-      check_output_includes 'a = "1111111111111...', 'b = 2'
+      check_output_includes 'a = "11111111111111111111...', 'b = 2'
     end
 
     it 'must fail if local variable doesn\'t respond to #to_s or to #inspect' do
       enter 'break 26', 'cont', 'info locals'
       debug_file 'info'
-      check_output_includes '*Error in evaluation*'
+      check_output_includes 'a = *Error in evaluation*'
     end
   end
 

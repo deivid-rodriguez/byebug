@@ -72,16 +72,16 @@ module Byebug
       args = @match[1].split(/[ \t]+/)
       param = args.shift
       subcmd = Command.find(Subcommands, param)
-      if subcmd
+      return errmsg "Unknown info command #{param}\n" unless subcmd
+
+      if @state.context
         send("info_#{subcmd.name}", *args)
       else
-        errmsg "Unknown info command #{param}\n"
+        errmsg "info_#{subcmd.name} not available without a context.\n"
       end
     end
 
     def info_args(*args)
-      return errmsg "No frame selected.\n" unless @state.context
-
       locals = @state.context.frame_locals
       args = @state.context.frame_args
       return if args == [[:rest]]
@@ -106,9 +106,6 @@ module Byebug
     private :info_breakpoint
 
     def info_breakpoints(*args)
-      return errmsg "\"info breakpoints\" not available here.\n" unless
-        @state.context
-
       return print "No breakpoints.\n" if Byebug.breakpoints.empty?
 
       brkpts = Byebug.breakpoints.sort_by{|b| b.id}
@@ -123,9 +120,6 @@ module Byebug
     end
 
     def info_display(*args)
-      return errmsg "\"info display\" not available here.\n" unless
-        @state.context
-
       return print "There are no auto-display expressions now.\n" unless
         @state.display.find{|d| d[0]}
 
@@ -207,38 +201,35 @@ module Byebug
     end
 
     def info_instance_variables(*args)
-      return errmsg "\"info instance_variables\" not available here.\n" unless
-        @state.context
-
       obj = debug_eval('self')
       var_list(obj.instance_variables)
     end
 
     def info_line(*args)
-      return errmsg "\"info line\" not available here.\n" unless @state.context
       print "Line #{@state.line} of \"#{@state.file}\"\n"
     end
 
     def info_locals(*args)
-      return errmsg "\"info locals\" not available here.\n" unless
-        @state.context
-
       locals = @state.context.frame_locals
-      locals.keys.sort.each do |name|
-        ### FIXME: make a common routine
+      print_hash(locals)
+    end
+
+    def print_hash(vars)
+      vars.keys.sort.each do |name|
         begin
-          s = "#{name} = #{locals[name].inspect}"
+          s = "#{name} = #{vars[name].inspect}"
         rescue
           begin
-          s = "#{name} = #{locals[name].to_s}"
+          s = "#{name} = #{vars[name].to_s}"
           rescue
-            s = "*Error in evaluation*"
+            s = "#{name} = *Error in evaluation*"
           end
         end
         pad_with_dots(s)
         print "#{s}\n"
       end
     end
+    private :print_hash
 
     def info_stop_reason(stop_reason)
       case stop_reason
@@ -255,9 +246,6 @@ module Byebug
     private :info_stop_reason
 
     def info_program(*args)
-      return errmsg "The program being debugged is not being run.\n" unless
-        @state.context
-
       return print "The program crashed.\n" + Byebug.last_exception ?
                    "Exception: #{Byebug.last_exception.inspect}" : "" + "\n" if
         @state.context.dead?
@@ -267,39 +255,19 @@ module Byebug
     end
 
     def info_stack(*args)
-      return errmsg "\"info stack\" not available here.\n" unless @state.context
-
       print_backtrace
     end
 
     def info_global_variables(*args)
-      return errmsg "\"info global_variables\" not available here.\n" unless
-        @state.context
-
       var_global
     end
 
     def info_variables(*args)
-      return errmsg "\"info variables\" not available here.\n" unless
-        @state.context
-
-      obj = debug_eval('self')
       locals = @state.context.frame_locals
       locals[:self] = @state.context.frame_self(@state.frame_pos)
-      locals.keys.sort.each do |name|
-        ### FIXME: make a common routine
-        begin
-          s = "#{name} = #{locals[name].inspect}"
-        rescue
-          begin
-            s = "#{name} = #{locals[name].to_s}"
-          rescue
-            s = "#{name} = *Error in evaluation*"
-          end
-        end
-        pad_with_dots(s)
-        print "#{s}\n"
-      end
+      print_hash(locals)
+
+      obj = debug_eval('self')
       var_list(obj.instance_variables, obj.instance_eval{binding()})
       var_class_self
     end
