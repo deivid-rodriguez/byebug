@@ -28,7 +28,7 @@ module Byebug
       b, e = set_line_range(Command.settings[:listsize], lines.size)
       return @state.previous_line if b < 0
 
-      print "[#{b}, #{e}] in #{@state.file}\n"
+      print "\n[#{b}, #{e}] in #{@state.file}\n"
       @state.previous_line = display_list(b, e, lines, @state.line)
     end
 
@@ -114,6 +114,7 @@ module Byebug
             end
           end
         end
+        print "\n"
         return e == lines.size ? @state.previous_line : b
       end
   end
