@@ -24,7 +24,7 @@ class TestDisplay < TestDsl::TestCase
       Byebug.handler.display.concat([[true, 'abc'], [true, 'd']]); 'display'
     end
     debug_file 'display'
-    check_output_includes '1: ', 'abc = ', '2: ', 'd = 4'
+    check_output_includes '1: ', 'abc = nil', '2: ', 'd = 4'
   end
 
   describe 'undisplay' do
@@ -52,7 +52,7 @@ class TestDisplay < TestDsl::TestCase
 
         it 'must not show any output' do
           debug_file 'display'
-          check_output_doesnt_include '1: ', 'abc = ', '2: ', 'd = 4'
+          check_output_doesnt_include '1: ', 'abc = nil', '2: ', 'd = 4'
         end
       end
 
@@ -66,7 +66,7 @@ class TestDisplay < TestDsl::TestCase
 
         it 'must not show any output' do
           debug_file 'display'
-          check_output_includes '1: ', 'abc = ', '2: ', 'd = 4'
+          check_output_includes '1: ', 'abc = nil', '2: ', 'd = 4'
         end
       end
     end

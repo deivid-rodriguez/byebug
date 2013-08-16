@@ -2,7 +2,7 @@ module Byebug
 
   module DisplayFunctions
     def display_expression(exp)
-      print "#{exp} = #{debug_silent_eval(exp).to_s}\n"
+      print "#{exp} = #{debug_silent_eval(exp).inspect}\n"
     end
 
     def active_display_expressions?
