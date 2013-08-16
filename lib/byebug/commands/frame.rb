@@ -103,7 +103,9 @@ module Byebug
     end
 
     def print_backtrace
-      realsize = caller.drop_while {|e| e[/\(eval\)|byebug/] }.size
+      realsize = caller_locations.
+        drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }.
+        take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
       if @state.context.stack_size != realsize
         errmsg "Warning, Byebug's stacksize (#{@state.context.stack_size}) is" \
                " incorrect (must be #{realsize}). This might be a bug in " \
