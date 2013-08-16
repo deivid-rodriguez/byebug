@@ -60,7 +60,7 @@ module Byebug
       end
       save_breakpoints(file)
       save_catchpoints(file)
-      # save_displays(file)
+      save_displays(file)
       save_settings(file)
       print "Saved to '#{file.path}'\n"
       if @state and @state.interface

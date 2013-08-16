@@ -1,14 +1,12 @@
 require_relative 'test_helper'
 
 class TestSave < TestDsl::TestCase
-
   describe 'successful saving' do
     let(:file_name) { 'save_output.txt' }
     let(:file_contents) { File.read(file_name) }
     before do
       enter 'break 2', 'break 3 if true', 'catch NoMethodError',
-            'display 2 + 3', 'display 5 + 6', 'set autoeval', 'set autolist',
-            "save #{file_name}"
+            'display 2 + 3', 'display 5 + 6', "save #{file_name}"
       debug_file 'save'
     end
     after do
@@ -27,9 +25,8 @@ class TestSave < TestDsl::TestCase
       file_contents.must_include 'catch NoMethodError'
     end
 
-    # Not sure why it is suppressed, but this is like it is now.
-    it 'must not save displays' do
-      file_contents.wont_include 'display 2 + 3'
+    it 'must save displays' do
+      file_contents.must_include 'display 2 + 3'
     end
 
     describe 'saving settings' do
