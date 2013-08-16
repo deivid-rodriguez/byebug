@@ -1,3 +1,11 @@
+## 1.8.2
+
+* More user friendly regexps for commands
+* Better help for some commands
+* `save` command now saves the list of "displays"
+* Fixes bug in calculating stacksize
+
+
 ## 1.8.1
 
 * Bugfix release
