@@ -192,10 +192,10 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
     frame_n = 0;                                                      \
   else                                                                \
     frame_n = FIX2INT(frame_no);                                      \
-  if (frame_n < 0 || frame_n >= context->stack_size)                  \
+  if (frame_n < 0 || frame_n >= real_stack_size())                    \
   {                                                                   \
     rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
-             frame_n, context->stack_size - 1);                       \
+             frame_n, real_stack_size() - 1);                         \
   }                                                                   \
 
 static VALUE
