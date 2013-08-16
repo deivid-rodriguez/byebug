@@ -120,10 +120,8 @@ module Byebug
     protect :at_catchpoint
 
     def at_tracing(context, file, line)
-      if file != @last_file || line != @last_line ||
-         Command.settings[:tracing_plus] == false
-        @last_file = file
-        @last_line = line
+      if file != @last_file || line != @last_line || Command.settings[:linetrace_plus]
+        @last_file, @last_line = file, line
         print "Tracing: #{CommandProcessor.canonic_file(file)}:#{line} " \
               "#{Byebug.line_at(file,line)}\n"
       end

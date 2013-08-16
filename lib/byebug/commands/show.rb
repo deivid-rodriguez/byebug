@@ -77,10 +77,10 @@ module Byebug
         on_off = Command.settings[:testing]
         return "Currently testing byebug is #{show_onoff(on_off)}."
       when /^forcestep$/
-        on_off = Command.settings[:force_stepping]
+        on_off = Command.settings[:forcestep]
         return "force-stepping is #{show_onoff(on_off)}."
       when /^fullpath$/
-        on_off = Command.settings[:frame_fullpath]
+        on_off = Command.settings[:fullpath]
         return "Displaying frame's full file names is #{show_onoff(on_off)}."
       when /^history(:?\s+(filename|save|size))?$/
         args = @match[1].split
@@ -119,12 +119,11 @@ module Byebug
       when /^linetrace$/
         on_off = Byebug.tracing?
         return "line tracing is #{show_onoff(on_off)}."
-      when /^linetrace\+$/
-        on_off = Command.settings[:tracing_plus]
-        if on_off
-          return "line tracing style is different consecutive lines."
-        else
+      when /^linetrace_plus$/
+        if Command.settings[:linetrace_plus]
           return "line tracing style is every line."
+        else
+          return "line tracing style is different consecutive lines."
         end
       when /^listsize$/
         listlines = Command.settings[:listsize]
@@ -173,8 +172,8 @@ module Byebug
          'show history save -- Show whether history record should be saved '  \
          'on exit'                                                            \
          'show history size -- Show the size of the command history'],
-        ['linetrace', 3, 'Show line execution tracing'],
-        ['linetrace+', 10,
+        ['linetrace', 3, 'Show line execution tracing status'],
+        ['linetrace_plus', 10,
          'Show whether different consecutive lines are shown in tracing'],
         ['listsize', 3, 'Show number of source lines to list by default'],
         ['port', 3, 'Show server port'],

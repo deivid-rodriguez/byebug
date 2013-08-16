@@ -109,11 +109,11 @@ class TestShow < TestDsl::TestCase
     end
   end
 
-  describe 'linetrace+' do
+  describe 'linetrace_plus' do
     it 'must show default value' do
-      enter 'show linetrace+'
+      enter 'show linetrace_plus'
       debug_file 'show'
-      check_output_includes 'line tracing style is every line.'
+      check_output_includes 'line tracing style is different consecutive lines.'
     end
   end
 

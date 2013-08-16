@@ -2613,17 +2613,17 @@ Shows whether line tracing is in effect or not.
 @subsection Set/Show Line tracing style
 
 @table @code
-@kindex set linetrace+ @r{[} on | 1 | off | 0 @r{]}
-@item set linetrace+ @r{[} on | 1 | off | 0 @r{]}
+@kindex set linetrace_plus @r{[} on | 1 | off | 0 @r{]}
+@item set linetrace_plus @r{[} on | 1 | off | 0 @r{]}
 
-Setting linetrace+ on will cause consecutive trace lines not to be a
-duplicate of the preceding line-trace line. Note however that this
-setting doesn't by itself turn on or off line tracing.
+Setting linetrace_plus on will cause every trace line to be printed, even if
+it's a duplicate of the preceding trace line. Note however that this setting
+doesn't by itself turn on or off line tracing.
 
-@kindex show linetrace+
-@item show linetrace
-Shows whether the line tracing style is to show all lines or remove
-duplicates linetrace lines when it is a repeat of the previous line.
+@kindex show linetrace_plus
+@item show linetrace_plus
+Shows whether the line tracing style is to show all lines or remove duplicates
+linetrace lines when it is a repeat of the previous line.
 @end table
 
 @node Listsize
@@ -2963,17 +2963,17 @@ Boolean. True if basename on. @xref{Basename}.
 Symbol: @code{:short} or @code{:long}. @xref{Callstyle}.
 @item :testing
 Boolean. True if currently testing byebug.
-@item :force_stepping
+@item :forcestep
 Boolean. True if stepping should go to a line different from the last
 step. @xref{Forcestep}.
-@item :frame_fullpath
+@item :fullpath
 Boolean. @xref{Fullpath}.
 @item :listsize
 Fixnum. Number of lines to show in a @code{list} command. @xref{Listsize}.
 @item :autoreload
 Boolean. True if we should reread the source every time it changes. @xref{Autoreload}.
 @item :stack_trace_on_error
-Boolean. True if we should produce a stack trace on error. @xref{Trace}.
+Boolean. True if we should produce a stack trace on eval errors. @xref{Trace}.
 @item :width
 Fixnum. Number of characters byebug thinks are in a line. @xref{Width}.
 @end table

@@ -4,7 +4,7 @@ module Byebug
   module SteppingFunctions
     def parse_stepping_args(command_name, match)
       if match[1].nil?
-        force = Command.settings[:force_stepping]
+        force = Command.settings[:forcestep]
       elsif match[1] == '+'
         force = true
       elsif match[1] == '-'
@@ -39,7 +39,8 @@ module Byebug
       def description
         %{n[ext][+-]?[ nnn]\tstep over once or nnn times,
           \t\t'+' forces to move to another line.
-          \t\t'-' is the opposite of '+' and disables the force_stepping setting.}
+          \t\t'-' is the opposite of '+' and disables the :forcestep setting.
+         }
       end
     end
   end
@@ -69,8 +70,8 @@ module Byebug
         %{
           s[tep][+-]?[ nnn]\tstep (into methods) once or nnn times
           \t\t'+' forces to move to another line.
-          \t\t'-' is the opposite of '+' and disables the force_stepping setting.
-        }
+          \t\t'-' is the opposite of '+' and disables the :forcestep setting.
+         }
       end
     end
   end

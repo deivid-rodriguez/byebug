@@ -24,8 +24,8 @@ class TestStepping < TestDsl::TestCase
           debug_file('stepping') { $state.line.must_equal 10 }
         end
 
-        describe 'when force_stepping is set' do
-          temporary_change_hash Byebug::Command.settings, :force_stepping, true
+        describe 'when forcestep is set' do
+          temporary_change_hash Byebug::Command.settings, :forcestep, true
 
           it 'must go to the next line' do
             enter 'next'
@@ -95,8 +95,8 @@ class TestStepping < TestDsl::TestCase
           debug_file('stepping') { $state.line.must_equal 10 }
         end
 
-        describe 'when force_stepping is set' do
-          temporary_change_hash Byebug::Command.settings, :force_stepping, true
+        describe 'when forcestep is set' do
+          temporary_change_hash Byebug::Command.settings, :forcestep, true
 
           it 'must go to the step line if forced by a setting' do
             enter 'step'

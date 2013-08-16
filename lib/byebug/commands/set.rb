@@ -32,11 +32,12 @@ module Byebug
         'command history'                                                  \
         'set history save -- Set saving of the history record on exit'     \
         'set history size -- Set the size of the command history'],
-       ['linetrace+', 10, true,
+       ['linetrace_plus', 10, true,
         'Set line execution tracing to show different lines'],
-       ['linetrace', 3, true, 'Set line execution tracing'],
+       ['linetrace', 3, true, 'Enable line execution tracing'],
        ['listsize', 3, false, 'Set number of source lines to list by default'],
-       ['trace', 1, true, 'Display stack trace when "eval" raises exception'],
+       ['stack_trace_on_error', 1, true,
+        'Display stack trace when "eval" raises exception'],
        ['width', 1, false,
         'Number of characters per line for byebug\'s output']
       ].map do |name, min, is_bool, short_help, long_help|
@@ -87,53 +88,34 @@ module Byebug
         else
           Command.settings[:argv] = args
         end
+      when /^autoirb$/
+        Command.settings[:autoirb] = (set_on ? 1 : 0)
       when /^autolist$/
         Command.settings[:autolist] = (set_on ? 1 : 0)
-      when /^autoeval$/
-        Command.settings[:autoeval] = set_on
-      when /^basename$/
-        Command.settings[:basename] = set_on
       when /^callstyle$/
         if args[0] and (args[0] == 'short' or args[0] == 'long')
           Command.settings[:callstyle] = args[0].to_sym
         else
           print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
-      when /^trace$/
-        Command.settings[:stack_trace_on_error] = set_on
-      when /^fullpath$/
-        Command.settings[:frame_fullpath] = set_on
-      when /^autoreload$/
-        Command.settings[:autoreload] = set_on
-      when /^autoirb$/
-        Command.settings[:autoirb] = (set_on ? 1 : 0)
-      when /^testing$/
-        Command.settings[:testing] = set_on
-      when /^forcestep$/
-        Command.settings[:force_stepping] = set_on
       when /^history$/
-        if 2 == args.size
-          interface = @state.interface
-          case args[0]
-          when /^save$/
-            interface.history_save = get_onoff(args[1])
-          when /^size$/
-            interface.history_length =
-              get_int(args[1], "Set history size")
-          when /^filename$/
-            interface.histfile =
-              File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
-          else
-            print "Invalid history parameter #{args[0]}. Should be " \
-                  "\"filename\", \"save\" or \"size\".\n"
-          end
+        return print 'Need two parameters for "set history"; ' \
+                     "got #{args.size}.\n" unless args.size == 2
+
+        interface = @state.interface
+        case args[0]
+        when /^save$/
+          interface.history_save = get_onoff(args[1])
+        when /^size$/
+          interface.history_length =
+            get_int(args[1], "Set history size")
+        when /^filename$/
+          interface.histfile =
+            File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
         else
-          print 'Need two parameters for "set history"; got ' \
-                "#{args.size}.\n"
-          return
+          print "Invalid history parameter #{args[0]}. Should be " \
+                "\"filename\", \"save\" or \"size\".\n"
         end
-      when /^linetrace\+$/
-        self.class.settings[:tracing_plus] = set_on
       when /^linetrace$/
         Byebug.tracing = set_on
       when /^listsize$/
@@ -143,6 +125,8 @@ module Byebug
       when /^width$/
         return unless width = get_int(args[0], "Set width", 10, nil, 80)
         Command.settings[:width] = width
+      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|testing|stack_trace_on_error$/
+        Command.settings[subcmd.name.to_sym] = set_on
       else
         return print "Unknown setting #{@match[1]}.\n"
       end
