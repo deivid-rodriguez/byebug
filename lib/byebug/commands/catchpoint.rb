@@ -37,11 +37,9 @@ module Byebug
       end
 
       def description
-        %{cat[ch]\t\tsame as "info catch"
-          cat[ch] <exception-name> [on|off]
-          \tIntercept <exception-name> when there would otherwise be no handler.
-          \tWith an "on" or "off", turn handling the exception on or off.
-          cat[ch] off\tdelete all catchpoints}
+        %{cat[ch]\t\t\t\tLists catchpoints
+          cat[ch] off\t\t\tDeletes all catchpoints
+          cat[ch] <exception> [off]\tEnable/disable handling <exception>.}
       end
     end
   end

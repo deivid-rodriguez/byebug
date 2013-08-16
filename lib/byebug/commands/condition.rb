@@ -7,8 +7,7 @@ module Byebug
     end
 
     def execute
-      return errmsg "\"condition\" must be followed by " \
-                    "breakpoint number and expression\n" unless @match[1]
+      return print ConditionCommand.help(nil) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by{|b| b.id }
       largest = breakpoints.inject(0) do |tally, b|

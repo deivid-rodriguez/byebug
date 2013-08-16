@@ -21,8 +21,7 @@ module Byebug
       end
 
       def description
-        %{q[uit][ !| unconditionally]\texit from byebug.
-          exit[!]\talias to quit
+        %{q[uit]|exit [!|unconditionally]\tExits from byebug.
 
           Normally we prompt before exiting. However if the parameter
           "unconditionally" is given or command is suffixed with !, we exit

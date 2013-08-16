@@ -91,8 +91,10 @@ module Byebug
       end
 
       def description
-        %{Enable some things.
-          This is used to cancel the effect of the "disable" command.}
+        %{Enable breakpoints or displays.
+
+          This is used to cancel the effect of the "disable" command.
+         }
       end
     end
   end
@@ -143,10 +145,11 @@ module Byebug
       end
 
       def description
-        %{Disable some things.
+        %{Disable breakpoints or displays.
 
           A disabled item is not forgotten, but has no effect until reenabled.
-          Use the "enable" command to have it take effect again.}
+          Use the "enable" command to have it take effect again.
+         }
       end
     end
   end
