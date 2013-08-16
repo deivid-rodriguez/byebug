@@ -4,8 +4,7 @@ module TestDsl
     include TestDsl
 
     def setup
-      Byebug.interface = TestInterface.new
-      Byebug.handler.display.clear
+      Byebug.handler = Byebug::CommandProcessor.new(TestInterface.new)
     end
 
     def self.temporary_change_hash hash, key, value
