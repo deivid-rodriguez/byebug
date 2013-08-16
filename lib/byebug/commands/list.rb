@@ -14,7 +14,7 @@ module Byebug
     Command.settings[:autolist] = 1
 
     def regexp
-      /^\s* l(?:ist)? (?:\s*([-=])|\s+(.+))? $/x
+      /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x
     end
 
     def execute

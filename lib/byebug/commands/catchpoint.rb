@@ -4,9 +4,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* cat(?:ch)?
-           (?:\s+ (\S+))?
-           (?:\s+ (off))? \s* $/ix
+      /^\s* cat(?:ch)? (?:\s+(\S+))? (?:\s+(off))? \s*$/ix
     end
 
     def execute

@@ -2,10 +2,10 @@ module Byebug
 
   class TraceCommand < Command
     def regexp
-      /^\s* tr(?:ace)? (?: \s+ (\S+))      # on | off | var(iable)
-                       (?: \s+ (\S+))?     # (variable-name)?
-                       (?: \s+ (\S+))? \s* # (stop | nostop)?
-       $/ix
+      /^\s* tr(?:ace)? (?: \s+ (\S+))   # on | off | var(iable)
+                       (?: \s+ (\S+))?  # (variable-name)?
+                       (?: \s+ (\S+))?  # (stop | nostop)?
+       \s*$/ix
     end
 
     def execute

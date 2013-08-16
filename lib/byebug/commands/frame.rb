@@ -150,7 +150,7 @@ module Byebug
   # Implements byebug "where" or "backtrace" command.
   class WhereCommand < Command
     def regexp
-      /^\s*(?:w(?:here)?|bt|backtrace)$/
+      /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
     end
 
     def execute
@@ -177,7 +177,7 @@ module Byebug
 
   class UpCommand < Command
     def regexp
-      /^\s* u(?:p)? (?:\s+(.*))?$/x
+      /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
@@ -199,7 +199,7 @@ module Byebug
 
   class DownCommand < Command
     def regexp
-      /^\s* down (?:\s+(.*))? .*$/x
+      /^\s* down (?:\s+(\S+))? \s*$/x
     end
 
     def execute
@@ -221,10 +221,7 @@ module Byebug
 
   class FrameCommand < Command
     def regexp
-      / ^\s*
-        f(?:rame)?
-        (?: \s+ (\S+))? \s*
-        $/x
+      /^\s* f(?:rame)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

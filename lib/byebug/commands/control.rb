@@ -4,11 +4,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      / ^\s*
-      (?:restart|R)
-      (?:\s+ (\S?.*\S))? \s*
-      $
-      /ix
+      /^\s* (?:restart|R) (?:\s+(.+))? \s*$/ix
     end
 
     def execute

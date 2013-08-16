@@ -10,7 +10,7 @@ module Byebug
   # Implements byebug's 'method sig' command.
   class MethodSigCommand < Command
     def regexp
-      /^\s*m(?:ethod)?\s+sig(?:nature)?\s+(\S+)\s*$/
+      /^\s* m(?:ethod)? \s+ sig(?:nature)? \s+ (\S+) \s*$/x
     end
 
     def execute
@@ -42,7 +42,7 @@ module Byebug
     include Columnize
 
     def regexp
-      /^\s*m(?:ethod)?\s+((iv)|(i(:?nstance)?)\s+)?/
+      /^\s* m(?:ethod)? \s+ ((iv)|(i(:?nstance)?)\s+)?/x
     end
 
     def execute

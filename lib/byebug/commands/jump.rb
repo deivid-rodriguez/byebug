@@ -9,12 +9,7 @@ module Byebug
     end
 
     def regexp
-      / ^\s*
-         j(?:ump)? \s*
-         (?:\s+(\S+))?\s*
-         (?:\s+(\S+))?\s*
-         $
-      /ix
+      /^\s* j(?:ump)? (?:\s+(\S+))? \s* (?:\s+(\S+))? \s*$/ix
     end
 
     def execute

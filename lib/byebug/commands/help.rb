@@ -7,7 +7,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* h(?:elp)? (?:\s+(.+))? $/x
+      /^\s* h(?:elp)? (?:\s+(.+))? \s*$/x
     end
 
     def execute

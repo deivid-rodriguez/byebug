@@ -3,7 +3,7 @@ module Byebug
   class ConditionCommand < Command
 
     def regexp
-      /^\s* cond(?:ition)? (?:\s+(\d+)\s*(.*))?$/ix
+      /^\s* cond(?:ition)? (?:\s+(\d+)(?:\s+(.*))?)? \s*$/ix
     end
 
     def execute

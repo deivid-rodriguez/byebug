@@ -6,7 +6,7 @@ module Byebug
     self.need_context         = false
 
     def regexp
-      /^\s* c(?:ont(?:inue)?)? (?:\s+(.*))? $/x
+      /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

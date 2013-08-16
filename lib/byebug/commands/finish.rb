@@ -6,7 +6,7 @@ module Byebug
     self.need_context         = true
 
     def regexp
-      /^\s*fin(?:ish)? (?:\s+(.*))?$/x
+      /^\s* fin(?:ish)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

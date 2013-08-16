@@ -5,12 +5,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      / ^\s*
-        b(?:reak)?
-        (?: \s+ #{Position_regexp})? \s*
-        (?: \s+ (.*))? \s*
-        $
-      /x
+      /^\s* b(?:reak)? (?:\s+#{Position_regexp})? (?:\s+(.+))? \s*$/x
     end
 
     def execute

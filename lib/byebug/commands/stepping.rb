@@ -21,9 +21,7 @@ module Byebug
     self.need_context         = true
 
     def regexp
-      /^\s* n(?:ext)?
-        ([+-])?(?:\s+(\S+))?
-        \s*$/x
+      /^\s* n(?:ext)?([+-])? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
@@ -52,9 +50,7 @@ module Byebug
     self.need_context         = true
 
     def regexp
-      /^\s* s(?:tep)?
-        ([+-])?(?:\s+(\S+))?
-        \s*$/x
+      /^\s* s(?:tep)?([+-]) ?(?:\s+(\S+))? \s*$/x
     end
 
     def execute

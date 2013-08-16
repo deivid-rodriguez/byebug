@@ -23,7 +23,7 @@ module Byebug
 
   class AddDisplayCommand < Command
     def regexp
-      /^\s*disp(?:lay)?\s+(.+)$/
+      /^\s* disp(?:lay)? \s+ (.+) \s*$/x
     end
 
     def execute
@@ -55,7 +55,7 @@ module Byebug
     end
 
     def regexp
-      /^\s*disp(?:lay)?$/
+      /^\s* disp(?:lay)? \s*$/x
     end
 
     def execute
@@ -75,7 +75,7 @@ module Byebug
 
   class DeleteDisplayCommand < Command
     def regexp
-      /^\s* undisp(?:lay)? \s* (?:(\S+))?$/x
+      /^\s* undisp(?:lay)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

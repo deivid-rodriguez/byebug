@@ -5,7 +5,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* so(?:urce)? (?:\s+ (.+))? $/x
+      /^\s* so(?:urce)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

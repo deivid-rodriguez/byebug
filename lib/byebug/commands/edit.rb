@@ -4,7 +4,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* ed(?:it)? (?:\s+(.*))?$/ix
+      /^\s* ed(?:it)? (?:\s+(\S+))? \s*$/ix
     end
 
     def execute

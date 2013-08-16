@@ -29,7 +29,7 @@ module Byebug
   # Implements byebug's 'var class' command
   class VarClassVarCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+cl(?:ass)?/
+      /^\s* v(?:ar)? \s+ cl(?:ass)? \s*/x
     end
 
     def execute
@@ -53,7 +53,7 @@ module Byebug
 
   class VarConstantCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+co(?:nst(?:ant)?)?\s+/
+      /^\s* v(?:ar)? \s+ co(?:nst(?:ant)?)? \s+/x
     end
 
     def execute
@@ -84,7 +84,7 @@ module Byebug
 
   class VarGlobalCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+g(?:lobal)?\s*$/
+      /^\s* v(?:ar)? \s+ g(?:lobal)? \s*$/x
     end
 
     def execute
@@ -104,7 +104,7 @@ module Byebug
 
   class VarInstanceCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+ins(?:tance)?\s*/
+      /^\s* v(?:ar)? \s+ ins(?:tance)? \s*/x
     end
 
     def execute
@@ -126,7 +126,7 @@ module Byebug
   # Implements byebug's 'var local' command
   class VarLocalCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+l(?:ocal)?\s*$/
+      /^\s* v(?:ar)? \s+ l(?:ocal)? \s*$/x
     end
 
     def execute
@@ -158,7 +158,7 @@ module Byebug
   # Implements byebug's 'var inherit' command
   class VarInheritCommand < Command
     def regexp
-      /^\s*v(?:ar)?\s+ct\s*/
+      /^\s* v(?:ar)? \s+ ct \s*$/x
     end
 
     def execute

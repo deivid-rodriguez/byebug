@@ -46,7 +46,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^set (?: \s+ (.*) )?$/ix
+      /^\s* set (?:\s+(.*))? \s*$/ix
     end
 
     def execute

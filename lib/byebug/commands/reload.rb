@@ -14,7 +14,7 @@ module Byebug
     Command.settings[:autoreload] = true
 
     def regexp
-      /^\s*r(?:eload)?$/
+      /^\s* r(?:eload)? \s*$/x
     end
 
     def execute

@@ -43,7 +43,7 @@ module Byebug
     end
 
     def regexp
-      /^\s*(p|e(?:val)?)\s+/
+      /^\s*(p|e(?:val)?)\s+/x
     end
 
     def execute
