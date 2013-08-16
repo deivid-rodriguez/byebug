@@ -121,7 +121,7 @@ module Byebug
       when /^listsize$/
         listsize = get_int(args[0], "Set listsize", 1, nil, 10)
         return unless listsize
-        self.class.settings[:listsize] = listsize
+        Command.settings[:listsize] = listsize
       when /^width$/
         return unless width = get_int(args[0], "Set width", 10, nil, 80)
         Command.settings[:width] = width
