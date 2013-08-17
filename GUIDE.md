@@ -834,12 +834,11 @@ short list of named classes of commands
 Type "help <command-name>" for help on a specific command
 
 Available commands:
-backtrace  catch   continue  disable  down   enable  exit       frame
-info       jump    list      next     pp     putl    reload     save
-show       source  trace     up       where  break   condition  delete
-display    edit    eval      finish   help   irb     kill       method
-p          ps      quit      restart  set    skip    step       undisplay
-var
+backtrace  delete   enable  help  method  ps       save    step       where
+break      disable  eval    info  next    putl     set     trace
+catch      display  exit    irb   p       quit     show    undisplay
+condition  down     finish  kill  pp      reload   skip    up
+continue   edit     frame   list  pry     restart  source  var
 ```
 
 With a command name as `help` argument, `byebug` displays short information on how to

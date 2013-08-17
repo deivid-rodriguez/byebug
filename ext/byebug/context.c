@@ -303,30 +303,6 @@ Context_stop_reason(VALUE self)
   return ID2SYM(rb_intern(symbol));
 }
 
-#if 0
-
-static VALUE
-Context_jump(VALUE self, VALUE line, VALUE file)
-{
-  debug_context_t *context;
-  debug_frame_t *frame;
-  int i, lineno;
-
-  Data_Get_Struct(self, debug_context_t, context);
-
-  frame = context->stack;
-  lineno = FIX2INT(line);
-
-  for (i = 0; i < context->stack_size; i++) {
-    if (strcmp(frame->file, RSTRING_PTR(file))) {
-      /* And now? */
-    }
-    frame = frame->prev;
-  }
-}
-
-#endif
-
 static VALUE
 Context_step_into(int argc, VALUE *argv, VALUE self)
 {

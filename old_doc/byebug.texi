@@ -1,8 +1,8 @@
 \input texinfo
 @setfilename byebug.info
 
-@set BYEBUG_VERSION 1.1.1
-@set UPDATED May-2013
+@set BYEBUG_VERSION 1.8.2
+@set UPDATED Aug-2013
 
 @macro Example {}
 @iftex
@@ -1326,11 +1326,11 @@ byebug help v@value{BYEBUG_VERSION}
 Type 'help <command-name>' for help on a specific command
 
 Available commands:
-backtrace  delete   enable  help  list    ps       save    where
-break      disable  eval    info  method  putl     set     trace
-catch      display  exit    irb   next    quit     show    undisplay
-condition  down     finish  jump  p       reload   source  up
-continue   edit     frame   kill  pp      restart  step    var
+backtrace  delete   enable  help  method  ps       save    step       where
+break      disable  eval    info  next    putl     set     trace
+catch      display  exit    irb   p       quit     show    undisplay
+condition  down     finish  kill  pp      reload   skip    up
+continue   edit     frame   list  pry     restart  source  var
 @end smallexample
 @end flushleft
 @c the above line break eliminates huge line overfull...
@@ -2252,7 +2252,7 @@ condition 1       # Change that! Unconditionally stop on breakpoint 1.
 @end example
 
 @node Resuming Execution
-@subsection Resuming Execution (@samp{step}, @samp{next}, @samp{finish}, @samp{continue}, @samp{jump})
+@subsection Resuming Execution (@samp{step}, @samp{next}, @samp{finish}, @samp{continue})
 
 A typical technique for using stepping is to set a breakpoint
 (@pxref{Breakpoints}) at the beginning of the function or the section of your
@@ -2274,7 +2274,6 @@ breakpoint or a signal.
 * Next::     running the next statement skipping over functions (next)
 * Finish::   running until the return of a function or ``source'' (finish)
 * Continue:: continuing execution (continue)
-* Jump::     jumping to a new line (jump)
 @end menu
 
 @node Step
@@ -2365,14 +2364,6 @@ Should the program stop before that breakpoint is reached, for
 example, perhaps another breakpoint is reached first, in
 a listing of the breakpoints you won't see this entry in the list of
 breakpoints.
-@end table
-
-@node Jump
-@subsubsection Jump (@samp{jump})
-@table @code
-@kindex jump @r{[}+-@r{]} @ovar{line}
-@item jump @r{[}+-@r{]} @ovar{line}
-Change the next line to execute to the given line number.
 @end table
 
 @node byebug settings
