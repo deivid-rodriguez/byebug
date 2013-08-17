@@ -103,7 +103,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s *del(?:ete)? (?:\s+(.*))?$/ix
+      /^\s* del(?:ete)? (?:\s+(.*))?$/x
     end
 
     def execute

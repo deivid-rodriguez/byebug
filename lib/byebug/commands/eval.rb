@@ -43,7 +43,7 @@ module Byebug
     end
 
     def regexp
-      /^\s*(p|e(?:val)?)\s+/x
+      /^\s* (p|e(?:val)?)\s+/x
     end
 
     def execute
@@ -72,7 +72,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s*pp\s+/
+      /^\s* pp \s+/x
     end
 
     def execute
@@ -101,7 +101,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s*putl\s+/
+      /^\s* putl\s+/x
     end
 
     def execute
@@ -138,7 +138,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s*ps\s+/
+      /^\s* ps\s+/x
     end
 
     def execute
