@@ -60,7 +60,7 @@ module Byebug
     end unless defined?(Subcommands)
 
     def regexp
-      /^\s* en(?:able)? (?:\s+(.+))? \s*$/ix
+      /^\s* en(?:able)? (?:\s+(.+))? \s*$/x
     end
 
     def execute
@@ -114,7 +114,7 @@ module Byebug
     end unless defined?(Subcommands)
 
     def regexp
-      /^\s* dis(?:able)? (?:\s+(.+))? \s*$/ix
+      /^\s* dis(?:able)? (?:\s+(.+))? \s*$/x
     end
 
     def execute

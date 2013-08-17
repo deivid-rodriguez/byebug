@@ -5,7 +5,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* (?:q(?:uit)?|exit) \s* (!|\s+unconditionally)? \s*$/ix
+      /^\s* (?:q(?:uit)?|exit) \s* (!|\s+unconditionally)? \s*$/x
     end
 
     def execute

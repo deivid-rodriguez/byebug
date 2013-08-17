@@ -63,7 +63,7 @@ module Byebug
     end unless defined?(InfoFileSubcommands)
 
     def regexp
-      /^\s* i(?:nfo)? (?:\s+(.+))? \s*$/ix
+      /^\s* i(?:nfo)? (?:\s+(.+))? \s*$/x
     end
 
     def execute

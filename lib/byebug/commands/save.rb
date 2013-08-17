@@ -49,7 +49,7 @@ module Byebug
     end
 
     def regexp
-      /^\s* sa(?:ve)? (?:\s+(\S+))? \s*$/ix
+      /^\s* sa(?:ve)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute

@@ -5,7 +5,7 @@ module Byebug
       /^\s* tr(?:ace)? (?: \s+ (\S+))   # on | off | var(iable)
                        (?: \s+ (\S+))?  # (variable-name)?
                        (?: \s+ (\S+))?  # (stop | nostop)?
-       \s*$/ix
+       \s*$/x
     end
 
     def execute

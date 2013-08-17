@@ -5,7 +5,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* sk(?:ip)? \s*$/ix
+      /^\s* sk(?:ip)? \s*$/x
     end
 
     def execute
