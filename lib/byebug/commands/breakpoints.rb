@@ -66,9 +66,6 @@ module Byebug
           return unless confirm("Set breakpoint anyway? (y/n) ")
         end
 
-        return errmsg "We are not in a state we can add breakpoints.\n" unless
-          @state.context
-
         b = Byebug.add_breakpoint brkpt_filename, line, expr
         print "Created breakpoint #{b.id} at " \
               "#{CommandProcessor.canonic_file(brkpt_filename)}:#{line.to_s}\n"

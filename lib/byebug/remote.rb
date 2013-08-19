@@ -52,13 +52,13 @@ module Byebug
     end
 
     def start_control(host = nil, ctrl_port = PORT + 1)
-      return @ctrl_port if defined?(@control_thread) && @control_thread
+      return @ctrl_port if @control_thread
       server = TCPServer.new(host, ctrl_port)
       @ctrl_port = server.addr[1]
       @control_thread = Thread.new do
         while (session = server.accept)
           interface = RemoteInterface.new(session)
-          processor = ControlCommandProcessor.new(interface)
+          ControlCommandProcessor.new(interface).process_commands
           processor.process_commands
         end
       end
