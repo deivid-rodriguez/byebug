@@ -16,8 +16,7 @@ module Byebug
   end
 
   class Command
-    SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
-      defined?(SubcmdStruct)
+    Subcmd = Struct.new(:name, :min, :short_help, :long_help)
 
     class << self
       def commands

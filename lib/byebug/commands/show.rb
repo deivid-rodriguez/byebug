@@ -186,7 +186,7 @@ module Byebug
         ['version', 1, 'Show byebug\'s version'],
         ['width', 1, 'Show the number of characters per line for byebug']
       ].map do |name, min, short_help, long_help|
-      SubcmdStruct.new(name, min, short_help, long_help)
+      Subcmd.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)
 
     self.allow_in_control = true

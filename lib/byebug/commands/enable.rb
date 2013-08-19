@@ -52,11 +52,11 @@ module Byebug
         'used to cancel the effect of the "disable" command.'],
        ['display', 2,
         'Enable some expressions to be displayed when program stops',
-        'Arguments are the code numbers of the expressions to resume '     \
+        'Arguments are the code numbers of the expressions to resume '   \
         'displaying. Do "info display" to see the current list of code ' \
         'numbers.'],
       ].map do |name, min, short_help, long_help|
-      SubcmdStruct.new(name, min, short_help, long_help)
+        Subcmd.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)
 
     def regexp
@@ -110,7 +110,7 @@ module Byebug
         'displaying. Do "info display" to see the current list of code ' \
         'numbers.'],
       ].map do |name, min, short_help, long_help|
-      SubcmdStruct.new(name, min, short_help, long_help)
+      Subcmd.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)
 
     def regexp

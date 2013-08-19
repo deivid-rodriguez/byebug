@@ -44,7 +44,7 @@ module Byebug
        ['variables', 1,
         'Local and instance variables of the current stack frame']
       ].map do |name, min, short_help, long_help|
-      SubcmdStruct.new(name, min, short_help, long_help)
+        Subcmd.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)
 
     InfoFileSubcommands =
@@ -59,7 +59,7 @@ module Byebug
        ['path', 4, 'Show full file path name for file'],
        ['sha1', 1, 'Show SHA1 hash of contents of the file']
       ].map do |name, min, short_help, long_help|
-      SubcmdStruct.new(name, min, short_help, long_help)
+        Subcmd.new(name, min, short_help, long_help)
     end unless defined?(InfoFileSubcommands)
 
     def regexp
