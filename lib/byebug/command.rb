@@ -15,10 +15,6 @@ module Byebug
     end
   end
 
-  # Root dir for byebug
-  BYEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
-    defined?(BYEBUG_DIR)
-
   class Command
     SubcmdStruct = Struct.new(:name, :min, :short_help, :long_help) unless
       defined?(SubcmdStruct)
@@ -88,8 +84,8 @@ module Byebug
       end
 
       def load_commands
-        Dir[File.join(Byebug.const_get(:BYEBUG_DIR), 'commands', '*')].each {
-          |file| require file if file =~ /\.rb$/ }
+        Dir[File.join(File.dirname(__FILE__), 'commands', '*')].each {
+          |file| require file }
         Byebug.constants.grep(/Functions$/).map {
           |name| Byebug.const_get(name) }.each { |mod| include mod }
       end
