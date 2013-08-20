@@ -386,7 +386,7 @@ Context_stop_return(VALUE self, VALUE frame)
  *
  *   Byebug keeps a single instance of this class.
  */
-VALUE
+void
 Init_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
@@ -405,6 +405,4 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "step_over", Context_step_over, -1);
   rb_define_method(cContext, "step_out", Context_step_out, 1);
   rb_define_method(cContext, "stop_return", Context_stop_return, 1);
-
-  return cContext;
 }

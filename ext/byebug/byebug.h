@@ -55,20 +55,14 @@ struct call_with_inspection_data {
 
 
 /* functions */
-extern VALUE Init_context(VALUE mByebug);
-
+extern void Init_context(VALUE mByebug);
 extern VALUE context_create();
-
 extern VALUE context_dup(debug_context_t *context);
-
 extern void reset_stepping_stop_points(debug_context_t *context);
-
 extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
-
 extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
                                    void *data);
 
-/* utility functions */
 static inline int
 classname_cmp(VALUE name, VALUE klass)
 {

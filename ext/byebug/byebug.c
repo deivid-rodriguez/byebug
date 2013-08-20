@@ -1,7 +1,6 @@
 #include <byebug.h>
 
 static VALUE mByebug; /* Ruby Byebug Module object */
-static VALUE cContext;
 
 static VALUE tracing     = Qfalse;
 static VALUE post_mortem = Qfalse;
@@ -604,9 +603,9 @@ Init_byebug()
   rb_define_module_function(mByebug, "post_mortem?", Byebug_post_mortem, 0);
   rb_define_module_function(mByebug, "post_mortem=", Byebug_set_post_mortem, 1);
 
-  cContext = Init_context(mByebug);
 
   Init_breakpoint(mByebug);
+  Init_context(mByebug);
 
   context     = Qnil;
   catchpoints = Qnil;
