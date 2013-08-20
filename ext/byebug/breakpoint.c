@@ -422,11 +422,13 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
   return Qnil;
 }
 
-extern void
+void
 Init_breakpoint(VALUE mByebug)
 {
   breakpoint_max = 0;
+
   cBreakpoint = rb_define_class_under(mByebug, "Breakpoint", rb_cObject);
+
   rb_define_singleton_method(cBreakpoint, "remove", Breakpoint_remove, 2);
   rb_define_method(cBreakpoint, "initialize", Breakpoint_initialize, 3);
   rb_define_method(cBreakpoint, "id", Breakpoint_id, 0);
