@@ -5,13 +5,13 @@
 #include <ruby/debug.h>
 
 /* flags */
-#define CTX_FL_SUSPEND      (1<<1)
-#define CTX_FL_TRACING      (1<<2)
-#define CTX_FL_SKIPPED      (1<<3)
-#define CTX_FL_DEAD         (1<<4)
-#define CTX_FL_ENABLE_BKPT  (1<<5)
-#define CTX_FL_FORCE_MOVE   (1<<6)
-#define CTX_FL_CATCHING     (1<<7)
+#define CTX_FL_CATCHING     (1<<1) /* catching of exceptions enabled         */
+#define CTX_FL_DEAD         (1<<2) /* this context belonged to a dead thread */
+#define CTX_FL_ENABLE_BKPT  (1<<3) /* cab check for breakpoints              */
+#define CTX_FL_FORCE_MOVE   (1<<4) /* don't stop unless we've changed line   */
+#define CTX_FL_SKIPPED      (1<<5) /* skip all events                        */
+#define CTX_FL_SUSPEND      (1<<6) /* thread currently suspended             */
+#define CTX_FL_TRACING      (1<<7) /* call at_tracing method                 */
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))

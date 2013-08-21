@@ -28,16 +28,42 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
   }
 }
 
-static VALUE
-bb_context(VALUE self)
-{
-  return context;
-}
-
 static void
 cleanup(debug_context_t *dc)
 {
   dc->stop_reason = CTX_STOP_NONE;
+}
+
+#define IS_STARTED (catchpoints != Qnil)
+
+#define EVENT_SETUP                                                     \
+  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
+  debug_context_t *dc;                                                  \
+  if (!IS_STARTED)                                                      \
+    rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
+  Data_Get_Struct(context, debug_context_t, dc);                        \
+  if (debug == Qtrue) trace_print(trace_arg, dc);                       \
+
+#define EVENT_COMMON if (trace_common(trace_arg, dc) == 0) { return; }
+
+static int
+trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
+{
+  /* ignore a skipped section of code */
+  if (CTX_FL_TEST(dc, CTX_FL_SKIPPED))
+  {
+    cleanup(dc);
+    return 0;
+  }
+
+  /* Many events per line, but only *one* breakpoint */
+  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
+      dc->last_file != rb_tracearg_path(trace_arg))
+  {
+    CTX_FL_SET(dc, CTX_FL_ENABLE_BKPT);
+  }
+
+  return 1;
 }
 
 static void
@@ -48,6 +74,8 @@ save_current_position(debug_context_t *dc, VALUE file, VALUE line)
   CTX_FL_UNSET(dc, CTX_FL_ENABLE_BKPT);
   CTX_FL_UNSET(dc, CTX_FL_FORCE_MOVE);
 }
+
+/* Functions that return control to byebug after the different events */
 
 static VALUE
 call_at(VALUE context_obj, debug_context_t *dc, ID mid, int argc, VALUE a0,
@@ -114,38 +142,6 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
 
   reset_stepping_stop_points(dc);
   call_at_line(context_obj, dc, file, line);
-}
-
-#define IS_STARTED (catchpoints != Qnil)
-
-#define EVENT_SETUP                                                     \
-  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
-  debug_context_t *dc;                                                  \
-  if (!IS_STARTED)                                                      \
-    rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
-  Data_Get_Struct(context, debug_context_t, dc);                        \
-  if (debug == Qtrue) trace_print(trace_arg, dc);                       \
-
-#define EVENT_COMMON if (trace_common(trace_arg, dc) == 0) { return; }
-
-static int
-trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
-{
-  /* ignore a skipped section of code */
-  if (CTX_FL_TEST(dc, CTX_FL_SKIPPED))
-  {
-    cleanup(dc);
-    return 0;
-  }
-
-  /* Many events per line, but only *one* breakpoint */
-  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
-      dc->last_file != rb_tracearg_path(trace_arg))
-  {
-    CTX_FL_SET(dc, CTX_FL_ENABLE_BKPT);
-  }
-
-  return 1;
 }
 
 
@@ -386,12 +382,38 @@ clear_tracepoints(VALUE self)
   return Qnil;
 }
 
+
+/*
+ *  call-seq:
+ *    Byebug.context -> context
+ *
+ *  Returns byebug's context context.
+ */
+static VALUE
+bb_context(VALUE self)
+{
+  return context;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.started? -> bool
+ *
+ *  Returns +true+ byebug is started.
+ */
 static VALUE
 bb_started(VALUE self)
 {
   return IS_STARTED;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.stop -> bool
+ *
+ *  This method disables byebug. It returns +true+ if byebug was already
+ *  disabled, otherwise it returns +false+.
+ */
 static VALUE
 bb_stop(VALUE self)
 {
@@ -408,6 +430,20 @@ bb_stop(VALUE self)
   return Qtrue;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.start_ -> bool
+ *    Byebug.start_ { ... } -> bool
+ *
+ *  This method is internal and activates the debugger. Use Byebug.start (from
+ *  <tt>lib/byebug.rb</tt>) instead.
+ *
+ *  The return value is the value of !Byebug.started? <i>before</i> issuing the
+ *  +start+; That is, +true+ is returned, unless byebug was previously started.
+ *
+ *  If a block is given, it starts byebug and yields to block. When the block
+ *  is finished executing it stops the debugger with Byebug.stop method.
+ */
 static VALUE
 bb_start(VALUE self)
 {
@@ -446,6 +482,13 @@ set_current_skipped_status(VALUE status)
   return Qnil;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.debug_load(file, stop = false) -> nil
+ *
+ *  Same as Kernel#load but resets current context's frames.
+ *  +stop+ parameter forces byebug to stop at the first line of code in +file+
+ */
 static VALUE
 bb_load(int argc, VALUE *argv, VALUE self)
 {
@@ -502,22 +545,42 @@ debug_at_exit_i(VALUE proc)
     debug_at_exit_c(proc);
 }
 
+/*
+ *  call-seq:
+ *    Byebug.debug_at_exit { block } -> proc
+ *
+ *  Register <tt>at_exit</tt> hook which is escaped from byebug.
+ */
 static VALUE
 bb_at_exit(VALUE self)
 {
   VALUE proc;
+
   if (!rb_block_given_p()) rb_raise(rb_eArgError, "called without a block");
+
   proc = rb_block_proc();
   rb_set_end_proc(debug_at_exit_i, proc);
   return proc;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.tracing -> bool
+ *
+ *   Returns +true+ if global tracing is enabled.
+ */
 static VALUE
 bb_tracing(VALUE self)
 {
   return tracing;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.tracing = bool
+ *
+ *  Sets the global tracing flag.
+ */
 static VALUE
 bb_set_tracing(VALUE self, VALUE value)
 {
@@ -525,12 +588,24 @@ bb_set_tracing(VALUE self, VALUE value)
   return value;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.post_mortem? -> bool
+ *
+ *  Returns +true+ if post-moterm debugging is enabled.
+ */
 static VALUE
 bb_post_mortem(VALUE self)
 {
   return post_mortem;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.post_mortem = bool
+ *
+ *  Sets post-moterm flag.
+ */
 static VALUE
 bb_set_post_mortem(VALUE self, VALUE value)
 {
@@ -538,18 +613,36 @@ bb_set_post_mortem(VALUE self, VALUE value)
   return value;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.breakpoints -> array
+ *
+ *  Returns an array of breakpoints.
+ */
 static VALUE
 bb_breakpoints(VALUE self)
 {
   return breakpoints;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.catchpoints -> array
+ *
+ *  Returns an array of catchpoints.
+ */
 static VALUE
 bb_catchpoints(VALUE self)
 {
   return catchpoints;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.add_catchpoint(exception) -> exception
+ *
+ *  Adds a new exception to the catchpoints array.
+ */
 static VALUE
 bb_add_catchpoint(VALUE self, VALUE value)
 {
