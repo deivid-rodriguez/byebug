@@ -102,11 +102,7 @@ module Byebug
         Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
       end
       Byebug.tracing = options[:tracing] unless options[:tracing].nil?
-      if Byebug.started?
-        retval = block && block.call(self)
-      else
-        retval = Byebug._start(&block)
-      end
+      retval = Byebug._start(&block)
       post_mortem if options[:post_mortem]
       return retval
     end
