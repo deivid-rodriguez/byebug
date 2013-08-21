@@ -372,14 +372,13 @@ register_tracepoints(VALUE self)
     rb_tracepoint_enable(rb_ary_entry(traces, i));
 }
 
-static VALUE
+static void
 clear_tracepoints(VALUE self)
 {
   int i;
+
   for (i = RARRAY_LEN(tracepoints)-1; i >= 0; i--)
     rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
-
-  return Qnil;
 }
 
 
