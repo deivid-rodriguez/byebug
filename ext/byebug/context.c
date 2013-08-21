@@ -201,37 +201,37 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
 static VALUE
 Context_frame_file(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
-  VALUE loc;
+  FRAME_SETUP
 
-  loc = dc_frame_location(context, frame_n);
+  VALUE loc = dc_frame_location(context, frame_n);
+
   return rb_funcall(loc, rb_intern("path"), 0);
 }
 
 static VALUE
 Context_frame_line(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
-  VALUE loc;
+  FRAME_SETUP
 
-  loc = dc_frame_location(context, frame_n);
+  VALUE loc = dc_frame_location(context, frame_n);
+
   return rb_funcall(loc, rb_intern("lineno"), 0);
 }
 
 static VALUE
 Context_frame_method(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
-  VALUE loc;
+  FRAME_SETUP
 
-  loc = dc_frame_location(context, frame_n);
+  VALUE loc = dc_frame_location(context, frame_n);
+
   return rb_str_intern(rb_funcall(loc, rb_intern("label"), 0));
 }
 
 static VALUE
 Context_frame_binding(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
+  FRAME_SETUP
 
   return dc_frame_binding(context, frame_n);
 }
@@ -239,7 +239,7 @@ Context_frame_binding(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_frame_self(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
+  FRAME_SETUP
 
   return dc_frame_self(context, frame_n);
 }
@@ -247,7 +247,7 @@ Context_frame_self(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_frame_class(int argc, VALUE *argv, VALUE self)
 {
-  FRAME_SETUP;
+  FRAME_SETUP
 
   return dc_frame_class(context, frame_n);
 }
@@ -390,19 +390,20 @@ void
 Init_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
-  rb_define_method(cContext, "stack_size", Context_stack_size, 0);
-  rb_define_method(cContext, "dead?", Context_dead, 0);
-  rb_define_method(cContext, "stop_reason", Context_stop_reason, 0);
-  rb_define_method(cContext, "tracing", Context_tracing, 0);
-  rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
-  rb_define_method(cContext, "frame_file", Context_frame_file, -1);
-  rb_define_method(cContext, "frame_line", Context_frame_line, -1);
-  rb_define_method(cContext, "frame_method", Context_frame_method, -1);
+
+  rb_define_method(cContext, "dead?"        , Context_dead         ,  0);
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
-  rb_define_method(cContext, "frame_self", Context_frame_self, -1);
-  rb_define_method(cContext, "frame_class", Context_frame_class, -1);
-  rb_define_method(cContext, "step_into", Context_step_into, -1);
-  rb_define_method(cContext, "step_over", Context_step_over, -1);
-  rb_define_method(cContext, "step_out", Context_step_out, 1);
-  rb_define_method(cContext, "stop_return", Context_stop_return, 1);
+  rb_define_method(cContext, "frame_class"  , Context_frame_class  , -1);
+  rb_define_method(cContext, "frame_file"   , Context_frame_file   , -1);
+  rb_define_method(cContext, "frame_line"   , Context_frame_line   , -1);
+  rb_define_method(cContext, "frame_method" , Context_frame_method , -1);
+  rb_define_method(cContext, "frame_self"   , Context_frame_self   , -1);
+  rb_define_method(cContext, "stack_size"   , Context_stack_size   ,  0);
+  rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
+  rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);
+  rb_define_method(cContext, "tracing="     , Context_set_tracing  ,  1);
+  rb_define_method(cContext, "step_into"    , Context_step_into    , -1);
+  rb_define_method(cContext, "step_out"     , Context_step_out     ,  1);
+  rb_define_method(cContext, "step_over"    , Context_step_over    , -1);
+  rb_define_method(cContext, "stop_return"  , Context_stop_return  ,  1);
 }

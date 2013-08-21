@@ -44,7 +44,7 @@ cleanup(debug_context_t *dc)
   Data_Get_Struct(context, debug_context_t, dc);                        \
   if (debug == Qtrue) trace_print(trace_arg, dc);                       \
 
-#define EVENT_COMMON if (trace_common(trace_arg, dc) == 0) { return; }
+#define EVENT_COMMON if (!trace_common(trace_arg, dc)) { return; }
 
 static int
 trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
@@ -491,7 +491,7 @@ set_current_skipped_status(VALUE status)
 static VALUE
 bb_load(int argc, VALUE *argv, VALUE self)
 {
-  VALUE file, stop, context_obj;
+  VALUE file, stop, context;
   debug_context_t *dc;
   VALUE status = Qnil;
   int state = 0;
@@ -503,8 +503,9 @@ bb_load(int argc, VALUE *argv, VALUE self)
 
   bb_start(self);
 
-  context_obj = bb_context(self);
-  Data_Get_Struct(context_obj, debug_context_t, dc);
+  context = bb_context(self);
+  Data_Get_Struct(context, debug_context_t, dc);
+
   if (RTEST(stop)) dc->steps = 1;
 
   /* Reset stack size to ignore byebug's own frames */
@@ -665,22 +666,22 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "context"       , bb_context, 0);
-  rb_define_module_function(mByebug, "breakpoints"   , bb_breakpoints, 0);
-  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint, 1);
-  rb_define_module_function(mByebug, "catchpoints"   , bb_catchpoints, 0);
-  rb_define_module_function(mByebug, "_start"        , bb_start, 0);
-  rb_define_module_function(mByebug, "stop"          , bb_stop, 0);
-  rb_define_module_function(mByebug, "started?"      , bb_started, 0);
-  rb_define_module_function(mByebug, "tracing?"      , bb_tracing, 0);
-  rb_define_module_function(mByebug, "tracing="      , bb_set_tracing, 1);
-  rb_define_module_function(mByebug, "debug_load"    , bb_load, -1);
-  rb_define_module_function(mByebug, "debug_at_exit" , bb_at_exit, 0);
-  rb_define_module_function(mByebug, "post_mortem?"  , bb_post_mortem, 0);
-  rb_define_module_function(mByebug, "post_mortem="  , bb_set_post_mortem, 1);
+  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint ,  1);
+  rb_define_module_function(mByebug, "breakpoints"   , bb_breakpoints    ,  0);
+  rb_define_module_function(mByebug, "context"       , bb_context        ,  0);
+  rb_define_module_function(mByebug, "catchpoints"   , bb_catchpoints    ,  0);
+  rb_define_module_function(mByebug, "debug_at_exit" , bb_at_exit        ,  0);
+  rb_define_module_function(mByebug, "debug_load"    , bb_load           , -1);
+  rb_define_module_function(mByebug, "post_mortem?"  , bb_post_mortem    ,  0);
+  rb_define_module_function(mByebug, "post_mortem="  , bb_set_post_mortem,  1);
+  rb_define_module_function(mByebug, "_start"        , bb_start          ,  0);
+  rb_define_module_function(mByebug, "started?"      , bb_started        ,  0);
+  rb_define_module_function(mByebug, "stop"          , bb_stop           ,  0);
+  rb_define_module_function(mByebug, "tracing?"      , bb_tracing        ,  0);
+  rb_define_module_function(mByebug, "tracing="      , bb_set_tracing    ,  1);
 
-  Init_breakpoint(mByebug);
   Init_context(mByebug);
+  Init_breakpoint(mByebug);
 
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);

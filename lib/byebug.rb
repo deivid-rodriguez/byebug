@@ -111,7 +111,7 @@ module Byebug
       return retval
     end
 
-    ##
+    #
     # Runs normal byebug initialization scripts.
     #
     # Reads and executes the commands from init file (if any) in the current
@@ -139,7 +139,7 @@ module Byebug
       processor.process_commands(verbose)
     end
 
-    ##
+    #
     # Activates the post-mortem mode. There are two ways of using it:
     #
     # == Global post-mortem mode
@@ -193,7 +193,6 @@ module Byebug
       Byebug.tracing = orig_tracing
     end
     private :handle_post_mortem
-
   end
 end
 
@@ -239,7 +238,7 @@ class Module
 end
 
 module Kernel
-  ##
+  #
   # Enters byebug after _steps_into_ line events and _steps_out_ return events
   # occur. Before entering byebug startup, the init script is read.
   #

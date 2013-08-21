@@ -41,7 +41,7 @@ module TestDsl
     end
   end
 
-  ##
+  #
   # Expand fullpath of a given example file
   #
   def fullpath(filename)
