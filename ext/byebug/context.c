@@ -399,11 +399,11 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_method" , Context_frame_method , -1);
   rb_define_method(cContext, "frame_self"   , Context_frame_self   , -1);
   rb_define_method(cContext, "stack_size"   , Context_stack_size   ,  0);
-  rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
-  rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);
-  rb_define_method(cContext, "tracing="     , Context_set_tracing  ,  1);
   rb_define_method(cContext, "step_into"    , Context_step_into    , -1);
   rb_define_method(cContext, "step_out"     , Context_step_out     ,  1);
   rb_define_method(cContext, "step_over"    , Context_step_over    , -1);
   rb_define_method(cContext, "stop_return"  , Context_stop_return  ,  1);
+  rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
+  rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);
+  rb_define_method(cContext, "tracing="     , Context_set_tracing  ,  1);
 }

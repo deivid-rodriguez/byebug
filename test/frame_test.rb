@@ -44,9 +44,8 @@ class TestFrame < TestDsl::TestCase
     end
 
     it 'must set frame to the last one' do
-      enter 'bt', 'frame -1'
+      enter 'frame -1'
       debug_file('frame') { $state.file.must_match /minitest\/unit.rb/ }
-      check_output_doesnt_include "at #{@tst_file}:"
     end
 
     it 'must not set frame if the frame number is too low' do

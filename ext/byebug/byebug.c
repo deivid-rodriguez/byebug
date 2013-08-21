@@ -466,21 +466,6 @@ bb_start(VALUE self)
   return result;
 }
 
-static VALUE
-set_current_skipped_status(VALUE status)
-{
-  VALUE context_obj;
-  debug_context_t *dc;
-
-  context_obj = bb_context(mByebug);
-  Data_Get_Struct(context_obj, debug_context_t, dc);
-  if (status)
-    CTX_FL_SET(dc, CTX_FL_SKIPPED);
-  else
-    CTX_FL_UNSET(dc, CTX_FL_SKIPPED);
-  return Qnil;
-}
-
 /*
  *  call-seq:
  *    Byebug.debug_load(file, stop = false) -> nil
@@ -525,6 +510,23 @@ bb_load(int argc, VALUE *argv, VALUE self)
   rb_exec_end_proc();
 
   return status;
+}
+
+static VALUE
+set_current_skipped_status(VALUE status)
+{
+  VALUE context;
+  debug_context_t *dc;
+
+  context = bb_context(mByebug);
+  Data_Get_Struct(context, debug_context_t, dc);
+
+  if (status)
+    CTX_FL_SET(dc, CTX_FL_SKIPPED);
+  else
+    CTX_FL_UNSET(dc, CTX_FL_SKIPPED);
+
+  return Qnil;
 }
 
 static VALUE
