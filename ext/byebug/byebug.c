@@ -29,7 +29,7 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 }
 
 static VALUE
-Byebug_context(VALUE self)
+bb_context(VALUE self)
 {
   return context;
 }
@@ -116,12 +116,12 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
   call_at_line(context_obj, dc, file, line);
 }
 
-#define BYEBUG_STARTED (catchpoints != Qnil)
+#define IS_STARTED (catchpoints != Qnil)
 
 #define EVENT_SETUP                                                     \
   rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   debug_context_t *dc;                                                  \
-  if (!BYEBUG_STARTED)                                                  \
+  if (!IS_STARTED)                                                      \
     rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
   Data_Get_Struct(context, debug_context_t, dc);                        \
   if (debug == Qtrue) trace_print(trace_arg, dc);                       \
@@ -387,15 +387,15 @@ clear_tracepoints(VALUE self)
 }
 
 static VALUE
-Byebug_started(VALUE self)
+bb_started(VALUE self)
 {
-  return BYEBUG_STARTED;
+  return IS_STARTED;
 }
 
 static VALUE
-Byebug_stop(VALUE self)
+bb_stop(VALUE self)
 {
-  if (BYEBUG_STARTED)
+  if (IS_STARTED)
   {
     clear_tracepoints(self);
 
@@ -409,11 +409,11 @@ Byebug_stop(VALUE self)
 }
 
 static VALUE
-Byebug_start(VALUE self)
+bb_start(VALUE self)
 {
   VALUE result;
 
-  if (BYEBUG_STARTED)
+  if (IS_STARTED)
     result = Qfalse;
   else
   {
@@ -426,7 +426,7 @@ Byebug_start(VALUE self)
   }
 
   if (rb_block_given_p())
-    rb_ensure(rb_yield, self, Byebug_stop, self);
+    rb_ensure(rb_yield, self, bb_stop, self);
 
   return result;
 }
@@ -437,7 +437,7 @@ set_current_skipped_status(VALUE status)
   VALUE context_obj;
   debug_context_t *dc;
 
-  context_obj = Byebug_context(mByebug);
+  context_obj = bb_context(mByebug);
   Data_Get_Struct(context_obj, debug_context_t, dc);
   if (status)
     CTX_FL_SET(dc, CTX_FL_SKIPPED);
@@ -447,7 +447,7 @@ set_current_skipped_status(VALUE status)
 }
 
 static VALUE
-Byebug_load(int argc, VALUE *argv, VALUE self)
+bb_load(int argc, VALUE *argv, VALUE self)
 {
   VALUE file, stop, context_obj;
   debug_context_t *dc;
@@ -459,9 +459,9 @@ Byebug_load(int argc, VALUE *argv, VALUE self)
     stop = Qfalse;
   }
 
-  Byebug_start(self);
+  bb_start(self);
 
-  context_obj = Byebug_context(self);
+  context_obj = bb_context(self);
   Data_Get_Struct(context_obj, debug_context_t, dc);
   if (RTEST(stop)) dc->steps = 1;
 
@@ -493,7 +493,7 @@ debug_at_exit_c(VALUE proc)
 static void
 debug_at_exit_i(VALUE proc)
 {
-  if (BYEBUG_STARTED)
+  if (IS_STARTED)
   {
     set_current_skipped_status(Qtrue);
     rb_ensure(debug_at_exit_c, proc, set_current_skipped_status, Qfalse);
@@ -503,7 +503,7 @@ debug_at_exit_i(VALUE proc)
 }
 
 static VALUE
-Byebug_at_exit(VALUE self)
+bb_at_exit(VALUE self)
 {
   VALUE proc;
   if (!rb_block_given_p()) rb_raise(rb_eArgError, "called without a block");
@@ -513,45 +513,45 @@ Byebug_at_exit(VALUE self)
 }
 
 static VALUE
-Byebug_tracing(VALUE self)
+bb_tracing(VALUE self)
 {
   return tracing;
 }
 
 static VALUE
-Byebug_set_tracing(VALUE self, VALUE value)
+bb_set_tracing(VALUE self, VALUE value)
 {
   tracing = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
 
 static VALUE
-Byebug_post_mortem(VALUE self)
+bb_post_mortem(VALUE self)
 {
   return post_mortem;
 }
 
 static VALUE
-Byebug_set_post_mortem(VALUE self, VALUE value)
+bb_set_post_mortem(VALUE self, VALUE value)
 {
   post_mortem = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
 
 static VALUE
-Byebug_breakpoints(VALUE self)
+bb_breakpoints(VALUE self)
 {
   return breakpoints;
 }
 
 static VALUE
-Byebug_catchpoints(VALUE self)
+bb_catchpoints(VALUE self)
 {
   return catchpoints;
 }
 
 static VALUE
-Byebug_add_catchpoint(VALUE self, VALUE value)
+bb_add_catchpoint(VALUE self, VALUE value)
 {
   if (TYPE(value) != T_STRING)
     rb_raise(rb_eTypeError, "value of a catchpoint must be String");
@@ -572,25 +572,23 @@ void
 Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
-  rb_define_module_function(mByebug, "context", Byebug_context, 0);
-  rb_define_module_function(mByebug, "breakpoints", Byebug_breakpoints, 0);
-  rb_define_module_function(mByebug, "add_catchpoint",
-                                     Byebug_add_catchpoint, 1);
-  rb_define_module_function(mByebug, "catchpoints", Byebug_catchpoints, 0);
-  rb_define_module_function(mByebug, "_start", Byebug_start, 0);
-  rb_define_module_function(mByebug, "stop", Byebug_stop, 0);
-  rb_define_module_function(mByebug, "started?", Byebug_started, 0);
-  rb_define_module_function(mByebug, "tracing?", Byebug_tracing, 0);
-  rb_define_module_function(mByebug, "tracing=", Byebug_set_tracing, 1);
-  rb_define_module_function(mByebug, "debug_load", Byebug_load, -1);
-  rb_define_module_function(mByebug, "debug_at_exit", Byebug_at_exit, 0);
-  rb_define_module_function(mByebug, "post_mortem?", Byebug_post_mortem, 0);
-  rb_define_module_function(mByebug, "post_mortem=", Byebug_set_post_mortem, 1);
 
+  rb_define_module_function(mByebug, "context"       , bb_context, 0);
+  rb_define_module_function(mByebug, "breakpoints"   , bb_breakpoints, 0);
+  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint, 1);
+  rb_define_module_function(mByebug, "catchpoints"   , bb_catchpoints, 0);
+  rb_define_module_function(mByebug, "_start"        , bb_start, 0);
+  rb_define_module_function(mByebug, "stop"          , bb_stop, 0);
+  rb_define_module_function(mByebug, "started?"      , bb_started, 0);
+  rb_define_module_function(mByebug, "tracing?"      , bb_tracing, 0);
+  rb_define_module_function(mByebug, "tracing="      , bb_set_tracing, 1);
+  rb_define_module_function(mByebug, "debug_load"    , bb_load, -1);
+  rb_define_module_function(mByebug, "debug_at_exit" , bb_at_exit, 0);
+  rb_define_module_function(mByebug, "post_mortem?"  , bb_post_mortem, 0);
+  rb_define_module_function(mByebug, "post_mortem="  , bb_set_post_mortem, 1);
 
   Init_breakpoint(mByebug);
   Init_context(mByebug);
-
 
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
