@@ -48,8 +48,6 @@ module Byebug
       return "#{line.gsub(/^\s+/, '').chomp}"
     end
 
-    alias stop remove_tracepoints
-
     # @param [String] file
     # @param [Fixnum] line
     # @param [String] expr

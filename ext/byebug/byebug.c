@@ -9,13 +9,8 @@ static VALUE debug       = Qfalse;
 static VALUE context     = Qnil;
 static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
+static VALUE tracepoints = Qnil;
 
-static VALUE tpLine    = Qnil;
-static VALUE tpCall    = Qnil;
-static VALUE tpCCall   = Qnil;
-static VALUE tpReturn  = Qnil;
-static VALUE tpCReturn = Qnil;
-static VALUE tpRaise   = Qnil;
 
 static VALUE
 tp_inspect(rb_trace_arg_t *trace_arg) {
@@ -149,8 +144,7 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
     printf("%s (stack_size: %d)\n",                                     \
            RSTRING_PTR(tp_inspect(trace_arg)), dc->stack_size);         \
 
-#define EVENT_COMMON() \
-  if (trace_common(trace_arg, dc) == 0) { return; }
+#define EVENT_COMMON if (trace_common(trace_arg, dc) == 0) { return; }
 
 static int
 trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
@@ -172,17 +166,21 @@ trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
   return 1;
 }
 
+
+/* TracePoint API event handlers */
+
 static void
-process_line_event(VALUE trace_point, void *data)
+line_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP;
+  EVENT_SETUP
+
   VALUE breakpoint = Qnil;
   VALUE file    = rb_tracearg_path(trace_arg);
   VALUE line    = rb_tracearg_lineno(trace_arg);
   VALUE binding = rb_tracearg_binding(trace_arg);
   int moved = 0;
 
-  EVENT_COMMON();
+  EVENT_COMMON
 
   if (dc->stack_size == 0) dc->stack_size++;
 
@@ -217,21 +215,40 @@ process_line_event(VALUE trace_point, void *data)
 }
 
 static void
-process_c_return_event(VALUE trace_point, void *data)
+call_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP;
-  if (dc->stack_size > 0) dc->stack_size--;
-  EVENT_COMMON();
+  EVENT_SETUP
+
+  dc->stack_size++;
+
+  EVENT_COMMON
+
+  VALUE breakpoint = Qnil;
+  VALUE klass   = rb_tracearg_defined_class(trace_arg);
+  VALUE mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
+  VALUE binding = rb_tracearg_binding(trace_arg);
+  VALUE self    = rb_tracearg_self(trace_arg);
+  VALUE file    = rb_tracearg_path(trace_arg);
+  VALUE line    = rb_tracearg_lineno(trace_arg);
+
+  breakpoint = find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
+  if (breakpoint != Qnil)
+  {
+    call_at_breakpoint(context, dc, breakpoint);
+    call_at_line(context, dc, file, line);
+  }
 
   cleanup(dc);
 }
 
 static void
-process_return_event(VALUE trace_point, void *data)
+return_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP;
+  EVENT_SETUP
+
   if (dc->stack_size > 0) dc->stack_size--;
-  EVENT_COMMON();
+
+  EVENT_COMMON
 
   if (dc->stack_size + 1 == dc->before_frame)
   {
@@ -251,52 +268,41 @@ process_return_event(VALUE trace_point, void *data)
 }
 
 static void
-process_c_call_event(VALUE trace_point, void *data)
-{
-  EVENT_SETUP;
-  dc->stack_size++;
-  EVENT_COMMON();
-
-  cleanup(dc);
-}
-
-static void
-process_call_event(VALUE trace_point, void *data)
-{
-  EVENT_SETUP;
-  dc->stack_size++;
-  EVENT_COMMON();
-
-  VALUE breakpoint = Qnil;
-  VALUE klass   = rb_tracearg_defined_class(trace_arg);
-  VALUE mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
-  VALUE binding = rb_tracearg_binding(trace_arg);
-  VALUE self    = rb_tracearg_self(trace_arg);
-  VALUE file    = rb_tracearg_path(trace_arg);
-  VALUE line    = rb_tracearg_lineno(trace_arg);
-
-  breakpoint =
-    find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
-  if (breakpoint != Qnil)
-  {
-    call_at_breakpoint(context, dc, breakpoint);
-    call_at_line(context, dc, file, line);
-  }
-
-  cleanup(dc);
-}
-
-static void
-process_raise_event(VALUE trace_point, void *data)
+c_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP
+
+  dc->stack_size++;
+
+  EVENT_COMMON
+
+  cleanup(dc);
+}
+
+static void
+c_return_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP
+
+  if (dc->stack_size > 0) dc->stack_size--;
+
+  EVENT_COMMON
+
+  cleanup(dc);
+}
+
+static void
+raise_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP
+
   VALUE expn_class, aclass;
   VALUE err = rb_errinfo();
   VALUE ancestors;
   int i;
   debug_context_t *new_dc;
 
-  EVENT_COMMON();
+  EVENT_COMMON
 
   VALUE binding = rb_tracearg_binding(trace_arg);
   VALUE path    = rb_tracearg_path(trace_arg);
@@ -347,62 +353,53 @@ process_raise_event(VALUE trace_point, void *data)
   cleanup(dc);
 }
 
-static VALUE
-Byebug_setup_tracepoints(VALUE self)
+
+/* Setup TracePoint functionality */
+
+static void
+register_tracepoints(VALUE self)
 {
-  if (catchpoints != Qnil) return Qnil;
+  int i;
+  VALUE traces = tracepoints;
 
-  breakpoints = rb_ary_new();
-  catchpoints = rb_hash_new();
-  context = context_create();
+  if (NIL_P(traces))
+  {
+    traces = rb_ary_new();
 
-  tpLine = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_LINE,
-    process_line_event, NULL);
+    int line_msk     = RUBY_EVENT_LINE;
+    int call_msk     = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
+    int return_msk   = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
+    int c_call_msk   = RUBY_EVENT_C_CALL;
+    int c_return_msk = RUBY_EVENT_C_RETURN;
+    int raise_msk    = RUBY_EVENT_RAISE;
 
-  tpCall = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS,
-    process_call_event, NULL);
+    VALUE tpLine     = rb_tracepoint_new(Qnil, line_msk    , line_event    , 0);
+    VALUE tpCall     = rb_tracepoint_new(Qnil, call_msk    , call_event    , 0);
+    VALUE tpReturn   = rb_tracepoint_new(Qnil, return_msk  , return_event  , 0);
+    VALUE tpCCall    = rb_tracepoint_new(Qnil, c_call_msk  , c_call_event  , 0);
+    VALUE tpCReturn  = rb_tracepoint_new(Qnil, c_return_msk, c_return_event, 0);
+    VALUE tpRaise    = rb_tracepoint_new(Qnil, raise_msk   , raise_event   , 0);
 
-  tpCCall = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_C_CALL,
-    process_c_call_event, NULL);
+    rb_ary_push(traces, tpLine);
+    rb_ary_push(traces, tpCall);
+    rb_ary_push(traces, tpReturn);
+    rb_ary_push(traces, tpCCall);
+    rb_ary_push(traces, tpCReturn);
+    rb_ary_push(traces, tpRaise);
 
-  tpReturn = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END,
-    process_return_event, NULL);
+    tracepoints = traces;
+  }
 
-  tpCReturn = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_C_RETURN,
-    process_c_return_event, NULL);
-
-  tpRaise = rb_tracepoint_new(Qnil,
-    RUBY_EVENT_RAISE,
-    process_raise_event, NULL);
-
-  rb_tracepoint_enable(tpLine);
-  rb_tracepoint_enable(tpCall);
-  rb_tracepoint_enable(tpCCall);
-  rb_tracepoint_enable(tpReturn);
-  rb_tracepoint_enable(tpCReturn);
-  rb_tracepoint_enable(tpRaise);
-
-  return Qnil;
+  for (i = 0; i < RARRAY_LEN(traces); i++)
+    rb_tracepoint_enable(rb_ary_entry(traces, i));
 }
 
 static VALUE
-Byebug_remove_tracepoints(VALUE self)
+clear_tracepoints(VALUE self)
 {
-  rb_tracepoint_disable(tpRaise);
-  rb_tracepoint_disable(tpCReturn);
-  rb_tracepoint_disable(tpReturn);
-  rb_tracepoint_disable(tpCCall);
-  rb_tracepoint_disable(tpCall);
-  rb_tracepoint_disable(tpLine);
-
-  context = Qnil;
-  breakpoints = Qnil;
-  catchpoints = Qnil;
+  int i;
+  for (i = RARRAY_LEN(tracepoints)-1; i >= 0; i--)
+    rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
 
   return Qnil;
 }
@@ -418,7 +415,12 @@ Byebug_stop(VALUE self)
 {
   if (BYEBUG_STARTED)
   {
-    Byebug_remove_tracepoints(self);
+    clear_tracepoints(self);
+
+    context     = Qnil;
+    breakpoints = Qnil;
+    catchpoints = Qnil;
+
     return Qfalse;
   }
   return Qtrue;
@@ -433,7 +435,11 @@ Byebug_start(VALUE self)
     result = Qfalse;
   else
   {
-    Byebug_setup_tracepoints(self);
+    breakpoints = rb_ary_new();
+    catchpoints = rb_hash_new();
+    context     = context_create();
+
+    register_tracepoints(self);
     result = Qtrue;
   }
 
@@ -584,10 +590,6 @@ void
 Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
-  rb_define_module_function(mByebug, "setup_tracepoints",
-                                     Byebug_setup_tracepoints, 0);
-  rb_define_module_function(mByebug, "remove_tracepoints",
-                                     Byebug_remove_tracepoints, 0);
   rb_define_module_function(mByebug, "context", Byebug_context, 0);
   rb_define_module_function(mByebug, "breakpoints", Byebug_breakpoints, 0);
   rb_define_module_function(mByebug, "add_catchpoint",
@@ -607,11 +609,9 @@ Init_byebug()
   Init_breakpoint(mByebug);
   Init_context(mByebug);
 
-  context     = Qnil;
-  catchpoints = Qnil;
-  breakpoints = Qnil;
 
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
   rb_global_variable(&context);
+  rb_global_variable(&tracepoints);
 }
