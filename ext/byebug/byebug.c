@@ -11,37 +11,21 @@ static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
 static VALUE tracepoints = Qnil;
 
-
-static VALUE
-tp_inspect(rb_trace_arg_t *trace_arg) {
-  if (trace_arg) {
+static void
+trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
+{
+  if (trace_arg)
+  {
+    int i = 0;
+    VALUE path  = rb_tracearg_path(trace_arg);
+    VALUE line  = rb_tracearg_lineno(trace_arg);
     VALUE event = rb_tracearg_event(trace_arg);
-    if (ID2SYM(rb_intern("line")) == event ||
-        ID2SYM(rb_intern("specified_line")) == event)
-    {
-      VALUE sym = rb_tracearg_method_id(trace_arg);
-      if (NIL_P(sym)) sym = rb_str_new_cstr("<main>");
-      return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d in `%"PRIsVALUE"'",
-                          rb_tracearg_event(trace_arg),
-                          rb_tracearg_path(trace_arg),
-                          FIX2INT(rb_tracearg_lineno(trace_arg)),
-                          sym);
-    }
-    if (ID2SYM(rb_intern("call")) == event ||
-        ID2SYM(rb_intern("c_call")) == event ||
-        ID2SYM(rb_intern("return")) == event ||
-        ID2SYM(rb_intern("c_return")) == event)
-      return rb_sprintf("%"PRIsVALUE" `%"PRIsVALUE"'@%"PRIsVALUE":%d",
-                        rb_tracearg_event(trace_arg),
-                        rb_tracearg_method_id(trace_arg),
-                        rb_tracearg_path(trace_arg),
-                        FIX2INT(rb_tracearg_lineno(trace_arg)));
-    return rb_sprintf("%"PRIsVALUE"@%"PRIsVALUE":%d",
-                      rb_tracearg_event(trace_arg),
-                      rb_tracearg_path(trace_arg),
-                      FIX2INT(rb_tracearg_lineno(trace_arg)));
+    VALUE mid   = rb_tracearg_method_id(trace_arg);
+    for (i=0; i<dc->stack_size; i++) putc('|', stderr);
+    fprintf(stderr, "%s@%s:%d %s\n",
+      rb_id2name(SYM2ID(event)), RSTRING_PTR(path), NUM2INT(line),
+      NIL_P(mid) ? "" : rb_id2name(SYM2ID(mid)));
   }
-  return rb_sprintf("No info");
 }
 
 static VALUE
@@ -140,9 +124,7 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
   if (!BYEBUG_STARTED)                                                  \
     rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
   Data_Get_Struct(context, debug_context_t, dc);                        \
-  if (debug == Qtrue)                                                   \
-    printf("%s (stack_size: %d)\n",                                     \
-           RSTRING_PTR(tp_inspect(trace_arg)), dc->stack_size);         \
+  if (debug == Qtrue) trace_print(trace_arg, dc);                       \
 
 #define EVENT_COMMON if (trace_common(trace_arg, dc) == 0) { return; }
 
