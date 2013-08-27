@@ -12,12 +12,6 @@
 #
 #=== Options
 #
-#<tt>-A | --annotate</tt> <i>level</i>::
-#    Set gdb-style annotation to <i>level</i>, a number.  Additional information
-#    is output automatically when program state is changed. This can be used by
-#    front-ends such as GNU Emacs to post this updated information without
-#    having to poll for it.
-#
 #<tt>-d | --debug</tt>::
 #    Set $DEBUG true.
 #
@@ -74,8 +68,6 @@ def debug_program(options)
     puts output
     exit $?.exitstatus
   end
-  print "\032\032starting\n" if Byebug.annotate and Byebug.annotate > 2
-
   if bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
     print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{bt}\n"
@@ -98,7 +90,6 @@ def whence_file(prog_script)
 end
 
 options = OpenStruct.new(
-  'annotate'           => Byebug.annotate,
   'nx'                 => false,
   'post_mortem'        => false,
   'quit'               => true,
@@ -119,8 +110,6 @@ EOB
     opts.separator ""
     opts.separator "Options:"
 
-    opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") {
-      |annotate| Byebug.annotate = annotate }
     opts.on("-d", "--debug", "Set $DEBUG=true") {
       $DEBUG = true }
     opts.on('-I', '--include PATH', String,
@@ -253,7 +242,6 @@ loop do
     print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
     print "Uncaught exception: #{$!}\n"
   end
-  print "The program finished.\n" unless Byebug.annotate.to_i > 1
 
   break if options.quit
 

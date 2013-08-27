@@ -124,16 +124,6 @@ class TestDisplay < TestDsl::TestCase
     end
   end
 
-  describe 'annotate' do
-    after  { Byebug.annotate = 0 }
-
-    it 'must show display expression in annotation' do
-      enter 'display 2 + 2', 'set annotate 3', 'next', 'next'
-      debug_file 'display'
-      check_output_includes "\u001A\u001Adisplay", '1:', '2 + 2 = 4'
-    end
-  end
-
   describe 'Post Mortem' do
     it 'must be able to set display expressions in post-mortem mode' do
       enter 'cont', 'display 2 + 2'

@@ -5,9 +5,6 @@ module Byebug
 
     def show_setting(setting_name)
       case setting_name
-      when /^annotate$/
-        Byebug.annotate ||= 0
-        return ("Annotation level is #{Byebug.annotate}")
       when /^args$/
         if Command.settings[:argv] and Command.settings[:argv].size > 0
           if defined?(Byebug::BYEBUG_SCRIPT)
@@ -146,10 +143,6 @@ module Byebug
 
     Subcommands =
       [
-       ['annotate', 2, 'Show annotation level',
-        '0 == normal; '                                                    \
-        '2 == output annotated suitably for use by programs that control ' \
-        'byebug'],
         ['args', 2,
          'Show argument list to give to the program being debugged when it is' \
          ' started',

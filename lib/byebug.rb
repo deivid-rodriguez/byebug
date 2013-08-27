@@ -29,9 +29,6 @@ module Byebug
     attr_accessor :last_exception
     Byebug.last_exception = nil
 
-    # gdb-style annotation mode. Used in GNU Emacs interface
-    attr_accessor :annotate
-
     def source_reload
       Object.send(:remove_const, "SCRIPT_LINES__") if
         Object.const_defined?("SCRIPT_LINES__")

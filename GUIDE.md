@@ -589,7 +589,6 @@ byebug 1.6.1
 Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
 Options:
- -A, --annotate LEVEL      Set annotation level
  -d, --debug               Set $DEBUG=true
  -I, --include PATH        Add PATH (single or multiple:path:list) to $LOAD_PATH
      --no-quit             Do not quit when script finishes
@@ -614,10 +613,6 @@ letter option name, such as `-h`. The list of options is detailed below:
 * **-h | --help**. It causes `byebug` to print some basic help and exit
 * **-v | --version**. It causes `byebug` to print its version number and
 exit.
-* **-A | --annotate <level>**. Set gdb-style annotation `level`, a number.
-Additional information is output automatically when program state is changed.
-This can be used by front-ends such as GNU Emacs to post this updated
-information without having to poll for it.
 * **-d | --debug**. Set `$DEBUG` to `true`. Compatible with Ruby's.
 * **-I | --include <path>**. Add `path` to load path. `path` can be a single
 path ar a colon separated path list.
@@ -674,8 +669,8 @@ puts "rocky's byebugrc run"
 Here are the default values in `options`
 
 ```
-#<OpenStruct annotate=nil, nx=false, quit=true, restart_script=nil, script=nil,
-             stop=true, tracing=false, verbose_long=false>
+#<OpenStruct nx=false, quit=true, restart_script=nil, script=nil, stop=true,
+             tracing=false, verbose_long=false>
 ```
 
 ### Command Files
@@ -819,9 +814,7 @@ be `(byebug:ctrl)` and in post-mortem debugging it will be
 `(byebug:post-mortem)`.
 
 Whenever `byebug` gives an error message such as for an invalid command or an invalid
-location position, it will generally preface the message with `***`. However if
-annotation mode is on then the message is put in a `begin-error` annotation and no
-`***` appears.
+location position, it will generally preface the message with `***`.
 
 ### Command Help
 
@@ -858,11 +851,11 @@ A number of commands, namely `info`, `set`, `show`, `enable` and `disable`, have
 sub-parameters or _subcommands_. When you ask for help for one of these commands, you
 will get help for all of the subcommands that command offers. Sometimes you may want
 help only on a subcommand and to do this just follow the command with its subcommand
-name. For example `help set annotate` will just give help about the annotate command.
-Furthermore it will give longer help than the summary information that appears when
-you ask for help. You don't need to list the full subcommand name, just enough
-letters to make that subcommand distinct from others will do. For example,
-`help set an` is the same as `help set annotate`.
+name. For example, `help info breakpoints`will just give help about the `info
+breakpoints` command. Furthermore it will give longer help than the summary
+information that appears when you ask for help. You don't need to list the full
+subcommand name, just enough of the letters to make that subcommand distinct from
+others will do. For example, `help info b` is the same as `help info breakpoints`.
 
 Some examples follow.
 
@@ -901,7 +894,7 @@ With an integer argument, list info on that breakpoint.
 ```
 
 ```bash
-(byebug) help info br
+(byebug) help info b
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
 With an integer argument, list info on that breakpoint.

@@ -10,23 +10,8 @@ module Byebug
     # Common routine for reporting byebug error messages.
     # Derived classes may want to override this to capture output.
     def errmsg(*args)
-      if Byebug.annotate.to_i > 2
-        aprint 'error-begin'
-        print(*args)
-        aprint ''
-      else
-        print '*** '
-        print(*args)
-      end
-    end
-
-    # Format msg with gdb-style annotation header
-    def afmt(msg, newline="\n")
-      "\032\032#{msg}#{newline}"
-    end
-
-    def aprint(msg)
-      print afmt(msg) if Byebug.annotate.to_i > 2
+      print '*** '
+      print(*args)
     end
 
     def format(*args)
@@ -83,9 +68,6 @@ module Byebug
 
     # Things to do before quitting
     def finalize
-      if Byebug.method_defined?("annotate") and Byebug.annotate.to_i > 2
-        print "\032\032exited\n\n"
-      end
       if Byebug.respond_to?(:save_history)
         Byebug.save_history
       end

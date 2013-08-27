@@ -10,10 +10,6 @@ module Byebug
 
     Subcommands =
       [
-       ['annotate', 2, false, 'Set annotation level',
-        '0 == normal; '                                                    \
-        '2 == output annotated suitably for use by programs that control ' \
-        'byebug'],
        ['args', 2, false,
         'Set argument list to give program being debugged when it is started'],
        ['autoeval', 4, true, 'Evaluate every unrecognized command'],
@@ -75,13 +71,6 @@ module Byebug
       end
 
       case subcmd.name
-      when /^annotate$/
-        level = get_int(args[0], "Set annotate", 0, 3, 0)
-        if level
-          Byebug.annotate = level
-        else
-          return
-        end
       when /^args$/
         if defined?(Byebug::BYEBUG_SCRIPT)
           Command.settings[:argv][1..-1] = args

@@ -1,16 +1,6 @@
 require_relative 'test_helper'
 
 class TestShow < TestDsl::TestCase
-
-  describe 'annotate' do
-    it 'must show annotate setting' do
-      enter 'show annotate'
-      debug_file 'show'
-      Byebug.annotate.must_equal 0
-      check_output_includes 'Annotation level is 0'
-    end
-  end
-
   describe 'args' do
     temporary_change_hash Byebug.settings, :argv, %w{foo bar}
 

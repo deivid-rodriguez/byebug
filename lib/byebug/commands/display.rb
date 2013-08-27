@@ -46,12 +46,7 @@ module Byebug
 
   class DisplayCommand < Command
     def self.always_run
-      Byebug.annotate = 0 unless Byebug.annotate
-      if Byebug.annotate > 1
-        0
-      else
-        2
-      end
+      2
     end
 
     def regexp

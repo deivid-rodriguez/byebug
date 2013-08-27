@@ -917,7 +917,6 @@ byebug @value{BYEBUG_VERSION}
 Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
 Options:
-    -A, --annotate LEVEL       Set annotation level
     -d, --debug                Set $DEBUG=true
     -I, --include PATH         Add PATH to $LOAD_PATH
         --keep-frame-binding   Keep frame bindings
@@ -967,13 +966,6 @@ This option causes @code{byebug} to print some basic help and exit.
 @item -v | --version
 @cindex @option{-v}
 This option causes @code{byebug} to print its version number and exit.
-
-@item -A | --annotate @var{level}
-@cindex @option{-A}
-@cindex @option{--annotation} @var{level}
-Set gdb-style annotation @var{level}, a number. Additional information is output
-automatically when program state is changed. This can be used by front-ends such
-as GNU Emacs to post this updated information without having to poll for it.
 
 @item --debug
 @cindex @option{--debug}
@@ -1092,8 +1084,8 @@ Here are the default values in @code{options}
 @smallexample
 #<OpenStruct server=false, client=false, frame_bind=false, cport=8990,
              tracing=false, nx=false, post_mortem=false, port=8989,
-             verbose_long=false, annotate=nil, control=true, restart_script=nil,
-             quit=true, stop=true, script=nil, host=nil, wait=false>
+             verbose_long=false, control=true, restart_script=nil, quit=true,
+             stop=true, script=nil, host=nil, wait=false>
 @end smallexample
 
 @node Command Files
@@ -1298,8 +1290,7 @@ will be @code{(byebug:post-mortem)}.
 
 In the local interface, whenever @code{byebug} gives an error message such as
 for an invalid command, or an invalid location position, it will generally
-preface the message with @code{***}. However if annotation mode is on then the
-message is put in a @code{begin-error} annotation and no @code{***} appears.
+preface the message with @code{***}.
 
 @node Help
 @section Getting help (@samp{help})
@@ -1362,11 +1353,12 @@ include @code{info}, @code{set}, @code{show}, @code{enable} and @code{disable}.
 When you ask for help for one of these commands, you will get help for all of
 the subcommands that that command offers. Sometimes you may want help that
 subcommand and to do this just follow the command with its subcommand name. For
-example @code{help set annotate} will just give help about the annotate command.
-Furthermore it will give longer help than the summary information that appears
-when you ask for help. You don't need to list the full subcommand name, but just
-enough of the letters to make that subcommand distinct from others will do. For
-example, @code{help set an} is the same as @code{help set annotate}.
+example @code{help info breakpoints} will just give help about the
+@code{info breakpoints} command. Furthermore it will give longer help than the
+summary information that appears when you ask for help. You don't need to list
+the full subcommand name, but just enough of the letters to make that subcommand
+distinct from others will do. For example, @code{help info b} is the same as
+@code{help info breakpoints}.
 
 Some examples follow.
 @example

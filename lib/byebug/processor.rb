@@ -9,7 +9,7 @@ module Byebug
     attr_accessor :interface
 
     extend Forwardable
-    def_delegators :@interface, :errmsg, :print, :aprint, :afmt
+    def_delegators :@interface, :errmsg, :print
 
     def initialize(interface)
       @interface = interface
@@ -19,22 +19,6 @@ module Byebug
   class CommandProcessor < Processor
     attr_reader :display
 
-    @@Show_breakpoints_postcmd = [ Byebug::BreakCommand.new(nil).regexp,
-                                   Byebug::ConditionCommand.new(nil).regexp,
-                                   Byebug::DeleteCommand.new(nil).regexp,
-                                   Byebug::DisableCommand.new(nil).regexp,
-                                   Byebug::EnableCommand.new(nil).regexp
-                                 ]
-    @@Show_annotations_run = [ Byebug::ContinueCommand.new(nil).regexp,
-                               Byebug::FinishCommand.new(nil).regexp,
-                               Byebug::NextCommand.new(nil).regexp,
-                               Byebug::StepCommand.new(nil).regexp
-                             ]
-    @@Show_annotations_postcmd = [ Byebug::DownCommand.new(nil).regexp,
-                                   Byebug::FrameCommand.new(nil).regexp,
-                                   Byebug::UpCommand.new(nil).regexp
-                                 ]
-
     def initialize(interface = LocalInterface.new)
       super(interface)
 
@@ -43,8 +27,6 @@ module Byebug
       @last_cmd               = nil   # To allow empty (just <RET>) commands
       @last_file              = nil   # Filename the last time we stopped
       @last_line              = nil   # Line number the last time we stopped
-      @breakpoints_were_empty = false # Show breakpoints 1st time
-      @displays_were_empty    = true  # No display 1st time
       @context_was_dead       = false  # Assume we haven't started.
     end
 
@@ -57,7 +39,7 @@ module Byebug
 
     require 'pathname'  # For cleanpath
 
-    ##
+    #
     # Regularize file name.
     #
     # This is also used as a common funnel place if basename is desired or if we
@@ -95,17 +77,14 @@ module Byebug
     end
 
     def at_breakpoint(context, breakpoint)
-      aprint 'stopped'
       n = Byebug.breakpoints.index(breakpoint) + 1
       file = CommandProcessor.canonic_file(breakpoint.source)
       line = breakpoint.pos
-      aprint "source #{file}:#{line}"
       print "Stopped by breakpoint #{n} at #{file}:#{line}\n"
     end
     protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
-      aprint 'stopped'
       file = CommandProcessor.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
@@ -140,16 +119,14 @@ module Byebug
     protect :at_return
 
     private
-      ##
+      #
       # Prompt shown before reading a command.
       #
       def prompt(context)
-        p = "(byebug#{context.dead?  ? ':post-mortem' : ''}) "
-        p = afmt("pre-prompt")+p+"\n"+afmt("prompt") if Byebug.annotate.to_i > 2
-        return p
+        return "(byebug#{context.dead?  ? ':post-mortem' : ''}) "
       end
 
-      ##
+      #
       # Run commands everytime.
       #
       # For example display commands or possibly the list or irb in an
@@ -179,7 +156,7 @@ module Byebug
         return state, commands
       end
 
-      ##
+      #
       # Splits a command line of the form "cmd1 ; cmd2 ; ... ; cmdN" into an
       # array of commands: [cmd1, cmd2, ..., cmdN]
       #
@@ -199,7 +176,7 @@ module Byebug
         end
       end
 
-      ##
+      #
       # Handle byebug commands.
       #
       def process_commands(context, file, line)
@@ -207,7 +184,7 @@ module Byebug
         $state = Command.settings[:testing] ? state : nil
 
         preloop(commands, context)
-        aprint state.location if Command.settings[:autolist] == 0
+        print state.location if Command.settings[:autolist] == 0
 
         while !state.proceed?
           input = @interface.command_queue.empty? ?
@@ -223,14 +200,12 @@ module Byebug
             end
             split_commands(input).each do |cmd|
               one_cmd(commands, context, cmd)
-              postcmd(commands, context, cmd)
             end
           end
         end
-        postloop(commands, context)
       end
 
-      ##
+      #
       # Executes a single byebug command
       #
       def one_cmd(commands, context, input)
@@ -253,62 +228,10 @@ module Byebug
       def preloop(commands, context)
         @context_was_dead = true if context.dead? and not @context_was_dead
 
-        aprint 'stopped'
         if @context_was_dead
-          aprint 'exited'
           print "The program finished.\n"
           @context_was_dead = false
         end
-
-        if Byebug.annotate.to_i > 2
-          breakpoint_annotations(commands, context)
-          display_annotations(commands, context)
-          annotation('stack', commands, context, "where")
-          annotation('variables', commands, context, "info variables") unless
-            context.dead?
-        end
-      end
-
-      def postcmd(commands, context, cmd)
-        if Byebug.annotate.to_i > 2
-          cmd = @last_cmd unless cmd
-          breakpoint_annotations(commands, context) if
-            @@Show_breakpoints_postcmd.find{|pat| cmd =~ pat}
-          display_annotations(commands, context)
-          if @@Show_annotations_postcmd.find{|pat| cmd =~ pat}
-            annotation('stack', commands, context, "where") if
-              context.stack_size > 0
-            annotation('variables', commands, context, "info variables") unless
-              context.dead?
-          end
-          if not context.dead? and @@Show_annotations_run.find{|pat| cmd =~ pat}
-            afmt 'starting'
-            @context_was_dead = false
-          end
-        end
-      end
-
-      def postloop(commands, context)
-      end
-
-      def annotation(label, commands, context, cmd)
-        print afmt(label)
-        one_cmd(commands, context, cmd)
-      end
-
-      def breakpoint_annotations(commands, context)
-        unless Byebug.breakpoints.empty? and @breakpoints_were_empty
-          annotation('breakpoints', commands, context, "info breakpoints")
-          @breakpoints_were_empty = Byebug.breakpoints.empty?
-        end
-      end
-
-      def display_annotations(commands, context)
-        return if display.empty?
-        have_display = display.find{|d| d[0]}
-        return unless have_display and @displays_were_empty
-        @displays_were_empty = have_display
-        annotation('display', commands, context, "display")
       end
 
       class State
@@ -322,7 +245,7 @@ module Byebug
         end
 
         extend Forwardable
-        def_delegators :@interface, :aprint, :errmsg, :print, :confirm
+        def_delegators :@interface, :errmsg, :print, :confirm
 
         def proceed?
           @proceed
@@ -343,7 +266,6 @@ module Byebug
 
 
   class ControlCommandProcessor < Processor
-
     def initialize(interface)
       super(interface)
       @context_was_dead = false # Assume we haven't started.
@@ -357,7 +279,6 @@ module Byebug
       commands = control_cmds.map{|cmd| cmd.new(state) }
 
       if @context_was_dead
-        aprint 'exited'
         print "The program finished.\n"
         @context_was_dead = false
       end
@@ -380,12 +301,11 @@ module Byebug
       @interface.close
     end
 
+    #
     # The prompt shown before reading a command.
-    # Note: have an unused 'context' parameter to match the local interface.
+    #
     def prompt(context)
-      p = '(byebug:ctrl) '
-      p = afmt("pre-prompt") +p+"\n"+ afmt("prompt") if Byebug.annotate.to_i > 2
-      return p
+      return '(byebug:ctrl) '
     end
 
     class State
