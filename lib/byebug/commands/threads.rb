@@ -167,4 +167,36 @@ module Byebug
     end
   end
 
+  class ThreadSwitchCommand < Command
+    self.allow_in_control     = true
+    self.allow_in_post_mortem = false
+    self.need_context         = true
+
+    def regexp
+      /^\s* th(?:read)? \s+ (?:sw(?:itch)?\s+)? (\S+) \s*$/x
+    end
+
+    def execute
+      if @match[1] =~ /switch/
+        errmsg '"thread switch" needs a thread number'
+        return
+      end
+      c = parse_thread_num_for_cmd('thread switch', @match[1])
+      return unless c
+      display_context(c)
+      c.step_into 1
+      c.thread.run
+      @state.proceed
+    end
+
+    class << self
+      def names
+        %w(thread)
+      end
+
+      def description
+        %{th[read] [sw[itch]] <nnn>\tswitch thread context to nnn}
+      end
+    end
+  end
 end

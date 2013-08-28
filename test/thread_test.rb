@@ -86,4 +86,24 @@ class TestThread < TestDsl::TestCase
       check_output_includes 'Already running', interface.error_queue
     end
   end
+
+  describe 'switch' do
+    it 'must switch to another thread' do
+      enter 'c 21', ->{ "thread switch #{Byebug.contexts.last.thnum}" }, release
+      debug_file('thread') { $state.line.must_equal 16 }
+    end
+
+    it 'must show error message if thread number is not specified' do
+      enter 'break 8', 'cont', 'thread switch', release
+      debug_file 'thread'
+      check_output_includes '"thread switch" needs a thread number',
+                            interface.error_queue
+    end
+
+    it 'must show error message when trying to switch current thread' do
+      enter 'c 8', ->{ "thread switch #{Byebug.contexts.first.thnum}" }, release
+      debug_file 'thread'
+      check_output_includes "It's the current thread", interface.error_queue
+    end
+  end
 end
