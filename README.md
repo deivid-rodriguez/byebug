@@ -241,6 +241,8 @@ quit without being prompted, suffix the command with an exclamation mark, e.g.,
   `step`, `finish`, `continue` and `break` commands to pry using byebug.
 * [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger)
 adds a rake task that restarts Passenger with byebug connected.
+* [minitest-byebug](https://github.com/kaspth/minitest-byebug) starts a byebug
+session on minitest failures.
 
 
 ## Credits
