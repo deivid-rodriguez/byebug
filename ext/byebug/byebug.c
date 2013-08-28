@@ -6,10 +6,26 @@ static VALUE tracing     = Qfalse;
 static VALUE post_mortem = Qfalse;
 static VALUE debug       = Qfalse;
 
-static VALUE context     = Qnil;
 static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
 static VALUE tracepoints = Qnil;
+
+/* Implements thread syncronization, we must stop threads when debugging */
+VALUE locker  = Qnil;
+
+/* Threads table */
+VALUE threads = Qnil;
+VALUE cThreadsTable;
+
+#define IS_STARTED  (catchpoints != Qnil)
+static void
+check_started()
+{
+  if (!IS_STARTED)
+  {
+    rb_raise(rb_eRuntimeError, "Byebug is not started yet.");
+  }
+}
 
 static void
 trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
@@ -22,7 +38,7 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     VALUE event = rb_tracearg_event(trace_arg);
     VALUE mid   = rb_tracearg_method_id(trace_arg);
     for (i=0; i<dc->stack_size; i++) putc('|', stderr);
-    fprintf(stderr, "%s@%s:%d %s\n",
+    fprintf(stderr, "[#%d] %s@%s:%d %s\n", dc->thnum,
       rb_id2name(SYM2ID(event)), RSTRING_PTR(path), NUM2INT(line),
       NIL_P(mid) ? "" : rb_id2name(SYM2ID(mid)));
   }
@@ -31,16 +47,27 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 static void
 cleanup(debug_context_t *dc)
 {
-  dc->stop_reason = CTX_STOP_NONE;
-}
+  VALUE thread;
 
-#define IS_STARTED (catchpoints != Qnil)
+  dc->stop_reason = CTX_STOP_NONE;
+
+  /* checks for dead threads */
+  check_thread_contexts();
+
+  /* release a lock */
+  locker = Qnil;
+
+  /* let the next thread to run */
+  thread = remove_from_locked();
+  if (thread != Qnil)
+    rb_thread_run(thread);
+}
 
 #define EVENT_SETUP                                                     \
   rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   debug_context_t *dc;                                                  \
-  if (!IS_STARTED)                                                      \
-    rb_raise(rb_eRuntimeError, "Byebug not started yet!");              \
+  VALUE context;                                                        \
+  thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
   if (debug == Qtrue) trace_print(trace_arg, dc);                       \
 
@@ -49,12 +76,17 @@ cleanup(debug_context_t *dc)
 static int
 trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 {
-  /* ignore a skipped section of code */
-  if (CTX_FL_TEST(dc, CTX_FL_SKIPPED))
+  /* return if thread marked as 'ignored', like byebug's control thread */
+  if (CTX_FL_TEST(dc, CTX_FL_IGNORE))
   {
     cleanup(dc);
     return 0;
   }
+
+  halt_while_other_thread_is_active(dc);
+
+  /* Get the lock! */
+  locker = rb_thread_current();
 
   /* Many events per line, but only *one* breakpoint */
   if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
@@ -382,15 +414,83 @@ clear_tracepoints(VALUE self)
 }
 
 
+/* Byebug's Public API */
+
 /*
  *  call-seq:
- *    Byebug.context -> context
+ *    Byebug.contexts -> array
  *
- *  Returns byebug's context context.
+ *   Returns an array of all contexts.
  */
 static VALUE
-bb_context(VALUE self)
+bb_contexts(VALUE self)
 {
+  volatile VALUE list;
+  volatile VALUE new_list;
+  VALUE context;
+  threads_table_t *t_tbl;
+  debug_context_t *dc;
+  int i;
+
+  check_started();
+
+  new_list = rb_ary_new();
+  list = rb_funcall(rb_cThread, rb_intern("list"), 0);
+
+  for (i = 0; i < RARRAY_LEN(list); i++)
+  {
+    VALUE thread = rb_ary_entry(list, i);
+    thread_context_lookup(thread, &context);
+    rb_ary_push(new_list, context);
+  }
+
+  threads_clear(threads);
+  Data_Get_Struct(threads, threads_table_t, t_tbl);
+
+  for (i = 0; i < RARRAY_LEN(new_list); i++)
+  {
+    context = rb_ary_entry(new_list, i);
+    Data_Get_Struct(context, debug_context_t, dc);
+    st_insert(t_tbl->tbl, dc->thread, context);
+  }
+
+  return new_list;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.thread_context(thread) -> context
+ *
+ *   Returns context of the thread passed as an argument.
+ */
+static VALUE
+bb_thread_context(VALUE self, VALUE thread)
+{
+  VALUE context;
+
+  check_started();
+
+  thread_context_lookup(thread, &context);
+
+  return context;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.current_context -> context
+ *
+ *  Returns the current context.
+ *    <i>Note:</i> Byebug.current_context.thread == Thread.current
+ */
+static VALUE
+bb_current_context(VALUE self)
+{
+  VALUE context;
+
+  check_started();
+
+  thread_context_lookup(rb_thread_current(), &context);
+
   return context;
 }
 
@@ -420,9 +520,9 @@ bb_stop(VALUE self)
   {
     clear_tracepoints(self);
 
-    context     = Qnil;
     breakpoints = Qnil;
     catchpoints = Qnil;
+    threads     = Qnil;
 
     return Qfalse;
   }
@@ -452,9 +552,10 @@ bb_start(VALUE self)
     result = Qfalse;
   else
   {
+    locker      = Qnil;
     breakpoints = rb_ary_new();
     catchpoints = rb_hash_new();
-    context     = context_create();
+    threads     = threads_create();
 
     register_tracepoints(self);
     result = Qtrue;
@@ -488,7 +589,7 @@ bb_load(int argc, VALUE *argv, VALUE self)
 
   bb_start(self);
 
-  context = bb_context(self);
+  context = bb_current_context(self);
   Data_Get_Struct(context, debug_context_t, dc);
 
   if (RTEST(stop)) dc->steps = 1;
@@ -518,7 +619,7 @@ set_current_skipped_status(VALUE status)
   VALUE context;
   debug_context_t *dc;
 
-  context = bb_context(mByebug);
+  context = bb_current_context(mByebug);
   Data_Get_Struct(context, debug_context_t, dc);
 
   if (status)
@@ -668,25 +769,29 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint ,  1);
-  rb_define_module_function(mByebug, "breakpoints"   , bb_breakpoints    ,  0);
-  rb_define_module_function(mByebug, "context"       , bb_context        ,  0);
-  rb_define_module_function(mByebug, "catchpoints"   , bb_catchpoints    ,  0);
-  rb_define_module_function(mByebug, "debug_at_exit" , bb_at_exit        ,  0);
-  rb_define_module_function(mByebug, "debug_load"    , bb_load           , -1);
-  rb_define_module_function(mByebug, "post_mortem?"  , bb_post_mortem    ,  0);
-  rb_define_module_function(mByebug, "post_mortem="  , bb_set_post_mortem,  1);
-  rb_define_module_function(mByebug, "_start"        , bb_start          ,  0);
-  rb_define_module_function(mByebug, "started?"      , bb_started        ,  0);
-  rb_define_module_function(mByebug, "stop"          , bb_stop           ,  0);
-  rb_define_module_function(mByebug, "tracing?"      , bb_tracing        ,  0);
-  rb_define_module_function(mByebug, "tracing="      , bb_set_tracing    ,  1);
+  rb_define_module_function(mByebug, "add_catchpoint" , bb_add_catchpoint ,  1);
+  rb_define_module_function(mByebug, "breakpoints"    , bb_breakpoints    ,  0);
+  rb_define_module_function(mByebug, "catchpoints"    , bb_catchpoints    ,  0);
+  rb_define_module_function(mByebug, "contexts"       , bb_contexts       ,  0);
+  rb_define_module_function(mByebug, "current_context", bb_current_context,  0);
+  rb_define_module_function(mByebug, "debug_at_exit"  , bb_at_exit        ,  0);
+  rb_define_module_function(mByebug, "debug_load"     , bb_load           , -1);
+  rb_define_module_function(mByebug, "post_mortem?"   , bb_post_mortem    ,  0);
+  rb_define_module_function(mByebug, "post_mortem="   , bb_set_post_mortem,  1);
+  rb_define_module_function(mByebug, "_start"         , bb_start          ,  0);
+  rb_define_module_function(mByebug, "started?"       , bb_started        ,  0);
+  rb_define_module_function(mByebug, "stop"           , bb_stop           ,  0);
+  rb_define_module_function(mByebug, "thread_context" , bb_thread_context ,  1);
+  rb_define_module_function(mByebug, "tracing?"       , bb_tracing        ,  0);
+  rb_define_module_function(mByebug, "tracing="       , bb_set_tracing    ,  1);
+
+  cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
 
   Init_context(mByebug);
   Init_breakpoint(mByebug);
 
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
-  rb_global_variable(&context);
   rb_global_variable(&tracepoints);
+  rb_global_variable(&threads);
 }

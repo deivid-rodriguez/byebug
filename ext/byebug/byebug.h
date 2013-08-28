@@ -9,9 +9,11 @@
 #define CTX_FL_DEAD         (1<<2) /* this context belonged to a dead thread */
 #define CTX_FL_ENABLE_BKPT  (1<<3) /* cab check for breakpoints              */
 #define CTX_FL_FORCE_MOVE   (1<<4) /* don't stop unless we've changed line   */
-#define CTX_FL_SKIPPED      (1<<5) /* skip all events                        */
-#define CTX_FL_SUSPEND      (1<<6) /* thread currently suspended             */
-#define CTX_FL_TRACING      (1<<7) /* call at_tracing method                 */
+#define CTX_FL_IGNORE       (1<<5) /* this context belongs to ignored thread */
+#define CTX_FL_SKIPPED      (1<<6) /* skip all events                        */
+#define CTX_FL_SUSPEND      (1<<7) /* thread currently suspended             */
+#define CTX_FL_TRACING      (1<<8) /* call at_tracing method                 */
+#define CTX_FL_WAS_RUNNING  (1<<9) /* thread was previously running          */
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))
@@ -30,6 +32,9 @@ typedef struct {
   int stack_size;
   int flags;
   ctx_stop_reason stop_reason;
+
+  VALUE thread;
+  int thnum;
 
   int dest_frame;
   int lines;                   /* # of lines in dest_frame before stopping    */
@@ -53,10 +58,30 @@ struct call_with_inspection_data {
   VALUE *argv;
 };
 
+typedef struct {
+  st_table *tbl;
+} threads_table_t;
+
+/* functions from locker.c */
+extern int is_in_locked(VALUE thread_id);
+extern void add_to_locked(VALUE thread);
+extern VALUE remove_from_locked();
+
+/* functions from threads.c */
+extern VALUE threads_create(void);
+extern void threads_clear(VALUE table);
+extern void check_thread_contexts(void);
+extern void thread_context_lookup(VALUE thread, VALUE *context);
+extern void halt_while_other_thread_is_active(debug_context_t *dc);
+
+/* global variables */
+extern VALUE locker;
+extern VALUE threads;
+extern VALUE cThreadsTable;
 
 /* functions */
 extern void Init_context(VALUE mByebug);
-extern VALUE context_create();
+extern VALUE context_create(VALUE thread);
 extern VALUE context_dup(debug_context_t *context);
 extern void reset_stepping_stop_points(debug_context_t *context);
 extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);

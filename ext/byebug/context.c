@@ -1,6 +1,8 @@
 #include <byebug.h>
 
 static VALUE cContext;
+static VALUE cDebugThread;
+static int thnum_max = 0;
 
 /* "Step", "Next" and "Finish" do their work by saving information about where
  * to stop next. reset_stepping_stop_points removes/resets this information. */
@@ -15,6 +17,13 @@ reset_stepping_stop_points(debug_context_t *context)
 }
 
 static inline VALUE
+Context_thnum(VALUE self) {
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return INT2FIX(context->thnum);
+}
+
+static inline VALUE
 Context_stack_size(VALUE self)
 {
   debug_context_t *context;
@@ -23,11 +32,27 @@ Context_stack_size(VALUE self)
 }
 
 static inline VALUE
+Context_thread(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return context->thread;
+}
+
+static inline VALUE
 Context_dead(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
+}
+
+static inline VALUE
+Context_ignored(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
 static void
@@ -44,24 +69,31 @@ context_free(void *data)
 }
 
 static int
-real_stack_size()
+real_stack_size(VALUE thread)
 {
-  VALUE locs = rb_funcall(rb_cObject, rb_intern("caller_locations"), 1, INT2FIX(0));
+  VALUE locs = rb_funcall(thread, rb_intern("backtrace_locations"), 1, INT2FIX(1));
+  if (locs == Qnil)
+    return 0;
+
   return (int)RARRAY_LEN(locs);
 }
 
 extern VALUE
-context_create()
+context_create(VALUE thread)
 {
   debug_context_t *context = ALLOC(debug_context_t);
 
-  context->last_file  = Qnil;
-  context->last_line  = Qnil;
-  context->flags      = 0;
-  context->stack_size = real_stack_size();
+  context->last_file   = Qnil;
+  context->last_line   = Qnil;
+  context->flags       = 0;
+  context->stack_size  = real_stack_size(thread);
+  context->thnum       = ++thnum_max;
+  context->thread      = thread;
   reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
-  context->backtrace = Qnil;
+  context->backtrace   = Qnil;
+
+  if (rb_obj_class(thread) == cDebugThread) CTX_FL_SET(context, CTX_FL_IGNORE);
 
   return Data_Wrap_Struct(cContext, context_mark, context_free, context);
 }
@@ -192,10 +224,10 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
     frame_n = 0;                                                      \
   else                                                                \
     frame_n = FIX2INT(frame_no);                                      \
-  if (frame_n < 0 || frame_n >= real_stack_size())                    \
+  if (frame_n < 0 || frame_n >= real_stack_size(rb_thread_current())) \
   {                                                                   \
     rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
-             frame_n, real_stack_size() - 1);                         \
+             frame_n, real_stack_size(rb_thread_current() - 1));      \
   }                                                                   \
 
 static VALUE
@@ -379,6 +411,13 @@ Context_stop_return(VALUE self, VALUE frame)
   return frame;
 }
 
+/* :nodoc: */
+static VALUE
+DebugThread_inherited(VALUE klass)
+{
+  rb_raise(rb_eRuntimeError, "Can't inherit Byebug::DebugThread class");
+}
+
 /*
  *   Document-class: Context
  *
@@ -398,12 +437,18 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_line"   , Context_frame_line   , -1);
   rb_define_method(cContext, "frame_method" , Context_frame_method , -1);
   rb_define_method(cContext, "frame_self"   , Context_frame_self   , -1);
+  rb_define_method(cContext, "ignored?"     , Context_ignored      ,  0);
   rb_define_method(cContext, "stack_size"   , Context_stack_size   ,  0);
   rb_define_method(cContext, "step_into"    , Context_step_into    , -1);
   rb_define_method(cContext, "step_out"     , Context_step_out     ,  1);
   rb_define_method(cContext, "step_over"    , Context_step_over    , -1);
   rb_define_method(cContext, "stop_return"  , Context_stop_return  ,  1);
   rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
+  rb_define_method(cContext, "thnum"        , Context_thnum        ,  0);
+  rb_define_method(cContext, "thread"       , Context_thread       ,  0);
   rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);
   rb_define_method(cContext, "tracing="     , Context_set_tracing  ,  1);
+
+  cDebugThread  = rb_define_class_under(mByebug, "DebugThread", rb_cThread);
+  rb_define_singleton_method(cDebugThread, "inherited", DebugThread_inherited, 1);
 }

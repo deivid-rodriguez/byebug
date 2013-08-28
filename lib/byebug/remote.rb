@@ -34,7 +34,7 @@ module Byebug
 
       server = TCPServer.new(host, cmd_port)
       @cmd_port = cmd_port = server.addr[1]
-      @thread = Thread.new do
+      @thread = DebugThread.new do
         while (session = server.accept)
           self.interface = RemoteInterface.new(session)
           if wait_connection
