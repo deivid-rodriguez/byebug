@@ -16,43 +16,19 @@ reset_stepping_stop_points(debug_context_t *context)
   context->before_frame = -1;
 }
 
-static inline VALUE
-Context_thnum(VALUE self) {
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return INT2FIX(context->thnum);
-}
-
-static inline VALUE
-Context_stack_size(VALUE self)
-{
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return INT2FIX(context->stack_size);
-}
-
-static inline VALUE
-Context_thread(VALUE self)
-{
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return context->thread;
-}
-
+/*
+ *  call-seq:
+ *    context.dead? -> bool
+ *
+ *  Returns +true+ if context doesn't represent a live context and is created
+ *  during post-mortem exception handling.
+ */
 static inline VALUE
 Context_dead(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
-}
-
-static inline VALUE
-Context_ignored(VALUE self)
-{
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-  return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
 static void
@@ -230,6 +206,40 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
              frame_n, real_stack_size(rb_thread_current() - 1));      \
   }                                                                   \
 
+/*
+ *  call-seq:
+ *    context.frame_binding(frame_position=0) -> binding
+ *
+ *  Returns frame's binding.
+ */
+static VALUE
+Context_frame_binding(int argc, VALUE *argv, VALUE self)
+{
+  FRAME_SETUP
+
+  return dc_frame_binding(context, frame_n);
+}
+
+/*
+ *  call-seq:
+ *    context.frame_class(frame_position=0) -> binding
+ *
+ *  Returns frame's defined class.
+ */
+ static VALUE
+Context_frame_class(int argc, VALUE *argv, VALUE self)
+{
+  FRAME_SETUP
+
+  return dc_frame_class(context, frame_n);
+}
+
+/*
+ *  call-seq:
+ *    context.frame_file(frame_position=0) -> string
+ *
+ *  Returns the name of the file in the frame.
+ */
 static VALUE
 Context_frame_file(int argc, VALUE *argv, VALUE self)
 {
@@ -240,6 +250,12 @@ Context_frame_file(int argc, VALUE *argv, VALUE self)
   return rb_funcall(loc, rb_intern("path"), 0);
 }
 
+/*
+ *  call-seq:
+ *    context.frame_line(frame_position) -> int
+ *
+ *  Returns the line number in the file.
+ */
 static VALUE
 Context_frame_line(int argc, VALUE *argv, VALUE self)
 {
@@ -250,6 +266,12 @@ Context_frame_line(int argc, VALUE *argv, VALUE self)
   return rb_funcall(loc, rb_intern("lineno"), 0);
 }
 
+/*
+ *  call-seq:
+ *    context.frame_method(frame_position=0) -> sym
+ *
+ *  Returns the sym of the called method.
+ */
 static VALUE
 Context_frame_method(int argc, VALUE *argv, VALUE self)
 {
@@ -260,14 +282,12 @@ Context_frame_method(int argc, VALUE *argv, VALUE self)
   return rb_str_intern(rb_funcall(loc, rb_intern("label"), 0));
 }
 
-static VALUE
-Context_frame_binding(int argc, VALUE *argv, VALUE self)
-{
-  FRAME_SETUP
-
-  return dc_frame_binding(context, frame_n);
-}
-
+/*
+ *  call-seq:
+ *    context.frame_self(frame_postion=0) -> obj
+ *
+ *  Returns self object of the frame.
+ */
 static VALUE
 Context_frame_self(int argc, VALUE *argv, VALUE self)
 {
@@ -276,35 +296,33 @@ Context_frame_self(int argc, VALUE *argv, VALUE self)
   return dc_frame_self(context, frame_n);
 }
 
-static VALUE
-Context_frame_class(int argc, VALUE *argv, VALUE self)
-{
-  FRAME_SETUP
-
-  return dc_frame_class(context, frame_n);
-}
-
-static VALUE
-Context_tracing(VALUE self)
-{
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
-  return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
-}
-
-static VALUE
-Context_set_tracing(VALUE self, VALUE value)
+/*
+ *  call-seq:
+ *    context.ignored? -> bool
+ *
+ *  Returns the ignore flag for the context, which marks whether the associated
+ *  thread is ignored while debugging.
+ */
+static inline VALUE
+Context_ignored(VALUE self)
 {
   debug_context_t *context;
-
   Data_Get_Struct(self, debug_context_t, context);
+  return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
+}
 
-  if (RTEST(value))
-      CTX_FL_SET(context, CTX_FL_TRACING);
-  else
-      CTX_FL_UNSET(context, CTX_FL_TRACING);
-  return value;
+/*
+ *  call-seq:
+ *    context.stack_size-> int
+ *
+ *  Returns the size of the context stack.
+ */
+static inline VALUE
+Context_stack_size(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return INT2FIX(context->stack_size);
 }
 
 static VALUE
@@ -335,6 +353,14 @@ Context_stop_reason(VALUE self)
   return ID2SYM(rb_intern(symbol));
 }
 
+/*
+ *  call-seq:
+ *    context.step_into(steps, force = false)
+ *
+ *  Stops the current context after a number of +steps+ are made.
+ *  +force+ parameter (if true) ensures that the cursor moves away from the
+ *  current line.
+ */
 static VALUE
 Context_step_into(int argc, VALUE *argv, VALUE self)
 {
@@ -357,6 +383,36 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
   return steps;
 }
 
+/*
+ *  call-seq:
+ *    context.step_out(frame)
+ *
+ *  Stops after frame number +frame+ is activated. Implements +finish+ and
+ *  +next+ commands.
+ */
+static VALUE
+Context_step_out(VALUE self, VALUE frame)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
+    rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
+
+  context->after_frame = context->stack_size - FIX2INT(frame);
+
+  return frame;
+}
+
+/*
+ *  call-seq:
+ *    context.step_over(lines, frame = nil, force = false)
+ *
+ *  Steps over +lines+ lines.
+ *  Make step over operation on +frame+, by default the current frame.
+ *  +force+ parameter (if true) ensures that the cursor moves away from the
+ *  current line.
+ */
 static VALUE
 Context_step_over(int argc, VALUE *argv, VALUE self)
 {
@@ -383,20 +439,13 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   return Qnil;
 }
 
-static VALUE
-Context_step_out(VALUE self, VALUE frame)
-{
-  debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
-
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
-    rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
-
-  context->after_frame = context->stack_size - FIX2INT(frame);
-
-  return frame;
-}
-
+/*
+ *  call-seq:
+ *    context.stop_return(frame)
+ *
+ *  Stops before frame number +frame+ is activated. Useful when you enter the
+ *  debugger after the last statement in a method.
+ */
 static VALUE
 Context_stop_return(VALUE self, VALUE frame)
 {
@@ -410,6 +459,69 @@ Context_stop_return(VALUE self, VALUE frame)
 
   return frame;
 }
+
+/*
+ *  call-seq:
+ *    context.thnum -> int
+ *
+ *  Returns the context's number.
+ */
+static inline VALUE
+Context_thnum(VALUE self) {
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return INT2FIX(context->thnum);
+}
+
+/*
+ *  call-seq:
+ *    context.thread -> thread
+ *
+ *  Returns the thread this context is associated with.
+ */
+static inline VALUE
+Context_thread(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+  return context->thread;
+}
+
+/*
+ *  call-seq:
+ *    context.tracing -> bool
+ *
+ *  Returns the tracing flag for the current context.
+ */
+static VALUE
+Context_tracing(VALUE self)
+{
+  debug_context_t *context;
+
+  Data_Get_Struct(self, debug_context_t, context);
+  return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
+}
+
+/*
+ *  call-seq:
+ *    context.tracing = bool
+ *
+ *  Controls the tracing for this context.
+ */
+static VALUE
+Context_set_tracing(VALUE self, VALUE value)
+{
+  debug_context_t *context;
+
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (RTEST(value))
+      CTX_FL_SET(context, CTX_FL_TRACING);
+  else
+      CTX_FL_UNSET(context, CTX_FL_TRACING);
+  return value;
+}
+
 
 /* :nodoc: */
 static VALUE
