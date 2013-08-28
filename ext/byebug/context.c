@@ -311,6 +311,38 @@ Context_ignored(VALUE self)
   return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
+static void
+context_resume_0(debug_context_t *context)
+{
+  if (!CTX_FL_TEST(context, CTX_FL_SUSPEND)) return;
+
+  CTX_FL_UNSET(context, CTX_FL_SUSPEND);
+
+  if (CTX_FL_TEST(context, CTX_FL_WAS_RUNNING))
+    rb_thread_wakeup(context->thread);
+}
+
+/*
+ *  call-seq:
+ *    context.resume -> nil
+ *
+ *  Resumes thread from the suspended mode.
+ */
+static VALUE
+Context_resume(VALUE self)
+{
+    debug_context_t *context;
+
+    Data_Get_Struct(self, debug_context_t, context);
+
+    if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
+      rb_raise(rb_eRuntimeError, "Thread is not suspended.");
+
+    context_resume_0(context);
+
+    return Qnil;
+}
+
 /*
  *  call-seq:
  *    context.stack_size-> int
@@ -460,6 +492,55 @@ Context_stop_return(VALUE self, VALUE frame)
   return frame;
 }
 
+static void
+context_suspend_0(debug_context_t *context)
+{
+  VALUE status = rb_funcall(context->thread, rb_intern("status"), 0);
+
+  if (rb_str_cmp(status, rb_str_new2("run")) == 0)
+    CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
+  else if (rb_str_cmp(status, rb_str_new2("sleep")) == 0)
+    CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
+  else
+    return;
+
+  CTX_FL_SET(context, CTX_FL_SUSPEND);
+}
+
+/*
+ *  call-seq:
+ *    context.suspend -> nil
+ *
+ *  Suspends the thread when it is running.
+ */
+static VALUE
+Context_suspend(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (CTX_FL_TEST(context, CTX_FL_SUSPEND))
+    rb_raise(rb_eRuntimeError, "Already suspended.");
+
+  context_suspend_0(context);
+  return Qnil;
+}
+
+/*
+ *  call-seq:
+ *    context.suspended? -> bool
+ *
+ *  Returns +true+ if the thread is suspended by debugger.
+ */
+static VALUE
+Context_is_suspended(VALUE self)
+{
+  debug_context_t *context;
+  Data_Get_Struct(self, debug_context_t, context);
+
+  return CTX_FL_TEST(context, CTX_FL_SUSPEND) ? Qtrue : Qfalse;
+}
+
 /*
  *  call-seq:
  *    context.thnum -> int
@@ -550,12 +631,15 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_method" , Context_frame_method , -1);
   rb_define_method(cContext, "frame_self"   , Context_frame_self   , -1);
   rb_define_method(cContext, "ignored?"     , Context_ignored      ,  0);
+  rb_define_method(cContext, "resume"       , Context_resume       ,  0);
   rb_define_method(cContext, "stack_size"   , Context_stack_size   ,  0);
   rb_define_method(cContext, "step_into"    , Context_step_into    , -1);
   rb_define_method(cContext, "step_out"     , Context_step_out     ,  1);
   rb_define_method(cContext, "step_over"    , Context_step_over    , -1);
   rb_define_method(cContext, "stop_return"  , Context_stop_return  ,  1);
   rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
+  rb_define_method(cContext, "suspend"      , Context_suspend      ,  0);
+  rb_define_method(cContext, "suspended?"   , Context_is_suspended ,  0);
   rb_define_method(cContext, "thnum"        , Context_thnum        ,  0);
   rb_define_method(cContext, "thread"       , Context_thread       ,  0);
   rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);

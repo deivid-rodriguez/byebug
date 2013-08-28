@@ -93,9 +93,21 @@ thread_context_lookup(VALUE thread, VALUE *context)
 void
 halt_while_other_thread_is_active(debug_context_t *dc)
 {
-  while (locker != Qnil && locker != rb_thread_current())
+  while (1)
   {
-    add_to_locked(rb_thread_current());
-    rb_thread_stop();
+    /* halt execution of current thread if debugger is activated in another */
+    while (locker != Qnil && locker != rb_thread_current())
+    {
+      add_to_locked(rb_thread_current());
+      rb_thread_stop();
+    }
+
+    /* stop the current thread if it's marked as suspended */
+    if (CTX_FL_TEST(dc, CTX_FL_SUSPEND) && locker != rb_thread_current())
+    {
+      CTX_FL_SET(dc, CTX_FL_WAS_RUNNING);
+      rb_thread_stop();
+    }
+    else break;
   }
 }

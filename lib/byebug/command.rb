@@ -5,7 +5,7 @@ require_relative 'helper'
 module Byebug
 
   module CommandFunctions
-    ##
+    #
     # Pad a string with dots at the end to fit :width setting
     #
     def pad_with_dots(string)
@@ -226,6 +226,10 @@ module Byebug
 
       def get_binding pos = @state.frame_pos
         @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
+      end
+
+      def get_context(thnum)
+        Byebug.contexts.find {|c| c.thnum == thnum}
       end
   end
 

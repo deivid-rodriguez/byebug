@@ -5,6 +5,7 @@ module TestDsl
 
     def setup
       Byebug.handler = Byebug::CommandProcessor.new(TestInterface.new)
+      Byebug.tracing = false
     end
 
     def self.temporary_change_hash hash, key, value

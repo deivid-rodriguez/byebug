@@ -7,8 +7,11 @@ module Byebug
     end
 
     def thread_arguments(context, should_show_top_frame = true)
-      is_current = context.thread == Thread.current
-      status_flag = is_current ? '+' : ' '
+      status_flag = if context.suspended?
+        "$"
+      else
+        context.thread == Thread.current ? '+' : ' '
+      end
       debug_flag = context.ignored? ? '!' : ' '
       if should_show_top_frame
         if context.thread == Thread.current
@@ -30,6 +33,34 @@ module Byebug
         file_line: file_line ? file_line : ''
       }
     end
+
+    def parse_thread_num(subcmd, arg)
+      if '' == arg
+        errmsg "\"#{subcmd}\" needs a thread number"
+        nil
+      else
+        thread_num = get_int(arg, "thread #{subcmd}", 1)
+        return nil unless thread_num
+        get_context(thread_num)
+      end
+    end
+
+    def parse_thread_num_for_cmd(subcmd, arg)
+      c = parse_thread_num(subcmd, arg)
+      return nil unless c
+      case
+      when nil == c
+        errmsg 'No such thread'
+      when @state.context == c
+        errmsg "It's the current thread"
+      when c.ignored?
+        errmsg "Can't #{subcmd} thread #{arg}"
+      else
+        return c
+      end
+      return nil
+    end
+
   end
 
   class ThreadListCommand < Command
@@ -77,4 +108,63 @@ module Byebug
       end
     end
   end
+
+  class ThreadStopCommand < Command
+    self.allow_in_control     = true
+    self.allow_in_post_mortem = false
+    self.need_context         = true
+
+    def regexp
+      /^\s* th(?:read)? \s+ stop \s* (\S*) \s*$/x
+    end
+
+    def execute
+      c = parse_thread_num_for_cmd("thread stop", @match[1])
+      return unless c
+      c.suspend
+      display_context(c)
+    end
+
+    class << self
+      def names
+        %w(thread)
+      end
+
+      def description
+        %{th[read] stop <nnn>\t\tstop thread nnn}
+      end
+    end
+  end
+
+  class ThreadResumeCommand < Command
+    self.allow_in_control     = true
+    self.allow_in_post_mortem = false
+    self.need_context         = true
+
+    def regexp
+      /^\s* th(?:read)? \s+ resume \s* (\S*) \s*$/x
+    end
+
+    def execute
+      c = parse_thread_num_for_cmd("thread resume", @match[1])
+      return unless c
+      if !c.suspended?
+        errmsg 'Already running'
+        return
+      end
+      c.resume
+      display_context(c)
+    end
+
+    class << self
+      def names
+        %w(thread)
+      end
+
+      def description
+        %{th[read] resume <nnn>\t\tresume thread nnn}
+      end
+    end
+  end
+
 end
