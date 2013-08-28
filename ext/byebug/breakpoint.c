@@ -21,37 +21,78 @@ eval_expression(VALUE args)
   return rb_funcall2(rb_mKernel, idEval, 2, RARRAY_PTR(args));
 }
 
+/*
+ *  call-seq:
+ *    breakpoint.enabled? -> bool
+ *
+ *  Returns +true+ if breakpoint is enabled, false otherwise.
+ */
 static VALUE
-Breakpoint_hit_count(VALUE self)
+brkpt_enabled(VALUE self)
 {
   breakpoint_t *breakpoint;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return INT2FIX(breakpoint->hit_count);
+  return breakpoint->enabled;
 }
 
-
+/*
+ *  call-seq:
+ *    breakpoint.enabled = bool
+ *
+ *  Enables or disables breakpoint.
+ */
 static VALUE
-Breakpoint_hit_value(VALUE self)
+brkpt_set_enabled(VALUE self, VALUE bool)
 {
     breakpoint_t *breakpoint;
 
     Data_Get_Struct(self, breakpoint_t, breakpoint);
-    return INT2FIX(breakpoint->hit_value);
+    return breakpoint->enabled = bool;
 }
 
+/*
+ *  call-seq:
+ *    breakpoint.expr -> string
+ *
+ *  Returns a conditional expression which indicates when this breakpoint should
+ *  be activated.
+ */
 static VALUE
-Breakpoint_set_hit_value(VALUE self, VALUE value)
+brkpt_expr(VALUE self)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    breakpoint->hit_value = FIX2INT(value);
-    return value;
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return breakpoint->expr;
 }
 
+/*
+ *  call-seq:
+ *    breakpoint.expr = string | nil
+ *
+ *  Sets or unsets the conditional expression which indicates when this
+ *  breakpoint should be activated.
+ */
 static VALUE
-Breakpoint_hit_condition(VALUE self)
+brkpt_set_expr(VALUE self, VALUE expr)
+{
+  breakpoint_t *breakpoint;
+
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  breakpoint->expr = NIL_P(expr) ? expr: StringValue(expr);
+  return expr;
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.hit_condition -> symbol
+ *
+ *   Returns the hit condition of the breakpoint: +nil+ if it is an
+ *   unconditional breakpoint, or :greater_or_equal, :equal or :modulo otherwise
+ */
+static VALUE
+brkpt_hit_condition(VALUE self)
 {
   breakpoint_t *breakpoint;
 
@@ -70,8 +111,18 @@ Breakpoint_hit_condition(VALUE self)
   }
 }
 
+/*
+ *  call-seq:
+ *    breakpoint.hit_condition = symbol
+ *
+ *  Sets the hit condition of the breakpoint which must be one of the following
+ *  values:
+ *
+ *  +nil+ if it is an unconditional breakpoint, or
+ *  :greater_or_equal(:ge), :equal(:eq), :modulo(:mod)
+ */
 static VALUE
-Breakpoint_set_hit_condition(VALUE self, VALUE value)
+brkpt_set_hit_condition(VALUE self, VALUE value)
 {
   breakpoint_t *breakpoint;
   ID id_value;
@@ -90,23 +141,120 @@ Breakpoint_set_hit_condition(VALUE self, VALUE value)
   return value;
 }
 
+/*
+ *  call-seq:
+ *    breakpoint.hit_count -> int
+ *
+ *  Returns the number of times this breakpoint has been hit.
+ */
+static VALUE
+brkpt_hit_count(VALUE self)
+{
+  breakpoint_t *breakpoint;
+
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return INT2FIX(breakpoint->hit_count);
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.hit_value -> int
+ *
+ *  Returns the hit value of the breakpoint, namely, a value to build a
+ *  condition on the number of hits of the breakpoint.
+ */
+static VALUE
+brkpt_hit_value(VALUE self)
+{
+    breakpoint_t *breakpoint;
+
+    Data_Get_Struct(self, breakpoint_t, breakpoint);
+    return INT2FIX(breakpoint->hit_value);
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.hit_value = int
+ *
+ *  Sets the hit value of the breakpoint. This allows the user to set conditions
+ *  on the number of hits to enable/disable the breakpoint.
+ */
+static VALUE
+brkpt_set_hit_value(VALUE self, VALUE value)
+{
+    breakpoint_t *breakpoint;
+
+    Data_Get_Struct(self, breakpoint_t, breakpoint);
+    breakpoint->hit_value = FIX2INT(value);
+    return value;
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.id -> int
+ *
+ *  Returns the id of the breakpoint.
+ */
+static VALUE
+brkpt_id(VALUE self)
+{
+  breakpoint_t *breakpoint;
+
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return INT2FIX(breakpoint->id);
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.pos -> string or int
+ *
+ *   Returns the position of this breakpoint, either a method name or a line
+ *   number.
+ */
+static VALUE
+brkpt_pos(VALUE self)
+{
+  breakpoint_t *breakpoint;
+
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  if (breakpoint->type == BP_METHOD_TYPE)
+    return rb_str_new2(rb_id2name(breakpoint->pos.mid));
+  else
+    return INT2FIX(breakpoint->pos.line);
+}
+
+/*
+ *  call-seq:
+ *    breakpoint.source -> string
+ *
+ *  Returns the source file of the breakpoint.
+ */
+static VALUE
+brkpt_source(VALUE self)
+{
+  breakpoint_t *breakpoint;
+
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return breakpoint->source;
+}
+
 static void
-Breakpoint_mark(breakpoint_t *breakpoint)
+mark_breakpoint(breakpoint_t *breakpoint)
 {
   rb_gc_mark(breakpoint->source);
   rb_gc_mark(breakpoint->expr);
 }
 
 static VALUE
-Breakpoint_create(VALUE klass)
+brkpt_create(VALUE klass)
 {
   breakpoint_t *breakpoint = ALLOC(breakpoint_t);
 
-  return Data_Wrap_Struct(klass, Breakpoint_mark, xfree, breakpoint);
+  return Data_Wrap_Struct(klass, mark_breakpoint, xfree, breakpoint);
 }
 
 static VALUE
-Breakpoint_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
+brkpt_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
 {
   breakpoint_t *breakpoint;
 
@@ -130,7 +278,7 @@ Breakpoint_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
 }
 
 static VALUE
-Breakpoint_remove(VALUE self, VALUE breakpoints, VALUE id_value)
+brkpt_remove(VALUE self, VALUE breakpoints, VALUE id_value)
 {
   int i;
   int id;
@@ -152,74 +300,6 @@ Breakpoint_remove(VALUE self, VALUE breakpoints, VALUE id_value)
     }
   }
   return Qnil;
-}
-
-static VALUE
-Breakpoint_id(VALUE self)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return INT2FIX(breakpoint->id);
-}
-
-static VALUE
-Breakpoint_source(VALUE self)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return breakpoint->source;
-}
-
-static VALUE
-Breakpoint_pos(VALUE self)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  if (breakpoint->type == BP_METHOD_TYPE)
-    return rb_str_new2(rb_id2name(breakpoint->pos.mid));
-  else
-    return INT2FIX(breakpoint->pos.line);
-}
-
-
-static VALUE
-Breakpoint_expr(VALUE self)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return breakpoint->expr;
-}
-
-static VALUE
-Breakpoint_set_expr(VALUE self, VALUE expr)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  breakpoint->expr = NIL_P(expr) ? expr: StringValue(expr);
-  return expr;
-}
-
-static VALUE
-Breakpoint_enabled(VALUE self)
-{
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return breakpoint->enabled;
-}
-
-static VALUE
-Breakpoint_set_enabled(VALUE self, VALUE bool)
-{
-    breakpoint_t *breakpoint;
-
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    return breakpoint->enabled = bool;
 }
 
 int
@@ -429,21 +509,23 @@ Init_breakpoint(VALUE mByebug)
 
   cBreakpoint = rb_define_class_under(mByebug, "Breakpoint", rb_cObject);
 
-  rb_define_singleton_method(cBreakpoint, "remove", Breakpoint_remove, 2);
-  rb_define_method(cBreakpoint, "initialize", Breakpoint_initialize, 3);
-  rb_define_method(cBreakpoint, "id", Breakpoint_id, 0);
-  rb_define_method(cBreakpoint, "source", Breakpoint_source, 0);
-  rb_define_method(cBreakpoint, "pos", Breakpoint_pos, 0);
-  rb_define_method(cBreakpoint, "expr", Breakpoint_expr, 0);
-  rb_define_method(cBreakpoint, "expr=", Breakpoint_set_expr, 1);
-  rb_define_method(cBreakpoint, "hit_count", Breakpoint_hit_count, 0);
-  rb_define_method(cBreakpoint, "hit_condition", Breakpoint_hit_condition, 0);
-  rb_define_method(cBreakpoint, "hit_condition=", Breakpoint_set_hit_condition, 1);
-  rb_define_method(cBreakpoint, "enabled?", Breakpoint_enabled, 0);
-  rb_define_method(cBreakpoint, "enabled=", Breakpoint_set_enabled, 1);
-  rb_define_method(cBreakpoint, "hit_value", Breakpoint_hit_value, 0);
-  rb_define_method(cBreakpoint, "hit_value=", Breakpoint_set_hit_value, 1);
-  rb_define_alloc_func(cBreakpoint, Breakpoint_create);
+  rb_define_alloc_func(cBreakpoint, brkpt_create);
+  rb_define_method(cBreakpoint, "initialize", brkpt_initialize, 3);
+
+  rb_define_singleton_method(cBreakpoint, "remove", brkpt_remove, 2);
+
+  rb_define_method(cBreakpoint, "enabled?"      , brkpt_enabled          , 0);
+  rb_define_method(cBreakpoint, "enabled="      , brkpt_set_enabled      , 1);
+  rb_define_method(cBreakpoint, "expr"          , brkpt_expr             , 0);
+  rb_define_method(cBreakpoint, "expr="         , brkpt_set_expr         , 1);
+  rb_define_method(cBreakpoint, "hit_count"     , brkpt_hit_count        , 0);
+  rb_define_method(cBreakpoint, "hit_condition" , brkpt_hit_condition    , 0);
+  rb_define_method(cBreakpoint, "hit_condition=", brkpt_set_hit_condition, 1);
+  rb_define_method(cBreakpoint, "hit_value"     , brkpt_hit_value        , 0);
+  rb_define_method(cBreakpoint, "hit_value="    , brkpt_set_hit_value    , 1);
+  rb_define_method(cBreakpoint, "id"            , brkpt_id               , 0);
+  rb_define_method(cBreakpoint, "pos"           , brkpt_pos              , 0);
+  rb_define_method(cBreakpoint, "source"        , brkpt_source           , 0);
 
   idEval = rb_intern("eval");
 }
