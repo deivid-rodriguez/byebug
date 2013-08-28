@@ -238,7 +238,9 @@ module Kernel
   def byebug(steps_into = 1, steps_out = 2)
     Byebug.start
     Byebug.run_init_script(StringIO.new)
-    Byebug.context.stop_return steps_out if steps_out >= 1
+    if Byebug.context.stack_size > 2
+      Byebug.context.stop_return steps_out if steps_out >= 1
+    end
     Byebug.context.step_into steps_into if steps_into >= 0
   end
 end
