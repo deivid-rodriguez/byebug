@@ -257,6 +257,7 @@ software, specially:
 * Dennis Ushakov, author of [debase](https://github.com/denofevil/debase), the
 starting point of this.
 * Logo by [Ivlichev Victor Petrovich](http://www.aha-soft.com/)
+* @kevjames3 for testing, bug reports and the interest in the project.
 
 [1]: https://badge.fury.io/rb/byebug.png
 [2]: http://badge.fury.io/rb/byebug
