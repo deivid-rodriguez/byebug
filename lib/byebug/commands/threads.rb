@@ -39,7 +39,7 @@ module Byebug
         errmsg "\"#{subcmd}\" needs a thread number"
         nil
       else
-        thread_num = get_int(arg, "thread #{subcmd}", 1)
+        thread_num = get_int(arg, subcmd, 1)
         return nil unless thread_num
         get_context(thread_num)
       end
@@ -119,7 +119,7 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd("thread stop", @match[1])
+      c = parse_thread_num_for_cmd('thread stop', @match[1])
       return unless c
       c.suspend
       display_context(c)
@@ -146,7 +146,7 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd("thread resume", @match[1])
+      c = parse_thread_num_for_cmd('thread resume', @match[1])
       return unless c
       if !c.suspended?
         errmsg 'Already running'

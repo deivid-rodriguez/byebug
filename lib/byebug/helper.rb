@@ -11,15 +11,15 @@ module Byebug
       begin
         int = Integer(str)
         if min and int < min
-          print "#{cmd} argument \"#{str}\" needs to be at least #{min}.\n"
+          print "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}.\n"
           return nil
         elsif max and int > max
-          print "#{cmd} argument \"#{str}\" needs to be at most #{max}.\n"
+          print "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}.\n"
           return nil
         end
         return int
       rescue
-        print "#{cmd} argument \"#{str}\" needs to be a number.\n"
+        print "\"#{cmd}\" argument \"#{str}\" needs to be a number.\n"
         return nil
       end
     end

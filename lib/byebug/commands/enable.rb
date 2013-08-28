@@ -16,7 +16,7 @@ module Byebug
         return nil unless pos
         breakpoints.each do |b|
           if b.id == pos
-            enabled = ('Enable' == is_enable)
+            enabled = ('enable' == is_enable)
             if enabled
               unless syntax_valid?(b.expr)
                 errmsg "Expression \"#{b.expr}\" syntactically incorrect; " \
@@ -24,7 +24,7 @@ module Byebug
                 break
               end
             end
-            b.enabled = ('Enable' == is_enable)
+            b.enabled = ('enable' == is_enable)
             break
           end
         end
@@ -39,7 +39,7 @@ module Byebug
       args.each do |pos|
         pos = get_int(pos, "#{is_enable} display", 1, @state.display.size)
         return nil unless pos
-        @state.display[pos-1][0] = ('Enable' == is_enable)
+        @state.display[pos-1][0] = ('enable' == is_enable)
       end
     end
   end
@@ -78,11 +78,11 @@ module Byebug
     end
 
     def enable_breakpoints(args)
-      enable_disable_breakpoints('Enable', args)
+      enable_disable_breakpoints('enable', args)
     end
 
     def enable_display(args)
-      enable_disable_display('Enable', args)
+      enable_disable_display('enable', args)
     end
 
     class << self
@@ -132,11 +132,11 @@ module Byebug
     end
 
     def disable_breakpoints(args)
-      enable_disable_breakpoints('Disable', args)
+      enable_disable_breakpoints('disable', args)
     end
 
     def disable_display(args)
-      enable_disable_display('Disable', args)
+      enable_disable_display('disable', args)
     end
 
     class << self

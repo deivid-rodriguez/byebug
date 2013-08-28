@@ -113,7 +113,7 @@ class TestDisplay < TestDsl::TestCase
       enter 'display d', 'disable display 4'
       debug_file 'display'
       check_output_includes \
-        'Disable display argument "4" needs to be at most 1.'
+        '"disable display" argument "4" needs to be at most 1.'
     end
   end
 

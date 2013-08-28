@@ -254,12 +254,11 @@ class TestBreakpoints < TestDsl::TestCase
           'No breakpoints have been set.', interface.error_queue
       end
 
-      it 'must show an error if not a number is provided as an argument to ' \
-         ' "disable" command' do
+      it 'must show an error if a number is not provided as an argument' do
         enter 'break 14', 'disable foo'
         debug_file('breakpoint')
         check_output_includes \
-          'Disable breakpoints argument "foo" needs to be a number.'
+          '"disable breakpoints" argument "foo" needs to be a number.'
       end
     end
   end
