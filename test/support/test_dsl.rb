@@ -48,7 +48,7 @@ module TestDsl
     (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
   end
 
-  ##
+  #
   # Adds commands to the input queue, so they will be later retrieved by
   # Processor, i.e., it emulates user's input.
   #
@@ -67,7 +67,7 @@ module TestDsl
     interface.input_queue.concat(messages)
   end
 
-  ##
+  #
   # Runs byebug with the provided basename for a file.
   #
   # The file should be placed in the test/examples dir. You also can specify a
@@ -109,7 +109,7 @@ module TestDsl
     raise exception if exception
   end
 
-  ##
+  #
   # Checks the output of byebug.
   #
   # By default it checks output queue of the current interface, but you can

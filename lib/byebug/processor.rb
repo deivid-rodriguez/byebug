@@ -209,14 +209,14 @@ module Byebug
       # Executes a single byebug command
       #
       def one_cmd(commands, context, input)
-        if cmd = commands.find{ |c| c.match(input) }
+        if cmd = commands.find { |c| c.match(input) }
           if context.dead? && cmd.class.need_context
             print "Command is unavailable\n"
           else
             cmd.execute
           end
         else
-          unknown_cmd = commands.find{ |c| c.class.unknown }
+          unknown_cmd = commands.find { |c| c.class.unknown }
           if unknown_cmd
             unknown_cmd.execute
           else
@@ -225,6 +225,9 @@ module Byebug
         end
       end
 
+      #
+      # Tasks to do before processor loop
+      #
       def preloop(commands, context)
         @context_was_dead = true if context.dead? and not @context_was_dead
 
@@ -302,7 +305,7 @@ module Byebug
     end
 
     #
-    # The prompt shown before reading a command.
+    # Prompt shown before reading a command.
     #
     def prompt(context)
       return '(byebug:ctrl) '

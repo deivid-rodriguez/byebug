@@ -569,7 +569,7 @@ bb_at_exit(VALUE self)
  *  call-seq:
  *    Byebug.tracing -> bool
  *
- *   Returns +true+ if global tracing is enabled.
+ *  Returns +true+ if global tracing is enabled.
  */
 static VALUE
 bb_tracing(VALUE self)
