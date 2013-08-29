@@ -69,8 +69,7 @@ def debug_program(options)
     exit $?.exitstatus
   end
   if bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
-    print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
-    print "Uncaught exception: #{bt}\n"
+    p bt, bt.backtrace
   end
 end
 
@@ -235,12 +234,8 @@ Byebug.tracing = options.tracing
 loop do
   begin
     debug_program(options)
-  rescue SyntaxError
-    puts $!.backtrace.map{|l| "\t#{l}"}.join("\n")
-    puts "Uncaught Syntax Error\n"
-  rescue
-    print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
-    print "Uncaught exception: #{$!}\n"
+  rescue Exception
+    p $!, $@
   end
 
   break if options.quit
