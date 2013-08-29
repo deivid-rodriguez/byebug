@@ -105,13 +105,4 @@ class TestVariables < TestDsl::TestCase
       skip('can\'t install ruby-internal gem')
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'var local'
-      debug_file 'post_mortem'
-      check_output_includes 'x => nil', 'z => 4'
-    end
-  end
-
 end

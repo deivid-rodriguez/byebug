@@ -48,16 +48,4 @@ class TestEdit < TestDsl::TestCase
     check_output_includes \
       'Invalid file/line number specification: blabla', interface.error_queue
   end
-
-  describe 'Post Mortem' do
-    temporary_change_hash ENV, 'EDITOR', 'editr'
-
-    it 'must work in post-mortem mode' do
-      Byebug::Edit.any_instance.expects(:system).
-                                with("editr +2 #{fullpath('edit')}")
-      enter 'cont', "edit #{fullpath('edit')}:2", 'cont'
-      debug_file 'post_mortem'
-    end
-  end
-
 end

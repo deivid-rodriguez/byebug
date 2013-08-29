@@ -36,12 +36,4 @@ class TestKill < TestDsl::TestCase
         'signal name BLA is not a signal I know about', interface.error_queue
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      Process.expects(:kill).with('USR1', Process.pid)
-      enter 'cont', 'kill USR1'
-      debug_file 'post_mortem'
-    end
-  end
 end

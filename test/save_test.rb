@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 
 class TestSave < TestDsl::TestCase
+
   describe 'successful saving' do
     let(:file_name) { 'save_output.txt' }
     let(:file_contents) { File.read(file_name) }
@@ -54,7 +55,6 @@ class TestSave < TestDsl::TestCase
     it 'must show a message about successful saving' do
       check_output_includes "Saved to '#{file_name}'"
     end
-
   end
 
   describe 'without filename' do
@@ -73,16 +73,4 @@ class TestSave < TestDsl::TestCase
       check_output_includes "Saved to '#{interface.restart_file}'"
     end
   end
-
-  describe 'Post Mortem' do
-    let(:file_name) { 'save_output.txt' }
-    let(:file_contents) { File.read(file_name) }
-    after { FileUtils.rm(file_name) }
-    it 'must work in post-mortem mode' do
-      enter 'cont', "save #{file_name}"
-      debug_file 'post_mortem'
-      file_contents.must_include 'set autoirb off'
-    end
-  end
-
 end

@@ -34,16 +34,4 @@ class TestFinish < TestDsl::TestCase
       debug_file('finish') { $state.line.must_equal 16 }
     end
   end
-
-  describe 'Post Mortem' do
-    temporary_change_hash Byebug.settings, :autoeval, false
-
-    it 'must not work in post-mortem mode' do
-      enter 'cont', 'finish'
-      debug_file 'post_mortem'
-      check_output_includes \
-        'Unknown command: "finish".  Try "help".', interface.error_queue
-    end
-  end
-
 end

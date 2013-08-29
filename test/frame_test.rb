@@ -194,10 +194,4 @@ class TestFrame < TestDsl::TestCase
     end
   end
 
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'frame'
-      debug_file('post_mortem') { $state.line.must_equal 8 }
-    end
-  end
 end

@@ -172,12 +172,4 @@ class TestList < TestDsl::TestCase
     debug_file 'list'
     check_output_includes "23: a = '%23'"
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont'
-      debug_file 'post_mortem'
-      check_output_includes "[3, 12] in #{fullpath('post_mortem')}"
-    end
-  end
 end

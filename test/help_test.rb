@@ -53,13 +53,4 @@ class TestHelp < TestDsl::TestCase
         "With an integer argument, list info on that breakpoint."
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'help'
-      debug_file 'post_mortem'
-      check_output_includes 'Available commands:'
-    end
-  end
-
 end

@@ -283,13 +283,4 @@ class TestInfo < TestDsl::TestCase
       check_output_includes /List of "info" subcommands:/
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'info line'
-      debug_file 'post_mortem'
-      check_output_includes "Line 8 of \"#{fullpath('post_mortem')}\""
-    end
-  end
-
 end

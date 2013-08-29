@@ -42,13 +42,4 @@ class TestQuit < TestDsl::TestCase
     enter 'exit!'
     debug_file 'quit'
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      Byebug::QuitCommand.any_instance.expects(:exit!)
-      enter 'cont', 'exit!'
-      debug_file 'post_mortem'
-    end
-  end
-
 end

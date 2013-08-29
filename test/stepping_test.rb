@@ -59,18 +59,6 @@ class TestStepping < TestDsl::TestCase
       end
 
     end
-
-    describe 'Post Mortem' do
-      temporary_change_hash Byebug.settings, :autoeval, false
-
-      it 'must not work in post-mortem mode' do
-        enter 'cont', 'next'
-        debug_file 'post_mortem'
-        check_output_includes \
-          'Unknown command: "next".  Try "help".', interface.error_queue
-      end
-    end
-
   end
 
   describe 'Step Command' do
@@ -122,17 +110,6 @@ class TestStepping < TestDsl::TestCase
           enter 'step'
           debug_file('stepping') { $state.line.must_equal 22 }
         end
-      end
-    end
-
-    describe 'Post Mortem' do
-      temporary_change_hash Byebug.settings, :autoeval, false
-
-      it 'must not work in post-mortem mode' do
-        enter 'cont', 'step'
-        debug_file 'post_mortem'
-        check_output_includes \
-          'Unknown command: "step".  Try "help".', interface.error_queue
       end
     end
   end

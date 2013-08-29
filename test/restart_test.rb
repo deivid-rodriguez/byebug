@@ -1,12 +1,6 @@
 require_relative 'test_helper'
 
 class TestRestart < TestDsl::TestCase
-
-  def must_restart
-    Byebug::RestartCommand.any_instance.unstub(:exec)
-    Byebug::RestartCommand.any_instance.expects(:exec)
-  end
-
   describe 'usual restarting' do
     temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
 
@@ -141,13 +135,4 @@ class TestRestart < TestDsl::TestCase
       end
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      must_restart
-      enter 'cont', 'restart'
-      debug_file 'post_mortem'
-    end
-  end
-
 end

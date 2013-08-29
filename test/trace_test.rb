@@ -108,13 +108,4 @@ class TestTrace < TestDsl::TestCase
       end
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'trace on'
-      debug_file 'post_mortem'
-      check_output_includes 'line tracing is on.'
-    end
-  end
-
 end

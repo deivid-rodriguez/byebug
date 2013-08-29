@@ -39,11 +39,4 @@ class TestSource < TestDsl::TestCase
         "source FILE\texecutes a file containing byebug commands"
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', "so #{filename}"
-      debug_file('post_mortem') { Byebug.breakpoints[0].pos.must_equal 3 }
-    end
-  end
 end

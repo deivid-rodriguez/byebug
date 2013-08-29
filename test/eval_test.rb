@@ -87,13 +87,4 @@ class TestEval < TestDsl::TestCase
       check_output_includes "1  3  5  7  9\n2  4  6  8"
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'eval 2 + 2'
-      debug_file 'post_mortem'
-      check_output_includes '4'
-    end
-  end
-
 end

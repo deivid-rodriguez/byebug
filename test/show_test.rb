@@ -264,13 +264,4 @@ class TestShow < TestDsl::TestCase
       check_output_includes /List of "show" subcommands:/
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must work in post-mortem mode' do
-      enter 'cont', 'show autolist'
-      debug_file 'post_mortem'
-      check_output_includes 'autolist is on.'
-    end
-  end
-
 end

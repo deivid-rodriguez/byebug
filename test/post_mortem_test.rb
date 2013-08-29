@@ -2,24 +2,249 @@ require_relative 'test_helper'
 
 class TestPostMortem < TestDsl::TestCase
 
-  it 'must enter into post mortem mode' do
-    enter 'cont'
-    debug_file('post_mortem') { Byebug.post_mortem?.must_equal true }
+  describe 'Features' do
+    it 'must enter into post mortem mode' do
+      enter 'cont'
+      debug_file('post_mortem') { Byebug.post_mortem?.must_equal true }
+    end
+
+    it 'must stop at the correct line' do
+      enter 'cont'
+      debug_file('post_mortem') { $state.line.must_equal 8 }
+    end
+
+    it 'must exit from post mortem mode after stepping command' do
+      enter 'cont', 'break 12', 'cont'
+      debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
+    end
+
+    it 'must save the raised exception' do
+      enter 'cont'
+      debug_file('post_mortem') {
+        Byebug.last_exception.must_be_kind_of RuntimeError }
+    end
   end
 
-  it 'must stop at the correct line' do
-    enter 'cont'
-    debug_file('post_mortem') { $state.line.must_equal 8 }
+  describe 'Unavailable commands' do
+    temporary_change_hash Byebug.settings, :autoeval, false
+
+    describe 'step' do
+      it 'must not work in post-mortem mode' do
+        enter 'cont', 'step'
+        debug_file 'post_mortem'
+        check_error_includes 'Unknown command: "step".  Try "help".'
+      end
+    end
+
+    describe 'next' do
+      it 'must not work in post-mortem mode' do
+        enter 'cont', 'next'
+        debug_file 'post_mortem'
+        check_error_includes 'Unknown command: "next".  Try "help".'
+      end
+    end
+
+    describe 'finish' do
+      it 'must not work in post-mortem mode' do
+        enter 'cont', 'finish'
+        debug_file 'post_mortem'
+        check_error_includes 'Unknown command: "finish".  Try "help".'
+      end
+    end
   end
 
-  it 'must exit from post mortem mode after stepping command' do
-    enter 'cont', 'break 12', 'cont'
-    debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
-  end
+  describe 'Available commands' do
+    before { @tst_file = fullpath('post_mortem') }
 
-  it 'must save the raised exception' do
-    enter 'cont'
-    debug_file('post_mortem') {
-      Byebug.last_exception.must_be_kind_of RuntimeError }
+    describe 'restart' do
+      it 'must work in post-mortem mode' do
+        must_restart
+        enter 'cont', 'restart'
+        debug_file 'post_mortem'
+      end
+    end
+
+    describe 'display' do
+      it 'must be able to set display expressions in post-mortem mode' do
+        enter 'cont', 'display 2 + 2'
+        debug_file 'post_mortem'
+        check_output_includes '1:', '2 + 2 = 4'
+      end
+    end
+
+    describe 'frame' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'frame'
+        debug_file('post_mortem') { $state.line.must_equal 8 }
+        check_output_includes \
+          "--> #0  block in CatchExample.a at #{@tst_file}:8"
+      end
+    end
+
+    describe 'condition' do
+      it 'must be able to set conditions in post-mortem mode' do
+        enter 'cont', 'break 12',
+              ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
+        debug_file('post_mortem') { $state.line.must_equal 12 }
+      end
+    end
+
+    describe 'break' do
+      it 'must be able to set breakpoints in post-mortem mode' do
+        enter 'cont', 'break 12', 'cont'
+        debug_file('post_mortem') { $state.line.must_equal 12 }
+      end
+    end
+
+    describe 'exit' do
+      it 'must work in post-mortem mode' do
+        Byebug::QuitCommand.any_instance.expects(:exit!)
+        enter 'cont', 'exit!'
+        debug_file 'post_mortem'
+      end
+    end
+
+    describe 'reload' do
+      after { change_line_in_file(@tst_file, 7, '        z = 4') }
+
+      it 'must work in post-mortem mode' do
+        enter 'cont', -> do
+          change_line_in_file(@tst_file, 7, 'z = 100')
+          'reload'
+        end, 'l 7-7'
+        debug_file 'post_mortem'
+        check_output_includes '7: z = 100'
+      end
+    end
+
+    describe 'edit' do
+      temporary_change_hash ENV, 'EDITOR', 'editr'
+
+      it 'must work in post-mortem mode' do
+        Byebug::Edit.any_instance.
+                     expects(:system).with("editr +2 #{fullpath('edit')}")
+        enter 'cont', "edit #{fullpath('edit')}:2", 'cont'
+        debug_file 'post_mortem'
+      end
+    end
+
+    describe 'info' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'info line'
+        debug_file 'post_mortem'
+        check_output_includes "Line 8 of \"#{@tst_file}\""
+      end
+    end
+
+    describe 'irb' do
+      let(:irb) { stub(context: ->{}) }
+
+      it 'must work in post-mortem mode' do
+        irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
+        enter 'cont', 'break 12', 'irb'
+        debug_file('post_mortem') { $state.line.must_equal 12 }
+      end
+    end
+
+    describe 'source' do
+      before { File.open(filename, 'w') do |f|
+                 f.puts 'break 2'
+                 f.puts 'break 3 if true'
+               end }
+      after { FileUtils.rm(filename) }
+
+      let(:filename) { 'source_example.txt' }
+
+      it 'must work in post-mortem mode' do
+        enter 'cont', "so #{filename}"
+        debug_file('post_mortem') { Byebug.breakpoints[0].pos.must_equal 3 }
+      end
+    end
+
+    describe 'help' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'help'
+        debug_file 'post_mortem'
+        check_output_includes 'Available commands:'
+      end
+    end
+
+    describe 'var' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'var local'
+        debug_file 'post_mortem'
+        check_output_includes 'x => nil', 'z => 4'
+      end
+    end
+
+    describe 'list' do
+      it 'must work in post-mortem mode' do
+        enter 'cont'
+        debug_file 'post_mortem'
+        check_output_includes "[3, 12] in #{@tst_file}"
+      end
+    end
+
+    describe 'method' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'm i self'
+        debug_file 'post_mortem'
+        check_output_includes /to_s/
+      end
+    end
+
+    describe 'kill' do
+      it 'must work in post-mortem mode' do
+        Process.expects(:kill).with('USR1', Process.pid)
+        enter 'cont', 'kill USR1'
+        debug_file 'post_mortem'
+      end
+    end
+
+    describe 'eval' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'eval 2 + 2'
+        debug_file 'post_mortem'
+        check_output_includes '4'
+      end
+    end
+
+    describe 'set' do
+      temporary_change_hash Byebug.settings, :autolist, 0
+
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'set autolist on'
+        debug_file 'post_mortem'
+        check_output_includes 'autolist is on.'
+      end
+    end
+
+    describe 'save' do
+      let(:file_name) { 'save_output.txt' }
+      let(:file_contents) { File.read(file_name) }
+      after { FileUtils.rm(file_name) }
+
+      it 'must work in post-mortem mode' do
+        enter 'cont', "save #{file_name}"
+        debug_file 'post_mortem'
+        file_contents.must_include 'set autoirb off'
+      end
+    end
+
+    describe 'show' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'show autolist'
+        debug_file 'post_mortem'
+        check_output_includes 'autolist is on.'
+      end
+    end
+
+    describe 'trace' do
+      it 'must work in post-mortem mode' do
+        enter 'cont', 'trace on'
+        debug_file 'post_mortem'
+        check_output_includes 'line tracing is on.'
+      end
+    end
   end
 end

@@ -69,13 +69,4 @@ class TestConditions < TestDsl::TestCase
       debug_file('conditions') { $state.line.must_equal 3 }
     end
   end
-
-  describe 'Post Mortem' do
-    it 'must be able to set conditions in post-mortem mode' do
-      enter 'cont', 'break 12', ->{ "cond #{Byebug.breakpoints.first.id} true" },
-            'cont'
-      debug_file('post_mortem') { $state.line.must_equal 12 }
-    end
-  end
-
 end
