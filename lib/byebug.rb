@@ -36,8 +36,11 @@ module Byebug
       LineCache::clear_file_cache
     end
 
+    #
     # Get line +line_number+ from file named +filename+.
+    #
     # @return "\n" if there was a problem. Leaking blanks are stripped off.
+    #
     def line_at(filename, line_number)
       @@autoreload = nil unless defined?(@@autoreload)
       line = LineCache::getline filename, line_number, @@autoreload
@@ -45,9 +48,13 @@ module Byebug
       return "#{line.gsub(/^\s+/, '').chomp}"
     end
 
+    #
+    # Add a new breakpoint
+    #
     # @param [String] file
     # @param [Fixnum] line
     # @param [String] expr
+    #
     def add_breakpoint(file, line, expr=nil)
       breakpoint = Breakpoint.new(file, line, expr)
       breakpoints << breakpoint
@@ -123,7 +130,7 @@ module Byebug
       end
     end
 
-    ##
+    #
     # Runs a script file
     #
     def run_script(file, out = handler.interface, verbose=false)
