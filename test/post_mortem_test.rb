@@ -77,7 +77,7 @@ class TestPostMortem < TestDsl::TestCase
         enter 'cont', 'frame'
         debug_file('post_mortem') { $state.line.must_equal 8 }
         check_output_includes \
-          "--> #0  block in CatchExample.a at #{@tst_file}:8"
+          /--> #0  block in CatchExample\.a\s+at #{@tst_file}:8/
       end
     end
 
