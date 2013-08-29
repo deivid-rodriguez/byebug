@@ -176,12 +176,11 @@ module Byebug
     end
 
     def handle_post_mortem(exp)
-      return if !exp || !exp.__debug_context ||
-        exp.__debug_context.stack_size == 0
+      return if !exp || !exp.__bb_context || exp.__bb_context.stack_size == 0
       orig_tracing = Byebug.tracing?
       Byebug.tracing = false
       Byebug.last_exception = exp
-      handler.at_line(exp.__debug_context, exp.__debug_file, exp.__debug_line)
+      handler.at_line(exp.__bb_context, exp.__bb_file, exp.__bb_line)
     ensure
       Byebug.tracing = orig_tracing
     end
@@ -190,7 +189,7 @@ module Byebug
 end
 
 class Exception
-  attr_reader :__debug_file, :__debug_line, :__debug_binding, :__debug_context
+  attr_reader :__bb_file, :__bb_line, :__bb_binding, :__bb_context
 end
 
 class Module

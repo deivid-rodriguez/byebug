@@ -321,10 +321,10 @@ raise_event(VALUE trace_point, void *data)
   if (post_mortem == Qtrue)
   {
     context = context_dup(dc);
-    rb_ivar_set(err, rb_intern("@__debug_file")   , path);
-    rb_ivar_set(err, rb_intern("@__debug_line")   , lineno);
-    rb_ivar_set(err, rb_intern("@__debug_binding"), binding);
-    rb_ivar_set(err, rb_intern("@__debug_context"), context);
+    rb_ivar_set(err, rb_intern("@__bb_file")   , path);
+    rb_ivar_set(err, rb_intern("@__bb_line")   , lineno);
+    rb_ivar_set(err, rb_intern("@__bb_binding"), binding);
+    rb_ivar_set(err, rb_intern("@__bb_context"), context);
 
     Data_Get_Struct(context, debug_context_t, new_dc);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
