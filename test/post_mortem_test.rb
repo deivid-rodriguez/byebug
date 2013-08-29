@@ -246,5 +246,13 @@ class TestPostMortem < TestDsl::TestCase
         check_output_includes 'line tracing is on.'
       end
     end
+
+    describe 'thread' do
+      it "must work in post-mortem mode" do
+        enter 'cont', 'thread list'
+        debug_file('post_mortem')
+        check_output_includes /\+ \d+ #<Thread:(\S+) run/
+      end
+    end
   end
 end

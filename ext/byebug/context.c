@@ -90,9 +90,6 @@ context_dup(debug_context_t *context)
 static VALUE
 dc_backtrace(const debug_context_t *context)
 {
-  if (NIL_P(context->backtrace))
-    rb_raise(rb_eRuntimeError, "Backtrace information is not available");
-
   return context->backtrace;
 }
 
@@ -100,6 +97,9 @@ static VALUE
 dc_frame_get(const debug_context_t *context, int frame_index,
                                              enum frame_component type)
 {
+  if (NIL_P(dc_backtrace(context)))
+    rb_raise(rb_eRuntimeError, "Backtrace information is not available");
+
   if (frame_index >= RARRAY_LEN(dc_backtrace(context)))
     rb_raise(rb_eRuntimeError, "That frame doesn't exist!");
 
@@ -354,7 +354,16 @@ Context_stack_size(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
-  return INT2FIX(context->stack_size);
+  VALUE backtrace = dc_backtrace(context);
+
+  if (NIL_P(backtrace))
+    return INT2FIX(context->stack_size);
+
+  if (context->stack_size != RARRAY_LEN(backtrace))
+    rb_warn("Calculated stack size is %d but there are actually %ld frames",
+            context->stack_size, RARRAY_LEN(backtrace));
+
+  return INT2FIX(RARRAY_LEN(backtrace));
 }
 
 static VALUE

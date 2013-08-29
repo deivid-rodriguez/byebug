@@ -15,8 +15,8 @@ module Byebug
       debug_flag = context.ignored? ? '!' : ' '
       if should_show_top_frame
         if context.thread == Thread.current
-          file = context.frame_file(0)
-          line = context.frame_line(0)
+          file = @state.context.frame_file(0)
+          line = @state.context.frame_line(0)
         else
           if context.thread.backtrace_locations && context.thread.backtrace_locations[0]
             file = context.thread.backtrace_locations[0].path
