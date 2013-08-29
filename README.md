@@ -66,7 +66,7 @@ no longer need to set them in the startup file.
 * Works on 2.0.0 and it doesn't on 1.9.x.
 * Has no MRI internal source code dependencies, just a clean API.
 * Fixes most of debugger's current open issues:
-  - Post mortem mode segfaulting.
+  - Post-mortem mode segfaulting.
   - Line number wrongly shown as zero in backtrace.
   - Line tracing.
   - Colon delimited include paths.

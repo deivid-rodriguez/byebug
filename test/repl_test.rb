@@ -58,7 +58,7 @@ class TestRepl < TestDsl::TestCase
       end
     end
 
-    describe 'Post Mortem' do
+    describe 'post-mortem' do
       it 'must work in post-mortem mode' do
         skip 'TODO'
       end

@@ -91,7 +91,7 @@ containing the character '%'
 
 ## 1.1.0
 
-* Post mortem support
+* Post-mortem support
 
 
 ## 1.0.3

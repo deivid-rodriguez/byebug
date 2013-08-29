@@ -3,7 +3,7 @@ require_relative 'test_helper'
 class TestPostMortem < TestDsl::TestCase
 
   describe 'Features' do
-    it 'must enter into post mortem mode' do
+    it 'must enter into post-mortem mode' do
       enter 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal true }
     end
@@ -13,7 +13,7 @@ class TestPostMortem < TestDsl::TestCase
       debug_file('post_mortem') { $state.line.must_equal 8 }
     end
 
-    it 'must exit from post mortem mode after stepping command' do
+    it 'must exit from post-mortem mode after stepping command' do
       enter 'cont', 'break 12', 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
     end
