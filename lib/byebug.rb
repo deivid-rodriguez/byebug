@@ -199,43 +199,6 @@ class Exception
   attr_reader :__bb_file, :__bb_line, :__bb_binding, :__bb_context
 end
 
-class Module
-  #
-  # Wraps the +meth+ method with Byebug.start {...} block.
-  #
-  def debug_method(meth)
-    old_meth = "__debugee_#{meth}"
-    old_meth = "#{$1}_set" if old_meth =~ /^(.+)=$/
-    alias_method old_meth.to_sym, meth
-    class_eval <<-EOD
-    def #{meth}(*args, &block)
-      Byebug.start do
-        byebug 2
-        #{old_meth}(*args, &block)
-      end
-    end
-    EOD
-  end
-
-  #
-  # Wraps the +meth+ method with Byebug.post_mortem {...} block.
-  #
-  def post_mortem_method(meth)
-    old_meth = "__postmortem_#{meth}"
-    old_meth = "#{$1}_set" if old_meth =~ /^(.+)=$/
-    alias_method old_meth.to_sym, meth
-    class_eval <<-EOD
-    def #{meth}(*args, &block)
-      Byebug.start do |dbg|
-        dbg.post_mortem do
-          #{old_meth}(*args, &block)
-        end
-      end
-    end
-    EOD
-  end
-end
-
 module Kernel
   #
   # Enters byebug after _steps_into_ line events and _steps_out_ return events
