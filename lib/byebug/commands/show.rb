@@ -125,6 +125,9 @@ module Byebug
       when /^listsize$/
         listlines = Command.settings[:listsize]
         return "Number of source lines to list is #{listlines}."
+      when /^post_mortem$/
+        on_off = Byebug.post_mortem?
+        return "post-mortem mode is #{show_onoff(on_off)}"
       when /^trace$/
         on_off = Command.settings[:stack_trace_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."

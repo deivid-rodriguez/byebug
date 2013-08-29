@@ -32,6 +32,7 @@ module Byebug
         'Set line execution tracing to show different lines'],
        ['linetrace', 3, true, 'Enable line execution tracing'],
        ['listsize', 3, false, 'Set number of source lines to list by default'],
+       ['post_mortem', 2, true, 'Enable post-mortem mode'],
        ['stack_trace_on_error', 1, true,
         'Display stack trace when "eval" raises exception'],
        ['width', 1, false,
@@ -114,7 +115,14 @@ module Byebug
       when /^width$/
         return unless width = get_int(args[0], "Set width", 10, nil, 80)
         Command.settings[:width] = width
-      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|testing|stack_trace_on_error$/
+      when /^post_mortem$/
+        if set_on
+          Byebug.post_mortem
+        else
+          Byebug.post_mortem = false
+        end
+      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
+             testing|stack_trace_on_error$/x
         Command.settings[subcmd.name.to_sym] = set_on
       else
         return print "Unknown setting #{@match[1]}.\n"
