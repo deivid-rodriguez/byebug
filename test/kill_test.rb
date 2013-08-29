@@ -32,8 +32,7 @@ class TestKill < TestDsl::TestCase
     it 'must show an error' do
       enter 'kill BLA'
       debug_file('kill')
-      check_output_includes \
-        'signal name BLA is not a signal I know about', interface.error_queue
+      check_error_includes 'signal name BLA is not a signal I know about'
     end
   end
 end

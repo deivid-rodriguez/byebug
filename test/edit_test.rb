@@ -38,14 +38,12 @@ class TestEdit < TestDsl::TestCase
   it 'must show an error if there is no such line' do
     enter "edit #{fullpath('edit3')}:6"
     debug_file 'edit'
-    check_output_includes \
-      "File \"#{fullpath('edit3')}\" is not readable.", interface.error_queue
+    check_error_includes "File \"#{fullpath('edit3')}\" is not readable."
   end
 
   it 'must show an error if there is incorrect syntax' do
     enter 'edit blabla'
     debug_file 'edit'
-    check_output_includes \
-      'Invalid file/line number specification: blabla', interface.error_queue
+    check_error_includes 'Invalid file/line number specification: blabla'
   end
 end

@@ -47,9 +47,8 @@ class TestTrace < TestDsl::TestCase
     it 'must show an error message if given subcommand is incorrect' do
       enter 'trace bla'
       debug_file 'trace'
-      check_output_includes \
-        'expecting "on", "off", "var" or "variable"; got: "bla"',
-        interface.error_queue
+      check_error_includes \
+        'expecting "on", "off", "var" or "variable"; got: "bla"'
     end
 
     describe 'disabling' do
@@ -96,15 +95,13 @@ class TestTrace < TestDsl::TestCase
       it 'must show an error message if there is no such global variable' do
         enter 'trace variable $foo'
         debug_file 'trace'
-        check_output_includes \
-          '$foo is not a global variable.', interface.error_queue
+        check_error_includes '$foo is not a global variable.'
       end
 
       it 'must show an error message if subcommand is invalid' do
         enter 'trace variable $bla foo'
         debug_file 'trace'
-        check_output_includes \
-          'expecting "stop" or "nostop"; got "foo"', interface.error_queue
+        check_error_includes 'expecting "stop" or "nostop"; got "foo"'
       end
     end
   end

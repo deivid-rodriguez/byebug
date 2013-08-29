@@ -46,14 +46,13 @@ class TestThread < TestDsl::TestCase
     it 'must show error message if thread number is not specified' do
       enter 'break 8', 'cont', 'thread stop', release
       debug_file 'thread'
-      check_output_includes '"thread stop" needs a thread number',
-                            interface.error_queue
+      check_error_includes '"thread stop" needs a thread number'
     end
 
     it 'must show error message when trying to stop current thread' do
       enter 'cont 8', ->{"thread stop #{Byebug.contexts.first.thnum}"}, release
       debug_file 'thread'
-      check_output_includes "It's the current thread", interface.error_queue
+      check_error_includes "It's the current thread"
     end
   end
 
@@ -70,20 +69,19 @@ class TestThread < TestDsl::TestCase
     it 'must show error message if thread number is not specified' do
       enter 'break 8', 'cont', 'thread resume', release
       debug_file 'thread'
-      check_output_includes '"thread resume" needs a thread number',
-                            interface.error_queue
+      check_error_includes '"thread resume" needs a thread number'
     end
 
     it 'must show error message when trying to resume current thread' do
       enter 'c 8', ->{ "thread resume #{Byebug.contexts.first.thnum}" }, release
       debug_file 'thread'
-      check_output_includes "It's the current thread", interface.error_queue
+      check_error_includes "It's the current thread"
     end
 
     it 'must show error message if it is not stopped' do
       enter 'c 21', ->{ "thread resume #{Byebug.contexts.last.thnum}" }, release
       debug_file 'thread'
-      check_output_includes 'Already running', interface.error_queue
+      check_error_includes 'Already running'
     end
   end
 
@@ -96,14 +94,13 @@ class TestThread < TestDsl::TestCase
     it 'must show error message if thread number is not specified' do
       enter 'break 8', 'cont', 'thread switch', release
       debug_file 'thread'
-      check_output_includes '"thread switch" needs a thread number',
-                            interface.error_queue
+      check_error_includes '"thread switch" needs a thread number'
     end
 
     it 'must show error message when trying to switch current thread' do
       enter 'c 8', ->{ "thread switch #{Byebug.contexts.first.thnum}" }, release
       debug_file 'thread'
-      check_output_includes "It's the current thread", interface.error_queue
+      check_error_includes "It's the current thread"
     end
   end
 end

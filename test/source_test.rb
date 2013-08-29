@@ -28,7 +28,7 @@ class TestSource < TestDsl::TestCase
   it 'must show an error if file is not found' do
     enter 'source blabla'
     debug_file 'source'
-    check_output_includes /File ".*blabla" not found/, interface.error_queue
+    check_error_includes /File ".*blabla" not found/
   end
 
   describe 'Help' do

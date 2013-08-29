@@ -39,8 +39,7 @@ class TestInfo < TestDsl::TestCase
     it 'must show an error if no breakpoints are found' do
       enter 'break 7', 'info breakpoints 123'
       debug_file 'info'
-      check_output_includes \
-        'No breakpoints found among list given.', interface.error_queue
+      check_error_includes 'No breakpoints found among list given.'
     end
 
     it 'must show hit count' do
@@ -155,7 +154,7 @@ class TestInfo < TestDsl::TestCase
     it 'must not show any info if the parameter is invalid' do
       enter "info file #{file} blabla"
       debug_file 'info'
-      check_output_includes 'Invalid parameter blabla', interface.error_queue
+      check_error_includes 'Invalid parameter blabla'
     end
   end
 
