@@ -1,3 +1,3 @@
 module Byebug
-  VERSION = '1.8.2'
+  VERSION = '2.0.0'
 end

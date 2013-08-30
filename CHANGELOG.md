@@ -1,3 +1,10 @@
+# 2.0.0
+
+* Various bug fixes
+* "Official" definition of a command API
+* Thread support
+
+
 ## 1.8.2
 
 * More user friendly regexps for commands
