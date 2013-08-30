@@ -8,8 +8,7 @@ _Debugging in Ruby 2.0_
 Byebug is a simple to use, feature rich debugger for Ruby 2.0. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
 stack navigation, so it doesn't depend on internal core sources. It's developed
-as a C extension, so it's fast. And it has a full test suite so it's (I hope)
-reliable.
+as a C extension, so it's fast. And it has a full test suite so it's reliable.
 
 It allows you to see what is going on _inside_ a Ruby program while it executes
 and can do four main kinds of things to help you catch bugs in the act:
