@@ -128,7 +128,7 @@ module Byebug
       when /^post_mortem$/
         on_off = Byebug.post_mortem?
         return "post-mortem mode is #{show_onoff(on_off)}"
-      when /^trace$/
+      when /^stack_trace_on_error$/
         on_off = Command.settings[:stack_trace_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."
       when /^version$/
@@ -146,41 +146,37 @@ module Byebug
 
     Subcommands =
       [
-        ['args', 2,
-         'Show argument list to give to the program being debugged when it is' \
-         ' started',
-         'Follow this command with any number of args to be passed to the '    \
-         'program'],
-        ['autoeval', 4, 'Show whether unrecognized commands are evaluated'],
-        ['autolist', 4, 'Show whether "list" command is run on stopping'],
-        ['autoirb', 4, 'Show whether IRB is invoked on stopping'],
-        ['autoreload', 4, 'Show whether source code is reloaded when changed'],
-        ['basename',  1, 'Show whether basename is used when reporting files'],
-        ['callstyle', 2, 'Show paramater style used when showing call frames'],
-        ['commands',  2, 'Show the history of commands you typed',
-         'You can supply a command number to start with'],
-        ['forcestep', 1, 'Show whether "next/step" force to move onto a new ' \
-         'line'],
-        ['fullpath',  2, 'Show whether full paths are displayed in frames'],
-        ['history', 2, 'Generic command to show command history parameters',
-         'show history filename -- Show the filename in which to record the ' \
-         'command history'                                                    \
-         'show history save -- Show whether history record should be saved '  \
-         'on exit'                                                            \
-         'show history size -- Show the size of the command history'],
-        ['linetrace', 3, 'Show line execution tracing status'],
-        ['linetrace_plus', 10,
-         'Show whether different consecutive lines are shown in tracing'],
-        ['listsize', 3, 'Show number of source lines to list by default'],
-        ['port', 3, 'Show server port'],
-        ['post-mortem', 3,
-         'Show whether we go into post-mortem debugging on an uncaught ' \
-         'exception'],
-        ['trace', 1,
-         'Show whether a stack trace is displayed when "eval" raises an ' \
-         'exception'],
-        ['version', 1, 'Show byebug\'s version'],
-        ['width', 1, 'Show the number of characters per line for byebug']
+       ['args', 2,
+        'Show argument list to the program being debugged when it is started',
+        'Follow this command with any number of args to be passed to the '    \
+        'program'],
+       ['autoeval', 4, 'Show whether unrecognized commands are evaluated'],
+       ['autolist', 4, 'Show whether "list" command is run on stopping'],
+       ['autoirb', 4, 'Show whether IRB is invoked on stopping'],
+       ['autoreload', 4, 'Show whether source code is reloaded when changed'],
+       ['basename',  1, 'Show whether basename is used when reporting files'],
+       ['callstyle', 2, 'Show paramater style used when showing call frames'],
+       ['commands',  2, 'Show the history of commands you typed',
+        'You can supply a command number to start with'],
+       ['forcestep', 1,
+        'Show whether "next/step" commands are set to always move to a line'],
+       ['fullpath',  2, 'Show whether full paths are displayed in frames'],
+       ['history', 2, 'Generic command to show command history parameters',
+        'show history filename -- Show the filename in which to record the ' \
+        'command history'                                                    \
+        'show history save -- Show whether history record should be saved '  \
+        'on exit'                                                            \
+        'show history size -- Show the size of the command history'],
+       ['linetrace', 3, 'Show line execution tracing status'],
+       ['linetrace_plus', 10,
+        'Show whether different consecutive lines are shown in tracing'],
+       ['listsize', 3, 'Show number of source lines to list by default'],
+       ['post-mortem', 3, 'Show whether we should go into post-mortem ' \
+                          'debugging on an uncaught exception'],
+       ['stack_trace_on_error', 1, 'Show whether a stack trace is displayed ' \
+                                   'when "eval" raises an exception'],
+       ['version', 1, 'Show byebug\'s version'],
+       ['width', 1, 'Show the number of characters per line for byebug']
       ].map do |name, min, short_help, long_help|
       Subcmd.new(name, min, short_help, long_help)
     end unless defined?(Subcommands)

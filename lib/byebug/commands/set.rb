@@ -1,5 +1,69 @@
 module Byebug
 
+  # Mix-in module to setting settings
+  module SetFunctions
+
+    def set_setting(setting_name, setting_value, setting_args)
+      case setting_name
+      when /^args$/
+        if defined?(Byebug::BYEBUG_SCRIPT)
+          Command.settings[:argv][1..-1] = setting_args
+        else
+          Command.settings[:argv] = setting_args
+        end
+      when /^autoirb$/
+        Command.settings[:autoirb] = (setting_value ? 1 : 0)
+      when /^autolist$/
+        Command.settings[:autolist] = (setting_value ? 1 : 0)
+      when /^callstyle$/
+        if setting_args[0] and ['short', 'long'].include?(setting_args[0])
+          Command.settings[:callstyle] = setting_args[0].to_sym
+        else
+          print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
+        end
+      when /^history$/
+        return print 'Need two parameters for "set history"; ' \
+                     "got #{setting_args.size}.\n" unless setting_args.size == 2
+
+        interface = @state.interface
+        case setting_args[0]
+        when /^save$/
+          interface.history_save = get_onoff(setting_args[1])
+        when /^size$/
+          interface.history_length =
+            get_int(setting_args[1], "Set history size")
+        when /^filename$/
+          interface.histfile =
+            File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", setting_args[1])
+        else
+          print "Invalid history parameter #{setting_args[0]}. Should be " \
+                "\"filename\", \"save\" or \"size\".\n"
+        end
+      when /^linetrace$/
+        Byebug.tracing = setting_value
+      when /^listsize$/
+        listsize = get_int(setting_args[0], "Set listsize", 1, nil, 10)
+        return unless listsize
+        Command.settings[:listsize] = listsize
+      when /^width$/
+        return unless width = get_int(setting_args[0], "Set width", 10, nil, 80)
+        Command.settings[:width] = width
+      when /^post_mortem$/
+        if setting_value
+          Byebug.post_mortem
+        else
+          Byebug.post_mortem = false
+        end
+      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
+             testing|stack_trace_on_error$/x
+        Command.settings[setting_name.to_sym] = setting_value
+      else
+        return print "Unknown setting #{@match[1]}.\n"
+      end
+    end
+  end
+
+
   # Implements byebug "set" command.
   class SetCommand < Command
     SubcmdStruct2 = Struct.new(:name,
@@ -11,7 +75,7 @@ module Byebug
     Subcommands =
       [
        ['args', 2, false,
-        'Set argument list to give program being debugged when it is started'],
+        'Set argument list to the program being debugged when it is started'],
        ['autoeval', 4, true, 'Evaluate every unrecognized command'],
        ['autolist', 4, true, 'Execute "list" command on every breakpoint'],
        ['autoirb', 4, true, 'Invoke IRB on every stop'],
@@ -28,9 +92,9 @@ module Byebug
         'command history'                                                  \
         'set history save -- Set saving of the history record on exit'     \
         'set history size -- Set the size of the command history'],
+       ['linetrace', 3, true, 'Enable line execution tracing'],
        ['linetrace_plus', 10, true,
         'Set line execution tracing to show different lines'],
-       ['linetrace', 3, true, 'Enable line execution tracing'],
        ['listsize', 3, false, 'Set number of source lines to list by default'],
        ['post_mortem', 2, true, 'Enable post-mortem mode'],
        ['stack_trace_on_error', 1, true,
@@ -61,8 +125,6 @@ module Byebug
       end
 
       subcmd = Command.find(Subcommands, try_subcmd)
-
-      # Subcommand not found...
       return print "Unknown set command \"#{try_subcmd}\"\n" unless subcmd
 
       begin
@@ -71,62 +133,8 @@ module Byebug
         return
       end
 
-      case subcmd.name
-      when /^args$/
-        if defined?(Byebug::BYEBUG_SCRIPT)
-          Command.settings[:argv][1..-1] = args
-        else
-          Command.settings[:argv] = args
-        end
-      when /^autoirb$/
-        Command.settings[:autoirb] = (set_on ? 1 : 0)
-      when /^autolist$/
-        Command.settings[:autolist] = (set_on ? 1 : 0)
-      when /^callstyle$/
-        if args[0] and (args[0] == 'short' or args[0] == 'long')
-          Command.settings[:callstyle] = args[0].to_sym
-        else
-          print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
-        end
-      when /^history$/
-        return print 'Need two parameters for "set history"; ' \
-                     "got #{args.size}.\n" unless args.size == 2
+      set_setting(subcmd.name, set_on, args)
 
-        interface = @state.interface
-        case args[0]
-        when /^save$/
-          interface.history_save = get_onoff(args[1])
-        when /^size$/
-          interface.history_length =
-            get_int(args[1], "Set history size")
-        when /^filename$/
-          interface.histfile =
-            File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
-        else
-          print "Invalid history parameter #{args[0]}. Should be " \
-                "\"filename\", \"save\" or \"size\".\n"
-        end
-      when /^linetrace$/
-        Byebug.tracing = set_on
-      when /^listsize$/
-        listsize = get_int(args[0], "Set listsize", 1, nil, 10)
-        return unless listsize
-        Command.settings[:listsize] = listsize
-      when /^width$/
-        return unless width = get_int(args[0], "Set width", 10, nil, 80)
-        Command.settings[:width] = width
-      when /^post_mortem$/
-        if set_on
-          Byebug.post_mortem
-        else
-          Byebug.post_mortem = false
-        end
-      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
-             testing|stack_trace_on_error$/x
-        Command.settings[subcmd.name.to_sym] = set_on
-      else
-        return print "Unknown setting #{@match[1]}.\n"
-      end
       return print "#{show_setting(subcmd.name)}\n"
     end
 

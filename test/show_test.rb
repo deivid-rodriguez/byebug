@@ -115,9 +115,9 @@ class TestShow < TestDsl::TestCase
     end
   end
 
-  describe 'trace' do
-    it 'must show trace' do
-      enter 'show trace'
+  describe 'stack_trace_on_error' do
+    it 'must show stack_trace_on_error' do
+      enter 'show stack_trace_on_error'
       debug_file 'show'
       check_output_includes 'Displaying stack trace is off.'
     end
