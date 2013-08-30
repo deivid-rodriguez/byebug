@@ -78,6 +78,106 @@ no longer need to set them in the startup file.
 * Pry command is built-in. No need of external gem like debugger-pry.
 
 
+## Semantic Versioning
+
+Byebug tries to follow [semantic versioning](semver.org). Backwards
+compatibility doesn't seem like a critic issue for a debugger because it's not
+supposed to be used permanently by any program, let alone in production
+environments. However, I still like the idea of giving some meaning to version
+changes.
+
+Byebug's public API is determined by its set of commands
+
++-----------+----------+----------------------+
+|  Command  | Aliases  |      Subcommand      |
++-----------+----------+----------------------+
+| backtrace | bt|where |                      |
+| break     |          |                      |
+| catch     |          |                      |
+| condition |          |                      |
+| continue  |          |                      |
+| delete    |          |                      |
+| disable   |          | breakpoints          |
+|           |          | display              |
+| display   |          |                      |
+| down      |          |                      |
+| edit      |          |                      |
+| enable    |          | breakpoints          |
+|           |          | display              |
+| finish    |          |                      |
+| frame     |          |                      |
+| help      |          |                      |
+| info      |          | args                 |
+|           |          | breakpoints          |
+|           |          | catch                |
+|           |          | display              |
+|           |          | file                 |
+|           |          | files                |
+|           |          | global_variables     |
+|           |          | instance_variables   |
+|           |          | line                 |
+|           |          | locals               |
+|           |          | program              |
+|           |          | stack                |
+|           |          | variables            |
+| irb       |          |                      |
+| kill      |          |                      |
+| list      |          |                      |
+| method    |          | instance             |
+|           |          | iv                   |
+| next      |          |                      |
+| p         | eval     |                      |
+| pp        |          |                      |
+| pry       |          |                      |
+| ps        |          |                      |
+| putl      |          |                      |
+| quit      | exit     |                      |
+| reload    |          |                      |
+| restart   |          |                      |
+| save      |          |                      |
+| set       |          | args                 |
+|           |          | autoeval             |
+|           |          | autolist             |
+|           |          | autoirb              |
+|           |          | autoreload           |
+|           |          | basename             |
+|           |          | callstyle            |
+|           |          | testing              |
+|           |          | forcestep            |
+|           |          | fullpath             |
+|           |          | history              |
+|           |          | linetrace            |
+|           |          | linetrace_plus       |
+|           |          | listsize             |
+|           |          | post_mortem          |
+|           |          | stack_trace_on_error |
+|           |          | width                |
+| show      |          | args                 |
+|           |          | autoeval             |
+|           |          | autolist             |
+|           |          | autoirb              |
+|           |          | autoreload           |
+|           |          | basename             |
+|           |          | callstyle            |
+|           |          | commands             |
+|           |          | forcestep            |
+|           |          | fullpath             |
+|           |          | history              |
+|           |          | linetrace            |
+|           |          | linetrace_plus       |
+|           |          | listsize             |
+|           |          | post_mortem          |
+| skip      |          |                      |
+| source    |          |                      |
+| step      |          |                      |
+| thread    |          |                      |
+| trace     |          |                      |
+| undisplay |          |                      |
+| up        |          |                      |
+| var       |          |                      |
++-----------+----------+----------------------+
+
+
 ## Getting Started
 
 A handful of commands are enough to get started using `byebug`. The following
