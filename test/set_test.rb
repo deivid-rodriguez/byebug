@@ -99,6 +99,12 @@ class TestSet < TestDsl::TestCase
         interface.history_save.must_equal true
       end
 
+      it 'must set history save to on when no param' do
+        enter 'set history save'
+        debug_file 'set'
+        interface.history_save.must_equal true
+      end
+
       it 'must show a message' do
         enter 'set history save on'
         debug_file 'set'
@@ -124,6 +130,12 @@ class TestSet < TestDsl::TestCase
         debug_file 'set'
         check_output_includes 'Byebug history size is 250'
       end
+
+      it 'must show an error message if no size provided' do
+        enter 'set history size'
+        debug_file 'set'
+        check_output_includes 'You need to specify the history size'
+      end
     end
 
     describe 'filename' do
@@ -141,19 +153,20 @@ class TestSet < TestDsl::TestCase
         debug_file 'set'
         check_output_includes "The command history file is \"#{filename}\""
       end
+
+      it 'must show an error message if no filenmae provided' do
+        enter 'set history filename'
+        debug_file 'set'
+        check_output_includes 'You need to specify a filename'
+      end
+
     end
 
     it 'must show an error message if used wrong subcommand' do
       enter 'set history bla 2'
       debug_file 'set'
       check_output_includes \
-        'Invalid history parameter bla. Should be "filename", "save" or "size".'
-    end
-
-    it 'must show an error message if provided only one argument' do
-      enter 'set history save'
-      debug_file 'set'
-      check_output_includes 'Need two parameters for "set history"; got 1.'
+        'Invalid history parameter bla. Should be "filename", "save" or "size"'
     end
   end
 

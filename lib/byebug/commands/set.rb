@@ -22,22 +22,22 @@ module Byebug
           print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
       when /^history$/
-        return print 'Need two parameters for "set history"; ' \
-                     "got #{setting_args.size}.\n" unless setting_args.size == 2
+        try_subcmd = setting_args[0]
+        subcmd = Command.find(SetCommand::SetHistorySubcommands, try_subcmd)
+        return print "Invalid history parameter #{try_subcmd}. Should be" \
+                     ' "filename", "save" or "size"' unless subcmd
 
-        interface = @state.interface
-        case setting_args[0]
+        sub_sub_cmd = setting_args[1]
+        iface = @state.interface
+        case subcmd.name
         when /^save$/
-          interface.history_save = get_onoff(setting_args[1])
+          iface.history_save = sub_sub_cmd ? get_onoff(sub_sub_cmd) : true
         when /^size$/
-          interface.history_length =
-            get_int(setting_args[1], "Set history size")
+          return print 'You need to specify the history size' unless sub_sub_cmd
+          iface.history_length = get_int(sub_sub_cmd, "Set history size")
         when /^filename$/
-          interface.histfile =
-            File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", setting_args[1])
-        else
-          print "Invalid history parameter #{setting_args[0]}. Should be " \
-                "\"filename\", \"save\" or \"size\".\n"
+          return print 'You need to specify a filename' unless sub_sub_cmd
+          iface.histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", sub_sub_cmd)
         end
       when /^linetrace$/
         Byebug.tracing = setting_value
@@ -86,12 +86,8 @@ module Byebug
        ['forcestep', 2, true,
         'Make sure "next/step" commands always move to a new line'],
        ['fullpath', 2, true, 'Display full file names in frames'],
-       ['history', 2, false,
-        'Generic command for setting command history parameters',
-        'set history filename -- Set the filename in which to record the ' \
-        'command history'                                                  \
-        'set history save -- Set saving of the history record on exit'     \
-        'set history size -- Set the size of the command history'],
+       ['history', 2, false, 'Command for setting command history parameters',
+        'History parameters are "filename", "save" and "size"'],
        ['linetrace', 3, true, 'Enable line execution tracing'],
        ['linetrace_plus', 10, true,
         'Set line execution tracing to show different lines'],
@@ -104,6 +100,15 @@ module Byebug
       ].map do |name, min, is_bool, short_help, long_help|
       SubcmdStruct2.new(name, min, is_bool, short_help, long_help)
     end unless defined?(Subcommands)
+
+    SetHistorySubcommands =
+      [
+       ['filename', 1, 'Set the filename in which to record command history'],
+       ['save', 1, 'Set saving of the history record on exit'],
+       ['size', 1, 'Set the size of the command history']
+      ].map do |name, min, short_help, long_help|
+        Subcmd.new(name, min, short_help, long_help)
+      end unless defined?(SetHistorySubcommands)
 
     self.allow_in_control = true
 

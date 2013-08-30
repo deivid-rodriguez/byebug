@@ -60,7 +60,7 @@ module Byebug
        ['sha1', 1, 'Show SHA1 hash of contents of the file']
       ].map do |name, min, short_help, long_help|
         Subcmd.new(name, min, short_help, long_help)
-    end unless defined?(InfoFileSubcommands)
+      end unless defined?(InfoFileSubcommands)
 
     def regexp
       /^\s* i(?:nfo)? (?:\s+(.+))? \s*$/x
