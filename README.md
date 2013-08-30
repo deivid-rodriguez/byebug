@@ -75,8 +75,6 @@ no longer need to set them in the startup file.
   - `byebug` can now be placed at the end of a block or method call.
 * Very actively mantained.
 * Editor agnostic: no external editor built-in support.
-* No thread support. Haven't had time to look at it and I don't know whether
-the new debugging API supports it yet.
 * Pry command is built-in. No need of external gem like debugger-pry.
 
 
