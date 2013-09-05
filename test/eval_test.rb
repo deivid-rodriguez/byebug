@@ -43,7 +43,7 @@ class TestEval < TestDsl::TestCase
       it 'must show a stack trace' do
         enter 'eval 2 / 0'
         debug_file 'eval'
-        check_output_includes /\S+:\d+:in `eval':divided by 0/
+        check_output_includes /\s*from \S+:in \`eval\'/
         check_output_doesnt_include 'ZeroDivisionError Exception: divided by 0'
       end
     end
