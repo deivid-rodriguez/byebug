@@ -106,7 +106,7 @@ module Byebug
       if Byebug.post_mortem?
         realsize = @state.context.stack_size
       else
-        realsize = Thread.current.backtrace_locations.
+        realsize = Thread.current.backtrace_locations(1).
           drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }.
           take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
         size = @state.context.stack_size
