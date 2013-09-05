@@ -20,6 +20,12 @@ class TestEval < TestDsl::TestCase
     check_output_includes '5'
   end
 
+  it 'must work when inspect raises an exception' do
+    enter 'c 14', 'p @foo'
+    debug_file('eval') { $state.line.must_equal 14 }
+    check_output_includes 'RuntimeError Exception: Broken'
+  end
+
   describe 'autoeval' do
     it 'must be set by default' do
       enter '[5,6,7].inject(&:+)'

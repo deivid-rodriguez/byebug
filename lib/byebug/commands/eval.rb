@@ -51,6 +51,8 @@ module Byebug
       run_with_binding do |b|
         print "#{debug_eval(expr, b).inspect}\n"
       end
+    rescue
+      print "#{$!.class} Exception: #{$!.message}\n"
     end
 
     class << self
