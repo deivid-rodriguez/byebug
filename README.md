@@ -23,13 +23,7 @@ effects of one bug and go on to learn about another.
 
 ## Install
 
-Just drop
-
-    gem 'byebug'
-
-in your Gemfile and run
-
-    bundle install
+    $ gem install byebug
 
 **Please upgrade your ruby to 2.0.0-p247 or higher** - a bug in ruby core was
 directly affecting byebug and a fix for it has been released with this
