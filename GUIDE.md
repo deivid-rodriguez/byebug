@@ -1153,3 +1153,36 @@ available only if the nodewrap gem is installed_.
 * `method <class-or-module>`. Show methods of the class or module
 `<class-or-module>`. Basically this is the same as running
 `ps <class-or-module>.methods`.
+
+### Examining Program Source Files (`list`)
+
+`byebug` can print parts of your script's source.  When your script stops,
+`byebug` spontaneously lists the source code around the line where it stopped
+that line. It does that when you change the current stack frame as well.
+Implicitly there is a default line location. Each time a list command is run
+that implicit location is updated, so that running several list commands in
+succession shows a contiguous block of program text.
+
+If you don't need code context displayed every time, you can issue the `set
+noautolist` command. Now whenever you want code listed, you can explicitly issue
+the `list` command or its abbreviation `l`. Notice that when a second listing is
+displayed, we continue listing from the place we last left off. When the
+beginning or end of the file is reached, the line range to be shown is adjusted
+so "it doesn't overflow". You can set the `noautolist` option by default by
+dropping `set noautolist` in byebug's startup file `.byebugrc`.
+
+If you want to set how many lines to be printed by default rather than use the
+initial number of lines, 10, use the `set listsize` command ([listsize()). To
+see the entire program in one shot, give an explicit starting and ending line
+number. You can print other portions of source files by giving explicit position
+as a parameter to the list command.
+
+There are several ways to specify what part of the file you want to print. `list
+nnn` prints lines centered around line number `nnn` in the current source file.
+`l` prints more lines, following the last lines printed. `list -` prints lines
+just before the lines last printed. `list nnn-mmm` prints lines between `nnn`
+and `mmm` inclusive. `list =` prints lines centered around where the script is
+stopped. Repeating a `list` command with `RET` discards the argument, so it is
+equivalent to typing just `list`.  This is more useful than listing the same
+lines again. An exception is made for an argument of `-`: that argument is
+preserved in repetition so that each repetition moves up in the source file.
