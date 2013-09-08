@@ -1,3 +1,12 @@
+# 2.1.0
+
+* Fix bug in remote debugging display
+* Fix bug where eval would crash when inspect raised an exception (reported by
+@iblue)
+* `enable breakpoints` now enables every breakpoint
+* `disable breakpoints` now disables every breakpoint
+
+
 # 2.0.0
 
 * Various bug fixes
