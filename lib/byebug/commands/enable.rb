@@ -3,30 +3,29 @@ module Byebug
   # Mix-in module to assist in command parsing.
   module EnableDisableFunctions
     def enable_disable_breakpoints(is_enable, args)
-      breakpoints = Byebug.breakpoints.sort_by{|b| b.id }
-      largest = breakpoints.inject(0) do |tally, b|
-        tally = b.id if b.id > tally
+      return errmsg "No breakpoints have been set." if Byebug.breakpoints.empty?
+
+      all_breakpoints = Byebug.breakpoints.sort_by {|b| b.id }
+      if !args
+        selected_breakpoints = all_breakpoints
+      else
+        selected_ids = []
+        args.each do |pos|
+          pos = get_int(pos, "#{is_enable} breakpoints", 1, all_breakpoints.last.id)
+          return nil unless pos
+          selected_ids << pos
+        end
+        selected_breakpoints = all_breakpoints.select {
+          |b| selected_ids.include?(b.id) }
       end
-      if 0 == largest
-        errmsg "No breakpoints have been set.\n"
-        return
-      end
-      args.each do |pos|
-        pos = get_int(pos, "#{is_enable} breakpoints", 1, largest)
-        return nil unless pos
-        breakpoints.each do |b|
-          if b.id == pos
-            enabled = ('enable' == is_enable)
-            if enabled
-              unless syntax_valid?(b.expr)
-                errmsg "Expression \"#{b.expr}\" syntactically incorrect; " \
-                       "breakpoint remains disabled.\n"
-                break
-              end
-            end
-            b.enabled = ('enable' == is_enable)
-            break
-          end
+
+      selected_breakpoints.each do |b|
+        enabled = ('enable' == is_enable)
+        if enabled && !syntax_valid?(b.expr)
+          errmsg "Expression \"#{b.expr}\" syntactically incorrect; " \
+                 "breakpoint remains disabled.\n"
+        else
+          b.enabled = enabled
         end
       end
     end
@@ -93,8 +92,7 @@ module Byebug
       def description
         %{Enable breakpoints or displays.
 
-          This is used to cancel the effect of the "disable" command.
-         }
+          This is used to cancel the effect of the "disable" command.}
       end
     end
   end
@@ -148,8 +146,7 @@ module Byebug
         %{Disable breakpoints or displays.
 
           A disabled item is not forgotten, but has no effect until reenabled.
-          Use the "enable" command to have it take effect again.
-         }
+          Use the "enable" command to have it take effect again.}
       end
     end
   end

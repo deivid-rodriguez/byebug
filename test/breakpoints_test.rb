@@ -15,12 +15,13 @@ class TestBreakpoints < TestDsl::TestCase
       debug_file('breakpoint') { subject.send(field).must_equal value }
     end
 
-    it('must have correct pos') { check_subject(:pos, 10) }
-    it('must have correct source') { check_subject(:source, @tst_file) }
-    it('must have correct expression') { check_subject(:expr, nil) }
-    it('must have correct hit count') { check_subject(:hit_count, 0) }
-    it('must have correct hit value') { check_subject(:hit_value, 0) }
-    it('must be enabled') { check_subject(:enabled?, true) }
+    it('must have correct pos')        { check_subject(:pos, 10)           }
+    it('must have correct source')     { check_subject(:source, @tst_file) }
+    it('must have correct expression') { check_subject(:expr, nil)         }
+    it('must have correct hit count')  { check_subject(:hit_count, 0)      }
+    it('must have correct hit value')  { check_subject(:hit_value, 0)      }
+    it('must be enabled')              { check_subject(:enabled?, true)    }
+
     it('must return right response') do
       id = nil
       debug_file('breakpoint') { id = subject.id }
@@ -203,13 +204,12 @@ class TestBreakpoints < TestDsl::TestCase
     end
   end
 
-  describe 'disabling a breakpoint' do
+  describe 'disabling breakpoints' do
     describe 'successfully' do
-      before { enter 'break 14' }
+      before { enter 'break 14', 'break 15' }
 
       describe 'short syntax' do
-        before { enter ->{"disable #{Byebug.breakpoints.first.id}"},
-                       'break 15' }
+        before { enter ->{ "disable #{Byebug.breakpoints.first.id}" } }
 
         it 'must have a breakpoint with #enabled? returning false' do
           debug_file('breakpoint') {
@@ -223,17 +223,36 @@ class TestBreakpoints < TestDsl::TestCase
       end
 
       describe 'full syntax' do
-        before { enter ->{"disable breakpoints #{Byebug.breakpoints.first.id}"},
-                       'break 15' }
+        describe 'with no args' do
+          before { enter 'disable breakpoints' }
 
-        it 'must have a breakpoint with #enabled? returning false' do
-          debug_file('breakpoint') {
-            Byebug.breakpoints.first.enabled?.must_equal false }
+          it 'must have all breakoints with #enabled? returning false' do
+            debug_file('breakpoint') do
+              Byebug.breakpoints.first.enabled?.must_equal false
+              Byebug.breakpoints.last.enabled?.must_equal false
+            end
+          end
+
+          it 'must not stop on any disabled breakpoint' do
+            enter 'cont'
+            debug_file('breakpoint') { $state.line.must_be nil }
+          end
+        end
+
+        describe 'with specific breakpoint' do
+          before do
+            enter ->{ "disable breakpoints #{Byebug.breakpoints.first.id}" }
+          end
+
+          it 'must have a breakpoint with #enabled? returning false' do
+            debug_file('breakpoint') {
+              Byebug.breakpoints.first.enabled?.must_equal false }
+          end
         end
       end
     end
 
-    describe 'errors' do
+    describe 'unsuccesfully' do
       it 'must show an error if syntax is incorrect' do
         enter 'disable'
         debug_file('breakpoint')
@@ -241,7 +260,7 @@ class TestBreakpoints < TestDsl::TestCase
                              '"breakpoints" or breakpoint numbers.'
       end
 
-      it 'must show an error if no breakpoints is set' do
+      it 'must show an error if no breakpoints are set' do
         enter 'disable 1'
         debug_file('breakpoint')
         check_error_includes 'No breakpoints have been set.'
@@ -256,13 +275,12 @@ class TestBreakpoints < TestDsl::TestCase
     end
   end
 
-  describe 'enabling a breakpoint' do
-
+  describe 'enabling breakpoints' do
     describe 'successfully' do
-      before { enter 'break 14' }
+      before { enter 'break 14', 'break 15', 'disable breakpoints' }
 
       describe 'short syntax' do
-        before { enter ->{"enable #{Byebug.breakpoints.first.id}"}, 'break 15' }
+        before { enter ->{ "enable #{Byebug.breakpoints.first.id}" } }
 
         it 'must have a breakpoint with #enabled? returning true' do
           debug_file('breakpoint') {
@@ -276,12 +294,41 @@ class TestBreakpoints < TestDsl::TestCase
       end
 
       describe 'full syntax' do
-        before { enter ->{"enable breakpoints #{Byebug.breakpoints.first.id}"},
-                       'break 15' }
+        describe 'with no args' do
+          before { enter 'enable breakpoints' }
 
-        it 'must have a breakpoint with #enabled? returning true' do
-          debug_file('breakpoint') {
-            Byebug.breakpoints.first.enabled?.must_equal true }
+          it 'must have all breakoints with #enabled? returning true' do
+            debug_file('breakpoint') do
+              Byebug.breakpoints.first.enabled?.must_equal true
+              Byebug.breakpoints.last.enabled?.must_equal true
+            end
+          end
+
+          it 'must stop on the first breakpoint' do
+            enter 'cont'
+            debug_file('breakpoint') { $state.line.must_be 14 }
+          end
+
+          it 'must stop on the last breakpoint' do
+            enter 'cont', 'cont'
+            debug_file('breakpoint') { $state.line.must_be 15 }
+          end
+        end
+
+        describe 'with specific breakpoint' do
+          before do
+            enter ->{ "enable breakpoints #{Byebug.breakpoints.last.id}" }
+          end
+
+          it 'must have a breakpoint with #enabled? returning true' do
+            debug_file('breakpoint') {
+              Byebug.breakpoints.first.enabled?.must_equal true }
+          end
+
+          it 'must not stop on the enabled breakpoint' do
+            enter 'cont'
+            debug_file('breakpoint') { $state.line.must_be 15 }
+          end
         end
       end
     end
