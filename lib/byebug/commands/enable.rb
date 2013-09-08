@@ -46,9 +46,10 @@ module Byebug
   class EnableCommand < Command
     Subcommands =
       [
-       ['breakpoints', 2, 'Enable specified breakpoints',
-        'Give breakpoint numbers (separated by spaces) as arguments. This is ' \
-        'used to cancel the effect of the "disable" command.'],
+       ['breakpoints', 2, 'Enable breakpoints',
+        'This is used to cancel the effect of the "disable" command. Give ' \
+        'breakpoint numbers (separated by spaces) as arguments or no '      \
+        'argument at all if you want to reenable every breakpoint'],
        ['display', 2,
         'Enable some expressions to be displayed when program stops',
         'Arguments are the code numbers of the expressions to resume '   \
@@ -100,11 +101,13 @@ module Byebug
   class DisableCommand < Command
     Subcommands =
       [
-       ['breakpoints', 1, 'Disable some breakpoints',
-        'Arguments are breakpoint numbers with spaces in between. A disabled ' \
-        'breakpoint is not forgotten, but has no effect until reenabled.'],
+       ['breakpoints', 1, 'Disable breakpoints',
+        'A disabled breakpoint is not forgotten, but has no effect until ' \
+        'reenabled. Give breakpoint numbers (separated by spaces) as '     \
+        'arguments or no argument at all if you want to disable every '    \
+        'breakpoint'],
        ['display', 1, 'Disable some display expressions when program stops',
-        'Arguments are the code numbers of the expressions to stop '       \
+        'Arguments are the code numbers of the expressions to stop '     \
         'displaying. Do "info display" to see the current list of code ' \
         'numbers.'],
       ].map do |name, min, short_help, long_help|
