@@ -157,7 +157,7 @@ module Byebug
     end
 
     def print(*args)
-      @socket.printf(*args)
+      @socket.printf(escape(format(*args)))
     end
 
     private
