@@ -46,7 +46,7 @@ module Byebug
     # are working remotely and want to change the basename. Or we are eliding
     # filenames.
     def self.canonic_file(filename)
-      return '(nil)' if not filename
+      return filename if ['(irb)', '-e'].include?(filename)
 
       # For now we want resolved filenames
       if Command.settings[:basename]
@@ -145,7 +145,7 @@ module Byebug
         state = State.new(event_cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
-        Command.settings[:autolist] = 0 if file == '(irb)' or file == '-e'
+        Command.settings[:autolist] = 0 if ['(irb)', '-e'].include?(file)
 
         # Bind commands to the current state.
         commands = event_cmds.map{|cmd| cmd.new(state)}
@@ -262,6 +262,7 @@ module Byebug
           loc = "#{CommandProcessor.canonic_file(@file)} @ #{@line}\n"
           loc += "#{Byebug.line_at(@file, @line)}\n" unless
             ['(irb)', '-e'].include? @file
+          loc
         end
       end
 
