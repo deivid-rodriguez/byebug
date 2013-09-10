@@ -1,3 +1,8 @@
+# 2.1.1
+
+* Fix bug when debugging code inside '-e' flag
+
+
 # 2.1.0
 
 * Fix bug in remote debugging display
