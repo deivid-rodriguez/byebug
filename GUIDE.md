@@ -1186,3 +1186,32 @@ stopped. Repeating a `list` command with `RET` discards the argument, so it is
 equivalent to typing just `list`.  This is more useful than listing the same
 lines again. An exception is made for an argument of `-`: that argument is
 preserved in repetition so that each repetition moves up in the source file.
+
+### Editing Source files (`edit`)
+
+To edit a source file, use the `edit` command.  The editor of your choice is invoked
+with the current line set to the active line in the program. Alternatively, you can
+give a line specification to specify what part of the file you want to edit.
+
+You can customize `byebug` to use any editor you want by using the `EDITOR`
+environment variable. The only restriction is that your editor (say `ex`) recognizes
+the following command-line syntax:
+```
+ex +nnn file
+```
+
+The optional numeric value `+nnn` specifies the line number in the file where
+you want to start editing. For example, to configure `byebug` to use the `vi` editor,
+you could use these commands with the `sh` shell:
+
+```bash
+EDITOR=/usr/bin/vi
+export EDITOR
+byebug ...
+```
+
+or in the `csh` shell,
+```bash
+setenv EDITOR /usr/bin/vi
+byebug ...
+```
