@@ -919,7 +919,6 @@ Usage: byebug [options] <script.rb> -- <script.rb parameters>
 Options:
     -d, --debug                Set $DEBUG=true
     -I, --include PATH         Add PATH to $LOAD_PATH
-        --keep-frame-binding   Keep frame bindings
     -m, --post-mortem          Activate post-mortem mode
         --no-quit              Do not quit when script finishes
         --no-stop              Do not stop when script is loaded
@@ -975,33 +974,6 @@ Set @code{$DEBUG} to @code{true}. This option is compatible with Ruby's.
 @cindex @option{-I} @var{PATH}
 @cindex @option{--include} @var{PATH}
 Add @var{PATH} to @code{$LOAD_PATH}
-
-@item --keep-frame-binding
-@cindex @option{--keep-frame-binding}
-Bindings are used to set the proper environment in evaluating expressions inside
-byebug. Under normal circumstances, I don't believe most people will ever need
-this option.
-
-By default, byebug doesn't create a binding object for each frame when the frame
-is created, i.e. when a call is performed. Creating a binding is an expensive
-operation and has been a major source of performance problems.
-
-Instead, byebug creates a binding when there is a need to evaluate expressions.
-The artificial binding that is created might be different from the real one. In
-particular, in performing constant and module name resolution.
-
-However it's still possible to restore the old, slower behavior by using this
-option or by setting @code{Byebug.keep_frame_binding = true}. There are two
-possibilities for which you might want to use this option.
-
-First, if you think there's a bug in the evaluation of variables, you might want
-to set this to see if this corrects things.
-
-Second, since the internal structures that are used here @code{FRAME} and
-@code{SCOPE} are not part of the Ruby specification, it is possible they can
-change with newer releases; so here this option this may offer a remedy. (But
-you'll probably also have to hack the C code since it's likely under this
-scenario that byebug will no longer compile.)
 
 @item -m | --post-mortem
 @cindex @option{-m}
