@@ -7,7 +7,6 @@ require 'stringio'
 require 'linecache19'
 
 module Byebug
-
   self.handler = CommandProcessor.new
 
   # List of files byebug will ignore while debugging
@@ -68,6 +67,9 @@ module Byebug
     def interface=(value)
       handler.interface = value
     end
+
+    extend Forwardable
+    def_delegators :"handler.interface", :print
 
     #
     # Byebug.start(options) -> bool

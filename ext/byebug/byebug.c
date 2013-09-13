@@ -209,7 +209,12 @@ line_event(VALUE trace_point, void *data)
     if (dc->stack_size <= dc->dest_frame)
     {
       dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
-      dc->dest_frame = dc->stack_size;
+      if (dc->stack_size < dc->dest_frame)
+      {
+        dc->dest_frame = dc->stack_size;
+        rb_funcall(mByebug, rb_intern("print"), 1,
+          rb_str_new2("Next went up a frame because previous frame finished\n"));
+      }
     }
   }
 

@@ -56,6 +56,14 @@ class TestStepping < TestDsl::TestCase
           debug_file('stepping') { $state.line.must_equal 21 }
         end
 
+        it 'must inform when not staying in the same frame' do
+          enter 'next 2'
+          debug_file('stepping')
+          check_output_includes \
+            'Next went up a frame because previous frame finished'
+        end
+
+
         it 'must ignore it if "minus" is specified' do
           enter 'next-'
           debug_file('stepping') { $state.line.must_equal 10 }
