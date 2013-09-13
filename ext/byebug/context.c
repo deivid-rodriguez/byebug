@@ -45,13 +45,9 @@ context_free(void *data)
 }
 
 static int
-real_stack_size(VALUE thread)
+real_stack_size()
 {
-  VALUE locs = rb_funcall(thread, rb_intern("backtrace_locations"), 1, INT2FIX(1));
-  if (locs == Qnil)
-    return 0;
-
-  return (int)RARRAY_LEN(locs);
+  return FIX2INT(rb_funcall(cContext, rb_intern("real_stack_size"), 0));
 }
 
 extern VALUE
@@ -62,7 +58,7 @@ context_create(VALUE thread)
   context->last_file   = Qnil;
   context->last_line   = Qnil;
   context->flags       = 0;
-  context->stack_size  = real_stack_size(thread);
+  context->stack_size  = real_stack_size();
   context->thnum       = ++thnum_max;
   context->thread      = thread;
   reset_stepping_stop_points(context);
@@ -354,16 +350,8 @@ Context_stack_size(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
-  VALUE backtrace = dc_backtrace(context);
 
-  if (NIL_P(backtrace))
-    return INT2FIX(context->stack_size);
-
-  if (context->stack_size != RARRAY_LEN(backtrace))
-    rb_warn("Calculated stack size is %d but there are actually %ld frames",
-            context->stack_size, RARRAY_LEN(backtrace));
-
-  return INT2FIX(RARRAY_LEN(backtrace));
+  return INT2FIX(context->stack_size);
 }
 
 static VALUE

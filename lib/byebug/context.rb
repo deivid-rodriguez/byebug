@@ -8,6 +8,15 @@ module Byebug
   end
 
   class Context
+
+    class << self
+      def real_stack_size
+        realsize = Thread.current.backtrace_locations(1)
+          .drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }
+          .take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
+      end
+    end
+
     def frame_locals frame_no = 0
       bind = frame_binding frame_no
       eval "local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}", bind

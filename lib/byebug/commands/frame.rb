@@ -106,9 +106,7 @@ module Byebug
       if Byebug.post_mortem?
         realsize = @state.context.stack_size
       else
-        realsize = Thread.current.backtrace_locations(1).
-          drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }.
-          take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
+        realsize = Context.real_stack_size
         size = @state.context.stack_size
         if size != realsize
           errmsg "Byebug's stacksize (#{size}) should be #{realsize}. " \
