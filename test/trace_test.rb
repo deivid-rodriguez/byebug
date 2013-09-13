@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
 class TestTrace < TestDsl::TestCase
-
   before do
     untrace_var(:$bla) if defined?($bla)
   end

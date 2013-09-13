@@ -184,7 +184,7 @@ class TestSet < TestDsl::TestCase
     it 'must show help when typing just "set"' do
       enter 'set', 'cont'
       debug_file 'set'
-      check_output_includes /List of "set" subcommands:/
+      check_output_includes(/List of "set" subcommands:/)
     end
   end
 end

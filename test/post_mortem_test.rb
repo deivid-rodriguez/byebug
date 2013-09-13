@@ -1,25 +1,38 @@
 require_relative 'test_helper'
 
-class TestPostMortem < TestDsl::TestCase
+class PostMortemExample
+  def a
+    begin
+      Byebug.post_mortem do
+        z = 4
+        raise 'blabla'
+        x = 6
+        x + z
+      end
+    rescue => e
+      e
+    end
+  end
+end
 
+class TestPostMortem < TestDsl::TestCase
   describe 'Features' do
+    before { enter 'cont' }
+
     it 'must enter into post-mortem mode' do
-      enter 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal true }
     end
 
     it 'must stop at the correct line' do
-      enter 'cont'
       debug_file('post_mortem') { $state.line.must_equal 8 }
     end
 
     it 'must exit from post-mortem mode after stepping command' do
-      enter 'cont', 'break 12', 'cont'
+      enter "break #{__FILE__}:13", 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
     end
 
     it 'must save the raised exception' do
-      enter 'cont'
       debug_file('post_mortem') {
         Byebug.last_exception.must_be_kind_of RuntimeError }
     end
@@ -76,23 +89,23 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont', 'frame'
         debug_file('post_mortem') { $state.line.must_equal 8 }
-        check_output_includes \
-          /--> #0  block in CatchExample\.a\s+at #{@tst_file}:8/
+        check_output_includes(
+          /--> #0  block in PostMortemExample\.a\s+at #{__FILE__}:8/)
       end
     end
 
     describe 'condition' do
       it 'must be able to set conditions in post-mortem mode' do
-        enter 'cont', 'break 12',
+        enter 'cont', "break #{__FILE__}:13",
               ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 12 }
+        debug_file('post_mortem') { $state.line.must_equal 13 }
       end
     end
 
     describe 'break' do
       it 'must be able to set breakpoints in post-mortem mode' do
-        enter 'cont', 'break 12', 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 12 }
+        enter 'cont', "break #{__FILE__}:13",
+        debug_file('post_mortem') { $state.line.must_equal 13 }
       end
     end
 
@@ -105,15 +118,15 @@ class TestPostMortem < TestDsl::TestCase
     end
 
     describe 'reload' do
-      after { change_line_in_file(@tst_file, 7, '        z = 4') }
+      after { change_line_in_file(@tst_file, 4, 'c.a') }
 
       it 'must work in post-mortem mode' do
         enter 'cont', -> do
-          change_line_in_file(@tst_file, 7, 'z = 100')
+          change_line_in_file(@tst_file, 4, 'bo = BasicObject.new')
           'reload'
-        end, 'l 7-7'
+        end, 'up 3', 'l 4-4'
         debug_file 'post_mortem'
-        check_output_includes '7: z = 100'
+        check_output_includes '=> 4: bo = BasicObject.new'
       end
     end
 
@@ -132,7 +145,7 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont', 'info line'
         debug_file 'post_mortem'
-        check_output_includes "Line 8 of \"#{@tst_file}\""
+        check_output_includes "Line 8 of \"#{__FILE__}\""
       end
     end
 
@@ -141,8 +154,8 @@ class TestPostMortem < TestDsl::TestCase
 
       it 'must work in post-mortem mode' do
         irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
-        enter 'cont', 'break 12', 'irb'
-        debug_file('post_mortem') { $state.line.must_equal 12 }
+        enter 'cont', 'break 13', 'irb'
+        debug_file('post_mortem') { $state.line.must_equal 13 }
       end
     end
 
@@ -181,7 +194,7 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont'
         debug_file 'post_mortem'
-        check_output_includes "[3, 12] in #{@tst_file}"
+        check_output_includes "[3, 12] in #{__FILE__}"
       end
     end
 
@@ -189,7 +202,7 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont', 'm i self'
         debug_file 'post_mortem'
-        check_output_includes /to_s/
+        check_output_includes(/to_s/)
       end
     end
 
@@ -251,7 +264,7 @@ class TestPostMortem < TestDsl::TestCase
       it "must work in post-mortem mode" do
         enter 'cont', 'thread list'
         debug_file('post_mortem')
-        check_output_includes /\+ \d+ #<Thread:(\S+) run/
+        check_output_includes(/\+ \d+ #<Thread:(\S+) run/)
       end
     end
   end

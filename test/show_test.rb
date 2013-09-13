@@ -9,7 +9,7 @@ class TestShow < TestDsl::TestCase
         enter 'show args'
         debug_file 'show'
         check_output_includes 'Argument list to give program being debugged ' \
-                            'when it is started is "foo bar".'
+                              'when it is started is "foo bar".'
       end
     end
 
@@ -160,16 +160,16 @@ class TestShow < TestDsl::TestCase
       end
 
       it 'must show history file' do
-        check_output_includes \
-          /filename: The command history file is "hist_file\.txt"/
+        check_output_includes(
+          /filename: The command history file is "hist_file\.txt"/)
       end
 
       it 'must show history save setting' do
-        check_output_includes /save: Saving of history save is on\./
+        check_output_includes(/save: Saving of history save is on\./)
       end
 
       it 'must show history length' do
-        check_output_includes /size: Byebug history size is 25/
+        check_output_includes(/size: Byebug history size is 25/)
       end
     end
 
@@ -217,8 +217,8 @@ class TestShow < TestDsl::TestCase
         it 'must show records from readline history' do
           enter 'show commands'
           debug_file 'show'
-          check_output_includes /1  aaa/
-          check_output_includes /6  fff/
+          check_output_includes(/1  aaa/)
+          check_output_includes(/6  fff/)
         end
       end
 
@@ -228,9 +228,9 @@ class TestShow < TestDsl::TestCase
         it 'must show last 10 records from readline history' do
           enter 'show commands'
           debug_file 'show'
-          check_output_doesnt_include /3  ddd/
-          check_output_includes /4  eee/
-          check_output_includes /13  nnn/
+          check_output_doesnt_include(/3  ddd/)
+          check_output_includes(/4  eee/)
+          check_output_includes(/13  nnn/)
         end
       end
 
@@ -241,17 +241,17 @@ class TestShow < TestDsl::TestCase
           # Really don't know why it substracts 4, and shows starting from position 6
           enter 'show commands 10'
           debug_file 'show'
-          check_output_doesnt_include /5  fff/
-          check_output_includes /6  ggg/
-          check_output_includes /13  nnn/
+          check_output_doesnt_include(/5  fff/)
+          check_output_includes(/6  ggg/)
+          check_output_includes(/13  nnn/)
         end
 
         it 'must adjust first line if it is < 0' do
           enter 'show commands 3'
           debug_file 'show'
-          check_output_includes /1  bbb/
-          check_output_includes /8  iii/
-          check_output_doesnt_include /9  jjj/
+          check_output_includes(/1  bbb/)
+          check_output_includes(/8  iii/)
+          check_output_doesnt_include(/9  jjj/)
         end
       end
     end
@@ -261,7 +261,7 @@ class TestShow < TestDsl::TestCase
     it 'must show help when typing just "show"' do
       enter 'show', 'cont'
       debug_file 'show'
-      check_output_includes /List of "show" subcommands:/
+      check_output_includes(/List of "show" subcommands:/)
     end
   end
 end

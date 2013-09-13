@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 
 class TestSource < TestDsl::TestCase
+  let(:filename) { 'source_example.txt' }
 
   before { File.open(filename, 'w') do |f|
              f.puts 'break 2'
@@ -8,8 +9,6 @@ class TestSource < TestDsl::TestCase
            end }
 
   after { FileUtils.rm(filename) }
-
-  let(:filename) { 'source_example.txt' }
 
   it 'must run commands from file' do
     enter "source #{filename}"
@@ -28,7 +27,7 @@ class TestSource < TestDsl::TestCase
   it 'must show an error if file is not found' do
     enter 'source blabla'
     debug_file 'source'
-    check_error_includes /File ".*blabla" not found/
+    check_error_includes(/File ".*blabla" not found/)
   end
 
   describe 'Help' do

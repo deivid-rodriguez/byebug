@@ -6,19 +6,18 @@ class TestConditions < TestDsl::TestCase
     before { enter 'break 3' }
 
     describe 'successfully' do
+      before { enter ->{ "cond #{Byebug.breakpoints.first.id} b == 5" }, 'cont'}
+
       it 'must assign the expression to breakpoint' do
-        enter ->{ "cond #{Byebug.breakpoints.first.id} b == 5" }, 'cont'
         debug_file('conditions') {
           Byebug.breakpoints.first.expr.must_equal 'b == 5' }
       end
 
       it 'must stop at the breakpoint if condition is true' do
-        enter ->{ "cond #{Byebug.breakpoints.first.id} b == 5" }, 'cont'
         debug_file('conditions') { $state.line.must_equal 3 }
       end
 
       it 'must work with full command name too' do
-        enter ->{ "condition #{Byebug.breakpoints.first.id} b == 5" }, 'cont'
         debug_file('conditions') { $state.line.must_equal 3 }
       end
     end

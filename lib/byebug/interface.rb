@@ -98,7 +98,7 @@ module Byebug
 
         def readline(prompt, hist)
           Readline::readline(prompt, hist)
-        rescue Interrupt => e
+        rescue Interrupt
           print "^C\n"
           retry
         end

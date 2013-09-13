@@ -17,8 +17,8 @@ module Byebug
       return print "No breakpoints have been set.\n" if 0 == largest
       return unless pos = get_int(@match[1], "Condition", 1, largest)
 
-      b = breakpoints.select{ |b| b.id == pos }.first
-      b.expr = @match[2] if b
+      breakpoint = breakpoints.select{ |b| b.id == pos }.first
+      breakpoint.expr = @match[2] if breakpoint
     end
 
     class << self

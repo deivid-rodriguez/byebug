@@ -1,5 +1,11 @@
 require_relative 'test_helper'
 
+class RestartExample
+  def concat_args(a, b, c)
+    a.to_s + b.to_s + c.to_s
+  end
+end
+
 class TestRestart < TestDsl::TestCase
   describe 'usual restarting' do
     temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'

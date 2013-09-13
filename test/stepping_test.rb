@@ -1,11 +1,27 @@
 require_relative 'test_helper'
 
-class TestStepping < TestDsl::TestCase
+class SteppingExample
+  def self.a(num)
+    num += 2
+    b(num)
+  end
 
+  def self.b(num)
+    v2 = 5 if 1 == num ; [1, 2, v2].map { |a| a.to_f }
+    c(num)
+  end
+
+  def self.c(num)
+    num += 4
+    num
+  end
+end
+
+class TestStepping < TestDsl::TestCase
   describe 'Next Command' do
 
     describe 'method call behaviour' do
-      before { enter 'break 10', 'cont' }
+      before { enter "break #{__FILE__}:10", 'cont' }
 
       it 'must leave on the same line by default' do
         enter 'next'
@@ -48,11 +64,11 @@ class TestStepping < TestDsl::TestCase
     end
 
     describe 'block behaviour' do
-      before { enter 'break 21', 'cont' }
+      before { enter 'break 4', 'cont' }
 
       it 'must step over blocks' do
         enter 'next'
-        debug_file('stepping') { $state.line.must_equal 25 }
+        debug_file('stepping') { $state.line.must_equal 8 }
       end
     end
   end
@@ -60,7 +76,7 @@ class TestStepping < TestDsl::TestCase
   describe 'Step Command' do
 
     describe 'method call behaviour' do
-      before { enter 'break 10', 'cont' }
+      before { enter "break #{__FILE__}:10", 'cont' }
 
       it 'must leave on the same line if forced by a setting' do
         enter 'step'
@@ -98,11 +114,11 @@ class TestStepping < TestDsl::TestCase
     end
 
     describe 'block behaviour' do
-      before { enter 'break 21', 'cont' }
+      before { enter 'break 4', 'cont' }
 
       it 'must step into blocks' do
         enter 'step'
-        debug_file('stepping') { $state.line.must_equal 22 }
+        debug_file('stepping') { $state.line.must_equal 5 }
       end
     end
   end

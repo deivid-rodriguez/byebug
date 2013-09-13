@@ -1,5 +1,3 @@
-require 'irb'
-
 module IRB
   module ExtendCommand
     class Continue
@@ -18,12 +16,14 @@ module IRB
       end
     end
   end
+
+  require 'irb'
   ExtendCommandBundle.def_extend_command "cont", :Continue
   ExtendCommandBundle.def_extend_command "n", :Next
   ExtendCommandBundle.def_extend_command "step", :Step
 
   def self.start_session(binding)
-    unless @__initialized
+    unless @__initialized ||= false
       args = ARGV.dup
       ARGV.replace([])
       IRB.setup(nil)
@@ -51,7 +51,6 @@ module Byebug
 
   # Implements byebug's "irb" command.
   class IRBCommand < Command
-
     register_setting_get(:autoirb) do
       IRBCommand.always_run
     end
@@ -82,8 +81,6 @@ module Byebug
         @state.context.step_over 1, @state.frame_pos, force
         @state.proceed
       else
-        file = @state.context.frame_file(0)
-        line = @state.context.frame_line(0)
         print @state.location
         @state.previous_line = nil
       end

@@ -1,5 +1,11 @@
 require_relative 'test_helper'
 
+class ContinueExample
+  def self.a(num)
+    num + 4
+  end
+end
+
 class TestContinue < TestDsl::TestCase
 
   describe "successful" do

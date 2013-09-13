@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
 class TestList < TestDsl::TestCase
-
   describe 'listsize' do
     it 'must show lines according to :listsize setting' do
       enter 'break 5', 'cont'
@@ -108,7 +107,7 @@ class TestList < TestDsl::TestCase
       debug_file 'list'
       check_error_includes 'Invalid line range'
       check_output_doesnt_include "[44, 44] in #{fullpath('list')}"
-      check_output_doesnt_include /^44  \S/
+      check_output_doesnt_include(/^44  \S/)
     end
 
     it 'must show nothing if range is incorrect' do

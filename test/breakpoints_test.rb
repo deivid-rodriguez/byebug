@@ -1,13 +1,39 @@
 require_relative 'test_helper'
 
+class BreakpointExample
+  def self.a(num)
+    4
+  end
+  def b
+    3
+  end
+end
+
+class BreakpointDeepExample
+  def a
+    z = 2
+    b(z)
+  end
+
+  def b(num)
+    v2 = 5 if 1 == num ; [1,2,v2].map { |a| a.to_f }
+    c
+  end
+
+  def c
+    z = 4
+    z += 5
+    byebug
+  end
+end
+
 class TestBreakpoints < TestDsl::TestCase
   before do
     @tst_file = fullpath('breakpoint')
-    @tst_file_2 = fullpath('breakpoint2')
   end
 
   describe 'setting breakpoint in the current file' do
-    before { enter 'break 10' }
+    before { enter 'break 1' }
 
     subject { Byebug.breakpoints.first }
 
@@ -15,7 +41,7 @@ class TestBreakpoints < TestDsl::TestCase
       debug_file('breakpoint') { subject.send(field).must_equal value }
     end
 
-    it('must have correct pos')        { check_subject(:pos, 10)           }
+    it('must have correct pos')        { check_subject(:pos, 1)            }
     it('must have correct source')     { check_subject(:source, @tst_file) }
     it('must have correct expression') { check_subject(:expr, nil)         }
     it('must have correct hit count')  { check_subject(:hit_count, 0)      }
@@ -25,12 +51,12 @@ class TestBreakpoints < TestDsl::TestCase
     it('must return right response') do
       id = nil
       debug_file('breakpoint') { id = subject.id }
-      check_output_includes "Created breakpoint #{id} at #{@tst_file}:10"
+      check_output_includes "Created breakpoint #{id} at #{@tst_file}:1"
     end
   end
 
   describe 'using shortcut for the command' do
-    before { enter 'b 10' }
+    before { enter 'b 1' }
     it 'must set a breakpoint' do
       debug_file('breakpoint') { Byebug.breakpoints.size.must_equal 1 }
     end
@@ -52,7 +78,7 @@ class TestBreakpoints < TestDsl::TestCase
 
 
   describe 'setting breakpoint to incorrect line' do
-    before { enter 'break 11' }
+    before { enter 'break 2' }
 
     it 'must not create a breakpoint' do
       debug_file('breakpoint') { Byebug.breakpoints.must_be_empty }
@@ -61,18 +87,18 @@ class TestBreakpoints < TestDsl::TestCase
     it 'must show an error' do
       debug_file('breakpoint')
       check_error_includes \
-        "Line 11 is not a stopping point in file #{@tst_file}"
+        "Line 2 is not a stopping point in file #{@tst_file}"
     end
   end
 
   describe 'stopping at breakpoint' do
     it 'must stop at the correct line' do
-      enter 'break 14', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 14 }
+      enter 'break 5', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 5 }
     end
 
     it 'must stop at the correct file' do
-      enter 'break 14', 'cont'
+      enter 'break 5', 'cont'
       debug_file('breakpoint') { $state.file.must_equal @tst_file }
     end
 
@@ -80,9 +106,9 @@ class TestBreakpoints < TestDsl::TestCase
 
       describe 'with full filename' do
         it 'must show a message with full filename' do
-          enter 'break 14', 'cont'
+          enter 'break 5', 'cont'
           debug_file('breakpoint') { @id = Byebug.breakpoints.first.id }
-          check_output_includes "Created breakpoint #{@id} at #{@tst_file}:14"
+          check_output_includes "Created breakpoint #{@id} at #{@tst_file}:5"
         end
       end
 
@@ -90,9 +116,9 @@ class TestBreakpoints < TestDsl::TestCase
         temporary_change_hash Byebug.settings, :basename, true
 
         it 'must show a message with basename' do
-          enter 'break 14', 'cont'
+          enter 'break 5', 'cont'
           debug_file('breakpoint') { @id = Byebug.breakpoints.first.id }
-          check_output_includes "Created breakpoint #{@id} at breakpoint.rb:14"
+          check_output_includes "Created breakpoint #{@id} at breakpoint.rb:5"
         end
       end
     end
@@ -104,39 +130,37 @@ class TestBreakpoints < TestDsl::TestCase
 
       it 'must not reload source' do
         id = nil
-        enter \
-          ->{change_line_in_file(@tst_file, 14, ''); 'break 14'},
-          ->{change_line_in_file(@tst_file, 14, 'c = a + b');
-          'cont'}
+        enter ->{ change_line_in_file(@tst_file, 5, ''); 'break 5' },
+              ->{ change_line_in_file(@tst_file, 5, 'BreakpointExample.new.b');
+              cont }
         debug_file('breakpoint') { id = Byebug.breakpoints.first.id }
-        check_output_includes "Created breakpoint #{id} at #{@tst_file}:14"
+        check_output_includes "Created breakpoint #{id} at #{@tst_file}:5"
       end
     end
 
     describe 'autoreload set' do
       it 'must reload source' do
         enter \
-          ->{change_line_in_file(@tst_file, 14, ''); 'break 14'},
-          # 2nd breakpoint just to reload source code after rolling changes back
-          ->{change_line_in_file(@tst_file, 14, 'c = a + b');
-            'break 15'}, 'cont'
+          ->{change_line_in_file(@tst_file, 5, ''); 'break 5'},
+          ->{change_line_in_file(@tst_file, 5, 'BreakpointExample.new.b');
+            'next'}
         debug_file 'breakpoint'
         check_error_includes \
-          "Line 14 is not a stopping point in file #{@tst_file}"
+          "Line 5 is not a stopping point in file #{@tst_file}"
       end
     end
   end
 
   describe 'set breakpoint in a file' do
     describe 'successfully' do
-      before { enter "break #{@tst_file_2}:3", 'cont' }
+      before { enter "break #{__FILE__}:5", 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 3 }
+        debug_file('breakpoint') { $state.line.must_equal 5 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal @tst_file_2 }
+        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
       end
     end
 
@@ -206,7 +230,7 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'disabling breakpoints' do
     describe 'successfully' do
-      before { enter 'break 14', 'break 15' }
+      before { enter 'break 5', 'break 6' }
 
       describe 'short syntax' do
         before { enter ->{ "disable #{Byebug.breakpoints.first.id}" } }
@@ -218,7 +242,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must not stop on the disabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint') { $state.line.must_equal 15 }
+          debug_file('breakpoint') { $state.line.must_equal 6 }
         end
       end
 
@@ -267,7 +291,7 @@ class TestBreakpoints < TestDsl::TestCase
       end
 
       it 'must show an error if a number is not provided as an argument' do
-        enter 'break 14', 'disable foo'
+        enter 'break 5', 'disable foo'
         debug_file('breakpoint')
         check_output_includes \
           '"disable breakpoints" argument "foo" needs to be a number.'
@@ -277,7 +301,7 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'enabling breakpoints' do
     describe 'successfully' do
-      before { enter 'break 14', 'break 15', 'disable breakpoints' }
+      before { enter 'break 5', 'break 6', 'disable breakpoints' }
 
       describe 'short syntax' do
         before { enter ->{ "enable #{Byebug.breakpoints.first.id}" } }
@@ -289,7 +313,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must stop on the enabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint') { $state.line.must_equal 14 }
+          debug_file('breakpoint') { $state.line.must_equal 5 }
         end
       end
 
@@ -306,12 +330,12 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must stop on the first breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_be 14 }
+            debug_file('breakpoint') { $state.line.must_be 5 }
           end
 
           it 'must stop on the last breakpoint' do
             enter 'cont', 'cont'
-            debug_file('breakpoint') { $state.line.must_be 15 }
+            debug_file('breakpoint') { $state.line.must_be 6 }
           end
         end
 
@@ -327,7 +351,7 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must not stop on the enabled breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_be 15 }
+            debug_file('breakpoint') { $state.line.must_be 6 }
           end
         end
       end
@@ -344,8 +368,8 @@ class TestBreakpoints < TestDsl::TestCase
   end
 
   describe 'deleting a breakpoint' do
-    before { enter 'break 14', ->{"delete #{Byebug.breakpoints.first.id}"},
-                   'break 15' }
+    before { enter 'break 5', ->{"delete #{Byebug.breakpoints.first.id}"},
+                   'break 6' }
 
     it 'must have only one breakpoint' do
       debug_file('breakpoint') { Byebug.breakpoints.size.must_equal 1 }
@@ -353,30 +377,30 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must not stop on the disabled breakpoint' do
       enter 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 15 }
+      debug_file('breakpoint') { $state.line.must_equal 6 }
     end
   end
 
   describe 'Conditional breakpoints' do
     it 'must stop if the condition is true' do
-      enter 'break 14 if b == 5', 'break 15', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 14 }
+      enter 'break 5 if b == 5', 'break 6', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 5 }
     end
 
     it 'must skip if the condition is false' do
-      enter 'break 14 if b == 3', 'break 15', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 15 }
+      enter 'break 5 if b == 3', 'break 6', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 6 }
     end
 
     it 'must show an error when conditional syntax is wrong' do
-      enter 'break 14 ifa b == 3', 'break 15', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 15 }
+      enter 'break 5 ifa b == 3', 'break 6', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 6 }
       check_error_includes \
         'Expecting "if" in breakpoint condition; got: ifa b == 3.'
     end
 
     describe 'enabling with wrong conditional syntax' do
-      before { enter 'break 14',
+      before { enter 'break 5',
                      ->{"disable #{Byebug.breakpoints.first.id}"},
                      ->{"cond #{Byebug.breakpoints.first.id} b -=( 3"},
                      ->{"enable #{Byebug.breakpoints.first.id}"} }
@@ -394,14 +418,14 @@ class TestBreakpoints < TestDsl::TestCase
     end
 
     it 'must show an error if no file or line is specified' do
-      enter 'break ifa b == 3', 'break 15', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 15 }
+      enter 'break ifa b == 3', 'break 6', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 6 }
       check_error_includes 'Invalid breakpoint location: ifa b == 3.'
     end
 
     it 'must show an error if expression syntax is invalid' do
-      enter 'break if b -=) 3', 'break 15', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 15 }
+      enter 'break if b -=) 3', 'break 6', 'cont'
+      debug_file('breakpoint') { $state.line.must_equal 6 }
       check_error_includes \
         'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.'
     end
@@ -410,7 +434,7 @@ class TestBreakpoints < TestDsl::TestCase
   describe 'Stopping through `byebug` keyword' do
     describe 'when not the last instruction of a method' do
       it 'must stop in the next line' do
-        debug_file('breakpoint') { $state.line.must_equal 13 }
+        debug_file('breakpoint') { $state.line.must_equal 4 }
       end
     end
 
@@ -425,7 +449,7 @@ class TestBreakpoints < TestDsl::TestCase
     it 'must show info about setting breakpoints when using just "break"' do
       enter 'break', 'cont'
       debug_file 'breakpoint'
-      check_output_includes /b\[reak\] file:line \[if expr\]/
+      check_output_includes(/b\[reak\] file:line \[if expr\]/)
     end
   end
 end

@@ -176,7 +176,7 @@ module Byebug
     register_setting_var(:argv, Byebug::ARGV)
 
     def initialize(state)
-      @state = state
+      @match, @state = nil, state
     end
 
     def match(input)

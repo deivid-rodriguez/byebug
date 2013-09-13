@@ -1,2 +1,2 @@
 byebug
-1
+KillExample.kill_me

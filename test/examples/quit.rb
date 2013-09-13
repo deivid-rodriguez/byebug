@@ -1,2 +1,2 @@
 byebug
-1
+DummyObject.new

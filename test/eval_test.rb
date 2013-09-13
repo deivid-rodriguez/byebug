@@ -1,7 +1,16 @@
 require_relative 'test_helper'
 
-class TestEval < TestDsl::TestCase
+class EvalTest
+  def sum(a,b)
+    a + b
+  end
 
+  def inspect
+    raise "Broken"
+  end
+end
+
+class TestEval < TestDsl::TestCase
   it 'must evaluate an expression' do
     enter 'eval 3 + 2'
     debug_file 'eval'
@@ -21,8 +30,8 @@ class TestEval < TestDsl::TestCase
   end
 
   it 'must work when inspect raises an exception' do
-    enter 'c 14', 'p @foo'
-    debug_file('eval') { $state.line.must_equal 14 }
+    enter 'c 4', 'p @foo'
+    debug_file('eval') { $state.line.must_equal 4 }
     check_output_includes 'RuntimeError Exception: Broken'
   end
 
@@ -49,7 +58,7 @@ class TestEval < TestDsl::TestCase
       it 'must show a stack trace' do
         enter 'eval 2 / 0'
         debug_file 'eval'
-        check_output_includes /\s*from \S+:in \`eval\'/
+        check_output_includes(/\s*from \S+:in \`eval\'/)
         check_output_doesnt_include 'ZeroDivisionError Exception: divided by 0'
       end
     end
@@ -61,7 +70,7 @@ class TestEval < TestDsl::TestCase
         enter 'eval 2 / 0'
         debug_file 'eval'
         check_output_includes 'ZeroDivisionError Exception: divided by 0'
-        check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/
+        check_output_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
       end
     end
   end
