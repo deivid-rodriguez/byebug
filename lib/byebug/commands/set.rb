@@ -51,11 +51,7 @@ module Byebug
         return unless width = get_int(setting_args[0], "Set width", 10, nil, 80)
         Command.settings[:width] = width
       when /^post_mortem$/
-        if setting_value
-          Byebug.post_mortem
-        else
-          Byebug.post_mortem = false
-        end
+        Byebug.post_mortem = setting_value
       when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
              testing|stack_trace_on_error$/x
         Command.settings[setting_name.to_sym] = setting_value
