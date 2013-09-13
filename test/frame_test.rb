@@ -106,11 +106,6 @@ class TestFrame < TestDsl::TestCase
     end
 
     describe 'fullpath' do
-      def short_path(fullpath)
-        separator = File::ALT_SEPARATOR || File::SEPARATOR
-        "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
-      end
-
       describe 'when set' do
         temporary_change_hash Byebug.settings, :fullpath, true
 
@@ -131,10 +126,10 @@ class TestFrame < TestDsl::TestCase
           enter 'where'
           debug_file 'frame'
           check_output_includes(
-            /--> #0  FrameExample\.d\(e#String\)\s+at #{short_path(__FILE__)}:23/,
-                /#1  FrameExample\.c\s+at #{short_path(__FILE__)}:18/,
-                /#2  FrameExample\.b\s+at #{short_path(__FILE__)}:13/,
-                /#3  FrameExample\.a\s+at #{short_path(__FILE__)}:9/)
+            /--> #0  FrameExample\.d\(e#String\)\s+at #{shortpath(__FILE__)}:23/,
+                /#1  FrameExample\.c\s+at #{shortpath(__FILE__)}:18/,
+                /#2  FrameExample\.b\s+at #{shortpath(__FILE__)}:13/,
+                /#3  FrameExample\.a\s+at #{shortpath(__FILE__)}:9/)
         end
       end
     end

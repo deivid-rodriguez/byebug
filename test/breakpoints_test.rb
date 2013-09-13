@@ -103,7 +103,6 @@ class TestBreakpoints < TestDsl::TestCase
     end
 
     describe 'show a message' do
-
       describe 'with full filename' do
         it 'must show a message with full filename' do
           enter 'break 5', 'cont'
