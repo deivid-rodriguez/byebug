@@ -158,7 +158,9 @@ module TestDsl
 
   def change_line_in_file(file, line, new_line_content)
     old_content = File.read(file)
-    new_content = old_content.split("\n").tap { |c| c[line - 1] = new_line_content }.join("\n")
+    new_content = old_content.split("\n")
+                             .tap { |c| c[line - 1] = new_line_content }
+                             .join("\n") + "\n"
     File.open(file, 'w') { |f| f.write(new_content) }
   end
 
