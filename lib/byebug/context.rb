@@ -1,12 +1,5 @@
 module Byebug
 
-  class << self
-
-    # interface modules provide +handler+ object
-    attr_accessor :handler
-
-  end
-
   class Context
 
     class << self

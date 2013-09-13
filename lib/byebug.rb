@@ -7,7 +7,6 @@ require 'stringio'
 require 'linecache19'
 
 module Byebug
-  self.handler = CommandProcessor.new
 
   # List of files byebug will ignore while debugging
   IGNORED_FILES = Dir[Pathname.new(__FILE__) + "../**/*.rb"].map {
@@ -24,6 +23,10 @@ module Byebug
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
   class << self
+
+    # processor modules provide +handler+ object
+    attr_accessor :handler
+    Byebug.handler = CommandProcessor.new
 
     attr_accessor :last_exception
     Byebug.last_exception = nil
