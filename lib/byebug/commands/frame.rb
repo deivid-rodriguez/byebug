@@ -43,14 +43,10 @@ module Byebug
       return errmsg "Can't navigate beyond the newest frame\n" if
         abs_frame_pos < 0
 
-      if @state.frame_pos != abs_frame_pos
-        @state.previous_line = nil
-        @state.frame_pos = abs_frame_pos
-      end
-
+      @state.frame_pos = abs_frame_pos
       @state.file = @state.context.frame_file @state.frame_pos
       @state.line = @state.context.frame_line @state.frame_pos
-
+      @state.previous_line = nil
       ListCommand.new(@state).execute
     end
 
