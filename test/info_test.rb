@@ -22,6 +22,12 @@ class InfoExample
     e = "%.2f"
     e
   end
+
+  def d
+    raise "bang"
+  rescue
+  end
+
 end
 
 class TestInfo < TestDsl::TestCase
@@ -235,7 +241,9 @@ class TestInfo < TestDsl::TestCase
     end
 
     it 'must show the catchpoint stop reason' do
-      skip('TODO')
+      enter 'catch Exception', 'cont', 'info program'
+      debug_file 'info'
+      check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
     end
 
     it 'must show the unknown stop reason' do
