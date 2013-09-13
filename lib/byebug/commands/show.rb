@@ -131,6 +131,9 @@ module Byebug
       when /^stack_trace_on_error$/
         on_off = Command.settings[:stack_trace_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."
+      when /^verbose$/
+        on_off = Byebug.verbose
+        return "Verbose output of TracePoint API events is #{show_onoff(on_off)}."
       when /^version$/
         return "Byebug #{Byebug::VERSION}"
       when /^width$/
@@ -175,6 +178,8 @@ module Byebug
                           'debugging on an uncaught exception'],
        ['stack_trace_on_error', 1, 'Show whether a stack trace is displayed ' \
                                    'when "eval" raises an exception'],
+       ['verbose', 4, true,
+        'Show whether verbose output for debugging byebug itself is enabled'],
        ['version', 1, 'Show byebug\'s version'],
        ['width', 1, 'Show the number of characters per line for byebug']
       ].map do |name, min, short_help, long_help|

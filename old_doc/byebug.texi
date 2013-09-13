@@ -929,7 +929,6 @@ Options:
     -x, --trace                Turn on line tracing
 
 Common options:
-        --verbose              Turn on verbose mode
         --help                 Show this message
         --version              Print the version
     -v                         Print version number, then turn on verbose mode
@@ -1056,8 +1055,8 @@ Here are the default values in @code{options}
 @smallexample
 #<OpenStruct server=false, client=false, frame_bind=false, cport=8990,
              tracing=false, nx=false, post_mortem=false, port=8989,
-             verbose_long=false, control=true, restart_script=nil, quit=true,
-             stop=true, script=nil, host=nil, wait=false>
+             control=true, restart_script=nil, quit=true, stop=true, script=nil,
+             host=nil, wait=false>
 @end smallexample
 
 @node Command Files

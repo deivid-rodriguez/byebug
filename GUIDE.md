@@ -601,7 +601,6 @@ Options:
     -x, --trace            Turn on line tracing
 
 Common options:
-        --verbose          Turn on verbose mode
         --help             Show this message
         --version          Print program version
     -v                     Print version number, then turn on verbose mode

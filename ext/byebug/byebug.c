@@ -4,7 +4,7 @@ static VALUE mByebug; /* Ruby Byebug Module object */
 
 static VALUE tracing     = Qfalse;
 static VALUE post_mortem = Qfalse;
-static VALUE debug       = Qfalse;
+static VALUE verbose     = Qfalse;
 
 static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
@@ -69,7 +69,7 @@ cleanup(debug_context_t *dc)
   VALUE context;                                                        \
   thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
-  if (debug == Qtrue) trace_print(trace_arg, dc);                       \
+  if (verbose == Qtrue) trace_print(trace_arg, dc);                     \
 
 #define EVENT_COMMON if (!trace_common(trace_arg, dc)) { return; }
 
@@ -613,6 +613,32 @@ bb_load(int argc, VALUE *argv, VALUE self)
   return status;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.verbose -> bool
+ *
+ *  Returns +true+ if verbose output of TracePoint API events is enabled.
+ */
+static VALUE
+bb_verbose(VALUE self)
+{
+  return verbose;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.verbose = bool
+ *
+ *  Enable verbose output of every TracePoint API events, useful for debugging
+ *  byebug.
+ */
+static VALUE
+bb_set_verbose(VALUE self, VALUE value)
+{
+  verbose = RTEST(value) ? Qtrue : Qfalse;
+  return value;
+}
+
 static VALUE
 set_current_skipped_status(VALUE status)
 {
@@ -784,6 +810,8 @@ Init_byebug()
   rb_define_module_function(mByebug, "thread_context" , bb_thread_context ,  1);
   rb_define_module_function(mByebug, "tracing?"       , bb_tracing        ,  0);
   rb_define_module_function(mByebug, "tracing="       , bb_set_tracing    ,  1);
+  rb_define_module_function(mByebug, "verbose"        , bb_verbose        ,  0);
+  rb_define_module_function(mByebug, "verbose="       , bb_set_verbose    ,  1);
 
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
 

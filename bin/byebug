@@ -96,7 +96,6 @@ options = OpenStruct.new(
   'script'             => nil,
   'stop'               => true,
   'tracing'            => false,
-  'verbose_long'       => false
 )
 
 def process_options(options)
@@ -158,10 +157,6 @@ EOB
       puts "byebug #{Byebug::VERSION}"
       exit
     end
-    opts.on('--verbose', 'Turn on verbose mode') do
-      $VERBOSE = true
-      options.verbose_long = true
-    end
     opts.on_tail('-v', 'Print version number, then turn on verbose mode') do
       puts "byebug #{Byebug::VERSION}"
       $VERBOSE = true
@@ -198,7 +193,6 @@ rescue StandardError => e
 end
 
 if ARGV.empty?
-  exit if $VERBOSE and not options.verbose_long
   puts opts
   puts
   puts 'Must specify a script to run'

@@ -21,6 +21,8 @@ module Byebug
         else
           print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
+      when /^verbose$/
+        Byebug.verbose = setting_value
       when /^history$/
         try_subcmd = setting_args[0]
         subcmd = Command.find(SetCommand::SetHistorySubcommands, try_subcmd)
@@ -95,6 +97,8 @@ module Byebug
        ['post_mortem', 2, true, 'Enable post-mortem mode'],
        ['stack_trace_on_error', 1, true,
         'Display stack trace when "eval" raises exception'],
+       ['verbose', 1, true,
+        'Enable verbose output of TracePoint API events is enabled'],
        ['width', 1, false,
         'Number of characters per line for byebug\'s output']
       ].map do |name, min, is_bool, short_help, long_help|
