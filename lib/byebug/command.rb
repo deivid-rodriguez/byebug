@@ -31,7 +31,7 @@ module Byebug
                       need_context:         false } unless defined?(DEF_OPTIONS)
 
       def help(args)
-        output = description.gsub(/^ +/, '')
+        output = description.gsub(/^ +/, '') + "\n"
 
         if defined? self::Subcommands
           return output += format_subcmds unless args and args[1]
