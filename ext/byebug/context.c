@@ -93,13 +93,15 @@ static VALUE
 dc_frame_get(const debug_context_t *context, int frame_index,
                                              enum frame_component type)
 {
+  VALUE frame;
+
   if (NIL_P(dc_backtrace(context)))
     rb_raise(rb_eRuntimeError, "Backtrace information is not available");
 
   if (frame_index >= RARRAY_LEN(dc_backtrace(context)))
     rb_raise(rb_eRuntimeError, "That frame doesn't exist!");
 
-  VALUE frame = rb_ary_entry(dc_backtrace(context), frame_index);
+  frame = rb_ary_entry(dc_backtrace(context), frame_index);
   return rb_ary_entry(frame, type);
 }
 
@@ -239,9 +241,11 @@ Context_frame_class(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_frame_file(int argc, VALUE *argv, VALUE self)
 {
+  VALUE loc;
+
   FRAME_SETUP
 
-  VALUE loc = dc_frame_location(context, frame_n);
+  loc = dc_frame_location(context, frame_n);
 
   return rb_funcall(loc, rb_intern("path"), 0);
 }
@@ -255,9 +259,11 @@ Context_frame_file(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_frame_line(int argc, VALUE *argv, VALUE self)
 {
+  VALUE loc;
+
   FRAME_SETUP
 
-  VALUE loc = dc_frame_location(context, frame_n);
+  loc = dc_frame_location(context, frame_n);
 
   return rb_funcall(loc, rb_intern("lineno"), 0);
 }
@@ -271,9 +277,11 @@ Context_frame_line(int argc, VALUE *argv, VALUE self)
 static VALUE
 Context_frame_method(int argc, VALUE *argv, VALUE self)
 {
+  VALUE loc;
+
   FRAME_SETUP
 
-  VALUE loc = dc_frame_location(context, frame_n);
+  loc = dc_frame_location(context, frame_n);
 
   return rb_str_intern(rb_funcall(loc, rb_intern("label"), 0));
 }
