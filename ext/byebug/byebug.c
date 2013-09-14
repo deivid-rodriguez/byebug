@@ -182,13 +182,15 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
 static void
 line_event(VALUE trace_point, void *data)
 {
+  VALUE breakpoint, file, line, binding;
+  int moved = 0;
+
   EVENT_SETUP
 
-  VALUE breakpoint = Qnil;
-  VALUE file    = rb_tracearg_path(trace_arg);
-  VALUE line    = rb_tracearg_lineno(trace_arg);
-  VALUE binding = rb_tracearg_binding(trace_arg);
-  int moved = 0;
+  breakpoint = Qnil;
+  file    = rb_tracearg_path(trace_arg);
+  line    = rb_tracearg_lineno(trace_arg);
+  binding = rb_tracearg_binding(trace_arg);
 
   EVENT_COMMON
 
@@ -232,19 +234,21 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
+  VALUE breakpoint, klass, mid, binding, self, file, line;
+
   EVENT_SETUP
 
   dc->stack_size++;
 
   EVENT_COMMON
 
-  VALUE breakpoint = Qnil;
-  VALUE klass   = rb_tracearg_defined_class(trace_arg);
-  VALUE mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
-  VALUE binding = rb_tracearg_binding(trace_arg);
-  VALUE self    = rb_tracearg_self(trace_arg);
-  VALUE file    = rb_tracearg_path(trace_arg);
-  VALUE line    = rb_tracearg_lineno(trace_arg);
+  breakpoint = Qnil;
+  klass   = rb_tracearg_defined_class(trace_arg);
+  mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
+  binding = rb_tracearg_binding(trace_arg);
+  self    = rb_tracearg_self(trace_arg);
+  file    = rb_tracearg_path(trace_arg);
+  line    = rb_tracearg_lineno(trace_arg);
 
   breakpoint = find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
   if (breakpoint != Qnil)
@@ -267,9 +271,11 @@ return_event(VALUE trace_point, void *data)
 
   if (dc->stack_size + 1 == dc->before_frame)
   {
+    VALUE file, line;
+
     reset_stepping_stop_points(dc);
-    VALUE file = rb_tracearg_path(trace_arg);
-    VALUE line = rb_tracearg_lineno(trace_arg);
+    file = rb_tracearg_path(trace_arg);
+    line = rb_tracearg_lineno(trace_arg);
     call_at_return(context, dc, file, line);
   }
 
@@ -309,19 +315,22 @@ c_return_event(VALUE trace_point, void *data)
 static void
 raise_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP
-
   VALUE expn_class, aclass;
-  VALUE err = rb_errinfo();
+  VALUE err;
   VALUE ancestors;
   int i;
   debug_context_t *new_dc;
+  VALUE binding, path, lineno;
+
+  EVENT_SETUP
+
+  err = rb_errinfo();
 
   EVENT_COMMON
 
-  VALUE binding = rb_tracearg_binding(trace_arg);
-  VALUE path    = rb_tracearg_path(trace_arg);
-  VALUE lineno  = rb_tracearg_lineno(trace_arg);
+  binding = rb_tracearg_binding(trace_arg);
+  path    = rb_tracearg_path(trace_arg);
+  lineno  = rb_tracearg_lineno(trace_arg);
 
   if (post_mortem == Qtrue)
   {
@@ -379,8 +388,6 @@ register_tracepoints(VALUE self)
 
   if (NIL_P(traces))
   {
-    traces = rb_ary_new();
-
     int line_msk     = RUBY_EVENT_LINE;
     int call_msk     = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
     int return_msk   = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
@@ -395,6 +402,7 @@ register_tracepoints(VALUE self)
     VALUE tpCReturn  = rb_tracepoint_new(Qnil, c_return_msk, c_return_event, 0);
     VALUE tpRaise    = rb_tracepoint_new(Qnil, raise_msk   , raise_event   , 0);
 
+    traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
     rb_ary_push(traces, tpCall);
     rb_ary_push(traces, tpReturn);
