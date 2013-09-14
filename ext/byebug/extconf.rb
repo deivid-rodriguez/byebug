@@ -8,7 +8,8 @@ if RUBY_VERSION < "2.0"
 end
 
 if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc/
-  $CFLAGS = '-Wall -Werror'
+  $CFLAGS ||= ''
+  $CFLAGS += ' -Wall -Werror'
   $CFLAGS += ' -gdwarf-2 -g3' if ENV['debug']
 end
 
