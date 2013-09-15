@@ -4,7 +4,7 @@ module Byebug
 
     class << self
       def real_stack_size
-        Thread.current.backtrace_locations(1)
+        Thread.current.backtrace_locations
           .drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }
           .take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
       end
