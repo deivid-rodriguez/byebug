@@ -1,3 +1,155 @@
+### First Steps
+
+A handful of commands are enough to get started using `byebug`. The following
+session illustrates these commands.
+
+```
+$ byebug triangle.rb
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    1: # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+=>  2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: t = triangle(3)
+(byebug)
+```
+
+We are currently stopped before the first executable line of the program: line 2
+of `triangle.rb`. If you are used to less dynamic languages and have used
+debuggers for more statically compiled languages like C, C++, or Java, it may
+seem odd to be stopped before a function definition but in Ruby line 2 is
+executed.
+
+Byebug's prompt is `(byebug)`. If the program has died and you are in
+post-mortem debugging, `(byebug:post-mortem)` is used instead. If the program
+has terminated normally, the string this position will be `(byebug:ctrl)`. The
+commands available change depending on the program's state.
+
+Byebug automatically lists 10 lines of code centered around the current line
+everytime it is stopped. The current line is marked with `=>`, so the range
+byebug would like to show is [-3..6]. However since there aren't 5 lines before
+the current line, the range is moved _up_ so we can actually display 10 lines
+of code.
+
+Now let us step through the program.
+
+```
+(byebug) step
+[2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+=> 10: t = triangle(3)
+   11: puts t
+(byebug) <RET> # hit enter
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    1: # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+    2: def triangle(n)
+=>  3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: t = triangle(3)
+(byebug) p tri
+nil
+(byebug) step
+[1, 10] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    1: # Compute the n'th triangle number: triangle(n) == (n*(n+1))/2
+    2: def triangle(n)
+    3:   tri = 0
+=>  4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: t = triangle(3)
+(byebug) p tri
+0
+```
+
+The first `step` command runs the script one executable unit. The second command
+we entered was just hitting the return key; `byebug` remembers the last command
+you entered was `step` and it runs it again.
+
+One way to print the values of variables is `p` (there are other ways). When we
+look at the value of `tri` the first time, we see it is `nil`. Again we are
+stopped _before_ the assignment on line 3, and this variable hasn't been set
+previously. However after issuing another `step` command we see that the value
+is 0 as expected. If every time we stop we want to see the value of `tri` to see
+how things are going, there is a better way by setting a display expression:
+
+```
+(byebug) display tri
+1: tri = 0
+```
+
+Now let us run the program until we return from the function. We'll want to see
+which lines get run, so we turn on _line tracing_. If we don't want whole paths
+to be displayed when tracing, we can turn on _basename_.
+
+```
+(byebug) display i
+2: i =
+(byebug) set linetrace on
+line tracing is on.
+(byebug) set basename on
+basename is on.
+(byebug) finish
+Tracing: triangle.rb:5 tri += i
+1: tri = 0
+2: i = 0
+Tracing: triangle.rb:5 tri += i
+1: tri = 0
+2: i = 1
+Tracing: triangle.rb:5 tri += i
+1: tri = 1
+2: i = 2
+Tracing: triangle.rb:5 tri += i
+1: tri = 3
+2: i = 3
+Tracing: triangle.rb:7 tri
+1: tri = 6
+2: i =
+Tracing: triangle.rb:11 puts t
+1: tri =
+2: i =
+[2, 11] in /home/davidr/Proyectos/byebug/old_doc/triangle.rb
+    2: def triangle(n)
+    3:   tri = 0
+    4:   0.upto(n) do |i|
+    5:     tri += i
+    6:   end
+    7:   tri
+    8: end
+    9:
+   10: t = triangle(3)
+=> 11: puts t
+1: tri =
+2: i =
+(byebug) quit
+Really quit? (y/n) y
+```
+
+So far, so good. As you can see from the above to get out of `byebug`, one
+can issue a `quit` command (`q` and `exit` are just as good). If you want to
+quit without being prompted, suffix the command with an exclamation mark, e.g.,
+`q!`.
+
+
 ### Second Sample Session: Delving Deeper
 
 In this section we'll introduce breakpoints, the call stack and restarting.
