@@ -149,6 +149,12 @@ adds a rake task that restarts Passenger with byebug connected.
 session on minitest failures.
 
 
+## Future (possible) directions
+
+* JRuby support.
+* Libify and test byebug's executable.
+
+
 ## Credits
 
 Everybody who has ever contributed to this forked and reforked piece of
