@@ -58,15 +58,9 @@ no longer need to set them in the startup file.
 
 * Works on 2.0.0 and it doesn't on 1.9.x.
 * Has no MRI internal source code dependencies, just a clean API.
-* Fixes most of debugger's current open issues:
-  - Post-mortem mode segfaulting.
-  - Line number wrongly shown as zero in backtrace.
-  - Line tracing.
-  - Colon delimited include paths.
-  - Nice markdown guide.
-  - Ruby 2.0 support.
-  - where/bt does not in fact give a backtrace.
-  - `byebug` can now be placed at the end of a block or method call.
+* Fixes all of debugger's open bugs in its issue tracker and provides some
+enhancements, such as a markdown guide or the fact that `byebug` can now be
+placed at the end of a block or method call.
 * Very actively mantained.
 * Editor agnostic: no external editor built-in support.
 * Pry command is built-in. No need of external gem like debugger-pry.
