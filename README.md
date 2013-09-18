@@ -38,7 +38,7 @@ Simply drop
     byebug
 
 wherever you want to start debugging and the execution will stop there. If you
-are debugging rails, start the server and once the execution get to your
+are debugging rails, start the server and once the execution gets to your
 `byebug` command you will get a debugging prompt.
 
 Former [debugger](https://github.com/cldwalker/debugger) or
