@@ -197,7 +197,7 @@ module Byebug
           eval(str, b)
         rescue StandardError, ScriptError => e
           if Command.settings[:stack_trace_on_error]
-            at = eval("Thread.current.backtrace_locations(1)", b)
+            at = eval("Thread.current.backtrace_locations", b)
             print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
             for i in at
               print "\tfrom #{i}\n"
