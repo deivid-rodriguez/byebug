@@ -9,21 +9,24 @@ module Byebug
 
     def execute
       if not @match[1]
-        unless @state.context
-          errmsg "We are not in a state that has an associated file.\n"
-          return
+        unless @state.file
+          return errmsg "We are not in a state that has an associated file.\n"
         end
         file = @state.file
-        line_number = @state.line
+        line = @state.line if @state.line
       elsif @pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1])
-        file, line_number = @pos_match.captures
+        file, line = @pos_match.captures
+      elsif File.exist?(@match[1])
+        file = @match[1]
       else
-        errmsg "Invalid file/line number specification: #{@match[1]}\n"
-        return
+        return errmsg "Invalid file[:line] number specification: #{@match[1]}\n"
       end
-      editor = ENV['EDITOR'] || 'ex'
+
+      editor = ENV['EDITOR'] || 'vim'
+
       if File.readable?(file)
-        system("#{editor} +#{line_number} #{file}")
+        system("#{editor} +#{line} #{file}") if line
+        system("#{editor} #{file}") unless line
       else
         errmsg "File \"#{file}\" is not readable.\n"
       end

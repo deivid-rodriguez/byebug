@@ -16,9 +16,9 @@ class TestEdit < TestDsl::TestCase
   describe 'open default editor' do
     temporary_change_hash ENV, 'EDITOR', nil
 
-    it 'must call "ex" with current line and file if EDITOR env not set' do
+    it 'must call "vim" with current line and file if EDITOR env not set' do
       Byebug::Edit.any_instance.expects(:system).
-                                with("ex +2 #{fullpath('edit')}")
+                                with("vim +2 #{fullpath('edit')}")
       enter 'edit'
       debug_file 'edit'
     end
@@ -44,6 +44,6 @@ class TestEdit < TestDsl::TestCase
   it 'must show an error if there is incorrect syntax' do
     enter 'edit blabla'
     debug_file 'edit'
-    check_error_includes 'Invalid file/line number specification: blabla'
+    check_error_includes 'Invalid file[:line] number specification: blabla'
   end
 end
