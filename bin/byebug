@@ -62,9 +62,8 @@ require File.dirname(__FILE__) + "/../lib/byebug"
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
-  # Otherwise we get a load message that looks like byebug has a problem.
   output = `ruby -c "#{Byebug::PROG_SCRIPT}" 2>&1`
-  if $?.exitstatus != 0 and RUBY_PLATFORM !~ /mswin/
+  if $?.exitstatus != 0
     puts output
     exit $?.exitstatus
   end
