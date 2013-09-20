@@ -4,10 +4,17 @@ module Byebug
 
     class << self
       def real_stack_size
-        Thread.current.backtrace_locations
-          .drop_while{ |l| IGNORED_FILES.include?(l.path) || l.path == '(eval)' }
-          .take_while{ |l| !IGNORED_FILES.include?(l.path) }.size
+        if backtrace = Thread.current.backtrace_locations
+          backtrace.drop_while { |l| ignored(l.path) || l.path == '(eval)' }
+                   .take_while { |l| !ignored(l.path) }
+                   .size
+        end
       end
+
+      def ignored(path)
+        IGNORED_FILES.include?(path)
+      end
+      private :ignored
     end
 
     def frame_locals frame_no = 0

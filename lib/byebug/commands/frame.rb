@@ -99,15 +99,11 @@ module Byebug
     end
 
     def print_backtrace
-      if Byebug.post_mortem?
-        realsize = @state.context.stack_size
-      else
-        realsize = Context.real_stack_size
-        size = @state.context.stack_size
-        if size != realsize
-          errmsg "Byebug's stacksize (#{size}) should be #{realsize}. " \
-                 "This might be a bug in byebug or ruby's debugging API's\n"
-        end
+      realsize = Context.real_stack_size
+      size = @state.context.stack_size
+      if size != realsize
+        errmsg "Byebug's stacksize (#{size}) should be #{realsize}. " \
+               "This might be a bug in byebug or ruby's debugging API's\n"
       end
       (0...realsize).each do |idx|
         print_frame(idx)
