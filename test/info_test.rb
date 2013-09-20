@@ -96,7 +96,7 @@ class TestInfo < TestDsl::TestCase
   end
 
   describe 'Files info' do
-    let(:files) { (LineCache.cached_files + SCRIPT_LINES__.keys).uniq.sort }
+    let(:files) { SCRIPT_LINES__.keys.uniq.sort }
 
     it 'must show all files read in' do
       enter 'info files'
@@ -171,12 +171,6 @@ class TestInfo < TestDsl::TestCase
       debug_file 'info'
       check_output_includes \
         filename, lines, breakpoint_line_numbers, mtime, sha1
-    end
-
-    it 'must not show info about the file if the file is not loaded' do
-      enter "info file #{fullpath('info2')} basic"
-      debug_file 'info'
-      check_output_includes "File #{fullpath('info2')} is not cached"
     end
 
     it 'must not show any info if the parameter is invalid' do

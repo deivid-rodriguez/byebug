@@ -4,6 +4,7 @@ require_relative 'byebug/context'
 require_relative 'byebug/processor'
 require_relative 'byebug/remote'
 require 'stringio'
+require 'tracer'
 require 'linecache19'
 
 module Byebug
@@ -32,10 +33,9 @@ module Byebug
     Byebug.last_exception = nil
 
     def source_reload
-      Object.send(:remove_const, "SCRIPT_LINES__") if
-        Object.const_defined?("SCRIPT_LINES__")
-      Object.const_set("SCRIPT_LINES__", {})
-      LineCache::clear_file_cache
+      Object.send(:remove_const, 'SCRIPT_LINES__') if
+        Object.const_defined?('SCRIPT_LINES__')
+      Object.const_set('SCRIPT_LINES__', {})
     end
 
     #
@@ -44,9 +44,11 @@ module Byebug
     # @return "\n" if there was a problem. Leaking blanks are stripped off.
     #
     def line_at(filename, line_number)
-      @@autoreload = nil unless defined?(@@autoreload)
-      line = LineCache::getline filename, line_number, @@autoreload
-      return "\n" unless line
+      source_reload
+
+      return "\n" unless File.exist?(filename)
+      line = Tracer::Single.get_line(filename, line_number)
+
       return "#{line.gsub(/^\s+/, '').chomp}"
     end
 

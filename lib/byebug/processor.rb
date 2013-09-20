@@ -52,7 +52,6 @@ module Byebug
       if Command.settings[:basename]
         File.basename(filename)
       else
-        # Cache this?
         Pathname.new(filename).cleanpath.to_s
       end
     end
@@ -109,6 +108,7 @@ module Byebug
     protect :at_tracing
 
     def at_line(context, file, line)
+      Byebug.source_reload if Command.settings[:autoreload]
       process_commands(context, file, line)
     end
     protect :at_line

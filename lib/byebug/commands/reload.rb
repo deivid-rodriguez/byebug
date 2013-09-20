@@ -1,5 +1,16 @@
 module Byebug
 
+  module ReloadFunctions
+    def getlines(file, line)
+      unless (lines = SCRIPT_LINES__[file]) and lines != true
+        Tracer::Single.get_line(file, line) if File.exist?(file)
+        lines = SCRIPT_LINES__[file]
+        lines = nil if lines == true
+      end
+      lines
+    end
+  end
+
   # Implements byebug "reload" command.
   class ReloadCommand < Command
     self.allow_in_control = true

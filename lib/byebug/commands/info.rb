@@ -134,7 +134,7 @@ module Byebug
 
     def info_file_path(file)
       print "File #{file}"
-      path = LineCache.path(file)
+      path = File.expand_path(file)
       print " - #{path}\n" if path and path != file
     end
     private :info_file_path
@@ -171,12 +171,6 @@ module Byebug
       subcmd = Command.find(InfoFileSubcommands, args[1] || 'basic')
       return errmsg "Invalid parameter #{args[1]}\n" unless subcmd
 
-      unless LineCache::cached?(args[0])
-        return print "File #{args[0]} is not cached\n" unless
-          LineCache::cached_script?(args[0])
-        LineCache::cache(args[0], Command.settings[:autoreload])
-      end
-
       if %w(all basic).member?(subcmd.name)
         info_file_path(args[0])
         info_file_lines(args[0])
@@ -192,8 +186,7 @@ module Byebug
     end
 
     def info_files(*args)
-      files = LineCache::cached_files
-      files += SCRIPT_LINES__.keys unless 'stat' == args[0]
+      files = SCRIPT_LINES__.keys
       files.uniq.sort.each do |file|
         info_file_path(file)
         info_file_mtime(file)
