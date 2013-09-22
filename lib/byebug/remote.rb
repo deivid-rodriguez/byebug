@@ -19,19 +19,12 @@ module Byebug
       self.interface = nil
       start
 
-      if port.kind_of?(Array)
-        cmd_port, _ = port
-      else
-        cmd_port, _ = port, port + 1
-      end
-
       yield if block_given?
 
       mutex = Mutex.new
       proceed = ConditionVariable.new
 
-      server = TCPServer.new(host, cmd_port)
-      @cmd_port = cmd_port = server.addr[1]
+      server = TCPServer.new(host, port)
       @thread = DebugThread.new do
         while (session = server.accept)
           self.interface = RemoteInterface.new(session)
