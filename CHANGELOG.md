@@ -1,3 +1,12 @@
+# 2.2.0
+
+* Small fixes in stack_size calculations
+* Warning free byebug
+* Add `verbose` setting for TracePoint API event inspection
+* Fix setting `post_mortem` mode
+* Allow `edit <filename>` without a line number
+
+
 # 2.1.1
 
 * Fix bug when debugging code inside '-e' flag
