@@ -21,10 +21,11 @@ module Byebug
           else
             dbg_cmd = (@match[3] && @match[3] !~ /nostop/) ? 'byebug(1,0)' : ''
           end
-          eval("trace_var(:#{varname}) do |val|
+          eval("trace_var(:\"#{varname}\") do |val|
                   print \"traced variable \#{varname} has value \#{val}\n\"
                   #{dbg_cmd}
                 end")
+          print "Tracing variable \"#{varname}\".\n"
         else
           errmsg "#{varname} is not a global variable.\n"
         end
