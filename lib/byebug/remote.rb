@@ -20,12 +20,10 @@ module Byebug
       start
 
       if port.kind_of?(Array)
-        cmd_port, ctrl_port = port
+        cmd_port, _ = port
       else
-        cmd_port, ctrl_port = port, port + 1
+        cmd_port, _ = port, port + 1
       end
-
-      ctrl_port = start_control(host, ctrl_port)
 
       yield if block_given?
 
@@ -49,20 +47,6 @@ module Byebug
           proceed.wait(mutex)
         end
       end
-    end
-
-    def start_control(host = nil, ctrl_port = PORT + 1)
-      return @ctrl_port if @control_thread
-      server = TCPServer.new(host, ctrl_port)
-      @ctrl_port = server.addr[1]
-      @control_thread = Thread.new do
-        while (session = server.accept)
-          interface = RemoteInterface.new(session)
-          ControlCommandProcessor.new(interface).process_commands
-          processor.process_commands
-        end
-      end
-      @ctrl_port
     end
 
     #
