@@ -9,7 +9,7 @@ end
 
 if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc/
   $CFLAGS ||= ''
-  $CFLAGS += ' -Wall -Werror'
+  $CFLAGS += ' -Wall -Werror -Wno-unused-parameter'
   $CFLAGS += ' -gdwarf-2 -g3' if ENV['debug']
 end
 
