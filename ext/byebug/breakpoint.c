@@ -289,11 +289,11 @@ brkpt_remove(VALUE self, VALUE breakpoints, VALUE id_value)
 
   id = FIX2INT(id_value);
 
-  for(i = 0; i < RARRAY_LEN(breakpoints); i++)
+  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
-    if(breakpoint->id == id)
+    if (breakpoint->id == id)
     {
       rb_ary_delete_at(breakpoints, i);
       return breakpoint_object;
