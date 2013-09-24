@@ -2926,7 +2926,7 @@ Boolean. @xref{Fullpath}.
 Fixnum. Number of lines to show in a @code{list} command. @xref{Listsize}.
 @item :autoreload
 Boolean. True if we should reread the source every time it changes. @xref{Autoreload}.
-@item :stack_trace_on_error
+@item :stack_on_error
 Boolean. True if we should produce a stack trace on eval errors. @xref{Trace}.
 @item :width
 Fixnum. Number of characters byebug thinks are in a line. @xref{Width}.

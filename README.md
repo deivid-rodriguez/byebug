@@ -125,11 +125,10 @@ Full lists of subcommands:
 `variables`.
 * set: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
 `callstyle`,`forcestep`,`fullpath`,`history`,`linetrace`,`linetrace_plus`,
-`listsize`,`post_mortem`,`stack_trace_on_error`,`testing`,`verbose`,`width`.
+`listsize`,`post_mortem`,`stack_on_error`,`testing`,`verbose`,`width`.
 * show: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
 `callstyle`,`commands`,`forcestep`,`fullpath`,`history`,`linetrace`,
-`linetrace_plus`, `listsize`,`post_mortem`,`stack_trace_on_error`,`verbose`,
-`width`.
+`linetrace_plus`, `listsize`,`post_mortem`,`stack_on_error`,`verbose`, `width`.
 
 
 ## Getting Started

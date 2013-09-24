@@ -53,14 +53,13 @@ module Byebug
       when /^post_mortem$/
         Byebug.post_mortem = setting_value
       when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
-             testing|stack_trace_on_error$/x
+             testing|stack_on_error$/x
         Command.settings[setting_name.to_sym] = setting_value
       else
         return print "Unknown setting #{@match[1]}.\n"
       end
     end
   end
-
 
   # Implements byebug "set" command.
   class SetCommand < Command
@@ -91,7 +90,7 @@ module Byebug
         'Set line execution tracing to show different lines'],
        ['listsize', 3, false, 'Set number of source lines to list by default'],
        ['post_mortem', 2, true, 'Enable post-mortem mode'],
-       ['stack_trace_on_error', 1, true,
+       ['stack_on_error', 1, true,
         'Display stack trace when "eval" raises exception'],
        ['verbose', 1, true,
         'Enable verbose output of TracePoint API events is enabled'],

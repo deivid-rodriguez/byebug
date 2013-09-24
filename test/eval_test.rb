@@ -53,7 +53,7 @@ class TestEval < TestDsl::TestCase
 
   describe 'stack trace on error' do
     describe 'when enabled' do
-      temporary_change_hash Byebug.settings, :stack_trace_on_error, true
+      temporary_change_hash Byebug.settings, :stack_on_error, true
 
       it 'must show a stack trace' do
         enter 'eval 2 / 0'
@@ -64,7 +64,7 @@ class TestEval < TestDsl::TestCase
     end
 
     describe 'when disabled' do
-      temporary_change_hash Byebug.settings, :stack_trace_on_error, false
+      temporary_change_hash Byebug.settings, :stack_on_error, false
 
       it 'must only show exception' do
         enter 'eval 2 / 0'

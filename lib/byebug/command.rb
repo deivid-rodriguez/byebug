@@ -168,7 +168,7 @@ module Byebug
     register_setting_var(:forcestep, false)
     register_setting_var(:fullpath, true)
     register_setting_var(:listsize, 10)
-    register_setting_var(:stack_trace_on_error, false)
+    register_setting_var(:stack_on_error, false)
     register_setting_var(:linetrace_plus, false)
     cols = terminal_width || 160
     register_setting_var(:width, cols > 10 ? cols : 160)
@@ -196,7 +196,7 @@ module Byebug
         begin
           eval(str, b)
         rescue StandardError, ScriptError => e
-          if Command.settings[:stack_trace_on_error]
+          if Command.settings[:stack_on_error]
             at = eval("Thread.current.backtrace_locations", b)
             print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
             for i in at
@@ -241,18 +241,17 @@ module Byebug
   # Use Byebug.settings[] and Byebug.settings[]= methods to query and set
   # byebug settings. These settings are available:
   #
-  #  :autoeval             - evaluates input in the current binding if it's not
-  #                          recognized as a byebug command
-  #  :autoirb              - automatically calls 'irb' command on breakpoint
-  #  :autolist             - automatically calls 'list' command on breakpoint
-  #  :autoreload           - makes 'list' command always display up-to-date
-  #                          source code
-  #  :frame_class_names    - displays method's class name when showing frame
-  #                          stack
-  #  :forcestep            - stepping command always move to the new line
-  #  :fullpath             - displays full paths when showing frame stack
-  #  :stack_trace_on_error - shows full stack trace if eval command results in
-  #                          an exception
+  #  :autoeval          - evaluates input in the current binding if it's not
+  #                       recognized as a byebug command
+  #  :autoirb           - automatically calls 'irb' command on breakpoint
+  #  :autolist          - automatically calls 'list' command on breakpoint
+  #  :autoreload        - makes 'list' command always display up-to-date source
+  #                       code
+  #  :frame_class_names - displays method's class name when showing frame stack
+  #  :forcestep         - stepping command always move to the new line
+  #  :fullpath          - displays full paths when showing frame stack
+  #  :stack_on_error    - shows full stack trace if eval command results in an
+  #                       exception
   #
   def self.settings
     Command.settings

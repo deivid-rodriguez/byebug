@@ -128,8 +128,8 @@ module Byebug
       when /^post_mortem$/
         on_off = Byebug.post_mortem?
         return "post-mortem mode is #{show_onoff(on_off)}"
-      when /^stack_trace_on_error$/
-        on_off = Command.settings[:stack_trace_on_error]
+      when /^stack_on_error$/
+        on_off = Command.settings[:stack_on_error]
         return "Displaying stack trace is #{show_onoff(on_off)}."
       when /^verbose$/
         on_off = Byebug.verbose
@@ -176,7 +176,7 @@ module Byebug
        ['listsize', 3, 'Show number of source lines to list by default'],
        ['post-mortem', 3, 'Show whether we should go into post-mortem ' \
                           'debugging on an uncaught exception'],
-       ['stack_trace_on_error', 1, 'Show whether a stack trace is displayed ' \
+       ['stack_on_error', 1, 'Show whether a stack trace is displayed ' \
                                    'when "eval" raises an exception'],
        ['verbose', 4, true,
         'Show whether verbose output for debugging byebug itself is enabled'],
