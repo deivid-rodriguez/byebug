@@ -225,11 +225,7 @@ options.stop = false if options.tracing
 Byebug.tracing = options.tracing
 
 loop do
-  begin
-    debug_program(options)
-  rescue Exception
-    p $!, $@
-  end
+  debug_program(options)
 
   break if options.quit
 
