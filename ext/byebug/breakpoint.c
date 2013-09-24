@@ -277,31 +277,6 @@ brkpt_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
   return Qnil;
 }
 
-static VALUE
-brkpt_remove(VALUE self, VALUE breakpoints, VALUE id_value)
-{
-  int i;
-  int id;
-  VALUE breakpoint_object;
-  breakpoint_t *breakpoint;
-
-  if (breakpoints == Qnil) return Qnil;
-
-  id = FIX2INT(id_value);
-
-  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
-  {
-    breakpoint_object = rb_ary_entry(breakpoints, i);
-    Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
-    if (breakpoint->id == id)
-    {
-      rb_ary_delete_at(breakpoints, i);
-      return breakpoint_object;
-    }
-  }
-  return Qnil;
-}
-
 int
 filename_cmp_impl(VALUE source, char *file)
 {
@@ -511,8 +486,6 @@ Init_breakpoint(VALUE mByebug)
 
   rb_define_alloc_func(cBreakpoint, brkpt_create);
   rb_define_method(cBreakpoint, "initialize", brkpt_initialize, 3);
-
-  rb_define_singleton_method(cBreakpoint, "remove", brkpt_remove, 2);
 
   rb_define_method(cBreakpoint, "enabled?"      , brkpt_enabled          , 0);
   rb_define_method(cBreakpoint, "enabled="      , brkpt_set_enabled      , 1);

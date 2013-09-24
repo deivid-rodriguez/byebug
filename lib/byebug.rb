@@ -65,8 +65,13 @@ module Byebug
       breakpoint
     end
 
+    #
+    # Remove a breakpoint
+    #
+    # @param [integer] breakpoint number
+    #
     def remove_breakpoint(id)
-      Breakpoint.remove breakpoints, id
+      breakpoints.delete_at(id)
     end
 
     def interface=(value)
