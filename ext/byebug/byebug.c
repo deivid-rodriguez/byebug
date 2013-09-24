@@ -37,7 +37,7 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     VALUE line  = rb_tracearg_lineno(trace_arg);
     VALUE event = rb_tracearg_event(trace_arg);
     VALUE mid   = rb_tracearg_method_id(trace_arg);
-    for (i=0; i<dc->stack_size; i++) putc('|', stderr);
+    for (i=0; i<dc->calced_stack_size; i++) putc('|', stderr);
     fprintf(stderr, "[#%d] %s@%s:%d %s\n", dc->thnum,
       rb_id2name(SYM2ID(event)), RSTRING_PTR(path), NUM2INT(line),
       NIL_P(mid) ? "" : rb_id2name(SYM2ID(mid)));
@@ -194,7 +194,7 @@ line_event(VALUE trace_point, void *data)
 
   EVENT_COMMON
 
-  if (dc->stack_size == 0) dc->stack_size++;
+  if (dc->calced_stack_size == 0) dc->calced_stack_size++;
 
   if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
       dc->last_file != rb_tracearg_path(trace_arg))
@@ -208,12 +208,12 @@ line_event(VALUE trace_point, void *data)
   if (moved || !CTX_FL_TEST(dc, CTX_FL_FORCE_MOVE))
   {
     dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
-    if (dc->stack_size <= dc->dest_frame)
+    if (dc->calced_stack_size <= dc->dest_frame)
     {
       dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
-      if (dc->stack_size < dc->dest_frame)
+      if (dc->calced_stack_size < dc->dest_frame)
       {
-        dc->dest_frame = dc->stack_size;
+        dc->dest_frame = dc->calced_stack_size;
         rb_funcall(mByebug, rb_intern("print"), 1,
           rb_str_new2("Next went up a frame because previous frame finished\n"));
       }
@@ -238,7 +238,7 @@ call_event(VALUE trace_point, void *data)
 
   EVENT_SETUP
 
-  dc->stack_size++;
+  dc->calced_stack_size++;
 
   EVENT_COMMON
 
@@ -265,11 +265,11 @@ return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP
 
-  if (dc->stack_size > 0) dc->stack_size--;
+  if (dc->calced_stack_size > 0) dc->calced_stack_size--;
 
   EVENT_COMMON
 
-  if (dc->stack_size + 1 == dc->before_frame)
+  if (dc->calced_stack_size + 1 == dc->before_frame)
   {
     VALUE file, line;
 
@@ -279,7 +279,7 @@ return_event(VALUE trace_point, void *data)
     call_at_return(context, dc, file, line);
   }
 
-  if (dc->stack_size + 1 == dc->after_frame)
+  if (dc->calced_stack_size + 1 == dc->after_frame)
   {
     reset_stepping_stop_points(dc);
     dc->steps = 1;
@@ -293,7 +293,7 @@ c_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP
 
-  dc->stack_size++;
+  dc->calced_stack_size++;
 
   EVENT_COMMON
 
@@ -305,7 +305,7 @@ c_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP
 
-  if (dc->stack_size > 0) dc->stack_size--;
+  if (dc->calced_stack_size > 0) dc->calced_stack_size--;
 
   EVENT_COMMON
 
@@ -346,7 +346,7 @@ raise_event(VALUE trace_point, void *data)
 
   expn_class = rb_obj_class(err);
 
-  if (catchpoints == Qnil || dc->stack_size == 0 ||
+  if (catchpoints == Qnil || dc->calced_stack_size == 0 ||
       CTX_FL_TEST(dc, CTX_FL_CATCHING) ||
       RHASH_TBL(catchpoints)->num_entries == 0)
   {
@@ -606,9 +606,6 @@ bb_load(int argc, VALUE *argv, VALUE self)
   Data_Get_Struct(context, debug_context_t, dc);
 
   if (RTEST(stop)) dc->steps = 1;
-
-  /* Reset stack size to ignore byebug's own frames */
-  dc->stack_size = 0;
 
   /* Initializing $0 to the script's path */
   ruby_script(RSTRING_PTR(file));

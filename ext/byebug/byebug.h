@@ -29,7 +29,7 @@ typedef enum {
 } ctx_stop_reason;
 
 typedef struct {
-  int stack_size;
+  int calced_stack_size;
   int flags;
   ctx_stop_reason stop_reason;
 

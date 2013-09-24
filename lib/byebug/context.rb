@@ -3,11 +3,17 @@ module Byebug
   class Context
 
     class << self
-      def real_stack_size
+      def stack_size
         if backtrace = Thread.current.backtrace_locations
           backtrace.drop_while { |l| ignored(l.path) || l.path == '(eval)' }
                    .take_while { |l| !ignored(l.path) }
                    .size
+        end
+      end
+
+      def real_stack_size
+        if backtrace = Thread.current.backtrace_locations
+          backtrace.size
         end
       end
 

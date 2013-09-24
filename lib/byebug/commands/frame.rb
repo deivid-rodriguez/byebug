@@ -8,7 +8,7 @@ module Byebug
 
     def switch_to_frame(frame_no)
       if frame_no < 0
-        abs_frame_no = @state.context.stack_size + frame_no
+        abs_frame_no = Context.stack_size + frame_no
       else
         abs_frame_no = frame_no
       end
@@ -20,7 +20,7 @@ module Byebug
       step = jump_no/total_jumps
       loop do
         new_pos += step
-        return new_pos if new_pos < 0 || new_pos >= @state.context.stack_size
+        return new_pos if new_pos < 0 || new_pos >= Context.stack_size
 
         next if c_frame?(new_pos)
 
@@ -39,7 +39,7 @@ module Byebug
       end
 
       return errmsg "Can't navigate beyond the oldest frame\n" if
-        abs_frame_pos >= @state.context.stack_size
+        abs_frame_pos >= Context.stack_size
       return errmsg "Can't navigate beyond the newest frame\n" if
         abs_frame_pos < 0
 
@@ -99,10 +99,10 @@ module Byebug
     end
 
     def print_backtrace
-      realsize = Context.real_stack_size
-      size = @state.context.stack_size
-      if size != realsize
-        errmsg "Byebug's stacksize (#{size}) should be #{realsize}. " \
+      realsize = Context.stack_size
+      calcedsize = @state.context.calced_stack_size
+      if calcedsize != realsize
+        errmsg "Byebug's stacksize (#{calcedsize}) should be #{realsize}. " \
                "This might be a bug in byebug or ruby's debugging API's\n"
       end
       (0...realsize).each do |idx|

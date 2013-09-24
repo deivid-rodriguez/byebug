@@ -190,7 +190,7 @@ module Byebug
     end
 
     def handle_post_mortem(exp)
-      return if !exp || !exp.__bb_context || exp.__bb_context.stack_size == 0
+      return if !exp || !exp.__bb_context || !exp.__bb_context.calced_stack_size
       orig_tracing = Byebug.tracing?
       Byebug.tracing = false
       Byebug.last_exception = exp
@@ -214,7 +214,7 @@ module Kernel
   def byebug(steps_into = 1, steps_out = 2)
     Byebug.start
     Byebug.run_init_script(StringIO.new)
-    if Byebug.current_context.stack_size > 2
+    if Byebug.current_context.calced_stack_size > 2
       Byebug.current_context.stop_return steps_out if steps_out >= 1
     end
     Byebug.current_context.step_into steps_into if steps_into >= 0

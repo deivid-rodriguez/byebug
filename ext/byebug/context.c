@@ -55,15 +55,15 @@ context_create(VALUE thread)
 {
   debug_context_t *context = ALLOC(debug_context_t);
 
-  context->last_file   = Qnil;
-  context->last_line   = Qnil;
-  context->flags       = 0;
-  context->stack_size  = real_stack_size();
-  context->thnum       = ++thnum_max;
-  context->thread      = thread;
+  context->last_file         = Qnil;
+  context->last_line         = Qnil;
+  context->flags             = 0;
+  context->calced_stack_size = real_stack_size();
+  context->thnum             = ++thnum_max;
+  context->thread            = thread;
   reset_stepping_stop_points(context);
-  context->stop_reason = CTX_STOP_NONE;
-  context->backtrace   = Qnil;
+  context->stop_reason       = CTX_STOP_NONE;
+  context->backtrace         = Qnil;
 
   if (rb_obj_class(thread) == cDebugThread) CTX_FL_SET(context, CTX_FL_IGNORE);
 
@@ -192,16 +192,17 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
 #define FRAME_SETUP                                                   \
   debug_context_t *context;                                           \
   VALUE frame_no;                                                     \
-  int frame_n;                                                        \
+  int frame_n, stack_size;                                            \
   Data_Get_Struct(self, debug_context_t, context);                    \
   if (!rb_scan_args(argc, argv, "01", &frame_no))                     \
     frame_n = 0;                                                      \
   else                                                                \
     frame_n = FIX2INT(frame_no);                                      \
-  if (frame_n < 0 || frame_n >= real_stack_size(rb_thread_current())) \
+  stack_size = real_stack_size();                                     \
+  if (frame_n < 0 || frame_n >= stack_size)                           \
   {                                                                   \
     rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
-             frame_n, real_stack_size(rb_thread_current() - 1));      \
+             frame_n, stack_size - 1);                                \
   }                                                                   \
 
 /*
@@ -349,17 +350,20 @@ Context_resume(VALUE self)
 
 /*
  *  call-seq:
- *    context.stack_size-> int
+ *    context.calced_stack_size-> int
  *
- *  Returns the size of the context stack.
+ *  Returns the calculated size of the context stack.
+ *
+ *  NOTE: it shouldn't be necessary to expose this, this is only done to ease
+ *  the detection of TracePoint API bugs.
  */
 static inline VALUE
-Context_stack_size(VALUE self)
+Context_calced_stack_size(VALUE self)
 {
   debug_context_t *context;
   Data_Get_Struct(self, debug_context_t, context);
 
-  return INT2FIX(context->stack_size);
+  return INT2FIX(context->calced_stack_size);
 }
 
 static VALUE
@@ -431,12 +435,13 @@ static VALUE
 Context_step_out(VALUE self, VALUE frame)
 {
   debug_context_t *context;
+
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
 
-  context->after_frame = context->stack_size - FIX2INT(frame);
+  context->after_frame = context->calced_stack_size - FIX2INT(frame);
 
   return frame;
 }
@@ -458,15 +463,15 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (context->stack_size == 0)
+  if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
   rb_scan_args(argc, argv, "12", &lines, &frame, &force);
-  context->lines = FIX2INT(lines);
-
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
     rb_raise(rb_eRuntimeError, "Destination frame is out of range.");
-  context->dest_frame = context->stack_size - FIX2INT(frame);
+
+  context->lines = FIX2INT(lines);
+  context->dest_frame = context->calced_stack_size - FIX2INT(frame);
 
   if (RTEST(force))
     CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
@@ -487,12 +492,12 @@ static VALUE
 Context_stop_return(VALUE self, VALUE frame)
 {
   debug_context_t *context;
-  Data_Get_Struct(self, debug_context_t, context);
 
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->stack_size)
+  Data_Get_Struct(self, debug_context_t, context);
+  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
 
-  context->before_frame = context->stack_size - FIX2INT(frame);
+  context->before_frame = context->calced_stack_size - FIX2INT(frame);
 
   return frame;
 }
@@ -628,27 +633,27 @@ Init_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
 
-  rb_define_method(cContext, "dead?"        , Context_dead         ,  0);
-  rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
-  rb_define_method(cContext, "frame_class"  , Context_frame_class  , -1);
-  rb_define_method(cContext, "frame_file"   , Context_frame_file   , -1);
-  rb_define_method(cContext, "frame_line"   , Context_frame_line   , -1);
-  rb_define_method(cContext, "frame_method" , Context_frame_method , -1);
-  rb_define_method(cContext, "frame_self"   , Context_frame_self   , -1);
-  rb_define_method(cContext, "ignored?"     , Context_ignored      ,  0);
-  rb_define_method(cContext, "resume"       , Context_resume       ,  0);
-  rb_define_method(cContext, "stack_size"   , Context_stack_size   ,  0);
-  rb_define_method(cContext, "step_into"    , Context_step_into    , -1);
-  rb_define_method(cContext, "step_out"     , Context_step_out     ,  1);
-  rb_define_method(cContext, "step_over"    , Context_step_over    , -1);
-  rb_define_method(cContext, "stop_return"  , Context_stop_return  ,  1);
-  rb_define_method(cContext, "stop_reason"  , Context_stop_reason  ,  0);
-  rb_define_method(cContext, "suspend"      , Context_suspend      ,  0);
-  rb_define_method(cContext, "suspended?"   , Context_is_suspended ,  0);
-  rb_define_method(cContext, "thnum"        , Context_thnum        ,  0);
-  rb_define_method(cContext, "thread"       , Context_thread       ,  0);
-  rb_define_method(cContext, "tracing"      , Context_tracing      ,  0);
-  rb_define_method(cContext, "tracing="     , Context_set_tracing  ,  1);
+  rb_define_method(cContext, "dead?"            , Context_dead             ,  0);
+  rb_define_method(cContext, "frame_binding"    , Context_frame_binding    , -1);
+  rb_define_method(cContext, "frame_class"      , Context_frame_class      , -1);
+  rb_define_method(cContext, "frame_file"       , Context_frame_file       , -1);
+  rb_define_method(cContext, "frame_line"       , Context_frame_line       , -1);
+  rb_define_method(cContext, "frame_method"     , Context_frame_method     , -1);
+  rb_define_method(cContext, "frame_self"       , Context_frame_self       , -1);
+  rb_define_method(cContext, "ignored?"         , Context_ignored          ,  0);
+  rb_define_method(cContext, "resume"           , Context_resume           ,  0);
+  rb_define_method(cContext, "calced_stack_size", Context_calced_stack_size,  0);
+  rb_define_method(cContext, "step_into"        , Context_step_into        , -1);
+  rb_define_method(cContext, "step_out"         , Context_step_out         ,  1);
+  rb_define_method(cContext, "step_over"        , Context_step_over        , -1);
+  rb_define_method(cContext, "stop_return"      , Context_stop_return      ,  1);
+  rb_define_method(cContext, "stop_reason"      , Context_stop_reason      ,  0);
+  rb_define_method(cContext, "suspend"          , Context_suspend          ,  0);
+  rb_define_method(cContext, "suspended?"       , Context_is_suspended     ,  0);
+  rb_define_method(cContext, "thnum"            , Context_thnum            ,  0);
+  rb_define_method(cContext, "thread"           , Context_thread           ,  0);
+  rb_define_method(cContext, "tracing"          , Context_tracing          ,  0);
+  rb_define_method(cContext, "tracing="         , Context_set_tracing      ,  1);
 
   cDebugThread  = rb_define_class_under(mByebug, "DebugThread", rb_cThread);
   rb_define_singleton_method(cDebugThread, "inherited", DebugThread_inherited, 1);

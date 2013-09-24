@@ -2882,12 +2882,10 @@ Return the filename of the location of the indicated frame position.
 @vindex @code{Byebug.context.frame_method}
 Symbol of the method name of the indicated frame position.
 
-@item Byebug.context.stack_size
-@vindex @code{Byebug.context.stack_size}
-Return the number the size of the frame stack. Note this may be less
-that the actual frame stack size if byebug recording
-(@code{Byebug.start}) was turned on at after some blocks were added
-and not finished when the @code{Byebug.start} was issued.
+@item Byebug.context.calced_stack_size
+@vindex @code{Byebug.context.calced_stack_size}
+Returns the stack size calculated by byebug. This is initialized when byebug is
+started and after that is kept up-to-date using the TracePoint API events.
 @end table
 
 @node Byebug.settings
