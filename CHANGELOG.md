@@ -1,3 +1,9 @@
+# 2.2.1
+
+* Fix compilation issue introduced by 2.2.0 (#26)
+* "show" and "set" option `stack_trace_on_error` is now called `stack_on_error`
+
+
 # 2.2.0
 
 * Small fixes in stack_size calculations
