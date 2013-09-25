@@ -1,3 +1,8 @@
+# 2.2.2
+
+* Fix another compilation issue in 64 bit systems
+
+
 # 2.2.1
 
 * Fix compilation issue introduced by 2.2.0 (#26)
