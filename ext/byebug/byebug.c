@@ -355,7 +355,7 @@ raise_event(VALUE trace_point, void *data)
   }
 
   ancestors = rb_mod_ancestors(expn_class);
-  for (i = 0; i < RARRAY_LEN(ancestors); i++)
+  for (i = 0; i < RARRAY_LENINT(ancestors); i++)
   {
     VALUE mod_name;
     VALUE hit_count;
@@ -413,7 +413,7 @@ register_tracepoints(VALUE self)
     tracepoints = traces;
   }
 
-  for (i = 0; i < RARRAY_LEN(traces); i++)
+  for (i = 0; i < RARRAY_LENINT(traces); i++)
     rb_tracepoint_enable(rb_ary_entry(traces, i));
 }
 
@@ -422,7 +422,7 @@ clear_tracepoints(VALUE self)
 {
   int i;
 
-  for (i = RARRAY_LEN(tracepoints)-1; i >= 0; i--)
+  for (i = RARRAY_LENINT(tracepoints)-1; i >= 0; i--)
     rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
 }
 
@@ -450,7 +450,7 @@ bb_contexts(VALUE self)
   new_list = rb_ary_new();
   list = rb_funcall(rb_cThread, rb_intern("list"), 0);
 
-  for (i = 0; i < RARRAY_LEN(list); i++)
+  for (i = 0; i < RARRAY_LENINT(list); i++)
   {
     VALUE thread = rb_ary_entry(list, i);
     thread_context_lookup(thread, &context);
@@ -460,7 +460,7 @@ bb_contexts(VALUE self)
   threads_clear(threads);
   Data_Get_Struct(threads, threads_table_t, t_tbl);
 
-  for (i = 0; i < RARRAY_LEN(new_list); i++)
+  for (i = 0; i < RARRAY_LENINT(new_list); i++)
   {
     context = rb_ary_entry(new_list, i);
     Data_Get_Struct(context, debug_context_t, dc);

@@ -98,7 +98,7 @@ dc_frame_get(const debug_context_t *context, int frame_index,
   if (NIL_P(dc_backtrace(context)))
     rb_raise(rb_eRuntimeError, "Backtrace information is not available");
 
-  if (frame_index >= RARRAY_LEN(dc_backtrace(context)))
+  if (frame_index >= RARRAY_LENINT(dc_backtrace(context)))
     rb_raise(rb_eRuntimeError, "That frame doesn't exist!");
 
   frame = rb_ary_entry(dc_backtrace(context), frame_index);
@@ -136,7 +136,7 @@ load_backtrace(const rb_debug_inspector_t *inspector)
   VALUE locs = rb_debug_inspector_backtrace_locations(inspector);
   int i;
 
-  for (i=0; i<RARRAY_LEN(locs); i++)
+  for (i=0; i<RARRAY_LENINT(locs); i++)
   {
     VALUE frame = rb_ary_new();
     rb_ary_push(frame, rb_ary_entry(locs, i));

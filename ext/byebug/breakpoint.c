@@ -444,7 +444,7 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
 
   file = RSTRING_PTR(source);
   line = FIX2INT(pos);
-  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
+  for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     if (check_breakpoint_by_pos(breakpoint_object, file, line) &&
@@ -464,7 +464,7 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
   VALUE breakpoint_object;
   int i;
 
-  for (i = 0; i < RARRAY_LEN(breakpoints); i++)
+  for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     if (check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
