@@ -68,7 +68,7 @@ placed at the end of a block or method call.
 
 ## Semantic Versioning
 
-Byebug tries to follow [semantic versioning](semver.org). Backwards
+Byebug tries to follow [semantic versioning](http://semver.org). Backwards
 compatibility doesn't seem like a critic issue for a debugger because it's not
 supposed to be used permanently by any program, let alone in production
 environments. However, I still like the idea of giving some meaning to version
