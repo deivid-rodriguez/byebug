@@ -88,10 +88,10 @@ module Byebug
 
       def method_missing(meth, *args, &block)
         if meth.to_s =~ /^(.+?)=$/
-          @options[$1.intern] = args.first
+          options[$1.intern] = args.first
         else
-          if @options.has_key?(meth)
-            @options[meth]
+          if options.has_key?(meth)
+            options[meth]
           else
             super
           end
