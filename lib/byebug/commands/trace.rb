@@ -15,7 +15,7 @@ module Byebug
         print "#{show_setting('linetrace')}\n"
       elsif @match[1] =~ /var(?:iable)?/
         varname = @match[2]
-        if debug_eval("defined?(#{varname})")
+        if bb_eval("defined?(#{varname})")
           if @match[3] && @match[3] !~ /(:?no)?stop/
             errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[3]}\"\n"
           else

@@ -42,7 +42,7 @@ module Byebug
         end
       elsif line !~ /^\d+$/
         # See if "line" is a method/function name
-        klass = debug_silent_eval(file)
+        klass = bb_warning_eval(file)
         if klass && klass.kind_of?(Module)
           class_name = klass.name if klass
         else

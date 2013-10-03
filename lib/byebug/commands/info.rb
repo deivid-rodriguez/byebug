@@ -195,7 +195,7 @@ module Byebug
     end
 
     def info_instance_variables(*args)
-      obj = debug_eval('self')
+      obj = bb_eval('self')
       var_list(obj.instance_variables)
     end
 
@@ -261,7 +261,7 @@ module Byebug
       locals[:self] = @state.context.frame_self(@state.frame_pos)
       print_hash(locals)
 
-      obj = debug_eval('self')
+      obj = bb_eval('self')
       var_list(obj.instance_variables, obj.instance_eval{binding()})
       var_class_self
     end

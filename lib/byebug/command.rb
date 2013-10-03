@@ -189,36 +189,25 @@ module Byebug
         @state.confirm(msg) == 'y'
       end
 
-      def debug_eval(str, b = get_binding)
+      def bb_eval(str, b = get_binding)
         begin
           eval(str, b)
         rescue StandardError, ScriptError => e
-          if Command.settings[:stack_on_error]
-            at = eval("Thread.current.backtrace_locations", b)
-            print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
-            for i in at
-              print "\tfrom #{i}\n"
-            end
-          else
-            print "#{e.class} Exception: #{e.message}\n"
+          at = eval("Thread.current.backtrace_locations", b)
+          print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
+          for i in at
+            print "\tfrom #{i}\n"
           end
           nil
         end
       end
 
-      def debug_silent_eval(str, b = get_binding)
-        begin
-          eval(str, b)
-        rescue StandardError, ScriptError
-          nil
-        end
-      end
-
-      def debug_warning_eval(str, b = get_binding)
+      def bb_warning_eval(str, b = get_binding)
         begin
           eval(str, b)
         rescue StandardError, ScriptError => e
           print "#{e.class} Exception: #{e.message}\n"
+          nil
         end
       end
 

@@ -14,7 +14,7 @@ module Byebug
     end
 
     def execute
-      obj = debug_eval('method(:%s)' % @match[1])
+      obj = bb_eval('method(:%s)' % @match[1])
       if obj.is_a?(Method)
         begin
           print "%s\n", obj.signature.to_s
@@ -46,7 +46,7 @@ module Byebug
     end
 
     def execute
-      obj = debug_eval(@match.post_match)
+      obj = bb_eval(@match.post_match)
       if @match[1] == "iv"
         obj.instance_variables.sort.each do |v|
           print "#{v} = #{obj.instance_variable_get(v).inspect}\n"

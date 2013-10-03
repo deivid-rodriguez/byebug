@@ -33,7 +33,11 @@ module Byebug
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        print "#{debug_eval(expr, b).inspect}\n"
+        if Command.settings[:stack_on_error]
+          print "#{bb_eval(expr, b).inspect}\n"
+        else
+          print "#{bb_warning_eval(expr, b).inspect}\n"
+        end
       end
     rescue
       print "#{$!.class} Exception: #{$!.message}\n"
@@ -64,7 +68,11 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        PP.pp(debug_eval(@match.post_match, b), out)
+        if Command.settings[:stack_on_error]
+          PP.pp(bb_eval(@match.post_match, b), out)
+        else
+          PP.pp(bb_warning_eval(@match.post_match, b), out)
+        end
       end
       print out.string
     rescue
@@ -93,7 +101,11 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        vals = debug_eval(@match.post_match, b)
+        if Command.settings[:stack_on_error]
+          vals = bb_eval(@match.post_match, b)
+        else
+          vals = bb_warning_eval(@match.post_match, b)
+        end
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
           print "#{columnize(vals, Command.settings[:width])}\n"
@@ -130,7 +142,11 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        vals = debug_eval(@match.post_match, b)
+        if Command.settings[:stack_on_error]
+          vals = bb_eval(@match.post_match, b)
+        else
+          vals = bb_warning_eval(@match.post_match, b)
+        end
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
           print "#{columnize(vals.sort!, Command.settings[:width])}\n"

@@ -5,10 +5,10 @@ module Byebug
       ary.sort!
       for v in ary
         begin
-          s = debug_eval(v.to_s, b).inspect
+          s = bb_eval(v.to_s, b).inspect
         rescue
           begin
-            s = debug_eval(v.to_s, b).to_s
+            s = bb_eval(v.to_s, b).to_s
           rescue
             s = "*Error in evaluation*"
           end
@@ -18,7 +18,7 @@ module Byebug
       end
     end
     def var_class_self
-      obj = debug_eval('self')
+      obj = bb_eval('self')
       var_list(obj.class.class_variables, get_binding)
     end
     def var_global
@@ -57,9 +57,9 @@ module Byebug
     end
 
     def execute
-      obj = debug_eval(@match.post_match)
+      obj = bb_eval(@match.post_match)
       if obj.kind_of? Module
-        constants = debug_eval("#{@match.post_match}.constants")
+        constants = bb_eval("#{@match.post_match}.constants")
         constants.sort!
         for c in constants
           next if c =~ /SCRIPT/
@@ -108,7 +108,7 @@ module Byebug
     end
 
     def execute
-      obj = debug_eval(@match.post_match.empty? ? 'self' : @match.post_match)
+      obj = bb_eval(@match.post_match.empty? ? 'self' : @match.post_match)
       var_list(obj.instance_variables, obj.instance_eval{binding()})
     end
 
@@ -167,7 +167,7 @@ module Byebug
         return
       end
       puts @match.post_match
-      obj = debug_eval("#{@match.post_match}.classtree")
+      obj = bb_eval("#{@match.post_match}.classtree")
       if obj
         print obj
       else
