@@ -10,6 +10,9 @@ module Byebug
     # If in remote mode, wait for the remote connection
     attr_accessor :wait_connection
 
+    # The actual port that the server is started at
+    attr_accessor :actual_port
+
     #
     # Starts a remote byebug
     #
@@ -25,6 +28,7 @@ module Byebug
       proceed = ConditionVariable.new
 
       server = TCPServer.new(host, port)
+      self.actual_port = server.addr[1]
       @thread = DebugThread.new do
         while (session = server.accept)
           self.interface = RemoteInterface.new(session)
