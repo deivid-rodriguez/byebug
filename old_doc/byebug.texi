@@ -2576,7 +2576,7 @@ doesn't by itself turn on or off line tracing.
 
 @kindex show linetrace_plus
 @item show linetrace_plus
-Shows whether the line tracing style is to show all lines or remove duplicates
+Shows whether the line tracing style is to show all lines or remove duplicate
 linetrace lines when it is a repeat of the previous line.
 @end table
 
@@ -2950,7 +2950,7 @@ debugged program may terminate.
 @item remove_breakpoint(bpnum)
 @vindex @code{Byebug.remove_breakpoint}
 When a breakpoint is added, it is assigned a number as a way to uniquely
-identify it. (There can be more than one breakpoint on a given line.) To remove
+identify it (there can be more than one breakpoint on a given line). To remove
 a breakpoint, use @code{remove_breakpoint} with breakpoint number @var{bpnum}.
 
 @item breakpoints

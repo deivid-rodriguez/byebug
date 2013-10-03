@@ -16,7 +16,7 @@ module Byebug
   end
 
   class Command
-    Subcmd = Struct.new(:name, :min, :short_help, :long_help)
+    Subcmd = Struct.new(:name, :min, :help)
 
     class << self
       def commands
@@ -31,14 +31,13 @@ module Byebug
                       need_context:         false } unless defined?(DEF_OPTIONS)
 
       def help(args)
-        output = description.gsub(/^ +/, '') + "\n"
-
-        if defined? self::Subcommands
-          return output += format_subcmds unless args and args[1]
-          output += format_subcmd(args[1])
+        if args && args[1]
+          output = format_subcmd(args[1])
+        else
+          output = description.gsub(/^ +/, '') + "\n"
+          output += format_subcmds if defined? self::Subcommands
         end
-
-        return output
+        output
       end
 
       def find(subcmds, param)
@@ -57,8 +56,7 @@ module Byebug
         return "Invalid \"#{names.join("|")}\" " \
                "subcommand \"#{args[1]}\"." unless subcmd
 
-        return "#{subcmd.short_help}.\n" \
-               "#{subcmd.long_help || '' }"
+        return "#{subcmd.help}.\n"
       end
 
       def format_subcmds
@@ -67,10 +65,9 @@ module Byebug
             "--\n"                                   \
             "List of \"#{cmd_name}\" subcommands:\n" \
             "--\n"
-        width = self::Subcommands.map(&:name).max_by(&:size).size
+        w = self::Subcommands.map(&:name).max_by(&:size).size
         for subcmd in self::Subcommands do
-          s += sprintf \
-            "%s %-#{width}s -- %s\n", cmd_name, subcmd.name, subcmd.short_help
+          s += sprintf "%s %-#{w}s -- %s\n", cmd_name, subcmd.name, subcmd.help
         end
         return s
       end

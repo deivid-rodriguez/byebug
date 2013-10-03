@@ -63,51 +63,49 @@ module Byebug
 
   # Implements byebug "set" command.
   class SetCommand < Command
-    SubcmdStruct2 = Struct.new(:name,
-                               :min,
-                               :is_bool,
-                               :short_help,
-                               :long_help) unless defined?(SubcmdStruct2)
+    Subcmd2 = Struct.new(:name, :min, :is_bool, :help) unless defined?(Subcmd2)
 
-    Subcommands =
-      [
-       ['args', 2, false,
-        'Set argument list to the program being debugged when it is started'],
-       ['autoeval', 4, true, 'Evaluate every unrecognized command'],
-       ['autolist', 4, true, 'Execute "list" command on every breakpoint'],
-       ['autoirb', 4, true, 'Invoke IRB on every stop'],
-       ['autoreload', 4, true, 'Reload source code when changed'],
-       ['basename', 1, true, 'Set filename display style'],
-       ['callstyle', 2, false, 'Set how you want call parameters displayed'],
-       ['testing', 2, false, 'Used when testing byebug'],
-       ['forcestep', 2, true,
-        'Make sure "next/step" commands always move to a new line'],
-       ['fullpath', 2, true, 'Display full file names in frames'],
-       ['history', 2, false, 'Command for setting command history parameters',
-        'History parameters are "filename", "save" and "size"'],
-       ['linetrace', 3, true, 'Enable line execution tracing'],
-       ['linetrace_plus', 10, true,
-        'Set line execution tracing to show different lines'],
-       ['listsize', 3, false, 'Set number of source lines to list by default'],
-       ['post_mortem', 2, true, 'Enable post-mortem mode'],
-       ['stack_on_error', 1, true,
-        'Display stack trace when "eval" raises exception'],
-       ['verbose', 1, true,
-        'Enable verbose output of TracePoint API events is enabled'],
-       ['width', 1, false,
-        'Number of characters per line for byebug\'s output']
-      ].map do |name, min, is_bool, short_help, long_help|
-      SubcmdStruct2.new(name, min, is_bool, short_help, long_help)
+    Subcommands = [
+      ['args'          , 2 , false, 'Set argument list to the program '    \
+                                    'being debugged when it is started'       ],
+      ['autoeval'      , 4 , true , 'Evaluate every unrecognized command'     ],
+      ['autolist'      , 4 , true , 'Execute "list" command on every '     \
+                                    'breakpoint'                              ],
+      ['autoirb'       , 4 , true , 'Invoke IRB on every stop'                ],
+      ['autoreload'    , 4 , true , 'Reload source code when changed'         ],
+      ['basename'      , 1 , true , 'Set filename display style'              ],
+      ['callstyle'     , 2 , false, 'Set how you want call parameters '    \
+                                    'displayed'                               ],
+      ['testing'       , 2 , false, 'Used when testing byebug'                ],
+      ['forcestep'     , 2 , true , 'Make sure "next/step" commands always' \
+                                    'move to a new line'                      ],
+      ['fullpath'      , 2 , true , 'Display full file names in frames'       ],
+      ['history'       , 2 , false, 'Command for setting command history '  \
+                                    'parameters, namely, "filename", '      \
+                                    '"save" and "size"'                       ],
+      ['linetrace'     , 3 , true , 'Enable line execution tracing'           ],
+      ['linetrace_plus', 10, true , 'Set line execution tracing to show'    \
+                                    'different lines'                         ],
+      ['listsize'      , 3 , false, 'Set number of source lines to list by' \
+                                    'default'                                 ],
+      ['post_mortem'   , 2 , true , 'Enable post-mortem mode'                 ],
+      ['stack_on_error', 1 , true , 'Display stack trace when "eval" '      \
+                                    'raises exception'                        ],
+      ['verbose'       , 1 , true , 'Enable verbose output of TracePoint '  \
+                                    'API events is enabled'                   ],
+      ['width'         , 1 , false, 'Number of characters per line for '    \
+                                    'byebug\'s output'                        ]
+    ].map do |name, min, is_bool, help|
+      Subcmd2.new(name, min, is_bool, help)
     end unless defined?(Subcommands)
 
-    SetHistorySubcommands =
-      [
-       ['filename', 1, 'Set the filename in which to record command history'],
-       ['save', 1, 'Set saving of the history record on exit'],
-       ['size', 1, 'Set the size of the command history']
-      ].map do |name, min, short_help, long_help|
-        Subcmd.new(name, min, short_help, long_help)
-      end unless defined?(SetHistorySubcommands)
+    SetHistorySubcommands = [
+      ['filename', 1, 'Set the filename in which to record command history'],
+      ['save'    , 1, 'Set saving of the history record on exit'           ],
+      ['size'    , 1, 'Set the size of the command history'                ]
+    ].map do |name, min, help|
+      Subcmd.new(name, min, help)
+    end unless defined?(SetHistorySubcommands)
 
     self.allow_in_control = true
 
@@ -152,6 +150,6 @@ module Byebug
           or 0. You can see these environment settings with the "show" command.}
       end
     end
-
   end
+
 end

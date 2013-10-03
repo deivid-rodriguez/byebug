@@ -43,13 +43,10 @@ class TestHelp < TestDsl::TestCase
   end
 
   describe 'when typed with command and subcommand' do
-    it "must show subcommand's long help" do
+    it "must show subcommand's help" do
       enter 'help info breakpoints'
       debug_file 'help'
-      check_output_includes \
-        "Status of user-settable breakpoints.\n" \
-        "Without argument, list info about all breakpoints. " \
-        "With an integer argument, list info on that breakpoint."
+      check_output_includes "Status of user-settable breakpoints.\n"
     end
   end
 end

@@ -19,48 +19,49 @@ module Byebug
     include Columnize
     self.allow_in_control = true
 
-    Subcommands =
-      [
-       ['args', 1, 'Argument variables of current stack frame'],
-       ['breakpoints', 1, 'Status of user-settable breakpoints',
-        'Without argument, list info about all breakpoints. With an integer ' \
-        'argument, list info on that breakpoint.'],
-       ['catch', 3,
-        'Exceptions that can be caught in the current stack frame'],
-       ['display', 2, 'Expressions to display when program stops'],
-       ['file', 4, 'Info about a particular file read in',
-        'After the file name is supplied, you can list file attributes that ' \
-        'you wish to see. Attributes include: "all", "basic", "breakpoint", ' \
-        '"lines", "mtime", "path" and "sha1".'],
-       ['files', 5, 'File names and timestamps of files read in'],
-       ['global_variables', 2, 'Global variables'],
-       ['instance_variables', 2,
-        'Instance variables of the current stack frame'],
-       ['line', 2,
-        'Line number and file name of current position in source file'],
-       ['locals', 2, 'Local variables of the current stack frame'],
-       ['program', 2, 'Execution status of the program'],
-       ['stack', 2, 'Backtrace of the stack'],
-       ['variables', 1,
-        'Local and instance variables of the current stack frame']
-      ].map do |name, min, short_help, long_help|
-        Subcmd.new(name, min, short_help, long_help)
+    Subcommands = [
+       ['args'              , 1, 'Argument variables of current stack frame'  ],
+       ['breakpoints'       , 1, 'Status of user-settable breakpoints',
+                                 'Without argument, list info about all '   \
+                                 'breakpoints. With an integer argument, '  \
+                                 'list info on that breakpoint.'              ],
+       ['catch'             , 3, 'Exceptions that can be caught in the '    \
+                                 'current stack frame'                        ],
+       ['display'           , 2, 'Expressions to display when program stops'  ],
+       ['file'              , 4, 'Info about a particular file read in',
+                                 'After the file name is supplied, you can' \
+                                 'list file attributes that you wish to '   \
+                                 'see. Attributes include: "all", "basic",' \
+                                 ' "breakpoint", "lines", "mtime", "path" ' \
+                                 'and "sha1".'                                ],
+       ['files'             , 5, 'File names and timestamps of files read in' ],
+       ['global_variables'  , 2, 'Global variables'                           ],
+       ['instance_variables', 2, 'Instance variables in current stack frame'  ],
+       ['line'              , 2, 'Line number and file name of current '    \
+                                 'position in source file'                    ],
+       ['locals'            , 2, 'Local variables of the current stack frame' ],
+       ['program'           , 2, 'Execution status of the program'            ],
+       ['stack'             , 2, 'Backtrace of the stack'                     ],
+       ['variables'         , 1, 'Local and instance variables of the '     \
+                                 'current stack frame'                        ]
+    ].map do |name, min, help|
+      Subcmd.new(name, min, help)
     end unless defined?(Subcommands)
 
-    InfoFileSubcommands =
-      [
-       ['all', 1, 'All file information available - breakpoints, lines, ' \
-        'mtime, path and sha1'],
-       ['basic', 2, 'basic information - path, number of lines'],
-       ['breakpoints', 2, 'Show trace line numbers',
-        'These are the line number where a breakpoint can be set.'],
-       ['lines', 1, 'Show number of lines in the file'],
-       ['mtime', 1, 'Show modification time of file'],
-       ['path', 4, 'Show full file path name for file'],
-       ['sha1', 1, 'Show SHA1 hash of contents of the file']
-      ].map do |name, min, short_help, long_help|
-        Subcmd.new(name, min, short_help, long_help)
-      end unless defined?(InfoFileSubcommands)
+    InfoFileSubcommands = [
+      ['all'        , 1, 'All file information available - breakpoints, '   \
+                         'lines, mtime, path and sha1'                        ],
+      ['basic'      , 2, 'basic information - path, number of lines'          ],
+      ['breakpoints', 2, 'Show trace line numbers',
+                         'These are the line number where a breakpoint '    \
+                         'can be set.'                                        ],
+      ['lines'      , 1, 'Show number of lines in the file'                   ],
+      ['mtime'      , 1, 'Show modification time of file'                     ],
+      ['path'       , 4, 'Show full file path name for file'                  ],
+      ['sha1'       , 1, 'Show SHA1 hash of contents of the file'             ]
+    ].map do |name, min, help|
+      Subcmd.new(name, min, help)
+    end unless defined?(InfoFileSubcommands)
 
     def regexp
       /^\s* i(?:nfo)? (?:\s+(.+))? \s*$/x
