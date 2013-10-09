@@ -1,3 +1,9 @@
+# 2.3.0
+
+* Compatibility with Phusion Passenger Enterprise (thanks @FooBarWidget)
+* More minimalist help system
+
+
 # 2.2.2
 
 * Fix another compilation issue in 64 bit systems
