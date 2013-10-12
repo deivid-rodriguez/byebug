@@ -3,9 +3,9 @@
 <img src="https://raw.github.com/deivid-rodriguez/byebug/master/logo.png"
      alt="Byebug logo" align="right" style="margin-left: 10px" />
 
-_Debugging in Ruby 2.0_
+_Debugging in Ruby 2_
 
-Byebug is a simple to use, feature rich debugger for Ruby 2.0. It uses the new
+Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
 stack navigation, so it doesn't depend on internal core sources. It's developed
 as a C extension, so it's fast. And it has a full test suite so it's reliable.
@@ -56,7 +56,7 @@ no longer need to set them in the startup file.
 
 ## What's different from debugger
 
-* Works on 2.0.0 and it doesn't on 1.9.x.
+* Works on Ruby 2.x and it doesn't on 1.9.x.
 * Has no MRI internal source code dependencies, just a clean API.
 * Fixes all of debugger's open bugs in its issue tracker and provides some
 enhancements, such as a markdown guide or the fact that `byebug` can now be
