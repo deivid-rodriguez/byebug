@@ -84,19 +84,19 @@ Byebug's public API is determined by its set of commands
     `condition` |             |
     `continue`  |             |
     `delete`    |             |
-    `disable`   |             | breakpoints,display
+    `disable`   |             | `breakpoints``display`
     `display`   |             |
     `down`      |             |
     `edit`      |             |
-    `enable`    |             | breakpoints,display
+    `enable`    |             | `breakpoints``display`
     `finish`    |             |
     `frame`     |             |
     `help`      |             |
-    `info`      |             | args,breakpoints,catch,display,file,files,...
+    `info`      |             | `args``breakpoints``catch``display``file``files`...
     `irb`       |             |
     `kill`      |             |
     `list`      |             |
-    `method`    |             | instance,iv
+    `method`    |             | `instance``iv`
     `next`      |             |
     `p`         | `eval`      |
     `pp`        |             |
@@ -107,26 +107,26 @@ Byebug's public API is determined by its set of commands
     `reload`    |             |
     `restart`   |             |
     `save`      |             |
-    `set`       |             | args,autoeval,autoirb,autolist,autoreload,basename...
-    `show`      |             | args,autoeval,autoirb,autolist,autoreload,basename...
+    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename`...
+    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename`...
     `skip`      |             |
     `source`    |             |
     `step`      |             |
-    `thread`    |             | current,list,resume,stop,switch
+    `thread`    |             | `current``list``resume``stop``switch`
     `trace`     |             |
     `undisplay` |             |
     `up`        |             |
-    `var`       |             | class,constant,global,instance,local,ct
+    `var`       |             | `class``constant``global``instance``local``ct`
 
 Full lists of subcommands:
 
-* info: `args`,`breakpoints`,`catch`,`display`,`file`,`files`,
+* `info`: `args`,`breakpoints`,`catch`,`display`,`file`,`files`,
 `global_variables`,`instance_variables`,`line`,`locals`,`program,stack`,
 `variables`.
-* set: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
+* `set`: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
 `callstyle`,`forcestep`,`fullpath`,`history`,`linetrace`,`linetrace_plus`,
 `listsize`,`post_mortem`,`stack_on_error`,`testing`,`verbose`,`width`.
-* show: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
+* `show`: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
 `callstyle`,`commands`,`forcestep`,`fullpath`,`history`,`linetrace`,
 `linetrace_plus`, `listsize`,`post_mortem`,`stack_on_error`,`verbose`, `width`.
 
