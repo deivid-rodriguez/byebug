@@ -71,7 +71,7 @@ module Byebug
     # @param [integer] breakpoint number
     #
     def remove_breakpoint(id)
-      breakpoints.delete_at(id)
+      breakpoints.reject! { |b| b.id == id }
     end
 
     def interface=(value)
