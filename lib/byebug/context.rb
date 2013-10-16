@@ -8,6 +8,9 @@ module Byebug
           backtrace.drop_while { |l| ignored(l.path) || l.path == '(eval)' }
                    .take_while { |l| !ignored(l.path) }
                    .size
+        else
+          print 'No backtrace available!!'
+          return 0
         end
       end
 
