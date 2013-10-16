@@ -76,47 +76,47 @@ changes.
 
 Byebug's public API is determined by its set of commands
 
-    Command   | Aliases  | Subcommands
-    ----------|----------|------------------------------------------------------
-    backtrace | bt,where |
-    break     |          |
-    catch     |          |
-    condition |          |
-    continue  |          |
-    delete    |          |
-    disable   |          | breakpoints,display
-    display   |          |
-    down      |          |
-    edit      |          |
-    enable    |          | breakpoints,display
-    finish    |          |
-    frame     |          |
-    help      |          |
-    info      |          | args,breakpoints,catch,display,file,files,...
-    irb       |          |
-    kill      |          |
-    list      |          |
-    method    |          | instance,iv
-    next      |          |
-    p         | eval     |
-    pp        |          |
-    pry       |          |
-    ps        |          |
-    putl      |          |
-    quit      | exit     |
-    reload    |          |
-    restart   |          |
-    save      |          |
-    set       |          | args,autoeval,autoirb,autolist,autoreload,basename...
-    show      |          | args,autoeval,autoirb,autolist,autoreload,basename...
-    skip      |          |
-    source    |          |
-    step      |          |
-    thread    |          | current,list,resume,stop,switch
-    trace     |          |
-    undisplay |          |
-    up        |          |
-    var       |          | class,constant,global,instance,local,ct
+    Command     | Aliases     | Subcommands
+    ----------- |:----------- |:-----------
+    `backtrace` | `bt``where` |
+    `break`     |             |
+    `catch`     |             |
+    `condition` |             |
+    `continue`  |             |
+    `delete`    |             |
+    `disable`   |             | breakpoints,display
+    `display`   |             |
+    `down`      |             |
+    `edit`      |             |
+    `enable`    |             | breakpoints,display
+    `finish`    |             |
+    `frame`     |             |
+    `help`      |             |
+    `info`      |             | args,breakpoints,catch,display,file,files,...
+    `irb`       |             |
+    `kill`      |             |
+    `list`      |             |
+    `method`    |             | instance,iv
+    `next`      |             |
+    `p`         | `eval`      |
+    `pp`        |             |
+    `pry`       |             |
+    `ps`        |             |
+    `putl`      |             |
+    `quit`      | `exit`      |
+    `reload`    |             |
+    `restart`   |             |
+    `save`      |             |
+    `set`       |             | args,autoeval,autoirb,autolist,autoreload,basename...
+    `show`      |             | args,autoeval,autoirb,autolist,autoreload,basename...
+    `skip`      |             |
+    `source`    |             |
+    `step`      |             |
+    `thread`    |             | current,list,resume,stop,switch
+    `trace`     |             |
+    `undisplay` |             |
+    `up`        |             |
+    `var`       |             | class,constant,global,instance,local,ct
 
 Full lists of subcommands:
 
