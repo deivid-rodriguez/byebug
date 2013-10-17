@@ -92,7 +92,7 @@ Byebug's public API is determined by its set of commands
     `finish`    |             |
     `frame`     |             |
     `help`      |             |
-    `info`      |             | `args``breakpoints``catch``display``file``files`...
+    `info`      |             | `args``breakpoints``catch``display``file``files``global_variables`...
     `irb`       |             |
     `kill`      |             |
     `list`      |             |
@@ -107,8 +107,8 @@ Byebug's public API is determined by its set of commands
     `reload`    |             |
     `restart`   |             |
     `save`      |             |
-    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename`...
-    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename`...
+    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`...
+    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`...
     `skip`      |             |
     `source`    |             |
     `step`      |             |
