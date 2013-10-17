@@ -92,7 +92,9 @@ Byebug's public API is determined by its set of commands
     `finish`    |             |
     `frame`     |             |
     `help`      |             |
-    `info`      |             | `args``breakpoints``catch``display``file``files``global_variables`...
+    `info`      |             | `args``breakpoints``catch``display``file``files`
+                |             | `global_variables``instance_variables``line``locals`
+                |             | `program``stack``variables`
     `irb`       |             |
     `kill`      |             |
     `list`      |             |
@@ -107,8 +109,12 @@ Byebug's public API is determined by its set of commands
     `reload`    |             |
     `restart`   |             |
     `save`      |             |
-    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`...
-    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`...
+    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`
+                |             | `callstyle``forcestep``fullpath``history``linetrace``linetrace_plus`
+                |             | `listsize`,`post_mortem`,`stack_on_error`,`testing`,`verbose`,`width`
+    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`
+                |             | `callstyle``commands``forcestep``fullpath``history``linetrace`
+                |             | `linetrace_plus``listsize``post_mortem``stack_on_error``verbose``width`
     `skip`      |             |
     `source`    |             |
     `step`      |             |
@@ -117,18 +123,6 @@ Byebug's public API is determined by its set of commands
     `undisplay` |             |
     `up`        |             |
     `var`       |             | `class``constant``global``instance``local``ct`
-
-Full lists of subcommands:
-
-* `info`: `args`,`breakpoints`,`catch`,`display`,`file`,`files`,
-`global_variables`,`instance_variables`,`line`,`locals`,`program,stack`,
-`variables`.
-* `set`: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
-`callstyle`,`forcestep`,`fullpath`,`history`,`linetrace`,`linetrace_plus`,
-`listsize`,`post_mortem`,`stack_on_error`,`testing`,`verbose`,`width`.
-* `show`: `args`,`autoeval`,`autoirb`,`autolist`,`autoreload`,`basename`,
-`callstyle`,`commands`,`forcestep`,`fullpath`,`history`,`linetrace`,
-`linetrace_plus`, `listsize`,`post_mortem`,`stack_on_error`,`verbose`, `width`.
 
 
 ## Getting Started
