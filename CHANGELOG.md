@@ -1,3 +1,9 @@
+# 2.3.1
+
+* Fixes bug preventing users from deleting breakpoints
+* Fix broken test suite
+
+
 # 2.3.0
 
 * Compatibility with Phusion Passenger Enterprise (thanks @FooBarWidget)
