@@ -76,7 +76,6 @@ class TestBreakpoints < TestDsl::TestCase
     end
   end
 
-
   describe 'setting breakpoint to incorrect line' do
     before { enter 'break 2' }
 

@@ -24,10 +24,10 @@ module Byebug
 
       @display = []
       @mutex = Mutex.new
-      @last_cmd               = nil   # To allow empty (just <RET>) commands
-      @last_file              = nil   # Filename the last time we stopped
-      @last_line              = nil   # Line number the last time we stopped
-      @context_was_dead       = false  # Assume we haven't started.
+      @last_cmd         = nil   # To allow empty (just <RET>) commands
+      @last_file        = nil   # Filename the last time we stopped
+      @last_line        = nil   # Line number the last time we stopped
+      @context_was_dead = false # Assume we haven't started.
     end
 
     def interface=(interface)
