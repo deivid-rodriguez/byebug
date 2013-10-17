@@ -28,7 +28,7 @@ class TestPostMortem < TestDsl::TestCase
     end
 
     it 'must exit from post-mortem mode after stepping command' do
-      enter "break #{__FILE__}:13", 'cont'
+      enter 'break 13', 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
     end
 
@@ -96,7 +96,7 @@ class TestPostMortem < TestDsl::TestCase
 
     describe 'condition' do
       it 'must be able to set conditions in post-mortem mode' do
-        enter 'cont', "break #{__FILE__}:13",
+        enter 'cont', 'break 13',
               ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
         debug_file('post_mortem') { $state.line.must_equal 13 }
       end
@@ -104,7 +104,7 @@ class TestPostMortem < TestDsl::TestCase
 
     describe 'break' do
       it 'must be able to set breakpoints in post-mortem mode' do
-        enter 'cont', "break #{__FILE__}:13",
+        enter 'cont', 'break 13', 'cont'
         debug_file('post_mortem') { $state.line.must_equal 13 }
       end
     end
