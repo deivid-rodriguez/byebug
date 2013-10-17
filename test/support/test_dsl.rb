@@ -93,11 +93,20 @@ module TestDsl
   def debug_file(filename, &block)
     is_test_block_called = false
     debug_completed = false
+    exception = nil
     Byebug.stubs(:run_init_script)
     if block
-      interface.test_block= lambda do
+      interface.test_block = lambda do
         is_test_block_called = true
-        block.call
+        # We need to store exception and reraise it after completing debugging,
+        # because Byebug will swallow any exceptions, so e.g. our failed
+        # assertions will be ignored
+        begin
+          block.call
+        rescue Exception => e
+          exception = e
+          raise e
+        end
       end
     end
     Byebug.start do
@@ -106,6 +115,7 @@ module TestDsl
     end
     flunk "Debug block was not completed" unless debug_completed
     flunk "Test block was provided, but not called" if block && !is_test_block_called
+    raise exception if exception
   end
 
   #
