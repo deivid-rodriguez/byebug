@@ -152,6 +152,7 @@ session on minitest failures.
 
 * JRuby support.
 * Libify and test byebug's executable.
+* Add printers support.
 
 
 ## Credits
