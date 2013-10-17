@@ -6,7 +6,7 @@ module Byebug
       return errmsg "No breakpoints have been set." if Byebug.breakpoints.empty?
 
       all_breakpoints = Byebug.breakpoints.sort_by {|b| b.id }
-      if !args
+      if args.empty?
         selected_breakpoints = all_breakpoints
       else
         selected_ids = []

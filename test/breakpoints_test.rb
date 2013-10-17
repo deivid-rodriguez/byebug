@@ -184,11 +184,11 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample#b', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 5 }
+        debug_file('breakpoint') { $state.line.must_equal 7 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal @tst_file }
+        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
       end
     end
 
@@ -196,11 +196,11 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample.a', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 2 }
+        debug_file('breakpoint') { $state.line.must_equal 4 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal @tst_file }
+        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
       end
     end
 
@@ -257,7 +257,9 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must not stop on any disabled breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_be nil }
+            debug_file('breakpoint')
+            # Obscure assert to check for program termination
+            $state.proceed.must_equal true
           end
         end
 
@@ -328,12 +330,12 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must stop on the first breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_be 5 }
+            debug_file('breakpoint') { $state.line.must_equal 5 }
           end
 
           it 'must stop on the last breakpoint' do
             enter 'cont', 'cont'
-            debug_file('breakpoint') { $state.line.must_be 6 }
+            debug_file('breakpoint') { $state.line.must_equal 6 }
           end
         end
 
@@ -344,12 +346,12 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must have a breakpoint with #enabled? returning true' do
             debug_file('breakpoint') {
-              Byebug.breakpoints.first.enabled?.must_equal true }
+              Byebug.breakpoints.last.enabled?.must_equal true }
           end
 
-          it 'must not stop on the enabled breakpoint' do
+          it 'must stop only on the enabled breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_be 6 }
+            debug_file('breakpoint') { $state.line.must_equal 6 }
           end
         end
       end
@@ -381,26 +383,26 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'Conditional breakpoints' do
     it 'must stop if the condition is true' do
-      enter 'break 5 if b == 5', 'break 6', 'cont'
+      enter 'break 5 if z == 5', 'break 6', 'cont'
       debug_file('breakpoint') { $state.line.must_equal 5 }
     end
 
     it 'must skip if the condition is false' do
-      enter 'break 5 if b == 3', 'break 6', 'cont'
+      enter 'break 5 if z == 3', 'break 6', 'cont'
       debug_file('breakpoint') { $state.line.must_equal 6 }
     end
 
     it 'must show an error when conditional syntax is wrong' do
-      enter 'break 5 ifa b == 3', 'break 6', 'cont'
+      enter 'break 5 ifa z == 3', 'break 6', 'cont'
       debug_file('breakpoint') { $state.line.must_equal 6 }
       check_error_includes \
-        'Expecting "if" in breakpoint condition; got: ifa b == 3.'
+        'Expecting "if" in breakpoint condition; got: ifa z == 3.'
     end
 
     describe 'enabling with wrong conditional syntax' do
       before { enter 'break 5',
                      ->{"disable #{Byebug.breakpoints.first.id}"},
-                     ->{"cond #{Byebug.breakpoints.first.id} b -=( 3"},
+                     ->{"cond #{Byebug.breakpoints.first.id} z -=( 3"},
                      ->{"enable #{Byebug.breakpoints.first.id}"} }
 
       it 'must not enable a breakpoint' do
@@ -410,22 +412,22 @@ class TestBreakpoints < TestDsl::TestCase
 
       it 'must show an error' do
         debug_file('breakpoint')
-        check_error_includes 'Expression "b -=( 3" syntactically incorrect; ' \
+        check_error_includes 'Expression "z -=( 3" syntactically incorrect; ' \
                              'breakpoint remains disabled.'
       end
     end
 
     it 'must show an error if no file or line is specified' do
-      enter 'break ifa b == 3', 'break 6', 'cont'
+      enter 'break ifa z == 3', 'break 6', 'cont'
       debug_file('breakpoint') { $state.line.must_equal 6 }
-      check_error_includes 'Invalid breakpoint location: ifa b == 3.'
+      check_error_includes 'Invalid breakpoint location: ifa z == 3.'
     end
 
     it 'must show an error if expression syntax is invalid' do
-      enter 'break if b -=) 3', 'break 6', 'cont'
+      enter 'break if z -=) 3', 'break 6', 'cont'
       debug_file('breakpoint') { $state.line.must_equal 6 }
       check_error_includes \
-        'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.'
+        'Expression "z -=) 3" syntactically incorrect; breakpoint disabled.'
     end
   end
 
@@ -438,7 +440,7 @@ class TestBreakpoints < TestDsl::TestCase
 
     describe 'when last instruction of a method' do
       it 'must stop right before returning from the frame' do
-        debug_file('breakpoint_deep') { $state.line.must_equal 16 }
+        debug_file('breakpoint_deep') { $state.line.must_equal 27 }
       end
     end
   end

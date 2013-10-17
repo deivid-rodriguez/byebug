@@ -28,7 +28,7 @@ class TestContinue < TestDsl::TestCase
   describe "unsuccessful" do
     it "must ignore the command if specified line is not valid" do
       enter 'cont 123'
-      debug_file('continue') { $state.line.must_equal 2 }
+      debug_file('continue') { $state.line.must_equal 3 }
     end
 
     it "must show error if specified line is not valid" do

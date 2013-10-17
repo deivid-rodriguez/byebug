@@ -53,7 +53,7 @@ class TestStepping < TestDsl::TestCase
 
         it 'must go the specified number of lines forward by default' do
           enter 'next 2'
-          debug_file('stepping') { $state.line.must_equal 21 }
+          debug_file('stepping') { $state.line.must_equal 4 }
         end
 
         it 'must inform when not staying in the same frame' do
