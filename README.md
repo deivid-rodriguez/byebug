@@ -76,53 +76,47 @@ changes.
 
 Byebug's public API is determined by its set of commands
 
-    Command     | Aliases     | Subcommands
-    ----------- |:----------- |:-----------
-    `backtrace` | `bt``where` |
-    `break`     |             |
-    `catch`     |             |
-    `condition` |             |
-    `continue`  |             |
-    `delete`    |             |
-    `disable`   |             | `breakpoints``display`
-    `display`   |             |
-    `down`      |             |
-    `edit`      |             |
-    `enable`    |             | `breakpoints``display`
-    `finish`    |             |
-    `frame`     |             |
-    `help`      |             |
-    `info`      |             | `args``breakpoints``catch``display``file``files`
-                |             | `global_variables``instance_variables``line``locals`
-                |             | `program``stack``variables`
-    `irb`       |             |
-    `kill`      |             |
-    `list`      |             |
-    `method`    |             | `instance``iv`
-    `next`      |             |
-    `p`         | `eval`      |
-    `pp`        |             |
-    `pry`       |             |
-    `ps`        |             |
-    `putl`      |             |
-    `quit`      | `exit`      |
-    `reload`    |             |
-    `restart`   |             |
-    `save`      |             |
-    `set`       |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`
-                |             | `callstyle``forcestep``fullpath``history``linetrace``linetrace_plus`
-                |             | `listsize`,`post_mortem`,`stack_on_error`,`testing`,`verbose`,`width`
-    `show`      |             | `args``autoeval``autoirb``autolist``autoreload``basename``callstyle`
-                |             | `callstyle``commands``forcestep``fullpath``history``linetrace`
-                |             | `linetrace_plus``listsize``post_mortem``stack_on_error``verbose``width`
-    `skip`      |             |
-    `source`    |             |
-    `step`      |             |
-    `thread`    |             | `current``list``resume``stop``switch`
-    `trace`     |             |
-    `undisplay` |             |
-    `up`        |             |
-    `var`       |             | `class``constant``global``instance``local``ct`
+    Command     | Aliases      | Subcommands
+    ----------- |:------------ |:-----------
+    `backtrace` | `bt` `where` |
+    `break`     |              |
+    `catch`     |              |
+    `condition` |              |
+    `continue`  |              |
+    `delete`    |              |
+    `disable`   |              | `breakpoints` `display`
+    `display`   |              |
+    `down`      |              |
+    `edit`      |              |
+    `enable`    |              | `breakpoints` `display`
+    `finish`    |              |
+    `frame`     |              |
+    `help`      |              |
+    `info`      |              | `args` `breakpoints` `catch` `display` `file` `files` `global_variables` `instance_variables` `line` `locals` `program` `stack` `variables`
+    `irb`       |              |
+    `kill`      |              |
+    `list`      |              |
+    `method`    |              | `instance` `iv`
+    `next`      |              |
+    `p`         | `eval`       |
+    `pp`        |              |
+    `pry`       |              |
+    `ps`        |              |
+    `putl`      |              |
+    `quit`      | `exit`       |
+    `reload`    |              |
+    `restart`   |              |
+    `save`      |              |
+    `set`       |              | `args` `autoeval` `autoirb` `autolist` `autoreload` `basename` `callstyle` `callstyle` `forcestep` `fullpath` `history` `linetrace` `linetrace_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
+    `show`      |              | `args` `autoeval` `autoirb` `autolist` `autoreload` `basename` `callstyle` `callstyle` `commands` `forcestep` `fullpath` `history` `linetrace` `linetrace_plus` `listsize` `post_mortem` `stack_on_error` `verbose` `width`
+    `skip`      |              |
+    `source`    |              |
+    `step`      |              |
+    `thread`    |              | `current` `list` `resume` `stop` `switch`
+    `trace`     |              |
+    `undisplay` |              |
+    `up`        |              |
+    `var`       |              | `class` `constant` `global` `instance` `local` `ct`
 
 
 ## Getting Started
