@@ -23,11 +23,16 @@ module Byebug
         @commands ||= []
       end
 
-      DEF_OPTIONS = { allow_in_control:     false,
-                      allow_in_post_mortem: true ,
-                      always_run:           0    ,
-                      unknown:              false,
-                      need_context:         false } unless defined?(DEF_OPTIONS)
+      attr_accessor :allow_in_control, :unknown, :need_context
+      attr_writer :allow_in_post_mortem, :always_run
+
+     def allow_in_post_mortem
+       @allow_in_post_mortem ||= !defined?(@allow_in_post_mortem) ? true : false
+     end
+
+      def always_run
+        @always_run ||= 0
+      end
 
       def help(args)
         if args && args[1]
@@ -72,9 +77,6 @@ module Byebug
       end
 
       def inherited(klass)
-        DEF_OPTIONS.each do |o, v|
-          klass.options[o] = v if klass.options[o].nil?
-        end
         commands << klass
       end
 
@@ -83,22 +85,6 @@ module Byebug
           |file| require file }
         Byebug.constants.grep(/Functions$/).map {
           |name| Byebug.const_get(name) }.each { |mod| include mod }
-      end
-
-      def method_missing(meth, *args, &block)
-        if meth.to_s =~ /^(.+?)=$/
-          options[$1.intern] = args.first
-        else
-          if options.has_key?(meth)
-            options[meth]
-          else
-            super
-          end
-        end
-      end
-
-      def options
-        @options ||= {}
       end
 
       def settings_map
