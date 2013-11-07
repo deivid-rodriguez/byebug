@@ -132,9 +132,7 @@ module Byebug
         cmds = Command.commands
 
         # Remove some commands in post-mortem
-        cmds = cmds.find_all do |cmd|
-          cmd.allow_in_post_mortem
-        end if context.dead?
+        cmds = cmds.find_all { |cmd| cmd.allow_in_post_mortem } if context.dead?
 
         state = State.new(cmds, context, @display, file, @interface, line)
 
@@ -142,11 +140,11 @@ module Byebug
         Command.settings[:autolist] = 0 if ['(irb)', '-e'].include?(file)
 
         # Bind commands to the current state.
-        commands = cmds.map{|cmd| cmd.new(state)}
+        commands = cmds.map { |cmd| cmd.new(state) }
 
-        commands.select do |cmd|
-          cmd.class.always_run >= run_level
-        end.each {|cmd| cmd.execute}
+        commands.select { |cmd| cmd.class.always_run >= run_level }
+                .each { |cmd| cmd.execute }
+
         return state, commands
       end
 
