@@ -26,9 +26,9 @@ module Byebug
       attr_accessor :allow_in_control, :unknown, :need_context
       attr_writer :allow_in_post_mortem, :always_run
 
-     def allow_in_post_mortem
-       @allow_in_post_mortem ||= !defined?(@allow_in_post_mortem) ? true : false
-     end
+      def allow_in_post_mortem
+        @allow_in_post_mortem ||= !defined?(@allow_in_post_mortem) ? true : false
+      end
 
       def always_run
         @always_run ||= 0
