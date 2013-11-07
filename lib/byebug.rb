@@ -224,4 +224,6 @@ module Kernel
     end
     Byebug.current_context.step_into steps_into if steps_into >= 0
   end
+
+  alias_method :debugger, :byebug
 end
