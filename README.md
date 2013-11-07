@@ -47,11 +47,8 @@ Former [debugger](https://github.com/cldwalker/debugger) or
 * Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
 require and start the debugger. These flags are a performance penalty and Byebug
 doesn't need them anymore so my recommendation is not to use them.
-* Stopping execution using the word `debugger` doesn't work anymore unless you
-explicitly alias it. Similarly, the startup configuration file is now called
-`.byebugrc` instead of `.rdebugrc`.
-* `autoreload`, `autoeval` and `autolist` are default options in Byebug so you
-no longer need to set them in the startup file.
+* The startup configuration file is now called `.byebugrc` instead of
+`.rdebugrc`.
 
 
 ## What's different from debugger
@@ -61,7 +58,7 @@ no longer need to set them in the startup file.
 * Fixes all of debugger's open bugs in its issue tracker and provides some
 enhancements, such as a markdown guide or the fact that `byebug` can now be
 placed at the end of a block or method call.
-* Very actively mantained.
+* Actively mantained.
 * Editor agnostic: no external editor built-in support.
 * Pry command is built-in. No need of external gem like debugger-pry.
 
