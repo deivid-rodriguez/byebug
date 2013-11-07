@@ -93,6 +93,7 @@ options = OpenStruct.new(
   'quit'               => true,
   'restart_script'     => nil,
   'script'             => nil,
+  'server'             => nil,
   'stop'               => true,
   'tracing'            => false,
 )
@@ -126,6 +127,13 @@ EOB
       else
         require name
       end }
+    opts.on('-R', '--remote HOST[:PORT]', String, 'Specify byebug server spec') {
+      |server| host, port = server.split(':', 2)
+      host = 'localhost' if host.empty?
+      port = nil if port && port.empty?
+      port &&= port.to_i
+      options.server = [host, port].compact
+    }
     opts.on('--restart-script FILE', String,
             'Name of the script file to run. Erased after read') do
       |restart_script|
@@ -189,6 +197,12 @@ rescue StandardError => e
   puts
   puts e.message
   exit(-1)
+end
+
+if options.server
+  puts "Connecting to byebug server #{options.server.join(':')}"
+  Byebug.start_client(*options.server)
+  exit
 end
 
 if ARGV.empty?
