@@ -140,7 +140,6 @@ module Byebug
           nil
         end
       end
-
     end
 
     # Register default settings
