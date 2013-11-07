@@ -129,20 +129,20 @@ module Byebug
       # @return List of commands acceptable to run bound to the current state
       #
       def always_run(context, file, line, run_level)
-        event_cmds = Command.commands.select{|cmd| cmd.event }
+        cmds = Command.commands
 
         # Remove some commands in post-mortem
-        event_cmds = event_cmds.find_all do |cmd|
+        cmds = cmds.find_all do |cmd|
           cmd.allow_in_post_mortem
         end if context.dead?
 
-        state = State.new(event_cmds, context, @display, file, @interface, line)
+        state = State.new(cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
         Command.settings[:autolist] = 0 if ['(irb)', '-e'].include?(file)
 
         # Bind commands to the current state.
-        commands = event_cmds.map{|cmd| cmd.new(state)}
+        commands = cmds.map{|cmd| cmd.new(state)}
 
         commands.select do |cmd|
           cmd.class.always_run >= run_level

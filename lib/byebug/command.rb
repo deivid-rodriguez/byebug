@@ -25,7 +25,6 @@ module Byebug
 
       DEF_OPTIONS = { allow_in_control:     false,
                       allow_in_post_mortem: true ,
-                      event:                true ,
                       always_run:           0    ,
                       unknown:              false,
                       need_context:         false } unless defined?(DEF_OPTIONS)

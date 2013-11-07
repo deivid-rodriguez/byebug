@@ -4,7 +4,7 @@ class TestHelp < TestDsl::TestCase
   include Columnize
 
   let(:available_commands) {
-    Byebug::Command.commands.select(&:event).map(&:names).flatten.uniq.sort }
+    Byebug::Command.commands.map(&:names).flatten.uniq.sort }
 
   describe 'when typed alone' do
     temporary_change_hash Byebug.settings, :width, 50
