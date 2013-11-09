@@ -128,7 +128,7 @@ module Byebug
 
       def command_exists?(command)
         ENV['PATH'].split(File::PATH_SEPARATOR).any? {
-          |d| File.exists? File.join(d, command) }
+          |d| File.exist? File.join(d, command) }
       end
 
       def terminal_width
