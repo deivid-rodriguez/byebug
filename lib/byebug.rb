@@ -134,10 +134,10 @@ module Byebug
     #
     def run_init_script(out = handler.interface)
       cwd_script  = File.expand_path(File.join(".", INITFILE))
-      run_script(cwd_script, out) if File.exists?(cwd_script)
+      run_script(cwd_script, out) if File.exist?(cwd_script)
 
       home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
-      if File.exists?(home_script) and cwd_script != home_script
+      if File.exist?(home_script) and cwd_script != home_script
          run_script(home_script, out)
       end
     end
