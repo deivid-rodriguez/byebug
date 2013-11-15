@@ -102,10 +102,17 @@ module Byebug
       realsize = Context.stack_size
       calcedsize = @state.context.calced_stack_size
       if calcedsize != realsize
-        errmsg "Byebug's stacksize (#{calcedsize}) should be #{realsize}. " \
-               "This might be a bug in byebug or ruby's debugging API's\n"
+        if Byebug.post_mortem?
+          stacksize = calcedsize
+        else
+          errmsg "Byebug's stacksize (#{calcedsize}) should be #{realsize}. " \
+                 "This might be a bug in byebug or ruby's debugging API's\n"
+          stacksize = realsize
+        end
+      else
+        stacksize = calcedsize
       end
-      (0...realsize).each do |idx|
+      (0...stacksize).each do |idx|
         print_frame(idx)
       end
     end
