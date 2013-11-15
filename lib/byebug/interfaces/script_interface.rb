@@ -22,10 +22,8 @@ module Byebug
         puts "# #{result}" if @verbose
         next if result =~ /^\s*#/
         next if result.strip.empty?
-        break
+        return result.chomp
       end
-      raise IOError unless result
-      result.chomp!
     end
 
     def readline_support?
