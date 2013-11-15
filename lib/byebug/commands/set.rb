@@ -51,7 +51,11 @@ module Byebug
         return unless width = get_int(setting_args[0], "Set width", 10, nil, 80)
         Command.settings[:width] = width
       when /^post_mortem$/
-        Byebug.post_mortem = setting_value
+        if setting_value == true
+          Byebug.post_mortem
+        else
+          return print 'Sorry... not implemented yet. Restart byebug'
+        end
       when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
              testing|stack_on_error$/x
         Command.settings[setting_name.to_sym] = setting_value
