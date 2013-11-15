@@ -10,7 +10,7 @@ module Byebug
                    .size
         else
           print 'No backtrace available!!'
-          return 0
+          0
         end
       end
 
