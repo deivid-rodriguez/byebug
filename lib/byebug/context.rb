@@ -4,7 +4,7 @@ module Byebug
 
     class << self
       def stack_size
-        if backtrace = Thread.current.backtrace_locations
+        if backtrace = Thread.current.backtrace_locations(1)
           backtrace.drop_while { |l| ignored(l.path) || l.path == '(eval)' }
                    .take_while { |l| !ignored(l.path) }
                    .size
@@ -15,7 +15,7 @@ module Byebug
       end
 
       def real_stack_size
-        if backtrace = Thread.current.backtrace_locations
+        if backtrace = Thread.current.backtrace_locations(1)
           backtrace.size
         end
       end

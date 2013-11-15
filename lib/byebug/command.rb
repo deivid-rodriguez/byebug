@@ -177,7 +177,7 @@ module Byebug
         begin
           eval(str, b)
         rescue StandardError, ScriptError => e
-          at = eval("Thread.current.backtrace_locations", b)
+          at = eval('Thread.current.backtrace_locations(1)', b)
           print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
           for i in at
             print "\tfrom #{i}\n"

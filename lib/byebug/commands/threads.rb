@@ -19,9 +19,9 @@ module Byebug
           line = @state.context.frame_line(0)
         else
           if context.thread.backtrace_locations &&
-             context.thread.backtrace_locations[0]
-            file = context.thread.backtrace_locations[0].path
-            line = context.thread.backtrace_locations[0].lineno
+             context.thread.backtrace_locations[1]
+            file = context.thread.backtrace_locations[1].path
+            line = context.thread.backtrace_locations[1].lineno
           end
         end
         file_line = "#{file}:#{line}"
