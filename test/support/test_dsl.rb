@@ -6,6 +6,7 @@ module TestDsl
     def setup
       Byebug.handler = Byebug::CommandProcessor.new(TestInterface.new)
       Byebug.tracing = false
+      Byebug.breakpoints.clear if Byebug.breakpoints
     end
 
     def self.temporary_change_hash hash, key, value
@@ -92,7 +93,6 @@ module TestDsl
   #
   def debug_file(filename, &block)
     is_test_block_called = false
-    debug_completed = false
     exception = nil
     Byebug.stubs(:run_init_script)
     if block
@@ -109,11 +109,7 @@ module TestDsl
         end
       end
     end
-    Byebug.start do
-      load fullpath(filename)
-      debug_completed = true
-    end
-    flunk "Debug block was not completed" unless debug_completed
+    load fullpath(filename)
     flunk "Test block was provided, but not called" if block && !is_test_block_called
     raise exception if exception
   end

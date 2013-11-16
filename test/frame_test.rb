@@ -88,7 +88,7 @@ class TestFrame < TestDsl::TestCase
 
     it 'must set frame to the last one' do
       enter 'frame -1'
-      debug_file('frame') { $state.file.must_match(/test_dsl.rb/) }
+      debug_file('frame') { $state.file.must_match(/minitest\/unit\.rb/) }
     end
 
     it 'must not set frame if the frame number is too low' do
