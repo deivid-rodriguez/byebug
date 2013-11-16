@@ -10,7 +10,7 @@ end
 if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc/
   $CFLAGS ||= ''
   $CFLAGS += ' -Wall -Werror -Wno-unused-parameter'
-  $CFLAGS += ' -gdwarf-2 -g3' if ENV['debug']
+  $CFLAGS += ' -gdwarf-2 -g3 -O0' if ENV['debug']
 end
 
 dir_config("ruby")
