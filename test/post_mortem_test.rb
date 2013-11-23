@@ -163,7 +163,7 @@ class TestPostMortem < TestDsl::TestCase
                  f.puts 'break 3'
                  f.puts 'break 4 if true'
                end }
-      after { FileUtils.rm(filename) }
+      after { File.delete(filename) }
 
       let(:filename) { 'source_example.txt' }
 
@@ -234,7 +234,7 @@ class TestPostMortem < TestDsl::TestCase
     describe 'save' do
       let(:file_name) { 'save_output.txt' }
       let(:file_contents) { File.read(file_name) }
-      after { FileUtils.rm(file_name) }
+      after { File.delete(file_name) }
 
       it 'must work in post-mortem mode' do
         enter 'cont', "save #{file_name}"

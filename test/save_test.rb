@@ -9,7 +9,7 @@ class TestSave < TestDsl::TestCase
       debug_file 'save'
     end
     after do
-      FileUtils.rm(file_name)
+      File.delete(file_name)
     end
 
     it 'must save usual breakpoints' do
