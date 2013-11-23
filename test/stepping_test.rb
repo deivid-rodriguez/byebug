@@ -74,7 +74,7 @@ class TestStepping < TestDsl::TestCase
 
       it 'must step over blocks' do
         enter 'next'
-        debug_file('stepping') { state.line.must_equal 6 }
+        debug_file('stepping') { state.line.must_equal 8 }
       end
     end
   end
@@ -124,7 +124,7 @@ class TestStepping < TestDsl::TestCase
 
       it 'must step into blocks' do
         enter 'step'
-        debug_file('stepping') { state.line.must_equal 3 }
+        debug_file('stepping') { state.line.must_equal 5 }
       end
     end
   end
