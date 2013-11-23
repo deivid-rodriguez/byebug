@@ -58,7 +58,7 @@ module Byebug
 
     def self.protect(mname)
       alias_method "__#{mname}", mname
-      module_eval %{
+      module_eval <<-END, __FILE__, __LINE__+1
         def #{mname}(*args)
           @mutex.synchronize do
             return unless @interface
@@ -72,7 +72,7 @@ module Byebug
           print "INTERNAL ERROR!!! #\{$!\}\n" rescue nil
           print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n") rescue nil
         end
-      }
+      END
     end
 
     def at_breakpoint(context, breakpoint)
