@@ -160,8 +160,8 @@ class TestPostMortem < TestDsl::TestCase
 
     describe 'source' do
       before { File.open(filename, 'w') do |f|
-                 f.puts 'break 2'
-                 f.puts 'break 3 if true'
+                 f.puts 'break 3'
+                 f.puts 'break 4 if true'
                end }
       after { FileUtils.rm(filename) }
 
