@@ -119,7 +119,7 @@ class TestThread < TestDsl::TestCase
     it 'must switch to another thread' do
       enter "break #{__FILE__}:20", 'cont',
             ->{ "thread switch #{Byebug.contexts.last.thnum}" }, release
-      debug_file('thread') { state.line.must_equal 15 }
+      debug_file('thread') { assert_equal state.line, 15 }
     end
 
     it 'must show error message if thread number is not specified' do

@@ -22,7 +22,7 @@ class TestPostMortem < TestDsl::TestCase
     end
 
     it 'must stop at the correct line' do
-      debug_file('post_mortem') { state.line.must_equal 6 }
+      debug_file('post_mortem') { assert_equal state.line, 6 }
     end
 
     it 'must exit from post-mortem mode after stepping command' do
@@ -96,14 +96,14 @@ class TestPostMortem < TestDsl::TestCase
       it 'must be able to set conditions in post-mortem mode' do
         enter 'cont', "break 11",
               ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
-        debug_file('post_mortem') { state.line.must_equal 11 }
+        debug_file('post_mortem') { assert_equal 11, state.line }
       end
     end
 
     describe 'break' do
       it 'must be able to set breakpoints in post-mortem mode' do
         enter 'cont', 'break 11', 'cont'
-        debug_file('post_mortem') { state.line.must_equal 11 }
+        debug_file('post_mortem') { assert_equal 11, state.line }
       end
     end
 
