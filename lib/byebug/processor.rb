@@ -87,7 +87,6 @@ module Byebug
       file = CommandProcessor.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
-      print_backtrace
     end
     protect :at_catchpoint
 
