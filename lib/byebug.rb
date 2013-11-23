@@ -160,9 +160,7 @@ module Byebug
     #
     def post_mortem
       return if self.post_mortem?
-      debug_at_exit do
-        handle_post_mortem($!) if post_mortem?
-      end
+      at_exit { handle_post_mortem($!) if post_mortem? }
       self.post_mortem = true
     end
 

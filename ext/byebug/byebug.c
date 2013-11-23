@@ -649,59 +649,6 @@ bb_set_verbose(VALUE self, VALUE value)
   return value;
 }
 
-static VALUE
-set_current_skipped_status(VALUE status)
-{
-  VALUE context;
-  debug_context_t *dc;
-
-  context = bb_current_context(mByebug);
-  Data_Get_Struct(context, debug_context_t, dc);
-
-  if (status)
-    CTX_FL_SET(dc, CTX_FL_SKIPPED);
-  else
-    CTX_FL_UNSET(dc, CTX_FL_SKIPPED);
-
-  return Qnil;
-}
-
-static VALUE
-debug_at_exit_c(VALUE proc)
-{
-  return rb_funcall(proc, rb_intern("call"), 0);
-}
-
-static void
-debug_at_exit_i(VALUE proc)
-{
-  if (IS_STARTED)
-  {
-    set_current_skipped_status(Qtrue);
-    rb_ensure(debug_at_exit_c, proc, set_current_skipped_status, Qfalse);
-  }
-  else
-    debug_at_exit_c(proc);
-}
-
-/*
- *  call-seq:
- *    Byebug.debug_at_exit { block } -> proc
- *
- *  Register <tt>at_exit</tt> hook which is escaped from byebug.
- */
-static VALUE
-bb_at_exit(VALUE self)
-{
-  VALUE proc;
-
-  if (!rb_block_given_p()) rb_raise(rb_eArgError, "called without a block");
-
-  proc = rb_block_proc();
-  rb_set_end_proc(debug_at_exit_i, proc);
-  return proc;
-}
-
 /*
  *  call-seq:
  *    Byebug.tracing -> bool
@@ -810,7 +757,6 @@ Init_byebug()
   rb_define_module_function(mByebug, "catchpoints"    , bb_catchpoints    ,  0);
   rb_define_module_function(mByebug, "contexts"       , bb_contexts       ,  0);
   rb_define_module_function(mByebug, "current_context", bb_current_context,  0);
-  rb_define_module_function(mByebug, "debug_at_exit"  , bb_at_exit        ,  0);
   rb_define_module_function(mByebug, "debug_load"     , bb_load           , -1);
   rb_define_module_function(mByebug, "post_mortem?"   , bb_post_mortem    ,  0);
   rb_define_module_function(mByebug, "post_mortem="   , bb_set_post_mortem,  1);
