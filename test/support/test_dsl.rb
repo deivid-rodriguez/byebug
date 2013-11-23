@@ -105,7 +105,6 @@ module TestDsl
           block.call
         rescue Exception => e
           exception = e
-          raise e
         end
       end
     end
