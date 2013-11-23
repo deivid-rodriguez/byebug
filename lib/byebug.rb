@@ -152,53 +152,26 @@ module Byebug
     end
 
     #
-    # Activates the post-mortem mode. There are two ways of using it:
+    # Activates the post-mortem mode.
     #
-    # == Global post-mortem mode
-    # By calling Byebug.post_mortem method without a block, you install an
-    # at_exit hook that intercepts any exception not handled by your script
-    # and enables post-mortem mode.
+    # By calling Byebug.post_mortem method, you install an at_exit hook that
+    # intercepts any exception not handled by your script and enables
+    # post-mortem mode.
     #
-    # == Local post-mortem mode
-    #
-    # If you know that a particular block of code raises an exception you can
-    # enable post-mortem mode by wrapping this block with Byebug.post_mortem,
-    # e.g.
-    #
-    #   def offender
-    #      raise 'error'
-    #   end
-    #   Byebug.post_mortem do
-    #      ...
-    #      offender
-    #      ...
-    #   end
     def post_mortem
-      if block_given?
-        old_post_mortem = self.post_mortem?
-        begin
-          self.post_mortem = true
-          yield
-        rescue Exception => exp
-          handle_post_mortem(exp)
-          raise
-        ensure
-          self.post_mortem = old_post_mortem
-        end
-      else
-        return if self.post_mortem?
-        self.post_mortem = true
-        debug_at_exit do
-          handle_post_mortem($!) if post_mortem?
-        end
+      return if self.post_mortem?
+      debug_at_exit do
+        handle_post_mortem($!) if post_mortem?
       end
+      self.post_mortem = true
     end
 
     def handle_post_mortem(exp)
-      return if !exp || !exp.__bb_context || !exp.__bb_context.calced_stack_size
+      return if !exp
+      Byebug.last_exception = exp
+      return if !exp.__bb_context || !exp.__bb_context.calced_stack_size
       orig_tracing = Byebug.tracing?
       Byebug.tracing = false
-      Byebug.last_exception = exp
       handler.at_line(exp.__bb_context, exp.__bb_file, exp.__bb_line)
     ensure
       Byebug.tracing = orig_tracing

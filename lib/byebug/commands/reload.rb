@@ -14,6 +14,7 @@ module Byebug
   # Implements byebug "reload" command.
   class ReloadCommand < Command
     self.allow_in_control = true
+    self.allow_in_post_mortem = false
 
     register_setting_get(:autoreload) do
       Byebug.class_variable_get(:@@autoreload)

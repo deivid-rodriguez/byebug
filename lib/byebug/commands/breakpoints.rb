@@ -2,6 +2,7 @@ module Byebug
 
   # Implements byebug "break" command.
   class BreakCommand < Command
+    self.allow_in_post_mortem = false
     self.allow_in_control = true
 
     def regexp
@@ -97,6 +98,7 @@ module Byebug
 
   # Implements byebug "delete" command.
   class DeleteCommand < Command
+    self.allow_in_post_mortem = false
     self.allow_in_control = true
 
     def regexp

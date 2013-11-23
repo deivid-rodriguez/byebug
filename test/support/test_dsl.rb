@@ -91,7 +91,7 @@ module TestDsl
   #   enter 'b 4', 'cont'
   #   debug_file("ex1") { state.line.must_equal 4 }
   #
-  def debug_file(filename, &block)
+  def debug_file(filename, options = {}, &block)
     is_test_block_called = false
     exception = nil
     Byebug.stubs(:run_init_script)
@@ -108,7 +108,16 @@ module TestDsl
         end
       end
     end
-    load fullpath(filename)
+    begin
+      load fullpath(filename)
+    rescue Exception => e
+      if options[:rescue]
+        interface.test_block.call if interface.test_block
+      else
+        raise e
+      end
+    end
+
     flunk "Test block was provided, but not called" if block && !is_test_block_called
     raise exception if exception
   end

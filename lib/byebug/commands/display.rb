@@ -22,6 +22,8 @@ module Byebug
   end
 
   class AddDisplayCommand < Command
+    self.allow_in_post_mortem = false
+
     def regexp
       /^\s* disp(?:lay)? \s+ (.+) \s*$/x
     end
@@ -45,6 +47,8 @@ module Byebug
   end
 
   class DisplayCommand < Command
+    self.allow_in_post_mortem = false
+
     def self.always_run
       2
     end
@@ -69,6 +73,8 @@ module Byebug
   end
 
   class DeleteDisplayCommand < Command
+    self.allow_in_post_mortem = false
+
     def regexp
       /^\s* undisp(?:lay)? (?:\s+(\S+))? \s*$/x
     end

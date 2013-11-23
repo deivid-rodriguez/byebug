@@ -1,6 +1,7 @@
 module Byebug
 
   class ConditionCommand < Command
+    self.allow_in_post_mortem = false
 
     def regexp
       /^\s* cond(?:ition)? (?:\s+(\d+)(?:\s+(.*))?)? \s*$/x
