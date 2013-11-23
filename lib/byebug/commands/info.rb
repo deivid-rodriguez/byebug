@@ -240,9 +240,11 @@ module Byebug
     private :info_stop_reason
 
     def info_program(*args)
-      return print "The program crashed.\n" + Byebug.last_exception ?
-                   "Exception: #{Byebug.last_exception.inspect}" : "" + "\n" if
-        @state.context.dead?
+      if @state.context.dead?
+        print "The program crashed.\n"
+        print "Exception: #{Byebug.last_exception.inspect}\n" if Byebug.last_exception
+        return
+      end
 
       print "Program stopped. "
       info_stop_reason @state.context.stop_reason
