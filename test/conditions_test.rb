@@ -25,7 +25,7 @@ class TestConditions < TestDsl::TestCase
 
       it 'must not stop at the breakpoint if condition is false' do
         enter ->{ "cond #{Byebug.breakpoints.first.id} b == 3" }, 'cont'
-        debug_file('conditions') { $state.line.must_equal 4 }
+        debug_file('conditions') { state.line.must_equal 4 }
       end
 
       it 'must assign expression to breakpoint in spite of incorrect syntax' do
@@ -36,7 +36,7 @@ class TestConditions < TestDsl::TestCase
 
       it 'must ignore the condition if when incorrect syntax' do
         enter ->{ "cond #{Byebug.breakpoints.first.id} b ==" },  'cont'
-        debug_file('conditions') { $state.line.must_equal 4 }
+        debug_file('conditions') { state.line.must_equal 4 }
       end
     end
   end
@@ -50,7 +50,7 @@ class TestConditions < TestDsl::TestCase
     end
 
     it 'must unconditionally stop on the breakpoint' do
-      debug_file('conditions') { $state.line.must_equal 3 }
+      debug_file('conditions') { state.line.must_equal 3 }
     end
   end
 
@@ -63,7 +63,7 @@ class TestConditions < TestDsl::TestCase
 
     it 'must not set breakpoint condition if breakpoint id is incorrect' do
       enter 'break 3', 'cond 8 b == 3', 'cont'
-      debug_file('conditions') { $state.line.must_equal 3 }
+      debug_file('conditions') { state.line.must_equal 3 }
     end
   end
 end

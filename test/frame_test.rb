@@ -50,27 +50,27 @@ class TestFrame < TestDsl::TestCase
 
     it 'must go up' do
       enter 'up'
-      debug_file('frame') { $state.line.must_equal 16 }
+      debug_file('frame') { state.line.must_equal 16 }
     end
 
     it 'must go up by specific number of frames' do
       enter 'up 2'
-      debug_file('frame') { $state.line.must_equal 11 }
+      debug_file('frame') { state.line.must_equal 11 }
     end
 
     it 'must go down' do
       enter 'up', 'down'
-      debug_file('frame') { $state.line.must_equal 21 }
+      debug_file('frame') { state.line.must_equal 21 }
     end
 
     it 'must go down by specific number of frames' do
       enter 'up 3', 'down 2'
-      debug_file('frame') { $state.line.must_equal 16 }
+      debug_file('frame') { state.line.must_equal 16 }
     end
 
     it 'must set frame' do
       enter 'frame 2'
-      debug_file('frame') { $state.line.must_equal 11 }
+      debug_file('frame') { state.line.must_equal 11 }
     end
 
     it 'must print current stack frame when without arguments' do
@@ -81,24 +81,24 @@ class TestFrame < TestDsl::TestCase
 
     it 'must set frame to the first one' do
       enter 'up', 'frame 0'
-      debug_file('frame') { $state.line.must_equal 21 }
+      debug_file('frame') { state.line.must_equal 21 }
     end
 
     it 'must set frame to the last one' do
       enter 'frame -1'
-      debug_file('frame') { File.basename($state.file).must_equal 'test_helper.rb' }
+      debug_file('frame') { File.basename(state.file).must_equal 'test_helper.rb' }
     end
 
     it 'must not set frame if the frame number is too low' do
       enter 'down'
-      debug_file('frame') { $state.line.must_equal 21 }
+      debug_file('frame') { state.line.must_equal 21 }
       check_output_includes \
         "Can't navigate beyond the newest frame", interface.error_queue
     end
 
     it 'must not set frame if the frame number is too high' do
       enter 'up 100'
-      debug_file('frame') { $state.line.must_equal 21 }
+      debug_file('frame') { state.line.must_equal 21 }
       check_output_includes \
         "Can't navigate beyond the oldest frame", interface.error_queue
     end
@@ -176,17 +176,17 @@ class TestFrame < TestDsl::TestCase
 
     it 'must go up' do
       enter 'up'
-      debug_file('frame_deep') { $state.line.must_equal 37 }
+      debug_file('frame_deep') { state.line.must_equal 37 }
     end
 
     it 'must go down' do
       enter 'up', 'down'
-      debug_file('frame_deep') { $state.line.must_equal 40 }
+      debug_file('frame_deep') { state.line.must_equal 40 }
     end
 
     it 'must set frame' do
       enter 'frame 2'
-      debug_file('frame_deep') { $state.line.must_equal 32 }
+      debug_file('frame_deep') { state.line.must_equal 32 }
     end
 
     it 'must eval properly when scaling the stack' do

@@ -22,7 +22,7 @@ class TestPostMortem < TestDsl::TestCase
     end
 
     it 'must stop at the correct line' do
-      debug_file('post_mortem') { $state.line.must_equal 6 }
+      debug_file('post_mortem') { state.line.must_equal 6 }
     end
 
     it 'must exit from post-mortem mode after stepping command' do
@@ -86,7 +86,7 @@ class TestPostMortem < TestDsl::TestCase
     describe 'frame' do
       it 'must work in post-mortem mode' do
         enter 'cont', 'frame'
-        debug_file('post_mortem') { $state.line.must_equal 6 }
+        debug_file('post_mortem') { state.line.must_equal 6 }
         check_output_includes(
           /--> #0  block in PostMortemExample\.a\s+at #{__FILE__}:6/)
       end
@@ -96,14 +96,14 @@ class TestPostMortem < TestDsl::TestCase
       it 'must be able to set conditions in post-mortem mode' do
         enter 'cont', "break 11",
               ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 11 }
+        debug_file('post_mortem') { state.line.must_equal 11 }
       end
     end
 
     describe 'break' do
       it 'must be able to set breakpoints in post-mortem mode' do
         enter 'cont', 'break 11', 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 11 }
+        debug_file('post_mortem') { state.line.must_equal 11 }
       end
     end
 
@@ -154,7 +154,7 @@ class TestPostMortem < TestDsl::TestCase
         skip "Don't know why this is failing now..."
         irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
         enter 'cont', 'break 11', 'irb'
-        debug_file('post_mortem') { $state.line.must_equal 11 }
+        debug_file('post_mortem') { state.line.must_equal 11 }
       end
     end
 

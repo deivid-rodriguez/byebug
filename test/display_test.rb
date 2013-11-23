@@ -14,7 +14,7 @@ class TestDisplay < TestDsl::TestCase
 
   it 'must save displayed expressions' do
     enter 'display d + 1'
-    debug_file('display') { $state.display.must_equal [[true, 'd + 1']] }
+    debug_file('display') { state.display.must_equal [[true, 'd + 1']] }
   end
 
   it 'displays all expressions available' do
@@ -44,8 +44,8 @@ class TestDisplay < TestDsl::TestCase
         end
 
         it 'must set all expressions saved to "false"' do
-          debug_file('display') {
-           $state.display.must_equal [[false, 'abc'], [false, 'd']] }
+          debug_file('display') { state.display.must_equal [[false, 'abc'],
+                                                            [false, 'd']] }
         end
 
         it 'must not show any output' do
@@ -58,8 +58,8 @@ class TestDisplay < TestDsl::TestCase
         let(:confirm_response) { 'n' }
 
         it 'must set all expressions saved to "false"' do
-          debug_file('display') {
-           $state.display.must_equal [[true, 'abc'], [true, 'd']] }
+          debug_file('display') { state.display.must_equal [[true, 'abc'],
+                                                            [true, 'd']] }
         end
 
         it 'must not show any output' do
@@ -78,8 +78,8 @@ class TestDisplay < TestDsl::TestCase
       end
 
       it 'must set inactive positions' do
-        debug_file('display') {
-         $state.display.must_equal [[nil, 'abc'], [true, 'd']] }
+        debug_file('display') { state.display.must_equal [[nil, 'abc'],
+                                                          [true, 'd']] }
       end
 
       it 'must display only the active position' do
@@ -97,7 +97,7 @@ class TestDisplay < TestDsl::TestCase
   describe 'disable' do
     it 'must disable a position' do
       enter 'display d', 'disable display 1'
-      debug_file('display') { $state.display.must_equal [[false, 'd']] }
+      debug_file('display') { state.display.must_equal [[false, 'd']] }
     end
 
     it 'must show an error if no displays are set' do
@@ -118,7 +118,7 @@ class TestDisplay < TestDsl::TestCase
   describe 'enable' do
     it 'must enable a position' do
       enter 'display d', 'disable display 1', 'enable display 1'
-      debug_file('display') { $state.display.must_equal [[true, 'd']] }
+      debug_file('display') { state.display.must_equal [[true, 'd']] }
     end
   end
 end

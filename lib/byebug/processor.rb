@@ -172,7 +172,12 @@ module Byebug
       #
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
-        $state = Command.settings[:testing] ? state : nil
+
+        if Command.settings[:testing]
+          Thread.current.thread_variable_set('state', state)
+        else
+          Thread.current.thread_variable_set('state', nil)
+        end
 
         preloop(commands, context)
         print state.location if Command.settings[:autolist] == 0

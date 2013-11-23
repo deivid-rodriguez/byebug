@@ -89,7 +89,7 @@ module TestDsl
   #   debug "ex1" # ex1 should be placed in test/examples/ex1.rb
   #
   #   enter 'b 4', 'cont'
-  #   debug("ex1") { $state.line.must_equal 4 }
+  #   debug("ex1") { state.line.must_equal 4 }
   #
   def debug_file(filename, &block)
     is_test_block_called = false
@@ -149,8 +149,12 @@ module TestDsl
     Byebug.handler.interface
   end
 
+  def state
+    Thread.current.thread_variable_get('state')
+  end
+
   def context
-    $state.context
+    state.context
   end
 
   def force_set_const(klass, const, value)

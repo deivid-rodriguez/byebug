@@ -91,12 +91,12 @@ class TestBreakpoints < TestDsl::TestCase
   describe 'stopping at breakpoint' do
     it 'must stop at the correct line' do
       enter 'break 5', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 5 }
+      debug_file('breakpoint') { state.line.must_equal 5 }
     end
 
     it 'must stop at the correct file' do
       enter 'break 5', 'cont'
-      debug_file('breakpoint') { $state.file.must_equal @tst_file }
+      debug_file('breakpoint') { state.file.must_equal @tst_file }
     end
 
     describe 'show a message' do
@@ -152,11 +152,11 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter "break #{__FILE__}:3", 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 3 }
+        debug_file('breakpoint') { state.line.must_equal 3 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
+        debug_file('breakpoint') { state.file.must_equal __FILE__ }
       end
     end
 
@@ -182,11 +182,11 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample#b', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 5 }
+        debug_file('breakpoint') { state.line.must_equal 5 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
+        debug_file('breakpoint') { state.file.must_equal __FILE__ }
       end
     end
 
@@ -194,11 +194,11 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample.a', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 2 }
+        debug_file('breakpoint') { state.line.must_equal 2 }
       end
 
       it 'must stop at the correct file' do
-        debug_file('breakpoint') { $state.file.must_equal __FILE__ }
+        debug_file('breakpoint') { state.file.must_equal __FILE__ }
       end
     end
 
@@ -238,7 +238,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must not stop on the disabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint') { $state.line.must_equal 6 }
+          debug_file('breakpoint') { state.line.must_equal 6 }
         end
       end
 
@@ -257,7 +257,7 @@ class TestBreakpoints < TestDsl::TestCase
             enter 'cont'
             debug_file('breakpoint')
             # Obscure assert to check for program termination
-            $state.proceed.must_equal true
+            state.proceed.must_equal true
           end
         end
 
@@ -311,7 +311,7 @@ class TestBreakpoints < TestDsl::TestCase
 
         it 'must stop on the enabled breakpoint' do
           enter 'cont'
-          debug_file('breakpoint') { $state.line.must_equal 5 }
+          debug_file('breakpoint') { state.line.must_equal 5 }
         end
       end
 
@@ -328,12 +328,12 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must stop on the first breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_equal 5 }
+            debug_file('breakpoint') { state.line.must_equal 5 }
           end
 
           it 'must stop on the last breakpoint' do
             enter 'cont', 'cont'
-            debug_file('breakpoint') { $state.line.must_equal 6 }
+            debug_file('breakpoint') { state.line.must_equal 6 }
           end
         end
 
@@ -349,7 +349,7 @@ class TestBreakpoints < TestDsl::TestCase
 
           it 'must stop only on the enabled breakpoint' do
             enter 'cont'
-            debug_file('breakpoint') { $state.line.must_equal 6 }
+            debug_file('breakpoint') { state.line.must_equal 6 }
           end
         end
       end
@@ -375,24 +375,24 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must not stop on the disabled breakpoint' do
       enter 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 6 }
+      debug_file('breakpoint') { state.line.must_equal 6 }
     end
   end
 
   describe 'Conditional breakpoints' do
     it 'must stop if the condition is true' do
       enter 'break 5 if z == 5', 'break 6', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 5 }
+      debug_file('breakpoint') { state.line.must_equal 5 }
     end
 
     it 'must skip if the condition is false' do
       enter 'break 5 if z == 3', 'break 6', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 6 }
+      debug_file('breakpoint') { state.line.must_equal 6 }
     end
 
     it 'must show an error when conditional syntax is wrong' do
       enter 'break 5 ifa z == 3', 'break 6', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 6 }
+      debug_file('breakpoint') { state.line.must_equal 6 }
       check_error_includes \
         'Expecting "if" in breakpoint condition; got: ifa z == 3.'
     end
@@ -417,13 +417,13 @@ class TestBreakpoints < TestDsl::TestCase
 
     it 'must show an error if no file or line is specified' do
       enter 'break ifa z == 3', 'break 6', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 6 }
+      debug_file('breakpoint') { state.line.must_equal 6 }
       check_error_includes 'Invalid breakpoint location: ifa z == 3.'
     end
 
     it 'must show an error if expression syntax is invalid' do
       enter 'break if z -=) 3', 'break 6', 'cont'
-      debug_file('breakpoint') { $state.line.must_equal 6 }
+      debug_file('breakpoint') { state.line.must_equal 6 }
       check_error_includes \
         'Expression "z -=) 3" syntactically incorrect; breakpoint disabled.'
     end
@@ -432,13 +432,13 @@ class TestBreakpoints < TestDsl::TestCase
   describe 'Stopping through `byebug` keyword' do
     describe 'when not the last instruction of a method' do
       it 'must stop in the next line' do
-        debug_file('breakpoint') { $state.line.must_equal 4 }
+        debug_file('breakpoint') { state.line.must_equal 4 }
       end
     end
 
     describe 'when last instruction of a method' do
       it 'must stop right before returning from the frame' do
-        debug_file('breakpoint_deep') { $state.line.must_equal 25 }
+        debug_file('breakpoint_deep') { state.line.must_equal 25 }
       end
     end
   end

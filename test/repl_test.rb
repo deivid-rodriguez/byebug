@@ -11,19 +11,19 @@ class TestRepl < TestDsl::TestCase
     it 'must support next command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :next)
       enter 'irb'
-      debug_file('repl') { $state.line.must_equal 3 }
+      debug_file('repl') { state.line.must_equal 3 }
     end
 
     it 'must support step command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :step)
       enter 'irb'
-      debug_file('repl') { $state.line.must_equal 3 }
+      debug_file('repl') { state.line.must_equal 3 }
     end
 
     it 'must support cont command' do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
       enter 'break 4', 'irb'
-      debug_file('repl') { $state.line.must_equal 4 }
+      debug_file('repl') { state.line.must_equal 4 }
     end
 
     describe 'autoirb' do

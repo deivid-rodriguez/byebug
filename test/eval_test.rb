@@ -29,7 +29,7 @@ class TestEval < TestDsl::TestCase
 
   it 'must work when inspect raises an exception' do
     enter 'c 4', 'p @foo'
-    debug_file('eval') { $state.line.must_equal 4 }
+    debug_file('eval') { state.line.must_equal 4 }
     check_output_includes 'RuntimeError Exception: Broken'
   end
 

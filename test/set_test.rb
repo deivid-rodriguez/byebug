@@ -67,14 +67,14 @@ class TestSet < TestDsl::TestCase
   end
 
   describe 'testing' do
-    describe '$state' do
+    describe 'state' do
       describe 'when setting "testing" to on' do
         temporary_change_hash Byebug.settings, :testing, false
 
         it 'must get set' do
           enter 'set testing', 'break 3', 'cont'
           debug_file('set') {
-            $state.must_be_kind_of Byebug::CommandProcessor::State }
+            state.must_be_kind_of Byebug::CommandProcessor::State }
         end
       end
 
@@ -83,7 +83,7 @@ class TestSet < TestDsl::TestCase
 
         it 'must get unset' do
           enter 'set notesting', 'break 3', 'cont'
-          debug_file('set') { $state.must_be_nil }
+          debug_file('set') { state.must_be_nil }
         end
       end
     end
