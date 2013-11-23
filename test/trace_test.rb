@@ -66,37 +66,37 @@ class TestTrace < TestDsl::TestCase
 
   describe 'tracing global variables' do
     it 'must track global variable' do
-      enter 'trace variable $bla'
+      enter 'trace variable bla'
       debug_file 'trace'
-      check_output_includes 'traced variable $bla has value 3',
-                            'traced variable $bla has value 7'
+      check_output_includes "traced global variable 'bla' has value '3'",
+                            "traced global variable 'bla' has value '7'"
     end
 
     it 'must be able to use a shortcut' do
-      enter 'trace var $bla'
+      enter 'trace var bla'
       debug_file 'trace'
-      check_output_includes 'traced variable $bla has value 3'
+      check_output_includes "traced global variable 'bla' has value '3'"
     end
 
     it 'must track global variable with stop' do
-      enter 'trace variable $bla stop', 'break 7', 'cont'
-      debug_file('trace') { $state.line.must_equal 4 }
+      enter 'trace variable bla stop', 'break 7', 'cont'
+      debug_file('trace') { state.line.must_equal 4 }
     end
 
     it 'must track global variable with nostop' do
-      enter 'trace variable $bla nostop', 'break 7', 'cont'
-      debug_file('trace') { $state.line.must_equal 7 }
+      enter 'trace variable bla nostop', 'break 7', 'cont'
+      debug_file('trace') { state.line.must_equal 7 }
     end
 
     describe 'errors' do
       it 'must show an error message if there is no such global variable' do
-        enter 'trace variable $foo'
+        enter 'trace variable foo'
         debug_file 'trace'
-        check_error_includes '$foo is not a global variable.'
+        check_error_includes "'foo' is not a global variable."
       end
 
       it 'must show an error message if subcommand is invalid' do
-        enter 'trace variable $bla foo'
+        enter 'trace variable bla foo'
         debug_file 'trace'
         check_error_includes 'expecting "stop" or "nostop"; got "foo"'
       end

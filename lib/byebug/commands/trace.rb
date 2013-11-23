@@ -15,19 +15,19 @@ module Byebug
         print "#{show_setting('linetrace')}\n"
       elsif @match[1] =~ /var(?:iable)?/
         varname = @match[2]
-        if bb_eval("defined?(#{varname})")
+        if global_variables.include?("$#{varname}".to_sym)
           if @match[3] && @match[3] !~ /(:?no)?stop/
             errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[3]}\"\n"
           else
             dbg_cmd = (@match[3] && @match[3] !~ /nostop/) ? 'byebug(1,0)' : ''
           end
-          eval("trace_var(:\"#{varname}\") do |val|
-                  print \"traced variable \#{varname} has value \#{val}\n\"
+          eval("trace_var(:\"\$#{varname}\") do |val|
+                  print \"traced global variable '#{varname}' has value '\#{val}'\"\n
                   #{dbg_cmd}
                 end")
-          print "Tracing variable \"#{varname}\".\n"
+          print "Tracing global variable \"#{varname}\".\n"
         else
-          errmsg "#{varname} is not a global variable.\n"
+          errmsg "'#{varname}' is not a global variable.\n"
         end
       else
         errmsg "expecting \"on\", \"off\", \"var\" or \"variable\"; got: " \
