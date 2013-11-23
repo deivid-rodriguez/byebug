@@ -72,7 +72,8 @@ module Byebug
     end
 
     def execute
-      Byebug.contexts.sort_by(&:thnum).each { |c| display_context(c) }
+      Byebug.contexts.select { |c| Thread.list.include?(c.thread) }
+                     .sort_by(&:thnum).each { |c| display_context(c) }
     end
 
     class << self
