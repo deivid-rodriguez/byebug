@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestRepl < TestDsl::TestCase
 
   describe 'Irb Command' do

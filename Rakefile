@@ -1,4 +1,3 @@
-require 'rake/testtask'
 require 'rake/extensiontask'
 require 'bundler/gem_tasks'
 
@@ -8,10 +7,16 @@ SO_NAME = "byebug.so"
 
 desc "Run MiniTest suite"
 task :test do
-  Rake::TestTask.new(:test) do |t|
-    t.test_files = FileList["test/*_test.rb"]
-    t.warning = true
-    t.verbose = true
+  args = "-w -Ilib test/test_helper.rb"
+  unless ARGV.empty?
+    ARGV.each { |arg| args += " #{arg}" unless arg == "test" }
+  end
+  ruby args do |ok, status|
+    if !ok && status.respond_to?(:signaled?) && status.signaled?
+      raise SignalException.new(status.termsig)
+    elsif !ok
+      fail "Command failed with status (#{status.exitstatus}): [ruby #{args}]"
+    end
   end
 end
 

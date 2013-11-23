@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestDisplay < TestDsl::TestCase
 
   it 'must show expressions' do

@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class FinishExample
   def a
     b
@@ -18,28 +16,30 @@ class FinishExample
 end
 
 class TestFinish < TestDsl::TestCase
+  before { enter "break #{__FILE__}:14", 'cont' }
+
   it 'must stop at the next frame by default' do
-    enter "break #{__FILE__}:16", 'cont', 'finish'
-    debug_file('finish') { $state.line.must_equal 13 }
+    enter 'finish'
+    debug_file('finish') { $state.line.must_equal 11 }
   end
 
   it 'must stop at the #0 frame by default' do
-    enter "break #{__FILE__}:16", 'cont', 'finish 0'
-    debug_file('finish') { $state.line.must_equal 13 }
+    enter 'finish 0'
+    debug_file('finish') { $state.line.must_equal 11 }
   end
 
   it 'must stop at the specified frame' do
-    enter "break #{__FILE__}:16", 'cont', 'finish 1'
-    debug_file('finish') { $state.line.must_equal 9 }
+    enter 'finish 1'
+    debug_file('finish') { $state.line.must_equal 7 }
   end
 
   it 'must stop at the next frame if the current frame was changed' do
-    enter "break #{__FILE__}:16", 'cont', 'up', 'finish'
-    debug_file('finish') { $state.line.must_equal 9 }
+    enter 'up', 'finish'
+    debug_file('finish') { $state.line.must_equal 7 }
   end
 
   describe 'not a number is specified for frame' do
-    before { enter "break #{__FILE__}:16", 'cont', 'finish foo' }
+    before { enter 'finish foo' }
 
     it 'must show an error' do
       debug_file('finish')
@@ -47,7 +47,7 @@ class TestFinish < TestDsl::TestCase
     end
 
     it 'must be on the same line' do
-      debug_file('finish') { $state.line.must_equal 16 }
+      debug_file('finish') { $state.line.must_equal 14 }
     end
   end
 end

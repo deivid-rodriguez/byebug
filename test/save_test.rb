@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestSave < TestDsl::TestCase
 
   describe 'successful saving' do

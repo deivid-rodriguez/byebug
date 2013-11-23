@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class RestartExample
   def concat_args(a, b, c)
     a.to_s + b.to_s + c.to_s

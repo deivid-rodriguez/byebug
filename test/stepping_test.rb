@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class SteppingExample
   def self.a(num)
     num += 2
@@ -21,21 +19,21 @@ class TestStepping < TestDsl::TestCase
   describe 'Next Command' do
 
     describe 'method call behaviour' do
-      before { enter "break #{__FILE__}:10", 'cont' }
+      before { enter "break #{__FILE__}:8", 'cont' }
 
       it 'must leave on the same line by default' do
         enter 'next'
-        debug_file('stepping') { $state.line.must_equal 10 }
+        debug_file('stepping') { $state.line.must_equal 8 }
       end
 
       it 'must go to the next line if forced by "plus" sign' do
         enter 'next+'
-        debug_file('stepping') { $state.line.must_equal 11 }
+        debug_file('stepping') { $state.line.must_equal 9 }
       end
 
       it 'must leave on the same line if forced by "minus" sign' do
         enter 'next-'
-        debug_file('stepping') { $state.line.must_equal 10 }
+        debug_file('stepping') { $state.line.must_equal 8 }
       end
 
       describe 'when forcestep is set' do
@@ -43,12 +41,12 @@ class TestStepping < TestDsl::TestCase
 
         it 'must go to the next line' do
           enter 'next'
-          debug_file('stepping') { $state.line.must_equal 11 }
+          debug_file('stepping') { $state.line.must_equal 9 }
         end
 
         it 'must go to the next line (by shortcut)' do
           enter 'n'
-          debug_file('stepping') { $state.line.must_equal 11 }
+          debug_file('stepping') { $state.line.must_equal 9 }
         end
 
         it 'must go the specified number of lines forward by default' do
@@ -66,7 +64,7 @@ class TestStepping < TestDsl::TestCase
 
         it 'must ignore it if "minus" is specified' do
           enter 'next-'
-          debug_file('stepping') { $state.line.must_equal 10 }
+          debug_file('stepping') { $state.line.must_equal 8 }
         end
       end
     end
@@ -76,7 +74,7 @@ class TestStepping < TestDsl::TestCase
 
       it 'must step over blocks' do
         enter 'next'
-        debug_file('stepping') { $state.line.must_equal 8 }
+        debug_file('stepping') { state.line.must_equal 6 }
       end
     end
   end
@@ -84,21 +82,21 @@ class TestStepping < TestDsl::TestCase
   describe 'Step Command' do
 
     describe 'method call behaviour' do
-      before { enter "break #{__FILE__}:10", 'cont' }
+      before { enter "break #{__FILE__}:8", 'cont' }
 
       it 'must leave on the same line if forced by a setting' do
         enter 'step'
-        debug_file('stepping') { $state.line.must_equal 10 }
+        debug_file('stepping') { $state.line.must_equal 8 }
       end
 
       it 'must go to the step line if forced to do that by "plus" sign' do
         enter 'step+'
-        debug_file('stepping') { $state.line.must_equal 11 }
+        debug_file('stepping') { $state.line.must_equal 9 }
       end
 
       it 'must leave on the same line if forced to do that by "minus" sign' do
         enter 'step-'
-        debug_file('stepping') { $state.line.must_equal 10 }
+        debug_file('stepping') { $state.line.must_equal 8 }
       end
 
       describe 'when forcestep is set' do
@@ -106,17 +104,17 @@ class TestStepping < TestDsl::TestCase
 
         it 'must go to the step line if forced by a setting' do
           enter 'step'
-          debug_file('stepping') { $state.line.must_equal 11 }
+          debug_file('stepping') { $state.line.must_equal 9 }
         end
 
         it 'must go to the next line if forced by a setting (by shortcut)' do
           enter 's'
-          debug_file('stepping') { $state.line.must_equal 11 }
+          debug_file('stepping') { $state.line.must_equal 9 }
         end
 
         it 'must go the specified number of lines forward by default' do
           enter 'step 2'
-          debug_file('stepping') { $state.line.must_equal 15 }
+          debug_file('stepping') { $state.line.must_equal 13 }
         end
       end
     end
@@ -126,7 +124,7 @@ class TestStepping < TestDsl::TestCase
 
       it 'must step into blocks' do
         enter 'step'
-        debug_file('stepping') { $state.line.must_equal 5 }
+        debug_file('stepping') { $state.line.must_equal 3 }
       end
     end
   end

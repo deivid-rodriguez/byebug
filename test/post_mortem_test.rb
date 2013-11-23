@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class PostMortemExample
   def a
     begin
@@ -24,11 +22,11 @@ class TestPostMortem < TestDsl::TestCase
     end
 
     it 'must stop at the correct line' do
-      debug_file('post_mortem') { $state.line.must_equal 8 }
+      debug_file('post_mortem') { $state.line.must_equal 6 }
     end
 
     it 'must exit from post-mortem mode after stepping command' do
-      enter 'break 13', 'cont'
+      enter "break 11", 'cont'
       debug_file('post_mortem') { Byebug.post_mortem?.must_equal false }
     end
 
@@ -88,24 +86,24 @@ class TestPostMortem < TestDsl::TestCase
     describe 'frame' do
       it 'must work in post-mortem mode' do
         enter 'cont', 'frame'
-        debug_file('post_mortem') { $state.line.must_equal 8 }
+        debug_file('post_mortem') { $state.line.must_equal 6 }
         check_output_includes(
-          /--> #0  block in PostMortemExample\.a\s+at #{__FILE__}:8/)
+          /--> #0  block in PostMortemExample\.a\s+at #{__FILE__}:6/)
       end
     end
 
     describe 'condition' do
       it 'must be able to set conditions in post-mortem mode' do
-        enter 'cont', 'break 13',
+        enter 'cont', "break 11",
               ->{ "cond #{Byebug.breakpoints.first.id} true" }, 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 13 }
+        debug_file('post_mortem') { $state.line.must_equal 11 }
       end
     end
 
     describe 'break' do
       it 'must be able to set breakpoints in post-mortem mode' do
-        enter 'cont', 'break 13', 'cont'
-        debug_file('post_mortem') { $state.line.must_equal 13 }
+        enter 'cont', 'break 11', 'cont'
+        debug_file('post_mortem') { $state.line.must_equal 11 }
       end
     end
 
@@ -145,7 +143,7 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont', 'info line'
         debug_file 'post_mortem'
-        check_output_includes "Line 8 of \"#{__FILE__}\""
+        check_output_includes "Line 6 of \"#{__FILE__}\""
       end
     end
 
@@ -155,8 +153,8 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         skip "Don't know why this is failing now..."
         irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)
-        enter 'cont', 'break 13', 'irb'
-        debug_file('post_mortem') { $state.line.must_equal 13 }
+        enter 'cont', 'break 11', 'irb'
+        debug_file('post_mortem') { $state.line.must_equal 11 }
       end
     end
 
@@ -195,7 +193,7 @@ class TestPostMortem < TestDsl::TestCase
       it 'must work in post-mortem mode' do
         enter 'cont'
         debug_file 'post_mortem'
-        check_output_includes "[3, 12] in #{__FILE__}"
+        check_output_includes "[1, 10] in #{__FILE__}"
       end
     end
 

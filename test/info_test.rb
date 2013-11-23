@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class InfoExample
   def initialize
     @foo = "bar"
@@ -35,7 +33,7 @@ class TestInfo < TestDsl::TestCase
 
   describe 'Args info' do
     it 'must show info about all args' do
-      enter "break #{__FILE__}:12", 'cont', 'info args'
+      enter "break #{__FILE__}:10", 'cont', 'info args'
       debug_file 'info'
       check_output_includes 'y = "a"', 'z = "b"'
     end
@@ -182,7 +180,7 @@ class TestInfo < TestDsl::TestCase
 
   describe 'Instance variables info' do
     it 'must show instance variables' do
-      enter "break #{__FILE__}:12", 'cont', 'info instance_variables'
+      enter "break #{__FILE__}:10", 'cont', 'info instance_variables'
       debug_file 'info'
       check_output_includes '@bla = "blabla"', '@foo = "bar"'
     end
@@ -190,9 +188,9 @@ class TestInfo < TestDsl::TestCase
 
   describe 'Line info' do
     it 'must show the current line' do
-      enter "break #{__FILE__}:12", 'cont', 'info line'
+      enter "break #{__FILE__}:10", 'cont', 'info line'
       debug_file 'info'
-      check_output_includes "Line 12 of \"#{__FILE__}\""
+      check_output_includes "Line 10 of \"#{__FILE__}\""
     end
   end
 
@@ -200,13 +198,13 @@ class TestInfo < TestDsl::TestCase
     temporary_change_hash Byebug.settings, :width, 28
 
     it 'must show the current local variables' do
-      enter "break #{__FILE__}:12", 'cont', 'info locals'
+      enter "break #{__FILE__}:10", 'cont', 'info locals'
       debug_file 'info'
       check_output_includes 'w = "11111111111111111111...', 'x = 2'
     end
 
     it 'must fail if local variable doesn\'t respond to #to_s or to #inspect' do
-      enter "break #{__FILE__}:17", 'cont', 'info locals'
+      enter "break #{__FILE__}:15", 'cont', 'info locals'
       debug_file 'info'
       check_output_includes 'a = *Error in evaluation*'
     end
@@ -254,11 +252,11 @@ class TestInfo < TestDsl::TestCase
 
   describe 'Stack info' do
     it 'must show stack info' do
-      enter 'set fullpath', "break #{__FILE__}:10", 'cont', 'info stack'
+      enter 'set fullpath', "break #{__FILE__}:8", 'cont', 'info stack'
       debug_file 'info'
       check_output_includes(
-        /--> #0  InfoExample.a\(y\#String, z\#String\)\s+at #{__FILE__}:10/,
-            /#1  InfoExample.b\s+at #{__FILE__}:21/,
+        /--> #0  InfoExample.a\(y\#String, z\#String\)\s+at #{__FILE__}:8/,
+            /#1  InfoExample.b\s+at #{__FILE__}:19/,
             /#2  <top \(required\)>\s+at #{fullpath('info')}:4/)
     end
   end
@@ -275,7 +273,7 @@ class TestInfo < TestDsl::TestCase
     temporary_change_hash Byebug.settings, :width, 30
 
     it 'must show all variables' do
-      enter "break #{__FILE__}:12", 'cont', 'info variables'
+      enter "break #{__FILE__}:10", 'cont', 'info variables'
       debug_file 'info'
       check_output_includes(/self = #<InfoExample:\S+.../,
                             'w = "1111111111111111111111...',
@@ -285,7 +283,7 @@ class TestInfo < TestDsl::TestCase
     end
 
     it 'must fail if the variable doesn\'t respond to #to_s or to #inspect' do
-      enter "break #{__FILE__}:17", 'cont', 'info variables'
+      enter "break #{__FILE__}:15", 'cont', 'info variables'
       debug_file 'info'
       check_output_includes 'a = *Error in evaluation*',
                             /self = #<InfoExample:\S+.../,
@@ -294,7 +292,7 @@ class TestInfo < TestDsl::TestCase
     end
 
     it 'must correctly print variables containing % sign' do
-      enter "break #{__FILE__}:23", 'cont', 'info variables'
+      enter "break #{__FILE__}:21", 'cont', 'info variables'
       debug_file 'info'
       check_output_includes 'e = "%.2f"'
     end

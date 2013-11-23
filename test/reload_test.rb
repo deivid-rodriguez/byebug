@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestReload < TestDsl::TestCase
 
   describe 'autoreloading' do

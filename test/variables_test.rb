@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class VariablesExample
   SOMECONST = 'foo' unless defined?(SOMECONST)
 
@@ -22,14 +20,16 @@ end
 
 class TestVariables < TestDsl::TestCase
   describe 'class variables' do
+    before { enter "break #{__FILE__}:17", 'cont' }
+
     it 'must show variables' do
-      enter "break #{__FILE__}:19", 'cont', 'var class'
+      enter 'var class'
       debug_file 'variables'
       check_output_includes '@@class_c = 3'
     end
 
     it 'must be able to use shortcut' do
-      enter "break #{__FILE__}:19", 'cont', 'v cl'
+      enter 'v cl'
       debug_file 'variables'
       check_output_includes '@@class_c = 3'
     end
@@ -77,7 +77,7 @@ class TestVariables < TestDsl::TestCase
     end
 
     it 'must show instance variables of self' do
-      enter "break #{__FILE__}:11", 'cont', 'var instance'
+      enter "break #{__FILE__}:9", 'cont', 'var instance'
       debug_file 'variables'
       check_output_includes '@inst_a = 1', '@inst_b = 2'
     end
@@ -113,7 +113,7 @@ class TestVariables < TestDsl::TestCase
 
   describe 'local variables' do
     it 'must show local variables' do
-      enter "break #{__FILE__}:17", 'cont', 'var local'
+      enter "break #{__FILE__}:15", 'cont', 'var local'
       debug_file 'variables'
       check_output_includes 'a => 4', 'b => nil', 'i => 1'
     end

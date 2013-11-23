@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class EvalTest
   def sum(a,b)
     a + b

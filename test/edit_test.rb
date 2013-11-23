@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestEdit < TestDsl::TestCase
 
   describe 'open configured editor' do

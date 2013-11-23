@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestSet < TestDsl::TestCase
 
   describe 'setting to on' do

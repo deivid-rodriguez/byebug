@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestSource < TestDsl::TestCase
   let(:filename) { 'source_example.txt' }
 

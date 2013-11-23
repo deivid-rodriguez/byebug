@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestList < TestDsl::TestCase
   describe 'listsize' do
     it 'must show lines according to :listsize setting' do

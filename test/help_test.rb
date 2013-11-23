@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestHelp < TestDsl::TestCase
   include Columnize
 

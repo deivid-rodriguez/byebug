@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestConditions < TestDsl::TestCase
 
   describe 'setting condition' do
@@ -14,11 +12,11 @@ class TestConditions < TestDsl::TestCase
       end
 
       it 'must stop at the breakpoint if condition is true' do
-        debug_file('conditions') { $state.line.must_equal 3 }
+        debug_file('conditions') { state.line.must_equal 3 }
       end
 
       it 'must work with full command name too' do
-        debug_file('conditions') { $state.line.must_equal 3 }
+        debug_file('conditions') { state.line.must_equal 3 }
       end
     end
 

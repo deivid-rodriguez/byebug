@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class BreakpointExample
   def self.a(num)
     4
@@ -151,10 +149,10 @@ class TestBreakpoints < TestDsl::TestCase
 
   describe 'set breakpoint in a file' do
     describe 'successfully' do
-      before { enter "break #{__FILE__}:5", 'cont' }
+      before { enter "break #{__FILE__}:3", 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 5 }
+        debug_file('breakpoint') { $state.line.must_equal 3 }
       end
 
       it 'must stop at the correct file' do
@@ -184,7 +182,7 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample#b', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 7 }
+        debug_file('breakpoint') { $state.line.must_equal 5 }
       end
 
       it 'must stop at the correct file' do
@@ -196,7 +194,7 @@ class TestBreakpoints < TestDsl::TestCase
       before { enter 'break BreakpointExample.a', 'cont' }
 
       it 'must stop at the correct line' do
-        debug_file('breakpoint') { $state.line.must_equal 4 }
+        debug_file('breakpoint') { $state.line.must_equal 2 }
       end
 
       it 'must stop at the correct file' do
@@ -440,7 +438,7 @@ class TestBreakpoints < TestDsl::TestCase
 
     describe 'when last instruction of a method' do
       it 'must stop right before returning from the frame' do
-        debug_file('breakpoint_deep') { $state.line.must_equal 27 }
+        debug_file('breakpoint_deep') { $state.line.must_equal 25 }
       end
     end
   end

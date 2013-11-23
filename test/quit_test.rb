@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestQuit < TestDsl::TestCase
   it 'must quit if user confirmed' do
     Byebug::QuitCommand.any_instance.expects(:exit!)

@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class KillExample
   def self.kill_me
     'dieeee'

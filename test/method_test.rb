@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class MethodExample
   def initialize
     @a = 'b'

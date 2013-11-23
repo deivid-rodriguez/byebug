@@ -1,5 +1,3 @@
-require_relative 'test_helper'
-
 class TestShow < TestDsl::TestCase
   describe 'args' do
     temporary_change_hash Byebug.settings, :argv, %w{foo bar}
