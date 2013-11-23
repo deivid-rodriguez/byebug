@@ -19,7 +19,7 @@ module Byebug
           print "Warning #{@match[1]} is not known to be a Class\n" unless
             bb_eval "#{@match[1]}.is_a?(Class)", get_binding
           Byebug.add_catchpoint @match[1]
-          print "Catch exception #{@match[1]}.\n"
+          print "Catching exception #{@match[1]}.\n"
         end
       elsif @match[2] != 'off'
         errmsg "Off expected. Got #{@match[2]}\n"
