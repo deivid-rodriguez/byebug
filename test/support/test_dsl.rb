@@ -80,16 +80,16 @@ module TestDsl
   #
   # Runs byebug with the provided basename for a file.
   #
-  # The file should be placed in the test/examples dir. You also can specify a
-  # block, which will be executed when Processor extracts all the commands from
-  # the input queue. You can use that for making asserts on the current test. If
-  # you specified the block and it never was executed, the test will fail.
+  # You also can specify a block, which will be executed when Processor extracts
+  # all the commands from the input queue. You can use that for making asserts
+  # on the current test. If you specified the block and it never was executed,
+  # the test will fail.
   #
   # Usage:
-  #   debug "ex1" # ex1 should be placed in test/examples/ex1.rb
+  #   debug_file '/path/to/ex1.rb'
   #
   #   enter 'b 4', 'cont'
-  #   debug_file("ex1") { state.line.must_equal 4 }
+  #   debug_file('/path/to/ex2.rb') { state.line.must_equal 4 }
   #
   def debug_file(filename, options = {}, &block)
     is_test_block_called = false
