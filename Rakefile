@@ -1,3 +1,4 @@
+require 'rake/testtask'
 require 'rake/extensiontask'
 require 'bundler/gem_tasks'
 
@@ -5,18 +6,19 @@ Rake::ExtensionTask.new('byebug')
 
 SO_NAME = "byebug.so"
 
+# Override default rake tests loader
+class Rake::TestTask
+  def rake_loader
+    'test/test_helper.rb'
+  end
+end
+
 desc "Run MiniTest suite"
 task :test do
-  args = "-w -Ilib test/test_helper.rb"
-  unless ARGV.empty?
-    ARGV.each { |arg| args += " #{arg}" unless arg == "test" }
-  end
-  ruby args do |ok, status|
-    if !ok && status.respond_to?(:signaled?) && status.signaled?
-      raise SignalException.new(status.termsig)
-    elsif !ok
-      fail "Command failed with status (#{status.exitstatus}): [ruby #{args}]"
-    end
+  Rake::TestTask.new do |t|
+    t.verbose = true
+    t.warning = true
+    t.pattern = 'test/*_test.rb'
   end
 end
 
