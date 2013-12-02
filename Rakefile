@@ -2,7 +2,9 @@ require 'rake/testtask'
 require 'rake/extensiontask'
 require 'bundler/gem_tasks'
 
-Rake::ExtensionTask.new('byebug')
+Rake::ExtensionTask.new('byebug') do |ext|
+  ext.lib_dir = 'lib/byebug'
+end
 
 SO_NAME = "byebug.so"
 

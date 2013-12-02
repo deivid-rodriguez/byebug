@@ -1,4 +1,4 @@
-require 'byebug.so'
+require 'byebug/byebug'
 require_relative 'byebug/version'
 require_relative 'byebug/context'
 require_relative 'byebug/processor'

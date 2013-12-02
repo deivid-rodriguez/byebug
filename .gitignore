@@ -14,5 +14,5 @@ doc
 
 Gemfile.lock
 
-lib/byebug.so
-lib/byebug.bundle
+lib/byebug/byebug.so
+lib/byebug/byebug.bundle
