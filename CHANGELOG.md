@@ -1,3 +1,18 @@
+# 2.4.0
+
+* Use `require` instead of `require_relative` for loading byebug's extension
+library (thanks @nobu)
+* Adds back `debugger` as an alias to `byebug` (thanks @wallace)
+* Adds -R option to byebug's binary to specify server's hostname:port for remote
+debugging (thanks @mrkn)
+* Fixes `thread list` showing too many threads
+* Change in tracing global variables. Use `trace variable foo` instead of `trace
+variable $foo`
+* Fix setting post mortem mode with `set post_mortem`. Now this is the only
+post mortem functionality available as specifying `Byebug.post_mortem` with a
+block has been removed in this version.
+
+
 # 2.3.1
 
 * Fixes bug preventing users from deleting breakpoints
