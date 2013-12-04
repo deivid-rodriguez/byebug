@@ -14,4 +14,4 @@ if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc/
 end
 
 dir_config("ruby")
-create_makefile("byebug")
+create_makefile('byebug/byebug')
