@@ -1,3 +1,8 @@
+# 2.4.1
+
+* Fix installation error in Mac OSX (#40), thanks @luislavena
+
+
 # 2.4.0
 
 * Use `require` instead of `require_relative` for loading byebug's extension
