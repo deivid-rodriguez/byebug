@@ -14,6 +14,13 @@ module Byebug
     attr_accessor :actual_port
 
     #
+    # Interrupts the current thread
+    #
+    def interrupt
+      current_context.interrupt
+    end
+
+    #
     # Starts a remote byebug
     #
     def start_server(host = nil, port = PORT)
@@ -21,6 +28,8 @@ module Byebug
 
       self.interface = nil
       start
+
+      start_control(host, port+1)
 
       yield if block_given?
 
@@ -44,6 +53,19 @@ module Byebug
           proceed.wait(mutex)
         end
       end
+    end
+
+    def start_control(host = nil, ctrl_port = PORT + 1)
+       return @ctrl_port if @control_thread
+       server = TCPServer.new(host, ctrl_port)
+       @ctrl_port = server.addr[1]
+       @control_thread = Thread.new do
+         while (session = server.accept)
+           interface = RemoteInterface.new(session)
+           ControlCommandProcessor.new(interface).process_commands
+         end
+       end
+       @ctrl_port
     end
 
     #
