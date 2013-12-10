@@ -26,6 +26,10 @@ module Byebug
       private :ignored
     end
 
+    def interrupt
+      self.step_into 1
+    end
+
     def frame_locals frame_no = 0
       bind = frame_binding frame_no
       eval "local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}", bind
