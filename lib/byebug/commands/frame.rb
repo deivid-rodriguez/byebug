@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Byebug
 
   # Mix-in module to assist in command parsing.
