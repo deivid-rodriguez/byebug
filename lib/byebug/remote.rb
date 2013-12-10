@@ -12,6 +12,7 @@ module Byebug
 
     # The actual port that the server is started at
     attr_accessor :actual_port
+    attr_reader :actual_control_port
 
     #
     # Interrupts the current thread
@@ -29,7 +30,7 @@ module Byebug
       self.interface = nil
       start
 
-      start_control(host, port+1)
+      start_control(host, port == 0 ? 0 : port + 1)
 
       yield if block_given?
 
@@ -56,16 +57,16 @@ module Byebug
     end
 
     def start_control(host = nil, ctrl_port = PORT + 1)
-       return @ctrl_port if @control_thread
+       return @actual_control_port if @control_thread
        server = TCPServer.new(host, ctrl_port)
-       @ctrl_port = server.addr[1]
+       @actual_control_port = server.addr[1]
        @control_thread = Thread.new do
          while (session = server.accept)
            interface = RemoteInterface.new(session)
            ControlCommandProcessor.new(interface).process_commands
          end
        end
-       @ctrl_port
+       @actual_control_port
     end
 
     #
