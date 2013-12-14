@@ -1,3 +1,8 @@
+# 2.5.0
+
+* Support for `sublime-debugger`
+
+
 # 2.4.1
 
 * Fix installation error in Mac OSX (#40), thanks @luislavena
