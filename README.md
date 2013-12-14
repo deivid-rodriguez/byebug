@@ -126,6 +126,8 @@ started. Proper documentation will be eventually written.
 adds a rake task that restarts Passenger with byebug connected.
 * [minitest-byebug](https://github.com/kaspth/minitest-byebug) starts a byebug
 session on minitest failures.
+* [sublime-debugger](https://github.com/shuky19/sublime_debugger) provides a plugin
+for ruby debugging on Sublime Text.
 
 
 ## Future (possible) directions
