@@ -168,11 +168,11 @@ module Byebug
       def description
         %{w[here]|bt|backtrace\tdisplay stack frames
 
-          Print the entire stack frame. Each frame is numbered, the most recent
-          frame is 0. Frame number can be referred to in the "frame" command;
+          Print the entire stack frame. Each frame is numbered; the most recent
+          frame is 0. A frame number can be referred to in the "frame" command;
           "up" and "down" add or subtract respectively to frame numbers shown.
           The position of the current frame is marked with -->. C-frames hang
-          from their most inmediate ruby frame to indicate that they are not
+          from their most immediate Ruby frame to indicate that they are not
           navigable}
       end
     end
