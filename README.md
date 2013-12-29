@@ -159,3 +159,7 @@ starting point of this.
 [6]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [7]: https://gemnasium.com/deivid-rodriguez/byebug.png
 [8]: https://gemnasium.com/deivid-rodriguez/byebug
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
