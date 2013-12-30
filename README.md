@@ -1,4 +1,4 @@
-# Byebug [![Gem Version][1]][2] [![Build Status][3]][4] [![Code Climate][5]][6] [![Dependency Status][7]][8]
+# Byebug [![Gem Version][1]][2] [![Build Status][3]][4] [![Code Climate][5]][6] [![Dependency Status][7]][8] [![Bitdeli Badge][9]][10]
 
 <img src="https://raw.github.com/deivid-rodriguez/byebug/master/logo.png"
      alt="Byebug logo" align="right" style="margin-left: 10px" />
@@ -151,15 +151,15 @@ starting point of this.
 * Logo by [Ivlichev Victor Petrovich](http://www.aha-soft.com/)
 * @kevjames3 for testing, bug reports and the interest in the project.
 
-[1]: https://badge.fury.io/rb/byebug.png
-[2]: http://badge.fury.io/rb/byebug
-[3]: https://secure.travis-ci.org/deivid-rodriguez/byebug.png
-[4]: http://travis-ci.org/deivid-rodriguez/byebug
-[5]: https://codeclimate.com/github/deivid-rodriguez/byebug.png
-[6]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[7]: https://gemnasium.com/deivid-rodriguez/byebug.png
-[8]: https://gemnasium.com/deivid-rodriguez/byebug
+[1]:  https://badge.fury.io/rb/byebug.png
+[2]:  http://badge.fury.io/rb/byebug
+[3]:  https://secure.travis-ci.org/deivid-rodriguez/byebug.png
+[4]:  http://travis-ci.org/deivid-rodriguez/byebug
+[5]:  https://codeclimate.com/github/deivid-rodriguez/byebug.png
+[6]:  https://codeclimate.com/github/deivid-rodriguez/byebug
+[7]:  https://gemnasium.com/deivid-rodriguez/byebug.png
+[8]:  https://gemnasium.com/deivid-rodriguez/byebug
+[9]:  https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png
+[10]: https://bitdeli.com/free
 
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
