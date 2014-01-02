@@ -16,7 +16,7 @@ module Byebug
       end
 
       def real_stack_size
-        if backtrace = Thread.current.backtrace_locations(1)
+        if backtrace = Thread.current.backtrace_locations(0)
           backtrace.size
         end
       end
