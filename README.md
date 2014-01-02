@@ -1,4 +1,4 @@
-# Byebug [![Gem Version][1]][2] [![Build Status][3]][4] [![Code Climate][5]][6] [![Dependency Status][7]][8] [![Bitdeli Badge][9]][10]
+# Byebug [![Version][1]][2] [![Build][3]][4] [![Climate][5]][6] [![Dependencies][7]][8] [![Bitdeli][9]][10]
 
 <img src="https://raw.github.com/deivid-rodriguez/byebug/master/logo.png"
      alt="Byebug logo" align="right" style="margin-left: 10px" />
