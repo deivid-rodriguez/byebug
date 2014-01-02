@@ -153,7 +153,7 @@ starting point of this.
 
 [1]:  https://badge.fury.io/rb/byebug.png
 [2]:  http://badge.fury.io/rb/byebug
-[3]:  https://secure.travis-ci.org/deivid-rodriguez/byebug.png
+[3]:  https://travis-ci.org/deivid-rodriguez/byebug.png
 [4]:  http://travis-ci.org/deivid-rodriguez/byebug
 [5]:  https://codeclimate.com/github/deivid-rodriguez/byebug.png
 [6]:  https://codeclimate.com/github/deivid-rodriguez/byebug
