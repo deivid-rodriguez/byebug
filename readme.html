@@ -1,0 +1,161 @@
+<p><img src='https://raw.github.com/deivid-rodriguez/byebug/master/logo.png'
+     alt='Byebug logo' align='right' style='margin-left: 10px' /></p>
+
+<p><a href="http://badge.fury.io/rb/byebug"><img src="https://badge.fury.io/rb/byebug.png" alt="Version"></a> <a href="http://travis-ci.org/deivid-rodriguez/byebug"><img src="https://travis-ci.org/deivid-rodriguez/byebug.png" alt="Build"></a> <a href="https://codeclimate.com/github/deivid-rodriguez/byebug"><img src="https://codeclimate.com/github/deivid-rodriguez/byebug.png" alt="Climate"></a> <a href="https://gemnasium.com/deivid-rodriguez/byebug"><img src="https://gemnasium.com/deivid-rodriguez/byebug.png" alt="Dependencies"></a> <a href="https://bitdeli.com/free"><img src="https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png" alt="Bitdeli"></a> <a href="https://coveralls.io/r/deivid-rodriguez/byebug"><img src="https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png" alt="Coverage"></a></p>
+
+<h1>Byebug</h1>
+
+<p><em>Debugging in Ruby 2</em></p>
+
+<p>Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
+TracePoint API for execution control and the new Debug Inspector API for call
+stack navigation, so it doesn&#39;t depend on internal core sources. It&#39;s developed
+as a C extension, so it&#39;s fast. And it has a full test suite so it&#39;s reliable.</p>
+
+<p>It allows you to see what is going on <em>inside</em> a Ruby program while it executes
+and can do four main kinds of things to help you catch bugs in the act:</p>
+
+<ul>
+<li>Start your program or attach to it, specifying anything that might affect its
+behavior.</li>
+<li>Make your program stop on specified conditions.</li>
+<li>Examine what has happened when your program has stopped.</li>
+<li>Change things in your program, so you can experiment with correcting the
+effects of one bug and go on to learn about another.</li>
+</ul>
+
+<h2>Install</h2>
+
+<pre><code>$ gem install byebug
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Simply drop</p>
+
+<pre><code>byebug
+</code></pre>
+
+<p>wherever you want to start debugging and the execution will stop there. If you
+are debugging rails, start the server and once the execution gets to your
+<code>byebug</code> command you will get a debugging prompt.</p>
+
+<p>Former <a href="https://github.com/cldwalker/debugger">debugger</a> or
+<a href="https://github.com/mark-moseley/ruby-debug">ruby-debug</a> users, notice:</p>
+
+<ul>
+<li>Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
+require and start the debugger. These flags are a performance penalty and Byebug
+doesn&#39;t need them anymore so my recommendation is not to use them.</li>
+<li>The startup configuration file is now called <code>.byebugrc</code> instead of
+<code>.rdebugrc</code>.</li>
+</ul>
+
+<h2>What&#39;s different from debugger</h2>
+
+<ul>
+<li>Works on Ruby 2.x and it doesn&#39;t on 1.9.x.</li>
+<li>Has no MRI internal source code dependencies, just a clean API.</li>
+<li>Fixes all of debugger&#39;s open bugs in its issue tracker and provides some
+enhancements, such as a markdown guide or the fact that <code>byebug</code> can now be
+placed at the end of a block or method call.</li>
+<li>Actively mantained.</li>
+<li>Editor agnostic: no external editor built-in support.</li>
+<li>Pry command is built-in. No need of external gem like debugger-pry.</li>
+</ul>
+
+<h2>Semantic Versioning</h2>
+
+<p>Byebug tries to follow <a href="http://semver.org">semantic versioning</a>. Backwards
+compatibility doesn&#39;t seem like a critic issue for a debugger because it&#39;s not
+supposed to be used permanently by any program, let alone in production
+environments. However, I still like the idea of giving some meaning to version
+changes.</p>
+
+<p>Byebug&#39;s public API is determined by its set of commands</p>
+
+<pre><code>Command     | Aliases      | Subcommands
+----------- |:------------ |:-----------
+`backtrace` | `bt` `where` |
+`break`     |              |
+`catch`     |              |
+`condition` |              |
+`continue`  |              |
+`delete`    |              |
+`disable`   |              | `breakpoints` `display`
+`display`   |              |
+`down`      |              |
+`edit`      |              |
+`enable`    |              | `breakpoints` `display`
+`finish`    |              |
+`frame`     |              |
+`help`      |              |
+`info`      |              | `args` `breakpoints` `catch` `display` `file` `files` `global_variables` `instance_variables` `line` `locals` `program` `stack` `variables`
+`irb`       |              |
+`kill`      |              |
+`list`      |              |
+`method`    |              | `instance` `iv`
+`next`      |              |
+`p`         | `eval`       |
+`pp`        |              |
+`pry`       |              |
+`ps`        |              |
+`putl`      |              |
+`quit`      | `exit`       |
+`reload`    |              |
+`restart`   |              |
+`save`      |              |
+`set`       |              | `args` `autoeval` `autoirb` `autolist` `autoreload` `basename` `callstyle` `callstyle` `forcestep` `fullpath` `history` `linetrace` `linetrace_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
+`show`      |              | `args` `autoeval` `autoirb` `autolist` `autoreload` `basename` `callstyle` `callstyle` `commands` `forcestep` `fullpath` `history` `linetrace` `linetrace_plus` `listsize` `post_mortem` `stack_on_error` `verbose` `width`
+`skip`      |              |
+`source`    |              |
+`step`      |              |
+`thread`    |              | `current` `list` `resume` `stop` `switch`
+`trace`     |              |
+`undisplay` |              |
+`up`        |              |
+`var`       |              | `class` `constant` `global` `instance` `local` `ct`
+</code></pre>
+
+<h2>Getting Started</h2>
+
+<p>Read <a href="https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md">byebug&#39;s markdown
+guide</a> to get
+started. Proper documentation will be eventually written.</p>
+
+<h2>Related projects</h2>
+
+<ul>
+<li><a href="https://github.com/deivid-rodriguez/pry-byebug">pry-byebug</a> adds <code>next</code>,
+<code>step</code>, <code>finish</code>, <code>continue</code> and <code>break</code> commands to pry using byebug.</li>
+<li><a href="https://github.com/davejamesmiller/ruby-debug-passenger">ruby-debug-passenger</a>
+adds a rake task that restarts Passenger with byebug connected.</li>
+<li><a href="https://github.com/kaspth/minitest-byebug">minitest-byebug</a> starts a byebug
+session on minitest failures.</li>
+<li><a href="https://github.com/shuky19/sublime_debugger">sublime-debugger</a> provides a plugin
+for ruby debugging on Sublime Text.</li>
+</ul>
+
+<h2>Future (possible) directions</h2>
+
+<ul>
+<li>JRuby support.</li>
+<li>Libify and test byebug&#39;s executable.</li>
+<li>Add printers support.</li>
+</ul>
+
+<h2>Credits</h2>
+
+<p>Everybody who has ever contributed to this forked and reforked piece of
+software, specially:</p>
+
+<ul>
+<li>Kent Sibilev and Mark Moseley, original authors of
+<a href="https://github.com/mark-moseley/ruby-debug">ruby-debug</a>.</li>
+<li>Gabriel Horner, <a href="https://github.com/cldwalker/debugger">debugger</a>&#39;s mantainer.</li>
+<li>Koichi Sasada, author of the new C debugging API for Ruby.</li>
+<li>Dennis Ushakov, author of <a href="https://github.com/denofevil/debase">debase</a>, the
+starting point of this.</li>
+<li>Logo by <a href="http://www.aha-soft.com/">Ivlichev Victor Petrovich</a></li>
+<li>@kevjames3 for testing, bug reports and the interest in the project.</li>
+</ul>
