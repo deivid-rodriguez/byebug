@@ -15,7 +15,40 @@ class SteppingExample
   end
 end
 
+class SteppingRaiseFromRubyMethodExample
+  def a
+    b
+  rescue
+    1
+  end
+
+  def b
+    c
+  end
+
+  def c
+    raise 'bang'
+  end
+end
+
+class SteppingRaiseFromCMethodExample
+  def a
+    b
+  rescue NameError
+    1
+  end
+
+  def b
+    c
+  end
+
+  def c
+    d
+  end
+end
+
 class TestStepping < TestDsl::TestCase
+
   describe 'Next Command' do
 
     describe 'method call behaviour' do
@@ -75,6 +108,26 @@ class TestStepping < TestDsl::TestCase
       it 'must step over blocks' do
         enter 'next'
         debug_file('stepping') { state.line.must_equal 8 }
+      end
+    end
+
+    describe 'raise/rescue behaviour' do
+      describe 'from c method' do
+        before { enter "break #{__FILE__}:36", 'cont' }
+
+        it 'must step over rescue' do
+          enter 'next'
+          debug_file('stepping_raise_from_c_method') { state.line.must_equal 38 }
+        end
+      end
+
+      describe 'from ruby method' do
+        before { enter "break #{__FILE__}:20", 'cont' }
+
+        it 'must step over rescue' do
+          enter 'next'
+          debug_file('stepping_raise_from_ruby_method') { state.line.must_equal 22 }
+        end
       end
     end
   end
