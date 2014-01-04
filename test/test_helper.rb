@@ -1,3 +1,10 @@
+if ENV['CI']
+  require 'coveralls'
+  Coveralls.wear! do
+    add_filter 'test'
+  end
+end
+
 require 'minitest'
 require 'minitest/spec'
 require 'pathname'
