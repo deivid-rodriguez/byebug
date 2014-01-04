@@ -1,11 +1,11 @@
-<img src='https://raw.github.com/deivid-rodriguez/byebug/master/logo.png'
-     alt='Byebug logo' style='float: right; margin-left: 10px' />
-
 [![Version][1]][2] [![Build][3]][4] [![Climate][5]][6] [![Dependencies][7]][8] [![Bitdeli][9]][10] [![Coverage][11]][12]
 
 # Byebug
 
 _Debugging in Ruby 2_
+
+<img src='https://raw.github.com/deivid-rodriguez/byebug/master/logo.png'
+     alt='Byebug logo' align: 'right' style='margin-left: 10px' />
 
 Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
