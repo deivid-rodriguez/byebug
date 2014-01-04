@@ -1,11 +1,7 @@
 [![Version][1]][2] [![Build][3]][4] [![Climate][5]][6] [![Dependencies][7]][8] [![Bitdeli][9]][10] [![Coverage][11]][12]
-
 # Byebug
 
 _Debugging in Ruby 2_
-
-<img src='https://raw.github.com/deivid-rodriguez/byebug/master/logo.png'
-     alt='Byebug logo' align: 'right' style='margin-left: 10px' />
 
 Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
@@ -150,7 +146,6 @@ software, specially:
 * Koichi Sasada, author of the new C debugging API for Ruby.
 * Dennis Ushakov, author of [debase](https://github.com/denofevil/debase), the
 starting point of this.
-* Logo by [Ivlichev Victor Petrovich](http://www.aha-soft.com/)
 * @kevjames3 for testing, bug reports and the interest in the project.
 
 [1]:  https://badge.fury.io/rb/byebug.png
