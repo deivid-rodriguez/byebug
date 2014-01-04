@@ -1,4 +1,4 @@
-# Byebug [![Version][1]][2] [![Build][3]][4] [![Climate][5]][6] [![Dependencies][7]][8] [![Bitdeli][9]][10]
+# Byebug [![Version][1]][2] [![Build][3]][4] [![Climate][5]][6] [![Dependencies][7]][8] [![Bitdeli][9]][10] [![Coverage][11]][12]
 
 <img src="https://raw.github.com/deivid-rodriguez/byebug/master/logo.png"
      alt="Byebug logo" align="right" style="margin-left: 10px" />
@@ -161,5 +161,5 @@ starting point of this.
 [8]:  https://gemnasium.com/deivid-rodriguez/byebug
 [9]:  https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png
 [10]: https://bitdeli.com/free
-
-
+[11]: https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png
+[12]: https://coveralls.io/r/deivid-rodriguez/byebug
