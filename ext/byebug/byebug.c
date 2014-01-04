@@ -11,7 +11,7 @@ static VALUE breakpoints = Qnil;
 static VALUE tracepoints = Qnil;
 
 /* Implements thread syncronization, we must stop threads when debugging */
-VALUE locker  = Qnil;
+VALUE locker = Qnil;
 
 /* Threads table */
 VALUE threads = Qnil;
