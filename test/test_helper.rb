@@ -8,7 +8,7 @@ end
 require 'minitest'
 require 'minitest/spec'
 require 'pathname'
-require 'mocha/setup'
+require 'mocha/mini_test'
 require 'byebug'
 
 Dir.glob(File.expand_path("../support/*.rb", __FILE__)).each { |f| require f }
