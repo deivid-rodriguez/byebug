@@ -1,10 +1,10 @@
 # Byebug
-[![Version][1]][2]
-[![Build][3]][4]
-[![Climate][5]][6]
-[![Dependencies][7]][8]
-[![Coverage][11]][12]
-[![Gittip][13]][14]
+[![Version][VersionBadge]][VersionURL]
+[![Build][TravisBadge]][TravisURL]
+[![Climate][CodeClimateBadge]][CodeClimateURL]
+[![Dependencies][GemnasiumBadge]][GemnasiumURL]
+[![Coverage][CoverallsBadge]][CoverallsURL]
+[![Gittip][GittipBadge]][GittipURL]
 
 _Debugging in Ruby 2_
 
@@ -153,15 +153,15 @@ software, specially:
 starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 
-[1]:  https://badge.fury.io/rb/byebug.png
-[2]:  http://badge.fury.io/rb/byebug
-[3]:  https://travis-ci.org/deivid-rodriguez/byebug.png
-[4]:  http://travis-ci.org/deivid-rodriguez/byebug
-[5]:  https://codeclimate.com/github/deivid-rodriguez/byebug.png
-[6]:  https://codeclimate.com/github/deivid-rodriguez/byebug
-[7]:  https://gemnasium.com/deivid-rodriguez/byebug.png
-[8]:  https://gemnasium.com/deivid-rodriguez/byebug
-[11]: https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png
-[12]: https://coveralls.io/r/deivid-rodriguez/byebug
-[13]: http://img.shields.io/gittip/deivid-rodriguez.png
-[14]: https://www.gittip.com/deivid-rodriguez
+[VersionBadge]: https://badge.fury.io/rb/byebug.png
+[VersionURL]: http://badge.fury.io/rb/byebug
+[TravisBadge]: https://travis-ci.org/deivid-rodriguez/byebug.png
+[TravisURL]: http://travis-ci.org/deivid-rodriguez/byebug
+[CodeClimateBadge]: https://codeclimate.com/github/deivid-rodriguez/byebug.png
+[CodeClimateURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
+[GemnasiumBadge]: https://gemnasium.com/deivid-rodriguez/byebug.png
+[GemnasiumURL]: https://gemnasium.com/deivid-rodriguez/byebug
+[CoverallsBadge]: https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png
+[CoverallsURL]: https://coveralls.io/r/deivid-rodriguez/byebug
+[GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.png
+[GittipURL]: https://www.gittip.com/deivid-rodriguez
