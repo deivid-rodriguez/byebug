@@ -3,7 +3,6 @@
 [![Build][3]][4]
 [![Climate][5]][6]
 [![Dependencies][7]][8]
-[![Bitdeli][9]][10]
 [![Coverage][11]][12]
 [![Gittip][13]][14]
 
@@ -162,8 +161,6 @@ starting point of this.
 [6]:  https://codeclimate.com/github/deivid-rodriguez/byebug
 [7]:  https://gemnasium.com/deivid-rodriguez/byebug.png
 [8]:  https://gemnasium.com/deivid-rodriguez/byebug
-[9]:  https://d2weczhvl823v0.cloudfront.net/deivid-rodriguez/byebug/trend.png
-[10]: https://bitdeli.com/free
 [11]: https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png
 [12]: https://coveralls.io/r/deivid-rodriguez/byebug
 [13]: http://img.shields.io/gittip/deivid-rodriguez.png
