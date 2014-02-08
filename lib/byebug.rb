@@ -2,6 +2,8 @@ require 'byebug/byebug'
 require 'byebug/version'
 require 'byebug/context'
 require 'byebug/processor'
+require 'byebug/command_processor'
+require 'byebug/control_command_processor'
 require 'byebug/remote'
 require 'stringio'
 require 'tracer'
@@ -24,6 +26,7 @@ module Byebug
 
   class << self
 
+    # processor modules provide +handler+ object
     # processor modules provide +handler+ object
     attr_accessor :handler
     Byebug.handler = CommandProcessor.new
