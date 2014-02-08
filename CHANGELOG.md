@@ -1,3 +1,8 @@
+# 2.6.0
+
+* Fix circular dependency that was affecting `pry-byebug`, thanks @andreychernih
+
+
 # 2.5.0
 
 * Support for `sublime-debugger`
