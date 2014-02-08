@@ -27,7 +27,6 @@ module Byebug
   class << self
 
     # processor modules provide +handler+ object
-    # processor modules provide +handler+ object
     attr_accessor :handler
     Byebug.handler = CommandProcessor.new
 
