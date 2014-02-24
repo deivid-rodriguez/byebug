@@ -86,7 +86,7 @@ class TestFrame < TestDsl::TestCase
 
     it 'must set frame to the last one' do
       enter 'frame -1'
-      debug_file('frame') { File.basename(state.file).must_equal 'minitest.rb' }
+      debug_file('frame') { File.basename(state.file).must_equal 'test_helper.rb' }
     end
 
     it 'must not set frame if the frame number is too low' do

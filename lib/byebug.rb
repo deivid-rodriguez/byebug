@@ -12,7 +12,7 @@ require 'linecache19'
 module Byebug
 
   # List of files byebug will ignore while debugging
-  IGNORED_FILES = Dir.glob('**/*.rb').map { |f| File.expand_path(f) }
+  IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
   # Default options to Byebug.start
   DEFAULT_START_SETTINGS = {
