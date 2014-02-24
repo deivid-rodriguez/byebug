@@ -1,3 +1,7 @@
+# 2.7.0
+* Bugfix release (#52, #53 and #54)
+
+
 # 2.6.0
 
 * Fix circular dependency that was affecting `pry-byebug`, thanks @andreychernih
