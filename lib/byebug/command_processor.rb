@@ -56,7 +56,7 @@ module Byebug
           self.interface = nil
         rescue SignalException
           raise
-        rescue Exception
+        rescue
           print "INTERNAL ERROR!!! #\{$!\}\n" rescue nil
           print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n") rescue nil
         end

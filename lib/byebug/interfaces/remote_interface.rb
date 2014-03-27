@@ -21,7 +21,7 @@ module Byebug
 
     def close
       @socket.close
-    rescue Exception
+    rescue
     end
 
     def confirm(prompt)

@@ -103,14 +103,14 @@ module TestDsl
         # assertions will be ignored
         begin
           block.call
-        rescue Exception => e
+        rescue => e
           exception = e
         end
       end
     end
     begin
       load fullpath(filename)
-    rescue Exception => e
+    rescue => e
       if options[:rescue]
         interface.test_block.call if interface.test_block
       else
