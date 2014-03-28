@@ -40,7 +40,5 @@ argv = ARGV.select do |argument|
   end
 end
 
-ARGV.replace argv
-
 # Run the tests
-Minitest.run
+Minitest.run argv
