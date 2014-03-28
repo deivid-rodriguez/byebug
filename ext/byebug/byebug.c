@@ -316,11 +316,10 @@ static void
 raise_event(VALUE trace_point, void *data)
 {
   VALUE expn_class, aclass;
-  VALUE err;
-  VALUE ancestors;
+  VALUE err, ancestors;
+  VALUE binding, path, lineno;
   int i;
   debug_context_t *new_dc;
-  VALUE binding, path, lineno;
 
   EVENT_SETUP
 
