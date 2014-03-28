@@ -678,7 +678,7 @@ bb_set_tracing(VALUE self, VALUE value)
  *  call-seq:
  *    Byebug.post_mortem? -> bool
  *
- *  Returns +true+ if post-moterm debugging is enabled.
+ *  Returns +true+ if post-mortem debugging is enabled.
  */
 static VALUE
 bb_post_mortem(VALUE self)
