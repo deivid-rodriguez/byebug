@@ -25,7 +25,6 @@ class InfoExample
     raise "bang"
   rescue
   end
-
 end
 
 class TestInfo < TestDsl::TestCase

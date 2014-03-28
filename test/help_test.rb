@@ -27,7 +27,7 @@ class TestHelp < TestDsl::TestCase
     it 'must show an error if an undefined command is specified' do
       enter 'help foobar'
       debug_file 'help'
-      check_error_includes 'Undefined command: "foobar".  Try "help".'
+      check_error_includes 'Undefined command: "foobar". Try "help".'
     end
 
     it "must show a command's help" do

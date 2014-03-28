@@ -201,7 +201,7 @@ module Byebug
           if unknown_cmd
             unknown_cmd.execute
           else
-            errmsg "Unknown command: \"#{input}\".  Try \"help\".\n"
+            errmsg "Unknown command: \"#{input}\". Try \"help\".\n"
           end
         end
       end
@@ -248,5 +248,5 @@ module Byebug
       end
 
   end # class CommandProcessor
-  
+
 end

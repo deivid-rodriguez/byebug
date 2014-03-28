@@ -21,7 +21,7 @@ module Byebug
           help.pop if help.last && help.last.empty?
           return print help.join("\n") + "\n"
         else
-          return errmsg "Undefined command: \"#{args[0]}\".  Try \"help\".\n" if
+          return errmsg "Undefined command: \"#{args[0]}\". Try \"help\".\n" if
             args[0]
         end
       end
