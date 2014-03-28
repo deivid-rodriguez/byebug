@@ -1,6 +1,6 @@
 module Byebug
 
-  class Edit < Command
+  class EditCommand < Command
     self.allow_in_control = true
 
     def regexp

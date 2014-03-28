@@ -90,8 +90,6 @@ module Byebug
   end
 
   class ThreadCurrentCommand < Command
-    self.need_context = true
-
     def regexp
       /^\s* th(?:read)? \s+ (?:cur(?:rent)?)? \s*$/x
     end
@@ -114,7 +112,6 @@ module Byebug
   class ThreadStopCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* th(?:read)? \s+ stop \s* (\S*) \s*$/x
@@ -141,7 +138,6 @@ module Byebug
   class ThreadResumeCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* th(?:read)? \s+ resume \s* (\S*) \s*$/x
@@ -172,7 +168,6 @@ module Byebug
   class ThreadSwitchCommand < Command
     self.allow_in_control     = true
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* th(?:read)? \s+ (?:sw(?:itch)?\s+)? (\S+) \s*$/x

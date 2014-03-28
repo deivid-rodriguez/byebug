@@ -48,7 +48,7 @@ class TestShow < TestDsl::TestCase
   end
 
   describe 'autoirb' do
-    before { Byebug::IRBCommand.any_instance.stubs(:execute) }
+    before { Byebug::IrbCommand.any_instance.stubs(:execute) }
 
     it 'must show default value' do
       enter 'show autoirb'

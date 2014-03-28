@@ -27,7 +27,7 @@ module Byebug
   end
 
   # Implements byebug's 'var class' command
-  class VarClassVarCommand < Command
+  class VarClassCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ cl(?:ass)? \s*/x
     end

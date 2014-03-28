@@ -118,9 +118,6 @@ module Byebug
       def always_run(context, file, line, run_level)
         cmds = Command.commands
 
-        # Remove some commands in post-mortem
-        cmds = cmds.find_all { |cmd| cmd.allow_in_post_mortem } if context.dead?
-
         state = State.new(cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
@@ -194,8 +191,8 @@ module Byebug
       #
       def one_cmd(commands, context, input)
         if cmd = commands.find { |c| c.match(input) }
-          if context.dead? && cmd.class.need_context
-            print "Command is unavailable\n"
+          if context.dead? && !cmd.class.allow_in_post_mortem
+            errmsg "Command unavailable in post mortem mode.\n"
           else
             cmd.execute
           end

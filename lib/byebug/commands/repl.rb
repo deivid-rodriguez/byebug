@@ -50,12 +50,12 @@ end
 module Byebug
 
   # Implements byebug's "irb" command.
-  class IRBCommand < Command
+  class IrbCommand < Command
     register_setting_get(:autoirb) do
-      IRBCommand.always_run
+      IrbCommand.always_run
     end
     register_setting_set(:autoirb) do |value|
-      IRBCommand.always_run = value
+      IrbCommand.always_run = value
     end
 
     def regexp

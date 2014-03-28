@@ -18,7 +18,6 @@ module Byebug
   # Implements byebug "next" command.
   class NextCommand < Command
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* n(?:ext)?([+-])? (?:\s+(\S+))? \s*$/x
@@ -48,7 +47,6 @@ module Byebug
   # Implements byebug "step" command.
   class StepCommand < Command
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* s(?:tep)?([+-]) ?(?:\s+(\S+))? \s*$/x

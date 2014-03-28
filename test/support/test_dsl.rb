@@ -111,11 +111,8 @@ module TestDsl
     begin
       load fullpath(filename)
     rescue => e
-      if options[:rescue]
-        interface.test_block.call if interface.test_block
-      else
-        raise e
-      end
+      interface.test_block.call if interface.test_block
+      raise e
     end
 
     flunk "Test block was provided, but not called" if block && !is_test_block_called

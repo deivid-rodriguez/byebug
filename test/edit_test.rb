@@ -4,8 +4,8 @@ class TestEdit < TestDsl::TestCase
     temporary_change_hash ENV, 'EDITOR', 'editr'
 
     it 'must open current file in current line in configured editor' do
-      Byebug::Edit.any_instance.expects(:system).
-                                with("editr +2 #{fullpath('edit')}")
+      Byebug::EditCommand.any_instance.expects(:system)
+                                      .with("editr +2 #{fullpath('edit')}")
       enter 'edit'
       debug_file 'edit'
     end
@@ -15,8 +15,8 @@ class TestEdit < TestDsl::TestCase
     temporary_change_hash ENV, 'EDITOR', nil
 
     it 'must call "vim" with current line and file if EDITOR env not set' do
-      Byebug::Edit.any_instance.expects(:system).
-                                with("vim +2 #{fullpath('edit')}")
+      Byebug::EditCommand.any_instance.expects(:system)
+                                      .with("vim +2 #{fullpath('edit')}")
       enter 'edit'
       debug_file 'edit'
     end
@@ -26,8 +26,8 @@ class TestEdit < TestDsl::TestCase
     temporary_change_hash ENV, 'EDITOR', 'editr'
 
     it 'must open specified line in specified file with configured editor' do
-      Byebug::Edit.any_instance.expects(:system).
-                                with("editr +3 #{fullpath('breakpoint')}")
+      Byebug::EditCommand.any_instance.expects(:system)
+                                      .with("editr +3 #{fullpath('breakpoint')}")
       enter "edit #{fullpath('breakpoint')}:3"
       debug_file 'edit'
     end

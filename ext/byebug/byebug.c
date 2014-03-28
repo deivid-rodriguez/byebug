@@ -10,6 +10,8 @@ static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
 static VALUE tracepoints = Qnil;
 
+static VALUE last_exception = Qnil;
+
 /* Implements thread syncronization, we must stop threads when debugging */
 VALUE locker = Qnil;
 
@@ -315,35 +317,34 @@ c_return_event(VALUE trace_point, void *data)
 static void
 raise_event(VALUE trace_point, void *data)
 {
-  VALUE expn_class, aclass;
-  VALUE err, ancestors;
-  VALUE binding, path, lineno;
+  VALUE expn_class, aclass, ancestors;
+  VALUE path, lineno, binding, post_mortem_context;
   int i;
   debug_context_t *new_dc;
 
   EVENT_SETUP
 
-  err = rb_errinfo();
+  last_exception = rb_errinfo();
 
   EVENT_COMMON
 
-  binding = rb_tracearg_binding(trace_arg);
   path    = rb_tracearg_path(trace_arg);
   lineno  = rb_tracearg_lineno(trace_arg);
+  binding = rb_tracearg_binding(trace_arg);
 
   if (post_mortem == Qtrue)
   {
-    context = context_dup(dc);
-    rb_ivar_set(err, rb_intern("@__bb_file")   , path);
-    rb_ivar_set(err, rb_intern("@__bb_line")   , lineno);
-    rb_ivar_set(err, rb_intern("@__bb_binding"), binding);
-    rb_ivar_set(err, rb_intern("@__bb_context"), context);
+    post_mortem_context = context_dup(dc);
+    rb_ivar_set(last_exception, rb_intern("@__bb_file")   , path);
+    rb_ivar_set(last_exception, rb_intern("@__bb_line")   , lineno);
+    rb_ivar_set(last_exception, rb_intern("@__bb_binding"), binding);
+    rb_ivar_set(last_exception, rb_intern("@__bb_context"), post_mortem_context);
 
-    Data_Get_Struct(context, debug_context_t, new_dc);
+    Data_Get_Struct(post_mortem_context, debug_context_t, new_dc);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
-  expn_class = rb_obj_class(err);
+  expn_class = rb_obj_class(last_exception);
 
   if (catchpoints == Qnil || dc->calced_stack_size == 0 ||
       CTX_FL_TEST(dc, CTX_FL_CATCHING) ||
@@ -367,7 +368,7 @@ raise_event(VALUE trace_point, void *data)
     if (hit_count != Qnil)
     {
       rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
-      call_at_catchpoint(context, dc, err);
+      call_at_catchpoint(context, dc, last_exception);
       call_at_line(context, dc, path, lineno);
       break;
     }
@@ -739,6 +740,18 @@ bb_add_catchpoint(VALUE self, VALUE value)
 }
 
 /*
+ *  call-seq:
+ *    Byebug.exception -> exception
+ *
+ *  Returns last exception when in post_mortem mode.
+ */
+static VALUE
+bb_last_exception(VALUE self)
+{
+  return last_exception;
+}
+
+/*
  *   Document-class: Byebug
  *
  *   == Summary
@@ -759,6 +772,7 @@ Init_byebug()
   rb_define_module_function(mByebug, "debug_load"     , bb_load           , -1);
   rb_define_module_function(mByebug, "post_mortem?"   , bb_post_mortem    ,  0);
   rb_define_module_function(mByebug, "post_mortem="   , bb_set_post_mortem,  1);
+  rb_define_module_function(mByebug, "last_exception" , bb_last_exception ,  0);
   rb_define_module_function(mByebug, "_start"         , bb_start          ,  0);
   rb_define_module_function(mByebug, "started?"       , bb_started        ,  0);
   rb_define_module_function(mByebug, "stop"           , bb_stop           ,  0);
@@ -776,5 +790,6 @@ Init_byebug()
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
   rb_global_variable(&tracepoints);
+  rb_global_variable(&last_exception);
   rb_global_variable(&threads);
 }

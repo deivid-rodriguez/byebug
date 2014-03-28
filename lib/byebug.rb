@@ -30,9 +30,6 @@ module Byebug
     attr_accessor :handler
     Byebug.handler = CommandProcessor.new
 
-    attr_accessor :last_exception
-    Byebug.last_exception = nil
-
     def source_reload
       Object.send(:remove_const, 'SCRIPT_LINES__') if
         Object.const_defined?('SCRIPT_LINES__')
@@ -161,21 +158,22 @@ module Byebug
     #
     def post_mortem
       return if self.post_mortem?
-      at_exit { handle_post_mortem($!) if post_mortem? }
       self.post_mortem = true
+      at_exit { handle_post_mortem if post_mortem? }
     end
 
-    def handle_post_mortem(exp)
-      return if !exp
-      Byebug.last_exception = exp
-      return if !exp.__bb_context || !exp.__bb_context.calced_stack_size
+    def handle_post_mortem
+      context = last_exception.instance_variable_get(:@__bb_context)
+      file    = last_exception.instance_variable_get(:@__bb_file)
+      line    = last_exception.instance_variable_get(:@__bb_line)
       orig_tracing = Byebug.tracing?
       Byebug.tracing = false
-      handler.at_line(exp.__bb_context, exp.__bb_file, exp.__bb_line)
+      handler.at_line(context, file, line)
     ensure
       Byebug.tracing = orig_tracing
     end
     private :handle_post_mortem
+
   end
 end
 

@@ -23,7 +23,7 @@ module Byebug
         @commands ||= []
       end
 
-      attr_accessor :allow_in_control, :unknown, :need_context
+      attr_accessor :allow_in_control, :unknown
       attr_writer :allow_in_post_mortem, :always_run
 
       def allow_in_post_mortem

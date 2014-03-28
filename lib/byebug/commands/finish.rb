@@ -3,7 +3,6 @@ module Byebug
   # Implements byebug's 'finish' command.
   class FinishCommand < Command
     self.allow_in_post_mortem = false
-    self.need_context         = true
 
     def regexp
       /^\s* fin(?:ish)? (?:\s+(\S+))? \s*$/x
