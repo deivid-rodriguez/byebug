@@ -22,8 +22,6 @@ task :test do
   end
 end
 
-base_spec = eval(File.read('byebug.gemspec'), binding, 'byebug.gemspec')
-
 task :default => :test
 
 desc 'Run a test in looped mode so that you can look for memory leaks'
