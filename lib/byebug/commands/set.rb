@@ -54,7 +54,7 @@ module Byebug
         if setting_value == true
           Byebug.post_mortem
         else
-          return print 'Sorry... not implemented yet. Restart byebug'
+          Byebug.post_mortem = false
         end
       when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
              testing|stack_on_error$/x
