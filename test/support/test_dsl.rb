@@ -92,31 +92,15 @@ module TestDsl
   #   debug_file('/path/to/ex2.rb') { state.line.must_equal 4 }
   #
   def debug_file(filename, options = {}, &block)
-    test_block_called = false
-    exception = nil
     Byebug.stubs(:run_init_script)
-    if block
-      interface.test_block = lambda do
-        test_block_called = true
-        # We need to store exception and reraise it after completing debugging,
-        # because Byebug will swallow any exceptions, so e.g. our failed
-        # assertions will be ignored
-        begin
-          block.call
-        rescue => e
-          exception = e
-        end
-      end
-    end
+    interface.test_block = block
     begin
       load fullpath(filename)
-    rescue => e
-      interface.test_block.call if interface.test_block
+    rescue Exception => e
       raise e
+    ensure
+      interface.test_block.call if interface.test_block
     end
-
-    flunk "Test block was provided, but not called" if block && !test_block_called
-    raise exception if exception
   end
 
   #
