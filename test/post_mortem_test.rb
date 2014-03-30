@@ -22,7 +22,7 @@ class TestPostMortem < TestDsl::TestCase
     it 'sets post_mortem to true' do
       begin
         debug_file('post_mortem')
-      rescue RuntimeError
+      rescue
         Byebug.post_mortem?.must_equal true
       end
     end
@@ -30,7 +30,7 @@ class TestPostMortem < TestDsl::TestCase
     it 'stops at the correct line' do
       begin
         debug_file('post_mortem')
-      rescue RuntimeError => e
+      rescue
         state.line.must_equal 4
       end
     end
