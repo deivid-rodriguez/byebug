@@ -51,11 +51,14 @@ doesn't need them anymore so my recommendation is not to use them.
 
 ## What's different from debugger
 
-* Works on Ruby 2.x and it doesn't on 1.9.x.
-* Has no MRI internal source code dependencies, just a clean API.
-* Fixes all of debugger's open bugs in its issue tracker and provides some
-enhancements, such as a markdown guide or the fact that `byebug` can now be
-placed at the end of a block or method call.
+* Works on Ruby 2.x but it doesn't on 1.9.x (you should probably upgrade
+anyways).
+* Has no MRI internal source code dependencies, just a clean API (no more `bump
+ruby_core_source dependency` entries in CHANGELOG, no more broken debugger's on
+ruby's releases).
+* Fixes a lot of debugger's issues, such as ruby 2.x support or post_mortem
+debugging. It also provides several enhancements, such as the fact the `byebug`
+can now be placed at the end of a block or method call.
 * Actively mantained.
 * Editor agnostic: no external editor built-in support.
 * Pry command is built-in. No need of external gem like debugger-pry.
