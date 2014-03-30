@@ -356,9 +356,7 @@ raise_event(VALUE trace_point, void *data)
   ancestors = rb_mod_ancestors(expn_class);
   for (i = 0; i < RARRAY_LENINT(ancestors); i++)
   {
-    VALUE aclass;
-    VALUE mod_name;
-    VALUE hit_count;
+    VALUE aclass, mod_name, hit_count;
 
     aclass    = rb_ary_entry(ancestors, i);
     mod_name  = rb_mod_name(aclass);
