@@ -28,7 +28,7 @@ module Byebug
     end
   end
 
-  require_relative 'interfaces/local_interface'
-  require_relative 'interfaces/script_interface'
-  require_relative 'interfaces/remote_interface'
+  require 'byebug/interfaces/local_interface'
+  require 'byebug/interfaces/script_interface'
+  require 'byebug/interfaces/remote_interface'
 end

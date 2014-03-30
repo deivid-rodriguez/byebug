@@ -1,6 +1,6 @@
 require 'columnize'
 require 'forwardable'
-require_relative 'helper'
+require 'byebug/helper'
 
 module Byebug
 

@@ -1,6 +1,6 @@
 require 'forwardable'
-require_relative 'interface'
-require_relative 'command'
+require 'byebug/interface'
+require 'byebug/command'
 
 module Byebug
 
@@ -16,6 +16,6 @@ module Byebug
     end
   end
 
-  require_relative 'processors/command_processor'
-  require_relative 'processors/control_command_processor'
+  require 'byebug/processors/command_processor'
+  require 'byebug/processors/control_command_processor'
 end
