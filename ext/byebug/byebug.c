@@ -317,7 +317,7 @@ c_return_event(VALUE trace_point, void *data)
 static void
 raise_event(VALUE trace_point, void *data)
 {
-  VALUE expn_class, aclass, ancestors;
+  VALUE expn_class, ancestors;
   VALUE path, lineno, binding, post_mortem_context;
   int i;
   debug_context_t *new_dc;
@@ -357,6 +357,7 @@ raise_event(VALUE trace_point, void *data)
   ancestors = rb_mod_ancestors(expn_class);
   for (i = 0; i < RARRAY_LENINT(ancestors); i++)
   {
+    VALUE aclass;
     VALUE mod_name;
     VALUE hit_count;
 
