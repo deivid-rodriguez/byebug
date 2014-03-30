@@ -356,17 +356,17 @@ raise_event(VALUE trace_point, void *data)
   ancestors = rb_mod_ancestors(expn_class);
   for (i = 0; i < RARRAY_LENINT(ancestors); i++)
   {
-    VALUE aclass, mod_name, hit_count;
+    VALUE ancestor_class, module_name, hit_count;
 
-    aclass    = rb_ary_entry(ancestors, i);
-    mod_name  = rb_mod_name(aclass);
-    hit_count = rb_hash_aref(catchpoints, mod_name);
+    ancestor_class = rb_ary_entry(ancestors, i);
+    module_name    = rb_mod_name(ancestor_class);
+    hit_count      = rb_hash_aref(catchpoints, module_name);
 
     /* increment exception */
     if (hit_count != Qnil)
     {
-      rb_hash_aset(catchpoints, mod_name, INT2FIX(FIX2INT(hit_count) + 1));
       call_at_catchpoint(context, dc, last_exception);
+      rb_hash_aset(catchpoints, module_name, INT2FIX(FIX2INT(hit_count) + 1));
       call_at_line(context, dc, path, lineno);
       break;
     }
