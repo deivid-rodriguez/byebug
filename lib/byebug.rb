@@ -163,9 +163,9 @@ module Byebug
     end
 
     def handle_post_mortem
-      context = last_exception.instance_variable_get(:@__bb_context)
-      file    = last_exception.instance_variable_get(:@__bb_file)
-      line    = last_exception.instance_variable_get(:@__bb_line)
+      context = raised_exception.__bb_context
+      file    = raised_exception.__bb_file
+      line    = raised_exception.__bb_line
       orig_tracing = Byebug.tracing?
       Byebug.tracing = false
       handler.at_line(context, file, line)

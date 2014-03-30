@@ -10,7 +10,7 @@ static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
 static VALUE tracepoints = Qnil;
 
-static VALUE last_exception = Qnil;
+static VALUE raised_exception = Qnil;
 
 /* Implements thread syncronization, we must stop threads when debugging */
 VALUE locker = Qnil;
@@ -324,21 +324,20 @@ raise_event(VALUE trace_point, void *data)
 
   EVENT_SETUP
 
-  last_exception = rb_errinfo();
-
   EVENT_COMMON
 
-  path    = rb_tracearg_path(trace_arg);
-  lineno  = rb_tracearg_lineno(trace_arg);
-  binding = rb_tracearg_binding(trace_arg);
+  path             = rb_tracearg_path(trace_arg);
+  lineno           = rb_tracearg_lineno(trace_arg);
+  binding          = rb_tracearg_binding(trace_arg);
+  raised_exception = rb_tracearg_raised_exception(trace_arg);
 
   if (post_mortem == Qtrue)
   {
     post_mortem_context = context_dup(dc);
-    rb_ivar_set(last_exception, rb_intern("@__bb_file")   , path);
-    rb_ivar_set(last_exception, rb_intern("@__bb_line")   , lineno);
-    rb_ivar_set(last_exception, rb_intern("@__bb_binding"), binding);
-    rb_ivar_set(last_exception, rb_intern("@__bb_context"), post_mortem_context);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_file")   , path);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_line")   , lineno);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_binding"), binding);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_context"), post_mortem_context);
 
     Data_Get_Struct(post_mortem_context, debug_context_t, new_dc);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
@@ -365,8 +364,8 @@ raise_event(VALUE trace_point, void *data)
     /* increment exception */
     if (hit_count != Qnil)
     {
-      call_at_catchpoint(context, dc, last_exception);
       rb_hash_aset(catchpoints, module_name, INT2FIX(FIX2INT(hit_count) + 1));
+      call_at_catchpoint(context, dc, raised_exception);
       call_at_line(context, dc, path, lineno);
       break;
     }
@@ -739,14 +738,14 @@ bb_add_catchpoint(VALUE self, VALUE value)
 
 /*
  *  call-seq:
- *    Byebug.exception -> exception
+ *    Byebug.raised_exception -> exception
  *
- *  Returns last exception when in post_mortem mode.
+ *  Returns raised exception when in post_mortem mode.
  */
 static VALUE
-bb_last_exception(VALUE self)
+bb_raised_exception(VALUE self)
 {
-  return last_exception;
+  return raised_exception;
 }
 
 /*
@@ -762,23 +761,23 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "add_catchpoint" , bb_add_catchpoint ,  1);
-  rb_define_module_function(mByebug, "breakpoints"    , bb_breakpoints    ,  0);
-  rb_define_module_function(mByebug, "catchpoints"    , bb_catchpoints    ,  0);
-  rb_define_module_function(mByebug, "contexts"       , bb_contexts       ,  0);
-  rb_define_module_function(mByebug, "current_context", bb_current_context,  0);
-  rb_define_module_function(mByebug, "debug_load"     , bb_load           , -1);
-  rb_define_module_function(mByebug, "post_mortem?"   , bb_post_mortem    ,  0);
-  rb_define_module_function(mByebug, "post_mortem="   , bb_set_post_mortem,  1);
-  rb_define_module_function(mByebug, "last_exception" , bb_last_exception ,  0);
-  rb_define_module_function(mByebug, "_start"         , bb_start          ,  0);
-  rb_define_module_function(mByebug, "started?"       , bb_started        ,  0);
-  rb_define_module_function(mByebug, "stop"           , bb_stop           ,  0);
-  rb_define_module_function(mByebug, "thread_context" , bb_thread_context ,  1);
-  rb_define_module_function(mByebug, "tracing?"       , bb_tracing        ,  0);
-  rb_define_module_function(mByebug, "tracing="       , bb_set_tracing    ,  1);
-  rb_define_module_function(mByebug, "verbose"        , bb_verbose        ,  0);
-  rb_define_module_function(mByebug, "verbose="       , bb_set_verbose    ,  1);
+  rb_define_module_function(mByebug, "add_catchpoint"   , bb_add_catchpoint  ,  1);
+  rb_define_module_function(mByebug, "breakpoints"      , bb_breakpoints     ,  0);
+  rb_define_module_function(mByebug, "catchpoints"      , bb_catchpoints     ,  0);
+  rb_define_module_function(mByebug, "contexts"         , bb_contexts        ,  0);
+  rb_define_module_function(mByebug, "current_context"  , bb_current_context ,  0);
+  rb_define_module_function(mByebug, "debug_load"       , bb_load            , -1);
+  rb_define_module_function(mByebug, "post_mortem?"     , bb_post_mortem     ,  0);
+  rb_define_module_function(mByebug, "post_mortem="     , bb_set_post_mortem ,  1);
+  rb_define_module_function(mByebug, "raised_exception" , bb_raised_exception,  0);
+  rb_define_module_function(mByebug, "_start"           , bb_start           ,  0);
+  rb_define_module_function(mByebug, "started?"         , bb_started         ,  0);
+  rb_define_module_function(mByebug, "stop"             , bb_stop            ,  0);
+  rb_define_module_function(mByebug, "thread_context"   , bb_thread_context  ,  1);
+  rb_define_module_function(mByebug, "tracing?"         , bb_tracing         ,  0);
+  rb_define_module_function(mByebug, "tracing="         , bb_set_tracing     ,  1);
+  rb_define_module_function(mByebug, "verbose"          , bb_verbose         ,  0);
+  rb_define_module_function(mByebug, "verbose="         , bb_set_verbose     ,  1);
 
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
 
@@ -788,6 +787,6 @@ Init_byebug()
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);
   rb_global_variable(&tracepoints);
-  rb_global_variable(&last_exception);
+  rb_global_variable(&raised_exception);
   rb_global_variable(&threads);
 }
