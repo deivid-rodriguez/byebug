@@ -344,8 +344,6 @@ raise_event(VALUE trace_point, void *data)
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
-  expn_class = rb_obj_class(last_exception);
-
   if (catchpoints == Qnil || dc->calced_stack_size == 0 ||
       CTX_FL_TEST(dc, CTX_FL_CATCHING) ||
       RHASH_TBL(catchpoints)->num_entries == 0)
@@ -354,6 +352,7 @@ raise_event(VALUE trace_point, void *data)
     return;
   }
 
+  expn_class = rb_obj_class(raised_exception);
   ancestors = rb_mod_ancestors(expn_class);
   for (i = 0; i < RARRAY_LENINT(ancestors); i++)
   {
