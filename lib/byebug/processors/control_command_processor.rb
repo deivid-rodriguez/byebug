@@ -1,7 +1,3 @@
-require 'forwardable'
-require_relative 'interface'
-require_relative 'command'
-
 module Byebug
 
   class ControlCommandProcessor < Processor
@@ -75,5 +71,5 @@ module Byebug
       end
     end
   end
-  
+
 end

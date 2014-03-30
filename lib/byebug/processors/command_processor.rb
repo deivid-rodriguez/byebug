@@ -1,7 +1,3 @@
-require 'forwardable'
-require_relative 'interface'
-require_relative 'command'
-
 module Byebug
 
   class CommandProcessor < Processor
