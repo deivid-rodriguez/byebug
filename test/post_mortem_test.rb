@@ -31,7 +31,7 @@ class TestPostMortem < TestDsl::TestCase
       begin
         debug_file('post_mortem')
       rescue
-        state.line.must_equal 4
+        Byebug.raised_exception.__bb_line.must_equal 4
       end
     end
   end

@@ -96,8 +96,6 @@ module TestDsl
     interface.test_block = block
     begin
       load fullpath(filename)
-    rescue Exception => e
-      raise e
     ensure
       interface.test_block.call if interface.test_block
     end
