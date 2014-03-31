@@ -148,13 +148,12 @@ for ruby debugging on Sublime Text.
 Everybody who has ever contributed to this forked and reforked piece of
 software, specially:
 
-* Kent Sibilev and Mark Moseley, original authors of
-[ruby-debug](https://github.com/mark-moseley/ruby-debug).
-* Gabriel Horner, [debugger](https://github.com/cldwalker/debugger)'s mantainer.
-* Koichi Sasada, author of the new C debugging API for Ruby.
-* Dennis Ushakov, author of [debase](https://github.com/denofevil/debase), the
+* @ko1, author of the awesome TracePoint API for Ruby.
+* @cldwalker, [debugger](https://github.com/cldwalker/debugger)'s mantainer.
+* @denofevil, author of [debase](https://github.com/denofevil/debase), the
 starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
+* @FooBarWidget for working and helping with remote debugging.
 
 [VersionBadge]: https://badge.fury.io/rb/byebug.png
 [VersionURL]: http://badge.fury.io/rb/byebug
