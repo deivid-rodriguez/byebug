@@ -48,7 +48,7 @@ module Byebug
             return unless @interface
             __#{mname}(*args)
           end
-        rescue IOError, Errno::EPIPE
+        rescue IOError, SystemCallError
           self.interface = nil
         rescue SignalException
           raise

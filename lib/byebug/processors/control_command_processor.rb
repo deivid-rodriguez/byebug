@@ -28,7 +28,7 @@ module Byebug
           end
         end
       end
-    rescue IOError, Errno::EPIPE
+    rescue IOError, SystemCallError
     rescue
       print "INTERNAL ERROR!!! #{$!}\n" rescue nil
       print $!.backtrace.map{|l| "\t#{l}"}.join("\n") rescue nil
