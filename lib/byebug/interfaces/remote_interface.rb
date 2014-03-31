@@ -21,7 +21,7 @@ module Byebug
 
     def close
       @socket.close
-    rescue
+    rescue IOError
     end
 
     def confirm(prompt)
