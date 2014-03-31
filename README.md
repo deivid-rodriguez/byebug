@@ -136,12 +136,12 @@ session on minitest failures.
 for ruby debugging on Sublime Text.
 
 
-## Future (possible) directions
+## TODO List (by priority)
 
-* JRuby support.
-* Libify and test byebug's executable.
+* Write tests for remote debugging support.
 * Add printers support.
-
+* Libify and test byebug's executable.
+* Support rubies other than MRI.
 
 ## Credits
 
