@@ -134,7 +134,7 @@ module Byebug
 
       home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
       if File.exist?(home_script) and cwd_script != home_script
-         run_script(home_script, out)
+        run_script(home_script, out)
       end
     end
 
