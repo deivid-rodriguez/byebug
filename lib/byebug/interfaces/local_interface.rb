@@ -52,7 +52,7 @@ module Byebug
               Readline::HISTORY.to_a.last(iface.hist_size).each do |line|
                 file.puts line unless line.strip.empty?
               end if iface.hist_save
-            end rescue nil
+            end
           end
           public :save_history
         end
