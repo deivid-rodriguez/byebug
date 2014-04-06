@@ -613,6 +613,8 @@ static VALUE
 DebugThread_inherited(VALUE klass)
 {
   rb_raise(rb_eRuntimeError, "Can't inherit Byebug::DebugThread class");
+
+  return Qnil;
 }
 
 /*
