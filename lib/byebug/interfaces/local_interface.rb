@@ -1,16 +1,12 @@
 module Byebug
   class LocalInterface < Interface
-    attr_accessor :command_queue, :hist_size, :hist_save, :hist_file
-    attr_accessor :restart_file
+    attr_accessor :hist_save, :hist_file
 
     FILE_HISTORY = ".byebug_hist" unless defined?(FILE_HISTORY)
 
     def initialize()
       super
-      @command_queue = []
-      @have_readline = false
       @hist_save = true
-      @hist_size = ENV["HISTSIZE"] ? ENV["HISTSIZE"].to_i : 256
       @hist_file = File.join(".", FILE_HISTORY)
       open(@hist_file, 'r') do |file|
         file.each do |line|

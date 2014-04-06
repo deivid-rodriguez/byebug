@@ -1,8 +1,8 @@
 class TestInterface < Byebug::Interface
   attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue
 
-  attr_accessor :command_queue, :hist_file, :hist_size, :hist_save
-  attr_accessor :readline_support, :restart_file, :test_block
+  attr_accessor :hist_file, :hist_save, :readline_support, :restart_file
+  attr_accessor :test_block
 
   def initialize
     @input_queue = []

@@ -1,9 +1,10 @@
 module Byebug
   class Interface
+    attr_accessor :command_queue, :hist_size, :restart_file
     attr_writer :have_readline
 
     def initialize
-      @have_readline = false
+      @command_queue, @have_readline, @hist_size = [], false, 256
     end
 
     # Common routine for reporting byebug error messages.
