@@ -137,8 +137,7 @@ class TestSet < TestDsl::TestCase
     end
 
     describe 'filename' do
-      let(:filename) {
-        File.join(ENV['HOME']||ENV['HOMEPATH']||'.', '.byebug-hist') }
+      let(:filename) { File.join('.', '.byebug-hist') }
 
       it 'must set history filename' do
         enter 'set history filename .byebug-hist'

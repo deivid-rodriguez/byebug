@@ -11,7 +11,7 @@ module Byebug
       @have_readline = false
       @hist_save = true
       @hist_size = ENV["HISTSIZE"] ? ENV["HISTSIZE"].to_i : 256
-      @hist_file = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", FILE_HISTORY)
+      @hist_file = File.join(".", FILE_HISTORY)
       open(@hist_file, 'r') do |file|
         file.each do |line|
           line.chomp!
@@ -55,8 +55,7 @@ module Byebug
           @have_readline = true
           define_method(:save_history) do
             iface = self.handler.interface
-            iface.hist_file ||= File.join(ENV["HOME"]||ENV["HOMEPATH"]||".",
-                                    FILE_HISTORY)
+            iface.hist_file ||= File.join('.', FILE_HISTORY)
             open(iface.hist_file, 'w') do |file|
               Readline::HISTORY.to_a.last(iface.hist_size).each do |line|
                 file.puts line unless line.strip.empty?

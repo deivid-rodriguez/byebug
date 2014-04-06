@@ -39,7 +39,7 @@ module Byebug
           iface.hist_size = get_int(sub_sub_cmd, "Set history size")
         when /^filename$/
           return print 'You need to specify a filename' unless sub_sub_cmd
-          iface.hist_file = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", sub_sub_cmd)
+          iface.hist_file = File.expand_path(sub_sub_cmd)
         end
       when /^linetrace$/
         Byebug.tracing = setting_value
