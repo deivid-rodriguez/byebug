@@ -48,7 +48,6 @@ module Byebug
           @have_readline = true
           define_method(:save_history) do
             iface = self.handler.interface
-            iface.hist_file ||= File.join('.', FILE_HISTORY)
             open(iface.hist_file, 'w') do |file|
               Readline::HISTORY.to_a.last(iface.hist_size).each do |line|
                 file.puts line unless line.strip.empty?
