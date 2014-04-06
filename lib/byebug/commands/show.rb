@@ -85,11 +85,11 @@ module Byebug
         if args[1]
           show_save = show_size = show_filename = false
           prefix = false
-          if args[1] == "save"
+          if args[1] == 'save'
             show_save = true
-          elsif args[1] == "size"
+          elsif args[1] == 'size'
             show_size = true
-          elsif args[1] == "filename"
+          elsif args[1] == 'filename'
             show_filename = true
           end
         else
@@ -103,12 +103,12 @@ module Byebug
           s << msg
         end
         if show_save
-          msg = (prefix ? "save: " : "") +
+          msg = (prefix ? 'save: ' : '') +
             "Saving of history save is #{show_onoff(interface.hist_save)}."
           s << msg
         end
         if show_size
-          msg = (prefix ? "size: " : "") +
+          msg = (prefix ? 'size: ' : '') +
             "Byebug history size is #{interface.hist_size}"
           s << msg
         end
@@ -118,9 +118,9 @@ module Byebug
         return "line tracing is #{show_onoff(on_off)}."
       when /^linetrace_plus$/
         if Command.settings[:linetrace_plus]
-          return "line tracing style is every line."
+          return 'line tracing style is every line.'
         else
-          return "line tracing style is different consecutive lines."
+          return 'line tracing style is different consecutive lines.'
         end
       when /^listsize$/
         listlines = Command.settings[:listsize]

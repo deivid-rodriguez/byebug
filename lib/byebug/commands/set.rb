@@ -44,11 +44,11 @@ module Byebug
       when /^linetrace$/
         Byebug.tracing = setting_value
       when /^listsize$/
-        listsize = get_int(setting_args[0], "Set listsize", 1, nil, 10)
+        listsize = get_int(setting_args[0], 'Set listsize', 1, nil, 10)
         return unless listsize
         Command.settings[:listsize] = listsize
       when /^width$/
-        return unless width = get_int(setting_args[0], "Set width", 10, nil, 80)
+        return unless width = get_int(setting_args[0], 'Set width', 10, nil, 80)
         Command.settings[:width] = width
       when /^post_mortem$/
         if setting_value == true
