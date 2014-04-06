@@ -1,3 +1,10 @@
+# Next release
+
+* Fix post_mortem mode
+* Allow disabling post_mortem mode
+* History file is `per project` by default now
+
+
 # 2.7.0
 * Bugfix release (#52, #53 and #54)
 
