@@ -99,17 +99,17 @@ module Byebug
         s = []
         if show_filename
           msg = "#{prefix ? 'filename:' : ''} The command history file is " \
-                "#{interface.histfile.inspect}"
+                "#{interface.hist_file.inspect}"
           s << msg
         end
         if show_save
           msg = (prefix ? "save: " : "") +
-            "Saving of history save is #{show_onoff(interface.history_save)}."
+            "Saving of history save is #{show_onoff(interface.hist_save)}."
           s << msg
         end
         if show_size
           msg = (prefix ? "size: " : "") +
-            "Byebug history size is #{interface.history_length}"
+            "Byebug history size is #{interface.hist_size}"
           s << msg
         end
         return s.join("\n")

@@ -1,14 +1,14 @@
 module Byebug
   class RemoteInterface < Interface
-    attr_accessor :command_queue, :history_length, :history_save, :histfile
+    attr_accessor :command_queue, :hist_size, :hist_save, :hist_file
     attr_accessor :restart_file
 
     def initialize(socket)
       @command_queue = []
       @socket = socket
-      @history_save = false
-      @history_length = 256
-      @histfile = ''
+      @hist_save = false
+      @hist_size = 256
+      @hist_file = ''
       # Do we read the histfile?
       # open(@histfile, 'r') do |file|
       #   file.each do |line|

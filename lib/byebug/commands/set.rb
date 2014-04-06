@@ -33,13 +33,13 @@ module Byebug
         iface = @state.interface
         case subcmd.name
         when /^save$/
-          iface.history_save = sub_sub_cmd ? get_onoff(sub_sub_cmd) : true
+          iface.hist_save = sub_sub_cmd ? get_onoff(sub_sub_cmd) : true
         when /^size$/
           return print 'You need to specify the history size' unless sub_sub_cmd
-          iface.history_length = get_int(sub_sub_cmd, "Set history size")
+          iface.hist_size = get_int(sub_sub_cmd, "Set history size")
         when /^filename$/
           return print 'You need to specify a filename' unless sub_sub_cmd
-          iface.histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", sub_sub_cmd)
+          iface.hist_file = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", sub_sub_cmd)
         end
       when /^linetrace$/
         Byebug.tracing = setting_value

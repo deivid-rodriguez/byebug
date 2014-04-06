@@ -150,9 +150,9 @@ class TestShow < TestDsl::TestCase
   describe 'history' do
     describe 'without arguments' do
       before do
-        interface.histfile = 'hist_file.txt'
-        interface.history_save = true
-        interface.history_length = 25
+        interface.hist_file = 'hist_file.txt'
+        interface.hist_save = true
+        interface.hist_size = 25
         enter 'show history'
         debug_file 'show'
       end
@@ -173,21 +173,21 @@ class TestShow < TestDsl::TestCase
 
     describe 'with "filename" argument' do
       it 'must show history filename' do
-        interface.histfile = 'hist_file.txt'
+        interface.hist_file = 'hist_file.txt'
         enter 'show history filename'
         debug_file 'show'
         check_output_includes 'The command history file is "hist_file.txt"'
       end
 
       it 'must show history save setting' do
-        interface.history_save = true
+        interface.hist_save = true
         enter 'show history save'
         debug_file 'show'
         check_output_includes 'Saving of history save is on.'
       end
 
       it 'must show history length' do
-        interface.history_length = 30
+        interface.hist_size = 30
         enter 'show history size'
         debug_file 'show'
         check_output_includes 'Byebug history size is 30'

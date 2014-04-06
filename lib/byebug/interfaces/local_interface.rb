@@ -1,6 +1,6 @@
 module Byebug
   class LocalInterface < Interface
-    attr_accessor :command_queue, :history_length, :history_save, :histfile
+    attr_accessor :command_queue, :hist_size, :hist_save, :hist_file
     attr_accessor :restart_file
 
     FILE_HISTORY = ".byebug_hist" unless defined?(FILE_HISTORY)
@@ -9,15 +9,15 @@ module Byebug
       super
       @command_queue = []
       @have_readline = false
-      @history_save = true
-      @history_length = ENV["HISTSIZE"] ? ENV["HISTSIZE"].to_i : 256
-      @histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", FILE_HISTORY)
-      open(@histfile, 'r') do |file|
+      @hist_save = true
+      @hist_size = ENV["HISTSIZE"] ? ENV["HISTSIZE"].to_i : 256
+      @hist_file = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", FILE_HISTORY)
+      open(@hist_file, 'r') do |file|
         file.each do |line|
           line.chomp!
           Readline::HISTORY << line
         end
-      end if File.exist?(@histfile)
+      end if File.exist?(@hist_file)
       @restart_file = nil
     end
 
@@ -55,12 +55,12 @@ module Byebug
           @have_readline = true
           define_method(:save_history) do
             iface = self.handler.interface
-            iface.histfile ||= File.join(ENV["HOME"]||ENV["HOMEPATH"]||".",
+            iface.hist_file ||= File.join(ENV["HOME"]||ENV["HOMEPATH"]||".",
                                     FILE_HISTORY)
-            open(iface.histfile, 'w') do |file|
-              Readline::HISTORY.to_a.last(iface.history_length).each do |line|
+            open(iface.hist_file, 'w') do |file|
+              Readline::HISTORY.to_a.last(iface.hist_size).each do |line|
                 file.puts line unless line.strip.empty?
-              end if defined?(iface.history_save) and iface.history_save
+              end if defined?(iface.hist_save) and iface.hist_save
             end rescue nil
           end
           public :save_history
@@ -74,7 +74,7 @@ module Byebug
         end
       rescue LoadError
         def readline(prompt, hist)
-          @histfile = ''
+          @hist_file = ''
           @hist_save = false
           STDOUT.print prompt
           STDOUT.flush
