@@ -99,7 +99,7 @@ module Byebug
         s = []
         if show_filename
           msg = "#{prefix ? 'filename:' : ''} The command history file is " \
-                "#{interface.hist_file.inspect}"
+                "\"#{interface.hist_file}\""
           s << msg
         end
         if show_save
