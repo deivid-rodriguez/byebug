@@ -3,9 +3,8 @@ module Byebug
     attr_accessor :hist_save, :hist_file
 
     def initialize(socket)
-      @socket = socket
-      @hist_save = false
-      @hist_file = ''
+      @command_queue, @socket = [], socket
+      @hist_save, @hist_file = false, FILE_HISTORY
       # Do we read the histfile?
       # open(@histfile, 'r') do |file|
       #   file.each do |line|

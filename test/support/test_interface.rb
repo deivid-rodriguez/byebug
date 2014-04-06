@@ -5,12 +5,8 @@ class TestInterface < Byebug::Interface
   attr_accessor :test_block
 
   def initialize
-    @input_queue = []
-    @output_queue = []
-    @error_queue = []
-    @confirm_queue = []
-    @command_queue = []
-    @readline_support = false
+    @input_queue, @output_queue, @error_queue = [], [], []
+    @confirm_queue, @command_queue, @readline_support = [], [], false
   end
 
   def errmsg(*args)

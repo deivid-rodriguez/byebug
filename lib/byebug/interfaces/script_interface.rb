@@ -3,12 +3,10 @@ module Byebug
     attr_accessor :hist_save, :hist_file
 
     def initialize(file, out, verbose=false)
-      super()
+      super
       @file = file.respond_to?(:gets) ? file : open(file)
-      @out = out
-      @verbose = verbose
-      @hist_save = false
-      @hist_file = ''
+      @out, @verbose = out, verbose
+      @hist_save, @hist_file = false, ''
     end
 
     def finalize

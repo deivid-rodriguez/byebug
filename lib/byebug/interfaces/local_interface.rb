@@ -2,10 +2,9 @@ module Byebug
   class LocalInterface < Interface
     attr_accessor :hist_save, :hist_file
 
-    def initialize()
+    def initialize
       super
-      @hist_save = true
-      @hist_file = FILE_HISTORY
+      @hist_save, @hist_file = true, FILE_HISTORY
       open(@hist_file, 'r') do |file|
         file.each do |line|
           line.chomp!
@@ -67,8 +66,7 @@ module Byebug
         end
       rescue LoadError
         def readline(prompt, hist)
-          @hist_file = ''
-          @hist_save = false
+          @hist_file, @hist_save = '', false
           STDOUT.print prompt
           STDOUT.flush
           line = STDIN.gets
