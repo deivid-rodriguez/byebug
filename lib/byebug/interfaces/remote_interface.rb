@@ -5,14 +5,13 @@ module Byebug
     def initialize(socket)
       @command_queue, @socket = [], socket
       @hist_save, @hist_file = false, FILE_HISTORY
-      # Do we read the histfile?
-      # open(@histfile, 'r') do |file|
-      #   file.each do |line|
-      #     line.chomp!
-      #     Readline::HISTORY << line
-      #   end
-      # end if File.exist?(@histfile)
-        @restart_file = nil
+      open(@hist_file, 'r') do |file|
+        file.each do |line|
+          line.chomp!
+          Readline::HISTORY << line
+        end
+      end if File.exist?(@hist_file)
+      @restart_file = nil
     end
 
     def close
