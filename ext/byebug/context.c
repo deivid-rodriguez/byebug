@@ -38,12 +38,6 @@ context_mark(void *data)
   rb_gc_mark(context->backtrace);
 }
 
-static void
-context_free(void *data)
-{
-
-}
-
 static int
 real_stack_size()
 {
@@ -67,7 +61,7 @@ context_create(VALUE thread)
 
   if (rb_obj_class(thread) == cDebugThread) CTX_FL_SET(context, CTX_FL_IGNORE);
 
-  return Data_Wrap_Struct(cContext, context_mark, context_free, context);
+  return Data_Wrap_Struct(cContext, context_mark, 0, context);
 }
 
 extern VALUE
@@ -80,7 +74,7 @@ context_dup(debug_context_t *context)
   new_context->backtrace = context->backtrace;
   CTX_FL_SET(new_context, CTX_FL_DEAD);
 
-  return Data_Wrap_Struct(cContext, context_mark, context_free, new_context);
+  return Data_Wrap_Struct(cContext, context_mark, 0, new_context);
 }
 
 static VALUE
