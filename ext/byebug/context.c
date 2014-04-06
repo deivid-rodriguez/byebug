@@ -219,7 +219,7 @@ Context_frame_binding(int argc, VALUE *argv, VALUE self)
  *
  *  Returns frame's defined class.
  */
- static VALUE
+static VALUE
 Context_frame_class(int argc, VALUE *argv, VALUE self)
 {
   FRAME_SETUP
