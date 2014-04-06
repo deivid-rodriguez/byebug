@@ -3,6 +3,8 @@ module Byebug
     attr_accessor :command_queue, :hist_size, :restart_file
     attr_writer :have_readline
 
+    FILE_HISTORY ||= File.expand_path('./.byebug_hist')
+
     def initialize
       @command_queue, @have_readline, @hist_size = [], false, 256
     end

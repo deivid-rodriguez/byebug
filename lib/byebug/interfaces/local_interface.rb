@@ -2,12 +2,10 @@ module Byebug
   class LocalInterface < Interface
     attr_accessor :hist_save, :hist_file
 
-    FILE_HISTORY = ".byebug_hist" unless defined?(FILE_HISTORY)
-
     def initialize()
       super
       @hist_save = true
-      @hist_file = File.join(".", FILE_HISTORY)
+      @hist_file = FILE_HISTORY
       open(@hist_file, 'r') do |file|
         file.each do |line|
           line.chomp!

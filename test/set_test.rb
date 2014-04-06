@@ -137,16 +137,16 @@ class TestSet < TestDsl::TestCase
     end
 
     describe 'filename' do
-      let(:filename) { File.join('.', '.byebug-hist') }
+      let(:filename) { File.expand_path('./.custom-byebug-hist') }
 
       it 'must set history filename' do
-        enter 'set history filename .byebug-hist'
+        enter "set history filename #{filename}"
         debug_file 'set'
         interface.hist_file.must_equal filename
       end
 
       it 'must show a message' do
-        enter 'set history filename .byebug-hist'
+        enter "set history filename #{filename}"
         debug_file 'set'
         check_output_includes "The command history file is \"#{filename}\""
       end
