@@ -189,7 +189,7 @@ module Byebug
       ['size'    , 1, 'Show the size of the command history'                 ]
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
-    end unless defined?(SetHistorySubcommands)
+    end unless defined?(ShowHistorySubcommands)
 
     self.allow_in_control = true
 
