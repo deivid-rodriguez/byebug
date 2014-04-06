@@ -37,7 +37,7 @@ module Byebug
         style = Command.settings[:callstyle]
         return "Frame call-display style is #{style}."
       when /^commands(:?\s+(\d+))?$/
-        if @state.interface.readline_support?
+        if @state.interface.save_history?
           s = '';
           args = @match[1].split
           if args[1]
@@ -99,17 +99,17 @@ module Byebug
         s = []
         if show_filename
           msg = "#{prefix ? 'filename:' : ''} The command history file is " \
-                "\"#{interface.hist_file}\""
+                "\"#{interface.history.file}\""
           s << msg
         end
         if show_save
           msg = (prefix ? 'save: ' : '') +
-            "Saving of history save is #{show_onoff(interface.hist_save)}."
+            "Saving history is #{show_onoff(interface.save_history?)}."
           s << msg
         end
         if show_size
           msg = (prefix ? 'size: ' : '') +
-            "Byebug history size is #{interface.hist_size}"
+            "Byebug history size is #{interface.history.size}"
           s << msg
         end
         return s.join("\n")

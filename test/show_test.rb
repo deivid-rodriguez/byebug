@@ -150,9 +150,9 @@ class TestShow < TestDsl::TestCase
   describe 'history' do
     describe 'without arguments' do
       before do
-        interface.hist_file = 'hist_file.txt'
-        interface.hist_save = true
-        interface.hist_size = 25
+        interface.history.file = 'hist_file.txt'
+        interface.save_history = true
+        interface.history.size = 25
         enter 'show history'
         debug_file 'show'
       end
@@ -163,7 +163,7 @@ class TestShow < TestDsl::TestCase
       end
 
       it 'must show history save setting' do
-        check_output_includes(/save: Saving of history save is on\./)
+        check_output_includes(/save: Saving history is on\./)
       end
 
       it 'must show history length' do
@@ -173,21 +173,21 @@ class TestShow < TestDsl::TestCase
 
     describe 'with "filename" argument' do
       it 'must show history filename' do
-        interface.hist_file = 'hist_file.txt'
+        interface.history.file = 'hist_file.txt'
         enter 'show history filename'
         debug_file 'show'
         check_output_includes 'The command history file is "hist_file.txt"'
       end
 
       it 'must show history save setting' do
-        interface.hist_save = true
+        interface.save_history = true
         enter 'show history save'
         debug_file 'show'
-        check_output_includes 'Saving of history save is on.'
+        check_output_includes 'Saving history is on.'
       end
 
       it 'must show history length' do
-        interface.hist_size = 30
+        interface.history.size = 30
         enter 'show history size'
         debug_file 'show'
         check_output_includes 'Byebug history size is 30'
@@ -197,7 +197,7 @@ class TestShow < TestDsl::TestCase
 
   describe 'commands' do
     describe 'no readline support' do
-      before { interface.readline_support = false }
+      before { interface.save_history = false }
 
       it 'must not show records from readline' do
         enter 'show commands'
@@ -207,7 +207,7 @@ class TestShow < TestDsl::TestCase
     end
 
     describe 'readline support' do
-      before { interface.readline_support = true }
+      before { interface.save_history = true }
 
       describe 'show records' do
         temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff}

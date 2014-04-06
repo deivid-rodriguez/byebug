@@ -4,7 +4,7 @@ module TestDsl
     include TestDsl
 
     def setup
-      Byebug.handler = Byebug::CommandProcessor.new(TestInterface.new)
+      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
       Byebug.tracing = false
       Byebug.breakpoints.clear if Byebug.breakpoints
     end

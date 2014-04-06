@@ -94,25 +94,25 @@ class TestSet < TestDsl::TestCase
       it 'must set history save to on' do
         enter 'set history save on'
         debug_file 'set'
-        interface.hist_save.must_equal true
+        interface.save_history?.must_equal true
       end
 
       it 'must set history save to on when no param' do
         enter 'set history save'
         debug_file 'set'
-        interface.hist_save.must_equal true
+        interface.save_history?.must_equal true
       end
 
       it 'must show a message' do
         enter 'set history save on'
         debug_file 'set'
-        check_output_includes 'Saving of history save is on.'
+        check_output_includes 'Saving history is on.'
       end
 
       it 'must set history save to off' do
         enter 'set history save off'
         debug_file 'set'
-        interface.hist_save.must_equal false
+        interface.save_history?.must_equal false
       end
     end
 
@@ -120,7 +120,7 @@ class TestSet < TestDsl::TestCase
       it 'must set history size' do
         enter 'set history size 250'
         debug_file 'set'
-        interface.hist_size.must_equal 250
+        interface.history.size.must_equal 250
       end
 
       it 'must show a message' do
@@ -142,7 +142,7 @@ class TestSet < TestDsl::TestCase
       it 'must set history filename' do
         enter "set history filename #{filename}"
         debug_file 'set'
-        interface.hist_file.must_equal filename
+        interface.history.file.must_equal filename
       end
 
       it 'must show a message' do

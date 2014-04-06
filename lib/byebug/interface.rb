@@ -1,12 +1,10 @@
 module Byebug
   class Interface
-    attr_accessor :command_queue, :hist_size, :restart_file
-    attr_writer :have_readline
-
-    FILE_HISTORY ||= File.expand_path('./.byebug_hist')
+    attr_accessor :command_queue, :restart_file, :save_history
+    alias_method :save_history?, :save_history
 
     def initialize
-      @command_queue, @have_readline, @hist_size = [], false, 256
+      @command_queue, @restart_file, @save_history = [], nil, false
     end
 
     # Common routine for reporting byebug error messages.

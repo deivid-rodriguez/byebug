@@ -1,12 +1,9 @@
 module Byebug
-  class ScriptInterface < Interface
-    attr_accessor :hist_save, :hist_file
-
+  class ScriptInterface < Byebug::Interface
     def initialize(file, out, verbose=false)
       super
       @file = file.respond_to?(:gets) ? file : open(file)
       @out, @verbose = out, verbose
-      @hist_save, @hist_file = false, ''
     end
 
     def finalize
@@ -19,10 +16,6 @@ module Byebug
         next if result.strip.empty?
         return result.chomp
       end
-    end
-
-    def readline_support?
-      false
     end
 
     def confirm(prompt)

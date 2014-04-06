@@ -1,17 +1,12 @@
+require 'byebug/history'
+
 module Byebug
   class LocalInterface < Interface
-    attr_accessor :hist_save, :hist_file
+    attr_reader :history
 
     def initialize
       super
-      @hist_save, @hist_file = true, FILE_HISTORY
-      open(@hist_file, 'r') do |file|
-        file.each do |line|
-          line.chomp!
-          Readline::HISTORY << line
-        end
-      end if File.exist?(@hist_file)
-      @restart_file = nil
+      @history = Byebug::History.new
     end
 
     def read_command(prompt)
@@ -29,43 +24,31 @@ module Byebug
     def close
     end
 
-    # Things to do before quitting
     def finalize
-      if Byebug.respond_to?(:save_history)
-        Byebug.save_history
-      end
+      @history.save if save_history?
     end
 
-    def readline_support?
-      @have_readline
+    def save_history?
+      @save_history ||=
+        begin
+          require 'readline'
+          true
+        rescue LoadError
+          false
+        end
     end
 
     private
 
-      begin
-        require 'readline'
-        class << Byebug
-          @have_readline = true
-          define_method(:save_history) do
-            iface = self.handler.interface
-            open(iface.hist_file, 'w') do |file|
-              Readline::HISTORY.to_a.last(iface.hist_size).each do |line|
-                file.puts line unless line.strip.empty?
-              end if iface.hist_save
-            end
+      def readline(prompt, hist)
+        if save_history?
+          begin
+            Readline::readline(prompt, hist)
+          rescue Interrupt
+            print "^C\n"
+            retry
           end
-          public :save_history
-        end
-
-        def readline(prompt, hist)
-          Readline::readline(prompt, hist)
-        rescue Interrupt
-          print "^C\n"
-          retry
-        end
-      rescue LoadError
-        def readline(prompt, hist)
-          @hist_file, @hist_save = '', false
+        else
           STDOUT.print prompt
           STDOUT.flush
           line = STDIN.gets
