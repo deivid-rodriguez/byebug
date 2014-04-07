@@ -16,7 +16,7 @@ module Byebug
           return false
         end
         if 'KILL' == signame
-            @state.interface.finalize
+          @state.interface.close
         end
       else
         if not confirm("Really kill? (y/n) ")

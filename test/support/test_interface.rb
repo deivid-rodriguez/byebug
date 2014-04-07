@@ -36,9 +36,6 @@ module Byebug
       read_command message
     end
 
-    def finalize
-    end
-
     def close
     end
 

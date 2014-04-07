@@ -10,7 +10,7 @@ module Byebug
 
     def execute
       if @match[1] or confirm("Really quit? (y/n) ")
-        @state.interface.finalize
+        @state.interface.close
         exit! # exit -> exit!: No graceful way to stop...
       end
     end

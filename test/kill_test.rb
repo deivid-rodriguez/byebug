@@ -11,9 +11,9 @@ class TestKill < TestDsl::TestCase
     debug_file('kill')
   end
 
-  it 'must finalize interface when sending KILL signal explicitly' do
+  it 'must close interface when sending KILL signal explicitly' do
     Process.stubs(:kill).with('KILL', Process.pid)
-    interface.expects(:finalize)
+    interface.expects(:close)
     enter 'kill KILL'
     debug_file('kill')
   end

@@ -49,7 +49,7 @@ module Byebug
             __#{mname}(*args)
           end
         rescue IOError, SystemCallError
-          self.interface = nil
+          @interface.close
         rescue SignalException
           raise
         rescue

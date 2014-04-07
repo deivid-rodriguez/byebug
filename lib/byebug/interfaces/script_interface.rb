@@ -6,9 +6,6 @@ module Byebug
       @out, @verbose = out, verbose
     end
 
-    def finalize
-    end
-
     def read_command(prompt)
       while result = @file.gets
         puts "# #{result}" if @verbose

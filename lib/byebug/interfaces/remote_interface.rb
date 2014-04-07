@@ -19,9 +19,6 @@ module Byebug
       send_command "CONFIRM #{prompt}"
     end
 
-    def finalize
-    end
-
     def read_command(prompt)
       send_command "PROMPT #{prompt}"
     end

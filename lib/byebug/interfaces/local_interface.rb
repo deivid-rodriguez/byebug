@@ -22,9 +22,6 @@ module Byebug
     end
 
     def close
-    end
-
-    def finalize
       @history.save if save_history?
     end
 
