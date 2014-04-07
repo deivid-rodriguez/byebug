@@ -152,7 +152,7 @@ class TestShow < TestDsl::TestCase
       before do
         interface.history.file = 'hist_file.txt'
         interface.save_history = true
-        interface.history.size = 25
+        interface.history.max_size = 25
         enter 'show history'
         debug_file 'show'
       end
@@ -167,7 +167,7 @@ class TestShow < TestDsl::TestCase
       end
 
       it 'must show history length' do
-        check_output_includes(/size: Byebug history size is 25/)
+        check_output_includes(/size: Byebug history's maximum size is 25/)
       end
     end
 
@@ -186,16 +186,18 @@ class TestShow < TestDsl::TestCase
         check_output_includes 'Saving history is on.'
       end
 
-      it 'must show history length' do
-        interface.history.size = 30
+      it "must show history's max size" do
+        interface.history.max_size = 30
         enter 'show history size'
         debug_file 'show'
-        check_output_includes 'Byebug history size is 30'
+        check_output_includes "Byebug history's maximum size is 30"
       end
     end
   end
 
   describe 'commands' do
+    temporary_change_const Readline, 'HISTORY', %w(aaa bbb ccc ddd)
+
     describe 'no readline support' do
       before { interface.save_history = false }
 
@@ -210,46 +212,28 @@ class TestShow < TestDsl::TestCase
       before { interface.save_history = true }
 
       describe 'show records' do
-        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff}
-
-        it 'must show records from readline history' do
-          enter 'show commands'
+        it 'displays last max_size records from readline history' do
+          enter 'set history size 3', 'show commands'
           debug_file 'show'
-          check_output_includes(/1  aaa/)
-          check_output_includes(/6  fff/)
+          check_output_includes(/2  bbb\n    3  ccc\n    4  ddd/)
+          check_output_doesnt_include(/1  aaa/)
         end
       end
 
       describe 'max records' do
-        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}
-
-        it 'must show last 10 records from readline history' do
-          enter 'show commands'
+        it 'displays whole history if max_size is bigger than Readline::HISTORY' do
+          enter 'set history size 7', 'show commands'
           debug_file 'show'
-          check_output_doesnt_include(/3  ddd/)
-          check_output_includes(/4  eee/)
-          check_output_includes(/13  nnn/)
+          check_output_includes(/1  aaa\n    2  bbb\n    3  ccc\n    4  ddd/)
         end
       end
 
-      describe 'with specified positions' do
-        temporary_change_const Readline, 'HISTORY', %w{aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn}
-
-        it 'must show records within boundaries' do
-          # Really don't know why it substracts 4, and shows starting from position 6
-          enter 'show commands 10'
+      describe 'with specified size' do
+        it 'displays the specified number of entries most recent first' do
+          enter 'show commands 2'
           debug_file 'show'
-          check_output_doesnt_include(/5  fff/)
-          check_output_includes(/6  ggg/)
-          check_output_includes(/13  nnn/)
-        end
-
-        it 'must adjust first line if it is < 0' do
-          enter 'show commands 3'
-          debug_file 'show'
-          check_output_includes(/1  bbb/)
-          check_output_includes(/8  iii/)
-          check_output_doesnt_include(/9  jjj/)
+          check_output_includes(/3  ccc\n    4  ddd/)
+          check_output_doesnt_include(/1  aaa\n    2  bbb/)
         end
       end
     end

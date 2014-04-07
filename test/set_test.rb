@@ -117,16 +117,16 @@ class TestSet < TestDsl::TestCase
     end
 
     describe 'size' do
-      it 'must set history size' do
+      it 'must set maximum history size' do
         enter 'set history size 250'
         debug_file 'set'
-        interface.history.size.must_equal 250
+        interface.history.max_size.must_equal 250
       end
 
       it 'must show a message' do
         enter 'set history size 250'
         debug_file 'set'
-        check_output_includes 'Byebug history size is 250'
+        check_output_includes "Byebug history's maximum size is 250"
       end
 
       it 'must show an error message if no size provided' do

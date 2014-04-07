@@ -37,37 +37,16 @@ module Byebug
         style = Command.settings[:callstyle]
         return "Frame call-display style is #{style}."
       when /^commands(:?\s+(\d+))?$/
-        if @state.interface.save_history?
-          s = '';
+        interface = @state.interface
+        if interface.save_history?
+          history = interface.history
           args = @match[1].split
           if args[1]
-            first_line = args[1].to_i - 4
-            last_line  = first_line + 10 - 1
-            if first_line > Readline::HISTORY.length
-              first_line = last_line = Readline::HISTORY.length
-            elsif first_line <= 0
-              first_line = 1
-            end
-            if last_line > Readline::HISTORY.length
-              last_line = Readline::HISTORY.length
-            end
-            i = first_line
-            commands = Readline::HISTORY.to_a[first_line..last_line]
-          else
-            if Readline::HISTORY.length > 10
-              commands = Readline::HISTORY.to_a[-10..-1]
-              i = Readline::HISTORY.length - 10
-            else
-              commands = Readline::HISTORY.to_a
-              i = 1
-            end
+            size = get_int(args[1], 'show commands', 1, history.max_size) if args[1]
           end
-          commands.each do |cmd|
-            s += ("%5d  %s\n" % [i, cmd])
-            i += 1
-          end
+          s = size ? history.to_s(size) : history.to_s
         else
-          s='No readline support'
+          s = 'No readline support'
         end
         return s
       when /^testing$/
@@ -109,7 +88,7 @@ module Byebug
         end
         if show_size
           msg = (prefix ? 'size: ' : '') +
-            "Byebug history size is #{interface.history.size}"
+            "Byebug history's maximum size is #{interface.history.max_size}"
           s << msg
         end
         return s.join("\n")
@@ -186,7 +165,7 @@ module Byebug
     ShowHistorySubcommands = [
       ['filename', 1, 'Show the filename in which to record command history' ],
       ['save'    , 1, 'Show whether history record should be saved on exit'  ],
-      ['size'    , 1, 'Show the size of the command history'                 ]
+      ['size'    , 1, 'Show the maximum allowed size of the command history' ]
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(ShowHistorySubcommands)
