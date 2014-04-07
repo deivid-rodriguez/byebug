@@ -1,6 +1,7 @@
 require 'byebug/byebug'
 require 'byebug/version'
 require 'byebug/context'
+require 'byebug/interface'
 require 'byebug/processor'
 require 'byebug/remote'
 require 'stringio'
