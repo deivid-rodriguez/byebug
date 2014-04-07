@@ -155,15 +155,15 @@ starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 * @FooBarWidget for working and helping with remote debugging.
 
-[VersionBadge]: https://badge.fury.io/rb/byebug.png
+[VersionBadge]: https://badge.fury.io/rb/byebug.svg
 [VersionURL]: http://badge.fury.io/rb/byebug
-[TravisBadge]: https://travis-ci.org/deivid-rodriguez/byebug.png
+[TravisBadge]: https://travis-ci.org/deivid-rodriguez/byebug.svg
 [TravisURL]: http://travis-ci.org/deivid-rodriguez/byebug
-[CodeClimateBadge]: https://codeclimate.com/github/deivid-rodriguez/byebug.png
+[CodeClimateBadge]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
 [CodeClimateURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[GemnasiumBadge]: https://gemnasium.com/deivid-rodriguez/byebug.png
+[GemnasiumBadge]: https://gemnasium.com/deivid-rodriguez/byebug.svg
 [GemnasiumURL]: https://gemnasium.com/deivid-rodriguez/byebug
-[CoverallsBadge]: https://coveralls.io/repos/deivid-rodriguez/byebug/badge.png
+[CoverallsBadge]: http://img.shields.io/coveralls/deivid-rodriguez/byebug.svg
 [CoverallsURL]: https://coveralls.io/r/deivid-rodriguez/byebug
-[GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.png
+[GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.svg
 [GittipURL]: https://www.gittip.com/deivid-rodriguez
