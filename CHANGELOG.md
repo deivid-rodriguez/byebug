@@ -3,6 +3,8 @@
 * Fix post_mortem mode
 * Allow disabling post_mortem mode
 * History file is `per project` by default now
+* `show commands` command for listing history of previous byebug commands now
+behaves like shell's `history` command.
 
 
 # 2.7.0
