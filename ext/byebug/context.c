@@ -399,8 +399,7 @@ Context_stop_reason(VALUE self)
 static VALUE
 Context_step_into(int argc, VALUE *argv, VALUE self)
 {
-  VALUE steps;
-  VALUE force;
+  VALUE steps, force;
   debug_context_t *context;
 
   rb_scan_args(argc, argv, "11", &steps, &force);

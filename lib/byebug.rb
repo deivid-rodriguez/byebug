@@ -172,7 +172,6 @@ module Byebug
       Byebug.tracing = orig_tracing
     end
     private :handle_post_mortem
-
   end
 end
 
