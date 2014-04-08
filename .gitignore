@@ -2,15 +2,11 @@ tmp
 pkg
 doc
 
-.rvmrc
-.ruby-version
-.ruby-gemset
-.gdbinit
 .gdb_history
 .bundle
 .tags
-.ackrc
-.jrubyrc
+.byebugrc
+.byebug_hist
 
 Gemfile.lock
 
