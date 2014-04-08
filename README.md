@@ -113,8 +113,9 @@ can now be placed at the end of a block or method call.
 
 Byebug tries to follow [semantic versioning](http://semver.org) and tries to
 bump major version only when backwards incompatible changes are released.
-Backwards compatibility is targeted to `pry-byebug` and any other plugins
-relying on `byebug`.
+Backwards compatibility is targeted to
+[pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) and any other
+plugins relying on `byebug`.
 
 
 ## Getting Started

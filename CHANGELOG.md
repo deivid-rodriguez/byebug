@@ -9,8 +9,10 @@ after quitting with the `q` command.
  * History file is `per project` by default now
  * `show commands` command for listing history of previous byebug commands now
 behaves like shell's `history` command.
- * Changes in `history` commands: see 50e6ad8
- * Changes in `finish` semantics and in the C extension API: see 61f9b4d
+ * Changes in `history` commands: see
+[50e6ad8](https://github.com/deivid-rodriguez/byebug/commit/50e6ad8)
+ * Changes in `finish` semantics and in the C extension API: see
+[61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d)
 
 - Features
  * Allow disabling post_mortem mode
