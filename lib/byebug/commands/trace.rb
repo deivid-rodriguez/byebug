@@ -19,7 +19,7 @@ module Byebug
           if @match[3] && @match[3] !~ /(:?no)?stop/
             errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[3]}\"\n"
           else
-            dbg_cmd = (@match[3] && @match[3] !~ /nostop/) ? 'byebug(1,0)' : ''
+            dbg_cmd = (@match[3] && @match[3] !~ /nostop/) ? 'byebug(1, false)' : ''
           end
           eval("trace_var(:\"\$#{varname}\") do |val|
                   print \"traced global variable '#{varname}' has value '\#{val}'\"\n

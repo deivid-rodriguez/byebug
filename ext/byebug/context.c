@@ -12,8 +12,7 @@ reset_stepping_stop_points(debug_context_t *context)
   context->dest_frame   = -1;
   context->lines        = -1;
   context->steps        = -1;
-  context->after_frame  = -1;
-  context->before_frame = -1;
+  context->steps_out    = -1;
 }
 
 /*
@@ -421,22 +420,35 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
  *  call-seq:
  *    context.step_out(frame)
  *
- *  Stops after frame number +frame+ is activated. Implements +finish+ and
- *  +next+ commands.
+ *  Stops after +n_frames+ frames are finished. Implements +finish+ and
+ *  +next+ commands. +force+ parameter (if true) ensures that the cursor will
+ *  stop in the specified frame even when there's no more instructions to run.
+ *  In that case, it will stop when the return event for that frame is
+ *  triggered.
  */
 static VALUE
-Context_step_out(VALUE self, VALUE frame)
+Context_step_out(int argc, VALUE *argv, VALUE self)
 {
+  int n_args, n_frames;
+  VALUE v_frames, v_force;
   debug_context_t *context;
+
+  n_args = rb_scan_args(argc, argv, "02", &v_frames, &v_force);
+  n_frames = n_args == 0 ? 1 : FIX2INT(v_frames);
+  v_force = (n_args < 2) ? Qfalse : v_force;
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
+  if (n_frames < 0 || n_frames >= context->calced_stack_size)
     rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
 
-  context->after_frame = context->calced_stack_size - FIX2INT(frame);
+  context->steps_out = n_frames;
+  if (RTEST(v_force))
+    CTX_FL_SET(context, CTX_FL_STOP_ON_RET);
+  else
+    CTX_FL_UNSET(context, CTX_FL_STOP_ON_RET);
 
-  return frame;
+  return Qnil;
 }
 
 /*
@@ -472,27 +484,6 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
     CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
 
   return Qnil;
-}
-
-/*
- *  call-seq:
- *    context.stop_return(frame)
- *
- *  Stops before frame number +frame+ is activated. Useful when you enter the
- *  debugger after the last statement in a method.
- */
-static VALUE
-Context_stop_return(VALUE self, VALUE frame)
-{
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
-    rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
-
-  context->before_frame = context->calced_stack_size - FIX2INT(frame);
-
-  return frame;
 }
 
 static void
@@ -639,9 +630,8 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "resume"           , Context_resume           ,  0);
   rb_define_method(cContext, "calced_stack_size", Context_calced_stack_size,  0);
   rb_define_method(cContext, "step_into"        , Context_step_into        , -1);
-  rb_define_method(cContext, "step_out"         , Context_step_out         ,  1);
+  rb_define_method(cContext, "step_out"         , Context_step_out         , -1);
   rb_define_method(cContext, "step_over"        , Context_step_over        , -1);
-  rb_define_method(cContext, "stop_return"      , Context_stop_return      ,  1);
   rb_define_method(cContext, "stop_reason"      , Context_stop_reason      ,  0);
   rb_define_method(cContext, "suspend"          , Context_suspend          ,  0);
   rb_define_method(cContext, "suspended?"       , Context_is_suspended     ,  0);

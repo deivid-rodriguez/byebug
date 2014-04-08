@@ -160,7 +160,7 @@ call_at_catchpoint(VALUE context_obj, debug_context_t *dc, VALUE exp)
 static VALUE
 call_at_return(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
 {
-  dc->stop_reason = CTX_STOP_BREAKPOINT;
+  CTX_FL_UNSET(dc, CTX_FL_STOP_ON_RET);
   return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
 }
 
@@ -241,6 +241,9 @@ call_event(VALUE trace_point, void *data)
 
   dc->calced_stack_size++;
 
+  if (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET))
+    dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
+
   EVENT_COMMON
 
   breakpoint = Qnil;
@@ -270,7 +273,11 @@ return_event(VALUE trace_point, void *data)
 
   EVENT_COMMON
 
-  if (dc->calced_stack_size + 1 == dc->before_frame)
+  if (dc->steps_out == 1)
+  {
+    dc->steps = 1;
+  }
+  else if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
     VALUE file, line;
 
@@ -280,11 +287,7 @@ return_event(VALUE trace_point, void *data)
     call_at_return(context, dc, file, line);
   }
 
-  if (dc->calced_stack_size + 1 == dc->after_frame)
-  {
-    reset_stepping_stop_points(dc);
-    dc->steps = 1;
-  }
+  dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out - 1;
 
   cleanup(dc);
 }

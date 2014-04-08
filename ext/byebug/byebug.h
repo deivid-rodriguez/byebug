@@ -12,6 +12,7 @@
 #define CTX_FL_SUSPEND      (1<<5) /* thread currently suspended             */
 #define CTX_FL_TRACING      (1<<6) /* call at_tracing method                 */
 #define CTX_FL_WAS_RUNNING  (1<<7) /* thread was previously running          */
+#define CTX_FL_STOP_ON_RET  (1<<8) /* can stop on method 'end'               */
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))
@@ -34,11 +35,10 @@ typedef struct {
   VALUE thread;
   int thnum;
 
-  int dest_frame;
-  int lines;                   /* # of lines in dest_frame before stopping    */
-  int steps;                   /* # of steps before stopping                  */
-  int after_frame;             /* stop right after returning from this frame  */
-  int before_frame;            /* stop right before returning from this frame */
+  int dest_frame;              /* next stop's frame if stopped by next     */
+  int lines;                   /* # of lines in dest_frame before stopping */
+  int steps;                   /* # of steps before stopping               */
+  int steps_out;               /* # of returns before stopping             */
 
   VALUE last_file;
   VALUE last_line;

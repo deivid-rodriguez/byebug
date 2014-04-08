@@ -18,22 +18,22 @@ end
 class TestFinish < TestDsl::TestCase
   before { enter "break #{__FILE__}:14", 'cont' }
 
-  it 'must stop at the next frame by default' do
+  it 'must stop after current frame is finished when without arguments' do
     enter 'finish'
     debug_file('finish') { state.line.must_equal 11 }
   end
 
-  it 'must stop at the #0 frame by default' do
+  it 'must stop before current frame finishes if 0 specified as argument' do
     enter 'finish 0'
+    debug_file('finish') { state.line.must_equal 15 }
+  end
+
+  it 'must stop after current frame is finished if 1 specified as argument' do
+    enter 'finish 1'
     debug_file('finish') { state.line.must_equal 11 }
   end
 
-  it 'must stop at the specified frame' do
-    enter 'finish 1'
-    debug_file('finish') { state.line.must_equal 7 }
-  end
-
-  it 'must stop at the next frame if the current frame was changed' do
+  it 'must behave consistenly even if current frame has been changed' do
     enter 'up', 'finish'
     debug_file('finish') { state.line.must_equal 7 }
   end

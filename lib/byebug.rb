@@ -181,16 +181,13 @@ end
 
 module Kernel
   #
-  # Enters byebug after _steps_into_ line events and _steps_out_ return events
-  # occur. Before entering byebug startup, the init script is read.
+  # Enters byebug right before (or right after if _before_ is false) return
+  # events occur. Before entering byebug the init script is read.
   #
-  def byebug(steps_into = 1, steps_out = 2)
+  def byebug(steps_out = 1, before = true)
     Byebug.start
     Byebug.run_init_script(StringIO.new)
-    if Byebug.current_context.calced_stack_size > 2
-      Byebug.current_context.stop_return steps_out if steps_out >= 1
-    end
-    Byebug.current_context.step_into steps_into if steps_into >= 0
+    Byebug.current_context.step_out(steps_out, before)
   end
 
   alias_method :debugger, :byebug
