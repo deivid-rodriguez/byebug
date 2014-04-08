@@ -1,4 +1,4 @@
 ex = BreakpointDeepExample.new.a
 2.times do
-  ex += 1
+  ex = ex ? ex : 1
 end
