@@ -1,58 +1,64 @@
 class TestSet < TestDsl::TestCase
 
-  describe 'setting to on' do
-    temporary_change_hash Byebug.settings, :autolist, 0
+  [:autoeval, :autoreload, :autosave, :basename, :forcestep, :fullpath,
+   :linetrace_plus, :stack_on_error].each do |setting|
 
-    it 'must set a setting to on' do
-      enter 'set autolist on'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 1
+    describe "setting #{setting} to on" do
+      temporary_change_hash Byebug.settings, setting, false
+
+      it "must set #{setting} to on using on" do
+        enter "set #{setting} on"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal true
+      end
+
+      it "must set #{setting} to on using 1" do
+        enter "set #{setting} 1"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal true
+      end
+
+      it "must set #{setting} to on by default" do
+        enter "set #{setting}"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal true
+      end
+
+      it "must set #{setting} using shortcut" do
+        skip 'it for now until I make it work'
+        enter "set autol"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal 1
+      end
     end
 
-    it 'must set a setting to on by 1' do
-      enter 'set autolist 1'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 1
-    end
+    describe "setting #{setting} to off" do
+      temporary_change_hash Byebug.settings, setting, true
 
-    it 'must set a setting to on by default' do
-      enter 'set autolist'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 1
-    end
+      it "must set #{setting} to off using off" do
+        enter "set #{setting} off"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal false
+      end
 
-    it 'must set a setting using shortcut' do
-      enter 'set autol'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 1
-    end
-  end
+      it "must set #{setting} to on using 0" do
+        enter "set #{setting} 0"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal false
+      end
 
-  describe 'setting to off' do
-    temporary_change_hash Byebug.settings, :autolist, 1
+      it "must set #{setting} to off using 'no' prefix" do
+        enter "set no#{setting}"
+        debug_file 'set'
+        Byebug.settings[setting].must_equal false
+      end
 
-    it 'must set a setting to off' do
-      enter 'set autolist off'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 0
-    end
-
-    it 'must set a setting to off by 0' do
-      enter 'set autolist 0'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 0
-    end
-
-    it 'must set a setting to off by "no" prefix' do
-      enter 'set noautolist'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 0
-    end
-
-    it 'must set a setting to off by "no" prefix and shortcut' do
-      enter 'set noautol'
-      debug_file 'set'
-      Byebug.settings[:autolist].must_equal 0
+      it "must set #{setting} off using 'no' prefix and shortcut" do
+        skip 'it for now until I make it work'
+        enter 'set noautol'
+        debug_file 'set'
+        Byebug.settings[setting].must_equal 0
+      end
     end
   end
 

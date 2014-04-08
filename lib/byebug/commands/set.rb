@@ -70,7 +70,6 @@ module Byebug
       ['basename'      , 1 , true , 'Set filename display style'              ],
       ['callstyle'     , 2 , false, 'Set how you want call parameters '    \
                                     'displayed'                               ],
-      ['testing'       , 2 , false, 'Used when testing byebug'                ],
       ['forcestep'     , 2 , true , 'Make sure "next/step" commands always' \
                                     'move to a new line'                      ],
       ['fullpath'      , 2 , true , 'Display full file names in frames'       ],
@@ -88,6 +87,7 @@ module Byebug
       ['post_mortem'   , 2 , true , 'Enable post-mortem mode'                 ],
       ['stack_on_error', 1 , true , 'Display stack trace when "eval" '      \
                                     'raises exception'                        ],
+      ['testing'       , 2 , false, 'Used when testing byebug'                ],
       ['verbose'       , 1 , true , 'Enable verbose output of TracePoint '  \
                                     'API events is enabled'                   ],
       ['width'         , 1 , false, 'Number of characters per line for '    \

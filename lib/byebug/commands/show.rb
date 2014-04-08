@@ -17,27 +17,15 @@ module Byebug
         else
           args = ''
         end
-        return "Argument list to give program being debugged when it is started is \"#{args}\"."
+        "Argument list to give program being debugged when it is started is \"#{args}\"."
       when /^autolist$/
-        on_off = Command.settings[:autolist] > 0
-        return "autolist is #{show_onoff(on_off)}."
-      when /^autoeval$/
-        on_off = Command.settings[:autoeval]
-        return "autoeval is #{show_onoff(on_off)}."
-      when /^autoreload$/
-        on_off = Command.settings[:autoreload]
-        return "autoreload is #{show_onoff(on_off)}."
+        "autolist is #{show_onoff(Command.settings[:autolist] > 0)}."
       when /^autoirb$/
-        on_off = Command.settings[:autoirb] > 0
-        return "autoirb is #{show_onoff(on_off)}."
-      when /^basename$/
-        on_off = Command.settings[:basename]
-        return "basename is #{show_onoff(on_off)}."
+        "autoirb is #{show_onoff(Command.settings[:autoirb] > 0)}."
       when /^autosave$/
         "Saving history is #{show_onoff(Command.settings[:autosave])}."
       when /^callstyle$/
-        style = Command.settings[:callstyle]
-        return "Frame call-display style is #{style}."
+        "Frame call-display style is #{Command.settings[:callstyle]}."
       when /^commands(:?\s+(\d+))?$/
         if Command.settings[:autosave]
           history = Byebug::History
@@ -50,11 +38,9 @@ module Byebug
           'Not currently saving history. Enable it with "set autosave"'
         end
       when /^testing$/
-        on_off = Command.settings[:testing]
-        return "Currently testing byebug is #{show_onoff(on_off)}."
+        "Currently testing byebug is #{show_onoff(Command.settings[:testing])}."
       when /^forcestep$/
-        on_off = Command.settings[:forcestep]
-        return "force-stepping is #{show_onoff(on_off)}."
+        "force-stepping is #{show_onoff(Command.settings[:forcestep])}."
       when /^fullpath$/
         "Displaying frame's full file names is #{show_onoff(Command.settings[:fullpath])}."
       when /^histfile$/
@@ -62,32 +48,29 @@ module Byebug
       when /^histsize$/
         "Byebug history's maximum size is #{Byebug::History.max_size}"
       when /^linetrace$/
-        on_off = Byebug.tracing?
-        return "line tracing is #{show_onoff(on_off)}."
+        "line tracing is #{show_onoff(Byebug.tracing?)}."
       when /^linetrace_plus$/
         if Command.settings[:linetrace_plus]
-          return 'line tracing style is every line.'
+          'line tracing style is every line.'
         else
-          return 'line tracing style is different consecutive lines.'
+          'line tracing style is different consecutive lines.'
         end
       when /^listsize$/
-        listlines = Command.settings[:listsize]
-        return "Number of source lines to list is #{listlines}."
+        "Number of source lines to list is #{Command.settings[:listsize]}."
       when /^post_mortem$/
-        on_off = Byebug.post_mortem?
-        return "post-mortem mode is #{show_onoff(on_off)}"
+        "Post-mortem mode is #{show_onoff(Byebug.post_mortem?)}"
       when /^stack_on_error$/
-        on_off = Command.settings[:stack_on_error]
-        return "Displaying stack trace is #{show_onoff(on_off)}."
+        "Displaying stack trace is #{show_onoff(Command.settings[:stack_on_error])}."
       when /^verbose$/
-        on_off = Byebug.verbose
-        return "Verbose output of TracePoint API events is #{show_onoff(on_off)}."
+        "Verbose output of TracePoint API events is #{show_onoff(Byebug.verbose)}."
       when /^version$/
-        return "Byebug #{Byebug::VERSION}"
+        "Byebug #{Byebug::VERSION}"
       when /^width$/
-        return "width is #{Command.settings[:width]}."
+        "Width is #{Command.settings[:width]}."
+      when /^autoeval|autoreload|basename$/x
+        "#{setting_name} is #{show_onoff(Command.settings[setting_name.to_sym])}."
       else
-        return "Unknown show subcommand #{setting_name}."
+        "Unknown show subcommand #{setting_name}."
       end
     end
   end

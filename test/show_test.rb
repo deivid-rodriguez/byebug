@@ -135,7 +135,7 @@ class TestShow < TestDsl::TestCase
     it 'must show default width' do
       enter 'show width'
       debug_file 'show'
-      check_output_includes "width is #{cols}."
+      check_output_includes "Width is #{cols}."
     end
   end
 
