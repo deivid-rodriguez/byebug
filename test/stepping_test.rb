@@ -5,7 +5,7 @@ class SteppingExample
   end
 
   def self.b(num)
-    v2 = 5 if 1 == num ; [1, 2, v2].map { |a| a.to_f }
+    v2 = 5 if 1 == num ; [1, 2, v2].map { |t| t.to_f }
     c(num)
   end
 
