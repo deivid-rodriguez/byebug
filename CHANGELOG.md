@@ -1,10 +1,19 @@
 # Next release
 
-* Fix post_mortem mode
-* Allow disabling post_mortem mode
-* History file is `per project` by default now
+- Bugfixes
+ * Fix post_mortem mode
+ * Command history is also saved after regular program termination, not only
+after quitting with the `q` command.
+
+- Changes
+ * History file is `per project` by default now
 * `show commands` command for listing history of previous byebug commands now
 behaves like shell's `history` command.
+ * Changes in `history` commands: see 50e6ad8
+ * Changes in `finish` semantics and in the C extension API: see 61f9b4d
+
+- Features
+ * Allow disabling post_mortem mode
 
 
 # 2.7.0
