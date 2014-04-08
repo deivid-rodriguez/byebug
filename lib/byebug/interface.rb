@@ -1,10 +1,9 @@
 module Byebug
   class Interface
-    attr_accessor :command_queue, :restart_file, :save_history
-    alias_method :save_history?, :save_history
+    attr_accessor :command_queue, :restart_file
 
     def initialize
-      @command_queue, @restart_file, @save_history = [], nil, false
+      @command_queue, @restart_file = [], nil
     end
 
     # Common routine for reporting byebug error messages.

@@ -89,81 +89,49 @@ class TestSet < TestDsl::TestCase
     end
   end
 
-  describe 'history' do
-    describe 'save' do
-      it 'must set history save to on' do
-        enter 'set history save on'
-        debug_file 'set'
-        interface.save_history?.must_equal true
-      end
+  describe 'histsize' do
+    after { Byebug::History.max_size = Byebug::History::DEFAULT_MAX_SIZE }
 
-      it 'must set history save to on when no param' do
-        enter 'set history save'
-        debug_file 'set'
-        interface.save_history?.must_equal true
-      end
-
-      it 'must show a message' do
-        enter 'set history save on'
-        debug_file 'set'
-        check_output_includes 'Saving history is on.'
-      end
-
-      it 'must set history save to off' do
-        enter 'set history save off'
-        debug_file 'set'
-        interface.save_history?.must_equal false
-      end
-    end
-
-    describe 'size' do
-      it 'must set maximum history size' do
-        enter 'set history size 250'
-        debug_file 'set'
-        interface.history.max_size.must_equal 250
-      end
-
-      it 'must show a message' do
-        enter 'set history size 250'
-        debug_file 'set'
-        check_output_includes "Byebug history's maximum size is 250"
-      end
-
-      it 'must show an error message if no size provided' do
-        enter 'set history size'
-        debug_file 'set'
-        check_output_includes 'You need to specify the history size'
-      end
-    end
-
-    describe 'filename' do
-      let(:filename) { File.expand_path('./.custom-byebug-hist') }
-
-      it 'must set history filename' do
-        enter "set history filename #{filename}"
-        debug_file 'set'
-        interface.history.file.must_equal filename
-      end
-
-      it 'must show a message' do
-        enter "set history filename #{filename}"
-        debug_file 'set'
-        check_output_includes "The command history file is \"#{filename}\""
-      end
-
-      it 'must show an error message if no filenmae provided' do
-        enter 'set history filename'
-        debug_file 'set'
-        check_output_includes 'You need to specify a filename'
-      end
-
-    end
-
-    it 'must show an error message if used wrong subcommand' do
-      enter 'set history bla 2'
+    it 'must set maximum history size' do
+      enter 'set histsize 250'
       debug_file 'set'
-      check_output_includes \
-        'Invalid history parameter bla. Should be "filename", "save" or "size"'
+      Byebug::History.max_size.must_equal 250
+    end
+
+    it 'must show a message' do
+      enter 'set histsize 250'
+      debug_file 'set'
+      check_output_includes "Byebug history's maximum size is 250"
+    end
+
+    it 'must show an error message if no size provided' do
+      enter 'set histsize'
+      debug_file 'set'
+      check_output_includes 'You need to specify the history size'
+    end
+  end
+
+  describe 'histfile' do
+    let(:filename) { File.expand_path('./.custom-byebug-hist') }
+
+    after { Byebug::History.file = Byebug::History::DEFAULT_FILE }
+
+    it 'must set history filename' do
+      enter "set histfile #{filename}"
+      debug_file 'set'
+      Byebug::History.file.must_equal filename
+    end
+
+    it 'must show a message' do
+      enter "set histfile #{filename}"
+      debug_file 'set'
+      check_output_includes "The command history file is \"#{filename}\""
+    end
+
+    it 'must show an error message if no filename provided' do
+      enter 'set histfile'
+      debug_file 'set'
+      check_output_includes 'You need to specify a filename'
     end
   end
 

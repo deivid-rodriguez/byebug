@@ -6,7 +6,7 @@ module Byebug
 
     def initialize
       super
-      @history = Byebug::History.new
+      History.load
     end
 
     def read_command(prompt)
@@ -22,37 +22,16 @@ module Byebug
     end
 
     def close
-      @history.save if save_history?
-    end
-
-    def save_history?
-      @save_history ||=
-        begin
-          require 'readline'
-          true
-        rescue LoadError
-          false
-        end
+      History.save
     end
 
     private
 
       def readline(prompt, hist)
-        if save_history?
-          begin
-            Readline::readline(prompt, hist)
-          rescue Interrupt
-            print "^C\n"
-            retry
-          end
-        else
-          STDOUT.print prompt
-          STDOUT.flush
-          line = STDIN.gets
-          exit unless line
-          line.chomp!
-          line
-        end
+        Readline::readline(prompt, hist)
+      rescue Interrupt
+        print "^C\n"
+        retry
       end
   end
 end

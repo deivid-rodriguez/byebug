@@ -143,6 +143,7 @@ module Byebug
     end
 
     # Register default settings
+    register_setting_var(:autosave, true)
     register_setting_var(:basename, false)
     register_setting_var(:callstyle, :long)
     register_setting_var(:testing, false)
@@ -217,6 +218,7 @@ module Byebug
   #  :autolist          - automatically calls 'list' command on breakpoint
   #  :autoreload        - makes 'list' command always display up-to-date source
   #                       code
+  #  :autosave          - automatic saving of command history on exit
   #  :frame_class_names - displays method's class name when showing frame stack
   #  :forcestep         - stepping command always move to the new line
   #  :fullpath          - displays full paths when showing frame stack

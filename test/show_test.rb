@@ -147,73 +147,54 @@ class TestShow < TestDsl::TestCase
     end
   end
 
-  describe 'history' do
-    describe 'without arguments' do
-      before do
-        interface.history.file = 'hist_file.txt'
-        interface.save_history = true
-        interface.history.max_size = 25
-        enter 'show history'
-        debug_file 'show'
-      end
-
-      it 'must show history file' do
-        check_output_includes(
-          /filename: The command history file is "hist_file\.txt"/)
-      end
-
-      it 'must show history save setting' do
-        check_output_includes(/save: Saving history is on\./)
-      end
-
-      it 'must show history length' do
-        check_output_includes(/size: Byebug history's maximum size is 25/)
-      end
+  describe 'autosave' do
+    it 'must show default value' do
+      enter 'show autosave'
+      debug_file 'show'
+      check_output_includes 'Saving history is on.'
     end
+  end
 
-    describe 'with "filename" argument' do
-      it 'must show history filename' do
-        interface.history.file = 'hist_file.txt'
-        enter 'show history filename'
-        debug_file 'show'
-        check_output_includes 'The command history file is "hist_file.txt"'
-      end
+  describe 'histfile' do
+    before { @filename = Byebug::History::DEFAULT_FILE }
 
-      it 'must show history save setting' do
-        interface.save_history = true
-        enter 'show history save'
-        debug_file 'show'
-        check_output_includes 'Saving history is on.'
-      end
+    it 'must show history filename' do
+      enter 'show histfile'
+      debug_file 'show'
+      check_output_includes "The command history file is \"#{@filename}\""
+    end
+  end
 
-      it "must show history's max size" do
-        interface.history.max_size = 30
-        enter 'show history size'
-        debug_file 'show'
-        check_output_includes "Byebug history's maximum size is 30"
-      end
+  describe 'histsize' do
+    before { @max_size = Byebug::History::DEFAULT_MAX_SIZE }
+
+    it "must show history's max size" do
+      enter 'show histsize'
+      debug_file 'show'
+      check_output_includes "Byebug history's maximum size is #{@max_size}"
     end
   end
 
   describe 'commands' do
     temporary_change_const Readline, 'HISTORY', %w(aaa bbb ccc ddd)
 
-    describe 'no readline support' do
-      before { interface.save_history = false }
+    describe 'with history disabled' do
+      temporary_change_hash Byebug.settings, :autosave, false
 
       it 'must not show records from readline' do
         enter 'show commands'
         debug_file 'show'
-        check_output_includes 'No readline support'
+        check_output_includes "Not currently saving history. " \
+                              'Enable it with "set autosave"'
       end
     end
 
-    describe 'readline support' do
-      before { interface.save_history = true }
+    describe 'with history enabled' do
+      temporary_change_hash Byebug.settings, :autosave, true
 
       describe 'show records' do
         it 'displays last max_size records from readline history' do
-          enter 'set history size 3', 'show commands'
+          enter 'set histsize 3', 'show commands'
           debug_file 'show'
           check_output_includes(/2  bbb\n    3  ccc\n    4  ddd/)
           check_output_doesnt_include(/1  aaa/)
@@ -222,7 +203,7 @@ class TestShow < TestDsl::TestCase
 
       describe 'max records' do
         it 'displays whole history if max_size is bigger than Readline::HISTORY' do
-          enter 'set history size 7', 'show commands'
+          enter 'set histsize 7', 'show commands'
           debug_file 'show'
           check_output_includes(/1  aaa\n    2  bbb\n    3  ccc\n    4  ddd/)
         end

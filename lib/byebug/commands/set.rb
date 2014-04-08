@@ -23,24 +23,12 @@ module Byebug
         end
       when /^verbose$/
         Byebug.verbose = setting_value
-      when /^history$/
-        try_subcmd = setting_args[0]
-        subcmd = Command.find(SetCommand::SetHistorySubcommands, try_subcmd)
-        return print "Invalid history parameter #{try_subcmd}. Should be" \
-                     ' "filename", "save" or "size"' unless subcmd
-
-        sub_sub_cmd = setting_args[1]
-        iface = @state.interface
-        case subcmd.name
-        when /^save$/
-          iface.save_history = sub_sub_cmd ? get_onoff(sub_sub_cmd) : true
-        when /^size$/
-          return print 'You need to specify the history size' unless sub_sub_cmd
-          iface.history.max_size = get_int(sub_sub_cmd, "Set history size")
-        when /^filename$/
-          return print 'You need to specify a filename' unless sub_sub_cmd
-          iface.history.file = File.expand_path(sub_sub_cmd)
-        end
+      when /^histfile$/
+        return print 'You need to specify a filename' unless setting_args[0]
+        Byebug::History.file = File.expand_path(setting_args[0])
+      when /^histsize$/
+        return print 'You need to specify the history size' unless setting_args[0]
+        Byebug::History.max_size = get_int(setting_args[0], "Set histsize")
       when /^linetrace$/
         Byebug.tracing = setting_value
       when /^listsize$/
@@ -56,8 +44,8 @@ module Byebug
         else
           Byebug.post_mortem = false
         end
-      when /^autoeval|autoreload|basename|forcestep|fullpath|linetrace_plus|
-             testing|stack_on_error$/x
+      when /^autoeval|autoreload|autosave|basename|forcestep|fullpath|
+             linetrace_plus|testing|stack_on_error$/x
         Command.settings[setting_name.to_sym] = setting_value
       else
         return print "Unknown setting #{@match[1]}.\n"
@@ -77,6 +65,8 @@ module Byebug
                                     'breakpoint'                              ],
       ['autoirb'       , 4 , true , 'Invoke IRB on every stop'                ],
       ['autoreload'    , 4 , true , 'Reload source code when changed'         ],
+      ['autosave'      , 5 , true , 'Automatically save command history '  \
+                                    'record on exit'                          ],
       ['basename'      , 1 , true , 'Set filename display style'              ],
       ['callstyle'     , 2 , false, 'Set how you want call parameters '    \
                                     'displayed'                               ],
@@ -84,9 +74,12 @@ module Byebug
       ['forcestep'     , 2 , true , 'Make sure "next/step" commands always' \
                                     'move to a new line'                      ],
       ['fullpath'      , 2 , true , 'Display full file names in frames'       ],
-      ['history'       , 2 , false, 'Command for setting command history '  \
-                                    'parameters, namely, "filename", '      \
-                                    '"save" and "size"'                       ],
+      ['histfile'      , 5 , false, 'Customize file where history is '      \
+                                    'loaded from and saved to. By '         \
+                                    'default, .byebug_hist'                   ],
+      ['histsize'      , 5 , false, 'Customize maximum number of commands ' \
+                                    'that are stored in byebug history '    \
+                                    'record. By default, 256'                 ],
       ['linetrace'     , 3 , true , 'Enable line execution tracing'           ],
       ['linetrace_plus', 10, true , 'Set line execution tracing to show'    \
                                     'different lines'                         ],
@@ -102,14 +95,6 @@ module Byebug
     ].map do |name, min, is_bool, help|
       Subcmd2.new(name, min, is_bool, help)
     end unless defined?(Subcommands)
-
-    SetHistorySubcommands = [
-      ['filename', 1, 'Set the filename in which to record command history'],
-      ['save'    , 1, 'Set saving of the history record on exit'           ],
-      ['size'    , 1, 'Set the size of the command history'                ]
-    ].map do |name, min, help|
-      Subcmd.new(name, min, help)
-    end unless defined?(SetHistorySubcommands)
 
     self.allow_in_control = true
 

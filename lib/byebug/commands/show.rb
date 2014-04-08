@@ -33,22 +33,22 @@ module Byebug
       when /^basename$/
         on_off = Command.settings[:basename]
         return "basename is #{show_onoff(on_off)}."
+      when /^autosave$/
+        "Saving history is #{show_onoff(Command.settings[:autosave])}."
       when /^callstyle$/
         style = Command.settings[:callstyle]
         return "Frame call-display style is #{style}."
       when /^commands(:?\s+(\d+))?$/
-        interface = @state.interface
-        if interface.save_history?
-          history = interface.history
+        if Command.settings[:autosave]
+          history = Byebug::History
           args = @match[1].split
           if args[1]
-            size = get_int(args[1], 'show commands', 1, history.max_size) if args[1]
+            size = get_int(args[1], 'show commands', 1, history.max_size)
           end
-          s = size ? history.to_s(size) : history.to_s
+          size ? history.to_s(size) : history.to_s
         else
-          s = 'No readline support'
+          'Not currently saving history. Enable it with "set autosave"'
         end
-        return s
       when /^testing$/
         on_off = Command.settings[:testing]
         return "Currently testing byebug is #{show_onoff(on_off)}."
@@ -56,42 +56,11 @@ module Byebug
         on_off = Command.settings[:forcestep]
         return "force-stepping is #{show_onoff(on_off)}."
       when /^fullpath$/
-        on_off = Command.settings[:fullpath]
-        return "Displaying frame's full file names is #{show_onoff(on_off)}."
-      when /^history(:?\s+(filename|save|size))?$/
-        args = @match[1].split
-        interface = @state.interface
-        if args[1]
-          show_save = show_size = show_filename = false
-          prefix = false
-          if args[1] == 'save'
-            show_save = true
-          elsif args[1] == 'size'
-            show_size = true
-          elsif args[1] == 'filename'
-            show_filename = true
-          end
-        else
-          show_save = show_size = show_filename = true
-          prefix = true
-        end
-        s = []
-        if show_filename
-          msg = "#{prefix ? 'filename:' : ''} The command history file is " \
-                "\"#{interface.history.file}\""
-          s << msg
-        end
-        if show_save
-          msg = (prefix ? 'save: ' : '') +
-            "Saving history is #{show_onoff(interface.save_history?)}."
-          s << msg
-        end
-        if show_size
-          msg = (prefix ? 'size: ' : '') +
-            "Byebug history's maximum size is #{interface.history.max_size}"
-          s << msg
-        end
-        return s.join("\n")
+        "Displaying frame's full file names is #{show_onoff(Command.settings[:fullpath])}."
+      when /^histfile$/
+        "The command history file is \"#{Byebug::History.file}\""
+      when /^histsize$/
+        "Byebug history's maximum size is #{Byebug::History.max_size}"
       when /^linetrace$/
         on_off = Byebug.tracing?
         return "line tracing is #{show_onoff(on_off)}."
@@ -135,6 +104,8 @@ module Byebug
       ['autoirb'       , 4 , 'Show whether IRB is invoked on stopping'        ],
       ['autoreload'    , 4 , 'Show whether source code is reloaded when '   \
                              'changed'                                        ],
+      ['autosave'      , 5 , 'Show whether command history is '             \
+                             'automatically saved on exit'                    ],
       ['basename'      , 1 , 'Show whether basename is used when reporting' \
                              ' files'                                         ],
       ['callstyle'     , 2 , 'Show parameter style used when showing call'  \
@@ -144,7 +115,9 @@ module Byebug
       ['forcestep'     , 1 , 'Show whether "next/step" commands are set to' \
                              ' always move to a line'                         ],
       ['fullpath'      , 2 , 'Show whether full paths are displayed in frames'],
-      ['history'       , 2 , 'Show command history configurations. '          ],
+      ['histfile'      , 5 , 'File where byebug save history of commands'     ],
+      ['histsize'      , 5 , 'Maximum number of commands stored in '        \
+                             'byebug\'s history'                              ],
       ['linetrace'     , 3 , 'Show line execution tracing status'             ],
       ['linetrace_plus', 10, 'Show whether different consecutive lines are' \
                              ' shown in tracing'                              ],
@@ -161,14 +134,6 @@ module Byebug
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(Subcommands)
-
-    ShowHistorySubcommands = [
-      ['filename', 1, 'Show the filename in which to record command history' ],
-      ['save'    , 1, 'Show whether history record should be saved on exit'  ],
-      ['size'    , 1, 'Show the maximum allowed size of the command history' ]
-    ].map do |name, min, help|
-      Subcmd.new(name, min, help)
-    end unless defined?(ShowHistorySubcommands)
 
     self.allow_in_control = true
 
