@@ -128,7 +128,7 @@ started. Proper documentation will be eventually written.
 ## Related projects
 
 * [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) adds `next`,
-  `step`, `finish`, `continue` and `break` commands to pry using byebug.
+`step`, `finish`, `continue` and `break` commands to pry using byebug.
 * [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger)
 adds a rake task that restarts Passenger with byebug connected.
 * [minitest-byebug](https://github.com/kaspth/minitest-byebug) starts a byebug
