@@ -6,7 +6,7 @@
 
 /* flags */
 #define CTX_FL_DEAD         (1<<1) /* this context belonged to a dead thread */
-#define CTX_FL_ENABLE_BKPT  (1<<2) /* cab check for breakpoints              */
+#define CTX_FL_ENABLE_BKPT  (1<<2) /* can check for breakpoints              */
 #define CTX_FL_FORCE_MOVE   (1<<3) /* don't stop unless we've changed line   */
 #define CTX_FL_IGNORE       (1<<4) /* this context belongs to ignored thread */
 #define CTX_FL_SUSPEND      (1<<5) /* thread currently suspended             */
