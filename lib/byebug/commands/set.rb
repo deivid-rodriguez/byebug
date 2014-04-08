@@ -60,11 +60,11 @@ module Byebug
     Subcommands = [
       ['args'          , 2 , false, 'Set argument list to the program '    \
                                     'being debugged when it is started'       ],
-      ['autoeval'      , 4 , true , 'Evaluate every unrecognized command'     ],
-      ['autolist'      , 4 , true , 'Execute "list" command on every '     \
+      ['autoeval'      , 5 , true , 'Evaluate every unrecognized command'     ],
+      ['autolist'      , 5 , true , 'Execute "list" command on every '     \
                                     'breakpoint'                              ],
-      ['autoirb'       , 4 , true , 'Invoke IRB on every stop'                ],
-      ['autoreload'    , 4 , true , 'Reload source code when changed'         ],
+      ['autoirb'       , 5 , true , 'Invoke IRB on every stop'                ],
+      ['autoreload'    , 5 , true , 'Reload source code when changed'         ],
       ['autosave'      , 5 , true , 'Automatically save command history '  \
                                     'record on exit'                          ],
       ['basename'      , 1 , true , 'Set filename display style'              ],

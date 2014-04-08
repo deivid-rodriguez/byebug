@@ -98,11 +98,11 @@ module Byebug
     Subcommands = [
       ['args'          , 2 , 'Show argument list to the program being '     \
                              'debugged when it is started'                    ],
-      ['autoeval'      , 4 , 'Show whether unrecognized commands are '      \
+      ['autoeval'      , 5 , 'Show whether unrecognized commands are '      \
                              'evaluated'                                      ],
-      ['autolist'      , 4 , 'Show whether "list" command is run on stopping' ],
-      ['autoirb'       , 4 , 'Show whether IRB is invoked on stopping'        ],
-      ['autoreload'    , 4 , 'Show whether source code is reloaded when '   \
+      ['autolist'      , 5 , 'Show whether "list" command is run on stopping' ],
+      ['autoirb'       , 5 , 'Show whether IRB is invoked on stopping'        ],
+      ['autoreload'    , 5 , 'Show whether source code is reloaded when '   \
                              'changed'                                        ],
       ['autosave'      , 5 , 'Show whether command history is '             \
                              'automatically saved on exit'                    ],
