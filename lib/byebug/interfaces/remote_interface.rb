@@ -5,7 +5,7 @@ module Byebug
     attr_reader :history
 
     def initialize(socket)
-      super
+      super()
       @socket = socket
       @history = History.new
     end

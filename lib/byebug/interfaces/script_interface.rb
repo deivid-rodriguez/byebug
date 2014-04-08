@@ -1,7 +1,7 @@
 module Byebug
   class ScriptInterface < Byebug::Interface
     def initialize(file, out, verbose=false)
-      super
+      super()
       @file = file.respond_to?(:gets) ? file : open(file)
       @out, @verbose = out, verbose
     end
