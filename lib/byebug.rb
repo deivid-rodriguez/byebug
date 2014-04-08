@@ -17,7 +17,8 @@ module Byebug
   DEFAULT_START_SETTINGS = {
     init:        true,  # Set $0 and save ARGV?
     post_mortem: false, # post-mortem debugging on uncaught exception?
-    tracing:     nil    # Byebug.tracing? value. true/false resets
+    tracing:     nil,   # Byebug.tracing? value. true/false resets
+    save_history: true  # Save history of byebug commands?
   } unless defined?(DEFAULT_START_SETTINGS)
 
   # Configuration file used for startup commands. Default value is .byebugrc
@@ -117,6 +118,7 @@ module Byebug
       Byebug.tracing = options[:tracing] unless options[:tracing].nil?
       retval = Byebug._start(&block)
       post_mortem if options[:post_mortem]
+      at_exit { Byebug::History.save } if options[:save_history]
       return retval
     end
 
