@@ -64,15 +64,7 @@ can now be placed at the end of a block or method call.
 * Pry command is built-in. No need of external gem like debugger-pry.
 
 
-## Semantic Versioning
-
-Byebug tries to follow [semantic versioning](http://semver.org). Backwards
-compatibility doesn't seem like a critic issue for a debugger because it's not
-supposed to be used permanently by any program, let alone in production
-environments. However, I still like the idea of giving some meaning to version
-changes.
-
-Byebug's public API is determined by its set of commands
+## Byebug's commands
 
     Command     | Aliases      | Subcommands
     ----------- |:------------ |:-----------
@@ -115,6 +107,14 @@ Byebug's public API is determined by its set of commands
     `undisplay` |              |
     `up`        |              |
     `var`       |              | `class` `constant` `global` `instance` `local` `ct`
+
+
+## Semantic Versioning
+
+Byebug tries to follow [semantic versioning](http://semver.org) and tries to
+bump major version only when backwards incompatible changes are released.
+Backwards compatibility is targeted to `pry-byebug` and any other plugins
+relying on `byebug`.
 
 
 ## Getting Started
