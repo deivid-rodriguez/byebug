@@ -4,6 +4,8 @@
  * Fix post_mortem mode
  * Command history is also saved after regular program termination, not only
 after quitting with the `q` command.
+ * Fix failure when calling Byebug.start with Timeout::timeout (see #54), thanks
+@zmoazeni!
 
 - Changes
  * History file is `per project` by default now

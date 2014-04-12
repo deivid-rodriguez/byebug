@@ -3,21 +3,17 @@ module Byebug
   class Context
 
     class << self
-      def stack_size
+      def stack_size(byebug_frames = false)
         if backtrace = Thread.current.backtrace_locations(0)
-          backtrace.drop_while { |l| !ignored(l.path) }
-                   .drop_while { |l|  ignored(l.path) }
-                   .take_while { |l| !ignored(l.path) }
-                   .size
-        else
-          print 'No backtrace available!!'
-          0
-        end
-      end
-
-      def real_stack_size
-        if backtrace = Thread.current.backtrace_locations(0)
+          unless byebug_frames
+            backtrace = backtrace.drop_while { |l| !ignored(l.path) }
+                                 .drop_while { |l|  ignored(l.path) }
+                                 .take_while { |l| !ignored(l.path) }
+          end
           backtrace.size
+        else
+          print 'WARNING: No backtrace available!!'
+          0
         end
       end
 
