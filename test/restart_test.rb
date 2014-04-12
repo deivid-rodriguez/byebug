@@ -60,47 +60,26 @@ class TestRestart < TestDsl::TestCase
     describe 'no script specified' do
       temporary_change_const Byebug, 'PROG_SCRIPT', :__undefined__
 
-      describe 'and no $0 used' do
-        temporary_change_const Byebug, 'DEFAULT_START_SETTINGS',
-          { init: false, post_mortem: false, tracing: nil }
-
-        it 'must not restart and show error messages instead' do
-          must_restart.never
-          debug_file 'restart'
-          check_output_includes 'Don\'t know name of debugged program',
+      it 'must not restart and show error messages instead' do
+        must_restart.never
+        debug_file 'restart'
+        check_output_includes 'Don\'t know name of debugged program',
                                 interface.error_queue
-        end
-      end
-
-      describe 'but initialized from $0' do
-        it 'must use prog_script from $0' do
-          old_prog_name = $0
-          $0 = 'prog-0'
-          debug_file 'restart'
-          check_output_includes 'Ruby program prog-0 doesn\'t exist',
-                                interface.error_queue
-          $0 = old_prog_name
-        end
       end
     end
 
     describe 'no script at the specified path' do
       temporary_change_const Byebug, 'PROG_SCRIPT', 'blabla'
 
-      describe 'and no restart params set' do
-        temporary_change_const Byebug, 'DEFAULT_START_SETTINGS',
-          init: false, post_mortem: false, tracing: nil
+      it 'must not restart' do
+        must_restart.never
+        debug_file 'restart'
+      end
 
-        it 'must not restart' do
-          must_restart.never
-          debug_file 'restart'
-        end
-
-        it 'must show an error message' do
-          debug_file 'restart'
-          check_output_includes 'Ruby program blabla doesn\'t exist',
-                                interface.error_queue
-        end
+      it 'must show an error message' do
+        debug_file 'restart'
+        check_output_includes 'Ruby program blabla doesn\'t exist',
+                              interface.error_queue
       end
     end
 

@@ -14,15 +14,19 @@ module Byebug
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
   # Default options to Byebug.start
-  DEFAULT_START_SETTINGS = {
-    init:        true,  # Set $0 and save ARGV?
-    post_mortem: false, # post-mortem debugging on uncaught exception?
-    tracing:     nil,   # Byebug.tracing? value. true/false resets
-    save_history: true  # Save history of byebug commands?
-  } unless defined?(DEFAULT_START_SETTINGS)
+  unless defined?(DEFAULT_START_SETTINGS)
+    DEFAULT_START_SETTINGS = { post_mortem: false,
+                               tracing: false,
+                               save_history: true }
+  end
 
   # Configuration file used for startup commands. Default value is .byebugrc
   INITFILE = '.byebugrc' unless defined?(INITFILE)
+
+  # Original ARGV, command line and initial directory to make restarts possible
+  ARGV = ARGV.clone unless defined?(ARGV)
+  PROG_SCRIPT = $0 unless defined?(PROG_SCRIPT)
+  INITIAL_DIR = Dir.pwd unless defined?(INITIAL_DIR)
 
   class << self
 
@@ -99,26 +103,23 @@ module Byebug
     # many times as you called Byebug.start method.</i>
     #
     # +options+ is a hash used to set various debugging options.
-    #   :init        - true if you want to save ARGV and some other variables to
-    #                  make a byebug restart possible. Only the first time :init
-    #                  is set to true the values will get set. Since ARGV is
-    #                  saved, you should make sure it hasn't been changed before
-    #                  the (first) call.
-    #   :post_mortem - true if you want to enter post-mortem debugging on an
-    #                  uncaught exception. Once post-mortem debugging is set, it
-    #                  can't be unset.
+    #   :post_mortem  - true if you want to enter post-mortem debugging on an
+    #                   uncaught exception, false otherwise. Default: false.
+    #   :tracing      - true if line tracing should be enabled, false otherwise.
+    #                   Default: false.
+    #   :save_history - true if byebug's command history should be saved to a
+    #                   file on program termination so that it can be reloaded
+    #                   later.
     #
     def start(options={}, &block)
       options = Byebug::DEFAULT_START_SETTINGS.merge(options)
-      if options[:init]
-        Byebug.const_set('ARGV', ARGV.clone) unless defined? Byebug::ARGV
-        Byebug.const_set('PROG_SCRIPT', $0) unless defined? Byebug::PROG_SCRIPT
-        Byebug.const_set('INITIAL_DIR', Dir.pwd) unless defined? Byebug::INITIAL_DIR
-      end
-      Byebug.tracing = options[:tracing] unless options[:tracing].nil?
+      Byebug.tracing = options[:tracing]
+
       retval = Byebug._start(&block)
+
       post_mortem if options[:post_mortem]
       at_exit { Byebug::History.save } if options[:save_history]
+
       return retval
     end
 

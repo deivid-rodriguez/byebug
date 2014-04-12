@@ -15,6 +15,8 @@ behaves like shell's `history` command.
 [50e6ad8](https://github.com/deivid-rodriguez/byebug/commit/50e6ad8)
  * Changes in `finish` semantics and in the C extension API: see
 [61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d)
+ * The `init` option for Byebug.start has been removed. Information to make the
+`restart` command work is always saved now.
 
 - Features
  * Allow disabling post_mortem mode
