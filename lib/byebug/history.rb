@@ -2,7 +2,7 @@ require 'readline'
 
 module Byebug
   class History
-    DEFAULT_FILE = File.expand_path('.byebug_hist')
+    DEFAULT_FILE = File.expand_path("#{ENV['HOME']||'.'}/.byebug_hist")
     DEFAULT_MAX_SIZE = 256
 
     @file = DEFAULT_FILE

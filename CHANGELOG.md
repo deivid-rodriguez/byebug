@@ -8,7 +8,6 @@ after quitting with the `q` command.
 @zmoazeni!
 
 - Changes
- * History file is `per project` by default now
  * `show commands` command for listing history of previous byebug commands now
 behaves like shell's `history` command.
  * Changes in `history` commands: see
