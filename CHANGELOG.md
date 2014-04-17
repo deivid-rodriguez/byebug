@@ -1,4 +1,4 @@
-# Next release
+# 3.0.0
 
 - Bugfixes
  * Fix post_mortem mode
