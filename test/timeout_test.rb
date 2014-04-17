@@ -1,9 +1,7 @@
-class TestTimeout < MiniTest::Spec
-
-  it 'call to "Timeout::timeout" after "Byebug.start" does not raise' do
-    Byebug.start do
-      Timeout::timeout(60) {}
-    end
+class TestTimeout < TestDsl::TestCase
+  it 'must evaluate expression that calls Timeout::timeout' do
+    enter 'eval Timeout::timeout(60) { 1 }'
+    debug_file 'timeout'
+    check_output_includes '1'
   end
-
 end
