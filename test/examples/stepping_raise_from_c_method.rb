@@ -1,3 +1,0 @@
-byebug
-
-SteppingRaiseFromCMethodExample.new.a

@@ -1,3 +1,0 @@
-byebug
-
-SteppingRaiseFromRubyMethodExample.new.a

@@ -78,7 +78,7 @@ module TestDsl
   end
 
   #
-  # Runs byebug with the provided basename for a file.
+  # Runs the provided Proc.
   #
   # You also can specify a block, which will be executed when Processor extracts
   # all the commands from the input queue. You can use that for making asserts
@@ -86,16 +86,20 @@ module TestDsl
   # the test will fail.
   #
   # Usage:
-  #   debug_file '/path/to/ex1.rb'
+  #   debug_proc -> { byebug; puts 'Hello' }
   #
   #   enter 'b 4', 'cont'
-  #   debug_file('/path/to/ex2.rb') { state.line.must_equal 4 }
+  #   code = -> do
+  #     byebug
+  #     puts 'hello'
+  #   end
+  #   debug_proc(code) { state.line.must_equal 4 }
   #
-  def debug_file(filename, options = {}, &block)
+  def debug_proc(program, &block)
     Byebug.stubs(:run_init_script)
     interface.test_block = block
     begin
-      load fullpath(filename)
+      program.call
     ensure
       interface.test_block.call if interface.test_block
     end

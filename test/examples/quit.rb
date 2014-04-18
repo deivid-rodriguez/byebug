@@ -1,2 +1,0 @@
-byebug
-DummyObject.new

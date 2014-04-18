@@ -1,39 +1,50 @@
-class ContinueExample
-  def self.a(num)
-    num + 4
-  end
-end
-
-class TestContinue < TestDsl::TestCase
-
-  describe "successful" do
-    it "must continue up to breakpoint if no line specified" do
-      enter 'break 4', 'continue'
-      debug_file('continue') { state.line.must_equal 4 }
-    end
-
-    it "must work in abbreviated mode too" do
-      enter 'break 4', 'cont'
-      debug_file('continue') { state.line.must_equal 4 }
-    end
-
-    it "must continue up to specified line" do
-      enter 'cont 4'
-      debug_file('continue') { state.line.must_equal 4 }
+module ContinueTest
+  class ContinueExample
+    def self.a(num)
+      num + 4
     end
   end
 
-  describe "unsuccessful" do
-    it "must ignore the command if specified line is not valid" do
-      enter 'cont 123'
-      debug_file('continue') { state.line.must_equal 3 }
+  class TestContinue < TestDsl::TestCase
+    before do
+      @example = lambda do
+        byebug
+
+        b = 5
+        c = b + 5
+        ContinueExample.a(c)
+      end
     end
 
-    it "must show error if specified line is not valid" do
-      enter 'cont 123'
-      debug_file 'continue'
-      check_error_includes \
-        "Line 123 is not a stopping point in file \"#{fullpath('continue')}\""
+    describe 'successful' do
+      it 'must continue up to breakpoint if no line specified' do
+        enter 'break 14', 'continue'
+        debug_proc(@example) { state.line.must_equal 14 }
+      end
+
+      it 'must work in abbreviated mode too' do
+        enter 'break 14', 'cont'
+        debug_proc(@example) { state.line.must_equal 14 }
+      end
+
+      it 'must continue up to specified line' do
+        enter 'cont 14'
+        debug_proc(@example) { state.line.must_equal 14 }
+      end
+    end
+
+    describe 'unsuccessful' do
+      before { enter 'cont 100' }
+
+      it 'must ignore the command if specified line is not valid' do
+        debug_proc(@example) { state.line.must_equal 13 }
+      end
+
+      it 'must show error if specified line is not valid' do
+        debug_proc(@example)
+        check_error_includes \
+          "Line 100 is not a stopping point in file \"#{__FILE__}\""
+      end
     end
   end
 end
