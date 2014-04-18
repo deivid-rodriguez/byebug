@@ -1,5 +1,5 @@
 module EditTest
-  class TestEdit < TestDsl::TestCase
+  class EditTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug

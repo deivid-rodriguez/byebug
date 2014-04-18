@@ -1,5 +1,5 @@
 module FinishTest
-  class FinishExample
+  class Example
     def a
       b
     end
@@ -20,7 +20,7 @@ module FinishTest
     before do
       @example = -> do
         byebug
-        FinishExample.new.a
+        Example.new.a
       end
       enter "break #{__FILE__}:15", 'cont'
     end

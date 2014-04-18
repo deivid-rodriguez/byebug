@@ -1,5 +1,5 @@
 module SourceTest
-  class TestSource < TestDsl::TestCase
+  class SourceTestCase < TestDsl::TestCase
     let(:filename) { 'source_example.txt' }
 
     before do

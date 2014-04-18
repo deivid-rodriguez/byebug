@@ -1,5 +1,5 @@
 module ReplTest
-  class TestRepl < TestDsl::TestCase
+  class ReplTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug

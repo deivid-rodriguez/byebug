@@ -1,18 +1,18 @@
 module RestartTest
-  class RestartExample
+  class Example
     def concat_args(a, b, c)
       a.to_s + b.to_s + c.to_s
     end
   end
 
-  class TestRestart < TestDsl::TestCase
+  class RestartTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug
         a = ARGV[0]
         b = ARGV[1]
         c = ARGV[2]
-        RestartExample.new.concat_args(a, b, c)
+        Example.new.concat_args(a, b, c)
       end
     end
 

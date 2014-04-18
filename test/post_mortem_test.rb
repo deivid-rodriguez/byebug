@@ -8,7 +8,7 @@ module PostMortemTest
     end
   end
 
-  class TestPostMortem < TestDsl::TestCase
+  class PostMortemTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug

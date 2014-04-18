@@ -1,5 +1,5 @@
 module SaveTest
-  class TestSave < TestDsl::TestCase
+  class SaveTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug

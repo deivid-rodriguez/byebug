@@ -1,5 +1,5 @@
 module ShowTest
-  class TestShow < TestDsl::TestCase
+  class ShowTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug

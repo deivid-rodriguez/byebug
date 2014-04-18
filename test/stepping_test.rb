@@ -16,7 +16,7 @@ module SteppingTest
     end
   end
 
-  class TestStepping < TestDsl::TestCase
+  class SteppingTestCase < TestDsl::TestCase
     before do
       @example = -> do
         byebug
