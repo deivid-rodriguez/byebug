@@ -17,10 +17,12 @@ module Byebug
         print "#{v} = #{s}\n"
       end
     end
+
     def var_class_self
       obj = bb_eval('self')
       var_list(obj.class.class_variables, get_binding)
     end
+
     def var_global
       var_list(global_variables.reject { |v| [:$=, :$KCODE, :$-K].include?(v) })
     end
