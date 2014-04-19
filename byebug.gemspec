@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.md']
   s.extensions       = ['ext/byebug/extconf.rb']
 
-  s.add_dependency 'columnize', '~> 0.3'
+  s.add_dependency 'columnize', '~> 0.8'
   s.add_dependency 'debugger-linecache', '~> 1.2'
 end
