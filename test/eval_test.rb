@@ -1,5 +1,5 @@
 module EvalTest
-  class EvalTest
+  class Example
     def sum(a,b)
       a + b
     end
@@ -13,7 +13,7 @@ module EvalTest
     before do
       @example = -> do
         byebug
-        @foo = EvalTest.new
+        @foo = Example.new
         @foo.sum(1, 2)
       end
     end
