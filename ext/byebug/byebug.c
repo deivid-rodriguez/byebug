@@ -35,14 +35,15 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
   if (trace_arg)
   {
     int i = 0;
-    VALUE path  = rb_tracearg_path(trace_arg);
-    VALUE line  = rb_tracearg_lineno(trace_arg);
-    VALUE event = rb_tracearg_event(trace_arg);
-    VALUE mid   = rb_tracearg_method_id(trace_arg);
-    for (i=0; i<dc->calced_stack_size; i++) putc('|', stderr);
-    fprintf(stderr, "[#%d] %s@%s:%d %s\n", dc->thnum,
-      rb_id2name(SYM2ID(event)), RSTRING_PTR(path), NUM2INT(line),
-      NIL_P(mid) ? "" : rb_id2name(SYM2ID(mid)));
+    const char *event = rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)));
+    char *path = RSTRING_PTR(rb_tracearg_path(trace_arg));
+    int line = NUM2INT(rb_tracearg_lineno(trace_arg));
+    VALUE v_mid = rb_tracearg_method_id(trace_arg);
+    const char *mid = NIL_P(v_mid) ? "" : rb_id2name(SYM2ID(v_mid));
+
+    for (i = 0; i < dc->calced_stack_size; i++) putc('-', stderr);
+    fprintf(stderr, "(%d)->[#%d] %s@%s:%d %s\n",
+                     dc->calced_stack_size, dc->thnum, event, path, line, mid);
   }
 }
 
