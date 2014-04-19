@@ -24,6 +24,12 @@ module EvalTest
       check_output_includes '5'
     end
 
+    it 'must evaluate expression that calls Timeout::timeout' do
+      enter 'eval Timeout::timeout(60) { 1 }'
+      debug_proc(@example)
+      check_output_includes '1'
+    end
+
     it 'must work with shortcut' do
       enter 'e 3 + 2'
       debug_proc(@example)
