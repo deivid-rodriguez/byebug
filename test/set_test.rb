@@ -121,7 +121,7 @@ module SetTest
       it 'must show an error message if no size provided' do
         enter 'set histsize'
         debug_proc(@example)
-        check_output_includes 'You need to specify the history size'
+        check_output_includes 'You need to specify an argument for "set histsize"'
       end
     end
 

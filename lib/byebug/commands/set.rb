@@ -27,16 +27,15 @@ module Byebug
         return print 'You need to specify a filename' unless setting_args[0]
         Byebug::History.file = File.expand_path(setting_args[0])
       when /^histsize$/
-        return print 'You need to specify the history size' unless setting_args[0]
-        Byebug::History.max_size = get_int(setting_args[0], "Set histsize")
+        return unless max_size = get_int(setting_args[0], 'set histsize', 1, nil, nil)
+        Byebug::History.max_size = max_size
       when /^linetrace$/
         Byebug.tracing = setting_value
       when /^listsize$/
-        listsize = get_int(setting_args[0], 'Set listsize', 1, nil, 10)
-        return unless listsize
+        return unless listsize = get_int(setting_args[0], 'set listsize', 1, nil, nil)
         Command.settings[:listsize] = listsize
       when /^width$/
-        return unless width = get_int(setting_args[0], 'Set width', 10, nil, 80)
+        return unless width = get_int(setting_args[0], 'set width', 10, nil, nil)
         Command.settings[:width] = width
       when /^post_mortem$/
         if setting_value == true

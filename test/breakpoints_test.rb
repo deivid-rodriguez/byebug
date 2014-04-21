@@ -308,7 +308,7 @@ module BreakpointsTest
           enter 'break 5', 'disable foo'
           debug_proc(@example)
           check_output_includes \
-            '"disable breakpoints" argument "foo" needs to be a number.'
+            '"disable breakpoints" argument "foo" needs to be a number'
         end
       end
     end

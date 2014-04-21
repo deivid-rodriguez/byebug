@@ -121,7 +121,7 @@ module DisplayTest
         enter 'display d', 'disable display 4'
         debug_proc(@example)
         check_output_includes \
-          '"disable display" argument "4" needs to be at most 1.'
+          '"disable display" argument "4" needs to be at most 1'
       end
     end
 
