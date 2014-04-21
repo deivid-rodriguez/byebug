@@ -47,7 +47,7 @@ module Byebug
 
     def execute
       obj = bb_eval(@match.post_match)
-      if @match[1] == "iv"
+      if @match[1] == 'iv'
         obj.instance_variables.sort.each do |v|
           print "#{v} = #{obj.instance_variable_get(v).inspect}\n"
         end
@@ -73,5 +73,4 @@ module Byebug
       end
     end
   end
-
 end

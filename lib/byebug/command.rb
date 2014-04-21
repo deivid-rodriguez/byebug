@@ -4,7 +4,6 @@ require 'byebug/helper'
 require 'byebug/configuration'
 
 module Byebug
-
   module CommandFunctions
     #
     # Pad a string with dots at the end to fit :width setting

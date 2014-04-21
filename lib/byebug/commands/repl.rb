@@ -37,7 +37,7 @@ module IRB
     @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
     @CONF[:MAIN_CONTEXT] = irb.context
 
-    trap("SIGINT") do
+    trap('SIGINT') do
       irb.signal_handle
     end
 
@@ -80,7 +80,6 @@ module Byebug
         @state.previous_line = nil
       end
     end
-
 
     class << self
       def names
@@ -129,5 +128,4 @@ module Byebug
       end
     end
   end if has_pry
-
 end
