@@ -8,64 +8,65 @@ module SetTest
       end
     end
 
-    [:autoeval, :autoreload, :autosave, :basename, :forcestep, :fullpath,
-     :tracing_plus, :stack_on_error].each do |setting|
+    Byebug::SetCommand::Subcommands.each do |subcmd|
+      if subcmd.is_bool && subcmd.name != 'verbose'
+        setting = subcmd.name.to_sym
+        shortcut = subcmd.name[0...subcmd.min]
 
-      describe "setting #{setting} to on" do
-        temporary_change_hash Byebug.settings, setting, false
+        describe "setting #{setting} to on" do
+          temporary_change_hash Byebug.settings, setting, false
 
-        it "must set #{setting} to on using on" do
-          enter "set #{setting} on"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal true
+          it "must set #{setting} to on using on" do
+            enter "set #{setting} on"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal true
+          end
+
+          it "must set #{setting} to on using 1" do
+            enter "set #{setting} 1"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal true
+          end
+
+          it "must set #{setting} to on by default" do
+            enter "set #{setting}"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal true
+          end
+
+          it "must set #{setting} using shortcut" do
+            enter "set #{shortcut}"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal true
+          end
         end
 
-        it "must set #{setting} to on using 1" do
-          enter "set #{setting} 1"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal true
-        end
+        describe "setting #{setting} to off" do
+          temporary_change_hash Byebug.settings, setting, true
 
-        it "must set #{setting} to on by default" do
-          enter "set #{setting}"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal true
-        end
+          it "must set #{setting} to off using off" do
+            enter "set #{setting} off"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal false
+          end
 
-        it "must set #{setting} using shortcut" do
-          skip 'it for now until I make it work'
-          enter "set autol"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal 1
-        end
-      end
+          it "must set #{setting} to on using 0" do
+            enter "set #{setting} 0"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal false
+          end
 
-      describe "setting #{setting} to off" do
-        temporary_change_hash Byebug.settings, setting, true
+          it "must set #{setting} to off using 'no' prefix" do
+            enter "set no#{setting}"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal false
+          end
 
-        it "must set #{setting} to off using off" do
-          enter "set #{setting} off"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal false
-        end
-
-        it "must set #{setting} to on using 0" do
-          enter "set #{setting} 0"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal false
-        end
-
-        it "must set #{setting} to off using 'no' prefix" do
-          enter "set no#{setting}"
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal false
-        end
-
-        it "must set #{setting} off using 'no' prefix and shortcut" do
-          skip 'it for now until I make it work'
-          enter 'set noautol'
-          debug_proc(@example)
-          Byebug.settings[setting].must_equal 0
+          it "must set #{setting} off using 'no' prefix and shortcut" do
+            enter "set no#{shortcut}"
+            debug_proc(@example)
+            Byebug.settings[setting].must_equal false
+          end
         end
       end
     end

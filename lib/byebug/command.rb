@@ -103,6 +103,8 @@ module Byebug
         settings.register(:listsize      , 10)
         settings.register(:stack_on_error, false)
         settings.register(:tracing_plus  , false)
+        settings.register(:tracing       , false, -> { Byebug.tracing? },
+                                                  ->(v) { Byebug.tracing = v })
         settings.register(:argv          , ARGV.clone)
         settings.register(:width         , terminal_width || 160)
         settings.register(:verbose       , false, -> { Byebug.verbose? },

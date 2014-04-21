@@ -21,30 +21,20 @@ module Byebug
         else
           print "Invalid callstyle. Should be one of: \"short\" or \"long\"\n"
         end
-      when /^verbose$/
-        Byebug.verbose = setting_value
       when /^histfile$/
         return print 'You need to specify a filename' unless setting_args[0]
         Byebug::History.file = File.expand_path(setting_args[0])
       when /^histsize$/
         return unless max_size = get_int(setting_args[0], 'set histsize', 1, nil, nil)
         Byebug::History.max_size = max_size
-      when /^tracing$/
-        Byebug.tracing = setting_value
       when /^listsize$/
         return unless listsize = get_int(setting_args[0], 'set listsize', 1, nil, nil)
         Command.settings[:listsize] = listsize
       when /^width$/
         return unless width = get_int(setting_args[0], 'set width', 10, nil, nil)
         Command.settings[:width] = width
-      when /^post_mortem$/
-        if setting_value == true
-          Byebug.post_mortem
-        else
-          Byebug.post_mortem = false
-        end
       when /^autoeval|autoreload|autosave|basename|forcestep|fullpath|
-             tracing_plus|testing|stack_on_error$/x
+             post_mortem|stack_on_error|testing|tracing|tracing_plus|verbose$/x
         Command.settings[setting_name.to_sym] = setting_value
       else
         return print "Unknown setting #{@match[1]}.\n"
