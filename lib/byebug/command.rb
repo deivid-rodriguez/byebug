@@ -101,9 +101,14 @@ module Byebug
         settings.register(:fullpath      , true)
         settings.register(:listsize      , 10)
         settings.register(:stack_on_error, false)
-        settings.register(:linetrace_plus, false)
+        settings.register(:tracing_plus  , false)
         settings.register(:argv          , ARGV.clone)
         settings.register(:width         , terminal_width || 160)
+        settings.register(:verbose       , false, -> { Byebug.verbose? },
+                                                  ->(v) { Byebug.verbose = v })
+        settings.register(:post_mortem   , false, -> { Byebug.post_mortem? },
+                                                  ->(v) { v ? Byebug.post_mortem : Byebug.post_mortem = v })
+        settings
       end
 
       def command_exists?(command)

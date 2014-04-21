@@ -47,10 +47,10 @@ module Byebug
         "The command history file is \"#{Byebug::History.file}\""
       when /^histsize$/
         "Byebug history's maximum size is #{Byebug::History.max_size}"
-      when /^linetrace$/
+      when /^tracing$/
         "line tracing is #{show_onoff(Byebug.tracing?)}."
-      when /^linetrace_plus$/
-        if Command.settings[:linetrace_plus]
+      when /^tracing_plus$/
+        if Command.settings[:tracing_plus]
           'line tracing style is every line.'
         else
           'line tracing style is different consecutive lines.'
@@ -79,41 +79,41 @@ module Byebug
   class ShowCommand < Command
 
     Subcommands = [
-      ['args'          , 2 , 'Show argument list to the program being '     \
-                             'debugged when it is started'                    ],
-      ['autoeval'      , 5 , 'Show whether unrecognized commands are '      \
-                             'evaluated'                                      ],
-      ['autolist'      , 5 , 'Show whether "list" command is run on stopping' ],
-      ['autoirb'       , 5 , 'Show whether IRB is invoked on stopping'        ],
-      ['autoreload'    , 5 , 'Show whether source code is reloaded when '   \
-                             'changed'                                        ],
-      ['autosave'      , 5 , 'Show whether command history is '             \
-                             'automatically saved on exit'                    ],
-      ['basename'      , 1 , 'Show whether basename is used when reporting' \
-                             ' files'                                         ],
-      ['callstyle'     , 2 , 'Show parameter style used when showing call'  \
-                             ' frames'                                        ],
-      ['commands'      , 2 , 'Show the history of commands you typed. You ' \
-                             'can supply a command number to start with'      ],
-      ['forcestep'     , 1 , 'Show whether "next/step" commands are set to' \
-                             ' always move to a line'                         ],
-      ['fullpath'      , 2 , 'Show whether full paths are displayed in frames'],
-      ['histfile'      , 5 , 'File where byebug save history of commands'     ],
-      ['histsize'      , 5 , 'Maximum number of commands stored in '        \
-                             'byebug\'s history'                              ],
-      ['linetrace'     , 3 , 'Show line execution tracing status'             ],
-      ['linetrace_plus', 10, 'Show whether different consecutive lines are' \
-                             ' shown in tracing'                              ],
-      ['listsize'      , 3 , 'Show number of source lines to list by default' ],
-      ['post_mortem'   , 3 , 'Show whether we should go into post-mortem '  \
-                             'debugging on an uncaught exception'             ],
-      ['stack_on_error', 1 , 'Show whether a stack trace is displayed when' \
-                             ' "eval" raises an exception'                    ],
-      ['verbose'       , 4 , 'Show whether verbose output for debugging '   \
-                             'byebug itself is enabled'                       ],
-      ['version'       , 1 , 'Show byebug\'s version'                         ],
-      ['width'         , 1 , 'Show the number of characters per line for '  \
-                             'byebug'                                         ]
+      ['args'          , 2, 'Show argument list to the program being '     \
+                            'debugged when it is started'                    ],
+      ['autoeval'      , 5, 'Show whether unrecognized commands are '      \
+                            'evaluated'                                      ],
+      ['autolist'      , 5, 'Show whether "list" command is run on stopping' ],
+      ['autoirb'       , 5, 'Show whether IRB is invoked on stopping'        ],
+      ['autoreload'    , 5, 'Show whether source code is reloaded when '   \
+                            'changed'                                        ],
+      ['autosave'      , 5, 'Show whether command history is '             \
+                            'automatically saved on exit'                    ],
+      ['basename'      , 1, 'Show whether basename is used when reporting' \
+                            ' files'                                         ],
+      ['callstyle'     , 2, 'Show parameter style used when showing call ' \
+                            'frames'                                         ],
+      ['commands'      , 2, 'Show the history of commands you typed. You ' \
+                            'can supply a command number to start with'      ],
+      ['forcestep'     , 2, 'Show whether "next/step" commands are set to' \
+                            ' always move to a line'                         ],
+      ['fullpath'      , 2, 'Show whether full paths are displayed in frames'],
+      ['histfile'      , 5, 'File where byebug save history of commands'     ],
+      ['histsize'      , 5, 'Maximum number of commands stored in '        \
+                            'byebug\'s history'                              ],
+      ['listsize'      , 1, 'Show number of source lines to list by default' ],
+      ['post_mortem'   , 1, 'Show whether we should go into post-mortem '  \
+                            'debugging on an uncaught exception'             ],
+      ['stack_on_error', 1, 'Show whether a stack trace is displayed when' \
+                            ' "eval" raises an exception'                    ],
+      ['tracing'       , 7, 'Show line execution tracing status'             ],
+      ['tracing_plus'  , 8, 'Show whether different consecutive lines are' \
+                            ' shown in tracing'                              ],
+      ['verbose'       , 4, 'Show whether verbose output for debugging '   \
+                            'byebug itself is enabled'                       ],
+      ['version'       , 4, 'Show byebug\'s version'                         ],
+      ['width'         , 1, 'Show the number of characters per line for '  \
+                            'byebug'                                         ]
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(Subcommands)

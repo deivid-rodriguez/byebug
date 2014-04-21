@@ -96,17 +96,17 @@ module ShowTest
       end
     end
 
-    describe 'linetrace' do
+    describe 'tracing' do
       it 'must show default value' do
-        enter 'show linetrace'
+        enter 'show tracing'
         debug_proc(@example)
         check_output_includes 'line tracing is off.'
       end
     end
 
-    describe 'linetrace_plus' do
+    describe 'tracing_plus' do
       it 'must show default value' do
-        enter 'show linetrace_plus'
+        enter 'show tracing_plus'
         debug_proc(@example)
         check_output_includes 'line tracing style is different consecutive lines.'
       end

@@ -9,7 +9,7 @@ module SetTest
     end
 
     [:autoeval, :autoreload, :autosave, :basename, :forcestep, :fullpath,
-     :linetrace_plus, :stack_on_error].each do |setting|
+     :tracing_plus, :stack_on_error].each do |setting|
 
       describe "setting #{setting} to on" do
         temporary_change_hash Byebug.settings, setting, false

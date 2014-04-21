@@ -29,7 +29,7 @@ module Byebug
       when /^histsize$/
         return unless max_size = get_int(setting_args[0], 'set histsize', 1, nil, nil)
         Byebug::History.max_size = max_size
-      when /^linetrace$/
+      when /^tracing$/
         Byebug.tracing = setting_value
       when /^listsize$/
         return unless listsize = get_int(setting_args[0], 'set listsize', 1, nil, nil)
@@ -44,7 +44,7 @@ module Byebug
           Byebug.post_mortem = false
         end
       when /^autoeval|autoreload|autosave|basename|forcestep|fullpath|
-             linetrace_plus|testing|stack_on_error$/x
+             tracing_plus|testing|stack_on_error$/x
         Command.settings[setting_name.to_sym] = setting_value
       else
         return print "Unknown setting #{@match[1]}.\n"
@@ -57,39 +57,39 @@ module Byebug
     Subcmd2 = Struct.new(:name, :min, :is_bool, :help) unless defined?(Subcmd2)
 
     Subcommands = [
-      ['args'          , 2 , false, 'Set argument list to the program '    \
-                                    'being debugged when it is started'       ],
-      ['autoeval'      , 5 , true , 'Evaluate every unrecognized command'     ],
-      ['autolist'      , 5 , true , 'Execute "list" command on every '     \
-                                    'breakpoint'                              ],
-      ['autoirb'       , 5 , true , 'Invoke IRB on every stop'                ],
-      ['autoreload'    , 5 , true , 'Reload source code when changed'         ],
-      ['autosave'      , 5 , true , 'Automatically save command history '  \
-                                    'record on exit'                          ],
-      ['basename'      , 1 , true , 'Set filename display style'              ],
-      ['callstyle'     , 2 , false, 'Set how you want call parameters '    \
-                                    'displayed'                               ],
-      ['forcestep'     , 2 , true , 'Make sure "next/step" commands always' \
-                                    'move to a new line'                      ],
-      ['fullpath'      , 2 , true , 'Display full file names in frames'       ],
-      ['histfile'      , 5 , false, 'Customize file where history is '      \
-                                    'loaded from and saved to. By '         \
-                                    'default, .byebug_hist'                   ],
-      ['histsize'      , 5 , false, 'Customize maximum number of commands ' \
-                                    'that are stored in byebug history '    \
-                                    'record. By default, 256'                 ],
-      ['linetrace'     , 3 , true , 'Enable line execution tracing'           ],
-      ['linetrace_plus', 10, true , 'Set line execution tracing to show'    \
-                                    'different lines'                         ],
-      ['listsize'      , 3 , false, 'Set number of source lines to list by' \
-                                    'default'                                 ],
-      ['post_mortem'   , 2 , true , 'Enable post-mortem mode'                 ],
-      ['stack_on_error', 1 , true , 'Display stack trace when "eval" '      \
-                                    'raises exception'                        ],
-      ['testing'       , 2 , false, 'Used when testing byebug'                ],
-      ['verbose'       , 1 , true , 'Enable verbose output of TracePoint '  \
-                                    'API events is enabled'                   ],
-      ['width'         , 1 , false, 'Number of characters per line for '    \
+      ['args'          , 2, false, 'Set argument list to the program '     \
+                                   'being debugged when it is started'       ],
+      ['autoeval'      , 5, true , 'Evaluate every unrecognized command'     ],
+      ['autolist'      , 5, false, 'Execute "list" command on every '      \
+                                   'breakpoint'                              ],
+      ['autoirb'       , 5, false, 'Invoke IRB on every stop'                ],
+      ['autoreload'    , 5, true , 'Reload source code when changed'         ],
+      ['autosave'      , 5, true , 'Automatically save command history '   \
+                                   'record on exit'                          ],
+      ['basename'      , 1, true , 'Set filename display style'              ],
+      ['callstyle'     , 2, false, 'Set how you want call parameters '     \
+                                   'displayed'                               ],
+      ['forcestep'     , 2, true , 'Make sure "next/step" commands always' \
+                                   'move to a new line'                      ],
+      ['fullpath'      , 2, true , 'Display full file names in frames'       ],
+      ['histfile'      , 5, false, 'Customize file where history is '      \
+                                   'loaded from and saved to. By '         \
+                                   'default, .byebug_hist'                   ],
+      ['histsize'      , 5, false, 'Customize maximum number of commands ' \
+                                   'that are stored in byebug history '    \
+                                   'record. By default, 256'                 ],
+      ['listsize'      , 3, false, 'Set number of source lines to list by' \
+                                   'default'                                 ],
+      ['post_mortem'   , 2, true , 'Enable post-mortem mode'                 ],
+      ['stack_on_error', 1, true , 'Display stack trace when "eval" '      \
+                                   'raises exception'                        ],
+      ['testing'       , 2, true , 'Used when testing byebug'                ],
+      ['tracing'       , 3, true , 'Enable line execution tracing'           ],
+      ['tracing_plus'  , 8, true , 'Set line execution tracing to show'    \
+                                   'different lines'                         ],
+      ['verbose'       , 1, true , 'Enable verbose output of TracePoint '  \
+                                   'API events is enabled'                   ],
+      ['width'         , 1, false, 'Number of characters per line for '    \
                                     'byebug\'s output'                        ]
     ].map do |name, min, is_bool, help|
       Subcmd2.new(name, min, is_bool, help)

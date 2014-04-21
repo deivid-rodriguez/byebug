@@ -104,7 +104,7 @@ to be displayed when tracing, we can turn on _basename_.
 ```
 (byebug) display i
 2: i =
-(byebug) set linetrace on
+(byebug) set tracing on
 line tracing is on.
 (byebug) set basename on
 basename is on.
@@ -638,7 +638,7 @@ $ byebug primes.rb
     8:     candidate += 1
     9:     while true do
    10:       @@odd_primes.each do |p|
-(byebug) set linetrace
+(byebug) set tracing
 line tracing is on.
 (byebug) set basename
 basename in on.

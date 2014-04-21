@@ -12,7 +12,7 @@ module Byebug
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1]
         Byebug.tracing = onoff
-        print "#{show_setting('linetrace')}\n"
+        print "#{show_setting('tracing')}\n"
       elsif @match[1] =~ /var(?:iable)?/
         varname = @match[2]
         if global_variables.include?("$#{varname}".to_sym)
