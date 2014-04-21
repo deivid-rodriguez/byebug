@@ -11,15 +11,7 @@ module Byebug
   class EvalCommand < Command
     self.allow_in_control = true
 
-    register_setting_get(:autoeval) do
-      EvalCommand.unknown
-    end
-    register_setting_set(:autoeval) do |value|
-      EvalCommand.unknown = value
-    end
-
-    # Set default value
-    Command.settings[:autoeval] = true
+    settings.register(:autoeval, true, -> { self.unknown }, ->(v) { self.unknown = v })
 
     def match(input)
       @input = input

@@ -51,12 +51,7 @@ module Byebug
 
   # Implements byebug's "irb" command.
   class IrbCommand < Command
-    register_setting_get(:autoirb) do
-      IrbCommand.always_run
-    end
-    register_setting_set(:autoirb) do |value|
-      IrbCommand.always_run = value
-    end
+    settings.register(:autoirb, 0, -> { self.always_run }, ->(v) { self.always_run = v })
 
     def regexp
       /^\s* irb \s*$/x

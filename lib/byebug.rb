@@ -24,7 +24,6 @@ module Byebug
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
   # Original ARGV, command line and initial directory to make restarts possible
-  ARGV = ARGV.clone unless defined?(ARGV)
   PROG_SCRIPT = $0 unless defined?(PROG_SCRIPT)
   INITIAL_DIR = Dir.pwd unless defined?(INITIAL_DIR)
 

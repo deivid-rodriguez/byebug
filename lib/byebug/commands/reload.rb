@@ -16,15 +16,6 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = false
 
-    register_setting_get(:autoreload) do
-      Byebug.class_variable_get(:@@autoreload)
-    end
-
-    register_setting_set(:autoreload) do |value|
-      Byebug.class_variable_set(:@@autoreload, value)
-    end
-    Command.settings[:autoreload] = true
-
     def regexp
       /^\s* r(?:eload)? \s*$/x
     end

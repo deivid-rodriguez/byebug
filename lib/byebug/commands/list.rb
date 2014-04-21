@@ -2,16 +2,7 @@ module Byebug
 
   # Implements byebug "list" command.
   class ListCommand < Command
-
-    register_setting_get(:autolist) do
-      ListCommand.always_run
-    end
-    register_setting_set(:autolist) do |value|
-      ListCommand.always_run = value
-    end
-
-    # Set default value
-    Command.settings[:autolist] = 1
+    settings.register(:autolist, 1, -> { self.always_run }, ->(v) { self.always_run = v })
 
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x

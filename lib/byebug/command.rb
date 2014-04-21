@@ -1,6 +1,7 @@
 require 'columnize'
 require 'forwardable'
 require 'byebug/helper'
+require 'byebug/configuration'
 
 module Byebug
 
@@ -87,43 +88,23 @@ module Byebug
           |name| Byebug.const_get(name) }.each { |mod| include mod }
       end
 
-      def settings_map
-        @@settings_map ||= {}
-      end
-      private :settings_map
-
       def settings
-        unless defined? @settings and @settings
-          @settings = Object.new
-          map = settings_map
-          c = class << @settings; self end
-          c.send(:define_method, :[]) do |name|
-            raise "No such setting #{name}" unless map.has_key?(name)
-            map[name][:getter].call
-          end
-          c.send(:define_method, :[]=) do |name, value|
-            raise "No such setting #{name}" unless map.has_key?(name)
-            map[name][:setter].call(value)
-          end
-        end
-        @settings
+        @settings ||= Configuration.instance
       end
 
-      def register_setting_var(name, default)
-        var_name = "@@#{name}"
-        class_variable_set(var_name, default)
-        register_setting_get(name) { class_variable_get(var_name) }
-        register_setting_set(name) { |value| class_variable_set(var_name, value) }
-      end
-
-      def register_setting_get(name, &block)
-        settings_map[name] ||= {}
-        settings_map[name][:getter] = block
-      end
-
-      def register_setting_set(name, &block)
-        settings_map[name] ||= {}
-        settings_map[name][:setter] = block
+      def load_settings
+        settings.register(:autosave      , true)
+        settings.register(:autoreload    , true)
+        settings.register(:basename      , false)
+        settings.register(:callstyle     , :long)
+        settings.register(:testing       , false)
+        settings.register(:forcestep     , false)
+        settings.register(:fullpath      , true)
+        settings.register(:listsize      , 10)
+        settings.register(:stack_on_error, false)
+        settings.register(:linetrace_plus, false)
+        settings.register(:argv          , ARGV.clone)
+        settings.register(:width         , terminal_width || 160)
       end
 
       def command_exists?(command)
@@ -141,21 +122,6 @@ module Byebug
         end
       end
     end
-
-    # Register default settings
-    register_setting_var(:autosave, true)
-    register_setting_var(:basename, false)
-    register_setting_var(:callstyle, :long)
-    register_setting_var(:testing, false)
-    register_setting_var(:forcestep, false)
-    register_setting_var(:fullpath, true)
-    register_setting_var(:listsize, 10)
-    register_setting_var(:stack_on_error, false)
-    register_setting_var(:linetrace_plus, false)
-    cols = terminal_width || 160
-    register_setting_var(:width, cols > 10 ? cols : 160)
-    Byebug::ARGV = ARGV.clone unless defined? Byebug::ARGV
-    register_setting_var(:argv, Byebug::ARGV)
 
     def initialize(state)
       @match, @state = nil, state
@@ -206,6 +172,7 @@ module Byebug
   end
 
   Command.load_commands
+  Command.load_settings
 
   ##
   # Returns ths settings object.
