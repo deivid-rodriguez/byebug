@@ -88,10 +88,11 @@ module Byebug
       end
 
       def settings
-        @settings ||= Configuration.instance
+        @settings ||= default_settings
       end
 
-      def load_settings
+      def default_settings
+        settings = Configuration.instance
         settings.register(:autosave      , true)
         settings.register(:autoreload    , true)
         settings.register(:basename      , false)
@@ -176,7 +177,6 @@ module Byebug
   end
 
   Command.load_commands
-  Command.load_settings
 
   ##
   # Returns ths settings object.
