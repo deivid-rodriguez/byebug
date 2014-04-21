@@ -10,7 +10,7 @@ module Byebug
 
     def execute
       max_frames = Context.stack_size - @state.frame_pos
-      n_frames = get_int(@match[1], "finish", 0, max_frames - 1, 1)
+      n_frames = get_int(@match[1], 'finish', 0, max_frames - 1, 1)
       return nil unless n_frames
 
       force = n_frames == 0 ? true : false
