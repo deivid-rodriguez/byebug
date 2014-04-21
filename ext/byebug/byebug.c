@@ -625,7 +625,7 @@ bb_load(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    Byebug.verbose -> bool
+ *    Byebug.verbose? -> bool
  *
  *  Returns +true+ if verbose output of TracePoint API events is enabled.
  */
@@ -651,7 +651,7 @@ bb_set_verbose(VALUE self, VALUE value)
 
 /*
  *  call-seq:
- *    Byebug.tracing -> bool
+ *    Byebug.tracing? -> bool
  *
  *  Returns +true+ if global tracing is enabled.
  */
@@ -779,7 +779,7 @@ Init_byebug()
   rb_define_module_function(mByebug, "thread_context"   , bb_thread_context  ,  1);
   rb_define_module_function(mByebug, "tracing?"         , bb_tracing         ,  0);
   rb_define_module_function(mByebug, "tracing="         , bb_set_tracing     ,  1);
-  rb_define_module_function(mByebug, "verbose"          , bb_verbose         ,  0);
+  rb_define_module_function(mByebug, "verbose?"         , bb_verbose         ,  0);
   rb_define_module_function(mByebug, "verbose="         , bb_set_verbose     ,  1);
 
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
