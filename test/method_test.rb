@@ -66,12 +66,6 @@ module MethodTest
       end
     end
 
-    describe 'show signature of a method' do
-      it 'must work' do
-        skip('TODO, can\'t install ruby-internal gem')
-      end
-    end
-
     describe 'show instance variables of an object' do
       before { enter 'break 21', 'cont' }
 

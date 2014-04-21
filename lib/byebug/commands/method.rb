@@ -1,42 +1,4 @@
 module Byebug
-
-  begin
-    require 'methodsig'
-    have_methodsig = true
-  rescue LoadError
-    have_methodsig = false
-  end
-
-  # Implements byebug's 'method sig' command.
-  class MethodSigCommand < Command
-    def regexp
-      /^\s* m(?:ethod)? \s+ sig(?:nature)? \s+ (\S+) \s*$/x
-    end
-
-    def execute
-      obj = bb_eval('method(:%s)' % @match[1])
-      if obj.is_a?(Method)
-        begin
-          print "%s\n", obj.signature.to_s
-        rescue
-          errmsg("Can't get signature for '#{@match[1]}'\n")
-        end
-      else
-        errmsg("Can't make method out of '#{@match[1]}'\n")
-      end
-    end
-
-    class << self
-      def names
-        %w(method)
-      end
-
-      def description
-        %{m[ethod] sig[nature] <obj>\tshow the signature of a method}
-      end
-    end
-  end if have_methodsig
-
   # Implements byebug's 'method' command.
   class MethodCommand < Command
     include Columnize
