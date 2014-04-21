@@ -19,10 +19,6 @@ module Byebug
     Subcmd = Struct.new(:name, :min, :help)
 
     class << self
-      def commands
-        @commands ||= []
-      end
-
       attr_accessor :allow_in_control, :unknown
       attr_writer :allow_in_post_mortem, :always_run
 
@@ -74,6 +70,10 @@ module Byebug
           s += sprintf "%s %-#{w}s -- %s\n", cmd_name, subcmd.name, subcmd.help
         end
         return s
+      end
+
+      def commands
+        @commands ||= []
       end
 
       def inherited(klass)
