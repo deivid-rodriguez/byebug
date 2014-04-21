@@ -1,5 +1,4 @@
 module Byebug
-
   module VarFunctions
     def var_list(ary, b = get_binding)
       ary.sort!
@@ -149,43 +148,4 @@ module Byebug
       end
     end
   end
-
-  begin
-    require 'classtree'
-    have_classtree = true
-  rescue LoadError
-    have_classtree = false
-  end
-
-  # Implements byebug's 'var inherit' command
-  class VarInheritCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ ct \s*$/x
-    end
-
-    def execute
-      unless @state.context
-        errmsg "can't get object inheritance.\n"
-        return
-      end
-      puts @match.post_match
-      obj = bb_eval("#{@match.post_match}.classtree")
-      if obj
-        print obj
-      else
-        errmsg "Trouble getting object #{@match.post_match}\n"
-      end
-    end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %{v[ar] ct\t\t\tshow class heirarchy of object}
-      end
-    end
-  end if have_classtree
-
 end

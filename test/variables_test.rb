@@ -129,11 +129,5 @@ module VariablesTest
         check_output_includes 'a => 4', 'b => nil', 'i => 1'
       end
     end
-
-    describe 'test for "var ct" command' do
-      it 'must work' do
-        skip('can\'t install ruby-internal gem')
-      end
-    end
   end
 end
