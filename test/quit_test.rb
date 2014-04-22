@@ -3,7 +3,7 @@ module QuitTest
     before do
       @example = -> do
         byebug
-        DummyObject.new
+        Object.new
       end
     end
 
