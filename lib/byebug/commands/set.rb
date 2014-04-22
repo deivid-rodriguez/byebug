@@ -36,7 +36,7 @@ module Byebug
       when '0', 'off'
         return false
       else
-        print "Expecting 'on', 1, 'off', or 0. Got: #{arg.to_s}.\n"
+        print "Expecting 'on', 1, 'off', or 0. Got: #{arg}.\n"
         raise RuntimeError
       end
     end
