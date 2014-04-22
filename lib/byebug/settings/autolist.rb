@@ -1,7 +1,7 @@
 module Byebug
   class Autolist < Setting
     def initialize
-      @value = 1
+      Byebug::ListCommand.always_run = 1
     end
 
     def help
