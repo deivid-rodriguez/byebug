@@ -6,7 +6,7 @@ module ShowTest
       end
     end
 
-    [:autoeval, :autoreload, :autosave, :basename, :forcestep,
+    [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
      :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
      :tracing_plus].each do |setting|
       describe "showing disabled boolean setting #{setting}" do
