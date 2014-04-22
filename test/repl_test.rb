@@ -37,12 +37,10 @@ module ReplTest
         debug_proc(@example) { state.line.must_equal 8 }
       end
 
-      describe 'autoirb' do
-        it 'must call irb automatically after breakpoint' do
-          irb.expects(:eval_input)
-          enter 'set autoirb', 'break 8', 'cont', 'set noautoirb'
-          debug_proc(@example)
-        end
+      it 'autoirb must call irb automatically after breakpoint' do
+        irb.expects(:eval_input)
+        enter 'set autoirb', 'break 8', 'cont', 'set noautoirb'
+        debug_proc(@example)
       end
     end
 
