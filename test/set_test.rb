@@ -90,28 +90,28 @@ module SetTest
       end
     end
 
-#   describe 'testing' do
-#     describe 'state' do
-#       describe 'when setting "testing" to on' do
-#         temporary_change_hash Byebug::Setting, :testing, false
+    describe 'testing' do
+      describe 'state' do
+        describe 'when setting "testing" to on' do
+          temporary_change_hash Byebug::Setting, :testing, false
 
-#         it 'must get set' do
-#           enter 'set testing', 'break 7', 'cont'
-#           debug_proc(@example) {
-#             state.must_be_kind_of Byebug::CommandProcessor::State }
-#         end
-#       end
+          it 'must get set' do
+            enter 'set testing', 'break 7', 'cont'
+            debug_proc(@example) {
+              state.must_be_kind_of Byebug::CommandProcessor::State }
+          end
+        end
 
-#       describe 'when setting "testing" to off' do
-#         temporary_change_hash Byebug::Setting, :testing, true
+        describe 'when setting "testing" to off' do
+          temporary_change_hash Byebug::Setting, :testing, true
 
-#         it 'must get unset' do
-#           enter 'set notesting', 'break 7', 'cont'
-#           debug_proc(@example) { state.must_be_nil }
-#         end
-#       end
-#     end
-#   end
+          it 'must get unset' do
+            enter 'set notesting', 'break 7', 'cont'
+            debug_proc(@example) { state.must_be_nil }
+          end
+        end
+      end
+    end
 
 #   describe 'histsize' do
 #     after { Byebug::History.max_size = Byebug::History::DEFAULT_MAX_SIZE }
