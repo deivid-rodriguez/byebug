@@ -87,13 +87,13 @@ module ShowTest
     end
 
     describe 'commands' do
-      skip 'for now'
       temporary_change_const Readline, 'HISTORY', %w(aaa bbb ccc ddd)
 
       describe 'with history disabled' do
         temporary_change_hash Byebug::Setting, :autosave, false
 
         it 'must not show records from readline' do
+          skip 'for now'
           enter 'show commands'
           debug_proc(@example)
           check_output_includes "Not currently saving history. " \
@@ -106,6 +106,7 @@ module ShowTest
 
         describe 'show records' do
           it 'displays last max_size records from readline history' do
+            skip 'for now'
             enter 'set histsize 3', 'show commands'
             debug_proc(@example)
             check_output_includes(/2  bbb\n    3  ccc\n    4  ddd/)
@@ -115,6 +116,7 @@ module ShowTest
 
         describe 'max records' do
           it 'displays whole history if max_size is bigger than Readline::HISTORY' do
+            skip 'for now'
             enter 'set histsize 7', 'show commands'
             debug_proc(@example)
             check_output_includes(/1  aaa\n    2  bbb\n    3  ccc\n    4  ddd/)
@@ -123,6 +125,7 @@ module ShowTest
 
         describe 'with specified size' do
           it 'displays the specified number of entries most recent first' do
+            skip 'for now'
             enter 'show commands 2'
             debug_proc(@example)
             check_output_includes(/3  ccc\n    4  ddd/)
