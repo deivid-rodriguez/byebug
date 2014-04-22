@@ -45,6 +45,10 @@ module Byebug
       Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
         require file
       end
+      Byebug.constants.grep(/[a-z]Setting/).map do |name|
+        setting = Byebug.const_get(name).new
+        settings[setting.to_sym] = setting
+      end
     end
 
     def self.find(shortcut)
@@ -56,7 +60,7 @@ module Byebug
     end
 
     def to_sym
-      name = self.class.name.gsub('Byebug::', '')
+      name = self.class.name.gsub(/^Byebug::/, '').gsub(/Setting$/, '')
       name.gsub(/(.)([A-Z])/,'\1_\2').downcase.to_sym
     end
 

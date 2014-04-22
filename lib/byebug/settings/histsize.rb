@@ -1,5 +1,5 @@
 module Byebug
-  class Histsize < Setting
+  class HistsizeSetting < Setting
     DEFAULT = 256
 
     def initialize
@@ -15,6 +15,4 @@ module Byebug
       "Maximum size of byebug's command history is #{value}"
     end
   end
-
-  Setting.settings[:histsize] = Histsize.new
 end

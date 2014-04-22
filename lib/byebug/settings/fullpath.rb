@@ -1,5 +1,5 @@
 module Byebug
-  class Fullpath < Setting
+  class FullpathSetting < Setting
     def initialize
       @value = true
     end
@@ -8,6 +8,4 @@ module Byebug
       'Display full file names in frames'
     end
   end
-
-  Setting.settings[:fullpath] = Fullpath.new
 end

@@ -1,5 +1,5 @@
 module Byebug
-  class Autoirb < Setting
+  class AutoirbSetting < Setting
     def initialize
       IrbCommand.always_run = 0
     end
@@ -16,6 +16,4 @@ module Byebug
       IrbCommand.always_run == 1
     end
   end
-
-  Setting.settings[:autoirb] = Autoirb.new
 end

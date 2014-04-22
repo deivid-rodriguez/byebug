@@ -1,9 +1,7 @@
 module Byebug
-  class Basename < Setting
+  class BasenameSetting < Setting
     def help
       'Filename display style.'
     end
   end
-
-  Setting.settings[:basename] = Basename.new
 end

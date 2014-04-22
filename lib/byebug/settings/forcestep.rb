@@ -1,5 +1,5 @@
 module Byebug
-  class Forcestep < Setting
+  class ForcestepSetting < Setting
     def help
       'If true, next/step commands always move to a new line'
     end
@@ -8,6 +8,4 @@ module Byebug
       "forced-stepping is #{self.getter}"
     end
   end
-
-  Setting.settings[:forcestep] = Forcestep.new
 end

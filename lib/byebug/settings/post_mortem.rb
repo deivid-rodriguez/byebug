@@ -1,5 +1,5 @@
 module Byebug
-  class PostMortem < Setting
+  class PostMortemSetting < Setting
     def help
       'Enable/disable post-mortem mode'
     end
@@ -12,6 +12,4 @@ module Byebug
       Byebug.post_mortem?
     end
   end
-
-  Setting.settings[:post_mortem] = PostMortem.new
 end

@@ -1,5 +1,5 @@
 module Byebug
-  class Autoreload < Setting
+  class AutoreloadSetting < Setting
     def initialize
       @value = true
     end
@@ -8,6 +8,4 @@ module Byebug
       'Reload source code when changed'
     end
   end
-
-  Setting.settings[:autoreload] = Autoreload.new
 end

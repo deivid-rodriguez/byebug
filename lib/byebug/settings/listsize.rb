@@ -1,5 +1,5 @@
 module Byebug
-  class Listsize < Setting
+  class ListsizeSetting < Setting
     def initialize
       @value = 10
     end
@@ -12,6 +12,4 @@ module Byebug
       "Number of source lines to list is #{value}"
     end
   end
-
-  Setting.settings[:listsize] = Listsize.new
 end

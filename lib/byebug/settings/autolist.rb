@@ -1,5 +1,5 @@
 module Byebug
-  class Autolist < Setting
+  class AutolistSetting < Setting
     def initialize
       ListCommand.always_run = 1
     end
@@ -16,6 +16,4 @@ module Byebug
       ListCommand.always_run == 1
     end
   end
-
-  Setting.settings[:autolist] = Autolist.new
 end

@@ -1,5 +1,5 @@
 module Byebug
-  class Histfile < Setting
+  class HistfileSetting < Setting
     def initialize
       @value = File.expand_path("#{ENV['HOME']||'.'}/.byebug_hist")
     end
@@ -13,6 +13,4 @@ module Byebug
       "The command history file is #{value}"
     end
   end
-
-  Setting.settings[:histfile] = Histfile.new
 end

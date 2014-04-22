@@ -1,5 +1,5 @@
 module Byebug
-  class Autoeval < Setting
+  class AutoevalSetting < Setting
     def initialize
       EvalCommand.unknown = true
     end
@@ -17,6 +17,4 @@ module Byebug
       EvalCommand.unknown
     end
   end
-
-  Setting.settings[:autoeval] = Autoeval.new
 end

@@ -1,5 +1,5 @@
 module Byebug
-  class Callstyle < Setting
+  class CallstyleSetting < Setting
     def initialize
       @value = :long
     end
@@ -12,6 +12,4 @@ module Byebug
       "Frame display callstyle is :#{value}"
     end
   end
-
-  Setting.settings[:callstyle] = Callstyle.new
 end

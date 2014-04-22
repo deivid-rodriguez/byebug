@@ -1,5 +1,5 @@
 module Byebug
-  class Linetrace < Setting
+  class LinetraceSetting < Setting
     def help
       'Enable line execution tracing'
     end
@@ -12,6 +12,4 @@ module Byebug
       Byebug.tracing?
     end
   end
-
-  Setting.settings[:linetrace] = Linetrace.new
 end

@@ -1,5 +1,5 @@
 module Byebug
-  class Width < Setting
+  class WidthSetting < Setting
     def initialize
       if ENV['COLUMNS'] =~ /^\d+$/
         @value = ENV['COLUMNS'].to_i
@@ -26,6 +26,4 @@ module Byebug
         end
       end
   end
-
-  Setting.settings[:width] = Width.new
 end
