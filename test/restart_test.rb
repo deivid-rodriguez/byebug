@@ -76,7 +76,7 @@ module RestartTest
         it 'must show a warning message when prog script is not executable' do
           debug_proc(@example)
           check_output_includes "Ruby program #{Byebug::PROG_SCRIPT} not " \
-                                "executable... We'll add a call to Ruby."
+                                "executable... We'll wrap it in a ruby call"
         end
       end
     end

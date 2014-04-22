@@ -18,6 +18,8 @@ module Byebug
         if File.executable?(Byebug::PROG_SCRIPT)
           cmd = Byebug::PROG_SCRIPT
         else
+          print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
+                "We'll wrap it in a ruby call"
           cmd = "ruby -rbyebug -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
         end
         args = ARGV[1..-1]
