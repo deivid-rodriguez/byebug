@@ -10,7 +10,7 @@ module Byebug
 
     def execute
       key, value = @match[:setting], @match[:value]
-      return print SetCommand.help(nil) if key.nil? && value.nil?
+      return print SetCommand.help if key.nil? && value.nil?
 
       full_key = Setting.find(key)
       return print "Unknown setting :#{key}\n" unless full_key
@@ -47,8 +47,25 @@ module Byebug
       end
 
       def description
-        %{Modifies parts of byebug environment. Boolean values take on, off, 1
-          or 0. You can see these environment settings with the "show" command.}
+        <<-EOD.gsub(/^        /, '')
+
+          set <setting> <value>
+
+          Modifies parts of byebug environment.
+
+          Boolean values take "on", "off", "true", "false", "1" or "0". If you
+          don't specify a value, the boolean setting will be enabled.
+          Conversely, you can use "set no<setting> to disable them.
+
+          You can see these environment settings with the "show" command.
+
+        EOD
+      end
+
+      def help(setting = nil)
+        return "set #{setting.to_sym} <value>\n\n#{setting.help}" if setting
+
+        description + Setting.format()
       end
     end
   end

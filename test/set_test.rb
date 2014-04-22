@@ -171,12 +171,13 @@ module SetTest
       end
     end
 
-#   describe 'Help' do
-#     it 'must show help when typing just "set"' do
-#       enter 'set', 'cont'
-#       debug_proc(@example)
-#       check_output_includes(/List of "set" subcommands:/)
-#     end
-#   end
+    describe 'Help' do
+      it 'must show help when typing just "set"' do
+        enter 'set', 'cont'
+        debug_proc(@example)
+        check_output_includes(/Modifies parts of byebug environment./)
+        check_output_includes(/List of settings supported in byebug/)
+      end
+    end
   end
 end

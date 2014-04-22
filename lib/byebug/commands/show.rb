@@ -10,7 +10,7 @@ module Byebug
 
     def execute
       key = @match[:setting]
-      return print ShowCommand.help(nil) if key.nil?
+      return print ShowCommand.help if key.nil?
 
       full_key = Setting.find(key)
       if full_key
@@ -26,7 +26,20 @@ module Byebug
       end
 
       def description
-        %{Generic command for showing things about byebug.}
+        <<-EOD.gsub(/^        /, '')
+
+          show <setting> <value>
+
+          Generic command for showing byebug settings. You can change them with
+          the "set" command.
+
+        EOD
+      end
+
+      def help(setting = nil)
+        return "show #{setting.to_sym} <value>\n\n#{setting.help}" if setting
+
+        description + Setting.format()
       end
     end
   end

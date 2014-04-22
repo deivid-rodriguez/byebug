@@ -139,7 +139,8 @@ module ShowTest
       it 'must show help when typing just "show"' do
         enter 'show', 'cont'
         debug_proc(@example)
-        check_output_includes(/List of "show" subcommands:/)
+        check_output_includes(/Generic command for showing byebug settings./)
+        check_output_includes(/List of settings supported in byebug/)
       end
     end
   end
