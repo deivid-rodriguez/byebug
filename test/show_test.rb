@@ -66,7 +66,7 @@ module ShowTest
     end
 
     describe 'histfile' do
-      before { @filename = Byebug::History::DEFAULT_FILE }
+      before { @filename = Byebug::Setting[:histfile] }
 
       it 'must show history filename' do
         enter 'show histfile'
@@ -76,7 +76,7 @@ module ShowTest
     end
 
     describe 'histsize' do
-      before { @max_size = Byebug::History::DEFAULT_MAX_SIZE }
+      before { @max_size = Byebug::Setting[:histsize] }
 
       it "must show history's max size" do
         enter 'show histsize'

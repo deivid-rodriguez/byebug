@@ -2,33 +2,25 @@ require 'readline'
 
 module Byebug
   class History
-    DEFAULT_FILE = File.expand_path("#{ENV['HOME']||'.'}/.byebug_hist")
-    DEFAULT_MAX_SIZE = 256
-
-    @file = DEFAULT_FILE
-    @max_size = DEFAULT_MAX_SIZE
-
     class << self
-      attr_accessor :file, :max_size
-
       def load
-        open(@file, 'r') do |file|
+        open(Setting[:histfile], 'r') do |file|
           file.each do |line|
             line.chomp!
             Readline::HISTORY << line
           end
-        end if File.exist?(@file)
+        end if File.exist?(Setting[:histfile])
       end
 
       def save
-        open(@file, 'w') do |file|
-          Readline::HISTORY.to_a.last(@max_size).each do |line|
+        open(Setting[:histfile], 'w') do |file|
+          Readline::HISTORY.to_a.last(Setting[:histsize]).each do |line|
             file.puts line unless line.strip.empty?
           end
         end
       end
 
-      def to_s(size = @max_size)
+      def to_s(size = Setting[:histsize])
         n_entries = Readline::HISTORY.length < size ? Readline::HISTORY.length : size
 
         first = Readline::HISTORY.length - n_entries

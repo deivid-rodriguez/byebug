@@ -7,7 +7,7 @@ module Byebug
     end
 
     def help
-      "Customize maximum number of commands that can be stored in byebug's "
+      "Customize maximum number of commands that can be stored in byebug's " \
       "history record. By default, #{DEFAULT}"
     end
 

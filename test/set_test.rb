@@ -2,9 +2,9 @@ module SetTest
   class SetTestCase < TestDsl::TestCase
     before do
       @example = -> do
-        byebug
+        byebug()
         a = 2
-        a = 3
+        a + 3
       end
     end
 
@@ -113,51 +113,51 @@ module SetTest
       end
     end
 
-#   describe 'histsize' do
-#     after { Byebug::History.max_size = Byebug::History::DEFAULT_MAX_SIZE }
+    describe 'histsize' do
+      temporary_change_hash Byebug::Setting, :histsize, 1
 
-#     it 'must set maximum history size' do
-#       enter 'set histsize 250'
-#       debug_proc(@example)
-#       Byebug::History.max_size.must_equal 250
-#     end
+      it 'must set maximum history size' do
+        enter 'set histsize 250'
+        debug_proc(@example)
+        Byebug::Setting[:histsize].must_equal 250
+      end
 
-#     it 'must show a message' do
-#       enter 'set histsize 250'
-#       debug_proc(@example)
-#       check_output_includes "Byebug history's maximum size is 250"
-#     end
+      it 'must show a message' do
+        enter 'set histsize 250'
+        debug_proc(@example)
+        check_output_includes "Maximum size of byebug's command history is 250"
+      end
 
-#     it 'must show an error message if no size provided' do
-#       enter 'set histsize'
-#       debug_proc(@example)
-#       check_output_includes 'You need to specify an argument for "set histsize"'
-#     end
-#   end
+      it 'must show an error message if no size provided' do
+        enter 'set histsize'
+        debug_proc(@example)
+        check_output_includes 'You must specify a value for setting :histsize'
+      end
+    end
 
-#   describe 'histfile' do
-#     let(:filename) { File.expand_path('./.custom-byebug-hist') }
+    describe 'histfile' do
+      let(:filename) { File.expand_path('.custom-byebug-hist') }
 
-#     after { Byebug::History.file = Byebug::History::DEFAULT_FILE }
+      temporary_change_hash Byebug::Setting, :histfile, File.expand_path('.byebug-hist')
 
-#     it 'must set history filename' do
-#       enter "set histfile #{filename}"
-#       debug_proc(@example)
-#       Byebug::History.file.must_equal filename
-#     end
+      it 'must set history filename' do
+        enter "set histfile #{filename}"
+        debug_proc(@example)
+        Byebug::Setting[:histfile].must_equal filename
+      end
 
-#     it 'must show a message' do
-#       enter "set histfile #{filename}"
-#       debug_proc(@example)
-#       check_output_includes "The command history file is \"#{filename}\""
-#     end
+      it 'must show a message' do
+        enter "set histfile #{filename}"
+        debug_proc(@example)
+        check_output_includes "The command history file is \"#{filename}\""
+      end
 
-#     it 'must show an error message if no filename provided' do
-#       enter 'set histfile'
-#       debug_proc(@example)
-#       check_output_includes 'You need to specify a filename'
-#     end
-#   end
+      it 'must show an error message if no filename provided' do
+        enter 'set histfile'
+        debug_proc(@example)
+        check_output_includes 'You must specify a value for setting :histfile'
+      end
+    end
 
     [:listsize, :width].each do |setting|
       describe "setting integer setting #{setting}" do
