@@ -47,14 +47,6 @@ module ShowTest
       end
     end
 
-    describe 'version' do
-      it 'must show version' do
-        enter 'show version'
-        debug_proc(@example)
-        check_output_includes "Byebug #{Byebug::VERSION}"
-      end
-    end
-
     describe 'width' do
       let(:cols) { `stty size`.scan(/\d+/)[1].to_i }
 
