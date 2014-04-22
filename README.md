@@ -103,7 +103,7 @@ can now be placed at the end of a block or method call.
     `source`    |              |
     `step`      |              |
     `thread`    |              | `current` `list` `resume` `stop` `switch`
-    `trace`     |              |
+    `tracevar`  |              |
     `undisplay` |              |
     `up`        |              |
     `var`       |              | `class` `constant` `global` `instance` `local`
