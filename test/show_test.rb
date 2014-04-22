@@ -6,30 +6,6 @@ module ShowTest
       end
     end
 
-    describe 'args' do
-      temporary_change_hash Byebug.settings, :argv, %w{foo bar}
-
-      describe 'default behaviour' do
-        it 'must show args' do
-          enter 'show args'
-          debug_proc(@example)
-          check_output_includes 'Argument list to give program being debugged ' \
-                                'when it is started is "foo bar".'
-        end
-      end
-
-      describe 'when BYEBUG_SCRIPT is defined' do
-        temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'bla'
-
-        it 'must not show the first arg' do
-          enter 'show args'
-          debug_proc(@example)
-          check_output_includes 'Argument list to give program being debugged ' \
-                                'when it is started is "bar".'
-        end
-      end
-    end
-
     describe 'autolist' do
       it 'must show default value' do
         enter 'show autolist'

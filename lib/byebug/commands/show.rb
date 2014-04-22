@@ -5,19 +5,6 @@ module Byebug
 
     def show_setting(setting_name)
       case setting_name
-      when /^args$/
-        if Command.settings[:argv] and Command.settings[:argv].size > 0
-          if defined?(Byebug::BYEBUG_SCRIPT)
-            # byebug was called initially. 1st arg is script name.
-            args = Command.settings[:argv][1..-1].join(' ')
-          else
-            # byebug wasn't called initially. 1st arg is not script name.
-            args = Command.settings[:argv].join(' ')
-          end
-        else
-          args = ''
-        end
-        "Argument list to give program being debugged when it is started is \"#{args}\"."
       when /^autolist$/
         "autolist is #{show_onoff(Command.settings[:autolist] > 0)}."
       when /^autoirb$/
@@ -79,8 +66,6 @@ module Byebug
   class ShowCommand < Command
 
     Subcommands = [
-      ['args'          , 2, 'Show argument list to the program being '     \
-                            'debugged when it is started'                    ],
       ['autoeval'      , 5, 'Show whether unrecognized commands are '      \
                             'evaluated'                                      ],
       ['autolist'      , 5, 'Show whether "list" command is run on stopping' ],

@@ -47,8 +47,6 @@ module Byebug
     Subcmd2 = Struct.new(:name, :min, :is_bool, :help) unless defined?(Subcmd2)
 
     Subcommands = [
-      ['args'          , 2, false, 'Set argument list to the program '     \
-                                   'being debugged when it is started'       ],
       ['autoeval'      , 5, true , 'Evaluate every unrecognized command'     ],
       ['autolist'      , 5, false, 'Execute "list" command on every '      \
                                    'breakpoint'                              ],

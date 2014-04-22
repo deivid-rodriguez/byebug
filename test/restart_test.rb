@@ -20,82 +20,49 @@ module RestartTest
       temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
 
       it 'must be restarted with arguments' do
-        Byebug::RestartCommand.any_instance.expects(:exec).
-          with("#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3")
+        cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3"
+        Byebug::RestartCommand.any_instance.expects(:exec).with(cmd)
         enter 'restart 1 2 3'
         debug_proc(@example)
-      end
-
-      describe 'when arguments have spaces' do
-        temporary_change_hash Byebug.settings, :argv, ['argv1', 'argv 2']
-
-        it 'must be correctly escaped' do
-          Byebug::RestartCommand.any_instance.expects(:exec).with \
-            "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} argv1 argv\\ 2"
-          enter 'restart'
-          debug_proc(@example)
-        end
-      end
-
-      describe 'when arguments specified by set command' do
-        temporary_change_hash Byebug.settings, :argv, []
-
-        it 'must specify arguments by "set" command' do
-          Byebug::RestartCommand.any_instance.expects(:exec).
-            with("#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3")
-          enter 'set args 1 2 3', 'restart'
-          debug_proc(@example)
-        end
+        check_output_includes "Re exec'ing:\n\t#{cmd}"
       end
     end
 
-    describe 'messaging' do
-      before { enter 'restart' }
+    describe 'no script specified' do
+      temporary_change_const Byebug, 'PROG_SCRIPT', :__undefined__
 
-      describe 'reexecing' do
-        temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
+      it 'must not restart and show error messages instead' do
+        must_restart.never
+        enter 'restart'
+        debug_proc(@example)
+        check_error_includes 'Don\'t know name of debugged program'
+      end
+    end
 
-        describe 'with set args' do
-          temporary_change_hash Byebug.settings, :argv, ['argv']
+    describe 'no script at the specified path' do
+      temporary_change_const Byebug, 'PROG_SCRIPT', 'blabla'
 
-          it 'must restart and show a message about reexecing' do
-            must_restart
-            debug_proc(@example)
-            check_output_includes \
-              "Re exec'ing:\n"    \
-              "\t#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} argv"
-          end
-        end
+      it 'must not restart' do
+        must_restart.never
+        enter 'restart'
+        debug_proc(@example)
       end
 
-      describe 'no script specified' do
-        temporary_change_const Byebug, 'PROG_SCRIPT', :__undefined__
-
-        it 'must not restart and show error messages instead' do
-          must_restart.never
-          debug_proc(@example)
-          check_output_includes 'Don\'t know name of debugged program',
-                                  interface.error_queue
-        end
+      it 'must show an error message' do
+        enter 'restart'
+        debug_proc(@example)
+        check_error_includes 'Ruby program blabla doesn\'t exist'
       end
+    end
 
-      describe 'no script at the specified path' do
-        temporary_change_const Byebug, 'PROG_SCRIPT', 'blabla'
+    describe 'when no runner script specified' do
+      temporary_change_const Byebug, 'BYEBUG_SCRIPT', :__undefined__
 
-        it 'must not restart' do
-          must_restart.never
-          debug_proc(@example)
+      describe 'restarting' do
+        before do
+          must_restart
+          enter 'restart'
         end
-
-        it 'must show an error message' do
-          debug_proc(@example)
-          check_output_includes 'Ruby program blabla doesn\'t exist',
-                                interface.error_queue
-        end
-      end
-
-      describe 'byebug runner script is not specified' do
-        before { must_restart }
 
         it 'must restart anyway' do
           debug_proc(@example)
@@ -112,21 +79,23 @@ module RestartTest
                                 "executable... We'll add a call to Ruby."
         end
       end
+    end
 
-      describe 'when can\'t change the dir to INITIAL_DIR' do
-        temporary_change_const Byebug, 'INITIAL_DIR', '/unexistent/path'
+    describe 'when can\'t change the dir to INITIAL_DIR' do
+      temporary_change_const Byebug, 'INITIAL_DIR', '/unexistent/path'
 
-        it 'must restart anyway' do
-          must_restart
-          debug_proc(@example)
-        end
+      it 'must restart anyway' do
+        must_restart
+        enter 'restart'
+        debug_proc(@example)
+      end
 
-        it 'must show an error message ' do
-          must_restart
-          debug_proc(@example)
-          check_output_includes \
-            'Failed to change initial directory /unexistent/path'
-        end
+      it 'must show an error message ' do
+        must_restart
+        enter 'restart'
+        debug_proc(@example)
+        check_output_includes \
+          'Failed to change initial directory /unexistent/path'
       end
     end
   end
