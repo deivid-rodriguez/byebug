@@ -13,7 +13,7 @@ require 'byebug'
 
 Dir.glob(File.expand_path("../support/*.rb", __FILE__)).each { |f| require f }
 
-Byebug.settings[:testing] = true
+Byebug::Setting[:testing] = true
 
 class DummyObject
   def initialize(*args)

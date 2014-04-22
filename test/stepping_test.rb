@@ -50,7 +50,7 @@ module SteppingTest
         end
 
         describe 'when forcestep is set' do
-          temporary_change_hash Byebug.settings, :forcestep, true
+          temporary_change_hash Byebug::Setting, :forcestep, true
 
           it 'must go to the next line' do
             enter 'next'
@@ -179,7 +179,7 @@ module SteppingTest
         end
 
         describe 'when forcestep is set' do
-          temporary_change_hash Byebug.settings, :forcestep, true
+          temporary_change_hash Byebug::Setting, :forcestep, true
 
           it 'must go to the step line if forced by a setting' do
             enter 'step'

@@ -26,13 +26,12 @@ module Byebug
         end
       end
 
-      print "byebug help v#{Byebug::VERSION}\n" unless
-        Command.settings[:testing]
+      print "byebug help v#{Byebug::VERSION}\n" unless Setting[:testing]
 
       print "Type \"help <command-name>\" for help on a specific command\n\n"
       print "Available commands:\n"
       cmds = @state.commands.map{ |cmd| cmd.names }.flatten.uniq.sort
-      print columnize(cmds, Command.settings[:width])
+      print columnize(cmds, Setting[:width])
     end
 
     class << self

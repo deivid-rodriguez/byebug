@@ -14,12 +14,11 @@ module Byebug
           print "#{v} = #{obj.instance_variable_get(v).inspect}\n"
         end
       elsif @match[1]
-        print "#{columnize(obj.methods.sort(), Command.settings[:width])}\n"
+        print "#{columnize(obj.methods.sort(), Setting[:width])}\n"
+      elsif !obj.kind_of?(Module)
+        print "Should be Class/Module: #{@match.post_match}\n"
       else
-        return print "Should be Class/Module: #{@match.post_match}\n" unless
-          obj.kind_of? Module
-        print "#{columnize(obj.instance_methods(false).sort(),
-                           Command.settings[:width])}\n"
+        print "#{columnize(obj.instance_methods(false).sort(), Setting[:width])}\n"
       end
     end
 

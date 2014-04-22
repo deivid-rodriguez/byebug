@@ -134,7 +134,7 @@ module InfoTest
       let(:sha1)     { LineCache.sha1(file) }
       let(:breakpoint_line_numbers) {
         columnize(LineCache.trace_line_numbers(file).to_a.sort,
-                  Byebug.settings[:width]) }
+                  Byebug::Setting[:width]) }
 
       it 'must show basic info about the file' do
         enter "info file #{file} basic"
@@ -205,7 +205,7 @@ module InfoTest
     end
 
     describe 'Locals info' do
-      temporary_change_hash Byebug.settings, :width, 28
+      temporary_change_hash Byebug::Setting, :width, 28
 
       it 'must show the current local variables' do
         enter 'break 11', 'cont', 'info locals'
@@ -281,7 +281,7 @@ module InfoTest
     end
 
     describe 'Variables info' do
-      temporary_change_hash Byebug.settings, :width, 30
+      temporary_change_hash Byebug::Setting, :width, 30
 
       it 'must show all variables' do
         enter 'break 11', 'cont', 'info variables'

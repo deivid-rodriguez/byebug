@@ -109,7 +109,7 @@ module FrameTest
 
       describe 'fullpath' do
         describe 'when set' do
-          temporary_change_hash Byebug.settings, :fullpath, true
+          temporary_change_hash Byebug::Setting, :fullpath, true
 
           it 'must display current backtrace with fullpaths' do
             enter 'where'
@@ -123,7 +123,7 @@ module FrameTest
         end
 
         describe 'when unset' do
-          temporary_change_hash Byebug.settings, :fullpath, false
+          temporary_change_hash Byebug::Setting, :fullpath, false
 
           it 'must display current backtrace with shortpaths' do
             path = shortpath(__FILE__)
@@ -140,7 +140,7 @@ module FrameTest
 
       describe 'callstyle' do
         describe 'long' do
-          temporary_change_hash Byebug.settings, :callstyle, :long
+          temporary_change_hash Byebug::Setting, :callstyle, :long
 
           it 'displays current backtrace with callstyle "long"' do
             enter 'where'
@@ -154,7 +154,7 @@ module FrameTest
         end
 
         describe 'short' do
-          temporary_change_hash Byebug.settings, :callstyle, :short
+          temporary_change_hash Byebug::Setting, :callstyle, :short
 
           it 'displays current backtrace with callstyle "short"' do
               enter 'where'

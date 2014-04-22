@@ -86,12 +86,12 @@ module Byebug
 
     def get_frame_call(prefix, pos)
       frame_block, frame_method = get_frame_block_and_method(pos)
-      frame_class = get_frame_class(Command.settings[:callstyle], pos)
-      frame_args = get_frame_args(Command.settings[:callstyle], pos)
+      frame_class = get_frame_class(Setting[:callstyle], pos)
+      frame_args = get_frame_args(Setting[:callstyle], pos)
 
       call_str = frame_block + frame_class + frame_method + frame_args
 
-      max_call_str_size = Command.settings[:width] - prefix.size
+      max_call_str_size = Setting[:width] - prefix.size
       if call_str.size > max_call_str_size
         call_str = call_str[0..max_call_str_size - 5] + "...)"
       end
@@ -122,7 +122,7 @@ module Byebug
       file = @state.context.frame_file pos
       line = @state.context.frame_line pos
 
-      unless Command.settings[:fullpath]
+      unless Setting[:fullpath]
         path_components = file.split(/[\\\/]/)
         if path_components.size > 3
           path_components[0...-3] = '...'
@@ -140,7 +140,7 @@ module Byebug
       frame_str += sprintf "#%-2d ", pos
       frame_str += get_frame_call frame_str, pos
       file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
-      if frame_str.size + file_line.size + 1 > Command.settings[:width]
+      if frame_str.size + file_line.size + 1 > Setting[:width]
         frame_str += "\n      #{file_line}\n"
       else
         frame_str += " #{file_line}\n"

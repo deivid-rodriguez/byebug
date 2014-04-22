@@ -106,7 +106,7 @@ module VariablesTest
       end
 
       describe 'when width is too small' do
-        temporary_change_hash Byebug.settings, :width, 20
+        temporary_change_hash Byebug::Setting, :width, 20
 
         it 'must cut long variable values according it' do
           enter 'break 28', 'cont', 'var instance v'

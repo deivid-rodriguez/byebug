@@ -123,7 +123,7 @@ module BreakpointsTest
         end
 
         describe 'with basename' do
-          temporary_change_hash Byebug.settings, :basename, true
+          temporary_change_hash Byebug::Setting, :basename, true
 
           it 'must show a message with basename' do
             debug_proc(@example) { @id = first.id }
@@ -136,7 +136,7 @@ module BreakpointsTest
 
     describe 'reloading source on change' do
       describe 'autoreload not set' do
-        temporary_change_hash Byebug.settings, :autoreload, false
+        temporary_change_hash Byebug::Setting, :autoreload, false
 
         it 'must not reload source' do
           id = nil

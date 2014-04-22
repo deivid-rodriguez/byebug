@@ -39,7 +39,7 @@ module InterruptTest
         end
 
         describe 'when forcestep is set' do
-          temporary_change_hash Byebug.settings, :forcestep, true
+          temporary_change_hash Byebug::Setting, :forcestep, true
 
           it 'must interrupt on the next line' do
             enter 'interrupt', 'continue'

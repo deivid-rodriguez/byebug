@@ -1,7 +1,7 @@
 require 'columnize'
 require 'forwardable'
 require 'byebug/helper'
-require 'byebug/configuration'
+require 'byebug/setting'
 
 module Byebug
   module CommandFunctions
@@ -9,9 +9,8 @@ module Byebug
     # Pad a string with dots at the end to fit :width setting
     #
     def pad_with_dots(string)
-      if string.size > Command.settings[:width]
-        string[Command.settings[:width]-3 .. -1] = "..."
-      end
+      width = Setting[:width]
+      string[width-3..1] = "..." if string.size > width
     end
   end
 
@@ -81,51 +80,13 @@ module Byebug
       end
 
       def load_commands
-        Dir[File.join(File.dirname(__FILE__), 'commands', '*')].each {
-          |file| require file }
-        Byebug.constants.grep(/Functions$/).map {
-          |name| Byebug.const_get(name) }.each { |mod| include mod }
-      end
-
-      def settings
-        @settings ||= default_settings
-      end
-
-      def default_settings
-        settings = Configuration.instance
-        settings.register(:autosave      , true)
-        settings.register(:autoreload    , true)
-        settings.register(:basename      , false)
-        settings.register(:callstyle     , :long)
-        settings.register(:testing       , false)
-        settings.register(:forcestep     , false)
-        settings.register(:fullpath      , true)
-        settings.register(:listsize      , 10)
-        settings.register(:stack_on_error, false)
-        settings.register(:tracing_plus  , false)
-        settings.register(:tracing       , false, -> { Byebug.tracing? },
-                                                  ->(v) { Byebug.tracing = v })
-        settings.register(:width         , terminal_width || 160)
-        settings.register(:verbose       , false, -> { Byebug.verbose? },
-                                                  ->(v) { Byebug.verbose = v })
-        settings.register(:post_mortem   , false, -> { Byebug.post_mortem? },
-                                                  ->(v) { v ? Byebug.post_mortem : Byebug.post_mortem = v })
-        settings
-      end
-
-      def command_exists?(command)
-        ENV['PATH'].split(File::PATH_SEPARATOR).any? {
-          |d| File.exist? File.join(d, command) }
-      end
-
-      def terminal_width
-        if ENV['COLUMNS'] =~ /^\d+$/
-          ENV['COLUMNS'].to_i
-        elsif STDIN.tty? && command_exists?('stty')
-          `stty size`.scan(/\d+/)[1].to_i
-        else
-          nil
+        Dir.glob(File.expand_path('../commands/*.rb', __FILE__)).each do |file|
+          require file
         end
+
+        Byebug.constants.grep(/Functions$/).map {
+          |name| Byebug.const_get(name)
+        }.each { |mod| include mod }
       end
     end
 
@@ -179,25 +140,4 @@ module Byebug
 
   Command.load_commands
 
-  ##
-  # Returns ths settings object.
-  # Use Byebug.settings[] and Byebug.settings[]= methods to query and set
-  # byebug settings. These settings are available:
-  #
-  #  :autoeval          - evaluates input in the current binding if it's not
-  #                       recognized as a byebug command
-  #  :autoirb           - automatically calls 'irb' command on breakpoint
-  #  :autolist          - automatically calls 'list' command on breakpoint
-  #  :autoreload        - makes 'list' command always display up-to-date source
-  #                       code
-  #  :autosave          - automatic saving of command history on exit
-  #  :frame_class_names - displays method's class name when showing frame stack
-  #  :forcestep         - stepping command always move to the new line
-  #  :fullpath          - displays full paths when showing frame stack
-  #  :stack_on_error    - shows full stack trace if eval command results in an
-  #                       exception
-  #
-  def self.settings
-    Command.settings
-  end
 end

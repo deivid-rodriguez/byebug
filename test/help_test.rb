@@ -13,7 +13,7 @@ module HelpTest
     end
 
     describe 'when typed alone' do
-      temporary_change_hash Byebug.settings, :width, 50
+      temporary_change_hash Byebug::Setting, :width, 50
 
       it 'must show self help when typed alone' do
         enter 'help'

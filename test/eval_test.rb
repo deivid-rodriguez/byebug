@@ -66,7 +66,7 @@ module EvalTest
 
     describe 'stack trace on error' do
       describe 'when enabled' do
-        temporary_change_hash Byebug.settings, :stack_on_error, true
+        temporary_change_hash Byebug::Setting, :stack_on_error, true
 
         it 'must show a stack trace' do
           enter 'eval 2 / 0'
@@ -77,7 +77,7 @@ module EvalTest
       end
 
       describe 'when disabled' do
-        temporary_change_hash Byebug.settings, :stack_on_error, false
+        temporary_change_hash Byebug::Setting, :stack_on_error, false
 
         it 'must only show exception' do
           enter 'eval 2 / 0'
@@ -97,7 +97,7 @@ module EvalTest
     end
 
     describe 'putl' do
-      temporary_change_hash Byebug.settings, :width, 20
+      temporary_change_hash Byebug::Setting, :width, 20
 
       it 'must print expression and columnize the result' do
         enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
@@ -107,7 +107,7 @@ module EvalTest
     end
 
     describe 'ps' do
-      temporary_change_hash Byebug.settings, :width, 20
+      temporary_change_hash Byebug::Setting, :width, 20
 
       it 'must print expression and sort and columnize the result' do
         enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'

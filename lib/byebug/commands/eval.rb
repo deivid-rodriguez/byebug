@@ -11,8 +11,6 @@ module Byebug
   class EvalCommand < Command
     self.allow_in_control = true
 
-    settings.register(:autoeval, true, -> { self.unknown }, ->(v) { self.unknown = v })
-
     def match(input)
       @input = input
       super
@@ -25,7 +23,7 @@ module Byebug
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        if Command.settings[:stack_on_error]
+        if Setting[:stack_on_error]
           print "#{bb_eval(expr, b).inspect}\n"
         else
           print "#{bb_warning_eval(expr, b).inspect}\n"
@@ -60,7 +58,7 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        if Command.settings[:stack_on_error]
+        if Setting[:stack_on_error]
           PP.pp(bb_eval(@match.post_match, b), out)
         else
           PP.pp(bb_warning_eval(@match.post_match, b), out)
@@ -93,14 +91,14 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        if Command.settings[:stack_on_error]
+        if Setting[:stack_on_error]
           vals = bb_eval(@match.post_match, b)
         else
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "#{columnize(vals, Command.settings[:width])}\n"
+          print "#{columnize(vals, Setting[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
@@ -134,14 +132,14 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        if Command.settings[:stack_on_error]
+        if Setting[:stack_on_error]
           vals = bb_eval(@match.post_match, b)
         else
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "#{columnize(vals.sort!, Command.settings[:width])}\n"
+          print "#{columnize(vals.sort!, Setting[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string

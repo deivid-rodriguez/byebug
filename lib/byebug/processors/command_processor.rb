@@ -33,7 +33,7 @@ module Byebug
       return filename if ['(irb)', '-e'].include?(filename)
 
       # For now we want resolved filenames
-      if Command.settings[:basename]
+      if Setting[:basename]
         File.basename(filename)
       else
         Pathname.new(filename).cleanpath.to_s
@@ -75,7 +75,7 @@ module Byebug
     protect :at_catchpoint
 
     def at_tracing(context, file, line)
-      if file != @last_file || line != @last_line || Command.settings[:tracing_plus]
+      if file != @last_file || line != @last_line || Setting[:tracing_plus]
         @last_file, @last_line = file, line
         print "Tracing: #{CommandProcessor.canonic_file(file)}:#{line} " \
               "#{Byebug.line_at(file,line)}\n"
@@ -85,7 +85,7 @@ module Byebug
     protect :at_tracing
 
     def at_line(context, file, line)
-      Byebug.source_reload if Command.settings[:autoreload]
+      Byebug.source_reload if Setting[:autoreload]
       process_commands(context, file, line)
     end
     protect :at_line
@@ -117,7 +117,7 @@ module Byebug
         state = State.new(cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
-        Command.settings[:autolist] = 0 if ['(irb)', '-e'].include?(file)
+        Setting[:autolist] = 0 if ['(irb)', '-e'].include?(file)
 
         # Bind commands to the current state.
         commands = cmds.map { |cmd| cmd.new(state) }
@@ -154,14 +154,14 @@ module Byebug
       def process_commands(context, file, line)
         state, commands = always_run(context, file, line, 1)
 
-        if Command.settings[:testing]
+        if Setting[:testing]
           Thread.current.thread_variable_set('state', state)
         else
           Thread.current.thread_variable_set('state', nil)
         end
 
         preloop(commands, context)
-        print state.location if Command.settings[:autolist] == 0
+        print state.location if Setting[:autolist] == 0
 
         while !state.proceed?
           input = @interface.command_queue.empty? ?

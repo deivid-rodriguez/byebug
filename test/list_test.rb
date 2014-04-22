@@ -51,7 +51,7 @@ module ListTest
       end
 
       describe 'when it goes before beginning of file' do
-        temporary_change_hash Byebug.settings, :listsize, 12
+        temporary_change_hash Byebug::Setting, :listsize, 12
 
         it 'must move range up' do
           enter 'list'
@@ -67,7 +67,7 @@ module ListTest
       end
 
       describe 'very large' do
-        temporary_change_hash Byebug.settings, :listsize, 1000
+        temporary_change_hash Byebug::Setting, :listsize, 1000
 
         it 'must list whole file if number of lines is smaller than listsize' do
           n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
@@ -93,7 +93,7 @@ module ListTest
     end
 
     describe 'list backwards' do
-      temporary_change_hash Byebug.settings, :autolist, 0
+      temporary_change_hash Byebug::Setting, :autolist, 0
 
       it 'must show surrounding lines with the first call' do
         enter 'break 18', 'cont', 'list -'
@@ -110,7 +110,7 @@ module ListTest
     end
 
     describe 'list surrounding' do
-      temporary_change_hash Byebug.settings, :autolist, 0
+      temporary_change_hash Byebug::Setting, :autolist, 0
 
       it 'must show the surrounding lines with =' do
         enter 'break 8', 'cont', 'list ='
@@ -169,7 +169,7 @@ module ListTest
       after  { change_line_in_file(__FILE__, 7, '      a = 7')   }
 
       describe 'when autoreload is false' do
-        temporary_change_hash Byebug.settings, :autoreload, false
+        temporary_change_hash Byebug::Setting, :autoreload, false
 
         it 'must not reload listing with file changes' do
           enter -> { change_line_in_file __FILE__, 7, '      a = 100' ;

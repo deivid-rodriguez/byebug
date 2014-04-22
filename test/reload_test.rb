@@ -12,7 +12,7 @@ module ReloadTest
     end
 
     describe 'autoreloading' do
-      after { Byebug.settings[:autoreload] = true }
+      after { Byebug::Setting[:autoreload] = true }
 
       it 'must notify that automatic reloading is on by default' do
         enter 'reload'

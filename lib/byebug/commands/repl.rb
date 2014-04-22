@@ -51,8 +51,6 @@ module Byebug
 
   # Implements byebug's "irb" command.
   class IrbCommand < Command
-    settings.register(:autoirb, 0, -> { self.always_run }, ->(v) { self.always_run = v })
-
     def regexp
       /^\s* irb \s*$/x
     end
@@ -68,11 +66,11 @@ module Byebug
       when :cont
         @state.proceed
       when :step
-        force = Command.settings[:forcestep]
+        force = Setting[:forcestep]
         @state.context.step_into 1, force
         @state.proceed
       when :next
-        force = Command.settings[:forcestep]
+        force = Setting[:forcestep]
         @state.context.step_over 1, @state.frame_pos, force
         @state.proceed
       else

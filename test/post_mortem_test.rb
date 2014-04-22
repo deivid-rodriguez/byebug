@@ -45,7 +45,7 @@ module PostMortemTest
     end
 
     describe 'Unavailable commands' do
-      temporary_change_hash Byebug.settings, :autoeval, false
+      temporary_change_hash Byebug::Setting, :autoeval, false
 
       %w(step next finish break condition display reload).each do |cmd|
         define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do

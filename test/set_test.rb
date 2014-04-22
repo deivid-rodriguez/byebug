@@ -8,8 +8,8 @@ module SetTest
       end
     end
 
-    [:autoeval, :autoreload, :autosave, :basename, :forcestep, :fullpath,
-     :post_mortem, :stack_on_error, :testing, :linetrace,
+    [:autoeval, :autoirb, :autoreload, :autosave, :basename, :forcestep,
+     :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
      :tracing_plus].each do |setting|
       describe "setting boolean #{setting} to on" do
         temporary_change_hash Byebug::Setting, setting, false

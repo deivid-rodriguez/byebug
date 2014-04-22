@@ -23,7 +23,7 @@ module Byebug
     def execute
       Byebug.source_reload
       print "Source code is reloaded. Automatic reloading is "   \
-            "#{Command.settings[:autoreload] ? 'on' : 'off'}.\n"
+            "#{Setting[:autoreload] ? 'on' : 'off'}.\n"
     end
 
     private

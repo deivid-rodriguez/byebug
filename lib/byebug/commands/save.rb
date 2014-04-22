@@ -38,13 +38,8 @@ module Byebug
 
     def save_settings(file)
       # FIXME put routine in set
-      %w(autoeval basename testing).each do |setting|
-        on_off = show_onoff(Command.settings[setting.to_sym])
-        file.puts "set #{setting} #{on_off}"
-      end
-      %w(autolist autoirb).each do |setting|
-        on_off = show_onoff(Command.settings[setting.to_sym] > 0)
-        file.puts "set #{setting} #{on_off}"
+      %w(autoeval autoirb autolist basename testing).each do |setting|
+        file.puts "set #{setting} #{Setting[setting.to_sym]}"
       end
     end
 

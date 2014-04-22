@@ -4,7 +4,7 @@ module Byebug
   module SteppingFunctions
     def parse_stepping_args(command_name, match)
       if match[1].nil?
-        force = Command.settings[:forcestep]
+        force = Setting[:forcestep]
       elsif match[1] == '+'
         force = true
       elsif match[1] == '-'
