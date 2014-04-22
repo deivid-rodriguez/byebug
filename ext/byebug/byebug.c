@@ -544,17 +544,17 @@ bb_stop(VALUE self)
 
 /*
  *  call-seq:
- *    Byebug.start_ -> bool
- *    Byebug.start_ { ... } -> bool
+ *    Byebug.start -> bool
+ *    Byebug.start { ... } -> bool
  *
- *  This method is internal and activates the debugger. Use Byebug.start (from
- *  <tt>lib/byebug.rb</tt>) instead.
+ *  If a block is given, it starts byebug and yields block. After the block is
+ *  executed it stops byebug with Byebug.stop method. Inside the block you
+ *  will probably want to have a call to Byebug.byebug. For example:
+ *
+ *      Byebug.start { byebug; foo }  # Stop inside of foo
  *
  *  The return value is the value of !Byebug.started? <i>before</i> issuing the
  *  +start+; That is, +true+ is returned, unless byebug was previously started.
- *
- *  If a block is given, it starts byebug and yields to block. When the block
- *  is finished executing it stops the debugger with Byebug.stop method.
  */
 static VALUE
 bb_start(VALUE self)
@@ -773,7 +773,7 @@ Init_byebug()
   rb_define_module_function(mByebug, "post_mortem?"     , bb_post_mortem     ,  0);
   rb_define_module_function(mByebug, "post_mortem="     , bb_set_post_mortem ,  1);
   rb_define_module_function(mByebug, "raised_exception" , bb_raised_exception,  0);
-  rb_define_module_function(mByebug, "_start"           , bb_start           ,  0);
+  rb_define_module_function(mByebug, "start"            , bb_start           ,  0);
   rb_define_module_function(mByebug, "started?"         , bb_started         ,  0);
   rb_define_module_function(mByebug, "stop"             , bb_stop            ,  0);
   rb_define_module_function(mByebug, "thread_context"   , bb_thread_context  ,  1);

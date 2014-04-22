@@ -13,13 +13,6 @@ module Byebug
   # List of files byebug will ignore while debugging
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
-  # Default options to Byebug.start
-  unless defined?(DEFAULT_START_SETTINGS)
-    DEFAULT_START_SETTINGS = { post_mortem: false,
-                               tracing: false,
-                               save_history: true }
-  end
-
   # Configuration file used for startup commands. Default value is .byebugrc
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
@@ -83,46 +76,6 @@ module Byebug
     def_delegators :"handler.interface", :print
 
     #
-    # Byebug.start(options) -> bool
-    # Byebug.start(options) { ... } -> obj
-    #
-    # If it's called without a block, it returns +true+ unless byebug was
-    # already started.
-    #
-    # If a block is given, it starts byebug and yields block. After the block is
-    # executed it stops byebug with Byebug.stop method. Inside the block you
-    # will probably want to have a call to Byebug.byebug. For example:
-    #
-    #     Byebug.start { byebug; foo }  # Stop inside of foo
-    #
-    # Also, byebug only allows one invocation of byebug at a time; nested
-    # Byebug.start's have no effect and you can't use this inside byebug itself.
-    #
-    # <i>Note that if you want to stop byebug, you must call Byebug.stop as
-    # many times as you called Byebug.start method.</i>
-    #
-    # +options+ is a hash used to set various debugging options.
-    #   :post_mortem  - true if you want to enter post-mortem debugging on an
-    #                   uncaught exception, false otherwise. Default: false.
-    #   :tracing      - true if line tracing should be enabled, false otherwise.
-    #                   Default: false.
-    #   :save_history - true if byebug's command history should be saved to a
-    #                   file on program termination so that it can be reloaded
-    #                   later.
-    #
-    def start(options={}, &block)
-      options = Byebug::DEFAULT_START_SETTINGS.merge(options)
-      Byebug.tracing = options[:tracing]
-
-      retval = Byebug._start(&block)
-
-      post_mortem if options[:post_mortem]
-      at_exit { Byebug::History.save } if options[:save_history]
-
-      return retval
-    end
-
-    #
     # Runs normal byebug initialization scripts.
     #
     # Reads and executes the commands from init file (if any) in the current
@@ -167,11 +120,7 @@ module Byebug
       context = raised_exception.__bb_context
       file    = raised_exception.__bb_file
       line    = raised_exception.__bb_line
-      orig_tracing = Byebug.tracing?
-      Byebug.tracing = false
       handler.at_line(context, file, line)
-    ensure
-      Byebug.tracing = orig_tracing
     end
     private :handle_post_mortem
   end
@@ -187,8 +136,8 @@ module Kernel
   # events occur. Before entering byebug the init script is read.
   #
   def byebug(steps_out = 1, before = true)
-    Byebug.start
     Byebug.run_init_script(StringIO.new)
+    Byebug.start
     Byebug.current_context.step_out(steps_out, before)
   end
 
