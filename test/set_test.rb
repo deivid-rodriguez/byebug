@@ -2,13 +2,13 @@ module SetTest
   class SetTestCase < TestDsl::TestCase
     before do
       @example = -> do
-        byebug()
+        byebug
         a = 2
-        a + 3
+        a += 1
       end
     end
 
-    [:autoeval, :autoirb, :autolist, :autoreload, :autosave, :basename, :forcestep,
+    [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
      :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
      :tracing_plus].each do |setting|
       describe "setting boolean #{setting} to on" do

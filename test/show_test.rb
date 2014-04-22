@@ -6,10 +6,9 @@ module ShowTest
       end
     end
 
-    [:autoeval, :autoirb, :autoreload, :autosave, :basename, :forcestep,
+    [:autoeval, :autoreload, :autosave, :basename, :forcestep,
      :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
      :tracing_plus].each do |setting|
-
       describe "showing disabled boolean setting #{setting}" do
         temporary_change_hash Byebug::Setting, setting, false
 
