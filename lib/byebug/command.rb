@@ -128,5 +128,4 @@ module Byebug
   end
 
   Command.load_commands
-
 end
