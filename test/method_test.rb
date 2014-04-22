@@ -14,7 +14,7 @@ module MethodTest
 
   class MethodTestCase < TestDsl::TestCase
     before do
-      Byebug::Setting[:autolist] = 0
+      Byebug::Setting[:autolist] = false
       @example = -> do
         byebug
         a = Example.new
@@ -23,7 +23,7 @@ module MethodTest
     end
 
     after do
-      Byebug::Setting[:autolist] = 1
+      Byebug::Setting[:autolist] = true
     end
 
     describe 'show instance method of a class' do

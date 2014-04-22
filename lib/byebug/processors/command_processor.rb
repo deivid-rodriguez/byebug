@@ -117,7 +117,7 @@ module Byebug
         state = State.new(cmds, context, @display, file, @interface, line)
 
         # Change default when in irb or code included in command line
-        Setting[:autolist] = 0 if ['(irb)', '-e'].include?(file)
+        Setting[:autolist] = false if ['(irb)', '-e'].include?(file)
 
         # Bind commands to the current state.
         commands = cmds.map { |cmd| cmd.new(state) }

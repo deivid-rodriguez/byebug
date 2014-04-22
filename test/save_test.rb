@@ -50,7 +50,7 @@ module SaveTest
         end
 
         it 'must save autolist' do
-          file_contents.must_include 'set autolist 1'
+          file_contents.must_include 'set autolist true'
         end
 
         it 'must save autoirb' do

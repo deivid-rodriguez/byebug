@@ -93,7 +93,7 @@ module ListTest
     end
 
     describe 'list backwards' do
-      temporary_change_hash Byebug::Setting, :autolist, 0
+      temporary_change_hash Byebug::Setting, :autolist, false
 
       it 'must show surrounding lines with the first call' do
         enter 'break 18', 'cont', 'list -'
@@ -110,7 +110,7 @@ module ListTest
     end
 
     describe 'list surrounding' do
-      temporary_change_hash Byebug::Setting, :autolist, 0
+      temporary_change_hash Byebug::Setting, :autolist, false
 
       it 'must show the surrounding lines with =' do
         enter 'break 8', 'cont', 'list ='

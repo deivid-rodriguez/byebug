@@ -8,7 +8,7 @@ module SetTest
       end
     end
 
-    [:autoeval, :autoirb, :autoreload, :autosave, :basename, :forcestep,
+    [:autoeval, :autoirb, :autolist, :autoreload, :autosave, :basename, :forcestep,
      :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
      :tracing_plus].each do |setting|
       describe "setting boolean #{setting} to on" do
@@ -89,16 +89,6 @@ module SetTest
         end
       end
     end
-
-#   describe 'messages' do
-#     temporary_change_hash Byebug::Setting, :autolist, 0
-
-#     it 'must show a message after setting' do
-#       enter 'set autolist on'
-#       debug_proc(@example)
-#       check_output_includes 'autolist is on.'
-#     end
-#   end
 
 #   describe 'testing' do
 #     describe 'state' do
