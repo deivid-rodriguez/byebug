@@ -38,23 +38,23 @@ module SaveTest
 
       describe 'saving settings' do
         it 'must save autoeval' do
-          file_contents.must_include 'set autoeval on'
+          file_contents.must_include 'set autoeval true'
         end
 
         it 'must save basename' do
-          file_contents.must_include 'set basename off'
+          file_contents.must_include 'set basename false'
         end
 
         it 'must save testing' do
-          file_contents.must_include 'set testing on'
+          file_contents.must_include 'set testing true'
         end
 
         it 'must save autolist' do
-          file_contents.must_include 'set autolist on'
+          file_contents.must_include 'set autolist 1'
         end
 
         it 'must save autoirb' do
-          file_contents.must_include 'set autoirb off'
+          file_contents.must_include 'set autoirb false'
         end
       end
 
