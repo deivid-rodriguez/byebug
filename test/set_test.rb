@@ -149,7 +149,7 @@ module SetTest
       it 'must show a message' do
         enter "set histfile #{filename}"
         debug_proc(@example)
-        check_output_includes "The command history file is \"#{filename}\""
+        check_output_includes "The command history file is #{filename}"
       end
 
       it 'must show an error message if no filename provided' do
