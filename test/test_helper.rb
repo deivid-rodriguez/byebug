@@ -11,7 +11,7 @@ require 'pathname'
 require 'mocha/mini_test'
 require 'byebug'
 
-Dir.glob(File.expand_path("../support/*.rb", __FILE__)).each { |f| require f }
+Dir.glob(File.expand_path('../support/*.rb', __FILE__)).each { |f| require f }
 
 Byebug::Setting[:testing] = true
 

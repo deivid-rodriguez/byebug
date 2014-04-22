@@ -3,14 +3,17 @@ module FinishTest
     def a
       b
     end
+
     def b
       c
       2
     end
+
     def c
       d
       3
     end
+
     def d
       5
     end
@@ -22,27 +25,27 @@ module FinishTest
         byebug
         Example.new.a
       end
-      enter "break #{__FILE__}:15", 'cont'
+      enter 'break 18', 'cont'
     end
 
     it 'must stop after current frame is finished when without arguments' do
       enter 'finish'
-      debug_proc(@example) { state.line.must_equal 12 }
+      debug_proc(@example) { state.line.must_equal 14 }
     end
 
     it 'must stop before current frame finishes if 0 specified as argument' do
       enter 'finish 0'
-      debug_proc(@example) { state.line.must_equal 16 }
+      debug_proc(@example) { state.line.must_equal 19 }
     end
 
     it 'must stop after current frame is finished if 1 specified as argument' do
       enter 'finish 1'
-      debug_proc(@example) { state.line.must_equal 12 }
+      debug_proc(@example) { state.line.must_equal 14 }
     end
 
     it 'must behave consistenly even if current frame has been changed' do
       enter 'up', 'finish'
-      debug_proc(@example) { state.line.must_equal 8 }
+      debug_proc(@example) { state.line.must_equal 9 }
     end
 
     describe 'not a number is specified for frame' do
@@ -54,7 +57,7 @@ module FinishTest
       end
 
       it 'must be on the same line' do
-        debug_proc(@example) { state.line.must_equal 15 }
+        debug_proc(@example) { state.line.must_equal 18 }
       end
     end
   end

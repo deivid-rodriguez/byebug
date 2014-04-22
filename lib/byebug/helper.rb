@@ -1,5 +1,4 @@
 module Byebug
-
   module ParseFunctions
     Position_regexp = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
 

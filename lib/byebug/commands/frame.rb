@@ -184,7 +184,7 @@ module Byebug
     end
 
     def execute
-      pos = get_int(@match[1], "Up")
+      pos = get_int(@match[1], 'Up')
       return unless pos
       adjust_frame(pos, false)
     end
@@ -206,7 +206,7 @@ module Byebug
     end
 
     def execute
-      pos = get_int(@match[1], "Down")
+      pos = get_int(@match[1], 'Down')
       return unless pos
       adjust_frame(-pos, false)
     end
@@ -229,7 +229,7 @@ module Byebug
 
     def execute
       return print_frame @state.frame_pos unless @match[1]
-      return unless pos = get_int(@match[1], "Frame")
+      return unless pos = get_int(@match[1], 'Frame')
       adjust_frame(pos, true)
     end
 

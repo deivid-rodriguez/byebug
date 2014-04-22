@@ -29,6 +29,6 @@ module Byebug
         %{Generic command for showing things about byebug.}
       end
     end
-
   end
+
 end
