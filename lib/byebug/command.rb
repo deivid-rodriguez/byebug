@@ -1,19 +1,8 @@
 require 'columnize'
 require 'forwardable'
 require 'byebug/helper'
-require 'byebug/setting'
 
 module Byebug
-  module CommandFunctions
-    #
-    # Pad a string with dots at the end to fit :width setting
-    #
-    def pad_with_dots(string)
-      width = Setting[:width]
-      string[width-3..1] = "..." if string.size > width
-    end
-  end
-
   class Command
     Subcmd = Struct.new(:name, :min, :help)
 
