@@ -89,7 +89,7 @@ module Byebug
 
       args.map do |_, name|
         s = "#{name} = #{locals[name].inspect}"
-        s[Setting[:width]-3..1] = "..." if s.size > Setting[:width]
+        s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
         print "#{s}\n"
       end
     end
@@ -219,7 +219,7 @@ module Byebug
             s = "#{name} = *Error in evaluation*"
           end
         end
-        s[Setting[:width]-3..1] = "..." if s.size > Setting[:width]
+        s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
         print "#{s}\n"
       end
     end
