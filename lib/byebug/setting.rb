@@ -74,7 +74,7 @@ module Byebug
     end
 
     def to_s
-      "#{to_sym} is #{value ? 'on' : 'off'}"
+      "#{to_sym} is #{value ? 'on' : 'off'}\n"
     end
   end
 

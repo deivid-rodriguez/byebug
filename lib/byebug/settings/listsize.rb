@@ -9,7 +9,7 @@ module Byebug
     end
 
     def to_s
-      "Number of source lines to list is #{value}"
+      "Number of source lines to list is #{value}\n"
     end
   end
 end

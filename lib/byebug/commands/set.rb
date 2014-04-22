@@ -16,7 +16,7 @@ module Byebug
       return print "Unknown setting :#{key}\n" unless full_key
 
       if !Setting.boolean?(full_key) && value.nil?
-        return print "You must specify a value for setting :#{key}"
+        return print "You must specify a value for setting :#{key}\n"
       elsif Setting.boolean?(full_key)
         value = get_onoff(value, key =~ /^no/ ? false : true)
       elsif Setting.integer?(full_key)

@@ -5,12 +5,12 @@ module Byebug
     end
 
     def help
-      'Customize file where history is loaded from and saved to. By default, ' \
-      '~/.byebug_hist'
+      "Customize file where history is loaded from and saved to. By default, " \
+      "~/.byebug_hist"
     end
 
     def to_s
-      "The command history file is #{value}"
+      "The command history file is #{value}\n"
     end
   end
 end
