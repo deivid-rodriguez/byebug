@@ -4,7 +4,7 @@ module ListTest
       @example = -> do
         byebug
         a = 6
-      a = 7
+        a = 7
         a = 8
         a = 9
         a = 10
@@ -166,13 +166,13 @@ module ListTest
     end
 
     describe 'reload source' do
-      after  { change_line_in_file(__FILE__, 7, '      a = 7')   }
+      after  { change_line_in_file(__FILE__, 7, '        a = 7')   }
 
       describe 'when autoreload is false' do
         temporary_change_hash Byebug::Setting, :autoreload, false
 
         it 'must not reload listing with file changes' do
-          enter -> { change_line_in_file __FILE__, 7, '      a = 100' ;
+          enter -> { change_line_in_file __FILE__, 7, '        a = 100' ;
                      'list 7-7' }
           debug_proc(@example)
           check_output_includes(/7:\s+a = 7/)
@@ -181,7 +181,7 @@ module ListTest
 
       describe 'when autoreload is true' do
         it 'must reload listing with file changes' do
-          enter -> { change_line_in_file __FILE__, 7, '      a = 100' ;
+          enter -> { change_line_in_file __FILE__, 7, '        a = 100' ;
                      'list 7-7' }
           debug_proc(@example)
           check_output_includes(/7:\s+a = 100/)
