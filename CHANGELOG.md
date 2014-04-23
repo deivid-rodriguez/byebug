@@ -1,4 +1,4 @@
-# Next release
+# 3.1.0
 
 * `show commands` moved to a separate `history` command.
 * Byebug.start can't recieve options any more. Any program settings you
