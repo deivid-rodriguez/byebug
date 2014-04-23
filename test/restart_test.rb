@@ -70,7 +70,7 @@ module RestartTest
           enter 'restart'
         end
 
-        it 'must restart anyway' do
+        it 'must restart anyways' do
           debug_proc(@example)
         end
 
