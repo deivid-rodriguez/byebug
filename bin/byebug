@@ -218,10 +218,10 @@ Byebug::PROG_SCRIPT = File.expand_path prog_script
 # Set up trace hook for byebug
 Byebug.start
 
-Byebug.setting[:post_mortem] = options.post_mortem
-
 # load initrc script (e.g. .byebugrc)
 Byebug.run_init_script(StringIO.new) unless options.nx
+
+Byebug::Setting[:post_mortem] = options.post_mortem
 
 # run restore-settings startup script if specified
 if options.restart_script
@@ -236,7 +236,7 @@ if options.script
 end
 
 options.stop = false if options.tracing
-Byebug.tracing = options.tracing
+Byebug::Setting[:linetrace] = options.tracing
 
 loop do
   debug_program(options)
