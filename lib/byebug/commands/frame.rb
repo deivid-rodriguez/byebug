@@ -162,7 +162,7 @@ module Byebug
 
     class << self
       def names
-        %w(where backtrace)
+        %w(where backtrace bt)
       end
 
       def description
