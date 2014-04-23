@@ -15,7 +15,7 @@ module Byebug
     end
 
     def to_s
-      "Maximun width of byebug's output is #{value}"
+      "Maximum width of byebug's output is #{value}"
     end
 
     private

@@ -52,7 +52,7 @@ module ShowTest
       it 'must show default width' do
         enter 'show width'
         debug_proc(@example)
-        check_output_includes "Maximun width of byebug's output is #{cols}"
+        check_output_includes "Maximum width of byebug's output is #{cols}"
       end
     end
 
