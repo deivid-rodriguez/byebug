@@ -1,5 +1,6 @@
 # Next release
 
+* `show commands` moved to a separate `history` command.
 * Byebug.start can't recieve options any more. Any program settings you
 want applied from the start should be set in .byebugrc.
 * `trace` command has been removed. Line tracing functionality should be
