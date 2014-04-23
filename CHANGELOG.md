@@ -1,3 +1,17 @@
+# Next release
+
+* Byebug.start can't recieve options any more. Any program settings you
+want applied from the start should be set in .byebugrc.
+* `trace` command has been removed. Line tracing functionality should be
+enabled through the `linetrace` setting whereas the global variable
+tracing functionality is now provided through the `tracevar` command.
+* `version` setting has been removed. It was not really a setting because it
+couldn't be set. Use `byebug --version` to check byebug's version.
+* `arg` setting removed. Program restart arguments should be set through
+`restart` command from now on.
+* `linetrace_plus` setting has been renamed to `tracing_plus`.
+
+
 # 3.0.0
 
 - Bugfixes
