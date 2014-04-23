@@ -1,3 +1,8 @@
+# 3.1.1
+
+* Fix starting `post_mortem` mode in bin/byebug
+
+
 # 3.1.0
 
 * `show commands` moved to a separate `history` command.
