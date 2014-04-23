@@ -218,7 +218,9 @@ prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 Byebug::PROG_SCRIPT = File.expand_path prog_script
 
 # Set up trace hook for byebug
-Byebug.start post_mortem: options.post_mortem
+Byebug.start
+
+Byebug.setting[:post_mortem] = options.post_mortem
 
 # load initrc script (e.g. .byebugrc)
 Byebug.run_init_script(StringIO.new) unless options.nx
