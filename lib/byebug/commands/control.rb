@@ -8,7 +8,7 @@ module Byebug
 
     def execute
       prog = Byebug::PROG_SCRIPT if defined?(Byebug::PROG_SCRIPT)
-      byebug = Byebug::BYEBUG_SCRIPT if defined?(Byebug::BYEBUG_SCRIPT)
+      byebug_script = Byebug::BYEBUG_SCRIPT if defined?(Byebug::BYEBUG_SCRIPT)
 
       return errmsg "Don't know name of debugged program\n" unless prog
 
@@ -16,8 +16,8 @@ module Byebug
         return errmsg "Ruby program #{prog} doesn't exist\n"
       end
 
-      if byebug
-        cmd = "#{byebug} #{prog}"
+      if byebug_script
+        cmd = "#{byebug_script} #{prog}"
       else
         print "Byebug was not called from the outset...\n"
         if File.executable?(prog)
