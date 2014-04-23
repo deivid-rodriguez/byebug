@@ -7,7 +7,7 @@ module Byebug
     def execute
       if Byebug::Setting[:autosave]
         if arg = @match[:num_cmds]
-          size = get_int(@match[:num_cmds], 'history', 1, Byebug::Setting[:histsize])
+          size = get_int(arg, 'history', 1, Byebug::Setting[:histsize])
         end
         print Byebug::History.to_s(size || Byebug::Setting[:histsize])
       else
