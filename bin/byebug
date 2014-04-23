@@ -72,17 +72,21 @@ def debug_program(options)
   end
 end
 
-# Do a shell-like path lookup for prog_script and return the results.
-# If we can't find anything return prog_script.
+#
+# Do a shell-like path lookup for prog_script and return the results. If we
+# can't find anything return prog_script.
+#
 def whence_file(prog_script)
   if prog_script.index(File::SEPARATOR)
     # Don't search since this name has path separator components
     return prog_script
   end
+
   for dirname in ENV['PATH'].split(File::PATH_SEPARATOR) do
     prog_script_try = File.join(dirname, prog_script)
     return prog_script_try if File.exist?(prog_script_try)
   end
+
   # Failure
   return prog_script
 end
@@ -210,7 +214,7 @@ if ARGV.empty?
   exit(-1)
 end
 
-# save script name
+# Save debugged program
 prog_script = ARGV.shift
 prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 Byebug::PROG_SCRIPT = File.expand_path prog_script

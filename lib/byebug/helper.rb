@@ -2,9 +2,10 @@ module Byebug
   module ParseFunctions
     Position_regexp = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
 
-    # Parse 'str' of command 'cmd' as an integer between
-    # min and max. If either min or max is nil, that
-    # value has no bound.
+    #
+    # Parse 'str' of command 'cmd' as an integer between min and max. If either
+    # min or max is nil, that value has no bound.
+    #
     def get_int(str, cmd, min = nil, max = nil, default = 1)
       unless str
         return default if default
@@ -28,7 +29,9 @@ module Byebug
       end
     end
 
-    # Return true if code is syntactically correct for Ruby.
+    #
+    # Returns true if code is syntactically correct for Ruby.
+    #
     def syntax_valid?(code)
       eval("BEGIN {return true}\n#{code}", nil, '', 0)
     rescue SyntaxError
