@@ -26,8 +26,6 @@ module Byebug
             "#{Setting[:autoreload] ? 'on' : 'off'}.\n"
     end
 
-    private
-
     class << self
       def names
         %w(reload)
