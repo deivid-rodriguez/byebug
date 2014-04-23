@@ -99,7 +99,7 @@ can now be placed at the end of a block or method call.
     `restart`   |              |
     `save`      |              |
     `set`       |              | `autoeval` `autoirb` `autolist` `autoreload` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
-    `show`      |              | `autoeval` `autoirb` `autolist` `autoreload` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `verbose` `width`
+    `show`      |              | `autoeval` `autoirb` `autolist` `autoreload` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
     `skip`      |              |
     `source`    |              |
     `step`      |              |
