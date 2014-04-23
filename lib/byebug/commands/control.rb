@@ -49,16 +49,16 @@ module Byebug
     end
 
     class << self
-       def names
-         %w(restart)
-       end
+      def names
+        %w(restart)
+      end
 
-       def description
-         %{restart|R [args]
+      def description
+        %{restart|R [args]
 
-           Restart the program. This is a re-exec - all byebug state
-           is lost. If command arguments are passed those are used.}
-       end
+          Restart the program. This is a re-exec - all byebug state
+          is lost. If command arguments are passed those are used.}
+      end
     end
   end
 

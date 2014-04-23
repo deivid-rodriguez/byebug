@@ -1,5 +1,4 @@
 module Byebug
-
   module DisplayFunctions
     def display_expression(exp)
       print "#{exp} = #{bb_warning_eval(exp).inspect}\n"
@@ -81,13 +80,13 @@ module Byebug
 
     def execute
       unless pos = @match[1]
-        if confirm("Clear all expressions? (y/n) ")
+        if confirm('Clear all expressions? (y/n) ')
           for d in @state.display
             d[0] = false
           end
         end
       else
-        pos = get_int(pos, "Undisplay")
+        pos = get_int(pos, 'Undisplay')
         return unless pos
         if @state.display[pos-1]
           @state.display[pos-1][0] = nil
