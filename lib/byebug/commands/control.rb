@@ -3,29 +3,29 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* (?:restart|R) (?:\s+(.+))? \s*$/x
+      /^\s* (?:restart|R) (?:\s+(?<args>.+))? \s*$/x
     end
 
     def execute
-      return errmsg "Don't know name of debugged program\n" unless
-        defined?(Byebug::PROG_SCRIPT)
+      prog = Byebug::PROG_SCRIPT if defined?(Byebug::PROG_SCRIPT)
+      byebug = Byebug::BYEBUG_SCRIPT if defined?(Byebug::BYEBUG_SCRIPT)
 
-      return errmsg "Ruby program #{Byebug::PROG_SCRIPT} doesn't exist\n" unless
-        File.exist?(File.expand_path(Byebug::PROG_SCRIPT))
+      return errmsg "Don't know name of debugged program\n" unless prog
 
-      if not defined?(Byebug::BYEBUG_SCRIPT)
-        print "Byebug was not called from the outset...\n"
-        if File.executable?(Byebug::PROG_SCRIPT)
-          cmd = Byebug::PROG_SCRIPT
-        else
-          print "Ruby program #{Byebug::PROG_SCRIPT} not executable... " \
-                "We'll wrap it in a ruby call\n"
-          cmd = "ruby -rbyebug -I#{$:.join(' -I')} #{Byebug::PROG_SCRIPT}"
-        end
-        args = ARGV[1..-1]
+      unless File.exist?(File.expand_path(prog))
+        return errmsg "Ruby program #{prog} doesn't exist\n"
+      end
+
+      if byebug
+        cmd = "#{byebug} #{prog}"
       else
-        cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT}"
-        args = ARGV[2..-1]
+        print "Byebug was not called from the outset...\n"
+        if File.executable?(prog)
+          cmd = prog
+        else
+          print "Ruby program #{prog} not executable... We'll wrap it in a ruby call\n"
+          cmd = "ruby -rbyebug -I#{$:.join(' -I')} #{prog}"
+        end
       end
 
       begin
@@ -34,11 +34,11 @@ module Byebug
         print "Failed to change initial directory #{Byebug::INITIAL_DIR}"
       end
 
-      if @match[1]
-        cmd += " #{@match[1]}"
+      if @match[:args]
+        cmd += " #{@match[:args]}"
       else
         require 'shellwords'
-        cmd += " #{args.compact.shelljoin}"
+        cmd += " #{ARGV.compact.shelljoin}"
       end
 
       # An execv would be preferable to the "exec" below.
