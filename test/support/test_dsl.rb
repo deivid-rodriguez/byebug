@@ -163,9 +163,4 @@ module TestDsl
                              .join("\n") + "\n"
     File.open(file, 'w') { |f| f.write(new_content) }
   end
-
-  def must_restart
-    Byebug::RestartCommand.any_instance.unstub(:exec)
-    Byebug::RestartCommand.any_instance.expects(:exec)
-  end
 end

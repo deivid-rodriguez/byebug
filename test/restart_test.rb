@@ -16,12 +16,18 @@ module RestartTest
       end
     end
 
+    def must_restart(cmd = nil)
+      expectation = Byebug::RestartCommand.any_instance.expects(:exec)
+      expectation = expectation.with(cmd) if cmd
+      expectation
+    end
+
     describe 'usual restarting' do
       temporary_change_const Byebug, 'BYEBUG_SCRIPT', 'byebug_script'
 
       it 'must be restarted with arguments' do
         cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3"
-        Byebug::RestartCommand.any_instance.expects(:exec).with(cmd)
+        must_restart(cmd)
         enter 'restart 1 2 3'
         debug_proc(@example)
         check_output_includes "Re exec'ing:\n\t#{cmd}"
