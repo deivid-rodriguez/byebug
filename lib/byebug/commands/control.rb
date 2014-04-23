@@ -28,12 +28,6 @@ module Byebug
         end
       end
 
-      begin
-        Dir.chdir(Byebug::INITIAL_DIR)
-      rescue
-        print "Failed to change initial directory #{Byebug::INITIAL_DIR}"
-      end
-
       if @match[:args]
         cmd += " #{@match[:args]}"
       else

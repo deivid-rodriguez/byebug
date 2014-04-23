@@ -86,23 +86,5 @@ module RestartTest
         end
       end
     end
-
-    describe 'when can\'t change the dir to INITIAL_DIR' do
-      temporary_change_const Byebug, 'INITIAL_DIR', '/unexistent/path'
-
-      it 'must restart anyway' do
-        must_restart
-        enter 'restart'
-        debug_proc(@example)
-      end
-
-      it 'must show an error message ' do
-        must_restart
-        enter 'restart'
-        debug_proc(@example)
-        check_output_includes \
-          'Failed to change initial directory /unexistent/path'
-      end
-    end
   end
 end

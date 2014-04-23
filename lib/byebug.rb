@@ -17,9 +17,8 @@ module Byebug
   # Configuration file used for startup commands. Default value is .byebugrc
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
-  # Original ARGV, command line and initial directory to make restarts possible
+  # Stores program being debugged to make restarts possible
   PROG_SCRIPT = $0 unless defined?(PROG_SCRIPT)
-  INITIAL_DIR = Dir.pwd unless defined?(INITIAL_DIR)
 
   class << self
 

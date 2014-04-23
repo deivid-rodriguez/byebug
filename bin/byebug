@@ -189,7 +189,6 @@ opts = process_options(options)
 begin
   Byebug::BYEBUG_SCRIPT = File.expand_path(__FILE__)
   Byebug::IGNORED_FILES << Byebug::BYEBUG_SCRIPT
-  Byebug::INITIAL_DIR = Dir.pwd
   opts.parse! ARGV
 rescue StandardError => e
   puts opts
