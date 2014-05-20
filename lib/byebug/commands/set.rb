@@ -31,12 +31,12 @@ module Byebug
     def get_onoff(arg, default)
       return default if arg.nil?
       case arg
-      when '1', 'on'
+      when '1', 'on', 'true'
         return true
-      when '0', 'off'
+      when '0', 'off', 'false'
         return false
       else
-        print "Expecting 'on', 1, 'off', or 0. Got: #{arg}.\n"
+        print "Expecting 'on', 1, true, 'off', 0, false. Got: #{arg}.\n"
         raise RuntimeError
       end
     end
