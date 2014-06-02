@@ -26,6 +26,12 @@ module SetTest
           Byebug::Setting[setting].must_equal true
         end
 
+        it "must set #{setting} to on using true" do
+          enter "set #{setting} true"
+          debug_proc(@example)
+          Byebug::Setting[setting].must_equal true
+        end
+
         it "must set #{setting} to on by default" do
           enter "set #{setting}"
           debug_proc(@example)
@@ -44,6 +50,12 @@ module SetTest
 
         it "must set #{setting} to on using 0" do
           enter "set #{setting} 0"
+          debug_proc(@example)
+          Byebug::Setting[setting].must_equal false
+        end
+
+        it "must set #{setting} to on using false" do
+          enter "set #{setting} false"
           debug_proc(@example)
           Byebug::Setting[setting].must_equal false
         end
