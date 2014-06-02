@@ -173,7 +173,7 @@ $ byebug hanoi.rb
 (byebug)
 ```
 
-Recall in the first section iwe said that before the `def` is run, the method it
+Recall in the first section it was stated that before the `def` is run, the method it
 names is undefined. Let's check that out. First let's see what private methods
 we can call before running `def hanoi`.
 
