@@ -60,7 +60,7 @@ module Byebug
        return @actual_control_port if @control_thread
        server = TCPServer.new(host, ctrl_port)
        @actual_control_port = server.addr[1]
-       @control_thread = Thread.new do
+       @control_thread = DebugThread.new do
          while (session = server.accept)
            interface = RemoteInterface.new(session)
            ControlCommandProcessor.new(interface).process_commands
