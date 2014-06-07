@@ -12,6 +12,8 @@ Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
 stack navigation, so it doesn't depend on internal core sources. It's developed
 as a C extension, so it's fast. And it has a full test suite so it's reliable.
+Note that byebug works only for ruby 2.0.0 or newer. For debugging ruby 1.9.3 or
+older, use [debugger](https://github.com/cldwalker/debugger).
 
 It allows you to see what is going on _inside_ a Ruby program while it executes
 and can do four main kinds of things to help you catch bugs in the act:
@@ -47,21 +49,6 @@ require and start the debugger. These flags are a performance penalty and Byebug
 doesn't need them anymore so my recommendation is not to use them.
 * The startup configuration file is now called `.byebugrc` instead of
 `.rdebugrc`.
-
-
-## What's different from debugger
-
-* Works on Ruby 2.x but it doesn't on 1.9.x (you should probably upgrade
-anyways).
-* Has no MRI internal source code dependencies, just a clean API (no more `bump
-ruby_core_source dependency` entries in CHANGELOG, no more broken debugger's on
-ruby's releases).
-* Fixes a lot of debugger's issues, such as ruby 2.x support or post_mortem
-debugging. It also provides several enhancements, such as the fact the `byebug`
-can now be placed at the end of a block or method call.
-* Actively mantained.
-* Editor agnostic: no external editor built-in support.
-* Pry command is built-in. No need of external gem like debugger-pry.
 
 
 ## Byebug's commands
