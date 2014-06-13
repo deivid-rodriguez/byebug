@@ -45,8 +45,9 @@ Former [debugger](https://github.com/cldwalker/debugger) or
 [ruby-debug](https://github.com/mark-moseley/ruby-debug) users, notice:
 
 * Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
-require and start the debugger. These flags are a performance penalty and Byebug
-doesn't need them anymore so my recommendation is not to use them.
+require and start the debugger. These flags are a performance penalty and byebug
+doesn't need them anymore so my recommendation is not to use them. In any case,
+both rails and rspec have deprecated these flags in their latest versions.  
 * The startup configuration file is now called `.byebugrc` instead of
 `.rdebugrc`.
 
