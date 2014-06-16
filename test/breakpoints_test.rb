@@ -98,8 +98,7 @@ module BreakpointsTest
 
       it 'must show an error' do
         debug_proc(@example)
-        check_error_includes \
-          "Line 6 is not a stopping point in file #{__FILE__}"
+        check_error_includes 'Line 6 is not a valid stopping point in file'
       end
     end
 
@@ -158,8 +157,7 @@ module BreakpointsTest
               'next' }
 
           debug_proc(@example)
-          check_error_includes \
-            "Line 37 is not a stopping point in file #{__FILE__}"
+          check_error_includes 'Line 37 is not a valid stopping point in file'
         end
       end
     end

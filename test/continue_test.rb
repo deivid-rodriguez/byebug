@@ -42,8 +42,7 @@ module ContinueTest
 
       it 'must show error if specified line is not valid' do
         debug_proc(@example)
-        check_error_includes \
-          "Line 100 is not a stopping point in file \"#{__FILE__}\""
+        check_error_includes 'Line 100 is not a valid stopping point in file'
       end
     end
   end
