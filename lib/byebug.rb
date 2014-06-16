@@ -102,27 +102,6 @@ module Byebug
       processor = ControlCommandProcessor.new(interface)
       processor.process_commands(verbose)
     end
-
-    #
-    # Activates the post-mortem mode.
-    #
-    # By calling Byebug.post_mortem method, you install an at_exit hook that
-    # intercepts any exception not handled by your script and enables
-    # post-mortem mode.
-    #
-    def post_mortem
-      return if self.post_mortem?
-      self.post_mortem = true
-      at_exit { handle_post_mortem if post_mortem? }
-    end
-
-    def handle_post_mortem
-      context = raised_exception.__bb_context
-      file    = raised_exception.__bb_file
-      line    = raised_exception.__bb_line
-      handler.at_line(context, file, line)
-    end
-    private :handle_post_mortem
   end
 end
 
