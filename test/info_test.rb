@@ -122,16 +122,16 @@ module InfoTest
         enter 'info files stat'
         debug_proc(@example)
         check_output_includes "File #{__FILE__}",
-                              LineCache.stat(__FILE__).mtime.to_s
+                              File.stat(__FILE__).mtime.to_s
       end
     end
 
     describe 'File info' do
       let(:file)     { __FILE__ }
       let(:filename) { "File #{file}" }
-      let(:lines)    { "#{LineCache.size(file)} lines" }
-      let(:mtime)    { LineCache.stat(file).mtime.to_s }
-      let(:sha1)     { LineCache.sha1(file) }
+      let(:lines)    { "#{File.foreach(file).count} lines" }
+      let(:mtime)    { File.stat(file).mtime.to_s }
+      let(:sha1)     { Digest::SHA1.hexdigest(file) }
       let(:breakpoint_line_numbers) {
         columnize(LineCache.trace_line_numbers(file).to_a.sort,
                   Byebug::Setting[:width]) }

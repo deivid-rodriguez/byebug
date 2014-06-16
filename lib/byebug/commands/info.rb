@@ -141,8 +141,8 @@ module Byebug
     private :info_file_path
 
     def info_file_lines(file)
-      lines = LineCache.size(file)
-      print "\t #{lines} lines\n" if lines
+      lines = File.foreach(file)
+      print "\t#{lines.count} lines\n" if lines
     end
     private :info_file_lines
 
@@ -156,13 +156,13 @@ module Byebug
     private :info_file_breakpoints
 
     def info_file_mtime(file)
-      stat = LineCache.stat(file)
+      stat = File.stat(file)
       print "\t#{stat.mtime}\n" if stat
     end
     private :info_file_mtime
 
     def info_file_sha1(file)
-      print "\t#{LineCache.sha1(file)}\n"
+      print "\t#{Digest::SHA1.hexdigest(file)}\n"
     end
     private :info_file_sha1
 

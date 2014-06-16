@@ -55,7 +55,7 @@ module Byebug
       if line =~ /^\d+$/
         line = line.to_i
         if LineCache.cache(brkpt_filename, Setting[:autoreload])
-          last_line = LineCache.size(brkpt_filename)
+          last_line = File.stat(brkpt_filename).size
           return errmsg "There are only #{last_line} lines in file " \
                         "#{brkpt_filename}\n" if line > last_line
 
