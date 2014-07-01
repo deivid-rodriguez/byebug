@@ -31,7 +31,7 @@ has terminated normally, the string this position will be `(byebug:ctrl)`. The
 commands available change depending on the program's state.
 
 Byebug automatically lists 10 lines of code centered around the current line
-everytime it is stopped. The current line is marked with `=>`, so the range
+every time it is stopped. The current line is marked with `=>`, so the range
 byebug would like to show is [-3..6]. However since there aren't 5 lines before
 the current line, the range is moved _up_ so we can actually display 10 lines
 of code.
@@ -186,7 +186,7 @@ we can call before running `def hanoi`.
 byebug doesn't understand a command, it will evaluate it as if it was a Ruby
 command. If you don't want this behaviour, you can use `set autoeval off` or
 even drop it in your `.byebugrc` file if you want that behaviour permanently.
-The output of `private_methods`, thought, is unwieldy for our porpuse: check
+The output of `private_methods`, thought, is unwieldy for our purpose: check
 whether `hanoi` method is in the list. Fortunately, byebug has nice formatting
 features: we can sort the output and put it into columns list using the print
 command `ps`.
@@ -863,7 +863,7 @@ Running a program from byebug adds a bit of overhead and slows it down a little.
 Furthermore, by necessity, debuggers change the operation of the program they
 are debugging. And this can lead to unexpected and unwanted differences. It has
 happened so often that the term
-[Heisenbugs](http://en.wikipedia.org/wiki/Heisenbug}) was coined to describe the
+[Heisenbugs](http://en.wikipedia.org/wiki/Heisenbug) was coined to describe the
 situation where using a debugger (among other possibilities) changes the
 behavior of the program so that the bug doesn't manifest itself anymore.
 
