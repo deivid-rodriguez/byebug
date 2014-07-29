@@ -1,7 +1,7 @@
 module ConditionsTest
   class ConditionsTestCase < TestDsl::TestCase
     before do
-      @example = lambda do
+      @example = -> do
         byebug
         b = 5
         c = b + 5

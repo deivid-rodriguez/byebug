@@ -7,7 +7,7 @@ module ContinueTest
 
   class ContinueTestCase < TestDsl::TestCase
     before do
-      @example = lambda do
+      @example = -> do
         byebug
 
         b = 5
