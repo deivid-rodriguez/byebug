@@ -13,7 +13,7 @@ class Rake::TestTask
   end
 end
 
-desc "Run MiniTest suite"
+desc 'Run the test suite'
 task :test do
   Rake::TestTask.new do |t|
     t.verbose = true

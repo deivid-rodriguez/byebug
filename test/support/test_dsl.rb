@@ -1,6 +1,6 @@
 module TestDsl
 
-  class TestCase < MiniTest::Spec
+  class TestCase < Minitest::Spec
     include TestDsl
 
     def setup

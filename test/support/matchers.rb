@@ -1,4 +1,4 @@
-module MiniTest::Assertions
+module Minitest::Assertions
 
   # This matcher checks that given collection is included into the original
   # collection and in correct order. It accepts both strings and regexps.
@@ -62,7 +62,7 @@ module MiniTest::Assertions
     end
 end
 
-module MiniTest::Expectations
+module Minitest::Expectations
   infect_an_assertion :assert_includes_in_order, :must_include_in_order
   infect_an_assertion :refute_includes_in_order, :wont_include_in_order
 end

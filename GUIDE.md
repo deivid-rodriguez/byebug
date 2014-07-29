@@ -440,7 +440,7 @@ same directory as `triangle.rb`.
 require 'minitest/autorun'
 require_relative 'triangle.rb'
 
-class TestTri < MiniTest::Unit::TestCase
+class TestTri < Minitest::Unit::TestCase
   def test_basic
     solutions = []
     0.upto(5) do |i|
@@ -474,7 +474,7 @@ Run options: --seed 13073
 [2, 11] in test-triangle.rb
     2: require_relative 'triangle.rb'
     3: 
-    4: class TestTri < MiniTest::Unit::TestCase
+    4: class TestTri < Minitest::Unit::TestCase
     5:   def test_basic
     6:     byebug
 =>  7:     solutions = []
@@ -495,20 +495,20 @@ Now let's see where we are...
 Displaying frame's full file names is off.
 (byebug) bt
 --> #0  TestTri.test_basic at test-triangle.rb:7
-    #1  MiniTest::Unit::TestCase.run(runner#MiniTest::Unit) at .../2.0.0/minitest/unit.rb:1301
-    #2  MiniTest::Unit.block in _run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:919
+    #1  Minitest::Unit::TestCase.run(runner#Minitest::Unit) at .../2.0.0/minitest/unit.rb:1301
+    #2  Minitest::Unit.block in _run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:919
      +-- #3  Array.map at .../2.0.0/minitest/unit.rb:912
-    #4  MiniTest::Unit._run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:912
-    #5  MiniTest::Unit.block in _run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
+    #4  Minitest::Unit._run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:912
+    #5  Minitest::Unit.block in _run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
      +-- #6  Array.map at .../2.0.0/minitest/unit.rb:899
-    #7  MiniTest::Unit._run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
-    #8  MiniTest::Unit._run_anything(type#Symbol) at .../2.0.0/minitest/unit.rb:867
-    #9  MiniTest::Unit.run_tests at .../2.0.0/minitest/unit.rb:1060
-    #10 MiniTest::Unit.block in _run(args#Array) at .../2.0.0/minitest/unit.rb:1047
+    #7  Minitest::Unit._run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
+    #8  Minitest::Unit._run_anything(type#Symbol) at .../2.0.0/minitest/unit.rb:867
+    #9  Minitest::Unit.run_tests at .../2.0.0/minitest/unit.rb:1060
+    #10 Minitest::Unit.block in _run(args#Array) at .../2.0.0/minitest/unit.rb:1047
      +-- #11 Array.each at .../2.0.0/minitest/unit.rb:1046
-    #12 MiniTest::Unit._run(args#Array) at .../2.0.0/minitest/unit.rb:1046
-    #13 MiniTest::Unit.run(args#Array) at .../2.0.0/minitest/unit.rb:1035
-    #14 #<Class:MiniTest::Unit>.block in autorun at .../2.0.0/minitest/unit.rb:789
+    #12 Minitest::Unit._run(args#Array) at .../2.0.0/minitest/unit.rb:1046
+    #13 Minitest::Unit.run(args#Array) at .../2.0.0/minitest/unit.rb:1035
+    #14 #<Class:Minitest::Unit>.block in autorun at .../2.0.0/minitest/unit.rb:789
 (byebug)
 ```
 
