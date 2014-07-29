@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug's 'finish' command.
   class FinishCommand < Command
     self.allow_in_post_mortem = false
 

@@ -1,7 +1,8 @@
 # encoding: utf-8
 module Byebug
-
-  # Mix-in module to assist in command parsing.
+  #
+  # Mixin to assist command parsing
+  #
   module FrameFunctions
     def c_frame?(frame_no)
       @state.context.frame_binding(frame_no).nil?
@@ -150,7 +151,6 @@ module Byebug
     end
   end
 
-  # Implements byebug "where" or "backtrace" command.
   class WhereCommand < Command
     def regexp
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x

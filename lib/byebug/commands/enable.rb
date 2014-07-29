@@ -1,6 +1,7 @@
 module Byebug
-
-  # Mix-in module to assist in command parsing.
+  #
+  # Mixin to assist command parsing
+  #
   module EnableDisableFunctions
     def enable_disable_breakpoints(is_enable, args)
       return errmsg "No breakpoints have been set." if Byebug.breakpoints.empty?
@@ -151,5 +152,4 @@ module Byebug
       end
     end
   end
-
 end

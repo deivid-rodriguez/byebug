@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "show" command.
   class ShowCommand < Command
     self.allow_in_control = true
 
@@ -43,5 +41,4 @@ module Byebug
       end
     end
   end
-
 end

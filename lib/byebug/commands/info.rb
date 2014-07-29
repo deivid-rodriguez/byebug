@@ -1,5 +1,4 @@
 module Byebug
-
   module InfoFunctions
     def info_catch(*args)
       return print "No frame selected.\n" unless @state.context
@@ -14,7 +13,6 @@ module Byebug
     end
   end
 
-  # Implements byebug "info" command.
   class InfoCommand < Command
     include Columnize
     self.allow_in_control = true
@@ -295,7 +293,5 @@ module Byebug
         return str
       end
     end
-
   end
-
 end

@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "help" command.
   class HelpCommand < Command
     include Columnize
 

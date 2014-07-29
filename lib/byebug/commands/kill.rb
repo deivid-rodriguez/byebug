@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "kill" command
   class KillCommand < Command
     self.allow_in_control = true
 

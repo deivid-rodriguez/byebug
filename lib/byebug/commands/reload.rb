@@ -1,5 +1,4 @@
 module Byebug
-
   module ReloadFunctions
     def getlines(file, line)
       unless (lines = SCRIPT_LINES__[file]) and lines != true
@@ -11,7 +10,6 @@ module Byebug
     end
   end
 
-  # Implements byebug "reload" command.
   class ReloadCommand < Command
     self.allow_in_control = true
     self.allow_in_post_mortem = false

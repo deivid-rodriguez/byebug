@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "source" command.
   class SourceCommand < Command
     self.allow_in_control = true
 
@@ -32,5 +30,4 @@ module Byebug
       end
     end
   end
-
 end

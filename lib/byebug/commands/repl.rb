@@ -48,8 +48,6 @@ module IRB
 end
 
 module Byebug
-
-  # Implements byebug's "irb" command.
   class IrbCommand < Command
     def regexp
       /^\s* irb \s*$/x
@@ -101,7 +99,6 @@ module Byebug
     has_pry = false
   end
 
-  # Implements byebug's "pry" command
   class PryCommand < Command
     def regexp
       /^\s* pry \s*$/x

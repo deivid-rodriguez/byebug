@@ -1,5 +1,4 @@
 module Byebug
-
   class ConditionCommand < Command
     self.allow_in_post_mortem = false
 
@@ -37,5 +36,4 @@ module Byebug
       end
     end
   end
-
 end

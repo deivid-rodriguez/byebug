@@ -1,5 +1,4 @@
 module Byebug
-  # Implements byebug's 'method' command.
   class MethodCommand < Command
     include Columnize
 

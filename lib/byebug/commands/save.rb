@@ -1,5 +1,4 @@
 module Byebug
-
   module SaveFunctions
     # Create a temporary file to write in if file is nil
     def open_save

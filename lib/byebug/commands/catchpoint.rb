@@ -1,5 +1,4 @@
 module Byebug
-
   class CatchCommand < Command
     self.allow_in_control = true
 

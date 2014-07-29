@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "quit" command
   class QuitCommand < Command
     self.allow_in_control = true
 

@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "set" command.
   class SetCommand < Command
     self.allow_in_control = true
 
@@ -69,5 +67,4 @@ module Byebug
       end
     end
   end
-
 end

@@ -1,6 +1,7 @@
 module Byebug
-
-  # Mix-in module to assist in command parsing.
+  #
+  # Mixin to assist command parsing
+  #
   module SteppingFunctions
     def parse_stepping_args(command_name, match)
       if match[1].nil?
@@ -15,7 +16,6 @@ module Byebug
     end
   end
 
-  # Implements byebug "next" command.
   class NextCommand < Command
     self.allow_in_post_mortem = false
 
@@ -44,7 +44,6 @@ module Byebug
     end
   end
 
-  # Implements byebug "step" command.
   class StepCommand < Command
     self.allow_in_post_mortem = false
 

@@ -27,7 +27,6 @@ module Byebug
     end
   end
 
-  # Implements byebug's 'var class' command
   class VarClassCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ cl(?:ass)? \s*/x
@@ -124,7 +123,6 @@ module Byebug
     end
   end
 
-  # Implements byebug's 'var local' command
   class VarLocalCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ l(?:ocal)? \s*$/x

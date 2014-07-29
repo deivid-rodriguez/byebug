@@ -1,5 +1,4 @@
 module Byebug
-
   class EditCommand < Command
     self.allow_in_control = true
 
@@ -46,5 +45,4 @@ module Byebug
       end
     end
   end
-
 end

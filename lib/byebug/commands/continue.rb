@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "continue" command.
   class ContinueCommand < Command
     self.allow_in_post_mortem = true
 

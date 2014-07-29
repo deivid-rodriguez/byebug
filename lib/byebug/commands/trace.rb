@@ -1,5 +1,4 @@
 module Byebug
-
   class TraceCommand < Command
     def regexp
       /^\s* tr(?:acevar)? (?: \s+ (\S+))?  # (variable-name)?

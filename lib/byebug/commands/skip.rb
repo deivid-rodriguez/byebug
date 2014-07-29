@@ -1,6 +1,4 @@
 module Byebug
-
-  # Implements byebug "skip" command
   class SkipCommand < Command
     self.allow_in_control = true
 
