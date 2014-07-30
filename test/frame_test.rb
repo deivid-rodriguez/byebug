@@ -157,12 +157,12 @@ module FrameTest
           temporary_change_hash Byebug::Setting, :callstyle, :short
 
           it 'displays current backtrace with callstyle "short"' do
-              enter 'where'
-              debug_proc(@example)
-              check_output_includes(/--> #0  d\(e\)\s+at #{__FILE__}:18/,
-                                        /#1  c\s+at #{__FILE__}:14/,
-                                        /#2  b\s+at #{__FILE__}:10/,
-                                        /#3  a\s+at #{__FILE__}:7/)
+            enter 'where'
+            debug_proc(@example)
+            check_output_includes(/--> #0  d\(e\)\s+at #{__FILE__}:18/,
+                                      /#1  c\s+at #{__FILE__}:14/,
+                                      /#2  b\s+at #{__FILE__}:10/,
+                                      /#3  a\s+at #{__FILE__}:7/)
           end
         end
       end

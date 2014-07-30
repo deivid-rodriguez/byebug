@@ -4,7 +4,7 @@ module Byebug
   #
   module EnableDisableFunctions
     def enable_disable_breakpoints(is_enable, args)
-      return errmsg "No breakpoints have been set." if Byebug.breakpoints.empty?
+      return errmsg "No breakpoints have been set" if Byebug.breakpoints.empty?
 
       all_breakpoints = Byebug.breakpoints.sort_by {|b| b.id }
       if args.empty?
@@ -33,8 +33,7 @@ module Byebug
 
     def enable_disable_display(is_enable, args)
       if 0 == @state.display.size
-        errmsg "No display expressions have been set.\n"
-        return
+        return errmsg "No display expressions have been set\n"
       end
       args.each do |pos|
         pos = get_int(pos, "#{is_enable} display", 1, @state.display.size)
@@ -65,7 +64,7 @@ module Byebug
 
     def execute
       return errmsg "\"enable\" must be followed by \"display\", " \
-                    "\"breakpoints\" or breakpoint numbers.\n" unless @match[1]
+                    "\"breakpoints\" or breakpoint ids\n" unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
@@ -119,7 +118,7 @@ module Byebug
 
     def execute
       return errmsg "\"disable\" must be followed by \"display\", " \
-                    "\"breakpoints\" or breakpoint numbers.\n" unless @match[1]
+                    "\"breakpoints\" or breakpoint ids\n" unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
