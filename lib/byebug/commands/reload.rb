@@ -1,12 +1,26 @@
 module Byebug
   module ReloadFunctions
-    def getlines(file, line)
-      unless (lines = SCRIPT_LINES__[file]) and lines != true
-        Tracer::Single.get_line(file, line) if File.exist?(file)
-        lines = SCRIPT_LINES__[file]
-        lines = nil if lines == true
+    #
+    # Gets all lines in a source code file
+    #
+    def getlines(filename)
+      return nil unless File.exist?(filename)
+
+      unless lines = SCRIPT_LINES__[filename]
+        lines = File.readlines(filename) rescue []
+        SCRIPT_LINES__[filename] = lines
       end
-      lines
+
+      return lines
+    end
+
+    #
+    # Gets a single line in a source code file
+    #
+    def getline(filename, lineno)
+      return nil unless lines = getlines(filename)
+
+      return lines[lineno-1]
     end
   end
 

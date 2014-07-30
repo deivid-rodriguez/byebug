@@ -27,23 +27,9 @@ module Byebug
     Byebug.handler = CommandProcessor.new
 
     def source_reload
-      Object.send(:remove_const, 'SCRIPT_LINES__') if
-        Object.const_defined?('SCRIPT_LINES__')
-      Object.const_set('SCRIPT_LINES__', {})
-    end
-
-    #
-    # Get line +line_number+ from file named +filename+.
-    #
-    # @return "\n" if there was a problem. Leaking blanks are stripped off.
-    #
-    def line_at(filename, line_number)
-      source_reload
-
-      return "\n" unless File.exist?(filename)
-      line = Tracer::Single.get_line(filename, line_number)
-
-      return "#{line.gsub(/^\s+/, '').chomp}"
+      hsh = 'SCRIPT_LINES__'
+      Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
+      Object.const_set(hsh, {})
     end
 
     #

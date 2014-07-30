@@ -76,9 +76,9 @@ module Byebug
 
     def at_tracing(context, file, line)
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
-        @last_file, @last_line = file, line
-        print "Tracing: #{CommandProcessor.canonic_file(file)}:#{line} " \
-              "#{Byebug.line_at(file,line)}\n"
+        path = CommandProcessor.canonic_file(file)
+        @last_file, @last_line, path = file, line
+        print "Tracing: #{path}:#{line} #{getline(file, line)}\n"
       end
       always_run(context, file, line, 2)
     end
@@ -236,8 +236,9 @@ module Byebug
         end
 
         def location
-          loc = "#{CommandProcessor.canonic_file(@file)} @ #{@line}\n"
-          loc += "#{Byebug.line_at(@file, @line)}\n" unless
+          path = CommandProcessor.canonic_file(@file)
+          loc = "#{path} @ #{@line}\n"
+          loc += "#{getline(@file, @line)}\n" unless
             ['(irb)', '-e'].include? @file
           loc
         end

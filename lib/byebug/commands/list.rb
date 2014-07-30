@@ -6,8 +6,8 @@ module Byebug
 
     def execute
       Byebug.source_reload if Setting[:autoreload]
-      lines = getlines(@state.file, @state.line)
-      if !lines
+
+      unless lines = getlines(@state.file)
         errmsg "No sourcefile available for #{@state.file}\n"
         return @state.previous_line
       end
