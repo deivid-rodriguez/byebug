@@ -34,7 +34,7 @@ module ShowTest
       it 'must show default value' do
         enter 'show callstyle'
         debug_proc(@example)
-        check_output_includes 'Frame display callstyle is :long'
+        check_output_includes "Frame display callstyle is 'long'"
       end
     end
 

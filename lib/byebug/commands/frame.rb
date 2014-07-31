@@ -53,7 +53,7 @@ module Byebug
     end
 
     def get_frame_class(style, pos)
-      frame_class = style == :short ? '' : "#{@state.context.frame_class pos}"
+      frame_class = style == 'short' ? '' : "#{@state.context.frame_class pos}"
       return frame_class == '' ? '' : "#{frame_class}."
     end
 
@@ -68,7 +68,7 @@ module Byebug
       args = @state.context.frame_args pos
       return '' if args.empty?
 
-      locals = @state.context.frame_locals pos if style == :long
+      locals = @state.context.frame_locals pos if style == 'long'
       my_args = args.map do |arg|
         case arg[0]
           when :block
@@ -78,7 +78,7 @@ module Byebug
           else
             prefix, default = '', nil
         end
-        klass = style == :long && arg[1] ? "##{locals[arg[1]].class}" : ''
+        klass = style == 'long' && arg[1] ? "##{locals[arg[1]].class}" : ''
         "#{prefix}#{arg[1] || default}#{klass}"
       end
 
