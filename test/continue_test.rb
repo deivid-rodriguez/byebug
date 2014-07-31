@@ -6,7 +6,7 @@ module ContinueTest
   end
 
   class ContinueTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
         byebug
 
@@ -14,36 +14,34 @@ module ContinueTest
         c = b + 5
         Example.a(c)
       end
+
+      super
     end
 
-    describe 'successful' do
-      it 'must continue up to breakpoint if no line specified' do
-        enter 'break 14', 'continue'
-        debug_proc(@example) { state.line.must_equal 14 }
-      end
-
-      it 'must work in abbreviated mode too' do
-        enter 'break 14', 'cont'
-        debug_proc(@example) { state.line.must_equal 14 }
-      end
-
-      it 'must continue up to specified line' do
-        enter 'cont 14'
-        debug_proc(@example) { state.line.must_equal 14 }
-      end
+    def test_continues_up_to_breakpoint_if_no_line_specified
+      enter 'break 14', 'continue'
+      debug_proc(@example) { assert_equal 14, state.line }
     end
 
-    describe 'unsuccessful' do
-      before { enter 'cont 100' }
+    def test_works_in_abbreviated_mode_too
+      enter 'break 14', 'cont'
+      debug_proc(@example) { assert_equal 14, state.line }
+    end
 
-      it 'must ignore the command if specified line is not valid' do
-        debug_proc(@example) { state.line.must_equal 13 }
-      end
+    def test_continues_up_to_the_specified_line
+      enter 'cont 14'
+      debug_proc(@example) { assert_equal 14, state.line }
+    end
 
-      it 'must show error if specified line is not valid' do
-        debug_proc(@example)
-        check_error_includes 'Line 100 is not a valid stopping point in file'
-      end
+    def test_ignores_the_command_if_specified_line_is_not_valid
+      enter 'cont 100'
+      debug_proc(@example) { assert_equal 13, state.line }
+    end
+
+    def test_shows_error_if_specified_line_is_not_valid
+      enter 'cont 100'
+      debug_proc(@example)
+      check_error_includes 'Line 100 is not a valid stopping point in file'
     end
   end
 end

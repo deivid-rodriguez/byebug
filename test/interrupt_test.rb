@@ -17,7 +17,7 @@ module InterruptTest
   end
 
   class InterruptTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
         byebug
         ex = Example.a(7)
@@ -26,39 +26,20 @@ module InterruptTest
         end
         Example.b(ex)
       end
+
+      super
     end
 
-    describe 'Interrupt Command' do
-      describe 'method call behaviour' do
-        it 'must interrupt on the next line' do
-          enter 'interrupt', 'continue'
-          debug_proc(@example) do
-            state.line.must_equal 4
-            state.file.must_equal __FILE__
-          end
-        end
-
-        describe 'when forcestep is set' do
-          temporary_change_hash Byebug::Setting, :forcestep, true
-
-          it 'must interrupt on the next line' do
-            enter 'interrupt', 'continue'
-            debug_proc(@example) do
-              state.line.must_equal 4
-              state.file.must_equal __FILE__
-            end
-          end
-
-          describe 'block behaviour' do
-            before { enter 'break 24', 'cont' }
-
-            it 'must step into blocks' do
-              enter 'interrupt', 'continue'
-              debug_proc(@example) { state.line.must_equal 25 }
-            end
-          end
-        end
+    def test_interrupt_stops_at_the_next_statement
+      enter 'interrupt', 'continue'
+      debug_proc(@example) do
+        assert_equal [__FILE__, 4], [state.file, state.line]
       end
+    end
+
+    def test_interrupt_steps_into_blocks
+      enter 'break 24', 'cont', 'interrupt', 'cont'
+      debug_proc(@example) { assert_equal 25, state.line }
     end
   end
 end

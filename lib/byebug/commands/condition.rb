@@ -9,16 +9,22 @@ module Byebug
     def execute
       return print ConditionCommand.help(nil) unless @match[1]
 
-      breakpoints = Byebug.breakpoints.sort_by{|b| b.id }
+      breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       largest = breakpoints.inject(0) do |tally, b|
         tally = b.id if b.id > tally
       end
 
-      return print "No breakpoints have been set.\n" if 0 == largest
+      return errmsg "No breakpoints have been set\n" if 0 == largest
       return unless pos = get_int(@match[1], "Condition", 1, largest)
 
-      breakpoint = breakpoints.select{ |b| b.id == pos }.first
-      breakpoint.expr = @match[2] if breakpoint
+      breakpoint = breakpoints.select { |b| b.id == pos }.first
+
+      if syntax_valid?(@match[2])
+        breakpoint.expr = @match[2]
+      else
+        return errmsg "Incorrect expression \"#{@match[2]}\", " \
+                      "breakpoint not changed\n"
+      end
     end
 
     class << self

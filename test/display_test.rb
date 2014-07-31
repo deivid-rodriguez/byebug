@@ -1,135 +1,113 @@
 module DisplayTest
   class DisplayTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
+        d = 0
         byebug
-        d = 4
-        d = d + 2
         d = d + 3
         d = d + 6
       end
+
+      super
     end
 
-    it 'must show expressions' do
-      enter 'break 7', 'cont', 'display d + 1'
-      debug_proc(@example)
-      check_output_includes '1: ', 'd + 1 = 5'
-    end
-
-    it 'must work with shortcut' do
-      enter 'break 7', 'cont', 'disp d + 1'
-      debug_proc(@example)
-      check_output_includes '1: ', 'd + 1 = 5'
-    end
-
-    it 'must save displayed expressions' do
+    def test_shows_expressions
       enter 'display d + 1'
-      debug_proc(@example) { state.display.must_equal [[true, 'd + 1']] }
-    end
-
-    it 'displays all expressions available' do
-      enter 'break 7', 'cont', -> do
-        Byebug.handler.display.concat([[true, 'abc'], [true, 'd']]); 'display'
-      end
       debug_proc(@example)
-      check_output_includes '1: ', 'abc = nil', '2: ', 'd = 4'
+      check_output_includes '1: ', 'd + 1 = 1'
     end
 
-    describe 'undisplay' do
-      describe 'undisplay all' do
-        before do
-          enter 'break 7', 'cont', -> do
-            Byebug.handler.display.concat([[true, 'abc'], [true, 'd']])
-            'undisplay'
-          end, confirm_response, 'display'
-        end
+    def test_works_when_using_a_shortcut
+      enter 'disp d + 1'
+      debug_proc(@example)
+      check_output_includes '1: ', 'd + 1 = 1'
+    end
 
-        describe 'confirmation is successful' do
-          let(:confirm_response) { 'y' }
+    def test_saves_displayed_expressions
+      enter 'display d + 1'
+      debug_proc(@example) { assert_equal [[true, 'd + 1']], state.display }
+    end
 
-          it 'must ask about confirmation' do
-            debug_proc(@example)
-            check_output_includes \
-              'Clear all expressions? (y/n)', interface.confirm_queue
-          end
+    def test_displays_all_expressions_available
+      enter 'display d', 'display d + 1', 'display'
+      debug_proc(@example)
+      check_output_includes '1: ', 'd = 0', '2: ', 'd + 1 = 1'
+    end
+  end
 
-          it 'must set all expressions saved to "false"' do
-            debug_proc(@example) { state.display.must_equal [[false, 'abc'],
-                                                              [false, 'd']] }
-          end
-
-          it 'must not show any output' do
-            debug_proc(@example)
-            check_output_doesnt_include '1: ', 'abc = nil', '2: ', 'd = 4'
-          end
-        end
-
-        describe 'confirmation is unsuccessful' do
-          let(:confirm_response) { 'n' }
-
-          it 'must set all expressions saved to "false"' do
-            debug_proc(@example) { state.display.must_equal [[true, 'abc'],
-                                                              [true, 'd']] }
-          end
-
-          it 'must not show any output' do
-            debug_proc(@example)
-            check_output_includes '1: ', 'abc = nil', '2: ', 'd = 4'
-          end
-        end
+  class UndisplayTestCase < TestDsl::TestCase
+    def setup
+      @example = -> do
+        d = 0
+        byebug
+        d = d + 3
+        d = d + 6
       end
 
-      describe 'undisplay specific position' do
-        before do
-          enter 'break 7', 'cont', -> do
-            Byebug.handler.display.concat([[true, 'abc'], [true, 'd']])
-            'undisplay 1'
-          end, 'display'
-        end
+      super
+    end
 
-        it 'must set inactive positions' do
-          debug_proc(@example) { state.display.must_equal [[nil, 'abc'],
-                                                            [true, 'd']] }
-        end
+    def test_asks_for_confirmation
+      enter 'display d', 'display d + 1', 'undisplay'
+      debug_proc(@example)
+      check_output_includes \
+        'Clear all expressions? (y/n)', interface.confirm_queue
+    end
 
-        it 'must display only the active position' do
-          debug_proc(@example)
-          check_output_includes '2: ', 'd = 4'
-        end
+    def test_removes_all_expressions_from_list_if_confirmed
+      enter 'display d', 'display d + 1', 'undisplay', 'y', 'next'
+      debug_proc(@example) do
+        assert_equal [[false, 'd'], [false, 'd + 1']], state.display
+      end
+      check_output_doesnt_include '1: ', 'd = 3', '2: ', 'd + 1 = 4'
+    end
 
-        it 'must not display the disabled position' do
-          debug_proc(@example)
-          check_output_doesnt_include '1: ', 'abc'
-        end
+    def test_does_not_remove_all_expressions_from_list_unless_confirmed
+      enter 'display d', 'display d + 1', 'undisplay', 'n', 'display'
+      debug_proc(@example) do
+        assert_equal [[true, 'd'], [true, 'd + 1']], state.display
+      end
+
+      check_output_includes '1: ', 'd = 0', '2: ', 'd + 1 = 1'
+    end
+
+    def test_marks_specific_expression_from_list_as_inactive
+      enter 'display d', 'display d + 1', 'undisplay 1'
+
+      debug_proc(@example) do
+        assert_equal [[nil, 'd'], [true, 'd + 1']], state.display
       end
     end
 
-    describe 'disable' do
-      it 'must disable a position' do
-        enter 'display d', 'disable display 1'
-        debug_proc(@example) { state.display.must_equal [[false, 'd']] }
-      end
-
-      it 'must show an error if no displays are set' do
-        enter 'disable display 1'
-        debug_proc(@example)
-        check_output_includes \
-          'No display expressions have been set.', interface.error_queue
-      end
-
-      it 'must show an error if there is no such display position' do
-        enter 'display d', 'disable display 4'
-        debug_proc(@example)
-        check_output_includes \
-          '"disable display" argument "4" needs to be at most 1'
-      end
+    def test_displays_only_the_active_position
+      enter 'display d', 'display d + 1', 'undisplay 1', 'next'
+      debug_proc(@example)
+      check_output_includes '2: ', 'd + 1 = 4'
+      check_output_doesnt_include '1: ', 'd = 3'
     end
 
-    describe 'enable' do
-      it 'must enable a position' do
-        enter 'display d', 'disable display 1', 'enable display 1'
-        debug_proc(@example) { state.display.must_equal [[true, 'd']] }
-      end
+    def test_disable_display_removes_the_expression_from_display_list
+      enter 'display d', 'disable display 1'
+      debug_proc(@example) { assert_equal [[false, 'd']], state.display }
+    end
+
+    def test_disable_display_shows_an_error_if_no_displays_are_set
+      enter 'disable display 1'
+      debug_proc(@example)
+      check_output_includes \
+        'No display expressions have been set', interface.error_queue
+    end
+
+    def test_disable_display_shows_an_error_if_theres_no_such_display_position
+      enter 'display d', 'disable display 4'
+      debug_proc(@example)
+      check_output_includes \
+        '"disable display" argument "4" needs to be at most 1'
+    end
+
+    def test_enable_display_set_display_flag_to_true_in_display_list
+      enter 'display d', 'disable display 1', 'enable display 1'
+      debug_proc(@example) { assert_equal [[true, 'd']], state.display }
     end
   end
 end

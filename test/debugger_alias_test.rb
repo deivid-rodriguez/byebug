@@ -1,7 +1,7 @@
-module DebuggerAliasTest
-  class DebuggerAliasSpec < Minitest::Spec
-    it 'aliases "debugger" to "byebug"' do
-      Kernel.method(:debugger).must_equal(Kernel.method(:byebug))
+module DebuggerAlias
+  class DebuggerAliasTest < Minitest::Test
+    def test_aliases_debugger_to_byebug
+      assert_equal Kernel.method(:byebug), Kernel.method(:debugger)
     end
   end
 end

@@ -1,195 +1,132 @@
 module SetTest
   class SetTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
         byebug
         a = 2
         a += 1
       end
+
+      super
     end
 
     [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
-     :fullpath, :post_mortem, :stack_on_error, :testing, :linetrace,
-     :tracing_plus].each do |setting|
-      describe "setting boolean #{setting} to on" do
-        temporary_change_hash Byebug::Setting, setting, false
-
-        it "must set #{setting} to on using on" do
-          enter "set #{setting} on"
+     :fullpath, :linetrace, :post_mortem, :stack_on_error, :testing,
+     :tracing_plus].each do |set|
+      ['on', '1', 'true', ''].each do |key|
+        define_method(:"test_enable_boolean_setting_#{set}_using_#{key}") do
+          Byebug::Setting[set] = false
+          enter "set #{set} #{key}"
           debug_proc(@example)
-          Byebug::Setting[setting].must_equal true
-        end
-
-        it "must set #{setting} to on using 1" do
-          enter "set #{setting} 1"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal true
-        end
-
-        it "must set #{setting} to on using true" do
-          enter "set #{setting} true"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal true
-        end
-
-        it "must set #{setting} to on by default" do
-          enter "set #{setting}"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal true
+          assert_equal true, Byebug::Setting[set]
         end
       end
 
-      describe "setting boolean #{setting} to off" do
-        temporary_change_hash Byebug::Setting, setting, true
-
-        it "must set #{setting} to off using off" do
-          enter "set #{setting} off"
+      ['off', '0', 'false'].each do |key|
+        define_method(:"test_disable_boolean_setting_#{set}_using_#{key}") do
+          Byebug::Setting[set] = true
+          enter "set #{set} #{key}"
           debug_proc(@example)
-          Byebug::Setting[setting].must_equal false
+          assert_equal false, Byebug::Setting[set]
         end
+      end
 
-        it "must set #{setting} to on using 0" do
-          enter "set #{setting} 0"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal false
-        end
-
-        it "must set #{setting} to on using false" do
-          enter "set #{setting} false"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal false
-        end
-
-        it "must set #{setting} to off using 'no' prefix" do
-          enter "set no#{setting}"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal false
-        end
+      define_method(:"test_disable_boolean_setting_#{set}_using_no_prefix") do
+        Byebug::Setting[set] = true
+        enter "set no#{set}"
+        debug_proc(@example)
+        assert_equal false, Byebug::Setting[set]
       end
     end
 
-    describe 'shortcuts' do
-      describe 'setting' do
-        temporary_change_hash Byebug::Setting, :autosave, false
+    def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
+      Byebug::Setting[:forcestep] = false
+      enter 'set fo'
+      debug_proc(@example)
+      assert_equal true, Byebug::Setting[:forcestep]
+    end
 
-        it 'must set setting if shortcut not ambiguous' do
-          enter 'set autos'
-          debug_proc(@example)
-          Byebug::Setting[:autosave].must_equal true
-        end
+    def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
+      Byebug::Setting[:forcestep] = false
+      Byebug::Setting[:fullpath] = false
+      enter 'set f'
+      debug_proc(@example)
+      assert_equal false, Byebug::Setting[:forcestep]
+      assert_equal false, Byebug::Setting[:fullpath]
+    end
 
-        it 'must not set setting if shortcut is ambiguous' do
-          enter 'set auto'
-          debug_proc(@example)
-          Byebug::Setting[:autosave].must_equal false
-        end
-      end
+    def test_set_disables_a_setting_using_shorcut_when_not_ambiguous
+      Byebug::Setting[:forcestep] = true
+      enter 'set nofo'
+      debug_proc(@example)
+      assert_equal false, Byebug::Setting[:forcestep]
+    end
 
-      describe 'unsetting' do
-        temporary_change_hash Byebug::Setting, :autosave, true
+    def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
+      Byebug::Setting[:forcestep] = true
+      Byebug::Setting[:fullpath] = true
+      enter 'set nof'
+      debug_proc(@example)
+      assert_equal true, Byebug::Setting[:forcestep]
+      assert_equal true, Byebug::Setting[:fullpath]
+    end
 
-        it 'must unset setting if shortcut not ambiguous' do
-          enter 'set noautos'
-          debug_proc(@example)
-          Byebug::Setting[:autosave].must_equal false
-        end
-
-        it 'must not set setting to off if shortcut ambiguous' do
-          enter 'set noauto'
-          debug_proc(@example)
-          Byebug::Setting[:autosave].must_equal true
-        end
+    def test_set_testing_sets_the_thread_state_variable
+      Byebug::Setting[:testing] = false
+      enter 'set testing', 'break 7', 'cont'
+      debug_proc(@example) do
+        assert_kind_of Byebug::CommandProcessor::State, state
       end
     end
 
-    describe 'testing' do
-      describe 'state' do
-        describe 'when setting "testing" to on' do
-          temporary_change_hash Byebug::Setting, :testing, false
+    def test_set_notesting_unsets_the_thread_state_variable
+      Byebug::Setting[:testing] = true
+      enter 'set notesting', 'break 7', 'cont'
+      debug_proc(@example) { assert_nil state }
+    end
 
-          it 'must get set' do
-            enter 'set testing', 'break 7', 'cont'
-            debug_proc(@example) {
-              state.must_be_kind_of Byebug::CommandProcessor::State }
-          end
-        end
+    def test_set_histsize_sets_maximum_history_size
+      Byebug::Setting[:histsize] = 1
+      enter 'set histsize 250'
+      debug_proc(@example)
+      assert_equal 250, Byebug::Setting[:histsize]
+      check_output_includes "Maximum size of byebug's command history is 250"
+    end
 
-        describe 'when setting "testing" to off' do
-          temporary_change_hash Byebug::Setting, :testing, true
+    def test_set_histsize_shows_an_error_message_if_no_size_is_provided
+      enter 'set histsize'
+      debug_proc(@example)
+      check_output_includes 'You must specify a value for setting :histsize'
+    end
 
-          it 'must get unset' do
-            enter 'set notesting', 'break 7', 'cont'
-            debug_proc(@example) { state.must_be_nil }
-          end
-        end
+    def test_set_histfile_sets_command_history_file
+      filename = File.expand_path('.custom-byebug-hist')
+      enter "set histfile #{filename}"
+      debug_proc(@example)
+      assert_equal filename, Byebug::Setting[:histfile]
+      check_output_includes "The command history file is #{filename}"
+    end
+
+    def test_set_histfile_shows_an_error_message_if_no_filename_is_provided
+      enter 'set histfile'
+      debug_proc(@example)
+      check_output_includes 'You must specify a value for setting :histfile'
+    end
+
+    [:listsize, :width].each do |set|
+      define_method(:"test_set_#{set}_changes_integer_setting_#{set}") do
+        Byebug::Setting[set] = 80
+        enter "set #{set} 120"
+        debug_proc(@example)
+        assert_equal 120, Byebug::Setting[set]
       end
     end
 
-    describe 'histsize' do
-      temporary_change_hash Byebug::Setting, :histsize, 1
-
-      it 'must set maximum history size' do
-        enter 'set histsize 250'
-        debug_proc(@example)
-        Byebug::Setting[:histsize].must_equal 250
-      end
-
-      it 'must show a message' do
-        enter 'set histsize 250'
-        debug_proc(@example)
-        check_output_includes "Maximum size of byebug's command history is 250"
-      end
-
-      it 'must show an error message if no size provided' do
-        enter 'set histsize'
-        debug_proc(@example)
-        check_output_includes 'You must specify a value for setting :histsize'
-      end
-    end
-
-    describe 'histfile' do
-      let(:filename) { File.expand_path('.custom-byebug-hist') }
-
-      temporary_change_hash Byebug::Setting, :histfile, File.expand_path('.byebug-hist')
-
-      it 'must set history filename' do
-        enter "set histfile #{filename}"
-        debug_proc(@example)
-        Byebug::Setting[:histfile].must_equal filename
-      end
-
-      it 'must show a message' do
-        enter "set histfile #{filename}"
-        debug_proc(@example)
-        check_output_includes "The command history file is #{filename}"
-      end
-
-      it 'must show an error message if no filename provided' do
-        enter 'set histfile'
-        debug_proc(@example)
-        check_output_includes 'You must specify a value for setting :histfile'
-      end
-    end
-
-    [:listsize, :width].each do |setting|
-      describe "setting integer setting #{setting}" do
-        temporary_change_hash Byebug::Setting, setting, 80
-
-        it 'must get correctly set' do
-          enter "set #{setting} 120"
-          debug_proc(@example)
-          Byebug::Setting[setting].must_equal 120
-        end
-      end
-    end
-
-    describe 'Help' do
-      it 'must show help when typing just "set"' do
-        enter 'set', 'cont'
-        debug_proc(@example)
-        check_output_includes(/Modifies parts of byebug environment./)
-        check_output_includes(/List of settings supported in byebug/)
-      end
+    def test_set_without_arguments_shows_help_for_set_command
+      enter 'set'
+      debug_proc(@example)
+      check_output_includes(/Modifies parts of byebug environment./)
+      check_output_includes(/List of settings supported in byebug/)
     end
   end
 end

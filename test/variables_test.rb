@@ -18,116 +18,79 @@ module VariablesTest
     end
   end
 
-
   class VariablesTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
         byebug
 
         v = Example.new
         v.run
       end
+
+      super
     end
 
     # we check a class minitest variable... brittle but ok for now
-    describe 'class variables' do
-      before { enter 'break 28', 'cont' }
-
-      it 'must show variables' do
-        enter 'var class'
-        debug_proc(@example)
-        check_output_includes(/@@runnables/)
-      end
-
-      it 'must be able to use shortcut' do
-        enter 'v cl'
+    ['var class', 'v cl'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_class_variables") do
+        enter cmd_alias
         debug_proc(@example)
         check_output_includes(/@@runnables/)
       end
     end
 
-    describe 'constants' do
-      it 'must show constants' do
-        enter 'break 28', 'cont', 'var const Example'
+    ['var const', 'v co'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_constants_in_class_or_module") do
+        enter "#{cmd_alias} Example"
         debug_proc(@example)
         check_output_includes 'SOMECONST => "foo"'
-      end
-
-      it 'must be able to use shortcut' do
-        enter 'break 28', 'cont', 'v co Example'
-        debug_proc(@example)
-        check_output_includes 'SOMECONST => "foo"'
-      end
-
-      it 'must show error message if given object is not a class or a module' do
-        enter 'break 28', 'cont', 'var const v'
-        debug_proc(@example)
-        check_output_includes 'Should be Class/Module: v'
       end
     end
 
-    describe 'globals' do
-      it 'must show global variables' do
-        enter 'break 28', 'cont', 'var global'
-        debug_proc(@example)
-        check_output_includes '$VERBOSE = true'
-      end
+    def test_var_const_shows_error_if_given_object_is_not_a_class_or_module
+      enter 'var const v'
+      debug_proc(@example)
+      check_output_includes 'Should be Class/Module: v'
+    end
 
-      it 'must be able to use shortcut' do
-        enter 'break 28', 'cont', 'v g'
+    ['var global', 'v g'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_global_variables") do
+        enter cmd_alias
         debug_proc(@example)
         check_output_includes '$VERBOSE = true'
       end
     end
 
-    describe 'instance variables' do
-      it 'must show instance variables of the given object' do
-        enter 'break 28', 'cont', 'var instance v'
+    ['var instance', 'v ins'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_instance_vars_of_an_object") do
+        enter 'break 27', 'cont', "#{cmd_alias} v"
         debug_proc(@example)
         check_output_includes '@inst_a = 1', '@inst_b = 2'
-      end
-
-      it 'must show instance variables of self' do
-        enter 'break 9', 'cont', 'var instance'
-        debug_proc(@example)
-        check_output_includes '@inst_a = 1', '@inst_b = 2'
-      end
-
-      it 'must show instance variables' do
-        enter 'break 28', 'cont', 'var instance v'
-        debug_proc(@example)
-        check_output_includes '@inst_a = 1', '@inst_b = 2'
-      end
-
-      it 'must be able to use shortcut' do
-        enter 'break 28', 'cont', 'v ins v'
-        debug_proc(@example)
-        check_output_includes '@inst_a = 1', '@inst_b = 2'
-      end
-
-      describe 'when width is too small' do
-        temporary_change_hash Byebug::Setting, :width, 20
-
-        it 'must cut long variable values according it' do
-          enter 'break 28', 'cont', 'var instance v'
-          debug_proc(@example)
-          check_output_includes '@inst_c = "1111111111111111...'
-        end
-      end
-
-      it 'must show error if value doesn\'t have #to_s/#inspect methods' do
-        enter 'break 28', 'cont', 'var instance v'
-        debug_proc(@example)
-        check_output_includes '@inst_d = *Error in evaluation*'
       end
     end
 
-    describe 'local variables' do
-      it 'must show local variables' do
-        enter 'break 15', 'cont', 'var local'
-        debug_proc(@example)
-        check_output_includes 'a => 4', 'b => nil', 'i => 1'
-      end
+    def test_var_instance_shows_instance_variables_of_self_if_no_object_given
+      enter 'break 9', 'cont', 'var instance'
+      debug_proc(@example)
+      check_output_includes '@inst_a = 1', '@inst_b = 2'
+    end
+
+    def test_var_instance_cuts_long_variable_values_according_to_width_setting
+      enter 'break 27', 'cont', 'set width 45', 'var instance v'
+      debug_proc(@example)
+      check_output_includes '@inst_c = "1111111111111111111111111111111...'
+    end
+
+    def test_v_ins_shows_error_if_value_does_not_have_to_s_or_inspect_methods
+      enter 'break 27', 'cont', 'v ins v'
+      debug_proc(@example)
+      check_output_includes '@inst_d = *Error in evaluation*'
+    end
+
+    def test_var_local_shows_local_variables
+      enter 'break 15', 'cont', 'var local'
+      debug_proc(@example)
+      check_output_includes 'a => 4', 'b => nil', 'i => 1'
     end
   end
 end

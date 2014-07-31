@@ -4,79 +4,54 @@ module MethodTest
       @a = 'b'
       @c = 'd'
     end
+
     def self.foo
-      "asdf"
+      'asdf'
     end
+
     def bla
-      "asdf"
+      'asdf'
     end
   end
 
   class MethodTestCase < TestDsl::TestCase
-    before do
-      Byebug::Setting[:autolist] = false
+    def setup
       @example = -> do
         byebug
         a = Example.new
         a.bla
       end
+
+      super
     end
 
-    after do
-      Byebug::Setting[:autolist] = true
-    end
-
-    describe 'show instance method of a class' do
-      before { enter 'break 4', 'cont' }
-
-      it 'must show using full command name' do
-        enter 'method Example'
+    %w(method m).each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_instance_methods_of_a_class") do
+        enter 'break 4', 'cont', "#{cmd_alias} Example"
         debug_proc(@example)
         check_output_includes(/bla/)
         check_output_doesnt_include(/foo/)
       end
-
-      it 'must show using shortcut' do
-        enter 'm Example'
-        debug_proc(@example)
-        check_output_includes(/bla/)
-      end
-
-      it 'must show an error if specified object is not a class or module' do
-        enter 'm a'
-        debug_proc(@example)
-        check_output_includes 'Should be Class/Module: a'
-      end
     end
 
-    describe 'show methods of an object' do
-      before { enter 'break 21', 'cont' }
+    def test_m_shows_an_error_if_specified_object_is_not_a_class_or_module
+      enter 'm a'
+      debug_proc(@example)
+      check_output_includes 'Should be Class/Module: a'
+    end
 
-      it 'must show using full command name' do
-        enter 'method instance a'
+    ['method instance', 'm i'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_methods_of_object") do
+        enter 'break 22', 'cont', "#{cmd_alias} a"
         debug_proc(@example)
         check_output_includes(/bla/)
         check_output_doesnt_include(/foo/)
       end
-
-      it 'must show using shortcut' do
-        enter 'm i a'
-        debug_proc(@example)
-        check_output_includes(/bla/)
-      end
     end
 
-    describe 'show instance variables of an object' do
-      before { enter 'break 21', 'cont' }
-
-      it 'must show using full name command' do
-        enter 'method iv a'
-        debug_proc(@example)
-        check_output_includes '@a = "b"', '@c = "d"'
-      end
-
-      it 'must show using shortcut' do
-        enter 'm iv a'
+    ['method iv', 'm iv'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_instance_variables_of_object") do
+        enter 'break 22', 'cont', "#{cmd_alias} a"
         debug_proc(@example)
         check_output_includes '@a = "b"', '@c = "d"'
       end

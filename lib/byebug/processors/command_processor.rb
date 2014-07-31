@@ -77,7 +77,7 @@ module Byebug
     def at_tracing(context, file, line)
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
         path = CommandProcessor.canonic_file(file)
-        @last_file, @last_line, path = file, line
+        @last_file, @last_line = file, line
         print "Tracing: #{path}:#{line} #{getline(file, line)}\n"
       end
       always_run(context, file, line, 2)

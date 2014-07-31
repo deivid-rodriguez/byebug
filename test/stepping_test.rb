@@ -16,8 +16,41 @@ module SteppingTest
     end
   end
 
-  class SteppingTestCase < TestDsl::TestCase
-    before do
+  class BasicSteppingTestCase < TestDsl::TestCase
+    def setup
+      @example = -> do
+        byebug
+
+        ex = Example.c(7)
+        ex
+      end
+
+      super
+    end
+
+    def test_next_goes_to_the_next_line
+      enter 'next'
+      debug_proc(@example) { assert_equal 25, state.line }
+    end
+
+    def test_n_goes_to_the_next_line
+      enter 'n'
+      debug_proc(@example) { assert_equal 25, state.line }
+    end
+
+    def test_step_goes_to_the_next_statement
+      enter 'step'
+      debug_proc(@example) { assert_equal 14, state.line }
+    end
+
+    def test_s_goes_to_the_next_statement
+      enter 's'
+      debug_proc(@example) { assert_equal 14, state.line }
+    end
+  end
+
+  class AdvancedStepping < TestDsl::TestCase
+    def setup
       @example = -> do
         byebug
 
@@ -28,184 +61,123 @@ module SteppingTest
 
         Example.b(ex)
       end
+
+      super
+
+      enter 'break 9', 'cont'
     end
 
-    describe 'Next Command' do
-      describe 'method call behaviour' do
-        before { enter 'break 9', 'cont' }
-
-        it 'must leave on the same line by default' do
-          enter 'next'
-          debug_proc(@example) { state.line.must_equal 9 }
-        end
-
-        it 'must go to the next line if forced by "plus" sign' do
-          enter 'next+'
-          debug_proc(@example) { state.line.must_equal 10 }
-        end
-
-        it 'must leave on the same line if forced by "minus" sign' do
-          enter 'next-'
-          debug_proc(@example) { state.line.must_equal 9 }
-        end
-
-        describe 'when forcestep is set' do
-          temporary_change_hash Byebug::Setting, :forcestep, true
-
-          it 'must go to the next line' do
-            enter 'next'
-            debug_proc(@example) { state.line.must_equal 10 }
-          end
-
-          it 'must go to the next line (by shortcut)' do
-            enter 'n'
-            debug_proc(@example) { state.line.must_equal 10 }
-          end
-
-          it 'must go the specified number of lines forward by default' do
-            enter 'next 2'
-            debug_proc(@example) { state.line.must_equal 25 }
-          end
-
-          it 'must inform when not staying in the same frame' do
-            enter 'next 2'
-            debug_proc(@example)
-            check_output_includes \
-              'Next went up a frame because previous frame finished'
-          end
-
-
-          it 'must ignore it if "minus" is specified' do
-            enter 'next-'
-            debug_proc(@example) { state.line.must_equal 9 }
-          end
-        end
+    %w(next step).each do |cmd|
+      define_method(:"test_#{cmd}_stays_by_default") do
+        enter cmd
+        debug_proc(@example) { assert_equal 9, state.line }
       end
 
-      describe 'block behaviour' do
-        before { enter 'break 57', 'cont' }
-
-        it 'must step over blocks' do
-          enter 'next'
-          debug_proc(@example) { state.line.must_equal 24 }
-        end
+      define_method(:"test_#{cmd}+_goes_2_next_line") do
+        enter "#{cmd}+"
+        debug_proc(@example) { assert_equal 10, state.line }
       end
 
-      describe 'raise/rescue behaviour' do
-        describe 'from c method' do
-          before do
-            @example_raise = -> do
-              byebug
+      define_method(:"test_#{cmd}-_stays") do
+        enter "#{cmd}-"
+        debug_proc(@example) { assert_equal 9, state.line }
+      end
 
-              class RaiseFromCMethodExample
-                def a
-                  b
-                rescue NameError
-                  1
-                end
+      define_method(:"test_#{cmd}_goes_2_next_line_if_forcestep_is_set") do
+        enter 'set forcestep', cmd
+        debug_proc(@example) { assert_equal 10, state.line }
+      end
 
-                def b
-                  c
-                end
+      define_method(:"test_#{cmd}+_goes_2_next_line_regardless_forcestep") do
+        enter 'set forcestep', "#{cmd}+"
+        debug_proc(@example) { assert_equal 10, state.line }
+      end
 
-                def c
-                  d
-                end
-              end
-
-              RaiseFromCMethodExample.new.a
-            end
-            enter 'break 102', 'cont'
-          end
-
-          it 'must step over rescue' do
-            enter 'next'
-            debug_proc(@example_raise) { state.line.must_equal 104 }
-          end
-        end
-
-        describe 'from ruby method' do
-          before do
-            @example_raise = -> do
-              byebug
-
-              class RaiseFromRubyMethodExample
-                def a
-                  b
-                rescue
-                  1
-                end
-
-                def b
-                  c
-                end
-
-                def c
-                  raise 'bang'
-                end
-              end
-
-              RaiseFromRubyMethodExample.new.a
-            end
-            enter 'break 134', 'cont'
-          end
-
-          it 'must step over rescue' do
-            enter 'next'
-            debug_proc(@example_raise) { state.line.must_equal 136 }
-          end
-        end
+      define_method(:"test_#{cmd}-_stays_regardless_forcestep") do
+        enter 'set forcestep', "#{cmd}-"
+        debug_proc(@example) { assert_equal 9, state.line }
       end
     end
 
-    describe 'Step Command' do
+    def test_next_goes_the_specified_number_of_lines_forward_by_default
+      enter 'set forcestep', 'next 2'
+      debug_proc(@example) { assert_equal 58, state.line }
+    end
 
-      describe 'method call behaviour' do
-        before { enter 'break 9', 'cont' }
+    def test_next_informs_when_not_staying_in_the_same_frame
+      enter 'set forcestep', 'next 2'
+      debug_proc(@example)
+      check_output_includes \
+          'Next went up a frame because previous frame finished'
+    end
 
-        it 'must leave on the same line if forced by a setting' do
-          enter 'step'
-          debug_proc(@example) { state.line.must_equal 9 }
-        end
+    def step_goes_the_specified_number_of_statements_forward_by_default
+      enter 'set forcestep', 'step 2'
+      debug_proc(@example) { assert_equal 58, state.line }
+    end
 
-        it 'must go to the step line if forced to do that by "plus" sign' do
-          enter 'step+'
-          debug_proc(@example) { state.line.must_equal 10 }
-        end
+    def test_next_steps_OVER_blocks
+      enter 'break 58', 'cont', 'next'
+      debug_proc(@example) { assert_equal 62, state.line }
+    end
 
-        it 'must leave on the same line if forced to do that by "minus" sign' do
-          enter 'step-'
-          debug_proc(@example) { state.line.must_equal 9 }
-        end
+    def test_step_steps_INTO_blocks
+      enter 'break 58', 'cont', 'step'
+      debug_proc(@example) { assert_equal 59, state.line }
+    end
 
-        describe 'when forcestep is set' do
-          temporary_change_hash Byebug::Setting, :forcestep, true
-
-          it 'must go to the step line if forced by a setting' do
-            enter 'step'
-            debug_proc(@example) { state.line.must_equal 10 }
-          end
-
-          it 'must go to the next line if forced by a setting (by shortcut)' do
-            enter 's'
-            debug_proc(@example) { state.line.must_equal 10 }
-          end
-
-          it 'must go the specified number of lines forward by default' do
-            enter 'step 2'
-            debug_proc(@example) { state.line.must_equal 14 }
-          end
-        end
+    class RaiseFromCMethodExample
+      def a
+        b
+      rescue NameError
+        1
       end
 
-      describe 'block behaviour' do
-        before { enter 'break 25', 'cont' }
-
-        it 'must step into blocks' do
-          enter 'step'
-          debug_proc(@example) { state.line.must_equal 26 }
-        end
+      def b
+        c
       end
+
+      def c
+        d
+      end
+    end
+
+    def test_next_steps_over_rescue_when_raising_from_c_method
+      example_raise = -> do
+        byebug
+
+        RaiseFromCMethodExample.new.a
+      end
+
+      enter 'break 131', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 133, state.line }
+    end
+
+    class RaiseFromRubyMethodExample
+      def a
+        b
+      rescue
+        1
+      end
+
+      def b
+        c
+      end
+
+      def c
+        raise 'bang'
+      end
+    end
+
+    def test_next_steps_over_rescue_when_raising_from_ruby_method
+      example_raise = -> do
+        byebug
+
+        RaiseFromRubyMethodExample.new.a
+      end
+
+      enter 'break 158', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 160, state.line }
     end
   end
 end

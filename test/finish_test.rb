@@ -20,45 +20,45 @@ module FinishTest
   end
 
   class FinishTestCase < TestDsl::TestCase
-    before do
+    def setup
       @example = -> do
         byebug
         Example.new.a
       end
+
+      super
       enter 'break 18', 'cont'
     end
 
-    it 'must stop after current frame is finished when without arguments' do
+    def test_finish_stops_after_current_frame_is_finished
       enter 'finish'
-      debug_proc(@example) { state.line.must_equal 14 }
+      debug_proc(@example) { assert_equal 14, state.line }
     end
 
-    it 'must stop before current frame finishes if 0 specified as argument' do
+    def test_finish_0_stops_before_current_frame_finishes
       enter 'finish 0'
-      debug_proc(@example) { state.line.must_equal 19 }
+      debug_proc(@example) { assert_equal 19, state.line }
     end
 
-    it 'must stop after current frame is finished if 1 specified as argument' do
+    def test_finish_1_stops_after_current_frame_is_finished
       enter 'finish 1'
-      debug_proc(@example) { state.line.must_equal 14 }
+      debug_proc(@example) { assert_equal 14, state.line }
     end
 
-    it 'must behave consistenly even if current frame has been changed' do
+    def test_finish_behaves_consistenly_even_if_current_frame_has_been_changed
       enter 'up', 'finish'
-      debug_proc(@example) { state.line.must_equal 9 }
+      debug_proc(@example) { assert_equal 9, state.line }
     end
 
-    describe 'not a number is specified for frame' do
-      before { enter 'finish foo' }
+    def test_finish_shows_an_error_if_incorrect_frame_number_specified
+      enter 'finish foo'
+      debug_proc(@example)
+      check_output_includes '"finish" argument "foo" needs to be a number'
+    end
 
-      it 'must show an error' do
-        debug_proc(@example)
-        check_output_includes '"finish" argument "foo" needs to be a number'
-      end
-
-      it 'must be on the same line' do
-        debug_proc(@example) { state.line.must_equal 18 }
-      end
+    def test_finish_stays_at_the_same_line_if_incorrect_frame_number_specified
+      enter 'finish foo'
+      debug_proc(@example) { assert_equal 18, state.line }
     end
   end
 end

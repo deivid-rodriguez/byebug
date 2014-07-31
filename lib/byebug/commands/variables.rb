@@ -12,8 +12,9 @@ module Byebug
             s = "*Error in evaluation*"
           end
         end
+        s = "#{v} = #{s}"
         s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
-        print "#{v} = #{s}\n"
+        print "#{s}\n"
       end
     end
 
