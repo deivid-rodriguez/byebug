@@ -43,13 +43,6 @@ module TestDsl
   end
 
   #
-  # Expand fullpath of a given example file
-  #
-  def fullpath(filename)
-    (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
-  end
-
-  #
   # Shorten a fullpath
   #
   def shortpath(fullpath)
