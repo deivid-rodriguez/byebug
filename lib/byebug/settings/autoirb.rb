@@ -1,7 +1,9 @@
 module Byebug
   class AutoirbSetting < Setting
+    DEFAULT = 0
+
     def initialize
-      IrbCommand.always_run = 0
+      IrbCommand.always_run = DEFAULT
     end
 
     def help

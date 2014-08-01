@@ -1,7 +1,9 @@
 module Byebug
   class AutolistSetting < Setting
+    DEFAULT = 1
+
     def initialize
-      ListCommand.always_run = 1
+      ListCommand.always_run = DEFAULT
     end
 
     def help

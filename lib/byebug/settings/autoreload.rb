@@ -1,8 +1,6 @@
 module Byebug
   class AutoreloadSetting < Setting
-    def initialize
-      @value = true
-    end
+    DEFAULT = true
 
     def help
       'Reload source code when changed'

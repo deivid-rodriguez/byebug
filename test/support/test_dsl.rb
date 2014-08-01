@@ -11,23 +11,7 @@ module TestDsl
       Byebug.breakpoints.clear if Byebug.breakpoints
       Byebug.catchpoints.clear if Byebug.catchpoints
 
-      Byebug::Setting[:autoeval] = true
-      Byebug::Setting[:autoirb] = false
-      Byebug::Setting[:autoreload] = true
-      Byebug::Setting[:autosave] = true
-      Byebug::Setting[:basename] = false
-      Byebug::Setting[:callstyle] = 'long'
-      Byebug::Setting[:forcestep] = false
-      Byebug::Setting[:fullpath] = true
-      Byebug::Setting[:histfile] =
-        File.expand_path("#{ENV['HOME']||'.'}/.byebug_hist")
-      Byebug::Setting[:histsize] = Byebug::HistsizeSetting::DEFAULT
-      Byebug::Setting[:linetrace] = false
-      Byebug::Setting[:listsize] = 10
-      Byebug::Setting[:post_mortem] = false
-      Byebug::Setting[:stack_on_error] = false
-      Byebug::Setting[:tracing_plus] = false
-
+      Byebug::Setting.load
       Byebug::Setting[:autolist] = false
       Byebug::Setting[:testing] = true
       Byebug::Setting[:verbose] = true

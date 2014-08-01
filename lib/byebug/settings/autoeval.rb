@@ -1,7 +1,9 @@
 module Byebug
   class AutoevalSetting < Setting
+    DEFAULT = true
+
     def initialize
-      EvalCommand.unknown = true
+      EvalCommand.unknown = DEFAULT
     end
 
     def help

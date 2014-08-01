@@ -11,7 +11,7 @@ module SetTest
     end
 
     [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
-     :fullpath, :linetrace, :post_mortem, :stack_on_error, :testing,
+     :fullpath, :post_mortem, :stack_on_error, :testing,
      :tracing_plus].each do |set|
       ['on', '1', 'true', ''].each do |key|
         define_method(:"test_enable_boolean_setting_#{set}_using_#{key}") do

@@ -1,8 +1,6 @@
 module Byebug
   class CallstyleSetting < Setting
-    def initialize
-      @value = 'long'
-    end
+    DEFAULT = 'long'
 
     def help
       'Set how you want method call parameters to be displayed'

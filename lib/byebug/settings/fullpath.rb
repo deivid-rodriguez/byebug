@@ -1,8 +1,6 @@
 module Byebug
   class FullpathSetting < Setting
-    def initialize
-      @value = true
-    end
+    DEFAULT = true
 
     def help
       'Display full file names in frames'

@@ -1,8 +1,6 @@
 module Byebug
   class ListsizeSetting < Setting
-    def initialize
-      @value = 10
-    end
+    DEFAULT = 10
 
     def help
       'Set number of source lines to list by default'

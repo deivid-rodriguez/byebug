@@ -1,8 +1,6 @@
 module Byebug
   class AutosaveSetting < Setting
-    def initialize
-      @value = true
-    end
+    DEFAULT = true
 
     def help
       'If true, command history record is saved on exit'

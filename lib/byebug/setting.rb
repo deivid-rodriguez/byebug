@@ -2,8 +2,10 @@ module Byebug
   class Setting
     attr_accessor :value
 
+    DEFAULT = false
+
     def initialize
-      @value = false
+      @value = self.class::DEFAULT
     end
 
     def self.settings
