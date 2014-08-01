@@ -38,7 +38,7 @@ module ShowTest
       check_output_includes 'Number of source lines to list is 10'
     end
 
-    def test_show_listsize
+    def test_show_width
       width = Byebug::Setting[:width]
       enter 'show width'
       debug_proc(@example)

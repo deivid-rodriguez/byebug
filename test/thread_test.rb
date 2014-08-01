@@ -108,7 +108,7 @@ module ThreadTest
       check_error_includes "It's the current thread"
     end
 
-    def thread_resume_removes_threads_from_the_suspended_state
+    def test_thread_resume_removes_threads_from_the_suspended_state
       skip 'for now'
       thnum = nil
       enter 'break 21', 'cont',
@@ -134,7 +134,7 @@ module ThreadTest
       check_error_includes "It's the current thread"
     end
 
-    def test_thread_resume_shows_error_is_thread_is_already_running
+    def test_thread_resume_shows_error_if_thread_is_already_running
       skip 'for now'
       enter 'break 21', 'cont', -> { "thread resume #{last_thnum}" }, release
       debug_proc(@example)
