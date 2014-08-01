@@ -60,14 +60,14 @@ module Byebug
 
     def at_breakpoint(context, breakpoint)
       n = Byebug.breakpoints.index(breakpoint) + 1
-      file = CommandProcessor.canonic_file(breakpoint.source)
+      file = self.class.canonic_file(breakpoint.source)
       line = breakpoint.pos
       print "Stopped by breakpoint #{n} at #{file}:#{line}\n"
     end
     protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
-      file = CommandProcessor.canonic_file(context.frame_file(0))
+      file = self.class.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
       print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
     end
@@ -77,7 +77,7 @@ module Byebug
 
     def at_tracing(context, file, line)
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
-        path = CommandProcessor.canonic_file(file)
+        path = self.class.canonic_file(file)
         @last_file, @last_line = file, line
         print "Tracing: #{path}:#{line} #{get_line(file, line)}"
       end
