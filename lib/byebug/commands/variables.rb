@@ -110,7 +110,7 @@ module Byebug
 
     def execute
       obj = bb_eval(@match.post_match.empty? ? 'self' : @match.post_match)
-      var_list(obj.instance_variables, obj.instance_eval{binding()})
+      var_list(obj.instance_variables, obj.instance_eval { binding() })
     end
 
     class << self
