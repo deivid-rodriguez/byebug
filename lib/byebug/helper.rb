@@ -30,6 +30,29 @@ module Byebug
     end
 
     #
+    # Gets all lines in a source code file
+    #
+    def get_lines(filename)
+      return nil unless File.exist?(filename)
+
+      unless lines = SCRIPT_LINES__[filename]
+        lines = File.readlines(filename) rescue []
+        SCRIPT_LINES__[filename] = lines
+      end
+
+      return lines
+    end
+
+    #
+    # Gets a single line in a source code file
+    #
+    def get_line(filename, lineno)
+      return nil unless lines = get_lines(filename)
+
+      return lines[lineno-1]
+    end
+
+    #
     # Returns true if code is syntactically correct for Ruby.
     #
     def syntax_valid?(code)
