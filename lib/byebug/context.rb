@@ -12,7 +12,6 @@ module Byebug
           end
           backtrace.size
         else
-          print 'WARNING: No backtrace available!!'
           0
         end
       end
