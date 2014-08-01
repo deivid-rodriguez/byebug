@@ -7,6 +7,8 @@
  * Remove warning reported in #77.
 
 - Removals
+ * `post_mortem` activation through `Byebug.post_mortem` is no longer allowed.
+Use `set post_mortem` instead.
  * `info stack` command has been removed. Use `where`|`backtrace` instead.
 
 
