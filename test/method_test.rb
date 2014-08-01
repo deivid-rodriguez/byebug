@@ -48,13 +48,5 @@ module MethodTest
         check_output_doesnt_include(/foo/)
       end
     end
-
-    ['method iv', 'm iv'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_instance_variables_of_object") do
-        enter 'break 22', 'cont', "#{cmd_alias} a"
-        debug_proc(@example)
-        check_output_includes '@a = "b"', '@c = "d"'
-      end
-    end
   end
 end

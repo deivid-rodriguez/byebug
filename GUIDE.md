@@ -1284,23 +1284,6 @@ basically listing `<object>.instance_variables`.
 * `info variables`. Show local and instance variables of `self`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
 same as running `ps <object>.instance_methods(false)`.
-* `method iv <object>`. Show method instance variables of `object`. Basically
-this is the same as running
-```
-  <object>.instance_variables.each do |v|
-     puts "%s = %s\n" % [v, <object>.instance_variable_get(v)]
-  end
-```
-* `signature <object>`. Show signature of method `<object>`. _This command is
-available only if the nodewrap gem is installed_.
-
-```ruby
-  def mymethod(a, b=5, &bock)
-  end
-  (byebug) method sig mymethod
-  Mine#mymethod(a, b=5, &bock)
-```
-
 * `method <class-or-module>`. Show methods of the class or module
 `<class-or-module>`. Basically this is the same as running
 `ps <class-or-module>.methods`.

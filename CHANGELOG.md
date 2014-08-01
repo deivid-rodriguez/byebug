@@ -10,6 +10,7 @@
  * `post_mortem` activation through `Byebug.post_mortem` is no longer allowed.
 Use `set post_mortem` instead.
  * `info stack` command has been removed. Use `where`|`backtrace` instead.
+ * `method iv` command has been removed. Use `var instance` instead.
 
 
 # 3.1.2
