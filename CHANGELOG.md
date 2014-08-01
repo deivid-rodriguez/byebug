@@ -1,9 +1,13 @@
 # 3.2.0 (Unreleased)
 
-* Fix bug in remote debugging (#71), thanks @shuky19.
-* Fix source command (#68), thanks @Olgagr.
-* Fix bug #71 preventing the test suite from running against ruby-head.
-* Remove warning reported in #77.
+- Bugfixes
+ * Fix bug in remote debugging (#71), thanks @shuky19.
+ * Fix source command (#68), thanks @Olgagr.
+ * Fix bug #71 preventing the test suite from running against ruby-head.
+ * Remove warning reported in #77.
+
+- Removals
+ * `info stack` command has been removed. Use `where`|`backtrace` instead.
 
 
 # 3.1.2

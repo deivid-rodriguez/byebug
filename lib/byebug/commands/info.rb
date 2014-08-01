@@ -39,7 +39,6 @@ module Byebug
                                  'position in source file'                    ],
        ['locals'            , 2, 'Local variables of the current stack frame' ],
        ['program'           , 2, 'Execution status of the program'            ],
-       ['stack'             , 2, 'Backtrace of the stack'                     ],
        ['variables'         , 1, 'Local and instance variables of the '     \
                                  'current stack frame'                        ]
     ].map do |name, min, help|
@@ -246,10 +245,6 @@ module Byebug
 
       print "Program stopped. "
       info_stop_reason @state.context.stop_reason
-    end
-
-    def info_stack(*args)
-      print_backtrace
     end
 
     def info_global_variables(*args)

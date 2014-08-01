@@ -248,15 +248,6 @@ module InfoTest
       skip('TODO')
     end
 
-    def test_info_stack_shows_the_current_callstack
-      enter 'set fullpath', 'break 9', 'cont', 'info stack'
-      debug_proc(@example)
-      check_output_includes(
-        /--> #0  InfoTest::Example.a\(y#String, z#String\)\s+at #{__FILE__}:9/,
-            /#1  InfoTest::Example.b\s+at #{__FILE__}:20/,
-            /#2  block in InfoTest::InfoTestCase.setup\s+at #{__FILE__}:38/)
-    end
-
     def test_info_global_variables_shows_global_variables
       enter 'info global_variables'
       debug_proc(@example)
