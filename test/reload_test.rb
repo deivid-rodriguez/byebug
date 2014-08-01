@@ -17,14 +17,14 @@ module ReloadTest
       enter 'reload'
       debug_proc(@example)
       check_output_includes \
-        'Source code is reloaded. Automatic reloading is on.'
+        'Source code was reloaded. Automatic reloading is on'
     end
 
     def test_reload_notifies_that_automatic_reloading_is_off_is_setting_changed
       enter 'set noautoreload', 'reload'
       debug_proc(@example)
       check_output_includes \
-        'Source code is reloaded. Automatic reloading is off.'
+        'Source code was reloaded. Automatic reloading is off'
     end
 
     def test_reload_properly_reloads_source_code

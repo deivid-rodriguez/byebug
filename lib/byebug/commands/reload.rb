@@ -9,8 +9,8 @@ module Byebug
 
     def execute
       Byebug.source_reload
-      print "Source code is reloaded. Automatic reloading is "   \
-            "#{Setting[:autoreload] ? 'on' : 'off'}.\n"
+      onoff = Setting[:autoreload] ? 'on' : 'off'
+      print "Source code was reloaded. Automatic reloading is #{onoff}\n"
     end
 
     class << self
