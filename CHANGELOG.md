@@ -1,3 +1,11 @@
+# 3.2.0 (Unreleased)
+
+* Fix bug in remote debugging (#71), thanks @shuky19.
+* Fix source command (#68), thanks @Olgagr.
+* Fix bug #71 preventing the test suite from running against ruby-head.
+* Remove warning reported in #77.
+
+
 # 3.1.2
 
 * Really fix starting `post_mortem` mode in bin/byebug
