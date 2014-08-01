@@ -1,5 +1,4 @@
 module Byebug
-
   class CommandProcessor < Processor
     attr_reader :display
 
@@ -238,14 +237,12 @@ module Byebug
         end
 
         def location
-          path = CommandProcessor.canonic_file(@file)
+          path = self.class.canonic_file(@file)
           loc = "#{path} @ #{@line}\n"
           loc += "#{get_line(@file, @line)}\n" unless
             ['(irb)', '-e'].include? @file
           loc
         end
       end
-
   end # class CommandProcessor
-
 end
