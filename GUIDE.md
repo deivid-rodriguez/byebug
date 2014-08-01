@@ -1032,7 +1032,6 @@ info line               -- Line number and file name of current position in
 source file
 info locals             -- Local variables of the current stack frame
 info program            -- Execution status of the program
-info stack              -- Backtrace of the stack
 info variables          -- Local and instance variables of the current stack
 frame
 ```
