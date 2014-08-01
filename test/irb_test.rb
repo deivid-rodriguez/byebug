@@ -12,7 +12,7 @@ module Byebug
 
       super
 
-      interface.stubs(:kind_of?).with(Byebug::LocalInterface).returns(true)
+      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
       IRB::Irb.stubs(:new).returns(irb)
     end
 

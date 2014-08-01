@@ -7,8 +7,8 @@ module Byebug
     end
 
     def execute
-      prog = Byebug::PROG_SCRIPT if defined?(Byebug::PROG_SCRIPT)
-      byebug_script = Byebug::BYEBUG_SCRIPT if defined?(Byebug::BYEBUG_SCRIPT)
+      prog = PROG_SCRIPT if defined?(PROG_SCRIPT)
+      byebug_script = BYEBUG_SCRIPT if defined?(BYEBUG_SCRIPT)
 
       return errmsg "Don't know name of debugged program\n" unless prog
 

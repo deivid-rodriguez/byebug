@@ -12,14 +12,14 @@ module Byebug
      :fullpath, :post_mortem, :stack_on_error, :testing,
      :tracing_plus].each do |set|
       define_method(:"test_show_#{set}_shows_disabled_bool_setting_#{set}") do
-        Byebug::Setting[set] = false
+        Setting[set] = false
         enter "show #{set}"
         debug_proc(@example)
         check_output_includes "#{set} is off"
       end
 
       define_method(:"test_show_#{set}_shows_enabled_bool_setting_#{set}") do
-        Byebug::Setting[set] = true
+        Setting[set] = true
         enter "show #{set}"
         debug_proc(@example)
         check_output_includes "#{set} is on"
@@ -39,7 +39,7 @@ module Byebug
     end
 
     def test_show_width
-      width = Byebug::Setting[:width]
+      width = Setting[:width]
       enter 'show width'
       debug_proc(@example)
       check_output_includes "Maximum width of byebug's output is #{width}"
@@ -52,14 +52,14 @@ module Byebug
     end
 
     def test_show_histfile
-      filename = Byebug::Setting[:histfile]
+      filename = Setting[:histfile]
       enter 'show histfile'
       debug_proc(@example)
       check_output_includes "The command history file is #{filename}"
     end
 
     def test_show_histsize
-      max_size = Byebug::Setting[:histsize]
+      max_size = Setting[:histsize]
       enter 'show histsize'
       debug_proc(@example)
       check_output_includes \

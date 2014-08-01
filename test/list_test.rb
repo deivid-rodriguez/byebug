@@ -41,7 +41,7 @@ module Byebug
     end
 
     def test_lists_source_code_lines
-      Byebug::Setting[:listsize] = 10
+      Setting[:listsize] = 10
       enter 'list'
       debug_proc(@example)
       check_output_includes "[1, 10] in #{__FILE__}"
@@ -54,7 +54,7 @@ module Byebug
     end
 
     def test_moves_range_up_when_it_goes_before_beginning_of_file
-      Byebug::Setting[:listsize] = 12
+      Setting[:listsize] = 12
       enter 'list'
       debug_proc(@example)
       check_output_includes "[1, 12] in #{__FILE__}"
@@ -65,7 +65,7 @@ module Byebug
     end
 
     def test_lists_the_whole_file_if_number_of_lines_is_smaller_than_listsize
-      Byebug::Setting[:listsize] = 1000
+      Setting[:listsize] = 1000
       n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
       enter 'list'
       debug_proc(@example)
@@ -162,7 +162,7 @@ module Byebug
   class ListTestCaseAutoreload < ListTestCase
     def setup
       super
-      Byebug::Setting[:autoreload] = true
+      Setting[:autoreload] = true
       enter 'list' # force first reading of file
     end
 
@@ -180,7 +180,7 @@ module Byebug
   class ListTestCaseNoAutoreload < ListTestCase
     def setup
       super
-      Byebug::Setting[:autoreload] = false
+      Setting[:autoreload] = false
       enter 'list' # force first reading of file
     end
 

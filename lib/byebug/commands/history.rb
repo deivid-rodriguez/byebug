@@ -5,11 +5,11 @@ module Byebug
     end
 
     def execute
-      if Byebug::Setting[:autosave]
+      if Setting[:autosave]
         if arg = @match[:num_cmds]
-          size = get_int(arg, 'history', 1, Byebug::Setting[:histsize])
+          size = get_int(arg, 'history', 1, Setting[:histsize])
         end
-        print Byebug::History.to_s(size || Byebug::Setting[:histsize])
+        print History.to_s(size || Setting[:histsize])
       else
         errmsg "Not currently saving history. Enable it with \"set autosave\"\n"
       end

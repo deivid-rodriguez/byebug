@@ -19,14 +19,14 @@ module Byebug
     end
 
     def must_restart(cmd = nil)
-      expectation = Byebug::RestartCommand.any_instance.expects(:exec)
+      expectation = RestartCommand.any_instance.expects(:exec)
       expectation = expectation.with(cmd) if cmd
       expectation
     end
 
     def test_restarts_with_manual_arguments
       force_set_const(Byebug, 'BYEBUG_SCRIPT', 'byebug_script')
-      cmd = "#{Byebug::BYEBUG_SCRIPT} #{Byebug::PROG_SCRIPT} 1 2 3"
+      cmd = "#{BYEBUG_SCRIPT} #{PROG_SCRIPT} 1 2 3"
       must_restart(cmd)
       enter 'restart 1 2 3'
       debug_proc(@example)
@@ -55,8 +55,8 @@ module Byebug
       enter 'restart'
       debug_proc(@example)
       check_output_includes 'Byebug was not called from the outset...'
-      check_output_includes "Ruby program #{Byebug::PROG_SCRIPT} not " \
-                            "executable... We'll wrap it in a ruby call"
+      check_output_includes "Ruby program #{PROG_SCRIPT} not executable... " \
+                            "We'll wrap it in a ruby call"
     end
   end
 end

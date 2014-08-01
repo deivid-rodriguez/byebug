@@ -131,7 +131,7 @@ module Byebug
     def breakpoint_line_numbers
       @breakpoint_line_numbers ||=
         columnize(LineCache.trace_line_numbers(__FILE__).to_a.sort,
-                  Byebug::Setting[:width])
+                  Setting[:width])
     end
 
     def test_info_file_basic_shows_basic_info_about_a_specific_file

@@ -12,7 +12,7 @@ module Byebug
 
     def available_cmds
       @available_cmds ||=
-        Byebug::Command.commands.map(&:names).flatten.uniq.sort
+        Command.commands.map(&:names).flatten.uniq.sort
     end
 
     %w(help h).each do |cmd_alias|

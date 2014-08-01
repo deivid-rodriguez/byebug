@@ -73,7 +73,7 @@ module Byebug
     # Connects to the remote byebug
     #
     def start_client(host = 'localhost', port = PORT)
-      interface = Byebug::LocalInterface.new
+      interface = LocalInterface.new
       socket = TCPSocket.new(host, port)
       puts "Connected."
 

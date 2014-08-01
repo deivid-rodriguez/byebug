@@ -8,7 +8,7 @@ module Byebug
 
     def initialize
       @input_queue, @output_queue, @error_queue = [], [], []
-      @confirm_queue, @command_queue, @history = [], [], Byebug::History.new
+      @confirm_queue, @command_queue, @history = [], [], History.new
     end
 
     def errmsg(*args)

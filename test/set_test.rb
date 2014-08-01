@@ -15,81 +15,81 @@ module Byebug
      :tracing_plus].each do |set|
       ['on', '1', 'true', ''].each do |key|
         define_method(:"test_enable_boolean_setting_#{set}_using_#{key}") do
-          Byebug::Setting[set] = false
+          Setting[set] = false
           enter "set #{set} #{key}"
           debug_proc(@example)
-          assert_equal true, Byebug::Setting[set]
+          assert_equal true, Setting[set]
         end
       end
 
       ['off', '0', 'false'].each do |key|
         define_method(:"test_disable_boolean_setting_#{set}_using_#{key}") do
-          Byebug::Setting[set] = true
+          Setting[set] = true
           enter "set #{set} #{key}"
           debug_proc(@example)
-          assert_equal false, Byebug::Setting[set]
+          assert_equal false, Setting[set]
         end
       end
 
       define_method(:"test_disable_boolean_setting_#{set}_using_no_prefix") do
-        Byebug::Setting[set] = true
+        Setting[set] = true
         enter "set no#{set}"
         debug_proc(@example)
-        assert_equal false, Byebug::Setting[set]
+        assert_equal false, Setting[set]
       end
     end
 
     def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
-      Byebug::Setting[:forcestep] = false
+      Setting[:forcestep] = false
       enter 'set fo'
       debug_proc(@example)
-      assert_equal true, Byebug::Setting[:forcestep]
+      assert_equal true, Setting[:forcestep]
     end
 
     def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
-      Byebug::Setting[:forcestep] = false
-      Byebug::Setting[:fullpath] = false
+      Setting[:forcestep] = false
+      Setting[:fullpath] = false
       enter 'set f'
       debug_proc(@example)
-      assert_equal false, Byebug::Setting[:forcestep]
-      assert_equal false, Byebug::Setting[:fullpath]
+      assert_equal false, Setting[:forcestep]
+      assert_equal false, Setting[:fullpath]
     end
 
     def test_set_disables_a_setting_using_shorcut_when_not_ambiguous
-      Byebug::Setting[:forcestep] = true
+      Setting[:forcestep] = true
       enter 'set nofo'
       debug_proc(@example)
-      assert_equal false, Byebug::Setting[:forcestep]
+      assert_equal false, Setting[:forcestep]
     end
 
     def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
-      Byebug::Setting[:forcestep] = true
-      Byebug::Setting[:fullpath] = true
+      Setting[:forcestep] = true
+      Setting[:fullpath] = true
       enter 'set nof'
       debug_proc(@example)
-      assert_equal true, Byebug::Setting[:forcestep]
-      assert_equal true, Byebug::Setting[:fullpath]
+      assert_equal true, Setting[:forcestep]
+      assert_equal true, Setting[:fullpath]
     end
 
     def test_set_testing_sets_the_thread_state_variable
-      Byebug::Setting[:testing] = false
+      Setting[:testing] = false
       enter 'set testing', 'break 7', 'cont'
       debug_proc(@example) do
-        assert_kind_of Byebug::CommandProcessor::State, state
+        assert_kind_of CommandProcessor::State, state
       end
     end
 
     def test_set_notesting_unsets_the_thread_state_variable
-      Byebug::Setting[:testing] = true
+      Setting[:testing] = true
       enter 'set notesting', 'break 7', 'cont'
       debug_proc(@example) { assert_nil state }
     end
 
     def test_set_histsize_sets_maximum_history_size
-      Byebug::Setting[:histsize] = 1
+      Setting[:histsize] = 1
       enter 'set histsize 250'
       debug_proc(@example)
-      assert_equal 250, Byebug::Setting[:histsize]
+      assert_equal 250, Setting[:histsize]
       check_output_includes "Maximum size of byebug's command history is 250"
     end
 
@@ -103,7 +103,7 @@ module Byebug
       filename = File.expand_path('.custom-byebug-hist')
       enter "set histfile #{filename}"
       debug_proc(@example)
-      assert_equal filename, Byebug::Setting[:histfile]
+      assert_equal filename, Setting[:histfile]
       check_output_includes "The command history file is #{filename}"
     end
 
@@ -115,10 +115,10 @@ module Byebug
 
     [:listsize, :width].each do |set|
       define_method(:"test_set_#{set}_changes_integer_setting_#{set}") do
-        Byebug::Setting[set] = 80
+        Setting[set] = 80
         enter "set #{set} 120"
         debug_proc(@example)
-        assert_equal 120, Byebug::Setting[set]
+        assert_equal 120, Setting[set]
       end
     end
 

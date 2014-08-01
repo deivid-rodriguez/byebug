@@ -38,7 +38,7 @@ module Byebug
         line, n = line.to_i, File.foreach(file).count
         return errmsg "There are only #{n} lines in file #{path}\n" if line > n
 
-        autoreload = Byebug::Setting[:autoreload]
+        autoreload = Setting[:autoreload]
         possible_lines = LineCache.trace_line_numbers(file, autoreload)
         if !possible_lines.member?(line)
           return errmsg \

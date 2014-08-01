@@ -24,7 +24,7 @@ module Byebug
         end
       end
 
-      print "byebug help v#{Byebug::VERSION}\n" unless Setting[:testing]
+      print "byebug help v#{VERSION}\n" unless Setting[:testing]
 
       print "Type \"help <command-name>\" for help on a specific command\n\n"
       print "Available commands:\n"

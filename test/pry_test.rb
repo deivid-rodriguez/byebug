@@ -19,8 +19,8 @@ module Byebug
 
       super
 
-      interface.stubs(:kind_of?).with(Byebug::LocalInterface).returns(true)
-      Byebug::PryCommand.any_instance.expects(:pry)
+      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
+      PryCommand.any_instance.expects(:pry)
     end
 
     def test_pry_supports_next_command

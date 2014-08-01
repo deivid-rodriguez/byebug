@@ -16,7 +16,7 @@ module Byebug
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       ENV['EDITOR'] = 'edi'
       file = __FILE__
-      Byebug::EditCommand.any_instance.expects(:system).with("edi +6 #{file}")
+      EditCommand.any_instance.expects(:system).with("edi +6 #{file}")
       enter 'edit'
       debug_proc(@example)
     end
@@ -24,7 +24,7 @@ module Byebug
     def test_edit_calls_vim_if_no_EDITOR_environment_variable_is_set
       ENV['EDITOR'] = nil
       file = __FILE__
-      Byebug::EditCommand.any_instance.expects(:system).with("vim +6 #{file}")
+      EditCommand.any_instance.expects(:system).with("vim +6 #{file}")
       enter 'edit'
       debug_proc(@example)
     end
@@ -32,7 +32,7 @@ module Byebug
     def test_edit_opens_configured_editor_at_specific_line_and_file
       ENV['EDITOR'] = 'edi'
       file = File.expand_path('test/test_helper.rb')
-      Byebug::EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
+      EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
       enter "edit #{file}:3"
       debug_proc(@example)
     end
