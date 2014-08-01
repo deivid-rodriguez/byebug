@@ -39,14 +39,6 @@ module TestDsl
     end
 
     #
-    # Shorten a fullpath
-    #
-    def shortpath(fullpath)
-      separator = File::ALT_SEPARATOR || File::SEPARATOR
-      "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
-    end
-
-    #
     # Adds commands to the input queue, so they will be later retrieved by
     # Processor, i.e., it emulates user's input.
     #

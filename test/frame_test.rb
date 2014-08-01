@@ -104,12 +104,12 @@ module FrameTest
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
       enter 'break 22', 'cont', 'set nofullpath', 'where'
       debug_proc(@example)
-      path = shortpath(__FILE__)
+      path = File.basename(__FILE__)
       check_output_includes(
-        /--> #0  FrameTest::Example\.d\(e#String\)\s+at #{path}:22/,
-            /#1  FrameTest::Example\.c\s+at #{path}:17/,
-            /#2  FrameTest::Example\.b\s+at #{path}:12/,
-            /#3  FrameTest::Example\.a\s+at #{path}:8/)
+        /--> #0  FrameTest::Example\.d\(e#String\)\s+at \.\.\..*#{path}:22/,
+            /#1  FrameTest::Example\.c\s+at \.\.\..*#{path}:17/,
+            /#2  FrameTest::Example\.b\s+at \.\.\..*#{path}:12/,
+            /#3  FrameTest::Example\.a\s+at \.\.\..*#{path}:8/)
     end
 
     def test_where_displays_backtraces_using_long_callstyle

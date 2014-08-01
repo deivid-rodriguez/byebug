@@ -119,17 +119,15 @@ module Byebug
       end
     end
 
-    def print_frame(pos, mark_current = true)
-      file = @state.context.frame_file pos
-      line = @state.context.frame_line pos
+    def shortpath(fullpath)
+      separator = File::ALT_SEPARATOR || File::SEPARATOR
+      "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
+    end
 
-      unless Setting[:fullpath]
-        path_components = file.split(/[\\\/]/)
-        if path_components.size > 3
-          path_components[0...-3] = '...'
-          file = path_components.join(File::ALT_SEPARATOR || File::SEPARATOR)
-        end
-      end
+    def print_frame(pos, mark_current = true)
+      fullpath = @state.context.frame_file pos
+      file = Setting[:fullpath] ? fullpath : shortpath(fullpath)
+      line = @state.context.frame_line pos
 
       if mark_current
         frame_str = (pos == @state.frame_pos) ? '--> ' : '    '
