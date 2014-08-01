@@ -1,5 +1,5 @@
-module DisplayTest
-  class DisplayTestCase < TestDsl::TestCase
+module Byebug
+  class DisplayTestCase < TestCase
     def setup
       @example = -> do
         d = 0
@@ -35,7 +35,7 @@ module DisplayTest
     end
   end
 
-  class UndisplayTestCase < TestDsl::TestCase
+  class UndisplayTestCase < TestCase
     def setup
       @example = -> do
         d = 0

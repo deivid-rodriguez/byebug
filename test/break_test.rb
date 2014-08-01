@@ -1,5 +1,5 @@
-module BreakpointsTest
-  class Example
+module Byebug
+  class BreakExample
     def self.a(num)
       4
     end
@@ -9,15 +9,15 @@ module BreakpointsTest
     end
   end
 
-  class BreakpointsTestCase < TestDsl::TestCase
+  class BreakTestCase < TestCase
     def setup
       @example = -> do
         y = 3
         # A comment
         byebug
         z = 5
-        Example.new.b
-        Example.a(y+z)
+        BreakExample.new.b
+        BreakExample.a(y+z)
       end
 
       super
@@ -66,7 +66,7 @@ module BreakpointsTest
     end
 
     def test_setting_breakpoint_to_an_instance_method_stops_at_correct_place
-      enter 'break Example#b', 'cont'
+      enter 'break BreakExample#b', 'cont'
 
       debug_proc(@example) do
         assert_equal 7, state.line
@@ -75,7 +75,7 @@ module BreakpointsTest
     end
 
     def test_setting_breakpoint_to_a_class_method_stops_at_correct_place
-      enter 'break Example.a', 'cont'
+      enter 'break BreakExample.a', 'cont'
 
       debug_proc(@example) do
         assert_equal 3, state.line
@@ -114,7 +114,7 @@ module BreakpointsTest
       debug_proc(@example) { assert_equal 18, state.line }
     end
 
-    class DeepExample
+    class BreakDeepExample
       def a
         z = 2
         b(z)
@@ -134,7 +134,7 @@ module BreakpointsTest
 
     def test_breaking_w_byebug_keywork_stops_at_frame_end_when_last_instruction
       @deep_example = lambda do
-        ex = DeepExample.new.a
+        ex = BreakDeepExample.new.a
         2.times do
           ex = ex ? ex : 1
         end
@@ -322,7 +322,7 @@ module BreakpointsTest
     end
   end
 
-  class BreakpointsTestCaseBasename < BreakpointsTestCase
+  class BreakTestCaseBasename < BreakTestCase
     def setup
       @filename = File.basename(__FILE__)
       super
@@ -332,7 +332,7 @@ module BreakpointsTest
     include FilenameTests
   end
 
-  class BreakpointsTestCaseNobasename < BreakpointsTestCase
+  class BreakTestCaseNobasename < BreakTestCase
     def setup
       @filename = __FILE__
       super
@@ -342,7 +342,7 @@ module BreakpointsTest
     include FilenameTests
   end
 
-  class BreakpointsTestCaseAutoreload < BreakpointsTestCase
+  class BreakTestCaseAutoreload < BreakTestCase
     def setup
       super
       enter 'set autoreload'
@@ -354,11 +354,11 @@ module BreakpointsTest
         'break 19'
       end
       debug_proc(@example) { assert_empty Byebug.breakpoints }
-      change_line_in_file(__FILE__,19, '        Example.new.b')
+      change_line_in_file(__FILE__,19, '        BreakExample.new.b')
     end
   end
 
-  class BreakpointsTestCaseNoAutoreload < BreakpointsTestCase
+  class BreakTestCaseNoAutoreload < BreakTestCase
     def setup
       super
       enter 'set noautoreload'
@@ -370,7 +370,7 @@ module BreakpointsTest
         'break 19'
       end
       debug_proc(@example) { assert_equal 1, Byebug.breakpoints.size }
-      change_line_in_file(__FILE__,19, '        Example.new.b')
+      change_line_in_file(__FILE__,19, '        BreakExample.new.b')
     end
   end
 end

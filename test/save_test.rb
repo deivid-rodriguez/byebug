@@ -1,5 +1,5 @@
-module SaveTest
-  class SaveTestCase < TestDsl::TestCase
+module Byebug
+  class SaveTestCase < TestCase
     def setup
       @example = -> do
         byebug

@@ -1,5 +1,5 @@
-module PostMortemTest
-  class Example
+module Byebug
+  class PostMortemExample
     def a
       z = 4
       raise 'blabla'
@@ -8,11 +8,11 @@ module PostMortemTest
     end
   end
 
-  class PostMortemTestCase < TestDsl::TestCase
+  class PostMortemTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        c = Example.new
+        c = PostMortemExample.new
         c.a
       end
 

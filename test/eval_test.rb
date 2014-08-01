@@ -1,5 +1,5 @@
-module EvalTest
-  class Example
+module Byebug
+  class EvalExample
     def sum(a,b)
       a + b
     end
@@ -9,11 +9,11 @@ module EvalTest
     end
   end
 
-  class EvalTestCase < TestDsl::TestCase
+  class EvalTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        @foo = Example.new
+        @foo = EvalExample.new
         @foo.sum(1, 2)
       end
 

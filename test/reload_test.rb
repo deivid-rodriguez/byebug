@@ -1,5 +1,5 @@
-module ReloadTest
-  class ReloadTestCase < TestDsl::TestCase
+module Byebug
+  class ReloadTestCase < TestCase
     def setup
       @example = -> do
         byebug

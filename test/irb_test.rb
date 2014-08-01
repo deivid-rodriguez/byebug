@@ -1,5 +1,5 @@
-module IrbTest
-  class IrbTestCase < TestDsl::TestCase
+module Byebug
+  class IrbTestCase < TestCase
     def setup
       @example = -> do
         byebug

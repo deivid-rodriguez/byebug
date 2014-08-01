@@ -1,5 +1,5 @@
-module VariablesTest
-  class Example
+module Byebug
+  class VariablesExample
     SOMECONST = 'foo' unless defined?(SOMECONST)
 
     def initialize
@@ -18,12 +18,12 @@ module VariablesTest
     end
   end
 
-  class VariablesTestCase < TestDsl::TestCase
+  class VariablesTestCase < TestCase
     def setup
       @example = -> do
         byebug
 
-        v = Example.new
+        v = VariablesExample.new
         v.run
       end
 
@@ -41,7 +41,7 @@ module VariablesTest
 
     ['var const', 'v co'].each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_constants_in_class_or_module") do
-        enter "#{cmd_alias} Example"
+        enter "#{cmd_alias} VariablesExample"
         debug_proc(@example)
         check_output_includes 'SOMECONST => "foo"'
       end

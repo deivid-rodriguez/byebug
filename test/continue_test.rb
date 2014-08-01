@@ -1,18 +1,18 @@
-module ContinueTest
-  class Example
+module Byebug
+  class ContinueExample
     def self.a(num)
       num + 4
     end
   end
 
-  class ContinueTestCase < TestDsl::TestCase
+  class ContinueTestCase < TestCase
     def setup
       @example = -> do
         byebug
 
         b = 5
         c = b + 5
-        Example.a(c)
+        ContinueExample.a(c)
       end
 
       super

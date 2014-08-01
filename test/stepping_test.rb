@@ -1,4 +1,4 @@
-module SteppingTest
+module Byebug
   class Example
     def self.a(num)
       num += 2
@@ -16,7 +16,7 @@ module SteppingTest
     end
   end
 
-  class BasicSteppingTestCase < TestDsl::TestCase
+  class BasicSteppingTestCase < TestCase
     def setup
       @example = -> do
         byebug
@@ -49,7 +49,7 @@ module SteppingTest
     end
   end
 
-  class AdvancedStepping < TestDsl::TestCase
+  class AdvancedStepping < TestCase
     def setup
       @example = -> do
         byebug

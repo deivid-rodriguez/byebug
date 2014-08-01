@@ -1,5 +1,5 @@
-module MethodTest
-  class Example
+module Byebug
+  class MethodExample
     def initialize
       @a = 'b'
       @c = 'd'
@@ -14,11 +14,11 @@ module MethodTest
     end
   end
 
-  class MethodTestCase < TestDsl::TestCase
+  class MethodTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        a = Example.new
+        a = MethodExample.new
         a.bla
       end
 
@@ -27,7 +27,7 @@ module MethodTest
 
     %w(method m).each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_instance_methods_of_a_class") do
-        enter 'break 4', 'cont', "#{cmd_alias} Example"
+        enter 'break 4', 'cont', "#{cmd_alias} MethodExample"
         debug_proc(@example)
         check_output_includes(/bla/)
         check_output_doesnt_include(/foo/)

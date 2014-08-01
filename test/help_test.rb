@@ -1,5 +1,5 @@
-module HelpTest
-  class HelpTestCase < TestDsl::TestCase
+module Byebug
+  class HelpTestCase < TestCase
     include Columnize
 
     def setup

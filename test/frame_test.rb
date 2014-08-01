@@ -1,5 +1,5 @@
-module FrameTest
-  class Example
+module Byebug
+  class FrameExample
     def initialize(f)
       @f = f
     end
@@ -23,11 +23,11 @@ module FrameTest
     end
   end
 
-  class FrameTestCase < TestDsl::TestCase
+  class FrameTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        fr_ex = FrameTest::Example.new('f')
+        fr_ex = FrameExample.new('f')
         fr_ex.a()
       end
 
@@ -62,7 +62,7 @@ module FrameTest
     def test_frame_prints_the_callstack_when_called_without_arguments
       enter 'break 22', 'cont', 'up', 'frame'
       debug_proc(@example)
-      check_output_includes(/#1  FrameTest::Example\.c\s+at #{__FILE__}:17/)
+      check_output_includes(/#1  Byebug::FrameExample\.c\s+at #{__FILE__}:17/)
     end
 
     def test_frame_0_sets_frame_to_the_first_one
@@ -95,10 +95,10 @@ module FrameTest
       enter 'break 22', 'cont', 'where'
       debug_proc(@example)
       check_output_includes(
-        /--> #0  FrameTest::Example\.d\(e#String\)\s+at #{__FILE__}:22/,
-            /#1  FrameTest::Example\.c\s+at #{__FILE__}:17/,
-            /#2  FrameTest::Example\.b\s+at #{__FILE__}:12/,
-            /#3  FrameTest::Example\.a\s+at #{__FILE__}:8/)
+        /--> #0  Byebug::FrameExample\.d\(e#String\)\s+at #{__FILE__}:22/,
+            /#1  Byebug::FrameExample\.c\s+at #{__FILE__}:17/,
+            /#2  Byebug::FrameExample\.b\s+at #{__FILE__}:12/,
+            /#3  Byebug::FrameExample\.a\s+at #{__FILE__}:8/)
     end
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
@@ -106,20 +106,20 @@ module FrameTest
       debug_proc(@example)
       path = File.basename(__FILE__)
       check_output_includes(
-        /--> #0  FrameTest::Example\.d\(e#String\)\s+at \.\.\..*#{path}:22/,
-            /#1  FrameTest::Example\.c\s+at \.\.\..*#{path}:17/,
-            /#2  FrameTest::Example\.b\s+at \.\.\..*#{path}:12/,
-            /#3  FrameTest::Example\.a\s+at \.\.\..*#{path}:8/)
+        /--> #0  Byebug::FrameExample\.d\(e#String\)\s+at \.\.\..*#{path}:22/,
+            /#1  Byebug::FrameExample\.c\s+at \.\.\..*#{path}:17/,
+            /#2  Byebug::FrameExample\.b\s+at \.\.\..*#{path}:12/,
+            /#3  Byebug::FrameExample\.a\s+at \.\.\..*#{path}:8/)
     end
 
     def test_where_displays_backtraces_using_long_callstyle
       enter 'break 22', 'cont', 'set callstyle long', 'where'
       debug_proc(@example)
       check_output_includes(
-        /--> #0  FrameTest::Example\.d\(e#String\)\s+at #{__FILE__}:22/,
-            /#1  FrameTest::Example\.c\s+at #{__FILE__}:17/,
-            /#2  FrameTest::Example\.b\s+at #{__FILE__}:12/,
-            /#3  FrameTest::Example\.a\s+at #{__FILE__}:8/)
+        /--> #0  Byebug::FrameExample\.d\(e#String\)\s+at #{__FILE__}:22/,
+            /#1  Byebug::FrameExample\.c\s+at #{__FILE__}:17/,
+            /#2  Byebug::FrameExample\.b\s+at #{__FILE__}:12/,
+            /#3  Byebug::FrameExample\.a\s+at #{__FILE__}:8/)
     end
 
     def test_where_displays_backtraces_using_short_callstyle
@@ -134,17 +134,18 @@ module FrameTest
     def test_where_marks_c_frames_when_printing_the_callstack
       enter 'break 4', 'cont', 'where'
       debug_proc(@example)
+      path = __FILE__
       check_output_includes(
-        /--> #0  FrameTest::Example.initialize\(f#String\)\s+at #{__FILE__}:4/,
+        /--> #0  Byebug::FrameExample.initialize\(f#String\)\s+at #{path}:4/,
             /ͱ-- #1  Class.new\(\*args\)\s+at #{__FILE__}:30/,
-            /#2  block in FrameTest::FrameTestCase.setup\s+at #{__FILE__}:30/)
+            /#2  block in Byebug::FrameTestCase.setup\s+at #{path}:30/)
     end
 
     def test_up_skips_c_frames
       enter 'break 4', 'cont', 'where', 'up', 'where'
       debug_proc(@example)
       check_output_includes(
-        /--> #2  block in FrameTest::FrameTestCase.setup\s+at #{__FILE__}:30/)
+        /--> #2  block in Byebug::FrameTestCase.setup\s+at #{__FILE__}:30/)
     end
 
     def test_down_skips_c_frames
@@ -160,7 +161,7 @@ module FrameTest
     end
   end
 
-  class DeepExample
+  class DeepFrameExample
     def a
       z = 1
       z += b
@@ -182,39 +183,39 @@ module FrameTest
     end
   end
 
-  class DeepFrameTestCase < TestDsl::TestCase
+  class DeepFrameTestCase < TestCase
     def setup
       @deep_example = -> do
-        DeepExample.new.a
+        DeepFrameExample.new.a
       end
 
       super
-      enter 'break 181', 'cont'
+      enter 'break 182', 'cont'
     end
 
     def test_where_correctly_prints_the_backtrace
       enter 'where'
       debug_proc(@deep_example)
       check_output_includes(
-        /--> #0  FrameTest::DeepExample\.d\(e#String\)\s+at #{__FILE__}:181/,
-            /#1  FrameTest::DeepExample\.c\s+at #{__FILE__}:177/,
-            /#2  FrameTest::DeepExample\.b\s+at #{__FILE__}:171/,
-            /#3  FrameTest::DeepExample\.a\s+at #{__FILE__}:166/)
+        /--> #0  Byebug::DeepFrameExample\.d\(e#String\)\s+at #{__FILE__}:182/,
+            /#1  Byebug::DeepFrameExample\.c\s+at #{__FILE__}:178/,
+            /#2  Byebug::DeepFrameExample\.b\s+at #{__FILE__}:172/,
+            /#3  Byebug::DeepFrameExample\.a\s+at #{__FILE__}:167/)
     end
 
     def test_up_moves_up_in_the_callstack
       enter 'up'
-      debug_proc(@deep_example) { assert_equal 177, state.line }
+      debug_proc(@deep_example) { assert_equal 178, state.line }
     end
 
     def test_down_moves_down_in_the_callstack
       enter 'up', 'down'
-      debug_proc(@deep_example) { assert_equal 181, state.line }
+      debug_proc(@deep_example) { assert_equal 182, state.line }
     end
 
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
-      debug_proc(@deep_example) { assert_equal 171, state.line }
+      debug_proc(@deep_example) { assert_equal 172, state.line }
     end
 
     def test_eval_works_properly_when_moving_through_the_stack

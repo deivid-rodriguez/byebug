@@ -1,5 +1,5 @@
-module TraceTest
-  class TraceTestCase < TestDsl::TestCase
+module Byebug
+  class TraceTestCase < TestCase
     def setup
       @example = -> do
         $bla = 5

@@ -1,5 +1,5 @@
-module ThreadTest
-  class Example
+module Byebug
+  class ThreadExample
     def initialize
       Thread.main[:should_break] = false
     end
@@ -27,12 +27,12 @@ module ThreadTest
     end
   end
 
-  class ThreadTestCase < TestDsl::TestCase
+  class ThreadTestCase < TestCase
     def setup
       @example = -> do
         byebug
 
-        t = Example.new
+        t = ThreadExample.new
         t.launch
         t.kill
       end

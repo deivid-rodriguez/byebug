@@ -1,5 +1,5 @@
-module HistoryTest
-  class HistoryTestCase < TestDsl::TestCase
+module Byebug
+  class HistoryTestCase < TestCase
     def setup
       @example = -> do
         byebug

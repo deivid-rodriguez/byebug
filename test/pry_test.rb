@@ -5,8 +5,8 @@ rescue LoadError
   has_pry = false
 end
 
-module PryTest
-  class PryTestCase < TestDsl::TestCase
+module Byebug
+  class PryTestCase < TestCase
     def setup
       @example = -> do
         byebug

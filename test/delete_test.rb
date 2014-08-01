@@ -1,5 +1,5 @@
-module DeleteTest
-  class DeleteTestCase < TestDsl::TestCase
+module Byebug
+  class DeleteTestCase < TestCase
     def setup
       @example = -> do
         byebug

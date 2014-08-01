@@ -1,5 +1,5 @@
-module QuitTest
-  class QuitTestCase < TestDsl::TestCase
+module Byebug
+  class QuitTestCase < TestCase
     def setup
       @example = -> do
         byebug

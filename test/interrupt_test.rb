@@ -1,5 +1,5 @@
-module InterruptTest
-  class Example
+module Byebug
+  class InterruptExample
     def self.a(num)
       num += 2
       b(num)
@@ -16,15 +16,15 @@ module InterruptTest
     end
   end
 
-  class InterruptTestCase < TestDsl::TestCase
+  class InterruptTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        ex = Example.a(7)
+        ex = InterruptExample.a(7)
         2.times do
           ex += 1
         end
-        Example.b(ex)
+        InterruptExample.b(ex)
       end
 
       super

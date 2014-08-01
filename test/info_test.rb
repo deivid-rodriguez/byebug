@@ -1,12 +1,12 @@
-module InfoTest
-  class Example
+module Byebug
+  class InfoExample
     def initialize
       @foo = 'bar'
       @bla = 'blabla'
     end
 
     def a(y, z)
-      w = '1' * 30
+      w = '1' * 45
       x = 2
       w + x.to_s + y + z + @foo
     end
@@ -28,13 +28,13 @@ module InfoTest
     end
   end
 
-  class InfoTestCase < TestDsl::TestCase
+  class InfoTestCase < TestCase
     include Columnize
 
     def setup
       @example = -> do
         byebug
-        i = Example.new
+        i = InfoExample.new
         i.b
         i.c
         i.d
@@ -255,10 +255,10 @@ module InfoTest
     end
 
     def test_info_variables_shows_all_variables
-      enter 'break 11', 'cont', 'set width 30', 'info variables'
+      enter 'break 11', 'cont', 'set width 45', 'info variables'
       debug_proc(@example)
-      check_output_includes(/self = #<InfoTest::Example:\S*.../,
-                            'w = "1111111111111111111111...',
+      check_output_includes(/self = #<Byebug::InfoExample:\S*.../,
+                            'w = "1111111111111111111111111111111111111...',
                             'x = 2',
                             '@bla = "blabla"',
                             '@foo = "bar"')
@@ -268,7 +268,7 @@ module InfoTest
       enter 'break 16', 'cont', 'info variables'
       debug_proc(@example)
       check_output_includes 'a = *Error in evaluation*',
-                            /self = #<InfoTest::Example:\S*.../,
+                            /self = #<Byebug::InfoExample:\S*.../,
                             '@bla = "blabla"',
                             '@foo = "bar"'
     end

@@ -1,15 +1,15 @@
-module KillTest
-  class Example
+module Byebug
+  class KillExample
     def self.kill_me
       'dieeee'
     end
   end
 
-  class KillTestCase < TestDsl::TestCase
+  class KillTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        Example.kill_me
+        KillExample.kill_me
       end
 
       super

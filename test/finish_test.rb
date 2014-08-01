@@ -1,5 +1,5 @@
-module FinishTest
-  class Example
+module Byebug
+  class FinishExample
     def a
       b
     end
@@ -19,11 +19,11 @@ module FinishTest
     end
   end
 
-  class FinishTestCase < TestDsl::TestCase
+  class FinishTestCase < TestCase
     def setup
       @example = -> do
         byebug
-        Example.new.a
+        FinishExample.new.a
       end
 
       super
