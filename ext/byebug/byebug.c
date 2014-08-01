@@ -236,7 +236,7 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, klass, mid, binding, self, file, line;
+  VALUE breakpoint, klass, msym, mid, binding, self, file, line;
 
   EVENT_SETUP
 
@@ -249,7 +249,8 @@ call_event(VALUE trace_point, void *data)
 
   breakpoint = Qnil;
   klass   = rb_tracearg_defined_class(trace_arg);
-  mid     = SYM2ID(rb_tracearg_method_id(trace_arg));
+  msym    = rb_tracearg_method_id(trace_arg);
+  mid     = NIL_P(msym) ? Qnil : SYM2ID(msym);
   binding = rb_tracearg_binding(trace_arg);
   self    = rb_tracearg_self(trace_arg);
   file    = rb_tracearg_path(trace_arg);
