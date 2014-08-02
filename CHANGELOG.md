@@ -1,4 +1,4 @@
-# 3.2.0 (Unreleased)
+# 3.2.0
 
 - Bugfixes
  * Fix bug in remote debugging (#71), thanks @shuky19.
