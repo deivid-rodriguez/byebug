@@ -3,7 +3,7 @@
 [![Build][TravisBadge]][TravisURL]
 [![Climate][CodeClimateBadge]][CodeClimateURL]
 [![Dependencies][GemnasiumBadge]][GemnasiumURL]
-[![Coverage][CoverallsBadge]][CoverallsURL]
+[![Coverage][CoverageBadge]][CoverageURL]
 [![Gittip][GittipBadge]][GittipURL]
 
 _Debugging in Ruby 2_
@@ -153,7 +153,7 @@ starting point of this.
 [CodeClimateURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [GemnasiumBadge]: https://gemnasium.com/deivid-rodriguez/byebug.svg
 [GemnasiumURL]: https://gemnasium.com/deivid-rodriguez/byebug
-[CoverallsBadge]: http://img.shields.io/coveralls/deivid-rodriguez/byebug.svg
-[CoverallsURL]: https://coveralls.io/r/deivid-rodriguez/byebug
+[CoverageBadge]: https://codeclimate.com/github/deivid-rodriguez/byebug/badges/coverage.svg
+[CoverageURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.svg
 [GittipURL]: https://www.gittip.com/deivid-rodriguez

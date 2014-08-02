@@ -6,3 +6,6 @@ rvm:
 matrix:
   allow_failures:
   - rvm: ruby-head
+addons:
+  code_climate:
+    repo_token: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408

@@ -1,8 +1,6 @@
 if ENV['CI']
-  require 'coveralls'
-  Coveralls.wear! do
-    add_filter 'test'
-  end
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
 end
 
 require 'minitest'
