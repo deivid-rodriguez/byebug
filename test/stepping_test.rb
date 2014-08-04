@@ -125,59 +125,59 @@ module Byebug
       enter 'break 58', 'cont', 'step'
       debug_proc(@example) { assert_equal 59, state.line }
     end
+  end
 
-    class RaiseFromCMethodExample
-      def a
-        b
-      rescue NameError
-        1
-      end
-
-      def b
-        c
-      end
-
-      def c
-        d
-      end
+  class RaiseFromCMethodExample
+    def a
+      b
+    rescue NameError
+      1
     end
 
-    def test_next_steps_over_rescue_when_raising_from_c_method
-      example_raise = -> do
-        byebug
-
-        RaiseFromCMethodExample.new.a
-      end
-
-      enter 'break 131', 'cont', 'next'
-      debug_proc(example_raise) { assert_equal 133, state.line }
+    def b
+      c
     end
 
-    class RaiseFromRubyMethodExample
-      def a
-        b
-      rescue
-        1
-      end
+    def c
+      d
+    end
+  end
 
-      def b
-        c
-      end
+  def test_next_steps_over_rescue_when_raising_from_c_method
+    example_raise = -> do
+      byebug
 
-      def c
-        raise 'bang'
-      end
+      RaiseFromCMethodExample.new.a
     end
 
-    def test_next_steps_over_rescue_when_raising_from_ruby_method
-      example_raise = -> do
-        byebug
+    enter 'break 132', 'cont', 'next'
+    debug_proc(example_raise) { assert_equal 134, state.line }
+  end
 
-        RaiseFromRubyMethodExample.new.a
-      end
-
-      enter 'break 158', 'cont', 'next'
-      debug_proc(example_raise) { assert_equal 160, state.line }
+  class RaiseFromRubyMethodExample
+    def a
+      b
+    rescue
+      1
     end
+
+    def b
+      c
+    end
+
+    def c
+      raise 'bang'
+    end
+  end
+
+  def test_next_steps_over_rescue_when_raising_from_ruby_method
+    example_raise = -> do
+      byebug
+
+      RaiseFromRubyMethodExample.new.a
+    end
+
+    enter 'break 159', 'cont', 'next'
+    debug_proc(example_raise) { assert_equal 161, state.line }
   end
 end
