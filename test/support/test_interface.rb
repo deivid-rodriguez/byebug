@@ -2,7 +2,8 @@ require 'byebug/history'
 
 module Byebug
   class TestInterface < Interface
-    attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue, :history
+    attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue,
+                :history
 
     attr_accessor :test_block
 
