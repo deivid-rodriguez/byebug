@@ -49,7 +49,7 @@ module Byebug
     end
   end
 
-  class AdvancedStepping < TestCase
+  class AdvancedSteppingTestCase < TestCase
     def setup
       @example = -> do
         byebug
@@ -143,15 +143,17 @@ module Byebug
     end
   end
 
-  def test_next_steps_over_rescue_when_raising_from_c_method
-    example_raise = -> do
-      byebug
+  class RaiseFromCMethodTestCase < TestCase
+    def test_next_steps_over_rescue_when_raising_from_c_method
+      example_raise = -> do
+        byebug
 
-      RaiseFromCMethodExample.new.a
+        RaiseFromCMethodExample.new.a
+      end
+
+      enter 'break 132', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 134, state.line }
     end
-
-    enter 'break 132', 'cont', 'next'
-    debug_proc(example_raise) { assert_equal 134, state.line }
   end
 
   class RaiseFromRubyMethodExample
@@ -170,14 +172,16 @@ module Byebug
     end
   end
 
-  def test_next_steps_over_rescue_when_raising_from_ruby_method
-    example_raise = -> do
-      byebug
+  class RaiseFromRubyMethodTestCase < TestCase
+    def test_next_steps_over_rescue_when_raising_from_ruby_method
+      example_raise = -> do
+        byebug
 
-      RaiseFromRubyMethodExample.new.a
+        RaiseFromRubyMethodExample.new.a
+      end
+
+      enter 'break 161', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 163, state.line }
     end
-
-    enter 'break 159', 'cont', 'next'
-    debug_proc(example_raise) { assert_equal 161, state.line }
   end
 end
