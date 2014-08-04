@@ -50,8 +50,7 @@ module Byebug
     def test_asks_for_confirmation
       enter 'display d', 'display d + 1', 'undisplay'
       debug_proc(@example)
-      check_output_includes \
-        'Clear all expressions? (y/n)', interface.confirm_queue
+      check_confirm_includes 'Clear all expressions? (y/n)'
     end
 
     def test_removes_all_expressions_from_list_if_confirmed
@@ -94,8 +93,7 @@ module Byebug
     def test_disable_display_shows_an_error_if_no_displays_are_set
       enter 'disable display 1'
       debug_proc(@example)
-      check_output_includes \
-        'No display expressions have been set', interface.error_queue
+      check_error_includes 'No display expressions have been set'
     end
 
     def test_disable_display_shows_an_error_if_theres_no_such_display_position

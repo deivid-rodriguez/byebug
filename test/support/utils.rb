@@ -60,24 +60,22 @@ module Byebug::TestUtils
   #   debug 'ex1'
   #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
   #
-  def check_output(check_method, *args)
-    queue = args.last.is_a?(String) || args.last.is_a?(Regexp) ?
-            interface.output_queue : args.pop
+  def check_output(check_method, *args, queue)
     queue_messages = queue.map(&:strip)
     messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
     send(check_method, messages, queue_messages)
   end
 
-  def check_error_includes(*args)
-    check_output :assert_includes_in_order, *args, interface.error_queue
-  end
+  %w(output error confirm).each do |queue_name|
+    define_method(:"check_#{queue_name}_includes") do |*args|
+      queue = interface.send(:"#{queue_name}_queue")
+      send(:check_output, :assert_includes_in_order, *args, queue)
+    end
 
-  def check_output_includes(*args)
-    check_output :assert_includes_in_order, *args
-  end
-
-  def check_output_doesnt_include(*args)
-    check_output :refute_includes_in_order, *args
+    define_method(:"check_#{queue_name}_doesnt_include") do |*args|
+      queue = interface.send(:"#{queue_name}_queue")
+      send(:check_output, :refute_includes_in_order, *args, queue)
+    end
   end
 
   def interface

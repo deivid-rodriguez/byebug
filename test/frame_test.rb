@@ -80,15 +80,13 @@ module Byebug
     def test_down_does_not_move_if_frame_number_to_too_low
       enter 'break 22', 'cont', 'down'
       debug_proc(@example) { assert_equal 22, state.line }
-      check_output_includes \
-        "Can't navigate beyond the newest frame", interface.error_queue
+      check_error_includes "Can't navigate beyond the newest frame"
     end
 
     def test_up_does_not_move_if_frame_number_to_too_high
       enter 'break 22', 'cont', 'up 100'
       debug_proc(@example) { assert_equal 22, state.line }
-      check_output_includes \
-        "Can't navigate beyond the oldest frame", interface.error_queue
+      check_error_includes "Can't navigate beyond the oldest frame"
     end
 
     def test_where_displays_current_backtrace_with_fullpaths
@@ -157,7 +155,7 @@ module Byebug
     def test_frame_cannot_navigate_to_c_frames
       enter 'break 4', 'cont', 'frame 1'
       debug_proc(@example)
-      check_output_includes "Can't navigate to c-frame", interface.error_queue
+      check_error_includes "Can't navigate to c-frame"
     end
   end
 
@@ -190,32 +188,32 @@ module Byebug
       end
 
       super
-      enter 'break 182', 'cont'
+      enter 'break 180', 'cont'
     end
 
     def test_where_correctly_prints_the_backtrace
       enter 'where'
       debug_proc(@deep_example)
       check_output_includes(
-        /--> #0  Byebug::DeepFrameExample\.d\(e#String\)\s+at #{__FILE__}:182/,
-            /#1  Byebug::DeepFrameExample\.c\s+at #{__FILE__}:178/,
-            /#2  Byebug::DeepFrameExample\.b\s+at #{__FILE__}:172/,
-            /#3  Byebug::DeepFrameExample\.a\s+at #{__FILE__}:167/)
+        /--> #0  Byebug::DeepFrameExample\.d\(e#String\)\s+at #{__FILE__}:180/,
+            /#1  Byebug::DeepFrameExample\.c\s+at #{__FILE__}:176/,
+            /#2  Byebug::DeepFrameExample\.b\s+at #{__FILE__}:170/,
+            /#3  Byebug::DeepFrameExample\.a\s+at #{__FILE__}:165/)
     end
 
     def test_up_moves_up_in_the_callstack
       enter 'up'
-      debug_proc(@deep_example) { assert_equal 178, state.line }
+      debug_proc(@deep_example) { assert_equal 176, state.line }
     end
 
     def test_down_moves_down_in_the_callstack
       enter 'up', 'down'
-      debug_proc(@deep_example) { assert_equal 182, state.line }
+      debug_proc(@deep_example) { assert_equal 180, state.line }
     end
 
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
-      debug_proc(@deep_example) { assert_equal 172, state.line }
+      debug_proc(@deep_example) { assert_equal 170, state.line }
     end
 
     def test_eval_works_properly_when_moving_through_the_stack
