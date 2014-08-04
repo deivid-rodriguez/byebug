@@ -22,7 +22,6 @@ class Byebug::TestCase < Minitest::Test
     Byebug::Setting.load
     Byebug::Setting[:autolist] = false
     Byebug::Setting[:testing] = true
-    Byebug::Setting[:verbose] = true
     Byebug::Setting[:width] = 80
 
     byebug_bin = File.expand_path('../../../bin/byebug', __FILE__)

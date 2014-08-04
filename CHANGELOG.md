@@ -1,3 +1,8 @@
+# 3.2.1 (Unreleased)
+
+* Fix `verbose` setting
+
+
 # 3.2.0
 
 - Bugfixes

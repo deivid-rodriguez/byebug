@@ -821,7 +821,7 @@ Here are the default values in `options`
 
 ```
 #<OpenStruct nx=false, quit=true, restart_script=nil, script=nil, stop=true,
-             tracing=false, verbose_long=false>
+             tracing=false, verbose=false>
 ```
 
 ### Command Files

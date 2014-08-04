@@ -122,6 +122,13 @@ module Byebug
       end
     end
 
+    def test_verbose_prints_tracepoint_api_event_information
+      enter 'set verbose'
+      debug_proc(@example)
+      assert_equal true, Byebug.verbose?
+      Byebug.verbose = false
+    end
+
     def test_set_without_arguments_shows_help_for_set_command
       enter 'set'
       debug_proc(@example)
