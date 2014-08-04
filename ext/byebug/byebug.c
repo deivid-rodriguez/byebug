@@ -34,16 +34,13 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 {
   if (trace_arg)
   {
-    int i = 0;
     const char *event = rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)));
     char *path = RSTRING_PTR(rb_tracearg_path(trace_arg));
     int line = NUM2INT(rb_tracearg_lineno(trace_arg));
     VALUE v_mid = rb_tracearg_method_id(trace_arg);
     const char *mid = NIL_P(v_mid) ? "" : rb_id2name(SYM2ID(v_mid));
-
-    for (i = 0; i < dc->calced_stack_size; i++) putc('-', stdout);
-    printf("(%d)->[#%d] %s@%s:%d %s\n",
-           dc->calced_stack_size, dc->thnum, event, path, line, mid);
+    printf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
+         dc->calced_stack_size, dc->thnum, event, path, line, mid);
   }
 }
 
