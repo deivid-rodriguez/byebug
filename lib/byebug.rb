@@ -20,74 +20,82 @@ module Byebug
   # Stores program being debugged to make restarts possible
   PROG_SCRIPT = $0 unless defined?(PROG_SCRIPT)
 
-  class << self
+  def self.handler
+    @handler
+  end
 
-    # processor modules provide +handler+ object
-    attr_accessor :handler
-    Byebug.handler = CommandProcessor.new
+  def self.handler=(processor = CommandProcessor.new)
+    @handler = processor
+  end
 
-    def source_reload
-      hsh = 'SCRIPT_LINES__'
-      Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
-      Object.const_set(hsh, {})
+  def self.source_reload
+    hsh = 'SCRIPT_LINES__'
+    Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
+    Object.const_set(hsh, {})
+  end
+
+  #
+  # Add a new breakpoint
+  #
+  # @param [String] file
+  # @param [Fixnum] line
+  # @param [String] expr
+  #
+  def self.add_breakpoint(file, line, expr=nil)
+    breakpoint = Breakpoint.new(file, line, expr)
+    breakpoints << breakpoint
+    breakpoint
+  end
+
+  #
+  # Remove a breakpoint
+  #
+  # @param [integer] breakpoint number
+  #
+  def self.remove_breakpoint(id)
+    breakpoints.reject! { |b| b.id == id }
+  end
+
+  #
+  # Byebug's interface is its handler's interface
+  #
+  def self.interface=(value)
+    handler.interface = value
+  end
+
+  #
+  # Byebug's prints according to its handler's interface
+  #
+  def self.print(*args)
+    handler.interface.print(*args)
+  end
+
+  #
+  # Runs normal byebug initialization scripts.
+  #
+  # Reads and executes the commands from init file (if any) in the current
+  # working directory.  This is only done if the current directory is
+  # different from your home directory.  Thus, you can have more than one init
+  # file, one generic in your home directory, and another, specific to the
+  # program you are debugging, in the directory where you invoke byebug.
+  #
+  def self.run_init_script(out = handler.interface)
+    cwd_script  = File.expand_path(File.join(".", INITFILE))
+    run_script(cwd_script, out) if File.exist?(cwd_script)
+
+    home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
+    if File.exist?(home_script) and cwd_script != home_script
+      run_script(home_script, out)
     end
+  end
 
-    #
-    # Add a new breakpoint
-    #
-    # @param [String] file
-    # @param [Fixnum] line
-    # @param [String] expr
-    #
-    def add_breakpoint(file, line, expr=nil)
-      breakpoint = Breakpoint.new(file, line, expr)
-      breakpoints << breakpoint
-      breakpoint
-    end
-
-    #
-    # Remove a breakpoint
-    #
-    # @param [integer] breakpoint number
-    #
-    def remove_breakpoint(id)
-      breakpoints.reject! { |b| b.id == id }
-    end
-
-    def interface=(value)
-      handler.interface = value
-    end
-
-    extend Forwardable
-    def_delegators :"handler.interface", :print
-
-    #
-    # Runs normal byebug initialization scripts.
-    #
-    # Reads and executes the commands from init file (if any) in the current
-    # working directory.  This is only done if the current directory is
-    # different from your home directory.  Thus, you can have more than one init
-    # file, one generic in your home directory, and another, specific to the
-    # program you are debugging, in the directory where you invoke byebug.
-    #
-    def run_init_script(out = handler.interface)
-      cwd_script  = File.expand_path(File.join(".", INITFILE))
-      run_script(cwd_script, out) if File.exist?(cwd_script)
-
-      home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
-      if File.exist?(home_script) and cwd_script != home_script
-        run_script(home_script, out)
-      end
-    end
-
-    #
-    # Runs a script file
-    #
-    def run_script(file, out = handler.interface, verbose=false)
-      interface = ScriptInterface.new(File.expand_path(file), out)
-      processor = ControlCommandProcessor.new(interface)
-      processor.process_commands(verbose)
-    end
+  #
+  # Runs a script file
+  #
+  def self.run_script(file, out = handler.interface, verbose=false)
+    interface = ScriptInterface.new(File.expand_path(file), out)
+    processor = ControlCommandProcessor.new(interface)
+    processor.process_commands(verbose)
   end
 end
 
