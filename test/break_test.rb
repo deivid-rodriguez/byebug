@@ -342,35 +342,23 @@ module Byebug
     include FilenameTests
   end
 
-  class BreakTestCaseAutoreload < BreakTestCase
-    def setup
-      super
-      enter 'set autoreload'
+  def test_setting_breakpoint_with_autoreload_uses_new_source
+    enter 'set autoreload', -> do
+      change_line_in_file(__FILE__, 19, '')
+      'break 19'
     end
 
-    def test_setting_breakpoint_with_autoreload_uses_new_source
-      enter -> do
-        change_line_in_file(__FILE__, 19, '')
-        'break 19'
-      end
-      debug_proc(@example) { assert_empty Byebug.breakpoints }
-      change_line_in_file(__FILE__,19, '        BreakExample.new.b')
-    end
+    debug_proc(@example) { assert_empty Byebug.breakpoints }
+    change_line_in_file(__FILE__,19, '        BreakExample.new.b')
   end
 
-  class BreakTestCaseNoAutoreload < BreakTestCase
-    def setup
-      super
-      enter 'set noautoreload'
+  def test_setting_breakpoint_with_noautoreload_uses_old_source
+    enter 'set noautoreload', -> do
+      change_line_in_file(__FILE__, 19, '')
+      'break 19'
     end
 
-    def test_setting_breakpoint_with_autoreload_uses_new_source
-      enter -> do
-        change_line_in_file(__FILE__, 19, '')
-        'break 19'
-      end
-      debug_proc(@example) { assert_equal 1, Byebug.breakpoints.size }
-      change_line_in_file(__FILE__,19, '        BreakExample.new.b')
-    end
+    debug_proc(@example) { assert_equal 1, Byebug.breakpoints.size }
+    change_line_in_file(__FILE__,19, '        BreakExample.new.b')
   end
 end
