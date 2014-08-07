@@ -453,17 +453,18 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.step_over(lines, frame = nil, force = false)
+ *    context.step_over(lines, frame = 0, force = false)
  *
  *  Steps over +lines+ lines.
- *  Make step over operation on +frame+, by default the current frame.
+ *  Make step over operation on +frame+, by default the newest frame.
  *  +force+ parameter (if true) ensures that the cursor moves away from the
  *  current line.
  */
 static VALUE
 Context_step_over(int argc, VALUE *argv, VALUE self)
 {
-  VALUE lines, frame, force;
+  int n_args, frame;
+  VALUE lines, v_frame, v_force;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
@@ -471,14 +472,18 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
-  rb_scan_args(argc, argv, "12", &lines, &frame, &force);
-  if (FIX2INT(frame) < 0 || FIX2INT(frame) >= context->calced_stack_size)
-    rb_raise(rb_eRuntimeError, "Destination frame is out of range.");
+  n_args = rb_scan_args(argc, argv, "12", &lines, &v_frame, &v_force);
+  frame = n_args == 1 ? 0 : FIX2INT(v_frame);
+
+  if (frame < 0 || frame >= context->calced_stack_size)
+    rb_raise(rb_eRuntimeError,
+             "Destination frame (%d) is out of range (%d)",
+             frame, context->calced_stack_size);
 
   context->lines = FIX2INT(lines);
   context->dest_frame = context->calced_stack_size - FIX2INT(frame);
 
-  if (RTEST(force))
+  if (n_args == 3 && RTEST(v_force))
     CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
     CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
