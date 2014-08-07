@@ -418,13 +418,12 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.step_out(frame)
+ *    context.step_out(n_frames = 1, force = false)
  *
- *  Stops after +n_frames+ frames are finished. Implements +finish+ and
- *  +next+ commands. +force+ parameter (if true) ensures that the cursor will
- *  stop in the specified frame even when there's no more instructions to run.
- *  In that case, it will stop when the return event for that frame is
- *  triggered.
+ *  Stops after +n_frames+ frames are finished. +force+ parameter (if true)
+ *  ensures that the execution will stop in the specified frame even when there
+ *  are no more instructions to run. In that case, it will stop when the return
+ *  event for that frame is triggered.
  */
 static VALUE
 Context_step_out(int argc, VALUE *argv, VALUE self)
@@ -435,15 +434,16 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
 
   n_args = rb_scan_args(argc, argv, "02", &v_frames, &v_force);
   n_frames = n_args == 0 ? 1 : FIX2INT(v_frames);
-  v_force = (n_args < 2) ? Qfalse : v_force;
 
   Data_Get_Struct(self, debug_context_t, context);
 
   if (n_frames < 0 || n_frames >= context->calced_stack_size)
-    rb_raise(rb_eRuntimeError, "Stop frame is out of range.");
+    rb_raise(rb_eRuntimeError,
+             "You wan't to finish %d frames, but stack size is only %d",
+             n_frames, context->calced_stack_size);
 
   context->steps_out = n_frames;
-  if (RTEST(v_force))
+  if (n_args == 2 && RTEST(v_force))
     CTX_FL_SET(context, CTX_FL_STOP_ON_RET);
   else
     CTX_FL_UNSET(context, CTX_FL_STOP_ON_RET);
