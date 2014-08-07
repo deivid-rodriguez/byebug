@@ -706,7 +706,7 @@ bb_set_post_mortem(VALUE self, VALUE value)
 static VALUE
 bb_breakpoints(VALUE self)
 {
-  return breakpoints;
+  return NIL_P(breakpoints) ? rb_ary_new() : breakpoints;
 }
 
 /*
