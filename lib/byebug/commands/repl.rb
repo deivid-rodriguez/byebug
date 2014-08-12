@@ -21,30 +21,6 @@ module IRB
   ExtendCommandBundle.def_extend_command 'cont', :Continue
   ExtendCommandBundle.def_extend_command 'next', :Next
   ExtendCommandBundle.def_extend_command 'step', :Step
-
-  def self.start_session(binding)
-    unless @__initialized ||= false
-      args = ARGV.dup
-      ARGV.replace([])
-      IRB.setup(nil)
-      ARGV.replace(args)
-      @__initialized = true
-    end
-
-    workspace = WorkSpace.new(binding)
-    irb = Irb.new(workspace)
-
-    @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
-    @CONF[:MAIN_CONTEXT] = irb.context
-
-    trap('SIGINT') do
-      irb.signal_handle
-    end
-
-    catch(:IRB_EXIT) do
-      irb.eval_input
-    end
-  end
 end
 
 module Byebug
@@ -59,7 +35,7 @@ module Byebug
         throw :debug_error
       end
 
-      cont = IRB.start_session(get_binding)
+      cont = IRB.start(__FILE__)
       case cont
       when :cont
         @state.proceed
