@@ -58,7 +58,7 @@ module Byebug
     end
 
     def handler
-      Byebug.handler or raise 'No interface loaded'
+      Byebug.handler || raise('No interface loaded')
     end
 
     def at_breakpoint(brkpnt)
