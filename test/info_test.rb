@@ -186,28 +186,10 @@ module Byebug
       check_error_includes 'Invalid parameter blabla'
     end
 
-    def test_info_instance_variables_shows_instance_variables
-      enter 'break 11', 'cont', 'info instance_variables'
-      debug_proc(@example)
-      check_output_includes '@bla = "blabla"', '@foo = "bar"'
-    end
-
     def test_info_line_shows_info_about_the_current_line
       enter 'break 11', 'cont', 'info line'
       debug_proc(@example)
       check_output_includes "Line 11 of \"#{__FILE__}\""
-    end
-
-    def test_info_locals_shows_info_about_the_current_local_variables
-      enter 'break 11', 'cont', 'set width 28', 'info locals'
-      debug_proc(@example)
-      check_output_includes 'w = "11111111111111111111...', 'x = 2'
-    end
-
-    def test_info_locals_fail_if_local_variable_does_not_have_to_s_or_inspect
-      enter 'break 16', 'cont', 'info locals'
-      debug_proc(@example)
-      check_output_includes 'a = *Error in evaluation*'
     end
 
     def test_info_program_shows_the_initial_stop_reason
@@ -246,12 +228,6 @@ module Byebug
 
     def test_shows_an_error_if_the_program_is_crashed
       skip('TODO')
-    end
-
-    def test_info_global_variables_shows_global_variables
-      enter 'info global_variables'
-      debug_proc(@example)
-      check_output_includes "$$ = #{Process.pid}"
     end
 
     def test_info_variables_shows_all_variables

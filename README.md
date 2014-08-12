@@ -71,7 +71,7 @@ both rails and rspec have deprecated these flags in their latest versions.
     `frame`     |              |
     `help`      |              |
     `history`   |              |
-    `info`      |              | `args` `breakpoints` `catch` `display` `file` `files` `global_variables` `instance_variables` `line` `locals` `program` `variables`
+    `info`      |              | `args` `breakpoints` `catch` `display` `file` `files` `line` `program` `variables`
     `irb`       |              |
     `kill`      |              |
     `list`      |              |

@@ -33,11 +33,8 @@ module Byebug
                                  ' "breakpoint", "lines", "mtime", "path" ' \
                                  'and "sha1".'                                ],
        ['files'             , 5, 'File names and timestamps of files read in' ],
-       ['global_variables'  , 2, 'Global variables'                           ],
-       ['instance_variables', 2, 'Instance variables in current stack frame'  ],
        ['line'              , 2, 'Line number and file name of current '    \
                                  'position in source file'                    ],
-       ['locals'            , 2, 'Local variables of the current stack frame' ],
        ['program'           , 2, 'Execution status of the program'            ],
        ['variables'         , 1, 'Local and instance variables of the '     \
                                  'current stack frame'                        ]
@@ -191,18 +188,8 @@ module Byebug
       end
     end
 
-    def info_instance_variables(*args)
-      obj = bb_eval('self')
-      var_list(obj.instance_variables)
-    end
-
     def info_line(*args)
       print "Line #{@state.line} of \"#{@state.file}\"\n"
-    end
-
-    def info_locals(*args)
-      locals = @state.context.frame_locals
-      print_hash(locals)
     end
 
     def print_hash(vars)
@@ -245,10 +232,6 @@ module Byebug
 
       print "Program stopped. "
       info_stop_reason @state.context.stop_reason
-    end
-
-    def info_global_variables(*args)
-      var_global
     end
 
     def info_variables(*args)

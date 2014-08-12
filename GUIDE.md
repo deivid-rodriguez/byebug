@@ -1019,21 +1019,15 @@ Generic command for showing things about the program being debugged.
 --
 List of "info" subcommands:
 --
-info args               -- Argument variables of current stack frame
-info breakpoints        -- Status of user-settable breakpoints
-info catch              -- Exceptions that can be caught in the current stack
-frame
-info display            -- Expressions to display when program stops
-info file               -- Info about a particular file read in
-info files              -- File names and timestamps of files read in
-info global_variables   -- Global variables
-info instance_variables -- Instance variables of the current stack frame
-info line               -- Line number and file name of current position in
-source file
-info locals             -- Local variables of the current stack frame
-info program            -- Execution status of the program
-info variables          -- Local and instance variables of the current stack
-frame
+info args        -- Argument variables of current stack frame
+info breakpoints -- Status of user-settable breakpoints
+info catch       -- Exceptions that can be caught in the current stack frame
+info display     -- Expressions to display when program stops
+info file        -- Info about a particular file read in
+info files       -- File names and timestamps of files read in
+info line        -- Line number and filename of current position in source file
+info program     -- Execution status of the program
+info variables   -- Local and instance variables of the current stack frame
 ```
 
 ```bash
@@ -1277,9 +1271,9 @@ Byebug can print many different information about variables. Such as
 listing variables and their values in `<object>.constant`.
 * `var instance <object>`. Show the instance variables of `<object>`. This is
 basically listing `<object>.instance_variables`.
-* `info instance_variables`. Show instance_variables of `self`.
-* `info locals`. Show local variables.
-* `info globals`. Show global variables.
+* `var instance`. Show instance_variables of `self`.
+* `var local`. Show local variables.
+* `var global`. Show global variables.
 * `info variables`. Show local and instance variables of `self`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
 same as running `ps <object>.instance_methods(false)`.
