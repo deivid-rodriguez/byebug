@@ -230,31 +230,6 @@ module Byebug
       skip('TODO')
     end
 
-    def test_info_variables_shows_all_variables
-      enter 'break 11', 'cont', 'set width 45', 'info variables'
-      debug_proc(@example)
-      check_output_includes(/self = #<Byebug::InfoExample:\S*.../,
-                            'w = "1111111111111111111111111111111111111...',
-                            'x = 2',
-                            '@bla = "blabla"',
-                            '@foo = "bar"')
-    end
-
-    def test_info_variables_fails_if_variables_has_no_to_s_or_inspect_methods
-      enter 'break 16', 'cont', 'info variables'
-      debug_proc(@example)
-      check_output_includes 'a = *Error in evaluation*',
-                            /self = #<Byebug::InfoExample:\S*.../,
-                            '@bla = "blabla"',
-                            '@foo = "bar"'
-    end
-
-    def test_info_variables_correctly_print_variables_containing_percentage
-      enter 'break 22', 'cont', 'info variables'
-      debug_proc(@example)
-      check_output_includes 'e = "%.2f"'
-    end
-
     def test_shows_help_when_typing_just_info
       enter 'info', 'cont'
       debug_proc(@example)

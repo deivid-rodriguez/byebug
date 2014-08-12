@@ -26,6 +26,44 @@ module Byebug
     def var_global
       var_list(global_variables.reject { |v| [:$=, :$KCODE, :$-K].include?(v) })
     end
+
+    def var_instance(where)
+      obj = bb_eval(where)
+      var_list(obj.instance_variables, obj.instance_eval { binding() })
+    end
+
+    def var_local
+      _self = @state.context.frame_self(@state.frame_pos)
+      locals = @state.context.frame_locals
+      locals.keys.sort.each do |name|
+        print "  %s => %p\n", name, locals[name]
+      end
+    end
+  end
+
+  class VarAllCommand < Command
+    def regexp
+      /^\s* v(?:ar)? \s+ a(?:ll)? \s*$/x
+    end
+
+    def execute
+      var_class_self
+      var_global
+      var_instance('self')
+      var_local
+    end
+
+    class << self
+      def names
+        %w(var)
+      end
+
+      def description
+        %{v[ar] a[ll]
+
+          Show local, global and instance & class variables of self.}
+      end
+    end
   end
 
   class VarClassCommand < Command
@@ -34,10 +72,7 @@ module Byebug
     end
 
     def execute
-      unless @state.context
-        errmsg "can't get class variables here.\n"
-        return
-      end
+      return errmsg "can't get class variables here.\n" unless @state.context
       var_class_self
     end
 
@@ -109,8 +144,7 @@ module Byebug
     end
 
     def execute
-      obj = bb_eval(@match.post_match.empty? ? 'self' : @match.post_match)
-      var_list(obj.instance_variables, obj.instance_eval { binding() })
+      var_instance(@match.post_match.empty? ? 'self' : @match.post_match)
     end
 
     class << self
@@ -130,11 +164,7 @@ module Byebug
     end
 
     def execute
-      _self = @state.context.frame_self(@state.frame_pos)
-      locals = @state.context.frame_locals
-      locals.keys.sort.each do |name|
-        print "  %s => %p\n", name, locals[name]
-      end
+      var_local
     end
 
     class << self

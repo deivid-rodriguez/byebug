@@ -30,7 +30,7 @@ module Byebug
       super
     end
 
-    # we check a class minitest variable... brittle but ok for now
+    # TODO: we check a class minitest variable... brittle...
     ['var class', 'v cl'].each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_class_variables") do
         enter cmd_alias
@@ -91,6 +91,15 @@ module Byebug
       enter 'break 15', 'cont', 'var local'
       debug_proc(@example)
       check_output_includes 'a => 4', 'b => nil', 'i => 1'
+    end
+
+    # TODO: class variables not currently checked
+    ['var all', 'v a'].each do |cmd_alias|
+      define_method(:"test_#{cmd_alias}_shows_all_variables") do
+        enter 'break 15', 'cont', cmd_alias
+        debug_proc(@example)
+        check_output_includes '$VERBOSE = true', '@inst_a = 1', 'a => 4'
+      end
     end
   end
 end

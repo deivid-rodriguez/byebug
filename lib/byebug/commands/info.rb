@@ -35,9 +35,7 @@ module Byebug
        ['files'             , 5, 'File names and timestamps of files read in' ],
        ['line'              , 2, 'Line number and file name of current '    \
                                  'position in source file'                    ],
-       ['program'           , 2, 'Execution status of the program'            ],
-       ['variables'         , 1, 'Local and instance variables of the '     \
-                                 'current stack frame'                        ]
+       ['program'           , 2, 'Execution status of the program'            ]
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(Subcommands)

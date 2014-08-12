@@ -1027,7 +1027,6 @@ info file        -- Info about a particular file read in
 info files       -- File names and timestamps of files read in
 info line        -- Line number and filename of current position in source file
 info program     -- Execution status of the program
-info variables   -- Local and instance variables of the current stack frame
 ```
 
 ```bash
@@ -1274,7 +1273,7 @@ basically listing `<object>.instance_variables`.
 * `var instance`. Show instance_variables of `self`.
 * `var local`. Show local variables.
 * `var global`. Show global variables.
-* `info variables`. Show local and instance variables of `self`.
+* `var all`. Show local, global and instance and class variables of `self`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
 same as running `ps <object>.instance_methods(false)`.
 * `method <class-or-module>`. Show methods of the class or module
