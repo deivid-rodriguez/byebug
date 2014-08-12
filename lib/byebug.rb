@@ -111,8 +111,8 @@ module Kernel
   # events occur. Before entering byebug the init script is read.
   #
   def byebug(steps_out = 1, before = true)
-    Byebug.run_init_script(StringIO.new)
     Byebug.start
+    Byebug.run_init_script(StringIO.new)
     Byebug.current_context.step_out(steps_out, before)
   end
 
