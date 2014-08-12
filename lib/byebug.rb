@@ -24,9 +24,11 @@ module Byebug
     @handler
   end
 
-  def self.handler=(processor = CommandProcessor.new)
+  def self.handler=(processor)
     @handler = processor
   end
+
+  Byebug.handler = CommandProcessor.new
 
   def self.source_reload
     hsh = 'SCRIPT_LINES__'
