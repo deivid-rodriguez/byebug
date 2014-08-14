@@ -229,9 +229,8 @@ Byebug::Setting[:post_mortem] = options.post_mortem
 
 # run restore-settings startup script if specified
 if options.restart_script
-  require 'fileutils'
   Byebug.run_script(options.restart_script)
-  FileUtils.rm(options.restart_script)
+  File.delete(options.restart_script)
 end
 
 # run startup script if specified

@@ -16,7 +16,7 @@ module Byebug
     end
 
     def teardown
-      FileUtils.rm('source_example.txt')
+      File.delete('source_example.txt')
     end
 
     %w(source so).each do |cmd_alias|
