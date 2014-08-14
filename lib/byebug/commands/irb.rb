@@ -12,7 +12,7 @@ module Byebug
         throw :debug_error
       end
 
-      cont = IRB.start(__FILE__)
+      IRB.start(__FILE__)
     end
 
     class << self
