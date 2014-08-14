@@ -1,27 +1,4 @@
-module IRB
-  module ExtendCommand
-    class Continue
-      def self.execute(conf)
-        throw :IRB_EXIT, :cont
-      end
-    end
-    class Next
-      def self.execute(conf)
-        throw :IRB_EXIT, :next
-      end
-    end
-    class Step
-      def self.execute(conf)
-        throw :IRB_EXIT, :step
-      end
-    end
-  end
-
-  require 'irb'
-  ExtendCommandBundle.def_extend_command 'cont', :Continue
-  ExtendCommandBundle.def_extend_command 'next', :Next
-  ExtendCommandBundle.def_extend_command 'step', :Step
-end
+require 'irb'
 
 module Byebug
   class IrbCommand < Command
@@ -36,21 +13,6 @@ module Byebug
       end
 
       cont = IRB.start(__FILE__)
-      case cont
-      when :cont
-        @state.proceed
-      when :step
-        force = Setting[:forcestep]
-        @state.context.step_into 1, force
-        @state.proceed
-      when :next
-        force = Setting[:forcestep]
-        @state.context.step_over 1, @state.frame_pos, force
-        @state.proceed
-      else
-        print @state.location
-        @state.previous_line = nil
-      end
     end
 
     class << self
@@ -59,11 +21,7 @@ module Byebug
       end
 
       def description
-        %{irb\tstarts an Interactive Ruby (IRB) session.
-
-          IRB is extended with methods "cont", "n" and "step" which run the
-          corresponding byebug commands. In contrast to the real byebug commands
-          these commands don't allow arguments.}
+        %{irb\tstarts an Interactive Ruby (IRB) session.}
       end
     end
   end

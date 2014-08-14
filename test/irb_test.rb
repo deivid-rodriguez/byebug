@@ -15,22 +15,10 @@ module Byebug
       interface.stubs(:kind_of?).with(LocalInterface).returns(true)
     end
 
-    def test_irb_supports_next_command
-      IRB::Irb.any_instance.stubs(:eval_input).throws(:IRB_EXIT, :next)
+    def test_irb_command_starts_an_irb_session
+      IrbCommand.any_instance.expects(:execute)
       enter 'irb'
-      debug_proc(@example) { assert_equal 7, state.line }
-    end
-
-    def test_irb_supports_step_command
-      IRB::Irb.any_instance.stubs(:eval_input).throws(:IRB_EXIT, :step)
-      enter 'irb'
-      debug_proc(@example) { assert_equal 7, state.line }
-    end
-
-    def test_irb_supports_cont_command
-      IRB::Irb.any_instance.stubs(:eval_input).throws(:IRB_EXIT, :cont)
-      enter 'break 8', 'irb'
-      debug_proc(@example) { assert_equal 8, state.line }
+      debug_proc(@example)
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
