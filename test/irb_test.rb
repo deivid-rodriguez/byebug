@@ -20,7 +20,7 @@ module Byebug
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
-      IRB::Irb.any_instance.expects(:eval_input)
+      IrbCommand.any_instance.expects(:execute)
       enter 'set autoirb', 'break 8', 'cont'
       debug_proc(@example)
     end
