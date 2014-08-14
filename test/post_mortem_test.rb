@@ -47,7 +47,7 @@ module Byebug
     %w(step next finish break condition display reload).each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
         enter 'set noautoeval', 'set post_mortem', "#{cmd}", 'set no_postmortem'
-        state.context.stubs(:dead?).returns(:true)
+        Context.any_instance.stubs(:dead?).returns(:true)
         begin
           debug_proc(@example)
         rescue RuntimeError
