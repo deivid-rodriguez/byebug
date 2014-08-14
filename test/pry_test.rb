@@ -18,19 +18,12 @@ module Byebug
       super
 
       interface.stubs(:kind_of?).with(LocalInterface).returns(true)
-      PryCommand.any_instance.expects(:pry)
     end
 
-    def test_pry_supports_next_command
-      skip 'TODO'
-    end
-
-    def test_pry_supports_step_command
-      skip 'TODO'
-    end
-
-    def test_pry_supports_cont_command
-      skip 'TODO'
+    def test_pry_command_starts_a_pry_session
+      PryCommand.any_instance.expects(:execute)
+      enter 'pry'
+      debug_proc(@example)
     end
 
     def test_autopry_calls_pry_automatically_after_every_stop
