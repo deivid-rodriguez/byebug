@@ -24,7 +24,7 @@ module Byebug
     end
 
     def execute
-      steps, force = parse_stepping_args("Next", @match)
+      steps, force = parse_stepping_args('Next', @match)
       return unless steps
       @state.context.step_over steps, @state.frame_pos, force
       @state.proceed
@@ -52,7 +52,7 @@ module Byebug
     end
 
     def execute
-      steps, force = parse_stepping_args("Step", @match)
+      steps, force = parse_stepping_args('Step', @match)
       return unless steps
       @state.context.step_into steps, force
       @state.proceed
