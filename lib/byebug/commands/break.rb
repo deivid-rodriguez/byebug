@@ -3,6 +3,8 @@ module Byebug
     self.allow_in_post_mortem = false
     self.allow_in_control = true
 
+    Position_regexp = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
+
     def regexp
       /^\s* b(?:reak)? (?:\s+ #{Position_regexp})? (?:\s+(.+))? \s*$/x
     end
