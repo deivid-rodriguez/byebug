@@ -10,7 +10,6 @@ require 'tracer'
 require 'linecache19'
 
 module Byebug
-
   # List of files byebug will ignore while debugging
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
@@ -18,14 +17,14 @@ module Byebug
   INITFILE = '.byebugrc' unless defined?(INITFILE)
 
   # Stores program being debugged to make restarts possible
-  PROG_SCRIPT = $0 unless defined?(PROG_SCRIPT)
+  PROG_SCRIPT = $PROGRAM_NAME unless defined?(PROG_SCRIPT)
 
-  def self.handler
-    @handler
+  class << self
+    attr_reader :handler
   end
 
-  def self.handler=(processor)
-    @handler = processor
+  class << self
+    attr_writer :handler
   end
 
   Byebug.handler = CommandProcessor.new
@@ -43,7 +42,7 @@ module Byebug
   # @param [Fixnum] line
   # @param [String] expr
   #
-  def self.add_breakpoint(file, line, expr=nil)
+  def self.add_breakpoint(file, line, expr = nil)
     breakpoint = Breakpoint.new(file, line, expr)
     breakpoints << breakpoint
     breakpoint
@@ -82,11 +81,11 @@ module Byebug
   # program you are debugging, in the directory where you invoke byebug.
   #
   def self.run_init_script(out = handler.interface)
-    cwd_script  = File.expand_path(File.join(".", INITFILE))
+    cwd_script  = File.expand_path(File.join('.', INITFILE))
     run_script(cwd_script, out) if File.exist?(cwd_script)
 
     home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
-    if File.exist?(home_script) and cwd_script != home_script
+    if File.exist?(home_script) && cwd_script != home_script
       run_script(home_script, out)
     end
   end
@@ -94,7 +93,7 @@ module Byebug
   #
   # Runs a script file
   #
-  def self.run_script(file, out = handler.interface, verbose=false)
+  def self.run_script(file, out = handler.interface, verbose = false)
     interface = ScriptInterface.new(File.expand_path(file), out)
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands(verbose)

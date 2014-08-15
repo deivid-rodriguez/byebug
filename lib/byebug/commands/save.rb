@@ -2,13 +2,13 @@ module Byebug
   module SaveFunctions
     # Create a temporary file to write in if file is nil
     def open_save
-      require "tempfile"
-      file = Tempfile.new("byebug-save")
+      require 'tempfile'
+      file = Tempfile.new('byebug-save')
       # We want close to not unlink, so redefine.
       def file.close
         @tmpfile.close if @tmpfile
       end
-      return file
+      file
     end
   end
 
@@ -47,8 +47,8 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
-        file = open_save()
+      if !@match[1]
+        file = open_save
       else
         file = open(@match[1], 'w')
       end
@@ -57,7 +57,7 @@ module Byebug
       save_displays(file)
       save_settings(file)
       print "Saved to '#{file.path}'\n"
-      if @state and @state.interface
+      if @state && @state.interface
         @state.interface.restart_file = file.path
       end
       file.close

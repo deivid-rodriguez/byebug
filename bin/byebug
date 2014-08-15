@@ -1,71 +1,72 @@
 #!/usr/bin/env ruby
 
-#=== Summary
+# === Summary
 #
-#A command-line front-end to <tt>byebug</tt>
+# A command-line front-end to <tt>byebug</tt>
 #
-#Command invocation:
+# Command invocation:
 #
 #   byebug [options] [--] [script-options] ruby-script-to-debug
 #   byebug [options] [script-options]
 #   byebug [--version | --help]
 #
-#=== Options
+# === Options
 #
-#<tt>-d | --debug</tt>::
+# <tt>-d | --debug</tt>::
 #    Set $DEBUG true.
 #
-#<tt>--help</tt>::
+# <tt>--help</tt>::
 #      Show invocation help and exit.
 #
-#<tt>-I | --include</tt> <i>path</i>
+# <tt>-I | --include</tt> <i>path</i>
 #    Add <i>path</i> to <tt>$LOAD_PATH</tt>. Like the <tt>ruby -I</tt> command,
 #    it supports multiple load paths separated by colons.
 #
-#<tt>--post-mortem</tt>::
+# <tt>--post-mortem</tt>::
 #    Activate post-mortem mode.
 #
-#<tt>--no-quit</tt>::
+# <tt>--no-quit</tt>::
 #    Do not quit when script terminates. Instead rerun the program.
 #
-#<tt>--no-stop</tt>::
+# <tt>--no-stop</tt>::
 #    Do not stop when script is loaded.
 #
-#<tt>--nx</tt>::
+# <tt>--nx</tt>::
 #    Don’t execute commands found in any initialization files like
 #    <tt>.byebugrc</tt>.
 #
-#<tt>-r | --require</tt><i>script</i>::
+# <tt>-r | --require</tt><i>script</i>::
 #    Require the library, before executing your script.
 #
-#<tt>--script</tt>=<i>file</i>::
+# <tt>--script</tt>=<i>file</i>::
 #    Run script file <i>file</i>
 #
-#<tt>--v</tt>::
+# <tt>--v</tt>::
 #    Print the version number, then turn on verbose mode if a script name is
 #    given. If no script name is given just exit after printing the version
 #    number.
 #
-#<tt>--verbose</tt>::
+# <tt>--verbose</tt>::
 #    Turn on verbose mode.
 #
-#<tt>--version</tt>::
+# <tt>--version</tt>::
 #    Show the version number and exit.
 #
-#<tt>-x | --trace</tt>::
+# <tt>-x | --trace</tt>::
 #    Show lines before executing them.
 #
 
 require 'optparse'
 require 'ostruct'
-require File.dirname(__FILE__) + "/../lib/byebug"
+require 'English'
+require File.dirname(__FILE__) + '/../lib/byebug'
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
   output = `ruby -c "#{Byebug::PROG_SCRIPT}" 2>&1`
-  if $?.exitstatus != 0
+  if $CHILD_STATUS.exitstatus != 0
     puts output
-    exit $?.exitstatus
+    exit $CHILD_STATUS.exitstatus
   end
   if bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options.stop)
     p bt, bt.backtrace
@@ -88,7 +89,7 @@ def whence_file(prog_script)
   end
 
   # Failure
-  return prog_script
+  prog_script
 end
 
 options = OpenStruct.new(
@@ -99,64 +100,73 @@ options = OpenStruct.new(
   'script'             => nil,
   'server'             => nil,
   'stop'               => true,
-  'tracing'            => false,
+  'tracing'            => false
 )
 
 def process_options(options)
-  program = File.basename($0)
+  program = File.basename($PROGRAM_NAME)
   opts = OptionParser.new do |opts|
     opts.banner = <<EOB
 #{program} #{Byebug::VERSION}
 Usage: #{program} [options] <script.rb> -- <script.rb parameters>
 EOB
-    opts.separator ""
-    opts.separator "Options:"
+    opts.separator ''
+    opts.separator 'Options:'
 
-    opts.on("-d", "--debug", "Set $DEBUG=true") {
-      $DEBUG = true }
-    opts.on('-I', '--include PATH', String,
-            'Add PATH (single or multiple:path:list) to $LOAD_PATH.') {
-      |path| $LOAD_PATH.unshift(*path.split(':')) }
-    opts.on('--no-quit', 'Do not quit when script finishes') {
-      options.quit = false }
-    opts.on('--no-stop', 'Do not stop when script is loaded') {
-      options.stop = false }
-    opts.on('-nx', 'Don\'t run any byebug initialization files') {
-      options.nx = true }
-    opts.on('--post-mortem', 'Run byebug in post-mortem mode') {
-      options.post_mortem = true }
-    opts.on('-r', '--require SCRIPT', String, 'Require library before script') {
-      |name| if name == 'debug'
+    opts.on('-d', '--debug', 'Set $DEBUG=true') do
+      $DEBUG = true
+    end
+    opts.on('-I', '--include PATH1[:PATH2[...[:PATHN]]]', String,
+            'Add PATH1[:PATH2[...[:PATHN]]] to $LOAD_PATH.') do |path|
+      $LOAD_PATH.unshift(*path.split(':'))
+    end
+    opts.on('--no-quit', 'Do not quit when script finishes') do
+      options.quit = false
+    end
+    opts.on('--no-stop', 'Do not stop when script is loaded') do
+      options.stop = false
+    end
+    opts.on('-nx', 'Don\'t run any byebug initialization files') do
+      options.nx = true
+    end
+    opts.on('--post-mortem', 'Run byebug in post-mortem mode') do
+      options.post_mortem = true
+    end
+    opts.on('-r', '--require SCRIPT', String,
+            'Require library before script') do |name|
+      if name == 'debug'
         puts 'byebug not compatible with Ruby\'s \'debug\' lib, option ignored'
       else
         require name
-      end }
-    opts.on('-R', '--remote HOST[:PORT]', String, 'Specify byebug server spec') {
-      |server| host, port = server.split(':', 2)
+      end
+    end
+    opts.on('-R', '--remote HOST[:PORT]', String,
+            'Specify byebug server spec') do |server|
+      host, port = server.split(':', 2)
       host = 'localhost' if host.empty?
       port = nil if port && port.empty?
       port &&= port.to_i
       options.server = [host, port].compact
-    }
+    end
     opts.on('--restart-script FILE', String,
-            'Name of the script file to run. Erased after read') do
-      |restart_script|
-      options.restart_script = restart_script
+            'Name of the script file to run. Erased after read') do |script|
+      options.restart_script = script
       unless File.exist?(options.restart_script)
         puts "Script file '#{options.restart_script}' is not found"
         exit
       end
     end
-    opts.on('--script FILE', String, 'Name of the script file to run') do
-      |script|
+    opts.on('--script FILE', String,
+            'Name of the script file to run') do |script|
       options.script = script
       unless File.exist?(options.script)
         puts "Script file '#{options.script}' is not found"
         exit
       end
     end
-    opts.on('-x', '--trace', 'Turn on line tracing') {
-      options.tracing = true }
+    opts.on('-x', '--trace', 'Turn on line tracing') do
+      options.tracing = true
+    end
 
     opts.separator ''
     opts.separator 'Common options:'
@@ -173,7 +183,7 @@ EOB
       $VERBOSE = true
     end
   end
-  return opts
+  opts
 end
 
 # What file is used for byebug startup commands.

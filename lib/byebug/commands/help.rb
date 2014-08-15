@@ -13,8 +13,8 @@ module Byebug
         args = @match[1].split
         cmds = @state.commands.select { |cmd| cmd.names.include?(args[0]) }
         unless cmds.empty?
-          help = cmds.map{ |cmd| cmd.help(args) }.join("\n")
-          help = help.split("\n").map{|l| l.gsub(/^ +/, '')}
+          help = cmds.map { |cmd| cmd.help(args) }.join("\n")
+          help = help.split("\n").map { |l| l.gsub(/^ +/, '') }
           help.shift if help.first && help.first.empty?
           help.pop if help.last && help.last.empty?
           return print help.join("\n") + "\n"
@@ -28,7 +28,7 @@ module Byebug
 
       print "Type \"help <command-name>\" for help on a specific command\n\n"
       print "Available commands:\n"
-      cmds = @state.commands.map{ |cmd| cmd.names }.flatten.uniq.sort
+      cmds = @state.commands.map { |cmd| cmd.names }.flatten.uniq.sort
       print columnize(cmds, Setting[:width])
     end
 

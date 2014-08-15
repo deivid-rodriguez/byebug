@@ -5,7 +5,7 @@ module Byebug
     end
 
     def active_display_expressions?
-      @state.display.select{|d| d[0]}.size > 0
+      @state.display.select { |d| d[0] }.size > 0
     end
 
     def print_display_expressions

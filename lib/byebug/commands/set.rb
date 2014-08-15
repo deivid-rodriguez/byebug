@@ -23,7 +23,7 @@ module Byebug
 
       Setting[full_key.to_sym] = value
 
-      return print Setting.settings[full_key.to_sym].to_s
+      print Setting.settings[full_key.to_sym].to_s
     end
 
     def get_onoff(arg, default)
@@ -35,7 +35,7 @@ module Byebug
         return false
       else
         print "Expecting 'on', 1, true, 'off', 0, false. Got: #{arg}.\n"
-        raise RuntimeError
+        fail RuntimeError
       end
     end
 
@@ -63,7 +63,7 @@ module Byebug
       def help(setting = nil)
         return "set #{setting.to_sym} <value>\n\n#{setting.help}" if setting
 
-        description + Setting.format()
+        description + Setting.format
       end
     end
   end

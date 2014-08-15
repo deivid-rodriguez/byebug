@@ -31,7 +31,7 @@ module Byebug
           s += ("%5d  %s\n" % [first + index + 1, command])
         end
 
-        return s
+        s
       end
     end
   end

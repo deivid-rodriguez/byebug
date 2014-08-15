@@ -29,11 +29,11 @@ module Byebug
 
     private
 
-      def send_command(msg)
-        @socket.puts msg
-        result = @socket.gets
-        raise IOError unless result
-        result.chomp
-      end
+    def send_command(msg)
+      @socket.puts msg
+      result = @socket.gets
+      fail IOError unless result
+      result.chomp
+    end
   end
 end

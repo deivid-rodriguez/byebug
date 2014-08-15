@@ -10,10 +10,10 @@ module Byebug
       excn = @match[1]
       return info_catch unless excn
 
-      if not @match[2]
+      if !@match[2]
         if 'off' == @match[1]
           Byebug.catchpoints.clear if
-            confirm("Delete all catchpoints? (y or n) ")
+            confirm('Delete all catchpoints? (y or n) ')
         else
           print "Warning #{@match[1]} is not known to be a Class\n" unless
             bb_eval "#{@match[1]}.is_a?(Class)", get_binding

@@ -1,10 +1,10 @@
 module Byebug
   module InfoFunctions
-    def info_catch(*args)
+    def info_catch(*_args)
       return print "No frame selected.\n" unless @state.context
 
-      if Byebug.catchpoints and not Byebug.catchpoints.empty?
-        Byebug.catchpoints.each do |exception, hits|
+      if Byebug.catchpoints && !Byebug.catchpoints.empty?
+        Byebug.catchpoints.each do |exception, _hits|
           print "#{exception}: #{exception.is_a?(Class)}\n"
         end
       else
@@ -81,7 +81,7 @@ module Byebug
 
       args.map do |_, name|
         s = "#{name} = #{locals[name].inspect}"
-        s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
+        s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
         print "#{s}\n"
       end
     end
@@ -101,10 +101,10 @@ module Byebug
     def info_breakpoints(*args)
       return print "No breakpoints.\n" if Byebug.breakpoints.empty?
 
-      brkpts = Byebug.breakpoints.sort_by{|b| b.id}
+      brkpts = Byebug.breakpoints.sort_by { |b| b.id }
       unless args.empty?
-        indices = args.map{|a| a.to_i}
-        brkpts = brkpts.select{|b| indices.member?(b.id)}
+        indices = args.map { |a| a.to_i }
+        brkpts = brkpts.select { |b| indices.member?(b.id) }
         return errmsg "No breakpoints found among list given.\n" if
           brkpts.empty?
       end
@@ -112,9 +112,9 @@ module Byebug
       brkpts.each { |b| info_breakpoint(b) }
     end
 
-    def info_display(*args)
+    def info_display(*_args)
       return print "There are no auto-display expressions now.\n" unless
-        @state.display.find{|d| d[0]}
+        @state.display.find { |d| d[0] }
 
       print "Auto-display expressions now in effect:\n" \
             "Num Enb Expression\n"
@@ -128,7 +128,7 @@ module Byebug
     def info_file_path(file)
       print "File #{file}"
       path = File.expand_path(file)
-      print " - #{path}\n" if path and path != file
+      print " - #{path}\n" if path && path != file
     end
     private :info_file_path
 
@@ -178,7 +178,7 @@ module Byebug
       end
     end
 
-    def info_files(*args)
+    def info_files(*_args)
       files = SCRIPT_LINES__.keys
       files.uniq.sort.each do |file|
         info_file_path(file)
@@ -186,7 +186,7 @@ module Byebug
       end
     end
 
-    def info_line(*args)
+    def info_line(*_args)
       print "Line #{@state.line} of \"#{@state.file}\"\n"
     end
 
@@ -196,12 +196,12 @@ module Byebug
           s = "#{name} = #{vars[name].inspect}"
         rescue
           begin
-          s = "#{name} = #{vars[name].to_s}"
-          rescue
-            s = "#{name} = *Error in evaluation*"
+            s = "#{name} = #{vars[name]}"
+            rescue
+              s = "#{name} = *Error in evaluation*"
           end
         end
-        s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
+        s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
         print "#{s}\n"
       end
     end
@@ -221,24 +221,24 @@ module Byebug
     end
     private :info_stop_reason
 
-    def info_program(*args)
+    def info_program(*_args)
       if @state.context.dead?
         print "The program crashed.\n"
         print "Exception: #{Byebug.last_exception.inspect}\n" if Byebug.last_exception
         return
       end
 
-      print "Program stopped. "
+      print 'Program stopped. '
       info_stop_reason @state.context.stop_reason
     end
 
-    def info_variables(*args)
+    def info_variables(*_args)
       locals = @state.context.frame_locals
       locals[:self] = @state.context.frame_self(@state.frame_pos)
       print_hash(locals)
 
       obj = bb_eval('self')
-      var_list(obj.instance_variables, obj.instance_eval{binding()})
+      var_list(obj.instance_variables, obj.instance_eval { binding })
       var_class_self
     end
 
@@ -254,9 +254,9 @@ module Byebug
       end
 
       def help(args)
-        return description + format_subcmds unless args and args[1]
+        return description + format_subcmds unless args && args[1]
 
-        return format_subcmd(args[1]) unless 'file' == args[1] and args[2]
+        return format_subcmd(args[1]) unless 'file' == args[1] && args[2]
 
         str = subcmd.short_help + '.'
         subsubcmd = Command.find(InfoFileSubcommands, args[2])
@@ -266,7 +266,7 @@ module Byebug
           str += "\n" + subsubcmd.short_help + '.'
         end
 
-        return str
+        str
       end
     end
   end

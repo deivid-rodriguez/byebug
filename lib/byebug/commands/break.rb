@@ -42,7 +42,7 @@ module Byebug
 
         autoreload = Setting[:autoreload]
         possible_lines = LineCache.trace_line_numbers(file, autoreload)
-        if !possible_lines.member?(line)
+        unless possible_lines.member?(line)
           return errmsg \
             "Line #{line} is not a valid breakpoint in file #{path}\n"
         end
@@ -50,14 +50,14 @@ module Byebug
         b = Byebug.add_breakpoint file, line, expr
         print "Created breakpoint #{b.id} at #{path}:#{line}\n"
 
-        if !syntax_valid?(expr)
+        unless syntax_valid?(expr)
           errmsg "Incorrect expression \"#{expr}\"; breakpoint disabled.\n"
           b.enabled = false
         end
 
       else
         klass = bb_warning_eval(file)
-        if klass && klass.kind_of?(Module)
+        if klass && klass.is_a?(Module)
           class_name = klass.name
         else
           return errmsg "Unknown class #{file}\n"

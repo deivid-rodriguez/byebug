@@ -12,7 +12,7 @@ module Byebug
         force = false
       end
       steps = get_int(match[2], command_name, 1)
-      return [steps, force]
+      [steps, force]
     end
   end
 
@@ -26,7 +26,7 @@ module Byebug
     def execute
       steps, force = parse_stepping_args('Next', @match)
       return unless steps
-      @state.context.step_over steps, @state.frame_pos, force
+      @state.context.step_over(steps, @state.frame_pos, force)
       @state.proceed
     end
 

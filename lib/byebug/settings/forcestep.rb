@@ -5,7 +5,7 @@ module Byebug
     end
 
     def print
-      "forced-stepping is #{self.getter}"
+      "forced-stepping is #{getter}"
     end
   end
 end

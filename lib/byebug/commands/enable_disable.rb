@@ -4,9 +4,9 @@ module Byebug
   #
   module EnableDisableFunctions
     def enable_disable_breakpoints(is_enable, args)
-      return errmsg "No breakpoints have been set" if Byebug.breakpoints.empty?
+      return errmsg 'No breakpoints have been set' if Byebug.breakpoints.empty?
 
-      all_breakpoints = Byebug.breakpoints.sort_by {|b| b.id }
+      all_breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       if args.empty?
         selected_breakpoints = all_breakpoints
       else
@@ -16,8 +16,9 @@ module Byebug
           return nil unless pos
           selected_ids << pos
         end
-        selected_breakpoints = all_breakpoints.select {
-          |b| selected_ids.include?(b.id) }
+        selected_breakpoints = all_breakpoints.select do
+          |b| selected_ids.include?(b.id)
+        end
       end
 
       selected_breakpoints.each do |b|
@@ -38,7 +39,7 @@ module Byebug
       args.each do |pos|
         pos = get_int(pos, "#{is_enable} display", 1, @state.display.size)
         return nil unless pos
-        @state.display[pos-1][0] = ('enable' == is_enable)
+        @state.display[pos - 1][0] = ('enable' == is_enable)
       end
     end
   end

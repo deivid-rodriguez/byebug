@@ -13,10 +13,10 @@ module Byebug
 
       begin
         int = Integer(str)
-        if min and int < min
+        if min && int < min
           print "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}\n"
           return nil
-        elsif max and int > max
+        elsif max && int > max
           print "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}\n"
           return nil
         end
@@ -38,7 +38,7 @@ module Byebug
         SCRIPT_LINES__[filename] = lines
       end
 
-      return lines
+      lines
     end
 
     #
@@ -47,7 +47,7 @@ module Byebug
     def get_line(filename, lineno)
       return nil unless lines = get_lines(filename)
 
-      return lines[lineno-1]
+      lines[lineno - 1]
     end
 
     #

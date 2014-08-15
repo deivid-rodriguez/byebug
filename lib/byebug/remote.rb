@@ -1,12 +1,10 @@
 require 'socket'
 
 module Byebug
-
   # Port number used for remote debugging
   PORT = 8989 unless defined?(PORT)
 
   class << self
-
     # If in remote mode, wait for the remote connection
     attr_accessor :wait_connection
 
@@ -57,16 +55,16 @@ module Byebug
     end
 
     def start_control(host = nil, ctrl_port = PORT + 1)
-       return @actual_control_port if @control_thread
-       server = TCPServer.new(host, ctrl_port)
-       @actual_control_port = server.addr[1]
-       @control_thread = DebugThread.new do
-         while (session = server.accept)
-           interface = RemoteInterface.new(session)
-           ControlCommandProcessor.new(interface).process_commands
-         end
-       end
-       @actual_control_port
+      return @actual_control_port if @control_thread
+      server = TCPServer.new(host, ctrl_port)
+      @actual_control_port = server.addr[1]
+      @control_thread = DebugThread.new do
+        while (session = server.accept)
+          interface = RemoteInterface.new(session)
+          ControlCommandProcessor.new(interface).process_commands
+        end
+      end
+      @actual_control_port
     end
 
     #
@@ -75,17 +73,17 @@ module Byebug
     def start_client(host = 'localhost', port = PORT)
       interface = LocalInterface.new
       socket = TCPSocket.new(host, port)
-      puts "Connected."
+      puts 'Connected.'
 
       catch(:exit) do
         while (line = socket.gets)
           case line
           when /^PROMPT (.*)$/
-            input = interface.read_command($1)
+            input = interface.read_command(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           when /^CONFIRM (.*)$/
-            input = interface.confirm($1)
+            input = interface.confirm(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           else

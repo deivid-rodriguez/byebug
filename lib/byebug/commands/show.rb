@@ -37,7 +37,7 @@ module Byebug
       def help(setting = nil)
         return "show #{setting.to_sym} <value>\n\n#{setting.help}" if setting
 
-        description + Setting.format()
+        description + Setting.format
       end
     end
   end

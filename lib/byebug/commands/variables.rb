@@ -9,11 +9,11 @@ module Byebug
           begin
             s = bb_eval(v.to_s, b).to_s
           rescue
-            s = "*Error in evaluation*"
+            s = '*Error in evaluation*'
           end
         end
         s = "#{v} = #{s}"
-        s[Setting[:width]-3..-1] = "..." if s.size > Setting[:width]
+        s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
         print "#{s}\n"
       end
     end
@@ -24,12 +24,16 @@ module Byebug
     end
 
     def var_global
-      var_list(global_variables.reject { |v| [:$=, :$KCODE, :$-K].include?(v) })
+      globals = global_variables.reject do |v|
+        [:$IGNORECASE, :$=, :$KCODE, :$-K].include?(v)
+      end
+
+      var_list(globals)
     end
 
     def var_instance(where)
       obj = bb_eval(where)
-      var_list(obj.instance_variables, obj.instance_eval { binding() })
+      var_list(obj.instance_variables, obj.instance_eval { binding })
     end
 
     def var_local
@@ -94,12 +98,12 @@ module Byebug
 
     def execute
       obj = bb_eval(@match.post_match)
-      if obj.kind_of? Module
+      if obj.is_a? Module
         constants = bb_eval("#{@match.post_match}.constants")
         constants.sort!
         for c in constants
           next if c =~ /SCRIPT/
-          value = obj.const_get(c) rescue "ERROR: #{$!}"
+          value = obj.const_get(c) rescue "ERROR: #{$ERROR_INFO}"
           print " %s => %p\n", c, value
         end
       else

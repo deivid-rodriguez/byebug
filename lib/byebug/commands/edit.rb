@@ -7,7 +7,7 @@ module Byebug
     end
 
     def execute
-      if not @match[1]
+      if !@match[1]
         unless @state.file
           return errmsg "We are not in a state that has an associated file.\n"
         end

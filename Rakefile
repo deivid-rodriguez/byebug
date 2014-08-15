@@ -26,8 +26,8 @@ task default: :test
 
 desc 'Run a test in looped mode so that you can look for memory leaks'
 task 'test_loop' do
-  code = %Q[loop{ require '#{$*[1]}' }]
-  cmd = %Q[ruby -Itest -e "#{ code }"]
+  code = %(loop{ require '#{$ARGV[1]}' })
+  cmd = %(ruby -Itest -e "#{ code }")
   system cmd
 end
 

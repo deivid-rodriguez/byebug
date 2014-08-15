@@ -13,7 +13,7 @@ module Byebug
       file = File.expand_path(@match[1]).strip
       return errmsg "File \"#{file}\" not found\n" unless File.exist?(file)
 
-      if @state and @state.interface
+      if @state && @state.interface
         @state.interface.command_queue += File.open(file).readlines
       else
         Byebug.run_script(file, @state)

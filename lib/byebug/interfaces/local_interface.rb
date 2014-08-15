@@ -27,11 +27,11 @@ module Byebug
 
     private
 
-      def readline(prompt, hist)
-        Readline::readline(prompt, hist)
-      rescue Interrupt
-        print "^C\n"
-        retry
-      end
+    def readline(prompt, hist)
+      Readline.readline(prompt, hist)
+    rescue Interrupt
+      print "^C\n"
+      retry
+    end
   end
 end

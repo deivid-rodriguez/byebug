@@ -9,11 +9,11 @@ module Byebug
     def execute
       obj = bb_eval(@match.post_match)
       if @match[1]
-        print "#{columnize(obj.methods.sort(), Setting[:width])}\n"
-      elsif !obj.kind_of?(Module)
+        print "#{columnize(obj.methods.sort, Setting[:width])}\n"
+      elsif !obj.is_a?(Module)
         print "Should be Class/Module: #{@match.post_match}\n"
       else
-        print "#{columnize(obj.instance_methods(false).sort(), Setting[:width])}\n"
+        print "#{columnize(obj.instance_methods(false).sort, Setting[:width])}\n"
       end
     end
 

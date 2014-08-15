@@ -1,3 +1,4 @@
+require 'English'
 require 'pp'
 
 module Byebug
@@ -30,7 +31,7 @@ module Byebug
         end
       end
     rescue
-      print "#{$!.class} Exception: #{$!.message}\n"
+      print "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}\n"
     end
 
     class << self
@@ -66,7 +67,7 @@ module Byebug
       end
       print out.string
     rescue
-      out.puts $!.message
+      out.puts $ERROR_INFO.message
     end
 
     class << self
@@ -97,7 +98,7 @@ module Byebug
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
-          vals = vals.map{|item| item.to_s}
+          vals = vals.map { |item| item.to_s }
           print "#{columnize(vals, Setting[:width])}\n"
         else
           PP.pp(vals, out)
@@ -105,7 +106,7 @@ module Byebug
         end
       end
     rescue
-      out.puts $!.message
+      out.puts $ERROR_INFO.message
     end
 
     class << self
@@ -138,7 +139,7 @@ module Byebug
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
-          vals = vals.map{|item| item.to_s}
+          vals = vals.map { |item| item.to_s }
           print "#{columnize(vals.sort!, Setting[:width])}\n"
         else
           PP.pp(vals, out)
@@ -146,7 +147,7 @@ module Byebug
         end
       end
     rescue
-      out.puts $!.message
+      out.puts $ERROR_INFO.message
     end
 
     class << self

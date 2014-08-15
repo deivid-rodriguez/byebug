@@ -19,7 +19,7 @@ module Byebug
     def navigate_to_frame(jump_no)
       return if jump_no == 0
       total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame_pos
-      step = jump_no/total_jumps
+      step = jump_no / total_jumps
       loop do
         new_pos += step
         return new_pos if new_pos < 0 || new_pos >= Context.stack_size
@@ -29,7 +29,7 @@ module Byebug
         current_jumps += 1
         break if current_jumps == total_jumps
       end
-      return new_pos
+      new_pos
     end
 
     def adjust_frame(frame_pos, absolute)
@@ -54,14 +54,14 @@ module Byebug
 
     def get_frame_class(style, pos)
       frame_class = style == 'short' ? '' : "#{@state.context.frame_class pos}"
-      return frame_class == '' ? '' : "#{frame_class}."
+      frame_class == '' ? '' : "#{frame_class}."
     end
 
     def get_frame_block_and_method(pos)
       frame_deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
       frame_deco_method = "#{@state.context.frame_method pos}"
       frame_block_and_method = frame_deco_regexp.match(frame_deco_method)[1..2]
-      return frame_block_and_method.map{ |x| x.nil? ? '' : x }
+      frame_block_and_method.map { |x| x.nil? ? '' : x }
     end
 
     def get_frame_args(style, pos)
@@ -82,7 +82,7 @@ module Byebug
         "#{prefix}#{arg[1] || default}#{klass}"
       end
 
-      return "(#{my_args.join(', ')})"
+      "(#{my_args.join(', ')})"
     end
 
     def get_frame_call(prefix, pos)
@@ -94,10 +94,10 @@ module Byebug
 
       max_call_str_size = Setting[:width] - prefix.size
       if call_str.size > max_call_str_size
-        call_str = call_str[0..max_call_str_size - 5] + "...)"
+        call_str = call_str[0..max_call_str_size - 5] + '...)'
       end
 
-      return call_str
+      call_str
     end
 
     def print_backtrace
@@ -132,11 +132,11 @@ module Byebug
       if mark_current
         frame_str = (pos == @state.frame_pos) ? '--> ' : '    '
       else
-        frame_str = ""
+        frame_str = ''
       end
       frame_str += c_frame?(pos) ? ' ͱ-- ' : ''
 
-      frame_str += sprintf "#%-2d ", pos
+      frame_str += sprintf '#%-2d ', pos
       frame_str += get_frame_call frame_str, pos
       file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
       if frame_str.size + file_line.size + 1 > Setting[:width]

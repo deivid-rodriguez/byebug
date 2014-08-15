@@ -61,7 +61,7 @@ module Byebug
       matches.size == 1 ? matches.keys.first : nil
     end
 
-    def self.format()
+    def self.format
       output = "List of settings supported in byebug:\n"
       width = settings.keys.max_by(&:size).size
       settings.values.each do |setting|
@@ -72,7 +72,7 @@ module Byebug
 
     def to_sym
       name = self.class.name.gsub(/^Byebug::/, '').gsub(/Setting$/, '')
-      name.gsub(/(.)([A-Z])/,'\1_\2').downcase.to_sym
+      name.gsub(/(.)([A-Z])/, '\1_\2').downcase.to_sym
     end
 
     def to_s

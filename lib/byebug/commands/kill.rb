@@ -17,7 +17,7 @@ module Byebug
           @state.interface.close
         end
       else
-        if not confirm("Really kill? (y/n) ")
+        if !confirm('Really kill? (y/n) ')
           return
         else
           signame = 'KILL'

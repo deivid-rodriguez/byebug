@@ -31,24 +31,24 @@ module Byebug
       def find(subcmds, param)
         param.downcase!
         for try_subcmd in subcmds do
-          if (param.size >= try_subcmd.min) and
-              (try_subcmd.name[0..param.size-1] == param)
+          if (param.size >= try_subcmd.min) &&
+              (try_subcmd.name[0..param.size - 1] == param)
             return try_subcmd
           end
         end
-        return nil
+        nil
       end
 
       def format_subcmd(subcmd_name)
         subcmd = find(self::Subcommands, subcmd_name)
-        return "Invalid \"#{names.join("|")}\" " \
+        return "Invalid \"#{names.join('|')}\" " \
                "subcommand \"#{args[1]}\"." unless subcmd
 
-        return "#{subcmd.help}.\n"
+        "#{subcmd.help}.\n"
       end
 
       def format_subcmds
-        cmd_name = names.join("|")
+        cmd_name = names.join('|')
         s = "\n"                                     \
             "--\n"                                   \
             "List of \"#{cmd_name}\" subcommands:\n" \
@@ -57,7 +57,7 @@ module Byebug
         for subcmd in self::Subcommands do
           s += sprintf "%s %-#{w}s -- %s\n", cmd_name, subcmd.name, subcmd.help
         end
-        return s
+        s
       end
 
       def commands
@@ -73,9 +73,9 @@ module Byebug
           require file
         end
 
-        Byebug.constants.grep(/Functions$/).map {
+        Byebug.constants.grep(/Functions$/).map do
           |name| Byebug.const_get(name)
-        }.each { |mod| include mod }
+        end.each { |mod| include mod }
       end
     end
 
@@ -89,42 +89,38 @@ module Byebug
 
     protected
 
-      extend Forwardable
-      def_delegators :@state, :errmsg, :print
+    extend Forwardable
+    def_delegators :@state, :errmsg, :print
 
-      def confirm(msg)
-        @state.confirm(msg) == 'y'
-      end
+    def confirm(msg)
+      @state.confirm(msg) == 'y'
+    end
 
-      def bb_eval(str, b = get_binding)
-        begin
-          eval(str, b)
-        rescue StandardError, ScriptError => e
-          at = eval('Thread.current.backtrace_locations(1)', b)
-          print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
-          for i in at
-            print "\tfrom #{i}\n"
-          end
-          nil
-        end
+    def bb_eval(str, b = get_binding)
+      eval(str, b)
+    rescue StandardError, ScriptError => e
+      at = eval('Thread.current.backtrace_locations(1)', b)
+      print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
+      for i in at
+        print "\tfrom #{i}\n"
       end
+      nil
+    end
 
-      def bb_warning_eval(str, b = get_binding)
-        begin
-          eval(str, b)
-        rescue StandardError, ScriptError => e
-          print "#{e.class} Exception: #{e.message}\n"
-          nil
-        end
-      end
+    def bb_warning_eval(str, b = get_binding)
+      eval(str, b)
+    rescue StandardError, ScriptError => e
+      print "#{e.class} Exception: #{e.message}\n"
+      nil
+    end
 
-      def get_binding pos = @state.frame_pos
-        @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
-      end
+    def get_binding(pos = @state.frame_pos)
+      @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
+    end
 
-      def get_context(thnum)
-        Byebug.contexts.find {|c| c.thnum == thnum}
-      end
+    def get_context(thnum)
+      Byebug.contexts.find { |c| c.thnum == thnum }
+    end
   end
 
   Command.load_commands

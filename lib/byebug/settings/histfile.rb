@@ -3,8 +3,8 @@ module Byebug
     DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_hist")
 
     def help
-      "Customize file where history is loaded from and saved to. By default, " \
-      "~/.byebug_hist"
+      'Customize file where history is loaded from and saved to. By default, ' \
+      '~/.byebug_hist'
     end
 
     def to_s

@@ -3,12 +3,12 @@ module Byebug
     def display_context(context, should_show_top_frame = true)
       args = thread_arguments(context, should_show_top_frame)
       print "%s%s%d %s\t%s\n", args[:status_flag], args[:debug_flag], args[:id],
-                               args[:thread], args[:file_line]
+            args[:thread], args[:file_line]
     end
 
     def thread_arguments(context, should_show_top_frame = true)
       status_flag = if context.suspended?
-        "$"
+                      '$'
       else
         context.thread == Thread.current ? '+' : ' '
       end
@@ -59,9 +59,8 @@ module Byebug
       else
         return c
       end
-      return nil
+      nil
     end
-
   end
 
   class ThreadListCommand < Command
@@ -146,7 +145,7 @@ module Byebug
     def execute
       c = parse_thread_num_for_cmd('thread resume', @match[1])
       return unless c
-      if !c.suspended?
+      unless c.suspended?
         errmsg 'Already running'
         return
       end

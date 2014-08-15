@@ -1,12 +1,12 @@
 module Byebug
   class ScriptInterface < Interface
-    def initialize(file, out, verbose=false)
+    def initialize(file, out, verbose = false)
       super()
       @file = file.respond_to?(:gets) ? file : open(file)
       @out, @verbose = out, verbose
     end
 
-    def read_command(prompt)
+    def read_command(_prompt)
       while result = @file.gets
         puts "# #{result}" if @verbose
         next if result =~ /^\s*#/
@@ -15,7 +15,7 @@ module Byebug
       end
     end
 
-    def confirm(prompt)
+    def confirm(_prompt)
       'y'
     end
 

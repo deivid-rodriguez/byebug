@@ -35,74 +35,74 @@ module Byebug
 
     private
 
-      ##
-      # Set line range to be printed by list
-      #
-      # @param listsize - number of lines to be printed
-      # @param maxline - max line number that can be printed
-      #
-      def set_line_range(listsize, maxline)
-        if !@match || !(@match[1] || @match[2])
-          b = @state.previous_line ?
-          @state.previous_line + listsize : @state.line - (listsize/2)
-        elsif @match[1] == '-'
-          b = if @state.previous_line
-                if  @state.previous_line > 0
-                  @state.previous_line - listsize
-                else
-                  @state.previous_line
-                end
+    ##
+    # Set line range to be printed by list
+    #
+    # @param listsize - number of lines to be printed
+    # @param maxline - max line number that can be printed
+    #
+    def set_line_range(listsize, maxline)
+      if !@match || !(@match[1] || @match[2])
+        b = @state.previous_line ?
+        @state.previous_line + listsize : @state.line - (listsize / 2)
+      elsif @match[1] == '-'
+        b = if @state.previous_line
+              if  @state.previous_line > 0
+                @state.previous_line - listsize
               else
-                @state.line - (listsize/2)
+                @state.previous_line
               end
-        elsif @match[1] == '='
-          @state.previous_line = nil
-          b = @state.line - (listsize/2)
-        else
-          b, e = @match[2].split(/[-,]/)
-          if e
-            b = b.to_i
-            e = e.to_i
-          else
-            b = b.to_i - (listsize/2)
-          end
-        end
-
-        if b > maxline
-          errmsg "Invalid line range"
-          return [ -1, -1 ]
-        end
-
-        b = [1, b].max
-        e ||=  b + listsize - 1
-
-        if e > maxline
-          e = maxline
-          b = e - listsize + 1
-          b = [1, b].max
-        end
-
-        return [ b, e ]
-      end
-
-      ##
-      # Show file lines in LINES from line B to line E where CURRENT is the
-      # current line number. If we can show from B to E then we return B,
-      # otherwise we return the previous line @state.previous_line.
-      #
-      def display_list(b, e, lines, current)
-        width = e.to_s.size
-        b.upto(e) do |n|
-          if n > 0 && lines[n-1]
-            if n == current
-              print "=> %#{width}d: %s\n", n, lines[n-1].chomp
             else
-              print "   %#{width}d: %s\n", n, lines[n-1].chomp
+              @state.line - (listsize / 2)
             end
+      elsif @match[1] == '='
+        @state.previous_line = nil
+        b = @state.line - (listsize / 2)
+      else
+        b, e = @match[2].split(/[-,]/)
+        if e
+          b = b.to_i
+          e = e.to_i
+        else
+          b = b.to_i - (listsize / 2)
+        end
+      end
+
+      if b > maxline
+        errmsg 'Invalid line range'
+        return [-1, -1]
+      end
+
+      b = [1, b].max
+      e ||=  b + listsize - 1
+
+      if e > maxline
+        e = maxline
+        b = e - listsize + 1
+        b = [1, b].max
+      end
+
+      [b, e]
+    end
+
+    ##
+    # Show file lines in LINES from line B to line E where CURRENT is the
+    # current line number. If we can show from B to E then we return B,
+    # otherwise we return the previous line @state.previous_line.
+    #
+    def display_list(b, e, lines, current)
+      width = e.to_s.size
+      b.upto(e) do |n|
+        if n > 0 && lines[n - 1]
+          if n == current
+            print "=> %#{width}d: %s\n", n, lines[n - 1].chomp
+          else
+            print "   %#{width}d: %s\n", n, lines[n - 1].chomp
           end
         end
-        print "\n"
-        return e == lines.size ? @state.previous_line : b
       end
+      print "\n"
+      e == lines.size ? @state.previous_line : b
+    end
   end
 end

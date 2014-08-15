@@ -16,8 +16,8 @@ module Byebug
       else
         pos = get_int(pos, 'Undisplay')
         return unless pos
-        if @state.display[pos-1]
-          @state.display[pos-1][0] = nil
+        if @state.display[pos - 1]
+          @state.display[pos - 1][0] = nil
         else
           errmsg "Display expression %d is not defined.\n", pos
         end

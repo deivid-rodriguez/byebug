@@ -24,7 +24,7 @@ module Byebug
           cmd = prog
         else
           print "Ruby program #{prog} not executable... We'll wrap it in a ruby call\n"
-          cmd = "ruby -rbyebug -I#{$:.join(' -I')} #{prog}"
+          cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} #{prog}"
         end
       end
 
