@@ -481,7 +481,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
              frame, context->calced_stack_size);
 
   context->lines = FIX2INT(lines);
-  context->dest_frame = context->calced_stack_size - FIX2INT(frame);
+  context->dest_frame = context->calced_stack_size - frame;
 
   if (n_args == 3 && RTEST(force))
     CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
