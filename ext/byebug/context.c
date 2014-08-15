@@ -429,10 +429,10 @@ static VALUE
 Context_step_out(int argc, VALUE *argv, VALUE self)
 {
   int n_args, n_frames;
-  VALUE v_frames, v_force;
+  VALUE v_frames, force;
   debug_context_t *context;
 
-  n_args = rb_scan_args(argc, argv, "02", &v_frames, &v_force);
+  n_args = rb_scan_args(argc, argv, "02", &v_frames, &force);
   n_frames = n_args == 0 ? 1 : FIX2INT(v_frames);
 
   Data_Get_Struct(self, debug_context_t, context);
@@ -443,7 +443,7 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
              n_frames, context->calced_stack_size);
 
   context->steps_out = n_frames;
-  if (n_args == 2 && RTEST(v_force))
+  if (n_args == 2 && RTEST(force))
     CTX_FL_SET(context, CTX_FL_STOP_ON_RET);
   else
     CTX_FL_UNSET(context, CTX_FL_STOP_ON_RET);
@@ -464,7 +464,7 @@ static VALUE
 Context_step_over(int argc, VALUE *argv, VALUE self)
 {
   int n_args, frame;
-  VALUE lines, v_frame, v_force;
+  VALUE lines, v_frame, force;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
@@ -472,7 +472,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
-  n_args = rb_scan_args(argc, argv, "12", &lines, &v_frame, &v_force);
+  n_args = rb_scan_args(argc, argv, "12", &lines, &v_frame, &force);
   frame = n_args == 1 ? 0 : FIX2INT(v_frame);
 
   if (frame < 0 || frame >= context->calced_stack_size)
@@ -483,7 +483,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
   context->lines = FIX2INT(lines);
   context->dest_frame = context->calced_stack_size - FIX2INT(frame);
 
-  if (n_args == 3 && RTEST(v_force))
+  if (n_args == 3 && RTEST(force))
     CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
   else
     CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
