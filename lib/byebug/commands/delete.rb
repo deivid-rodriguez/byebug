@@ -28,10 +28,10 @@ module Byebug
       end
 
       def description
-        %{del[ete][ nnn...]
+        %(del[ete][ nnn...]
 
-          Without and argument, deletes all breakpoints. With integer arguments,
-          it deletes specific breakpoints.}
+          Without and argument, deletes all breakpoints. With integer
+          arguments, it deletes specific breakpoints.)
       end
     end
   end

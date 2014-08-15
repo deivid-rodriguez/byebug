@@ -19,7 +19,7 @@ module Byebug
       end
 
       def description
-        %{r[eload]\tforces source code reloading}
+        %(r[eload]      Forces source code reloading.)
       end
     end
   end

@@ -248,9 +248,9 @@ module Byebug
       end
 
       def description
-        %{info[ subcommand]
+        %(info[ subcommand]
 
-          Generic command for showing things about the program being debugged.}
+          Generic command for showing things about the program being debugged.)
       end
 
       def help(args)

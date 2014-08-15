@@ -38,8 +38,8 @@ module Byebug
       define_method(:"test_#{cmd_alias}_without_arguments_shows_help") do
         enter 'source'
         debug_proc(@example)
-        check_output_includes \
-          "source FILE\texecutes a file containing byebug commands"
+        check_output_includes(
+          /Executes file <file> containing byebug commands./)
       end
     end
   end

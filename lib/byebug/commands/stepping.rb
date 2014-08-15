@@ -36,10 +36,11 @@ module Byebug
       end
 
       def description
-        %{n[ext][+-]?[ nnn]\tstep over once or nnn times,
-          \t\t'+' forces to move to another line.
-          \t\t'-' is the opposite of '+' and disables the :forcestep setting.
-         }
+        %(n[ext][+-]?[ nnn]
+
+        Steps over once or nnn times.
+          '+' forces to move to another line.
+          '-' is the opposite of '+' and disables the :forcestep setting.)
       end
     end
   end
@@ -64,11 +65,11 @@ module Byebug
       end
 
       def description
-        %{
-          s[tep][+-]?[ nnn]\tstep (into methods) once or nnn times
-          \t\t'+' forces to move to another line.
-          \t\t'-' is the opposite of '+' and disables the :forcestep setting.
-         }
+        %{s[tep][+-]?[ nnn]
+
+          Steps (into methods) once or nnn times.
+            '+' forces to move to another line.
+            '-' is the opposite of '+' and disables the :forcestep setting.}
       end
     end
   end

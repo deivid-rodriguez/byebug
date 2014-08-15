@@ -36,9 +36,12 @@ module Byebug
       end
 
       def description
-        %{cat[ch]\t\t\t\tLists catchpoints
-          cat[ch] off\t\t\tDeletes all catchpoints
-          cat[ch] <exception> [off]\tEnable/disable handling <exception>.}
+        %(cat[ch][ (off|<exception>[ off])]
+
+          "catch" lists catchpoints.
+          "catch off" deletes all catchpoints.
+          "catch <exception>" enables handling <exception>.
+          "catch <exception> off" disables handling <exception>.)
       end
     end
   end

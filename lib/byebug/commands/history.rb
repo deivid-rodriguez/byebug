@@ -21,7 +21,7 @@ module Byebug
       end
 
       def description
-        %{hist[ory] [num_cmds]\t\tShow byebug's command history}
+        %(hist[ory] [num_cmds]        Show byebug's command history.)
       end
     end
   end

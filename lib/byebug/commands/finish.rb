@@ -23,11 +23,11 @@ module Byebug
       end
 
       def description
-        %{fin[ish][ n_frames]\tExecute until frame returns.
+        %(fin[ish][ n_frames]        Execute until frame returns.
 
           If no number is given, we run until the current frame returns. If a
           number of frames `n_frames` is given, then we run until `n_frames`
-          return from the current position.}
+          return from the current position.)
       end
     end
   end

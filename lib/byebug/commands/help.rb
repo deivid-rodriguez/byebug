@@ -38,9 +38,11 @@ module Byebug
       end
 
       def description
-        %{h[elp]\t\tprint this help
-          h[elp] command\tprint help on command
-          h[elp] command subcommand\tprint help on subcommand}
+        %(h[elp][ <command>[ <subcommand>]]
+
+          "help" alone prints this help.
+          "help <command>" prints help on <command>.
+          "help <command> <subcommand> prints help on <subcommand>.)
       end
     end
   end

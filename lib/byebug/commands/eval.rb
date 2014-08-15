@@ -40,11 +40,12 @@ module Byebug
       end
 
       def description
-        %{(p|e[val]) expression
+        %{(p|e[val]) <expression>
 
-          Evaluate expression and print its value
+          Evaluates <expression> and prints its value.
+
           * NOTE - unknown input is automatically evaluated, to turn this off
-          use 'set noautoeval'}
+          use 'set noautoeval'.}
       end
     end
   end
@@ -76,7 +77,9 @@ module Byebug
       end
 
       def description
-        %{pp expression\tevaluate expression and pretty-print its value}
+        %(pp <expression>
+
+          Evaluates <expression> and pretty-prints its value.)
       end
     end
   end
@@ -115,9 +118,9 @@ module Byebug
       end
 
       def description
-        %{putl expression
+        %(putl <expression>
 
-          Evaluate expression, an array, and columnize its value}
+          Evaluates <expression>, an array, and columnize its value.)
       end
     end
   end
@@ -156,11 +159,10 @@ module Byebug
       end
 
       def description
-        %{ps expression
+        %(ps <expression>
 
-          Evaluate expression, an array, sort and columnize its value}
+          Evaluates <expression>, an array, sort and columnize its value.)
       end
     end
   end
-
 end

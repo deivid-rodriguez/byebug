@@ -63,9 +63,9 @@ module Byebug
       end
 
       def description
-        %{v[ar] a[ll]
+        %(v[ar] a[ll]
 
-          Show local, global and instance & class variables of self.}
+          Show local, global and instance & class variables of self.)
       end
     end
   end
@@ -86,7 +86,7 @@ module Byebug
       end
 
       def description
-        %{v[ar] cl[ass] \t\t\tshow class variables of self}
+        %(v[ar] cl[ass]        Show class variables of self.)
       end
     end
   end
@@ -117,7 +117,7 @@ module Byebug
       end
 
       def description
-        %{v[ar] co[nst] <object>\t\tshow constants of object}
+        %(v[ar] co[nst] <object>        Show constants of <object>.)
       end
     end
   end
@@ -137,7 +137,7 @@ module Byebug
       end
 
       def description
-        %{v[ar] g[lobal]\t\t\tshow global variables}
+        %(v[ar] g[lobal]        Show global variables.)
       end
     end
   end
@@ -157,7 +157,9 @@ module Byebug
       end
 
       def description
-        %{v[ar] i[nstance] <object>\tshow instance variables of object}
+        %(v[ar] i[nstance] <object>
+
+        Show instance variables of <object>.)
       end
     end
   end
@@ -177,7 +179,7 @@ module Byebug
       end
 
       def description
-        %{v[ar] l[ocal]\t\t\tshow local variables}
+        %(v[ar] l[ocal]        Sow local variables.)
       end
     end
   end

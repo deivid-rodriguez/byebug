@@ -81,9 +81,7 @@ module Byebug
       end
 
       def description
-        %{
-          th[read] l[ist]\t\t\tlist all threads
-        }
+        %(th[read] l[ist]        Lists all threads.)
       end
     end
   end
@@ -103,7 +101,7 @@ module Byebug
       end
 
       def description
-        %{th[read] [cur[rent]]\t\tshow current thread}
+        %(th[read] [cur[rent]]        Shows current thread.)
       end
     end
   end
@@ -129,7 +127,7 @@ module Byebug
       end
 
       def description
-        %{th[read] stop <nnn>\t\tstop thread nnn}
+        %(th[read] stop <n>        Stops thread <n>.)
       end
     end
   end
@@ -159,7 +157,7 @@ module Byebug
       end
 
       def description
-        %{th[read] resume <nnn>\t\tresume thread nnn}
+        %(th[read] resume <n>        Resumes thread <n>.)
       end
     end
   end
@@ -191,7 +189,7 @@ module Byebug
       end
 
       def description
-        %{th[read] [sw[itch]] <nnn>\tswitch thread context to nnn}
+        %(th[read] [sw[itch]] <nnn>        Switches thread context to <n>.)
       end
     end
   end

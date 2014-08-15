@@ -26,7 +26,7 @@ module Byebug
       end
 
       def description
-        %{pry\tstarts a Pry session.}
+        %(pry        Starts a Pry session.)
       end
     end
   end

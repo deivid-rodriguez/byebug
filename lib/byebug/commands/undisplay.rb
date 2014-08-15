@@ -30,13 +30,13 @@ module Byebug
       end
 
       def description
-        %{undisp[lay][ nnn]
+        %(undisp[lay][ nnn]
 
           Cancel some expressions to be displayed when program stops. Arguments
           are the code numbers of the expressions to stop displaying. No
           argument means cancel all automatic-display expressions. "delete
           display" has the same effect as this command. Do "info display" to see
-          the current list of code numbers.}
+          the current list of code numbers.)
       end
     end
   end

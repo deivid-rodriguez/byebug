@@ -25,11 +25,13 @@ module Byebug
       end
 
       def description
-        %{l[ist]\t\tlist forward
-          l[ist] -\tlist backward
-          l[ist] =\tlist current line
-          l[ist] nn-mm\tlist given lines
-          * NOTE - to turn on autolist, use 'set autolist'}
+        %(l[ist][[-=]][ nn-mm]
+
+          Lists lines of code forward from current line or from the place where
+          code was last listed. If "list-" is specified, lists backwards
+          instead. If "list=" is specified, lists from current line regardless
+          of where code was last listed. A line range can also be specified to
+          list specific sections of code.)
       end
     end
 

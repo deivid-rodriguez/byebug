@@ -30,7 +30,13 @@ module Byebug
       end
 
       def description
-        %{tr[acevar] VARNAME [stop|nostop]\tset trace variable on VARNAME}
+        %(tr[acevar] <variable> [[no]stop]
+
+          Start tracing variable <variable>.
+
+          If "stop" is specified, execution will stop every time the variable
+          changes its value. If nothing or "nostop" is specified, execution
+          won't stop, changes will just be logged in byebug's output.)
       end
     end
   end

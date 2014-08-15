@@ -33,12 +33,12 @@ module Byebug
       end
 
       def description
-        %{cond[ition] nnn[ expr]
+        %(cond[ition] <n>[ expr]
 
-          Specify breakpoint number nnn to break only if expr is true. nnn is an
-          integer and expr is an expression to be evaluated whenever breakpoint
-          nnn is reached. If no expression is specified, the condition is
-          removed.}
+          Specify breakpoint number <n> to break only if <expr> is true. <n> is
+          an integer and <expr> is an expression to be evaluated whenever
+          breakpoint <n> is reached. If no expression is specified, the
+          condition is removed.)
       end
     end
   end

@@ -24,9 +24,9 @@ module Byebug
       end
 
       def description
-        %{c[ont[inue]][ nnn]
+        %(c[ont[inue]][ <n>]
 
-          Run until program ends, hits a breakpoint or reaches line nnn}
+          Run until program ends, hits a breakpoint or reaches line <n>.)
       end
     end
   end

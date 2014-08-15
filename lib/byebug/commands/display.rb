@@ -40,7 +40,9 @@ module Byebug
       end
 
       def description
-        %{disp[lay] <expression>\tadd expression into display expression list}
+        %(disp[lay] <expression>
+
+          Add <expression> into display expression list.)
       end
     end
   end
@@ -66,7 +68,7 @@ module Byebug
       end
 
       def description
-        %{disp[lay]\t\tdisplay expression list}
+        %(disp[lay]        Display expression list.)
       end
     end
   end

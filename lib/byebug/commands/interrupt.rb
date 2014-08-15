@@ -18,7 +18,7 @@ module Byebug
       end
 
       def description
-        %{i|nterrupt\t interrupt the program}
+        %(i|nterrupt        Interrupts the program.)
       end
     end
   end

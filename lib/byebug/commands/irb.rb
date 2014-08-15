@@ -21,7 +21,7 @@ module Byebug
       end
 
       def description
-        %{irb\tstarts an Interactive Ruby (IRB) session.}
+        %{irb        Starts an Interactive Ruby (IRB) session.}
       end
     end
   end
