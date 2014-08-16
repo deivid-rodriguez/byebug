@@ -28,15 +28,11 @@ module Byebug
     end
 
     def save_displays(file)
-      for d in @state.display
-        if d[0]
-          file.puts "display #{d[1]}"
-        end
-      end
+      @state.display.each { |d| file.puts "display #{d[1]}" if d[0] }
     end
 
     def save_settings(file)
-      # FIXME put routine in set
+      # FIXME: put routine in set
       %w(autoeval autoirb autolist basename testing).each do |setting|
         file.puts "set #{setting} #{Setting[setting.to_sym]}"
       end
@@ -57,9 +53,7 @@ module Byebug
       save_displays(file)
       save_settings(file)
       print "Saved to '#{file.path}'\n"
-      if @state && @state.interface
-        @state.interface.restart_file = file.path
-      end
+      @state.interface.restart_file = file.path if @state && @state.interface
       file.close
     end
 

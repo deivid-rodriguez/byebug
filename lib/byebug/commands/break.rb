@@ -3,14 +3,14 @@ module Byebug
     self.allow_in_post_mortem = false
     self.allow_in_control = true
 
-    Position_regexp = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
+    POSITION_REGEXP = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
 
     def regexp
-      /^\s* b(?:reak)? (?:\s+ #{Position_regexp})? (?:\s+(.+))? \s*$/x
+      /^\s* b(?:reak)? (?:\s+ #{POSITION_REGEXP})? (?:\s+(.+))? \s*$/x
     end
 
     def execute
-      return print BreakCommand.help(nil) if BreakCommand.names.include?(@match[0])
+      return print self.class.help(nil) if self.class.names.include?(@match[0])
 
       if @match[1]
         line, _, _, expr = @match.captures

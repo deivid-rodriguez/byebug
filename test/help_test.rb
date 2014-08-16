@@ -37,7 +37,7 @@ module Byebug
     def test_help_with_undefined_command_shows_an_error
       enter 'help foobar'
       debug_proc(@example)
-      check_error_includes 'Undefined command: "foobar". Try "help".'
+      check_error_includes 'Undefined command: "foobar". Try "help"'
     end
 
     def test_help_with_command_and_subcommand_shows_subcommands_help

@@ -10,7 +10,7 @@ module Byebug
 
     def print_display_expressions
       n = 1
-      for d in @state.display
+      @state.display.each do |d|
         if d[0]
           print "#{n}: "
           display_expression(d[1])

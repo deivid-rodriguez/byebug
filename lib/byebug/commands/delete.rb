@@ -14,8 +14,10 @@ module Byebug
       if !@match[1]
         Byebug.breakpoints.clear if confirm('Delete all breakpoints? (y or n) ')
       else
-        @match[1].split(/[ \t]+/).each do |pos|
-          return unless pos = get_int(pos, 'Delete', 1)
+        @match[1].split(/[ \t]+/).each do |number|
+          pos = get_int(number, 'Delete', 1)
+          return unless pos
+
           errmsg "No breakpoint number %d\n", pos unless
             Byebug.remove_breakpoint(pos)
         end

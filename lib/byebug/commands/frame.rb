@@ -9,11 +9,7 @@ module Byebug
     end
 
     def switch_to_frame(frame_no)
-      if frame_no < 0
-        abs_frame_no = Context.stack_size + frame_no
-      else
-        abs_frame_no = frame_no
-      end
+      frame_no >= 0 ? frame_no : Context.stack_size + frame_no
     end
 
     def navigate_to_frame(jump_no)
@@ -71,13 +67,14 @@ module Byebug
       locals = @state.context.frame_locals pos if style == 'long'
       my_args = args.map do |arg|
         case arg[0]
-          when :block
-            prefix, default = '&', 'block'
-          when :rest
-            prefix, default = '*', 'args'
-          else
-            prefix, default = '', nil
+        when :block
+          prefix, default = '&', 'block'
+        when :rest
+          prefix, default = '*', 'args'
+        else
+          prefix, default = '', nil
         end
+
         klass = style == 'long' && arg[1] ? "##{locals[arg[1]].class}" : ''
         "#{prefix}#{arg[1] || default}#{klass}"
       end
@@ -136,7 +133,7 @@ module Byebug
       end
       frame_str += c_frame?(pos) ? ' ͱ-- ' : ''
 
-      frame_str += sprintf '#%-2d ', pos
+      frame_str += format('#%-2d ', pos)
       frame_str += get_frame_call frame_str, pos
       file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
       if frame_str.size + file_line.size + 1 > Setting[:width]
@@ -227,7 +224,10 @@ module Byebug
 
     def execute
       return print_frame @state.frame_pos unless @match[1]
-      return unless pos = get_int(@match[1], 'Frame')
+
+      pos = get_int(@match[1], 'Frame')
+      return unless pos
+
       adjust_frame(pos, true)
     end
 

@@ -12,8 +12,10 @@ module Byebug
       else
         selected_ids = []
         args.each do |pos|
-          pos = get_int(pos, "#{is_enable} breakpoints", 1, all_breakpoints.last.id)
+          last_id = all_breakpoints.last.id
+          pos = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
           return nil unless pos
+
           selected_ids << pos
         end
         selected_breakpoints = all_breakpoints.select do
@@ -46,15 +48,15 @@ module Byebug
 
   class EnableDisableCommand < Command
     Subcommands = [
-      ['breakpoints', 2, 'Enable/disable breakpoints. Give breakpoint '    \
-                         'numbers (separated by spaces) as arguments or '  \
-                         'no argument at all if you want to '              \
-                         'enable/disable every breakpoint'                   ],
-      ['display'    , 2, 'Enable/disable some expressions to be displayed' \
-                         ' when program stops. Arguments are the code '    \
-                         'numbers of the expressions to resume/stop '      \
-                         'displaying. Do "info display" to see the '       \
-                         'current list of code numbers'                      ]
+      ['breakpoints', 2, 'Enable/disable breakpoints. Give breakpoint '      \
+                         'numbers (separated by spaces) as arguments or no ' \
+                         'argument at all if you want to enable/disable '    \
+                         'every breakpoint'],
+      ['display', 2, 'Enable/disable some expressions to be displayed when ' \
+                     ' when program stops. Arguments are the code numbers '  \
+                     'of the expressions to resume/stop displaying. Do '     \
+                     '"info display" to see the current list of code '       \
+                     'numbers']
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(Subcommands)

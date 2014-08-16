@@ -7,9 +7,11 @@ Rake::ExtensionTask.new('byebug') do |ext|
 end
 
 # Override default rake tests loader
-class Rake::TestTask
-  def rake_loader
-    'test/test_helper.rb'
+module Rake
+  class TestTask
+    def rake_loader
+      'test/test_helper.rb'
+    end
   end
 end
 

@@ -2,7 +2,7 @@ module Byebug
   module VarFunctions
     def var_list(ary, b = get_binding)
       ary.sort!
-      for v in ary
+      ary.each do |v|
         begin
           s = bb_eval(v.to_s, b).inspect
         rescue
@@ -101,7 +101,7 @@ module Byebug
       if obj.is_a? Module
         constants = bb_eval("#{@match.post_match}.constants")
         constants.sort!
-        for c in constants
+        constants.each do |c|
           next if c =~ /SCRIPT/
           value = obj.const_get(c) rescue "ERROR: #{$ERROR_INFO}"
           print " %s => %p\n", c, value

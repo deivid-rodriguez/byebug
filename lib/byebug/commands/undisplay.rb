@@ -7,20 +7,19 @@ module Byebug
     end
 
     def execute
-      unless pos = @match[1]
-        if confirm('Clear all expressions? (y/n) ')
-          for d in @state.display
-            d[0] = false
-          end
-        end
-      else
-        pos = get_int(pos, 'Undisplay')
+      if @match[1]
+        pos = get_int(@match[1], 'Undisplay')
         return unless pos
+
         if @state.display[pos - 1]
           @state.display[pos - 1][0] = nil
         else
           errmsg "Display expression %d is not defined.\n", pos
         end
+      else
+        return unless confirm('Clear all expressions? (y/n) ')
+
+        @state.display.each { |d| d[0] = false }
       end
     end
 

@@ -7,7 +7,8 @@ module Byebug
     def execute
       Byebug.source_reload if Setting[:autoreload]
 
-      unless lines = get_lines(@state.file)
+      lines = get_lines(@state.file)
+      unless lines
         errmsg "No sourcefile available for #{@state.file}\n"
         return @state.previous_line
       end
@@ -45,8 +46,11 @@ module Byebug
     #
     def set_line_range(listsize, maxline)
       if !@match || !(@match[1] || @match[2])
-        b = @state.previous_line ?
-        @state.previous_line + listsize : @state.line - (listsize / 2)
+        b = if @state.previous_line
+              @state.previous_line + listsize
+            else
+              @state.line - (listsize / 2)
+            end
       elsif @match[1] == '-'
         b = if @state.previous_line
               if  @state.previous_line > 0

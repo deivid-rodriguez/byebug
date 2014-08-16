@@ -119,7 +119,7 @@ module Byebug
       print "Auto-display expressions now in effect:\n" \
             "Num Enb Expression\n"
       n = 1
-      for d in @state.display
+      @state.display.each do |d|
         print "%3d: %s  %s\n" % [n, (d[0] ? 'y' : 'n'), d[1]]
         n += 1
       end

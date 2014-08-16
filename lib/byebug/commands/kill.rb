@@ -13,16 +13,12 @@ module Byebug
           errmsg("signal name #{signame} is not a signal I know about\n")
           return false
         end
-        if 'KILL' == signame
-          @state.interface.close
-        end
+        @state.interface.close if 'KILL' == signame
       else
-        if !confirm('Really kill? (y/n) ')
-          return
-        else
-          signame = 'KILL'
-        end
+        return unless confirm('Really kill? (y/n) ')
+        signame = 'KILL'
       end
+
       Process.kill(signame, Process.pid)
     end
 
