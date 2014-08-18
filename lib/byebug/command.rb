@@ -7,7 +7,7 @@ module Byebug
     Subcmd = Struct.new(:name, :min, :help)
 
     class << self
-      attr_accessor :allow_in_control, :unknown
+      attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run
 
       def allow_in_post_mortem

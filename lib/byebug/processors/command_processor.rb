@@ -194,13 +194,10 @@ module Byebug
         else
           cmd.execute
         end
+      elsif Setting[:autoeval]
+        commands.find { |c| c.is_a?(EvalCommand) }.execute
       else
-        unknown_cmd = commands.find { |c| c.class.unknown }
-        if unknown_cmd
-          unknown_cmd.execute
-        else
-          errmsg "Unknown command: \"#{input}\". Try \"help\".\n"
-        end
+        errmsg "Unknown command: \"#{input}\". Try \"help\".\n"
       end
     end
 
