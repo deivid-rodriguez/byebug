@@ -28,14 +28,14 @@ module Byebug
         output
       end
 
-      def find(subcmds, param)
-        param.downcase!
-        for try_subcmd in subcmds do
-          if (param.size >= try_subcmd.min) &&
-              (try_subcmd.name[0..param.size - 1] == param)
-            return try_subcmd
+      def find(subcmds, str)
+        str.downcase!
+        subcmds.each do |subcmd|
+          if (str.size >= subcmd.min) && (subcmd.name[0..str.size - 1] == str)
+            return subcmd
           end
         end
+
         nil
       end
 

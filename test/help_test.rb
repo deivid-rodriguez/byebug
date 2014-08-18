@@ -11,8 +11,7 @@ module Byebug
     end
 
     def available_cmds
-      @available_cmds ||=
-        Command.commands.map(&:names).flatten.uniq.sort
+      @available_cmds ||= Command.commands.map(&:names).flatten.uniq.sort
     end
 
     %w(help h).each do |cmd_alias|
