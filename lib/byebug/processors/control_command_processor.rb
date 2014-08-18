@@ -17,8 +17,7 @@ module Byebug
         @context_was_dead = false
       end
 
-      input = @interface.read_command(prompt(nil))
-      while input
+      while (input = @interface.read_command(prompt(nil)))
         print "+#{input}" if verbose
         catch(:debug_error) do
           cmd = commands.find { |c| c.match(input) }

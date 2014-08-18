@@ -7,8 +7,7 @@ module Byebug
     end
 
     def read_command(_prompt)
-      result = @file.gets
-      while result
+      while (result = @file.gets)
         puts "# #{result}" if @verbose
         next if result =~ /^\s*#/
         next if result.strip.empty?
