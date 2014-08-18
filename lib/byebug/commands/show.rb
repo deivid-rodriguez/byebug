@@ -24,7 +24,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^        /, '')
+        <<-EOD.gsub(/^ {8}/, '')
 
           show <setting> <value>
 
