@@ -1,6 +1,6 @@
 module Byebug
   class VerboseSetting < Setting
-    def help
+    def banner
       'Enable verbose output of TracePoint API events'
     end
 

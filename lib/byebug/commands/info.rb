@@ -60,7 +60,7 @@ module Byebug
     end
 
     def execute
-      return print InfoCommand.help(nil) unless @match[1]
+      return print InfoCommand.help unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
@@ -248,25 +248,25 @@ module Byebug
       end
 
       def description
-        %(info[ subcommand]
+        <<-EOD.gsub(/^ {8}/,'')
 
-          Generic command for showing things about the program being debugged.)
+          info[ subcommand]
+
+          Generic command for showing things about the program being debugged.
+
+        EOD
       end
 
-      def help(args)
-        return description + format_subcmds unless args && args[1]
+      def help(subcmds = [])
+        return description + format_subcmds if subcmds.empty?
 
-        return format_subcmd(args[1]) unless 'file' == args[1] && args[2]
+        subcmd = subcmds.first
+        return format_subcmd(subcmd) unless 'file' == subcmd && subcmds[2]
 
-        str = subcmd.short_help + '.'
-        subsubcmd = Command.find(InfoFileSubcommands, args[2])
-        if subsubcmd
-          str += "\nInvalid \"file\" attribute \"#{args[2]}\"."
-        else
-          str += "\n" + subsubcmd.short_help + '.'
-        end
+        subsubcmd = Command.find(InfoFileSubcommands, subcmds[2])
+        return "\nInvalid \"file\" attribute \"#{args[2]}\"." unless subsubcmd
 
-        str
+        subsubcmd.short_help
       end
     end
   end

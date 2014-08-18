@@ -2,8 +2,8 @@ module Byebug
   class FullpathSetting < Setting
     DEFAULT = true
 
-    def help
-      'Display full file names in frames'
+    def banner
+      'Display full file names in backtraces'
     end
   end
 end

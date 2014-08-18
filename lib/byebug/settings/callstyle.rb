@@ -2,7 +2,7 @@ module Byebug
   class CallstyleSetting < Setting
     DEFAULT = 'long'
 
-    def help
+    def banner
       'Set how you want method call parameters to be displayed'
     end
 

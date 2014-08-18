@@ -6,9 +6,8 @@ module Byebug
       EvalCommand.unknown = DEFAULT
     end
 
-    def help
-      'If true, byebug will evaluate every unrecognized command. If false, ' \
-      'need to use the `eval` command to evaluate stuff'
+    def banner
+      'Automatically evaluate unrecognized commands'
     end
 
     def value=(v)

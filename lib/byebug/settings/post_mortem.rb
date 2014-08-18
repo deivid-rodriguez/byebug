@@ -4,7 +4,7 @@ module Byebug
       Byebug.post_mortem = DEFAULT
     end
 
-    def help
+    def banner
       'Enable/disable post-mortem mode'
     end
 

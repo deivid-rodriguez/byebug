@@ -13,13 +13,10 @@ module Byebug
         args = @match[1].split
         cmds = @state.commands.select { |cmd| cmd.names.include?(args[0]) }
         if cmds.empty?
-          errmsg "Undefined command: \"#{args[0]}\". Try \"help\"\n" if args[0]
+          return errmsg "Undefined command: \"#{args[0]}\". Try \"help\"\n"
         else
-          help = cmds.map { |cmd| cmd.help(args) }.join("\n")
-          help = help.split("\n").map { |l| l.gsub(/^ +/, '') }
-          help.shift if help.first && help.first.empty?
-          help.pop if help.last && help.last.empty?
-          print help.join("\n") + "\n"
+          help = cmds.map { |cmd| cmd.help(args[1..-1]) }.join("\n")
+          return print(help)
         end
       end
 
@@ -29,6 +26,7 @@ module Byebug
       print "Available commands:\n"
       cmds = @state.commands.map { |cmd| cmd.names }.flatten.uniq.sort
       print columnize(cmds, Setting[:width])
+      print "\n"
     end
 
     class << self

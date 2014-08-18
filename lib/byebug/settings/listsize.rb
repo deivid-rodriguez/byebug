@@ -2,7 +2,7 @@ module Byebug
   class ListsizeSetting < Setting
     DEFAULT = 10
 
-    def help
+    def banner
       'Set number of source lines to list by default'
     end
 

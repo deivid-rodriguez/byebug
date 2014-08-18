@@ -1,6 +1,6 @@
 module Byebug
   class TestingSetting < Setting
-    def help
+    def banner
       'Used when testing byebug'
     end
   end

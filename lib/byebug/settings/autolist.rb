@@ -6,8 +6,8 @@ module Byebug
       ListCommand.always_run = DEFAULT
     end
 
-    def help
-      'If true, `list` command is run everytime byebug stops'
+    def banner
+      'Invoke list command on every stop'
     end
 
     def value=(v)

@@ -2,7 +2,7 @@ module Byebug
   class WidthSetting < Setting
     DEFAULT = 160
 
-    def help
+    def banner
       "Number of characters per line in byebug's output"
     end
 

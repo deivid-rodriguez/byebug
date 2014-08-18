@@ -2,8 +2,8 @@ module Byebug
   class AutoreloadSetting < Setting
     DEFAULT = true
 
-    def help
-      'Reload source code when changed'
+    def banner
+      'Automatically reload source code when it is changed'
     end
   end
 end

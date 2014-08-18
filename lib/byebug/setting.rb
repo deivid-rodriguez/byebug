@@ -62,12 +62,33 @@ module Byebug
     end
 
     def self.format
-      output = "List of settings supported in byebug:\n"
+      output = "  List of settings supported in byebug:\n  --\n"
       width = settings.keys.max_by(&:size).size
-      settings.values.each do |setting|
-        output << sprintf("%-#{width}s -- %s\n", setting.to_sym, setting.help)
+      settings.values.each do |sett|
+        output << sprintf("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
       end
-      output
+      output + "\n"
+    end
+
+    def self.help(cmd, subcmd)
+      if subcmd
+        camelized = subcmd.split('_').map { |w| w.capitalize }.join
+        setting = Byebug.const_get("#{camelized}Setting").new
+        <<-EOH.gsub(/^ {8}/,'')
+
+          #{cmd} #{setting.to_sym} <value>
+
+          #{setting.banner}.
+
+        EOH
+      else
+        command = Byebug.const_get("#{cmd.capitalize}Command")
+        command.description + format
+      end
+    end
+
+    def help
+      "\n  #{banner}.\n\n"
     end
 
     def to_sym

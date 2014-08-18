@@ -44,20 +44,17 @@ module Byebug
         return "Invalid \"#{names.join('|')}\" " \
                "subcommand \"#{args[1]}\"." unless subcmd
 
-        "#{subcmd.help}.\n"
+        "\n  #{subcmd.help}.\n\n"
       end
 
       def format_subcmds
-        cmd_name = names.join('|')
-        s = "\n"                                     \
-            "--\n"                                   \
-            "List of \"#{cmd_name}\" subcommands:\n" \
-            "--\n"
+        header = names.join('|')
+        s = "  List of \"#{header}\" subcommands:\n  --\n"
         w = self::Subcommands.map(&:name).max_by(&:size).size
-        for subcmd in self::Subcommands do
-          s += sprintf "%s %-#{w}s -- %s\n", cmd_name, subcmd.name, subcmd.help
+        self::Subcommands.each do |subcmd|
+          s += sprintf "  %s %-#{w}s -- %s\n", header, subcmd.name, subcmd.help
         end
-        s
+        s + "\n"
       end
 
       def commands

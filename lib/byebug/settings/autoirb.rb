@@ -6,7 +6,7 @@ module Byebug
       IrbCommand.always_run = DEFAULT
     end
 
-    def help
+    def banner
       'Invoke IRB on every stop'
     end
 

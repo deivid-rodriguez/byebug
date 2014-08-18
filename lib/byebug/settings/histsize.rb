@@ -2,9 +2,8 @@ module Byebug
   class HistsizeSetting < Setting
     DEFAULT = 256
 
-    def help
-      "Customize maximum number of commands that can be stored in byebug's " \
-      "history record. By default, #{DEFAULT}"
+    def banner
+      'Maximum number of commands that can be stored in byebug history'
     end
 
     def to_s

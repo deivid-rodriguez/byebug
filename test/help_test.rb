@@ -42,7 +42,25 @@ module Byebug
     def test_help_with_command_and_subcommand_shows_subcommands_help
       enter 'help info breakpoints'
       debug_proc(@example)
-      check_output_includes "Status of user-settable breakpoints.\n"
+      check_output_includes(/Status of user-settable breakpoints/)
+    end
+
+    def test_help_set_shows_help_for_set_command
+      enter 'help set'
+      debug_proc(@example)
+      check_output_includes(/Modifies parts of byebug environment/)
+    end
+
+    def test_help_set_plus_a_setting_shows_help_for_that_setting
+      enter 'help set width'
+      debug_proc(@example)
+      check_output_includes(/Number of characters per line in byebug's output/)
+    end
+
+    def test_help_show_shows_help_for_show_command
+      enter 'help show'
+      debug_proc(@example)
+      check_output_includes(/Generic command for showing byebug settings/)
     end
   end
 end

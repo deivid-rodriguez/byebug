@@ -60,10 +60,8 @@ module Byebug
         EOD
       end
 
-      def help(setting = nil)
-        return "set #{setting.to_sym} <value>\n\n#{setting.help}" if setting
-
-        description + Setting.format
+      def help(subcmds = [])
+        Setting.help('set', subcmds.first)
       end
     end
   end

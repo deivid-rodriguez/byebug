@@ -1,6 +1,6 @@
 module Byebug
   class LinetraceSetting < Setting
-    def help
+    def banner
       'Enable line execution tracing'
     end
 
