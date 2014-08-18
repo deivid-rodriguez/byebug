@@ -188,7 +188,8 @@ module Byebug
     # Executes a single byebug command
     #
     def one_cmd(commands, context, input)
-      if cmd = commands.find { |c| c.match(input) }
+      cmd = commands.find { |c| c.match(input) }
+      if cmd
         if context.dead? && !cmd.class.allow_in_post_mortem
           errmsg "Command unavailable in post mortem mode.\n"
         else

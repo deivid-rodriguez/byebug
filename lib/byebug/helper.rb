@@ -33,7 +33,8 @@ module Byebug
     def get_lines(filename)
       return nil unless File.exist?(filename)
 
-      unless lines = SCRIPT_LINES__[filename]
+      lines = SCRIPT_LINES__[filename]
+      unless lines
         lines = File.readlines(filename) rescue []
         SCRIPT_LINES__[filename] = lines
       end
@@ -45,7 +46,8 @@ module Byebug
     # Gets a single line in a source code file
     #
     def get_line(filename, lineno)
-      return nil unless lines = get_lines(filename)
+      lines = get_lines(filename)
+      return nil unless lines
 
       lines[lineno - 1]
     end

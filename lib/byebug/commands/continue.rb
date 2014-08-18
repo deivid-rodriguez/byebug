@@ -9,7 +9,9 @@ module Byebug
     def execute
       if @match[1] && !@state.context.dead?
         filename = File.expand_path(@state.file)
-        return unless line_number = get_int(@match[1], 'Continue', 0, nil, 0)
+        line_number = get_int(@match[1], 'Continue', 0, nil, 0)
+        return unless line_number
+
         unless LineCache.trace_line_numbers(filename).member?(line_number)
           return errmsg "Line #{line_number} is not a valid stopping point in file\n"
         end

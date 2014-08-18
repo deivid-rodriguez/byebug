@@ -13,17 +13,18 @@ module Byebug
       largest = breakpoints.reduce(0) do |tally, b|
         tally = b.id if b.id > tally
       end
-
       return errmsg "No breakpoints have been set\n" if 0 == largest
-      return unless pos = get_int(@match[1], 'Condition', 1, largest)
+
+      pos = get_int(@match[1], 'Condition', 1, largest)
+      return unless pos
 
       breakpoint = breakpoints.select { |b| b.id == pos }.first
 
       if syntax_valid?(@match[2])
         breakpoint.expr = @match[2]
       else
-        return errmsg "Incorrect expression \"#{@match[2]}\", " \
-                      "breakpoint not changed\n"
+        errmsg "Incorrect expression \"#{@match[2]}\", " \
+               "breakpoint not changed\n"
       end
     end
 

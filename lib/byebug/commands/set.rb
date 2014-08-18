@@ -18,7 +18,8 @@ module Byebug
       elsif Setting.boolean?(full_key)
         value = get_onoff(value, key =~ /^no/ ? false : true)
       elsif Setting.integer?(full_key)
-        return unless value = get_int(value, full_key, 1)
+        value = get_int(value, full_key, 1)
+        return unless value
       end
 
       Setting[full_key.to_sym] = value

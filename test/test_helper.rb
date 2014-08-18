@@ -26,7 +26,7 @@ class Byebug::TestCase < Minitest::Test
 
     byebug_bin = File.expand_path('../../../bin/byebug', __FILE__)
     force_set_const(Byebug, 'BYEBUG_SCRIPT', byebug_bin)
-    force_set_const(Byebug, 'PROG_SCRIPT', $0)
+    force_set_const(Byebug, 'PROG_SCRIPT', $PROGRAM_NAME)
   end
 
   include Byebug::TestUtils

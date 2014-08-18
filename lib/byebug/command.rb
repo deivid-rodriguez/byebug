@@ -98,9 +98,7 @@ module Byebug
     rescue StandardError, ScriptError => e
       at = eval('Thread.current.backtrace_locations(1)', b)
       print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
-      for i in at
-        print "\tfrom #{i}\n"
-      end
+      at.each { |path| print "\tfrom #{path}\n" }
       nil
     end
 

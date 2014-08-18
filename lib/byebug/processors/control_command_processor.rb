@@ -17,14 +17,14 @@ module Byebug
         @context_was_dead = false
       end
 
-      while input = @interface.read_command(prompt(nil))
+      input = @interface.read_command(prompt(nil))
+      while input
         print "+#{input}" if verbose
         catch(:debug_error) do
-          if cmd = commands.find { |c| c.match(input) }
-            cmd.execute
-          else
-            errmsg "Unknown command\n"
-          end
+          cmd = commands.find { |c| c.match(input) }
+          return errmsg "Unknown command\n" unless cmd
+
+          cmd.execute
         end
       end
     rescue IOError, SystemCallError

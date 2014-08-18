@@ -13,7 +13,7 @@ module Byebug
         end
         file = @state.file
         line = @state.line if @state.line
-      elsif @pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1])
+      elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1]))
         file, line = @pos_match.captures
       elsif File.exist?(@match[1])
         file = @match[1]

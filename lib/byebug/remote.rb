@@ -40,18 +40,11 @@ module Byebug
       @thread = DebugThread.new do
         while (session = server.accept)
           self.interface = RemoteInterface.new(session)
-          if wait_connection
-            mutex.synchronize do
-              proceed.signal
-            end
-          end
+          mutex.synchronize { proceed.signal } unless wait_connection
         end
       end
-      if wait_connection
-        mutex.synchronize do
-          proceed.wait(mutex)
-        end
-      end
+
+      mutex.synchronize { proceed.wait(mutex) } if wait_connection
     end
 
     def start_control(host = nil, ctrl_port = PORT + 1)

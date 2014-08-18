@@ -248,7 +248,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/,'')
+        <<-EOD.gsub(/^ {8}/, '')
 
           info[ subcommand]
 

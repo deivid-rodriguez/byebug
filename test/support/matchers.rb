@@ -1,34 +1,34 @@
-module Minitest::Assertions
+module Minitest
+  module Assertions
 
-  # This matcher checks that given collection is included into the original
-  # collection and in correct order. It accepts both strings and regexps.
-  #
-  # Examples:
-  #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 3 5})            # => pass
-  #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 5 3})            # => fail
-  #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\d+/, "5"])     # => pass
-  #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\[a-z]+/, "5"]) # => fail
-  #
-  def assert_includes_in_order(given_collection, original_collection, msg = nil)
-    msg = message(msg) do
-      "Expected #{mu_pp(original_collection)} " \
-      "to include #{mu_pp(given_collection)} in order"
+    # This matcher checks that given collection is included into the original
+    # collection and in correct order. It accepts both strings and regexps.
+    #
+    # Examples:
+    #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 3 5})            # => pass
+    #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 5 3})            # => fail
+    #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\d+/, "5"])     # => pass
+    #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\[a-z]+/, "5"]) # => fail
+    #
+    def assert_includes_in_order(given_collection, original_collection, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(original_collection)} " \
+        "to include #{mu_pp(given_collection)} in order"
+      end
+      assert _includes_in_order_result(original_collection, given_collection), msg
     end
-    assert includes_in_order_result(original_collection, given_collection), msg
-  end
 
-  def refute_includes_in_order(given_collection, original_collection, msg = nil)
-    msg = message(msg) do
-      "Expected #{mu_pp(original_collection)} " \
-      "to not include #{mu_pp(given_collection)} in order"
+    def refute_includes_in_order(given_collection, original_collection, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(original_collection)} " \
+        "to not include #{mu_pp(given_collection)} in order"
+      end
+      refute _includes_in_order_result(original_collection, given_collection), msg
     end
-    refute includes_in_order_result(original_collection, given_collection), msg
-  end
 
+    private
 
-  private
-
-    def includes_in_order_result(original_collection, given_collection)
+    def _includes_in_order_result(original_collection, given_collection)
       result = true
       given_collection.each do |given_item|
         result &&= case given_item
@@ -60,4 +60,5 @@ module Minitest::Assertions
       end
       result
     end
+  end
 end

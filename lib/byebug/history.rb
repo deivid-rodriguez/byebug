@@ -28,7 +28,7 @@ module Byebug
 
         s = ''
         commands.each_with_index do |command, index|
-          s += ("%5d  %s\n" % [first + index + 1, command])
+          s += format("%5d  %s\n", first + index + 1, command)
         end
 
         s
