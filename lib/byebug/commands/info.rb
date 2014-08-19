@@ -212,14 +212,14 @@ module Byebug
 
     def info_stop_reason(stop_reason)
       case stop_reason
-        when :step
-          print "It stopped after stepping, next'ing or initial start.\n"
-        when :breakpoint
-          print("It stopped at a breakpoint.\n")
-        when :catchpoint
-          print("It stopped at a catchpoint.\n")
-        else
-          print("unknown reason: #{@state.context.stop_reason}\n")
+      when :step
+        print "It stopped after stepping, next'ing or initial start.\n"
+      when :breakpoint
+        print("It stopped at a breakpoint.\n")
+      when :catchpoint
+        print("It stopped at a catchpoint.\n")
+      else
+        print("unknown reason: #{@state.context.stop_reason}\n")
       end
     end
     private :info_stop_reason
