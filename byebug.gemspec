@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.files            = `git ls-files`.split("\n")
   s.test_files       = `git ls-files -- test/*`.split("\n")
+  s.bindir           = 'bin'
   s.executables      = ['byebug']
   s.extra_rdoc_files = ['README.md']
   s.extensions       = ['ext/byebug/extconf.rb']
