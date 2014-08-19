@@ -40,7 +40,8 @@ module Byebug
       _self = @state.context.frame_self(@state.frame_pos)
       locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
-        print "  %s => %p\n", name, locals[name]
+        interp = format("  %s => %p", name, locals[name])
+        print("#{interp}\n")
       end
     end
   end
@@ -104,7 +105,8 @@ module Byebug
         constants.each do |c|
           next if c =~ /SCRIPT/
           value = obj.const_get(c) rescue "ERROR: #{$ERROR_INFO}"
-          print " %s => %p\n", c, value
+          interp = format(" %s => %p", c, value)
+          print("#{interp}\n")
         end
       else
         print "Should be Class/Module: #{@match.post_match}\n"

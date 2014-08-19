@@ -69,7 +69,7 @@ module Byebug
     def at_catchpoint(context, excpt)
       file = self.class.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
-      print "Catchpoint at %s:%d: `%s' (%s)\n", file, line, excpt, excpt.class
+      print "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})\n"
     end
     protect :at_catchpoint
 

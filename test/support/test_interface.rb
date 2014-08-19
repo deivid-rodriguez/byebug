@@ -13,7 +13,7 @@ module Byebug
     end
 
     def errmsg(*args)
-      @error_queue << format(*args)
+      @error_queue.push(*args)
     end
 
     def read_command(*args)
@@ -29,7 +29,7 @@ module Byebug
     end
 
     def print(*args)
-      @output_queue << format(*args)
+      @output_queue.push(*args)
     end
 
     def confirm(message)

@@ -88,8 +88,10 @@ module Byebug
 
     def info_breakpoint(brkpt)
       expr = brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
-      print "%-3d %-3s at %s:%s%s\n" %
-        [brkpt.id, brkpt.enabled? ? 'y' : 'n', brkpt.source, brkpt.pos, expr]
+      interp = format("%-3d %-3s at %s:%s%s", brkpt.id,
+                                              brkpt.enabled? ? 'y' : 'n',
+                                              brkpt.source, brkpt.pos, expr)
+      print("#{interp}\n")
       hits = brkpt.hit_count
       if hits > 0
         s = (hits > 1) ? 's' : ''
@@ -120,7 +122,8 @@ module Byebug
             "Num Enb Expression\n"
       n = 1
       @state.display.each do |d|
-        print "%3d: %s  %s\n" % [n, (d[0] ? 'y' : 'n'), d[1]]
+        interp = format("%3d: %s  %s", n, d[0] ? 'y' : 'n', d[1])
+        print "#{interp}\n"
         n += 1
       end
     end
@@ -216,7 +219,7 @@ module Byebug
         when :catchpoint
           print("It stopped at a catchpoint.\n")
         else
-          print "unknown reason: %s\n" % @state.context.stop_reason.to_s
+          print("unknown reason: #{@state.context.stop_reason}\n")
       end
     end
     private :info_stop_reason

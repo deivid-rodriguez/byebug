@@ -13,16 +13,6 @@ module Byebug
       print(*args)
     end
 
-    def format(*args)
-      if args.is_a?(Array)
-        new_args = args.first
-        new_args = new_args % args[1..-1] unless args[1..-1].empty?
-      else
-        new_args = args
-      end
-      new_args
-    end
-
     def escape(msg)
       msg.gsub('%', '%%')
     end
