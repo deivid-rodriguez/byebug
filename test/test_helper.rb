@@ -33,7 +33,6 @@ class Byebug::TestCase < Minitest::Test
 end
 
 # Init globals to avoid warnings
-$bla = nil
 $binding = binding # this is from irb...
 
 # Load the test files from the command line.
