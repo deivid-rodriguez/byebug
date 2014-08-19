@@ -37,8 +37,9 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     const char *event = rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)));
     char *path = RSTRING_PTR(rb_tracearg_path(trace_arg));
     int line = NUM2INT(rb_tracearg_lineno(trace_arg));
-    VALUE v_mid = rb_tracearg_method_id(trace_arg);
-    const char *mid = NIL_P(v_mid) ? "" : rb_id2name(SYM2ID(v_mid));
+    VALUE v_mid_sym = rb_tracearg_method_id(trace_arg);
+    VALUE v_mid_id = NIL_P(v_mid_sym) ? Qnil : SYM2ID(v_mid_sym);
+    const char *mid = NIL_P(v_mid_id) ? "" : rb_id2name(v_mid_id);
     printf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
          dc->calced_stack_size, dc->thnum, event, path, line, mid);
   }
