@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.extensions       = ['ext/byebug/extconf.rb']
 
   s.add_dependency 'columnize', '~> 0.8'
+  s.add_dependency 'slop', '~> 3.6'
   s.add_dependency 'debugger-linecache', '~> 1.2'
 end
