@@ -1,6 +1,6 @@
 module Byebug
   class ControlCommandProcessor < Processor
-    def initialize(interface)
+    def initialize(interface = LocalInterface.new)
       super(interface)
       @context_was_dead = false # Assume we haven't started.
     end

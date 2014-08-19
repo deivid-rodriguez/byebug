@@ -32,7 +32,7 @@ module Byebug
     def lines_between(min, max, mark_current = true)
       lines = [*File.open(__FILE__)][min-1..max-1]
       numbers = (min..max).to_a
-      output = numbers.zip(lines).map { |l| sprintf("%2d: %s", l[0], l[1]) }
+      output = numbers.zip(lines).map { |l| format("%2d: %s", l[0], l[1]) }
       if mark_current
         middle = (output.size/2.0).ceil
         output[middle] = "=> #{output[middle]}"

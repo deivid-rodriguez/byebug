@@ -15,7 +15,13 @@ module Byebug
         RestartExample.new.concat_args(a, b, c)
       end
 
+      @old_prog_script = Byebug::PROG_SCRIPT if defined?(Byebug::PROG_SCRIPT)
+
       super
+    end
+
+    def after
+      force_set_const(Byebug, 'PROG_SCRIPT', @old_prog_script)
     end
 
     def must_restart(cmd = nil)
