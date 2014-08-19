@@ -41,7 +41,7 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     VALUE v_mid_id = NIL_P(v_mid_sym) ? Qnil : SYM2ID(v_mid_sym);
     const char *mid = NIL_P(v_mid_id) ? "" : rb_id2name(v_mid_id);
     printf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
-         dc->calced_stack_size, dc->thnum, event, path, line, mid);
+           dc->calced_stack_size, dc->thnum, event, path, line, mid);
   }
 }
 
