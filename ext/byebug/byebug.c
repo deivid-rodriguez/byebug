@@ -70,9 +70,10 @@ cleanup(debug_context_t *dc)
   VALUE context;                                                        \
   thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
-  if (verbose == Qtrue) trace_print(trace_arg, dc);                     \
 
-#define EVENT_COMMON if (!trace_common(trace_arg, dc)) { return; }
+#define EVENT_COMMON                                                    \
+  if (verbose == Qtrue) trace_print(trace_arg, dc);                     \
+  if (!trace_common(trace_arg, dc)) { return; }                         \
 
 static int
 trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
