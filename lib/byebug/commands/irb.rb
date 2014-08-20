@@ -1,6 +1,9 @@
 require 'irb'
 
 module Byebug
+  #
+  # Enter IRB from byebug's prompt
+  #
   class IrbCommand < Command
     def regexp
       /^\s* irb \s*$/x

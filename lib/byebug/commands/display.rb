@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Custom display utilities.
+  #
   module DisplayFunctions
     def display_expression(exp)
       print "#{exp} = #{bb_warning_eval(exp).inspect}\n"
@@ -20,6 +23,10 @@ module Byebug
     end
   end
 
+  #
+  # Implements the functionality of adding custom expressions to be displayed
+  # every time the debugger stops.
+  #
   class AddDisplayCommand < Command
     self.allow_in_post_mortem = false
 
@@ -47,6 +54,9 @@ module Byebug
     end
   end
 
+  #
+  # Displays the value of enabled expressions.
+  #
   class DisplayCommand < Command
     self.allow_in_post_mortem = false
 

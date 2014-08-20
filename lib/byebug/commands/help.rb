@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Ask for help from byebug's prompt.
+  #
   class HelpCommand < Command
     include Columnize
 

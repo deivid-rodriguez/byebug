@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Implements breakpoint deletion.
+  #
   class DeleteCommand < Command
     self.allow_in_post_mortem = false
     self.allow_in_control = true

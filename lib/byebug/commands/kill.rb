@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Send custom signals to the debugged program.
+  #
   class KillCommand < Command
     self.allow_in_control = true
 

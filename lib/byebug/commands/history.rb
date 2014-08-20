@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Show history of byebug commands.
+  #
   class HistoryCommand < Command
     def regexp
       /^\s* hist(?:ory)? (?:\s+(?<num_cmds>.+))? \s*$/x

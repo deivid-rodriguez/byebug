@@ -46,6 +46,9 @@ module Byebug
     end
   end
 
+  #
+  # Enabling or disabling custom display expressions or breakpoints.
+  #
   class EnableDisableCommand < Command
     Subcommands = [
       ['breakpoints', 2, 'Enable/disable breakpoints. Give breakpoint '      \

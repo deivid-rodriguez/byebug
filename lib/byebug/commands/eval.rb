@@ -2,6 +2,9 @@ require 'English'
 require 'pp'
 
 module Byebug
+  #
+  # Utilities used by the eval command
+  #
   module EvalFunctions
     def run_with_binding
       binding = get_binding
@@ -9,6 +12,9 @@ module Byebug
     end
   end
 
+  #
+  # Evaluation of expressions from byebug's prompt.
+  #
   class EvalCommand < Command
     self.allow_in_control = true
 
@@ -50,6 +56,9 @@ module Byebug
     end
   end
 
+  #
+  # Evaluation and pretty printing from byebug's prompt.
+  #
   class PPCommand < Command
     self.allow_in_control = true
 
@@ -84,6 +93,9 @@ module Byebug
     end
   end
 
+  #
+  # Evaluation, pretty printing and columnizing from byebug's prompt.
+  #
   class PutLCommand < Command
     include Columnize
     self.allow_in_control = true
@@ -125,6 +137,9 @@ module Byebug
     end
   end
 
+  #
+  # Evaluation, pretty printing, columnizing and sorting from byebug's prompt
+  #
   class PSCommand < Command
     include Columnize
     self.allow_in_control = true

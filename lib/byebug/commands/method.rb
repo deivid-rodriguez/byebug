@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Show methods of specific classes/modules/objects.
+  #
   class MethodCommand < Command
     include Columnize
 

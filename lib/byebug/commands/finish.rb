@@ -1,4 +1,9 @@
 module Byebug
+  #
+  # Implements the finish functionality.
+  #
+  # Allows the user to continue execution until certain frames are finished.
+  #
   class FinishCommand < Command
     self.allow_in_post_mortem = false
 

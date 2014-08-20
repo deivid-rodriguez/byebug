@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Show byebug settings.
+  #
   class ShowCommand < Command
     self.allow_in_control = true
 

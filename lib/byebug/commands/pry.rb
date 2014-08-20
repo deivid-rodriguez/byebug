@@ -6,6 +6,9 @@ rescue LoadError
 end
 
 module Byebug
+  #
+  # Enter Pry from byebug's prompt
+  #
   class PryCommand < Command
     def regexp
       /^\s* pry \s*$/x

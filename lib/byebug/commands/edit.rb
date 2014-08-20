@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Edit a file from byebug's prompt.
+  #
   class EditCommand < Command
     self.allow_in_control = true
 

@@ -1,4 +1,9 @@
 module Byebug
+  #
+  # Implements conditions on breakpoints.
+  #
+  # Adds the ability to stop on breakpoints only under certain conditions.
+  #
   class ConditionCommand < Command
     self.allow_in_post_mortem = false
 

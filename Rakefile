@@ -6,8 +6,10 @@ Rake::ExtensionTask.new('byebug') do |ext|
   ext.lib_dir = 'lib/byebug'
 end
 
-# Override default rake tests loader
 module Rake
+  #
+  # Overrides default rake tests loader
+  #
   class TestTask
     def rake_loader
       'test/test_helper.rb'

@@ -1,4 +1,9 @@
 module Byebug
+  #
+  # Implements exception catching.
+  #
+  # Enables the user to catch unhandled assertion when they happen.
+  #
   class CatchCommand < Command
     self.allow_in_control = true
 

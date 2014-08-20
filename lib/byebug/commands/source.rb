@@ -1,4 +1,9 @@
 module Byebug
+  #
+  # Execute a file containing byebug commands.
+  #
+  # It can be used to restore a previously saved debugging session.
+  #
   class SourceCommand < Command
     self.allow_in_control = true
 

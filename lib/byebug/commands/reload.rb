@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Reload source code to pick up latest changes.
+  #
   class ReloadCommand < Command
     self.allow_in_control = true
     self.allow_in_post_mortem = false

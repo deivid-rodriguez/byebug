@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # List parts of the source code.
+  #
   class ListCommand < Command
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x

@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Restart debugged program from within byebug.
+  #
   class RestartCommand < Command
     self.allow_in_control = true
 

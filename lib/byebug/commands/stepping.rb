@@ -16,6 +16,12 @@ module Byebug
     end
   end
 
+  #
+  # Implements the next functionality.
+  #
+  # Allows the user the continue execution until the next instruction in the
+  # current frame.
+  #
   class NextCommand < Command
     self.allow_in_post_mortem = false
 
@@ -45,6 +51,12 @@ module Byebug
     end
   end
 
+  #
+  # Implements the step functionality.
+  #
+  # Allows the user the continue execution until the next instruction, possibily
+  # in a different frame. Use step to step into method calls or blocks.
+  #
   class StepCommand < Command
     self.allow_in_post_mortem = false
 

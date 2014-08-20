@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Utilities for the var command.
+  #
   module VarFunctions
     def var_list(ary, b = get_binding)
       ary.sort!

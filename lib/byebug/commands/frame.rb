@@ -146,6 +146,9 @@ module Byebug
     end
   end
 
+  #
+  # Show current backtrace.
+  #
   class WhereCommand < Command
     def regexp
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
@@ -173,6 +176,9 @@ module Byebug
     end
   end
 
+  #
+  # Move the current frame up in the backtrace.
+  #
   class UpCommand < Command
     def regexp
       /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
@@ -195,6 +201,9 @@ module Byebug
     end
   end
 
+  #
+  # Move the current frame down in the backtrace.
+  #
   class DownCommand < Command
     def regexp
       /^\s* down (?:\s+(\S+))? \s*$/x
@@ -217,6 +226,9 @@ module Byebug
     end
   end
 
+  #
+  # Move to specific frames in the backtrace.
+  #
   class FrameCommand < Command
     def regexp
       /^\s* f(?:rame)? (?:\s+(\S+))? \s*$/x

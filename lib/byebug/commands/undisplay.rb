@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Remove expressions from display list.
+  #
   class UndisplayCommand < Command
     self.allow_in_post_mortem = false
 

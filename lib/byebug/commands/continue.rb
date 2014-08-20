@@ -1,4 +1,10 @@
 module Byebug
+  #
+  # Implements the continue command.
+  #
+  # Allows the user to continue execution until the next stopping point, a
+  # specific line number or until program termination.
+  #
   class ContinueCommand < Command
     self.allow_in_post_mortem = true
 

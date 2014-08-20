@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Utilities for the save command.
+  #
   module SaveFunctions
     # Create a temporary file to write in if file is nil
     def open_save
@@ -12,6 +15,9 @@ module Byebug
     end
   end
 
+  #
+  # Save current settings to use them in another debug session.
+  #
   class SaveCommand < Command
     self.allow_in_control = true
 
