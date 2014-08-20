@@ -43,12 +43,15 @@ module Byebug
       _self = @state.context.frame_self(@state.frame_pos)
       locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
-        interp = format("  %s => %p", name, locals[name])
+        interp = format('  %s => %p', name, locals[name])
         print("#{interp}\n")
       end
     end
   end
 
+  #
+  # Show all variables and its values.
+  #
   class VarAllCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ a(?:ll)? \s*$/x
@@ -74,6 +77,9 @@ module Byebug
     end
   end
 
+  #
+  # Show class variables and its values.
+  #
   class VarClassCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ cl(?:ass)? \s*/x
@@ -95,6 +101,9 @@ module Byebug
     end
   end
 
+  #
+  # Show constants and its values.
+  #
   class VarConstantCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ co(?:nst(?:ant)?)? \s+/x
@@ -108,7 +117,7 @@ module Byebug
         constants.each do |c|
           next if c =~ /SCRIPT/
           value = obj.const_get(c) rescue "ERROR: #{$ERROR_INFO}"
-          interp = format(" %s => %p", c, value)
+          interp = format(' %s => %p', c, value)
           print("#{interp}\n")
         end
       else
@@ -127,6 +136,9 @@ module Byebug
     end
   end
 
+  #
+  # Show global variables and its values.
+  #
   class VarGlobalCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ g(?:lobal)? \s*$/x
@@ -147,6 +159,9 @@ module Byebug
     end
   end
 
+  #
+  # Show instance variables and its values.
+  #
   class VarInstanceCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ ins(?:tance)? \s*/x
@@ -169,6 +184,9 @@ module Byebug
     end
   end
 
+  #
+  # Show local variables and its values.
+  #
   class VarLocalCommand < Command
     def regexp
       /^\s* v(?:ar)? \s+ l(?:ocal)? \s*$/x

@@ -103,7 +103,7 @@ module Byebug
       width = e.to_s.size
       b.upto(e) do |n|
         if n > 0 && lines[n - 1]
-          line = n == current ? "=>" : '  '
+          line = n == current ? '=>' : '  '
           line += format(" %#{width}d: %s\n", n, lines[n - 1].chomp)
           print(line)
         end

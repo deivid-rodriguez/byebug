@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Set of options that byebug's script accepts.
+  #
   class Options
     def self.parse
       Slop.parse!(help: true, strict: true) do
@@ -8,12 +11,12 @@ module Byebug
           Usage: byebug [options] <script.rb> -- <script.rb parameters>
         EOB
 
-        on :d , :debug, 'Set $DEBUG=true' do
+        on :d, :debug, 'Set $DEBUG=true' do
           $DEBUG = true
         end
 
-        on :I, :include=, 'Add PATH1[...[:PATHN]] to $LOAD_PATH.' do |path|
-          $LOAD_PATH.unshift(*path.split(':'))
+        on :I, :include=, 'Add to $LOAD_PATH', as: Array, delimiter: ':' do |l|
+          $LOAD_PATH.push(l).flatten!
         end
 
         on :q, :quit, 'Quit when script finishes', default: true

@@ -16,7 +16,7 @@ module Byebug
 
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       largest = breakpoints.reduce(0) do |tally, b|
-        tally = b.id if b.id > tally
+        b.id if b.id > tally
       end
       return errmsg "No breakpoints have been set\n" if 0 == largest
 

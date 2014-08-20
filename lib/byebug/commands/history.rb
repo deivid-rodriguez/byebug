@@ -9,7 +9,7 @@ module Byebug
 
     def execute
       unless Setting[:autosave]
-        return errmsg "Not currently saving history. " \
+        return errmsg 'Not currently saving history. ' \
                       "Enable it with \"set autosave\"\n"
       end
 

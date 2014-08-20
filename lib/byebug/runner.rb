@@ -5,6 +5,9 @@ require 'byebug/core'
 require 'byebug/options'
 
 module Byebug
+  #
+  # Responsible for starting the debugger when started from the command line.
+  #
   class Runner
     BYEBUG_SCRIPT = File.expand_path('../../../../bin/byebug')
     IGNORED_FILES << BYEBUG_SCRIPT
@@ -51,8 +54,9 @@ module Byebug
       return Byebug.print("\n  Running byebug #{VERSION}") if opts[:version]
 
       if opts[:port]
-        Byebug.print "Connecting to byebug server #{opts[:host]}:#{opts[:port]}..."
-        Byebug.start_client(opts[:host], opts[:port])
+        port, host = opts[:port], opts[:host]
+        Byebug.print "Connecting to byebug server #{host}:#{port}..."
+        Byebug.start_client(host, port)
         return
       end
 

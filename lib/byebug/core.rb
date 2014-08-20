@@ -97,7 +97,10 @@ module Byebug
   end
 end
 
+#
+# Extends the extension class to be able to pass information about the
+# debugging environment from the c-extension to the user.
+#
 class Exception
   attr_reader :__bb_file, :__bb_line, :__bb_binding, :__bb_context
 end
-

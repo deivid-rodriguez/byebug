@@ -12,9 +12,9 @@ module Byebug
     def thread_arguments(context, should_show_top_frame = true)
       status_flag = if context.suspended?
                       '$'
-      else
-        context.thread == Thread.current ? '+' : ' '
-      end
+                    else
+                      context.thread == Thread.current ? '+' : ' '
+                    end
       debug_flag = context.ignored? ? '!' : ' '
       if should_show_top_frame
         if context.thread == Thread.current && !context.dead?
