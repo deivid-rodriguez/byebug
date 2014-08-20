@@ -84,11 +84,12 @@ module Byebug
     end
 
     def test_run_with_require_flag
-      ARGV.replace(%w(byebug -r mathn my_script))
+      ARGV.replace(%w(byebug -r abbrev my_script))
       expect_it_debugs_script
 
       Byebug::Runner.new.run
-      assert_output("2/3\n") { puts Math.sqrt(4/9) }
+      hsh = { 'can' => 'can', 'cat' => 'cat' }
+      assert_equal hsh, %w(can cat).abbrev
     end
 
     def test_run_with_include_flag
