@@ -1,6 +1,9 @@
 require 'byebug/history'
 
 module Byebug
+  #
+  # Custom interface for easier assertions
+  #
   class TestInterface < Interface
     attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue,
                 :history
@@ -16,7 +19,7 @@ module Byebug
       @error_queue.push(*args)
     end
 
-    def read_command(*args)
+    def read_command(*)
       if @input_queue.empty?
         if test_block
           test_block.call

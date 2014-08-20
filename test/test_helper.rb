@@ -10,26 +10,31 @@ require 'byebug'
 
 require_relative 'support/utils'
 
-class Byebug::TestCase < Minitest::Test
+module Byebug
   #
-  # Reset to default state before each test
+  # Extends Minitest's base test case and provides defaults for all tests
   #
-  def setup
-    Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
-    Byebug.breakpoints.clear if Byebug.breakpoints
-    Byebug.catchpoints.clear if Byebug.catchpoints
+  class TestCase < Minitest::Test
+    #
+    # Reset to default state before each test
+    #
+    def setup
+      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
+      Byebug.breakpoints.clear if Byebug.breakpoints
+      Byebug.catchpoints.clear if Byebug.catchpoints
 
-    Byebug::Setting.load
-    Byebug::Setting[:autolist] = false
-    Byebug::Setting[:testing] = true
-    Byebug::Setting[:width] = 80
+      Byebug::Setting.load
+      Byebug::Setting[:autolist] = false
+      Byebug::Setting[:testing] = true
+      Byebug::Setting[:width] = 80
 
-    byebug_bin = File.expand_path('../../../bin/byebug', __FILE__)
-    force_set_const(Byebug, 'BYEBUG_SCRIPT', byebug_bin)
-    force_set_const(Byebug, 'PROG_SCRIPT', $PROGRAM_NAME)
+      byebug_bin = File.expand_path('../../../bin/byebug', __FILE__)
+      force_set_const(Byebug, 'BYEBUG_SCRIPT', byebug_bin)
+      force_set_const(Byebug, 'PROG_SCRIPT', $PROGRAM_NAME)
+    end
+
+    include Byebug::TestUtils
   end
-
-  include Byebug::TestUtils
 end
 
 # Init globals to avoid warnings

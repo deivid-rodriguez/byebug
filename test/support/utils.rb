@@ -2,13 +2,16 @@ require_relative 'matchers'
 require_relative 'test_interface'
 
 module Byebug
+  #
+  # Misc tools for the test suite
+  #
   module TestUtils
     #
     # Adds commands to the input queue, so they will be later retrieved by
     # Processor, i.e., it emulates user's input.
     #
-    # If a command is a Proc object, it will be executed before being retrieved by
-    # Processor. May be handy when you need build a command depending on the
+    # If a command is a Proc object, it will be executed before being retrieved
+    # by Processor. May be handy when you need build a command depending on the
     # current context/state.
     #
     # Usage:
@@ -25,10 +28,10 @@ module Byebug
     #
     # Runs the provided Proc
     #
-    # You also can specify a block, which will be executed when Processor extracts
-    # all the commands from the input queue. You can use that for making asserts
-    # on the current test. If you specified the block and it never was executed,
-    # the test will fail.
+    # You also can specify a block, which will be executed when Processor
+    # extracts all the commands from the input queue. You can use that for
+    # making assertions on the current test. If you specified the block and it
+    # was never executed, the test will fail.
     #
     # Usage:
     #   debug_proc -> { byebug; puts 'Hello' }

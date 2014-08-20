@@ -1,13 +1,14 @@
 module Byebug
-
+  #
+  # Extends Breakpoint class for easier inspection
+  #
   class Breakpoint
-
     def inspect
-      values = %w{id pos source expr hit_condition hit_count hit_value enabled?}.map do |field|
+      meths = %w(id pos source expr hit_condition hit_count hit_value enabled?)
+      values = meths.map do |field|
         "#{field}: #{send(field)}"
-      end.join(", ")
+      end.join(', ')
       "#<Byebug::Breakpoint #{values}>"
     end
-
   end
 end
