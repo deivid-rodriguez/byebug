@@ -21,7 +21,7 @@ module Byebug
     end
 
     def print(*args)
-      STDOUT.printf(escape(format(*args)))
+      STDOUT.print(*args)
     end
 
     def close
