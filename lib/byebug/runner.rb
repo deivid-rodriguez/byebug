@@ -51,17 +51,17 @@ module Byebug
     def run
       opts = Byebug::Options.parse
 
-      return Byebug.print("\n  Running byebug #{VERSION}") if opts[:version]
+      return Byebug.print("\n  Running byebug #{VERSION}\n\n") if opts[:version]
 
       if opts[:port]
         port, host = opts[:port], opts[:host]
-        Byebug.print "Connecting to byebug server #{host}:#{port}..."
+        Byebug.print "Connecting to byebug server #{host}:#{port}...\n"
         Byebug.start_client(host, port)
         return
       end
 
       if ARGV.empty?
-        Byebug.print 'You must specify a program to debug...'
+        Byebug.print "You must specify a program to debug...\n"
         abort
       end
 
