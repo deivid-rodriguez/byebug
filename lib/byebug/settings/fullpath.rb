@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting to display full paths in backtraces.
+  #
   class FullpathSetting < Setting
     DEFAULT = true
 

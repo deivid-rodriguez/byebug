@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting to customize the file where byebug's history is saved.
+  #
   class HistfileSetting < Setting
     DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_hist")
 

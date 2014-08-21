@@ -1,4 +1,8 @@
 module Byebug
+  #
+  # Setting to customize the number of source code lines to be displayed every
+  # time the "list" command is invoked.
+  #
   class ListsizeSetting < Setting
     DEFAULT = 10
 

@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Parent class for all byebug settings.
+  #
   class Setting
     attr_accessor :value
 
@@ -61,11 +64,11 @@ module Byebug
       matches.size == 1 ? matches.keys.first : nil
     end
 
-    def self.format
+    def self.help_all
       output = "  List of settings supported in byebug:\n  --\n"
       width = settings.keys.max_by(&:size).size
       settings.values.each do |sett|
-        output << sprintf("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
+        output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
       end
       output + "\n"
     end
@@ -74,7 +77,7 @@ module Byebug
       if subcmd
         camelized = subcmd.split('_').map { |w| w.capitalize }.join
         setting = Byebug.const_get("#{camelized}Setting").new
-        <<-EOH.gsub(/^ {8}/,'')
+        <<-EOH.gsub(/^ {8}/, '')
 
           #{cmd} #{setting.to_sym} <value>
 
@@ -83,7 +86,7 @@ module Byebug
         EOH
       else
         command = Byebug.const_get("#{cmd.capitalize}Command")
-        command.description + format
+        command.description + help_all
       end
     end
 

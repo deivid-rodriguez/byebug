@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting to customize the number of byebug commands to be saved in history.
+  #
   class HistsizeSetting < Setting
     DEFAULT = 256
 

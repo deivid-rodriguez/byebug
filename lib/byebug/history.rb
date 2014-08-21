@@ -21,9 +21,10 @@ module Byebug
       end
 
       def to_s(size = Setting[:histsize])
-        n_entries = Readline::HISTORY.length < size ? Readline::HISTORY.length : size
+        rl_size = Readline::HISTORY.length
+        n_entries = rl_size < size ? rl_size : size
 
-        first = Readline::HISTORY.length - n_entries
+        first = rl_size - n_entries
         commands = Readline::HISTORY.to_a.last(n_entries)
 
         s = ''

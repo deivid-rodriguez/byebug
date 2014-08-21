@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting for automatically invoking IRB on every stop.
+  #
   class AutoirbSetting < Setting
     DEFAULT = 0
 

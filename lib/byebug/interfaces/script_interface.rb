@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Interface class for command execution from script files.
+  #
   class ScriptInterface < Interface
     def initialize(file, out, verbose = false)
       super()

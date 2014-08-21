@@ -3,15 +3,61 @@ require 'forwardable'
 require 'byebug/helper'
 
 module Byebug
+  #
+  # Parent class of all byebug commands.
+  #
+  # Subclasses need to implement a `regexp` and an `execute` command.
+  #
   class Command
     Subcmd = Struct.new(:name, :min, :help)
+
+    def initialize(state)
+      @match, @state = nil, state
+    end
+
+    def match(input)
+      @match = regexp.match(input)
+    end
+
+    protected
+
+    extend Forwardable
+    def_delegators :@state, :errmsg, :print
+
+    def confirm(msg)
+      @state.confirm(msg) == 'y'
+    end
+
+    def bb_eval(str, b = get_binding)
+      eval(str, b)
+    rescue StandardError, ScriptError => e
+      at = eval('Thread.current.backtrace_locations', b)
+      print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
+      at.each { |path| print "\tfrom #{path}\n" }
+      nil
+    end
+
+    def bb_warning_eval(str, b = get_binding)
+      eval(str, b)
+    rescue StandardError, ScriptError => e
+      print "#{e.class} Exception: #{e.message}\n"
+      nil
+    end
+
+    def get_binding(pos = @state.frame_pos)
+      @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
+    end
+
+    def get_context(thnum)
+      Byebug.contexts.find { |c| c.thnum == thnum }
+    end
 
     class << self
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run
 
       def allow_in_post_mortem
-        @allow_in_post_mortem ||= !defined?(@allow_in_post_mortem) ? true : false
+        !defined?(@allow_in_post_mortem) ? true : false
       end
 
       def always_run
@@ -52,7 +98,7 @@ module Byebug
         s = "  List of \"#{header}\" subcommands:\n  --\n"
         w = self::Subcommands.map(&:name).max_by(&:size).size
         self::Subcommands.each do |subcmd|
-          s += sprintf "  %s %-#{w}s -- %s\n", header, subcmd.name, subcmd.help
+          s += format("  %s %-#{w}s -- %s\n", header, subcmd.name, subcmd.help)
         end
         s + "\n"
       end
@@ -70,51 +116,10 @@ module Byebug
           require file
         end
 
-        Byebug.constants.grep(/Functions$/).map do
-          |name| Byebug.const_get(name)
-        end.each { |mod| include mod }
+        Byebug.constants.grep(/Functions$/).map do |name|
+          include Byebug.const_get(name)
+        end
       end
-    end
-
-    def initialize(state)
-      @match, @state = nil, state
-    end
-
-    def match(input)
-      @match = regexp.match(input)
-    end
-
-    protected
-
-    extend Forwardable
-    def_delegators :@state, :errmsg, :print
-
-    def confirm(msg)
-      @state.confirm(msg) == 'y'
-    end
-
-    def bb_eval(str, b = get_binding)
-      eval(str, b)
-    rescue StandardError, ScriptError => e
-      at = eval('Thread.current.backtrace_locations(1)', b)
-      print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
-      at.each { |path| print "\tfrom #{path}\n" }
-      nil
-    end
-
-    def bb_warning_eval(str, b = get_binding)
-      eval(str, b)
-    rescue StandardError, ScriptError => e
-      print "#{e.class} Exception: #{e.message}\n"
-      nil
-    end
-
-    def get_binding(pos = @state.frame_pos)
-      @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
-    end
-
-    def get_context(thnum)
-      Byebug.contexts.find { |c| c.thnum == thnum }
     end
   end
 

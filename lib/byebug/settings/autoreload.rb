@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting for automatically reloading source code when it is changed.
+  #
   class AutoreloadSetting < Setting
     DEFAULT = true
 

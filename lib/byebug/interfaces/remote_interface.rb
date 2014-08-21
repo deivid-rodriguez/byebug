@@ -1,6 +1,9 @@
 require 'byebug/history'
 
 module Byebug
+  #
+  # Interface class for remote use of byebug.
+  #
   class RemoteInterface < Interface
     attr_reader :history
 

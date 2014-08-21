@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting to customize the verbosity level for stack frames.
+  #
   class CallstyleSetting < Setting
     DEFAULT = 'long'
 

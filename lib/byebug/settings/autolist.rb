@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting for automatically listing source code on every stop.
+  #
   class AutolistSetting < Setting
     DEFAULT = 1
 

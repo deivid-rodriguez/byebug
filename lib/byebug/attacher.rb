@@ -3,6 +3,11 @@ module Byebug
   PROG_SCRIPT = $PROGRAM_NAME unless defined?(PROG_SCRIPT)
 end
 
+#
+# Adds a `byebug` method to the Kernel module.
+#
+# Dropping a `byebug` call anywhere in your code, you get a debug prompt.
+#
 module Kernel
   #
   # Enters byebug right before (or right after if _before_ is false) return

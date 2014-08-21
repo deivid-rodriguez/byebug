@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting for automatic evaluation of unknown commands.
+  #
   class AutoevalSetting < Setting
     DEFAULT = true
 

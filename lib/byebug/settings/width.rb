@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Setting to customize the maximum width of byebug's output.
+  #
   class WidthSetting < Setting
     DEFAULT = 160
 

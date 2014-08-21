@@ -1,6 +1,9 @@
 require 'byebug/history'
 
 module Byebug
+  #
+  # Interface class for standard byebug use.
+  #
   class LocalInterface < Interface
     attr_reader :history
 

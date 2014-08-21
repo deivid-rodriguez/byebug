@@ -166,9 +166,11 @@ module Byebug
       print state.location if Setting[:autolist] == 0
 
       until state.proceed?
-        input = @interface.command_queue.empty? ?
-                @interface.read_command(prompt(context)) :
-                @interface.command_queue.shift
+        input = if @interface.command_queue.empty?
+                  @interface.read_command(prompt(context))
+                else
+                  @interface.command_queue.shift
+                end
         break unless input
         catch(:debug_error) do
           if input == ''
@@ -207,11 +209,10 @@ module Byebug
     #
     def preloop(_commands, context)
       @context_was_dead = true if context.dead? && !@context_was_dead
+      return unless @context_was_dead
 
-      if @context_was_dead
-        print "The program finished.\n"
-        @context_was_dead = false
-      end
+      print "The program finished.\n"
+      @context_was_dead = false
     end
 
     class State
