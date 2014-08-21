@@ -6,8 +6,6 @@ module Byebug
   # specific line number or until program termination.
   #
   class ContinueCommand < Command
-    self.allow_in_post_mortem = true
-
     def regexp
       /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
     end
