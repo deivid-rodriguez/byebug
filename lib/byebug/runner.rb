@@ -60,7 +60,7 @@ module Byebug
         return
       end
 
-      if ARGV.size == 1
+      if ARGV.empty?
         Byebug.print 'You must specify a program to debug...'
         abort
       end
