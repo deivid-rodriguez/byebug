@@ -4,7 +4,7 @@ module Byebug
   #
   class Options
     def self.parse
-      Slop.parse!(help: true, strict: true) do
+      Slop.parse!(strict: true) do
         banner <<-EOB.gsub(/^ {12}/, '')
           byebug #{Byebug::VERSION}
 
@@ -31,13 +31,14 @@ module Byebug
           require name
         end
 
-        on :host=, 'Host for remote debugging', default: 'localhost'
-
-        on :p, :port=, 'Port for remote debugging', as: Integer
+        on :R, :remote=, '[HOST:]PORT for remote debugging',
+                         as: Array, delimiter: ':', limit: 2
 
         on :t, :trace, 'Turn on line tracing'
 
         on :v, :version, 'Print program version'
+
+        on :h, :help, 'Display this message'
       end
     end
   end

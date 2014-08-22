@@ -19,12 +19,27 @@ module Byebug
       check_output_includes(/#{Byebug::VERSION}/)
     end
 
-    def test_run_with_port_option
-      ARGV.replace(%w(--port 9999))
+    def test_run_with_help_flag
+      ARGV.replace(%w(--help))
+      Byebug::Runner.new.run
+
+      check_output_includes(/-d.*-I.*-q.*-s.*-x.*-m.*-r.*-R.*-t.*-v.*-h/m)
+    end
+
+    def test_run_with_remote_option_only_with_a_port_number
+      ARGV.replace(%w(--remote 9999))
       Byebug.expects(:start_client)
       Byebug::Runner.new.run
 
       check_output_includes(/Connecting to byebug server localhost:9999/)
+    end
+
+    def test_run_with_remote_option_with_host_and_port_specification
+      ARGV.replace(%w(--remote myhost:9999))
+      Byebug.expects(:start_client)
+      Byebug::Runner.new.run
+
+      check_output_includes(/Connecting to byebug server myhost:9999/)
     end
 
     def test_run_without_a_script_to_debug
