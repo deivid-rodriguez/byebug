@@ -135,7 +135,7 @@ module Byebug
     # array of commands: [cmd1, cmd2, ..., cmdN]
     #
     def split_commands(cmd_line)
-      cmd_line.split(/;/).reduce([]) do |m, v|
+      cmd_line.split(/;/).each_with_object([]) do |v, m|
         if m.empty?
           m << v
         else
@@ -146,7 +146,6 @@ module Byebug
             m << v
           end
         end
-        m
       end
     end
 
