@@ -1,4 +1,4 @@
-Thanks for your interest in contributing to ByeBug!
+Thanks for your interest in contributing to Byebug!
 
 To make your changes, follow this steps:
 
@@ -8,10 +8,8 @@ To make your changes, follow this steps:
 * Push your branch to your forked repo - `git push origin my_branch`
 * [Make a pull request](https://help.github.com/articles/using-pull-requests)
 
-How to insert awesome code:
-
-This gem uses `rake-compiler` to build native gems. You can use `rake compile` to build the native gem
-and start the tests using `rake test`
+This gem uses `rake-compiler` to build native gems. Use `rake compile` to
+build the c-extension and then start the tests using `rake test`
 
 ```bash
 rake compile
