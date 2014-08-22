@@ -32,7 +32,7 @@ module Byebug
         end
 
         on :R, :remote=, '[HOST:]PORT for remote debugging',
-                         as: Array, delimiter: ':', limit: 2
+           as: Array, delimiter: ':', limit: 2
 
         on :t, :trace, 'Turn on line tracing'
 
