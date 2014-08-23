@@ -116,11 +116,11 @@ typedef struct {
   enum hit_condition hit_condition;
 } breakpoint_t;
 
+extern void Init_breakpoint(VALUE mByebug);
 extern VALUE catchpoint_hit_count(VALUE catchpoints, VALUE exception, VALUE *exception_name);
 extern VALUE find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
                                     VALUE binding);
 extern VALUE find_breakpoint_by_method(VALUE breakpoints, VALUE klass,
                                        VALUE mid, VALUE binding, VALUE self);
-extern void Init_breakpoint(VALUE mByebug);
 
 #endif
