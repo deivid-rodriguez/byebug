@@ -1,6 +1,24 @@
-# 3.2.1 (Unreleased)
+# 3.3.0 (Unreleased)
 
-* Fix `verbose` setting
+- Bugfixes
+ * Fix `verbose` setting (`set verbose` works now)
+ * Fix unsetting post_mortem mode (`set post_mortem false` works now)
+ * Fix some cases where the debugger would stop in byebug internal frames.
+
+- Removals
+ * `info locals` has been removed, use `var local` instead.
+ * `info instance_variables` has been removed, use `var instance` instead.
+ * `info global_variables` has been removed, use `var global` instead.
+ * `info variables` has been removed, use `var all` instead.
+ * `irb` command stepping capabilities were removed, see
+[8e226d0](https://github.com/deivid-rodriguez/byebug/commit/8e226d0).
+ * --script and --restart-script options from byebug's executable were removed.
+Also, '-t' option now turns tracing on whereas '-x' options tells byebug to run
+the initialization file (.byebugrc) on startup. This is the default behaviour
+though.
+
+- Improvements
+ * byebug's script has been libified and tests have been added.
 
 
 # 3.2.0
