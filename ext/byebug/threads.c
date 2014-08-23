@@ -65,13 +65,9 @@ is_living_thread(VALUE thread)
 static int
 check_thread_i(st_data_t key, st_data_t value, st_data_t dummy)
 {
-  VALUE thread;
-
   if (!value) return ST_DELETE;
 
-  thread = (VALUE)key;
-
-  if (!is_living_thread(thread)) return ST_DELETE;
+  if (!is_living_thread((VALUE)key)) return ST_DELETE;
 
   return ST_CONTINUE;
 }
