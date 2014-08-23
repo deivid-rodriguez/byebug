@@ -456,8 +456,8 @@ bb_contexts(VALUE self)
     rb_ary_push(new_list, context);
   }
 
-  threads_clear(threads);
   Data_Get_Struct(threads, threads_table_t, t_tbl);
+  st_clear(t_tbl->tbl);
 
   for (i = 0; i < RARRAY_LENINT(new_list); i++)
   {

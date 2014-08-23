@@ -46,15 +46,6 @@ create_threads_table(void)
   return Data_Wrap_Struct(cThreadsTable, t_tbl_mark, t_tbl_free, t_tbl);
 }
 
-void
-threads_clear(VALUE table)
-{
-  threads_table_t *t_tbl;
-
-  Data_Get_Struct(table, threads_table_t, t_tbl);
-  st_clear(t_tbl->tbl);
-}
-
 /*
  *  The condition to be in the thread's table is to be either running or
  *  sleeping, namely, to be Thread#alive?
