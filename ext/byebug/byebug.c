@@ -12,10 +12,10 @@ static VALUE tracepoints = Qnil;
 
 static VALUE raised_exception = Qnil;
 
-/* Implements thread syncronization, we must stop threads when debugging */
+/* To allow thread syncronization, we must stop threads when debugging */
 VALUE locker = Qnil;
 
-/* Threads table */
+/* Hash table with active threads and their associated contexts */
 VALUE threads = Qnil;
 VALUE cThreadsTable;
 

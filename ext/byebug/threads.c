@@ -29,6 +29,10 @@ t_tbl_free(void* data)
   xfree(t_tbl);
 }
 
+/*
+ *  Creates a numeric hash whose keys are the currently active threads and
+ *  whose values are their associated contexts.
+ */
 VALUE
 threads_create(void)
 {
@@ -48,12 +52,22 @@ threads_clear(VALUE table)
   st_clear(t_tbl->tbl);
 }
 
+/*
+ *  The condition to be in the thread's table is to be either running or
+ *  sleeping, namely, to be Thread#alive?
+ */
 static int
 is_living_thread(VALUE thread)
 {
   return rb_funcall(thread, rb_intern("alive?"), 0) == Qtrue;
 }
 
+/*
+ *  Checks a single entry in the threads table.
+ *
+ *  If it has no associated context or the key doesn't correspond to a living
+ *  thread, the entry is removed from the thread's list.
+ */
 static int
 t_tbl_check_i(st_data_t key, st_data_t value, st_data_t dummy)
 {
@@ -68,6 +82,9 @@ t_tbl_check_i(st_data_t key, st_data_t value, st_data_t dummy)
   return ST_CONTINUE;
 }
 
+/*
+ *  Checks threads table for dead/finished threads.
+ */
 void
 check_thread_contexts(void)
 {
