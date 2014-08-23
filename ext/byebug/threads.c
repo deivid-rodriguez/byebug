@@ -37,7 +37,7 @@ t_tbl_free(void* data)
  *  whose values are their associated contexts.
  */
 VALUE
-threads_create(void)
+create_threads_table(void)
 {
   threads_table_t *t_tbl;
 
@@ -72,7 +72,7 @@ is_living_thread(VALUE thread)
  *  thread, the entry is removed from the thread's list.
  */
 static int
-t_tbl_check_i(st_data_t key, st_data_t value, st_data_t dummy)
+check_thread_i(st_data_t key, st_data_t value, st_data_t dummy)
 {
   VALUE thread;
 
@@ -89,12 +89,12 @@ t_tbl_check_i(st_data_t key, st_data_t value, st_data_t dummy)
  *  Checks threads table for dead/finished threads.
  */
 void
-check_thread_contexts(void)
+check_threads_table(void)
 {
   threads_table_t *t_tbl;
 
   Data_Get_Struct(threads, threads_table_t, t_tbl);
-  st_foreach(t_tbl->tbl, t_tbl_check_i, 0);
+  st_foreach(t_tbl->tbl, check_thread_i, 0);
 }
 
 void

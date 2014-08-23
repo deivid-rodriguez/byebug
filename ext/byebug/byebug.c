@@ -52,7 +52,7 @@ cleanup(debug_context_t *dc)
   dc->stop_reason = CTX_STOP_NONE;
 
   /* checks for dead threads */
-  check_thread_contexts();
+  check_threads_table();
 
   /* release a lock */
   locker = Qnil;
@@ -567,7 +567,7 @@ bb_start(VALUE self)
     locker      = Qnil;
     breakpoints = rb_ary_new();
     catchpoints = rb_hash_new();
-    threads     = threads_create();
+    threads     = create_threads_table();
 
     register_tracepoints(self);
     result = Qtrue;
