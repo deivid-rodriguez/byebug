@@ -22,8 +22,8 @@ module Byebug
         exit $CHILD_STATUS.exitstatus
       end
 
-      bt = Byebug.debug_load(Byebug::PROG_SCRIPT, options[:stop])
-      Byebug.print bt, bt.backtrace if bt
+      status = Byebug.debug_load(Byebug::PROG_SCRIPT, options[:stop])
+      Byebug.print status, status.backtrace if status
     end
 
     #
