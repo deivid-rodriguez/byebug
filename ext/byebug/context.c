@@ -602,7 +602,6 @@ Context_set_tracing(VALUE self, VALUE value)
   return value;
 }
 
-
 /* :nodoc: */
 static VALUE
 DebugThread_inherited(VALUE klass)
