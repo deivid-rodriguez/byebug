@@ -52,7 +52,7 @@ module Byebug
       opts = Byebug::Options.parse
 
       return Byebug.print("\n  Running byebug #{VERSION}\n\n") if opts[:version]
-      return Byebug.print(opts.help) if opts[:help]
+      return Byebug.print("#{opts.help}\n\n") if opts[:help]
 
       if opts[:remote]
         port, host = opts[:remote].pop.to_i, opts[:remote].pop || 'localhost'

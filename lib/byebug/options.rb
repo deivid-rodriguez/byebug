@@ -5,7 +5,8 @@ module Byebug
   class Options
     def self.parse
       Slop.parse!(strict: true) do
-        banner <<-EOB.gsub(/^ {12}/, '')
+        banner <<-EOB.gsub(/^ {8}/, '')
+
           byebug #{Byebug::VERSION}
 
           Usage: byebug [options] <script.rb> -- <script.rb parameters>
