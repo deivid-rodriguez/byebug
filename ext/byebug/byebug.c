@@ -17,7 +17,6 @@ VALUE locker = Qnil;
 
 /* Hash table with active threads and their associated contexts */
 VALUE threads = Qnil;
-VALUE cThreadsTable;
 
 #define IS_STARTED  (catchpoints != Qnil)
 static void
@@ -782,8 +781,7 @@ Init_byebug()
   rb_define_module_function(mByebug, "verbose?"         , bb_verbose         ,  0);
   rb_define_module_function(mByebug, "verbose="         , bb_set_verbose     ,  1);
 
-  cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
-
+  Init_threads_table(mByebug);
   Init_context(mByebug);
   Init_breakpoint(mByebug);
 

@@ -1,5 +1,8 @@
 #include <byebug.h>
 
+/* Threads table class */
+static VALUE cThreadsTable;
+
 static int
 t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
@@ -127,4 +130,18 @@ halt_while_other_thread_is_active(debug_context_t *dc)
     }
     else break;
   }
+}
+
+/*
+ *
+ *    Document-class: ThreadsTable
+ *
+ *    == Sumary
+ *
+ *    Hash table holding currently active threads and their associated contexts
+ */
+void
+Init_threads_table(VALUE mByebug)
+{
+  cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
 }
