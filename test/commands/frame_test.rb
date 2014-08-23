@@ -72,9 +72,7 @@ module Byebug
 
     def test_frame_minus_one_sets_frame_to_the_last_one
       enter 'break 22', 'cont', 'frame -1'
-      debug_proc(@example) do
-        assert_equal 'test_helper.rb', File.basename(state.file)
-      end
+      debug_proc(@example) { assert_match 'frame_test.rb', state.file }
     end
 
     def test_down_does_not_move_if_frame_number_to_too_low
@@ -188,32 +186,32 @@ module Byebug
       end
 
       super
-      enter 'break 180', 'cont'
+      enter 'break 178', 'cont'
     end
 
     def test_where_correctly_prints_the_backtrace
       enter 'where'
       debug_proc(@deep_example)
       check_output_includes(
-        /--> #0  Byebug::DeepFrameExample\.d\(e#String\)\s+at #{__FILE__}:180/,
-            /#1  Byebug::DeepFrameExample\.c\s+at #{__FILE__}:176/,
-            /#2  Byebug::DeepFrameExample\.b\s+at #{__FILE__}:170/,
-            /#3  Byebug::DeepFrameExample\.a\s+at #{__FILE__}:165/)
+        /--> #0  Byebug::DeepFrameExample\.d\(e#String\)\s+at #{__FILE__}:178/,
+            /#1  Byebug::DeepFrameExample\.c\s+at #{__FILE__}:174/,
+            /#2  Byebug::DeepFrameExample\.b\s+at #{__FILE__}:168/,
+            /#3  Byebug::DeepFrameExample\.a\s+at #{__FILE__}:163/)
     end
 
     def test_up_moves_up_in_the_callstack
       enter 'up'
-      debug_proc(@deep_example) { assert_equal 176, state.line }
+      debug_proc(@deep_example) { assert_equal 174, state.line }
     end
 
     def test_down_moves_down_in_the_callstack
       enter 'up', 'down'
-      debug_proc(@deep_example) { assert_equal 180, state.line }
+      debug_proc(@deep_example) { assert_equal 178, state.line }
     end
 
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
-      debug_proc(@deep_example) { assert_equal 170, state.line }
+      debug_proc(@deep_example) { assert_equal 168, state.line }
     end
 
     def test_eval_works_properly_when_moving_through_the_stack

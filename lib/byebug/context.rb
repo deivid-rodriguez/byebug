@@ -72,7 +72,7 @@ module Byebug
     end
 
     def at_line(file, line)
-      handler.at_line(self, file, line)
+      handler.at_line(self, file, line) unless IGNORED_FILES.include?(file)
     end
 
     def at_return(file, line)

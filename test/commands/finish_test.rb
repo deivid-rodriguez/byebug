@@ -60,5 +60,10 @@ module Byebug
       enter 'finish foo'
       debug_proc(@example) { assert_equal 18, state.line }
     end
+
+    def test_finish_does_not_stop_in_byebug_internal_frames
+      enter 'finish 4'
+      debug_proc(@example) { refute_match(/byebug.test.support/, state.file) }
+    end
   end
 end

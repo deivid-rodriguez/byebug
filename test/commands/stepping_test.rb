@@ -47,6 +47,11 @@ module Byebug
       enter 's'
       debug_proc(@example) { assert_equal 14, state.line }
     end
+
+    def test_next_does_not_stop_at_byebug_internal_frames
+      enter 'set forcestep', 'next 2'
+      debug_proc(@example) { refute_match(/byebug.test.support/, state.file) }
+    end
   end
 
   class AdvancedSteppingTestCase < TestCase
@@ -101,7 +106,7 @@ module Byebug
 
     def test_next_goes_the_specified_number_of_lines_forward_by_default
       enter 'set forcestep', 'next 2'
-      debug_proc(@example) { assert_equal 58, state.line }
+      debug_proc(@example) { assert_equal 63, state.line }
     end
 
     def test_next_informs_when_not_staying_in_the_same_frame
@@ -113,17 +118,17 @@ module Byebug
 
     def step_goes_the_specified_number_of_statements_forward_by_default
       enter 'set forcestep', 'step 2'
-      debug_proc(@example) { assert_equal 58, state.line }
+      debug_proc(@example) { assert_equal 63, state.line }
     end
 
     def test_next_steps_OVER_blocks
-      enter 'break 58', 'cont', 'next'
-      debug_proc(@example) { assert_equal 62, state.line }
+      enter 'break 63', 'cont', 'next'
+      debug_proc(@example) { assert_equal 67, state.line }
     end
 
     def test_step_steps_INTO_blocks
-      enter 'break 58', 'cont', 'step'
-      debug_proc(@example) { assert_equal 59, state.line }
+      enter 'break 63', 'cont', 'step'
+      debug_proc(@example) { assert_equal 64, state.line }
     end
   end
 
@@ -151,8 +156,8 @@ module Byebug
         RaiseFromCMethodExample.new.a
       end
 
-      enter 'break 132', 'cont', 'next'
-      debug_proc(example_raise) { assert_equal 134, state.line }
+      enter 'break 137', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 139, state.line }
     end
   end
 
@@ -180,8 +185,8 @@ module Byebug
         RaiseFromRubyMethodExample.new.a
       end
 
-      enter 'break 161', 'cont', 'next'
-      debug_proc(example_raise) { assert_equal 163, state.line }
+      enter 'break 166', 'cont', 'next'
+      debug_proc(example_raise) { assert_equal 168, state.line }
     end
   end
 end
