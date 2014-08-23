@@ -23,7 +23,7 @@ module Byebug
       end
 
       status = Byebug.debug_load(Byebug::PROG_SCRIPT, options[:stop])
-      Byebug.print status, status.backtrace if status
+      Byebug.print "#{status}\n#{status.backtrace}\n" if status
     end
 
     #
