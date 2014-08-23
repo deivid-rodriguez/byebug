@@ -45,6 +45,11 @@ module Byebug
       debug_proc(@example) { assert_equal 14, state.line }
     end
 
+    def test_finish_works_for_frame_numbers_higher_than_one
+      enter 'finish 2'
+      debug_proc(@example) { assert_equal 9, state.line }
+    end
+
     def test_finish_behaves_consistenly_even_if_current_frame_has_been_changed
       enter 'up', 'finish'
       debug_proc(@example) { assert_equal 9, state.line }
