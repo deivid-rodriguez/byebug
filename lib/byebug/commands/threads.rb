@@ -45,7 +45,7 @@ module Byebug
       else
         thread_num = get_int(arg, subcmd, 1)
         return nil unless thread_num
-        get_context(thread_num)
+        Byebug.contexts.find { |c| c.thnum == thnum }
       end
     end
 

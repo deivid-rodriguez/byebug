@@ -48,10 +48,6 @@ module Byebug
       @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
     end
 
-    def get_context(thnum)
-      Byebug.contexts.find { |c| c.thnum == thnum }
-    end
-
     class << self
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run
