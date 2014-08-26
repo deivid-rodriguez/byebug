@@ -48,7 +48,7 @@ module Byebug
     def test_show_unknown_setting
       enter 'show bla'
       debug_proc(@example)
-      check_output_includes 'Unknown setting :bla'
+      check_error_includes 'Unknown setting :bla'
     end
 
     def test_show_histfile
