@@ -173,16 +173,15 @@ module Byebug
                   @interface.command_queue.shift
                 end
         break unless input
-        catch(:debug_error) do
-          if input == ''
-            next unless @last_cmd
-            input = @last_cmd
-          else
-            @last_cmd = input
-          end
-          split_commands(input).each do |cmd|
-            one_cmd(commands, context, cmd)
-          end
+
+        if input == ''
+          next unless @last_cmd
+          input = @last_cmd
+        else
+          @last_cmd = input
+        end
+        split_commands(input).each do |cmd|
+          one_cmd(commands, context, cmd)
         end
       end
     end

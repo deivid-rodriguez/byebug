@@ -11,8 +11,7 @@ module Byebug
 
     def execute
       unless @state.interface.is_a?(LocalInterface)
-        errmsg('Command is available only in local mode.')
-        throw :debug_error
+        return errmsg('Command is available only in local mode.')
       end
 
       IRB.start(__FILE__)

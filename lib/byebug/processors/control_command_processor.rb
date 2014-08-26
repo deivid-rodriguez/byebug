@@ -19,12 +19,11 @@ module Byebug
 
       while (input = @interface.read_command(prompt(nil)))
         puts("+#{input}") if verbose
-        catch(:debug_error) do
-          cmd = commands.find { |c| c.match(input) }
-          return errmsg "Unknown command\n" unless cmd
 
-          cmd.execute
-        end
+        cmd = commands.find { |c| c.match(input) }
+        return errmsg("Unknown command") unless cmd
+
+        cmd.execute
       end
     rescue IOError, SystemCallError
     rescue
@@ -66,8 +65,7 @@ module Byebug
       end
 
       def file
-        errmsg "No filename given.\n"
-        throw :debug_error
+        errmsg 'No filename given.'
       end
     end
   end
