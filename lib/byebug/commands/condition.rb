@@ -17,8 +17,8 @@ module Byebug
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       return errmsg('No breakpoints have been set') unless breakpoints.any?
 
-      pos = get_int(@match[1], 'Condition', 1, largest)
-      return unless pos
+      pos, err = get_int(@match[1], 'Condition', 1, breakpoints.last.id)
+      return errmsg(err) unless pos
 
       breakpoint = breakpoints.select { |b| b.id == pos }.first
 

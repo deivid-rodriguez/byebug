@@ -58,7 +58,7 @@ module Byebug
     def test_finish_shows_an_error_if_incorrect_frame_number_specified
       enter 'finish foo'
       debug_proc(@example)
-      check_output_includes '"finish" argument "foo" needs to be a number'
+      check_error_includes '"finish" argument "foo" needs to be a number'
     end
 
     def test_finish_stays_at_the_same_line_if_incorrect_frame_number_specified

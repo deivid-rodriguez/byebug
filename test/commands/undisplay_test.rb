@@ -63,7 +63,7 @@ module Byebug
     def test_disable_display_shows_an_error_if_theres_no_such_display_position
       enter 'display d', 'disable display 4'
       debug_proc(@example)
-      check_output_includes \
+      check_error_includes \
         '"disable display" argument "4" needs to be at most 1'
     end
 

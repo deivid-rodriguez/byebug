@@ -14,7 +14,8 @@ module Byebug
       end
 
       if @match[:num_cmds]
-        size = get_int(@match[:num_cmds], 'history', 1, Setting[:histsize])
+        size, err = get_int(@match[:num_cmds], 'history', 1, Setting[:histsize])
+        return errmsg(err) unless size
       end
 
       print History.to_s(size || Setting[:histsize])

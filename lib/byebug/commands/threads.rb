@@ -41,8 +41,8 @@ module Byebug
     def parse_thread_num(subcmd, arg)
       return errmsg("\"#{subcmd}\" needs a thread number") if '' == arg
 
-      thread_num = get_int(arg, subcmd, 1)
-      return nil unless thread_num
+      thread_num, err = get_int(arg, subcmd, 1)
+      return errmsg(err) unless thread_num
 
       Byebug.contexts.find { |c| c.thnum == thnum }
     end

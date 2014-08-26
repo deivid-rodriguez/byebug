@@ -13,8 +13,8 @@ module Byebug
         selected_ids = []
         args.each do |pos|
           last_id = all_breakpoints.last.id
-          pos = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
-          return nil unless pos
+          pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
+          return errmsg(err) unless pos
 
           selected_ids << pos
         end
@@ -40,8 +40,9 @@ module Byebug
       end
 
       args.each do |pos|
-        pos = get_int(pos, "#{is_enable} display", 1, @state.display.size)
-        return nil unless pos
+        pos, err = get_int(pos, "#{is_enable} display", 1, @state.display.size)
+        return errmsg(err) unless pos
+
         @state.display[pos - 1][0] = ('enable' == is_enable)
       end
     end

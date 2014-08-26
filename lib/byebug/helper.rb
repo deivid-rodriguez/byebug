@@ -1,30 +1,29 @@
 module Byebug
+  #
+  # Miscelaneous Utilities
+  #
   module ParseFunctions
     #
     # Parse 'str' of command 'cmd' as an integer between min and max. If either
     # min or max is nil, that value has no bound.
     #
-    def get_int(str, cmd, min = nil, max = nil, default = 1)
-      unless str
-        return default if default
-        print "You need to specify an argument for \"#{cmd}\"\n"
-        return nil
+    def get_int(str, cmd, min = nil, max = nil)
+      if str.nil?
+        return nil, "You need to specify an argument for \"#{cmd}\""
       end
 
-      begin
-        int = Integer(str)
-        if min && int < min
-          print "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}\n"
-          return nil
-        elsif max && int > max
-          print "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}\n"
-          return nil
-        end
-        return int
-      rescue
-        print "\"#{cmd}\" argument \"#{str}\" needs to be a number\n"
-        return nil
+      if str !~ /\A[0-9]+\z/
+        return nil, "\"#{cmd}\" argument \"#{str}\" needs to be a number"
       end
+
+      int = str.to_i
+      if min && int < min
+        return nil, "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}"
+      elsif max && int > max
+        return nil, "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}"
+      end
+
+      int
     end
 
     #

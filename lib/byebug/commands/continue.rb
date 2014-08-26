@@ -13,8 +13,8 @@ module Byebug
     def execute
       if @match[1] && !@state.context.dead?
         filename = File.expand_path(@state.file)
-        num = get_int(@match[1], 'Continue', 0, nil, 0)
-        return unless num
+        num, err = get_int(@match[1], 'Continue', 0, nil)
+        return errmsg(err) unless num
 
         unless LineCache.trace_line_numbers(filename).member?(num)
           return errmsg("Line #{num} is not a valid stopping point in file")

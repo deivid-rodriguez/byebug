@@ -203,7 +203,7 @@ module Byebug
       enter 'break 5', 'disable foo'
 
       debug_proc(@example)
-      check_output_includes \
+      check_error_includes \
         '"disable breakpoints" argument "foo" needs to be a number'
     end
 
