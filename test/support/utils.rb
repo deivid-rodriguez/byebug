@@ -90,14 +90,6 @@ module Byebug
       Thread.current.thread_variable_get('state')
     end
 
-    def first_brkpt
-      Byebug.breakpoints.first
-    end
-
-    def last_brkpt
-      Byebug.breakpoints.last
-    end
-
     def context
       state.context
     end

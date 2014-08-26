@@ -27,12 +27,12 @@ module Byebug
       enter 'break 19'
 
       debug_proc(@example) do
-        assert_equal 19, first_brkpt.pos
-        assert_equal __FILE__, first_brkpt.source
-        assert_equal nil, first_brkpt.expr
-        assert_equal 0, first_brkpt.hit_count
-        assert_equal 0, first_brkpt.hit_value
-        assert_equal true, first_brkpt.enabled?
+        assert_equal 19, Breakpoint.first.pos
+        assert_equal __FILE__, Breakpoint.first.source
+        assert_equal nil, Breakpoint.first.expr
+        assert_equal 0, Breakpoint.first.hit_count
+        assert_equal 0, Breakpoint.first.hit_value
+        assert_equal true, Breakpoint.first.enabled?
       end
     end
 
@@ -144,26 +144,26 @@ module Byebug
     end
 
     def test_disabling_breakpoints_with_short_syntax_sets_enabled_to_false
-      enter 'break 19', 'break 20', -> { "disable #{first_brkpt.id}" }
+      enter 'break 19', 'break 20', -> { "disable #{Breakpoint.first.id}" }
 
-      debug_proc(@example) { assert_equal false, first_brkpt.enabled? }
+      debug_proc(@example) { assert_equal false, Breakpoint.first.enabled? }
     end
 
     def test_disabling_breakpoints_with_short_syntax_properly_ignores_them
-      enter 'break 19', 'break 20', -> { "disable #{first_brkpt.id}" } , 'cont'
+      enter 'b 19', 'b 20', -> { "disable #{Breakpoint.first.id}" } , 'cont'
 
       debug_proc(@example) { assert_equal 20, state.line }
     end
 
     def test_disabling_breakpoints_with_full_syntax_sets_enabled_to_false
-      enter 'b 19', 'b 20', -> { "disable breakpoints #{first_brkpt.id}" }
+      enter 'b 19', 'b 20', -> { "disable breakpoints #{Breakpoint.first.id}" }
 
-      debug_proc(@example) { assert_equal false, first_brkpt.enabled? }
+      debug_proc(@example) { assert_equal false, Breakpoint.first.enabled? }
     end
 
     def test_disabling_breakpoints_with_full_syntax_properly_ignores_them
-      enter 'b 19', 'b 20', -> { "disable breakpoints #{first_brkpt.id}" },
-            'cont'
+      enter 'break 19', 'break 20',
+            -> { "disable breakpoints #{Breakpoint.first.id}" }, 'cont'
 
       debug_proc(@example) { assert_equal 20, state.line }
     end
@@ -172,8 +172,8 @@ module Byebug
       enter 'break 19', 'break 20', 'disable breakpoints'
 
       debug_proc(@example) do
-         assert_equal false, first_brkpt.enabled?
-         assert_equal false, last_brkpt.enabled?
+         assert_equal false, Breakpoint.first.enabled?
+         assert_equal false, Breakpoint.last.enabled?
       end
     end
 
@@ -188,8 +188,8 @@ module Byebug
       enter 'disable'
 
       debug_proc(@example)
-      check_error_includes \
-        '"disable" must be followed by "display", "breakpoints" or breakpoint ids'
+      check_error_includes '"disable" must be followed by "display", ' \
+                           '"breakpoints" or breakpoint ids'
     end
 
     def test_disabling_breakpoints_shows_an_error_if_no_breakpoints_are_set
@@ -209,14 +209,14 @@ module Byebug
 
     def test_enabling_breakpoints_with_short_syntax_sets_enabled_to_true
       enter 'b 19', 'b 20', 'disable breakpoints',
-            -> { "enable #{first_brkpt.id}" }
+            -> { "enable #{Breakpoint.first.id}" }
 
-      debug_proc(@example) { assert_equal true, first_brkpt.enabled? }
+      debug_proc(@example) { assert_equal true, Breakpoint.first.enabled? }
     end
 
     def test_enabling_breakpoints_with_short_syntax_stops_at_enabled_breakpoint
       enter 'break 19', 'break 20', 'disable breakpoints',
-            -> { "enable #{first_brkpt.id}" }, 'cont'
+            -> { "enable #{Breakpoint.first.id}" }, 'cont'
 
       debug_proc(@example) { assert_equal 19, state.line }
     end
@@ -225,8 +225,8 @@ module Byebug
       enter 'break 19', 'break 20', 'disable breakpoints', 'enable breakpoints'
 
       debug_proc(@example) do
-         assert_equal true, first_brkpt.enabled?
-         assert_equal true, last_brkpt.enabled?
+         assert_equal true, Breakpoint.first.enabled?
+         assert_equal true, Breakpoint.last.enabled?
       end
     end
 
@@ -245,14 +245,14 @@ module Byebug
 
     def test_enabling_breakpoints_with_full_syntax_sets_enabled_to_false
       enter 'break 19', 'break 20', 'disable breakpoints',
-            -> { "enable breakpoints #{last_brkpt.id}" }
+            -> { "enable breakpoints #{Breakpoint.last.id}" }
 
-      debug_proc(@example) { assert_equal false, first_brkpt.enabled? }
+      debug_proc(@example) { assert_equal false, Breakpoint.first.enabled? }
     end
 
     def test_enabling_breakpoints_with_full_syntax_stops_at_enabled_breakpoint
       enter 'break 19', 'break 20', 'disable breakpoints',
-            -> { "enable breakpoints #{last_brkpt.id}" }, 'cont'
+            -> { "enable breakpoints #{Breakpoint.last.id}" }, 'cont'
 
       debug_proc(@example) { assert_equal 20, state.line }
     end
@@ -261,8 +261,8 @@ module Byebug
       enter 'enable'
 
       debug_proc(@example)
-      check_error_includes \
-        '"enable" must be followed by "display", "breakpoints" or breakpoint ids'
+      check_error_includes '"enable" must be followed by "display", ' \
+                           '"breakpoints" or breakpoint ids'
     end
 
     def test_conditional_breakpoint_stops_if_condition_is_true
@@ -303,7 +303,7 @@ module Byebug
   module FilenameTests
     def test_setting_breakpoint_prints_confirmation_message
       enter 'break 19'
-      debug_proc(@example) { @id = first_brkpt.id }
+      debug_proc(@example) { @id = Breakpoint.first.id }
       check_output_includes "Created breakpoint #{@id} at #{@filename}:19"
     end
 

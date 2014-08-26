@@ -1,6 +1,7 @@
 require 'byebug/byebug'
 require 'byebug/version'
 require 'byebug/context'
+require 'byebug/breakpoint'
 require 'byebug/interface'
 require 'byebug/processor'
 require 'byebug/setting'
@@ -27,28 +28,6 @@ module Byebug
     hsh = 'SCRIPT_LINES__'
     Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
     Object.const_set(hsh, {})
-  end
-
-  #
-  # Add a new breakpoint
-  #
-  # @param [String] file
-  # @param [Fixnum] line
-  # @param [String] expr
-  #
-  def self.add_breakpoint(file, line, expr = nil)
-    breakpoint = Breakpoint.new(file, line, expr)
-    breakpoints << breakpoint
-    breakpoint
-  end
-
-  #
-  # Remove a breakpoint
-  #
-  # @param [integer] breakpoint number
-  #
-  def self.remove_breakpoint(id)
-    breakpoints.reject! { |b| b.id == id }
   end
 
   #

@@ -49,7 +49,7 @@ module Byebug
           return errmsg("Line #{l} is not a valid breakpoint in file #{path}")
         end
 
-        b = Byebug.add_breakpoint file, line, expr
+        b = Breakpoint.add(file, l, expr)
         print "Created breakpoint #{b.id} at #{path}:#{l}\n"
 
         unless syntax_valid?(expr)
@@ -61,7 +61,7 @@ module Byebug
         kl = bb_warning_eval(file)
         return errmsg("Unknown class #{file}") unless kl && kl.is_a?(Module)
 
-        method = line.intern
+        class_name, method = kl.name, line.intern
         b = Breakpoint.add(class_name, method, expr)
         print "Created breakpoint #{b.id} at #{class_name}::#{method}\n"
       end

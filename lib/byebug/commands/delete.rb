@@ -25,8 +25,8 @@ module Byebug
 
         return errmsg(err) unless pos
 
-        errmsg("No breakpoint number #{pos}") unless
-          Byebug.remove_breakpoint(pos)
+        unless Breakpoint.remove(pos)
+          return errmsg("No breakpoint number #{pos}")
         end
       end
     end

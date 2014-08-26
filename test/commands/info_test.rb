@@ -58,8 +58,7 @@ module Byebug
     end
 
     def test_info_about_specific_breakpoints
-      enter 'break 38', 'break 39',
-            -> { "info breakpoints #{first_brkpt.id}" }
+      enter 'b 38', 'b 39', -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_proc(@example)
       check_output_includes 'Num Enb What', /\d+ +y   at #{__FILE__}:38/
       check_output_doesnt_include(/\d+ +y   at #{__FILE__}:39/)

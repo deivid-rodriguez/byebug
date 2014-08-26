@@ -12,13 +12,13 @@ module Byebug
     end
 
     def test_deleting_a_breakpoint_removes_it_from_breakpoints_list
-      enter 'break 7', -> { "delete #{first_brkpt.id}" }
+      enter 'break 7', -> { "delete #{Breakpoint.first.id}" }
 
       debug_proc(@example) { assert_empty Byebug.breakpoints }
     end
 
     def test_does_not_stop_at_the_deleted_breakpoint
-      enter 'break 7', 'break 8', -> { "delete #{first_brkpt.id}" }, 'cont'
+      enter 'b 7', 'b 8', -> { "delete #{Breakpoint.first.id}" }, 'cont'
 
       debug_proc(@example) { assert_equal 8, state.line }
     end
