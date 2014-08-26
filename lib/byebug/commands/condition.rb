@@ -15,10 +15,7 @@ module Byebug
       return print(ConditionCommand.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
-      largest = breakpoints.reduce(0) do |tally, b|
-        b.id if b.id > tally
-      end
-      return errmsg("No breakpoints have been set") if 0 == largest
+      return errmsg('No breakpoints have been set') unless breakpoints.any?
 
       pos = get_int(@match[1], 'Condition', 1, largest)
       return unless pos
