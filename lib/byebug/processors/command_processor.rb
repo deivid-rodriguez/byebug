@@ -52,8 +52,10 @@ module Byebug
         rescue SignalException
           raise
         rescue
-          print "INTERNAL ERROR!!! #\{$!\}\n" rescue nil
-          print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n") rescue nil
+          without_exceptions do
+            print "INTERNAL ERROR!!! #\{$!\}\n"
+            print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n")
+          end
         end
       END
     end
@@ -189,7 +191,7 @@ module Byebug
     # Autoevals a single command
     #
     def one_unknown_cmd(commands, input)
-      if !Setting[:autoeval]
+      unless Setting[:autoeval]
         return errmsg("Unknown command: \"#{input}\". Try \"help\"")
       end
 
@@ -204,7 +206,7 @@ module Byebug
       return one_unknown_cmd(commands, input) unless cmd
 
       if context.dead? && !cmd.class.allow_in_post_mortem
-        return errmsg("Command unavailable in post mortem mode.")
+        return errmsg('Command unavailable in post mortem mode.')
       end
 
       cmd.execute

@@ -11,7 +11,7 @@ module Byebug
     end
 
     def execute
-      if !@match[1]
+      unless @match[1]
         Byebug.breakpoints.clear if confirm('Delete all breakpoints? (y/n) ')
 
         return nil

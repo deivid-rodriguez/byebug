@@ -30,7 +30,7 @@ module Byebug
       end
 
       if file.nil? && !@state.context
-        return errmsg("We are not in a state that has an associated file")
+        return errmsg('We are not in a state that has an associated file')
       end
 
       file = @state.file if file.nil?
@@ -50,7 +50,7 @@ module Byebug
         end
 
         b = Breakpoint.add(file, l, expr)
-        print "Created breakpoint #{b.id} at #{path}:#{l}\n"
+        print "Created breakpoint #{b.id} at #{path}:#{l}"
 
         unless syntax_valid?(expr)
           errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
@@ -63,7 +63,7 @@ module Byebug
 
         class_name, method = kl.name, line.intern
         b = Breakpoint.add(class_name, method, expr)
-        print "Created breakpoint #{b.id} at #{class_name}::#{method}\n"
+        print "Created breakpoint #{b.id} at #{class_name}::#{method}"
       end
     end
 

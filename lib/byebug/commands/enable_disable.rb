@@ -27,7 +27,7 @@ module Byebug
         enabled = ('enable' == is_enable)
         if enabled && !syntax_valid?(b.expr)
           return errmsg("Expression \"#{b.expr}\" syntactically incorrect; " \
-                        "breakpoint remains disabled.")
+                        'breakpoint remains disabled.')
         end
 
         b.enabled = enabled
@@ -36,7 +36,7 @@ module Byebug
 
     def enable_disable_display(is_enable, args)
       if 0 == @state.display.size
-        return errmsg("No display expressions have been set")
+        return errmsg('No display expressions have been set')
       end
 
       args.each do |pos|

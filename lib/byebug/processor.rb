@@ -10,6 +10,12 @@ module Byebug
     def initialize(interface)
       @interface = interface
     end
+
+    def without_exceptions
+      yield
+    rescue
+      nil
+    end
   end
 end
 

@@ -8,9 +8,7 @@ module Byebug
     # min or max is nil, that value has no bound.
     #
     def get_int(str, cmd, min = nil, max = nil)
-      if str.nil?
-        return nil, "You need to specify an argument for \"#{cmd}\""
-      end
+      return nil, "You need to specify an argument for \"#{cmd}\"" if str.nil?
 
       if str !~ /\A[0-9]+\z/
         return nil, "\"#{cmd}\" argument \"#{str}\" needs to be a number"

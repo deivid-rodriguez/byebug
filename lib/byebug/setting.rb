@@ -37,8 +37,9 @@ module Byebug
     end
 
     def integer?
-      integer = Integer(value) rescue nil
-      integer ? true : false
+      Integer(value) ? true : false
+    rescue ArgumentError
+      false
     end
 
     def self.exists?(name)

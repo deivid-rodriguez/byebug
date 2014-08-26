@@ -28,8 +28,10 @@ module Byebug
       end
     rescue IOError, SystemCallError
     rescue
-      print "INTERNAL ERROR!!! #{$ERROR_INFO}\n" rescue nil
-      print $ERROR_INFO.backtrace.map { |l| "\t#{l}" }.join("\n") rescue nil
+      without_exceptions do
+        print "INTERNAL ERROR!!! #{$ERROR_INFO}\n"
+        print $ERROR_INFO.backtrace.map { |l| "\t#{l}" }.join("\n")
+      end
     ensure
       @interface.close
     end

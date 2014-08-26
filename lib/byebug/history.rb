@@ -1,6 +1,9 @@
 require 'readline'
 
 module Byebug
+  #
+  # Handles byebug's history of commands.
+  #
   class History
     class << self
       def load

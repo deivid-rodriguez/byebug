@@ -25,7 +25,6 @@ module Byebug
       end
       return errmsg(err) if value.nil?
 
-
       Setting[full_key.to_sym] = value
 
       print Setting.settings[full_key.to_sym].to_s
