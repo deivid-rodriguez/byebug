@@ -11,7 +11,7 @@ module Byebug
     end
 
     def execute
-      if @match[1] && !@state.context.dead?
+      if @match[1]
         filename = File.expand_path(@state.file)
         num, err = get_int(@match[1], 'Continue', 0, nil)
         return errmsg(err) unless num

@@ -11,9 +11,6 @@ module Byebug
     end
 
     def execute
-      return errmsg("We are not in a state we can delete breakpoints.") unless
-        @state.context
-
       if !@match[1]
         Byebug.breakpoints.clear if confirm('Delete all breakpoints? (y/n) ')
 
