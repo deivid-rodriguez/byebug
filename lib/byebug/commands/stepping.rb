@@ -3,17 +3,24 @@ module Byebug
   # Mixin to assist command parsing
   #
   module SteppingFunctions
+    def parse_steps(str, cmd)
+      return 1 unless str
+
+      steps, err = get_int(str, cmd, 1)
+      return nil, err unless steps
+
+      steps
+    end
+
     def parse_force(str)
       return Setting[:forcestep] unless str
 
       case str
       when '+' then
-        return true
+        true
       when '-' then
-        return false
+        false
       end
-
-      nil
     end
   end
 
@@ -31,14 +38,10 @@ module Byebug
     end
 
     def execute
-      if @match[2]
-        steps, err = get_int(@match[2], 'Next', 1)
-        return errmsg(err) unless steps
-      end
+      steps, err = parse_steps(@match[2], 'Next')
+      return errmsg(err) unless steps
 
-      force = parse_force(@match[1])
-
-      @state.context.step_over(steps || 1, @state.frame_pos, force)
+      @state.context.step_over(steps, @state.frame_pos, parse_force(@match[1]))
       @state.proceed
     end
 
@@ -71,12 +74,10 @@ module Byebug
     end
 
     def execute
-      if @match[2]
-        steps, err = get_int(@match[2], 'Step', 1)
-        return errmsg(err) unless steps
-      end
+      steps, err = parse_steps(@match[2], 'Steps')
+      return errmsg(err) unless steps
 
-      @state.context.step_into(steps || 1, parse_force(@match[1]))
+      @state.context.step_into(steps, parse_force(@match[1]))
       @state.proceed
     end
 
