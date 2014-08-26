@@ -27,18 +27,19 @@ module Byebug
     end
 
     #
+    # Fills SCRIPT_LINES__ entry for <filename> if not already filled.
+    #
+    def lines(filename)
+      SCRIPT_LINES__[filename] ||= File.readlines(filename)
+    end
+
+    #
     # Gets all lines in a source code file
     #
     def get_lines(filename)
       return nil unless File.exist?(filename)
 
-      lines = SCRIPT_LINES__[filename]
-      unless lines
-        lines = File.readlines(filename) rescue []
-        SCRIPT_LINES__[filename] = lines
-      end
-
-      lines
+      lines(filename)
     end
 
     #
