@@ -60,7 +60,7 @@ module Byebug
         @always_run ||= 0
       end
 
-      def help(args)
+      def help(args = nil)
         if args && args[1]
           output = format_subcmd(args[1])
         else

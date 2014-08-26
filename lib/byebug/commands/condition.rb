@@ -12,7 +12,7 @@ module Byebug
     end
 
     def execute
-      return print ConditionCommand.help(nil) unless @match[1]
+      return print ConditionCommand.help unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       largest = breakpoints.reduce(0) do |tally, b|

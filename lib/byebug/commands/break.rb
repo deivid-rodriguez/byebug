@@ -13,7 +13,7 @@ module Byebug
     end
 
     def execute
-      return print self.class.help(nil) if self.class.names.include?(@match[0])
+      return print self.class.help if self.class.names.include?(@match[0])
 
       if @match[1]
         line, _, _, expr = @match.captures
