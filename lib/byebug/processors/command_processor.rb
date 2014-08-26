@@ -53,8 +53,8 @@ module Byebug
           raise
         rescue
           without_exceptions do
-            print "INTERNAL ERROR!!! #\{$!\}\n"
-            print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n")
+            puts "INTERNAL ERROR!!! #\{$!\}"
+            puts $!.backtrace.map{|l| "\t#\{l\}"}.join("\n")
           end
         end
       END
@@ -64,14 +64,14 @@ module Byebug
       n = Byebug.breakpoints.index(breakpoint) + 1
       file = self.class.canonic_file(breakpoint.source)
       line = breakpoint.pos
-      print "Stopped by breakpoint #{n} at #{file}:#{line}\n"
+      puts "Stopped by breakpoint #{n} at #{file}:#{line}"
     end
     protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
       file = self.class.canonic_file(context.frame_file(0))
       line = context.frame_line(0)
-      print "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})\n"
+      puts "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})"
     end
     protect :at_catchpoint
 
@@ -81,7 +81,7 @@ module Byebug
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
         path = self.class.canonic_file(file)
         @last_file, @last_line = file, line
-        print "Tracing: #{path}:#{line} #{get_line(file, line)}"
+        puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
       end
       always_run(context, file, line, 2)
     end
@@ -164,7 +164,7 @@ module Byebug
       end
 
       preloop(commands, context)
-      print state.location if Setting[:autolist] == 0
+      puts(state.location) if Setting[:autolist] == 0
 
       until state.proceed?
         input = if @interface.command_queue.empty?
@@ -219,7 +219,7 @@ module Byebug
       @context_was_dead = true if context.dead? && !@context_was_dead
       return unless @context_was_dead
 
-      print "The program finished.\n"
+      puts "The program finished."
       @context_was_dead = false
     end
 
@@ -234,7 +234,7 @@ module Byebug
       end
 
       extend Forwardable
-      def_delegators :@interface, :errmsg, :print, :confirm
+      def_delegators :@interface, :errmsg, :puts, :confirm
 
       def proceed?
         @proceed

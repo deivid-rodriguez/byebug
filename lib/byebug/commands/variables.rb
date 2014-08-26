@@ -17,7 +17,7 @@ module Byebug
         end
         s = "#{v} = #{s}"
         s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
-        print "#{s}\n"
+        puts s
       end
     end
 
@@ -43,8 +43,7 @@ module Byebug
       _self = @state.context.frame_self(@state.frame_pos)
       locals = @state.context.frame_locals
       locals.keys.sort.each do |name|
-        interp = format('  %s => %p', name, locals[name])
-        print("#{interp}\n")
+        puts format('  %s => %p', name, locals[name])
       end
     end
   end
@@ -115,13 +114,11 @@ module Byebug
         constants = bb_eval("#{@match.post_match}.constants")
         constants.sort!
         constants.each do |c|
-          next if c =~ /SCRIPT/
-          value = obj.const_get(c) rescue "ERROR: #{$ERROR_INFO}"
-          interp = format(' %s => %p', c, value)
-          print("#{interp}\n")
+          value = obj.const_get(c)
+          puts format(' %s => %p', c, value)
         end
       else
-        print "Should be Class/Module: #{@match.post_match}\n"
+        puts "Should be Class/Module: #{@match.post_match}"
       end
     end
 

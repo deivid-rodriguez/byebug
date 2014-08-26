@@ -12,7 +12,7 @@ module Byebug
     end
 
     def execute
-      return print(ConditionCommand.help) unless @match[1]
+      return puts(ConditionCommand.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       return errmsg('No breakpoints have been set') unless breakpoints.any?

@@ -40,8 +40,8 @@ module Byebug
   #
   # Byebug's prints according to its handler's interface
   #
-  def self.print(*args)
-    handler.interface.print(*args)
+  def self.puts(message)
+    handler.interface.puts(message)
   end
 
   #

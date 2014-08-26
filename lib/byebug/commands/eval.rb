@@ -31,13 +31,13 @@ module Byebug
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
         if Setting[:stack_on_error]
-          print "#{bb_eval(expr, b).inspect}\n"
+          puts "#{bb_eval(expr, b).inspect}"
         else
-          print "#{bb_warning_eval(expr, b).inspect}\n"
+          puts "#{bb_warning_eval(expr, b).inspect}"
         end
       end
     rescue
-      print "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}\n"
+      puts "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}"
     end
 
     class << self
@@ -75,7 +75,7 @@ module Byebug
           PP.pp(bb_warning_eval(@match.post_match, b), out)
         end
       end
-      print out.string
+      puts out.string
     rescue
       out.puts $ERROR_INFO.message
     end
@@ -114,10 +114,10 @@ module Byebug
         end
         if vals.is_a?(Array)
           vals = vals.map { |item| item.to_s }
-          print "#{columnize(vals, Setting[:width])}\n"
+          puts "#{columnize(vals, Setting[:width])}"
         else
           PP.pp(vals, out)
-          print out.string
+          puts out.string
         end
       end
     rescue
@@ -158,10 +158,10 @@ module Byebug
         end
         if vals.is_a?(Array)
           vals = vals.map { |item| item.to_s }
-          print "#{columnize(vals.sort!, Setting[:width])}\n"
+          puts "#{columnize(vals.sort!, Setting[:width])}"
         else
           PP.pp(vals, out)
-          print out.string
+          puts out.string
         end
       end
     rescue

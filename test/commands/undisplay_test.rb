@@ -22,7 +22,7 @@ module Byebug
       debug_proc(@example) do
         assert_equal [[false, 'd'], [false, 'd + 1']], state.display
       end
-      check_output_doesnt_include '1: ', 'd = 3', '2: ', 'd + 1 = 4'
+      check_output_doesnt_include '1: d = 3', '2: d + 1 = 4'
     end
 
     def test_does_not_remove_all_expressions_from_list_unless_confirmed
@@ -31,7 +31,7 @@ module Byebug
         assert_equal [[true, 'd'], [true, 'd + 1']], state.display
       end
 
-      check_output_includes '1: ', 'd = 0', '2: ', 'd + 1 = 1'
+      check_output_includes '1: d = 0', '2: d + 1 = 1'
     end
 
     def test_marks_specific_expression_from_list_as_inactive
@@ -45,8 +45,8 @@ module Byebug
     def test_displays_only_the_active_position
       enter 'display d', 'display d + 1', 'undisplay 1', 'next'
       debug_proc(@example)
-      check_output_includes '2: ', 'd + 1 = 4'
-      check_output_doesnt_include '1: ', 'd = 3'
+      check_output_includes '2: d + 1 = 4'
+      check_output_doesnt_include '1: d = 3'
     end
 
     def test_disable_display_removes_the_expression_from_display_list

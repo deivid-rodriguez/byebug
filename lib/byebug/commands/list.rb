@@ -19,7 +19,7 @@ module Byebug
       b, e = set_line_range(Setting[:listsize], lines.size)
       return @state.previous_line if b < 0
 
-      print "\n[#{b}, #{e}] in #{@state.file}\n"
+      puts "\n[#{b}, #{e}] in #{@state.file}"
       @state.previous_line = display_list(b, e, lines, @state.line)
     end
 
@@ -104,10 +104,9 @@ module Byebug
       b.upto(e) do |n|
         next unless n > 0 && lines[n - 1]
         line = n == current ? '=>' : '  '
-        line += format(" %#{width}d: %s\n", n, lines[n - 1].chomp)
-        print(line)
+        line += format(" %#{width}d: %s", n, lines[n - 1].chomp)
+        puts(line)
       end
-      print "\n"
       e == lines.size ? @state.previous_line : b
     end
   end

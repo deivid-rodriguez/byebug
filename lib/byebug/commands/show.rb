@@ -11,14 +11,12 @@ module Byebug
 
     def execute
       key = @match[:setting]
-      return print ShowCommand.help if key.nil?
+      return puts(self.class.help) if key.nil?
 
       full_key = Setting.find(key)
-      if full_key
-        print Setting.settings[full_key.to_sym].to_s
-      else
-        print "Unknown setting :#{key}\n"
-      end
+      return errmsg("Unknown setting :#{key}") unless full_key
+
+      puts Setting.settings[full_key.to_sym].to_s
     end
 
     class << self

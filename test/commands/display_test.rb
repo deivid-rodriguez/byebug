@@ -14,13 +14,13 @@ module Byebug
     def test_shows_expressions
       enter 'display d + 1'
       debug_proc(@example)
-      check_output_includes '1: ', 'd + 1 = 1'
+      check_output_includes '1: d + 1 = 1'
     end
 
     def test_works_when_using_a_shortcut
       enter 'disp d + 1'
       debug_proc(@example)
-      check_output_includes '1: ', 'd + 1 = 1'
+      check_output_includes '1: d + 1 = 1'
     end
 
     def test_saves_displayed_expressions
@@ -31,7 +31,7 @@ module Byebug
     def test_displays_all_expressions_available
       enter 'display d', 'display d + 1', 'display'
       debug_proc(@example)
-      check_output_includes '1: ', 'd = 0', '2: ', 'd + 1 = 1'
+      check_output_includes '1: d = 0', '2: d + 1 = 1'
     end
   end
 end

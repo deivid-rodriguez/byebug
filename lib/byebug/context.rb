@@ -40,8 +40,8 @@ module Byebug
       begin
         eval 'self.method(__method__).parameters', bind
       rescue NameError => e
-        print "WARNING: Got exception #{e.class}: \"#{e.message}\" " \
-              "while retreving parameters from frame\n"
+        puts "WARNING: Got exception #{e.class}: \"#{e.message}\" " \
+             "while retreving parameters from frame"
         return []
       end
     end

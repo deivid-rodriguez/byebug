@@ -5,7 +5,7 @@ module Byebug
     attr_accessor :interface
 
     extend Forwardable
-    def_delegators :@interface, :errmsg, :print
+    def_delegators :@interface, :errmsg, :puts
 
     def initialize(interface)
       @interface = interface

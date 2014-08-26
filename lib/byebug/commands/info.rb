@@ -4,14 +4,14 @@ module Byebug
   #
   module InfoFunctions
     def info_catch(*_args)
-      return print "No frame selected.\n" unless @state.context
+      return puts("No frame selected.") unless @state.context
 
       if Byebug.catchpoints && !Byebug.catchpoints.empty?
         Byebug.catchpoints.each do |exception, _hits|
-          print "#{exception}: #{exception.is_a?(Class)}\n"
+          puts("#{exception}: #{exception.is_a?(Class)}")
         end
       else
-        print "No exceptions set to be caught.\n"
+        puts("No exceptions set to be caught.")
       end
     end
 
@@ -23,25 +23,25 @@ module Byebug
       args.map do |_, name|
         s = "#{name} = #{locals[name].inspect}"
         s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
-        print "#{s}\n"
+        puts s
       end
     end
 
     def info_breakpoint(brkpt)
       expr = brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+      y_n = brkpt.enabled? ? 'y' : 'n'
       interp = format('%-3d %-3s at %s:%s%s',
-                      brkpt.id, brkpt.enabled? ? 'y' : 'n', brkpt.source,
-                      brkpt.pos, expr)
-      print("#{interp}\n")
+                      brkpt.id, y_n, brkpt.source, brkpt.pos, expr)
+      puts interp
       hits = brkpt.hit_count
       return unless hits > 0
 
       s = (hits > 1) ? 's' : ''
-      print "\tbreakpoint already hit #{hits} time#{s}\n"
+      puts "\tbreakpoint already hit #{hits} time#{s}"
     end
 
     def info_breakpoints(*args)
-      return print "No breakpoints.\n" if Byebug.breakpoints.empty?
+      return puts("No breakpoints.") if Byebug.breakpoints.empty?
 
       brkpts = Byebug.breakpoints.sort_by { |b| b.id }
       unless args.empty?
@@ -50,50 +50,50 @@ module Byebug
         return errmsg "No breakpoints found among list given.\n" if
           brkpts.empty?
       end
-      print "Num Enb What\n"
+      puts("Num Enb What")
       brkpts.each { |b| info_breakpoint(b) }
     end
 
     def info_display(*_args)
-      return print "There are no auto-display expressions now.\n" unless
+      return puts("There are no auto-display expressions now.") unless
         @state.display.find { |d| d[0] }
 
-      print "Auto-display expressions now in effect:\n" \
-            "Num Enb Expression\n"
+      puts "Auto-display expressions now in effect:"
+      puts "Num Enb Expression"
       n = 1
       @state.display.each do |d|
-        interp = format('%3d: %s  %s', n, d[0] ? 'y' : 'n', d[1])
-        print "#{interp}\n"
+        puts(format('%3d: %s  %s', n, d[0] ? 'y' : 'n', d[1]))
         n += 1
       end
     end
 
     def info_file_path(file)
-      print "File #{file}"
+      s = "File #{file}"
       path = File.expand_path(file)
-      print " - #{path}\n" if path && path != file
+      s = "#{s} - #{path}" if path && path != file
+      puts s
     end
 
     def info_file_lines(file)
       lines = File.foreach(file)
-      print "\t#{lines.count} lines\n" if lines
+      puts "\t#{lines.count} lines" if lines
     end
 
     def info_file_breakpoints(file)
       breakpoints = LineCache.trace_line_numbers(file)
       return unless breakpoints
 
-      print "\tbreakpoint line numbers:\n"
-      print columnize(breakpoints.to_a.sort, Setting[:width])
+      puts "\tbreakpoint line numbers:"
+      puts columnize(breakpoints.to_a.sort, Setting[:width])
     end
 
     def info_file_mtime(file)
       stat = File.stat(file)
-      print "\t#{stat.mtime}\n" if stat
+      puts "\t#{stat.mtime}" if stat
     end
 
     def info_file_sha1(file)
-      print "\t#{Digest::SHA1.hexdigest(file)}\n"
+      puts "\t#{Digest::SHA1.hexdigest(file)}"
     end
 
     def info_files(*_args)
@@ -105,7 +105,7 @@ module Byebug
     end
 
     def info_line(*_args)
-      print "Line #{@state.line} of \"#{@state.file}\"\n"
+      puts "Line #{@state.line} of \"#{@state.file}\""
     end
 
     def print_hash(vars)
@@ -120,31 +120,31 @@ module Byebug
           end
         end
         s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
-        print "#{s}\n"
+        puts s
       end
     end
 
     def info_stop_reason(stop_reason)
       case stop_reason
       when :step
-        print "It stopped after stepping, next'ing or initial start.\n"
+        puts "It stopped after stepping, next'ing or initial start."
       when :breakpoint
-        print("It stopped at a breakpoint.\n")
+        puts 'It stopped at a breakpoint.'
       when :catchpoint
-        print("It stopped at a catchpoint.\n")
+        puts 'It stopped at a catchpoint.'
       else
-        print("unknown reason: #{@state.context.stop_reason}\n")
+        puts "Unknown reason: #{@state.context.stop_reason}"
       end
     end
 
     def info_program(*_args)
       if @state.context.dead?
-        print "The program crashed.\n"
+        puts 'The program crashed.'
         excpt = Byebug.last_exception
-        return print "Exception: #{excpt.inspect}\n" if excpt
+        return puts("Exception: #{excpt.inspect}") if excpt
       end
 
-      print 'Program stopped. '
+      puts 'Program stopped. '
       info_stop_reason @state.context.stop_reason
     end
 
@@ -215,7 +215,7 @@ module Byebug
           info_file_sha1(args[0])
         end
       else
-        print "File #{args[0]}\n" if subcmd.name != 'path'
+        puts("File #{args[0]}") if subcmd.name != 'path'
         send("info_file_#{subcmd.name}", args[0])
       end
     end
@@ -225,7 +225,7 @@ module Byebug
     end
 
     def execute
-      return print InfoCommand.help unless @match[1]
+      return puts(InfoCommand.help) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift

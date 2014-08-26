@@ -31,7 +31,7 @@ module Byebug
       end
     end
 
-    def print(*args)
+    def puts(*args)
       @output_queue.push(*args)
     end
 

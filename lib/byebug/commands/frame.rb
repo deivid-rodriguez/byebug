@@ -138,12 +138,12 @@ module Byebug
       frame_str += get_frame_call frame_str, pos
       file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
       if frame_str.size + file_line.size + 1 > Setting[:width]
-        frame_str += "\n      #{file_line}\n"
+        frame_str += "\n      #{file_line}"
       else
-        frame_str += " #{file_line}\n"
+        frame_str += " #{file_line}"
       end
 
-      print frame_str
+      puts frame_str
     end
   end
 

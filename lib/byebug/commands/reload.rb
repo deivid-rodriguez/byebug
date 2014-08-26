@@ -13,7 +13,7 @@ module Byebug
     def execute
       Byebug.source_reload
       onoff = Setting[:autoreload] ? 'on' : 'off'
-      print "Source code was reloaded. Automatic reloading is #{onoff}\n"
+      puts "Source code was reloaded. Automatic reloading is #{onoff}"
     end
 
     class << self

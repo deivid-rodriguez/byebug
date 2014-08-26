@@ -13,7 +13,7 @@ module Byebug
       var = @match[1]
       if global_variables.include?("$#{var}".to_sym)
         if @match[2] && @match[2] !~ /(:?no)?stop/
-          errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\"\n"
+          errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""
         else
           dbg_cmd = if @match[2] && @match[2] !~ /nostop/
                       'byebug(1, false)'
@@ -22,12 +22,12 @@ module Byebug
                     end
         end
         eval("trace_var(:\"\$#{var}\") do |val|
-                print \"traced global variable '#{var}' has value '\#{val}'\"\n
+                puts \"traced global variable '#{var}' has value '\#{val}'\"
                 #{dbg_cmd}
               end")
-        print "Tracing global variable \"#{var}\".\n"
+        puts "Tracing global variable \"#{var}\"."
       else
-        errmsg "'#{var}' is not a global variable.\n"
+        errmsg "'#{var}' is not a global variable."
       end
     end
 

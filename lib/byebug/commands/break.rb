@@ -13,7 +13,7 @@ module Byebug
     end
 
     def execute
-      return print(self.class.help) if self.class.names.include?(@match[0])
+      return puts(self.class.help) if self.class.names.include?(@match[0])
 
       if @match[1]
         line, _, _, expr = @match.captures
@@ -50,7 +50,7 @@ module Byebug
         end
 
         b = Breakpoint.add(file, l, expr)
-        print "Created breakpoint #{b.id} at #{path}:#{l}"
+        puts "Created breakpoint #{b.id} at #{path}:#{l}"
 
         unless syntax_valid?(expr)
           errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
@@ -63,7 +63,7 @@ module Byebug
 
         class_name, method = kl.name, line.intern
         b = Breakpoint.add(class_name, method, expr)
-        print "Created breakpoint #{b.id} at #{class_name}::#{method}"
+        puts "Created breakpoint #{b.id} at #{class_name}::#{method}"
       end
     end
 

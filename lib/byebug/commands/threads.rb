@@ -5,8 +5,10 @@ module Byebug
   module ThreadFunctions
     def display_context(context, should_show_top_frame = true)
       args = thread_arguments(context, should_show_top_frame)
-      print "%s%s%d %s\t%s\n", args[:status_flag], args[:debug_flag], args[:id],
-            args[:thread], args[:file_line]
+      interp = format("%s%s%d %s\t%s",
+                      args[:status_flag], args[:debug_flag], args[:id],
+                      args[:thread], args[:file_line])
+      puts interp
     end
 
     def thread_arguments(context, should_show_top_frame = true)

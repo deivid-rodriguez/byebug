@@ -80,7 +80,7 @@ module Byebug
             throw :exit unless input
             socket.puts input
           else
-            print line
+            puts line
           end
         end
       end

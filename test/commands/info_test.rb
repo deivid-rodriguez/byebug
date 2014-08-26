@@ -86,7 +86,7 @@ module Byebug
     def test_info_display_shows_all_display_expressions
       enter 'display 3 + 3', 'display a + b', 'info display'
       debug_proc(@example)
-      check_output_includes "Auto-display expressions now in effect:\n" \
+      check_output_includes "Auto-display expressions now in effect:",
                             'Num Enb Expression',
                             '1: y  3 + 3',
                             '2: y  a + b'
@@ -222,7 +222,7 @@ module Byebug
       enter 'break 39', 'cont',
              ->{ context.stubs(:stop_reason).returns('blabla'); 'info program' }
       debug_proc(@example)
-      check_output_includes 'Program stopped.', 'unknown reason: blabla'
+      check_output_includes 'Program stopped.', 'Unknown reason: blabla'
     end
 
     def test_shows_an_error_if_the_program_is_crashed

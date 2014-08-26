@@ -20,8 +20,8 @@ module Byebug
       readline(prompt, false)
     end
 
-    def print(*args)
-      STDOUT.print(*args)
+    def puts(*args)
+      STDOUT.puts(*args)
     end
 
     def close
@@ -33,7 +33,7 @@ module Byebug
     def readline(prompt, hist)
       Readline.readline(prompt, hist)
     rescue Interrupt
-      print "^C\n"
+      puts "^C"
       retry
     end
   end

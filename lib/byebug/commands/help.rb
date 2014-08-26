@@ -16,20 +16,17 @@ module Byebug
         args = @match[1].split
         cmds = @state.commands.select { |cmd| cmd.names.include?(args[0]) }
         if cmds.empty?
-          return errmsg "Undefined command: \"#{args[0]}\". Try \"help\"\n"
-        else
-          help = cmds.map { |cmd| cmd.help(args[1..-1]) }.join("\n")
-          return print(help)
+          return errmsg("Undefined command: \"#{args[0]}\". Try \"help\"")
         end
+
+        return puts(cmds.map { |cmd| cmd.help(args[1..-1]) }.join("\n"))
       end
 
-      print "byebug help v#{VERSION}\n" unless Setting[:testing]
-
-      print "Type \"help <command-name>\" for help on a specific command\n\n"
-      print "Available commands:\n"
+      puts "byebug help v#{VERSION}" unless Setting[:testing]
+      puts "Type \"help <command-name>\" for help on a specific command\n"
+      puts "Available commands:"
       cmds = @state.commands.map { |cmd| cmd.names }.flatten.uniq.sort
-      print columnize(cmds, Setting[:width])
-      print "\n"
+      puts columnize(cmds, Setting[:width])
     end
 
     class << self

@@ -11,7 +11,7 @@ module Byebug
 
     def execute
       key, value = @match[:setting], @match[:value]
-      return print(SetCommand.help) if key.nil? && value.nil?
+      return puts(SetCommand.help) if key.nil? && value.nil?
 
       full_key = Setting.find(key)
       return errmsg("Unknown setting :#{key}") unless full_key
@@ -27,7 +27,7 @@ module Byebug
 
       Setting[full_key.to_sym] = value
 
-      print Setting.settings[full_key.to_sym].to_s
+      puts Setting.settings[full_key.to_sym].to_s
     end
 
     def get_onoff(arg, default)
@@ -60,7 +60,6 @@ module Byebug
           Conversely, you can use "set no<setting> to disable them.
 
           You can see these environment settings with the "show" command.
-
         EOD
       end
 

@@ -18,12 +18,12 @@ module Byebug
     def debug_program(options)
       output = `ruby -c "#{Byebug::PROG_SCRIPT}" 2>&1`
       if $CHILD_STATUS.exitstatus != 0
-        Byebug.print output
+        Byebug.puts output
         exit $CHILD_STATUS.exitstatus
       end
 
       status = Byebug.debug_load(Byebug::PROG_SCRIPT, options[:stop])
-      Byebug.print "#{status}\n#{status.backtrace}\n" if status
+      Byebug.puts "#{status}\n#{status.backtrace}" if status
     end
 
     #
@@ -51,18 +51,18 @@ module Byebug
     def run
       opts = Byebug::Options.parse
 
-      return Byebug.print("\n  Running byebug #{VERSION}\n\n") if opts[:version]
-      return Byebug.print("#{opts.help}\n\n") if opts[:help]
+      return Byebug.puts("\n  Running byebug #{VERSION}\n") if opts[:version]
+      return Byebug.puts("#{opts.help}\n") if opts[:help]
 
       if opts[:remote]
         port, host = opts[:remote].pop.to_i, opts[:remote].pop || 'localhost'
-        Byebug.print "Connecting to byebug server #{host}:#{port}...\n"
+        Byebug.puts "Connecting to byebug server #{host}:#{port}..."
         Byebug.start_client(host, port)
         return
       end
 
       if ARGV.empty?
-        Byebug.print "You must specify a program to debug...\n"
+        Byebug.puts 'You must specify a program to debug...'
         abort
       end
 

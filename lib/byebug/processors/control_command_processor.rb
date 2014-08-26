@@ -13,12 +13,12 @@ module Byebug
       commands = control_cmds.map { |cmd| cmd.new(state) }
 
       if @context_was_dead
-        print "The program finished.\n"
+        puts 'The program finished.'
         @context_was_dead = false
       end
 
       while (input = @interface.read_command(prompt(nil)))
-        print "+#{input}" if verbose
+        puts("+#{input}") if verbose
         catch(:debug_error) do
           cmd = commands.find { |c| c.match(input) }
           return errmsg "Unknown command\n" unless cmd
@@ -29,8 +29,8 @@ module Byebug
     rescue IOError, SystemCallError
     rescue
       without_exceptions do
-        print "INTERNAL ERROR!!! #{$ERROR_INFO}\n"
-        print $ERROR_INFO.backtrace.map { |l| "\t#{l}" }.join("\n")
+        puts "INTERNAL ERROR!!! #{$ERROR_INFO}"
+        puts $ERROR_INFO.backtrace.map { |l| "\t#{l}" }.join("\n")
       end
     ensure
       @interface.close
@@ -55,7 +55,7 @@ module Byebug
       end
 
       extend Forwardable
-      def_delegators :@interface, :errmsg, :print
+      def_delegators :@interface, :errmsg, :puts
 
       def confirm(*_args)
         'y'

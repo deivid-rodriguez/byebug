@@ -13,21 +13,21 @@ module Byebug
       prog = PROG_SCRIPT if defined?(PROG_SCRIPT)
       byebug_script = BYEBUG_SCRIPT if defined?(BYEBUG_SCRIPT)
 
-      return errmsg "Don't know name of debugged program\n" unless prog
+      return errmsg("Don't know name of debugged program") unless prog
 
       unless File.exist?(File.expand_path(prog))
-        return errmsg "Ruby program #{prog} doesn't exist\n"
+        return errmsg("Ruby program #{prog} doesn't exist")
       end
 
       if byebug_script
         cmd = "#{byebug_script} #{prog}"
       else
-        print "Byebug was not called from the outset...\n"
+        puts "Byebug was not called from the outset..."
         if File.executable?(prog)
           cmd = prog
         else
-          print "Ruby program #{prog} not executable... " \
-                "We'll wrap it in a ruby call\n"
+          puts "Ruby program #{prog} not executable... " \
+               "We'll wrap it in a ruby call"
           cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} #{prog}"
         end
       end
@@ -40,10 +40,10 @@ module Byebug
       end
 
       # An execv would be preferable to the "exec" below.
-      print "Re exec'ing:\n\t#{cmd}\n"
+      puts "Re exec'ing:\n\t#{cmd}"
       exec cmd
     rescue Errno::EOPNOTSUPP
-      print "Restart command is not available at this time.\n"
+      puts "Restart command is not available at this time."
     end
 
     class << self

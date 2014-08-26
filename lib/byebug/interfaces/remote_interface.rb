@@ -26,8 +26,8 @@ module Byebug
       send_command "PROMPT #{prompt}"
     end
 
-    def print(*args)
-      @socket.printf(escape(format(*args)))
+    def puts(message)
+      @socket.printf(message)
     end
 
     private

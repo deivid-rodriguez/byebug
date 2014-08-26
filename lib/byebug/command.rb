@@ -22,7 +22,7 @@ module Byebug
     protected
 
     extend Forwardable
-    def_delegators :@state, :errmsg, :print
+    def_delegators :@state, :errmsg, :puts
 
     def confirm(msg)
       @state.confirm(msg) == 'y'
@@ -32,15 +32,15 @@ module Byebug
       eval(str, b)
     rescue StandardError, ScriptError => e
       at = eval('Thread.current.backtrace_locations', b)
-      print "#{at.shift}: #{e.class} Exception(#{e.message})\n"
-      at.each { |path| print "\tfrom #{path}\n" }
+      puts "#{at.shift}: #{e.class} Exception(#{e.message})"
+      at.each { |path| puts "\tfrom #{path}" }
       nil
     end
 
     def bb_warning_eval(str, b = get_binding)
       eval(str, b)
     rescue StandardError, ScriptError => e
-      print "#{e.class} Exception: #{e.message}\n"
+      puts "#{e.class} Exception: #{e.message}"
       nil
     end
 

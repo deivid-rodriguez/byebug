@@ -22,8 +22,8 @@ module Byebug
       'y'
     end
 
-    def print(*args)
-      @out.printf(*args)
+    def puts(message)
+      @out.printf(message)
     end
 
     def close

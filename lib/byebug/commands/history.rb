@@ -9,8 +9,8 @@ module Byebug
 
     def execute
       unless Setting[:autosave]
-        return errmsg 'Not currently saving history. ' \
-                      "Enable it with \"set autosave\"\n"
+        return errmsg('Not currently saving history. ' \
+                      "Enable it with \"set autosave\"")
       end
 
       if @match[:num_cmds]
@@ -18,7 +18,7 @@ module Byebug
         return errmsg(err) unless size
       end
 
-      print History.to_s(size || Setting[:histsize])
+      puts History.to_s(size || Setting[:histsize])
     end
 
     class << self

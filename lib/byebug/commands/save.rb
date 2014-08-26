@@ -58,7 +58,7 @@ module Byebug
       save_catchpoints(file)
       save_displays(file)
       save_settings(file)
-      print "Saved to '#{file.path}'\n"
+      puts "Saved to '#{file.path}'"
       @state.interface.restart_file = file.path if @state && @state.interface
       file.close
     end
