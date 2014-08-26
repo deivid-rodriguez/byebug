@@ -194,7 +194,7 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
 
 /*
  *  call-seq:
- *    context.frame_binding(frame_position=0) -> binding
+ *    context.frame_binding(frame_position = 0) -> binding
  *
  *  Returns frame's binding.
  */
@@ -208,7 +208,7 @@ Context_frame_binding(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_class(frame_position=0) -> binding
+ *    context.frame_class(frame_position = 0) -> binding
  *
  *  Returns frame's defined class.
  */
@@ -222,7 +222,7 @@ Context_frame_class(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_file(frame_position=0) -> string
+ *    context.frame_file(frame_position = 0) -> string
  *
  *  Returns the name of the file in the frame.
  */
