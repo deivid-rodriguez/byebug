@@ -17,13 +17,14 @@ module Byebug
       return errmsg("Unknown setting :#{key}") unless full_key
 
       if !Setting.boolean?(full_key) && value.nil?
-        return errmsg("You must specify a value for setting :#{key}\n")
+        value, err = nil, "You must specify a value for setting :#{key}"
       elsif Setting.boolean?(full_key)
-        value = get_onoff(value, key =~ /^no/ ? false : true)
+        value, err = get_onoff(value, key =~ /^no/ ? false : true)
       elsif Setting.integer?(full_key)
         value, err = get_int(value, full_key, 1)
-        return errmsg(err) unless value
       end
+      return errmsg(err) if value.nil?
+
 
       Setting[full_key.to_sym] = value
 
@@ -39,8 +40,7 @@ module Byebug
       when '0', 'off', 'false'
         false
       else
-        print "Expecting 'on', 1, true, 'off', 0, false. Got: #{arg}.\n"
-        fail RuntimeError
+        [nil, "Expecting 'on', 1, true, 'off', 0, false. Got: #{arg}.\n"]
       end
     end
 
