@@ -25,11 +25,10 @@ module Byebug
 
       breakpoint = breakpoints.select { |b| b.id == pos }.first
 
-      if syntax_valid?(@match[2])
-        breakpoint.expr = @match[2]
-      else
-        errmsg("Incorrect expression \"#{@match[2]}\", breakpoint not changed")
-      end
+      return errmsg("Incorrect expression \"#{@match[2]}\", " \
+                    "breakpoint not changed") unless syntax_valid?(@match[2])
+
+      breakpoint.expr = @match[2]
     end
 
     class << self

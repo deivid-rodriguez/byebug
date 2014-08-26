@@ -243,5 +243,5 @@ module Byebug
         loc
       end
     end
-  end # class CommandProcessor
+  end
 end

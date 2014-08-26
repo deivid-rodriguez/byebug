@@ -15,14 +15,18 @@ module Byebug
         @state.context
 
       if !@match[1]
-        Byebug.breakpoints.clear if confirm('Delete all breakpoints? (y or n) ')
-      else
-        @match[1].split(/[ \t]+/).each do |number|
-          pos = get_int(number, 'Delete', 1)
-          return unless pos
+        Byebug.breakpoints.clear if confirm('Delete all breakpoints? (y/n) ')
 
-          errmsg("No breakpoint number #{pos}") unless
-            Byebug.remove_breakpoint(pos)
+        return nil
+      end
+
+      @match[1].split(/[ \t]+/).each do |number|
+        pos, err = get_int(number, 'Delete', 1)
+
+        return errmsg(err) unless pos
+
+        errmsg("No breakpoint number #{pos}") unless
+          Byebug.remove_breakpoint(pos)
         end
       end
     end

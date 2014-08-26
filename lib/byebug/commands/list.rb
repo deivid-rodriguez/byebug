@@ -102,11 +102,10 @@ module Byebug
     def display_list(b, e, lines, current)
       width = e.to_s.size
       b.upto(e) do |n|
-        if n > 0 && lines[n - 1]
-          line = n == current ? '=>' : '  '
-          line += format(" %#{width}d: %s\n", n, lines[n - 1].chomp)
-          print(line)
-        end
+        next unless n > 0 && lines[n - 1]
+        line = n == current ? '=>' : '  '
+        line += format(" %#{width}d: %s\n", n, lines[n - 1].chomp)
+        print(line)
       end
       print "\n"
       e == lines.size ? @state.previous_line : b

@@ -10,9 +10,6 @@ require 'stringio'
 require 'tracer'
 require 'linecache19'
 
-#
-# Namespace for all debugger's code
-#
 module Byebug
   # List of files byebug will ignore while debugging
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))

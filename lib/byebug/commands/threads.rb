@@ -39,19 +39,18 @@ module Byebug
     end
 
     def parse_thread_num(subcmd, arg)
-      if '' == arg
-        errmsg "\"#{subcmd}\" needs a thread number"
-        nil
-      else
-        thread_num = get_int(arg, subcmd, 1)
-        return nil unless thread_num
-        Byebug.contexts.find { |c| c.thnum == thnum }
-      end
+      return errmsg("\"#{subcmd}\" needs a thread number") if '' == arg
+
+      thread_num = get_int(arg, subcmd, 1)
+      return nil unless thread_num
+
+      Byebug.contexts.find { |c| c.thnum == thnum }
     end
 
     def parse_thread_num_for_cmd(subcmd, arg)
       c = parse_thread_num(subcmd, arg)
-      return nil unless c
+      return unless c
+
       case
       when nil == c
         errmsg 'No such thread'
@@ -60,9 +59,8 @@ module Byebug
       when c.ignored?
         errmsg "Can't #{subcmd} thread #{arg}"
       else
-        return c
+        c
       end
-      nil
     end
   end
 
@@ -129,6 +127,7 @@ module Byebug
     def execute
       c = parse_thread_num_for_cmd('thread stop', @match[1])
       return unless c
+
       c.suspend
       display_context(c)
     end
@@ -158,10 +157,7 @@ module Byebug
     def execute
       c = parse_thread_num_for_cmd('thread resume', @match[1])
       return unless c
-      unless c.suspended?
-        errmsg 'Already running'
-        return
-      end
+      return errmsg('Already running') unless c.suspended?
       c.resume
       display_context(c)
     end
@@ -192,8 +188,10 @@ module Byebug
       if @match[1] =~ /switch/
         return errmsg('"thread switch" needs a thread number')
       end
+
       c = parse_thread_num_for_cmd('thread switch', @match[1])
       return unless c
+
       display_context(c)
       c.step_into 1
       c.thread.run

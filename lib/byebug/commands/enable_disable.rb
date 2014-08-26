@@ -26,11 +26,11 @@ module Byebug
       selected_breakpoints.each do |b|
         enabled = ('enable' == is_enable)
         if enabled && !syntax_valid?(b.expr)
-          errmsg("Expression \"#{b.expr}\" syntactically incorrect; " \
-                 "breakpoint remains disabled.")
-        else
-          b.enabled = enabled
+          return errmsg("Expression \"#{b.expr}\" syntactically incorrect; " \
+                        "breakpoint remains disabled.")
         end
+
+        b.enabled = enabled
       end
     end
 

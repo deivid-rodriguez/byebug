@@ -14,11 +14,11 @@ module Byebug
         pos = get_int(@match[1], 'Undisplay')
         return unless pos
 
-        if @state.display[pos - 1]
-          @state.display[pos - 1][0] = nil
-        else
-          errmsg("Display expression #{pos} is not defined.")
+        unless @state.display[pos - 1]
+          return errmsg("Display expression #{pos} is not defined.")
         end
+
+        @state.display[pos - 1][0] = nil
       else
         return unless confirm('Clear all expressions? (y/n) ')
 

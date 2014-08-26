@@ -40,17 +40,17 @@ module Byebug
         path = CommandProcessor.canonic_file(file)
         return errmsg("No file named #{path}") unless File.exist?(file)
 
-        line, n = line.to_i, File.foreach(file).count
+        l, n = line.to_i, File.foreach(file).count
         return errmsg("There are only #{n} lines in file #{path}") if l > n
 
         autoreload = Setting[:autoreload]
         possible_lines = LineCache.trace_line_numbers(file, autoreload)
-        unless possible_lines.member?(line)
-          return errmsg("Line #{line} is not a valid breakpoint in file #{path}")
+        unless possible_lines.member?(l)
+          return errmsg("Line #{l} is not a valid breakpoint in file #{path}")
         end
 
         b = Byebug.add_breakpoint file, line, expr
-        print "Created breakpoint #{b.id} at #{path}:#{line}\n"
+        print "Created breakpoint #{b.id} at #{path}:#{l}\n"
 
         unless syntax_valid?(expr)
           errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
@@ -58,15 +58,11 @@ module Byebug
         end
 
       else
-        klass = bb_warning_eval(file)
-        if klass && klass.is_a?(Module)
-          class_name = klass.name
-        else
-          return errmsg("Unknown class #{file}")
-        end
+        kl = bb_warning_eval(file)
+        return errmsg("Unknown class #{file}") unless kl && kl.is_a?(Module)
 
         method = line.intern
-        b = Byebug.add_breakpoint class_name, method, expr
+        b = Breakpoint.add(class_name, method, expr)
         print "Created breakpoint #{b.id} at #{class_name}::#{method}\n"
       end
     end
