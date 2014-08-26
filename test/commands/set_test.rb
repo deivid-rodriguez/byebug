@@ -96,7 +96,7 @@ module Byebug
     def test_set_histsize_shows_an_error_message_if_no_size_is_provided
       enter 'set histsize'
       debug_proc(@example)
-      check_output_includes 'You must specify a value for setting :histsize'
+      check_error_includes 'You must specify a value for setting :histsize'
     end
 
     def test_set_histfile_sets_command_history_file
@@ -110,7 +110,7 @@ module Byebug
     def test_set_histfile_shows_an_error_message_if_no_filename_is_provided
       enter 'set histfile'
       debug_proc(@example)
-      check_output_includes 'You must specify a value for setting :histfile'
+      check_error_includes 'You must specify a value for setting :histfile'
     end
 
     [:listsize, :width].each do |set|
