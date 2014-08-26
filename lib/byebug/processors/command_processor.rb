@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Processes commands in regular mode
+  #
   class CommandProcessor < Processor
     attr_reader :display
 

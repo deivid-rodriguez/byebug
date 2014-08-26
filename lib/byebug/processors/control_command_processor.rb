@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Processes commands in 'control' mode, when there's no program running
+  #
   class ControlCommandProcessor < Processor
     def initialize(interface = LocalInterface.new)
       super(interface)

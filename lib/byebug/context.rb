@@ -1,4 +1,9 @@
 module Byebug
+  #
+  # Mantains context information for the debugger and it's the main
+  # communication point between the library and the C-extension through the
+  # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
+  #
   class Context
     class << self
       def stack_size(byebug_frames = false)

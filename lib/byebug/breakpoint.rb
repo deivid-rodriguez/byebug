@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Implements breakpoints
+  #
   class Breakpoint
     #
     # First breakpoint, in order of creation
