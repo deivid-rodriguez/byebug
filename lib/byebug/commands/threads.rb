@@ -190,8 +190,7 @@ module Byebug
 
     def execute
       if @match[1] =~ /switch/
-        errmsg '"thread switch" needs a thread number'
-        return
+        return errmsg('"thread switch" needs a thread number')
       end
       c = parse_thread_num_for_cmd('thread switch', @match[1])
       return unless c

@@ -11,13 +11,13 @@ module Byebug
 
     def execute
       key, value = @match[:setting], @match[:value]
-      return print SetCommand.help if key.nil? && value.nil?
+      return print(SetCommand.help) if key.nil? && value.nil?
 
       full_key = Setting.find(key)
-      return print "Unknown setting :#{key}\n" unless full_key
+      return print("Unknown setting :#{key}\n") unless full_key
 
       if !Setting.boolean?(full_key) && value.nil?
-        return print "You must specify a value for setting :#{key}\n"
+        return print("You must specify a value for setting :#{key}\n")
       elsif Setting.boolean?(full_key)
         value = get_onoff(value, key =~ /^no/ ? false : true)
       elsif Setting.integer?(full_key)

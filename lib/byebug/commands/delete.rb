@@ -11,7 +11,7 @@ module Byebug
     end
 
     def execute
-      return errmsg "We are not in a state we can delete breakpoints.\n" unless
+      return errmsg("We are not in a state we can delete breakpoints.\n") unless
         @state.context
 
       if !@match[1]

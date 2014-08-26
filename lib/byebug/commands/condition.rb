@@ -12,13 +12,13 @@ module Byebug
     end
 
     def execute
-      return print ConditionCommand.help unless @match[1]
+      return print(ConditionCommand.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
       largest = breakpoints.reduce(0) do |tally, b|
         b.id if b.id > tally
       end
-      return errmsg "No breakpoints have been set\n" if 0 == largest
+      return errmsg("No breakpoints have been set\n") if 0 == largest
 
       pos = get_int(@match[1], 'Condition', 1, largest)
       return unless pos
@@ -28,8 +28,7 @@ module Byebug
       if syntax_valid?(@match[2])
         breakpoint.expr = @match[2]
       else
-        errmsg "Incorrect expression \"#{@match[2]}\", " \
-               "breakpoint not changed\n"
+        errmsg("Incorrect expression \"#{@match[2]}\", breakpoint not changed\n")
       end
     end
 
