@@ -182,21 +182,15 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
                    close_debug_inspector, (VALUE)data);
 }
 
-#define FRAME_SETUP                                                   \
-  debug_context_t *context;                                           \
-  VALUE frame_no;                                                     \
-  int frame_n, stack_size;                                            \
-  Data_Get_Struct(self, debug_context_t, context);                    \
-  if (!rb_scan_args(argc, argv, "01", &frame_no))                     \
-    frame_n = 0;                                                      \
-  else                                                                \
-    frame_n = FIX2INT(frame_no);                                      \
-  stack_size = real_stack_size();                                     \
-  if (frame_n < 0 || frame_n >= stack_size)                           \
-  {                                                                   \
-    rb_raise(rb_eArgError, "Invalid frame number %d, stack (0...%d)", \
-             frame_n, stack_size - 1);                                \
-  }                                                                   \
+#define FRAME_SETUP                                \
+  debug_context_t *context;                        \
+  VALUE frame_no;                                  \
+  int frame_n;                                     \
+  Data_Get_Struct(self, debug_context_t, context); \
+  if (!rb_scan_args(argc, argv, "01", &frame_no))  \
+    frame_n = 0;                                   \
+  else                                             \
+    frame_n = FIX2INT(frame_no);
 
 /*
  *  call-seq:
