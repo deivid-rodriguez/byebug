@@ -12,10 +12,10 @@ module Byebug
 
     def execute
       if @match[1]
-        filename = File.expand_path(@state.file)
         num, err = get_int(@match[1], 'Continue', 0, nil)
         return errmsg(err) unless num
 
+        filename = File.expand_path(@state.file)
         unless LineCache.trace_line_numbers(filename).member?(num)
           return errmsg("Line #{num} is not a valid stopping point in file")
         end
