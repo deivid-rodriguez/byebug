@@ -4,14 +4,14 @@ module Byebug
   #
   module InfoFunctions
     def info_catch(*_args)
-      return puts("No frame selected.") unless @state.context
+      return puts('No frame selected.') unless @state.context
 
       if Byebug.catchpoints && !Byebug.catchpoints.empty?
         Byebug.catchpoints.each do |exception, _hits|
           puts("#{exception}: #{exception.is_a?(Class)}")
         end
       else
-        puts("No exceptions set to be caught.")
+        puts 'No exceptions set to be caught.'
       end
     end
 
@@ -41,25 +41,25 @@ module Byebug
     end
 
     def info_breakpoints(*args)
-      return puts("No breakpoints.") if Byebug.breakpoints.empty?
+      return puts('No breakpoints.') if Byebug.breakpoints.empty?
 
       brkpts = Byebug.breakpoints.sort_by { |b| b.id }
       unless args.empty?
         indices = args.map { |a| a.to_i }
         brkpts = brkpts.select { |b| indices.member?(b.id) }
-        return errmsg "No breakpoints found among list given.\n" if
-          brkpts.empty?
+        return errmsg('No breakpoints found among list given') if brkpts.empty?
       end
-      puts("Num Enb What")
+
+      puts 'Num Enb What'
       brkpts.each { |b| info_breakpoint(b) }
     end
 
     def info_display(*_args)
-      return puts("There are no auto-display expressions now.") unless
+      return puts('There are no auto-display expressions now.') unless
         @state.display.find { |d| d[0] }
 
-      puts "Auto-display expressions now in effect:"
-      puts "Num Enb Expression"
+      puts 'Auto-display expressions now in effect:'
+      puts 'Num Enb Expression'
       n = 1
       @state.display.each do |d|
         puts(format('%3d: %s  %s', n, d[0] ? 'y' : 'n', d[1]))

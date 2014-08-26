@@ -33,7 +33,7 @@ module Byebug
     def readline(prompt, hist)
       Readline.readline(prompt, hist)
     rescue Interrupt
-      puts "^C"
+      puts '^C'
       retry
     end
   end

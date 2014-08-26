@@ -22,7 +22,7 @@ module Byebug
       if byebug_script
         cmd = "#{byebug_script} #{prog}"
       else
-        puts "Byebug was not called from the outset..."
+        puts 'Byebug was not called from the outset...'
         if File.executable?(prog)
           cmd = prog
         else
@@ -43,7 +43,7 @@ module Byebug
       puts "Re exec'ing:\n\t#{cmd}"
       exec cmd
     rescue Errno::EOPNOTSUPP
-      puts "Restart command is not available at this time."
+      puts 'Restart command is not available at this time.'
     end
 
     class << self

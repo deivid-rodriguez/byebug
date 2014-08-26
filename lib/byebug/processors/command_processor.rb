@@ -218,7 +218,7 @@ module Byebug
       @context_was_dead = true if context.dead? && !@context_was_dead
       return unless @context_was_dead
 
-      puts "The program finished."
+      puts 'The program finished.'
       @context_was_dead = false
     end
 

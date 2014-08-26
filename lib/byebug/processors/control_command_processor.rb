@@ -21,7 +21,7 @@ module Byebug
         puts("+#{input}") if verbose
 
         cmd = commands.find { |c| c.match(input) }
-        return errmsg("Unknown command") unless cmd
+        return errmsg('Unknown command') unless cmd
 
         cmd.execute
       end

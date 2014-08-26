@@ -24,7 +24,7 @@ module Byebug
 
       puts "byebug help v#{VERSION}" unless Setting[:testing]
       puts "Type \"help <command-name>\" for help on a specific command\n"
-      puts "Available commands:"
+      puts 'Available commands:'
       cmds = @state.commands.map { |cmd| cmd.names }.flatten.uniq.sort
       puts columnize(cmds, Setting[:width])
     end

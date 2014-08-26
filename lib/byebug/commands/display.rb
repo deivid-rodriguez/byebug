@@ -14,9 +14,7 @@ module Byebug
     def print_display_expressions
       n = 1
       @state.display.each do |d|
-        if d[0]
-          puts "#{n}: #{display_expression(d[1])}"
-        end
+        puts "#{n}: #{display_expression(d[1])}" if d[0]
         n += 1
       end
     end

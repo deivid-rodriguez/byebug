@@ -73,7 +73,7 @@ module Byebug
     def test_info_breakpoints_shows_error_if_specific_breakpoint_do_not_exist
       enter 'break 38', 'info breakpoints 100'
       debug_proc(@example)
-      check_error_includes 'No breakpoints found among list given.'
+      check_error_includes 'No breakpoints found among list given'
     end
 
     def test_info_breakpoints_shows_hit_counts
