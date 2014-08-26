@@ -8,8 +8,6 @@ module Byebug
     # min or max is nil, that value has no bound.
     #
     def get_int(str, cmd, min = nil, max = nil)
-      return nil, "You need to specify an argument for \"#{cmd}\"" if str.nil?
-
       if str !~ /\A[0-9]+\z/
         return nil, "\"#{cmd}\" argument \"#{str}\" needs to be a number"
       end
@@ -57,6 +55,19 @@ module Byebug
       eval("BEGIN {return true}\n#{code}", nil, '', 0)
     rescue SyntaxError
       false
+    end
+
+    #
+    # Returns the number of steps specified in <str> as an integer or 1 if <str>
+    # is empty.
+    #
+    def parse_steps(str, cmd)
+      return 1 unless str
+
+      steps, err = get_int(str, cmd, 1)
+      return nil, err unless steps
+
+      steps
     end
   end
 end

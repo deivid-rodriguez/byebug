@@ -3,15 +3,6 @@ module Byebug
   # Mixin to assist command parsing
   #
   module SteppingFunctions
-    def parse_steps(str, cmd)
-      return 1 unless str
-
-      steps, err = get_int(str, cmd, 1)
-      return nil, err unless steps
-
-      steps
-    end
-
     def parse_force(str)
       return Setting[:forcestep] unless str
 

@@ -186,12 +186,10 @@ module Byebug
     end
 
     def execute
-      if @match[1]
-        pos, err = get_int(@match[1], 'Up')
-        return errmsg(err) unless pos
-      end
+      pos, err = parse_steps(@match[1], 'Up')
+      return errmsg(err) unless pos
 
-      adjust_frame(pos || 1, false)
+      adjust_frame(pos, false)
     end
 
     class << self
@@ -214,12 +212,10 @@ module Byebug
     end
 
     def execute
-      if @match[1]
-        pos, err = get_int(@match[1], 'Down')
-        return errmsg(err) unless pos
-      end
+      pos, err = parse_steps(@match[1], 'Down')
+      return errmsg(err) unless pos
 
-      adjust_frame(-(pos || 1), false)
+      adjust_frame(-pos, false)
     end
 
     class << self
