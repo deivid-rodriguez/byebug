@@ -186,21 +186,28 @@ module Byebug
     end
 
     #
+    # Autoevals a single command
+    #
+    def one_unknown_cmd(commands, input)
+      if !Setting[:autoeval]
+        return errmsg("Unknown command: \"#{input}\". Try \"help\"")
+      end
+
+      commands.find { |c| c.is_a?(EvalCommand) }.execute
+    end
+
+    #
     # Executes a single byebug command
     #
     def one_cmd(commands, context, input)
       cmd = commands.find { |c| c.match(input) }
-      if cmd
-        if context.dead? && !cmd.class.allow_in_post_mortem
-          errmsg "Command unavailable in post mortem mode.\n"
-        else
-          cmd.execute
-        end
-      elsif Setting[:autoeval]
-        commands.find { |c| c.is_a?(EvalCommand) }.execute
-      else
-        errmsg "Unknown command: \"#{input}\". Try \"help\".\n"
+      return one_unknown_cmd(commands, input) unless cmd
+
+      if context.dead? && !cmd.class.allow_in_post_mortem
+        return errmsg("Command unavailable in post mortem mode.")
       end
+
+      cmd.execute
     end
 
     #
