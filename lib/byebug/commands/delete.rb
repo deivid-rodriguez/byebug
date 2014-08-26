@@ -11,7 +11,7 @@ module Byebug
     end
 
     def execute
-      return errmsg("We are not in a state we can delete breakpoints.\n") unless
+      return errmsg("We are not in a state we can delete breakpoints.") unless
         @state.context
 
       if !@match[1]
@@ -21,7 +21,7 @@ module Byebug
           pos = get_int(number, 'Delete', 1)
           return unless pos
 
-          errmsg "No breakpoint number %d\n", pos unless
+          errmsg("No breakpoint number #{pos}") unless
             Byebug.remove_breakpoint(pos)
         end
       end

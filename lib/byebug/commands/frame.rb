@@ -31,15 +31,16 @@ module Byebug
     def adjust_frame(frame_pos, absolute)
       if absolute
         abs_frame_pos = switch_to_frame(frame_pos)
-        return errmsg("Can't navigate to c-frame\n") if c_frame?(abs_frame_pos)
+        return errmsg("Can't navigate to c-frame") if c_frame?(abs_frame_pos)
       else
         abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
-      return errmsg("Can't navigate beyond the oldest frame\n") if
-        abs_frame_pos >= Context.stack_size
-      return errmsg("Can't navigate beyond the newest frame\n") if
-        abs_frame_pos < 0
+      if abs_frame_pos >= Context.stack_size
+        return errmsg("Can't navigate beyond the oldest frame")
+      elsif abs_frame_pos < 0
+        return errmsg("Can't navigate beyond the newest frame")
+      end
 
       @state.frame_pos = abs_frame_pos
       @state.file = @state.context.frame_file @state.frame_pos

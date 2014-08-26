@@ -22,15 +22,15 @@ module Byebug
       end
 
       if expr && file.nil? && line.nil?
-        return errmsg("Invalid breakpoint location: #{expr}\n")
+        return errmsg("Invalid breakpoint location: #{expr}")
       elsif expr && expr !~ /^\s*if\s+(.+)/
-        return errmsg("Expecting \"if\" in breakpoint condition, got: #{expr}\n")
+        return errmsg("Expecting \"if\" in breakpoint condition, got: #{expr}")
       else
         expr = $1
       end
 
       if file.nil? && !@state.context
-        return errmsg("We are not in a state that has an associated file\n")
+        return errmsg("We are not in a state that has an associated file")
       end
 
       file = @state.file if file.nil?
@@ -38,22 +38,22 @@ module Byebug
 
       if line =~ /^\d+$/
         path = CommandProcessor.canonic_file(file)
-        return errmsg("No file named #{path}\n") unless File.exist?(file)
+        return errmsg("No file named #{path}") unless File.exist?(file)
 
         line, n = line.to_i, File.foreach(file).count
-        return errmsg("There are only #{n} lines in file #{path}\n") if l > n
+        return errmsg("There are only #{n} lines in file #{path}") if l > n
 
         autoreload = Setting[:autoreload]
         possible_lines = LineCache.trace_line_numbers(file, autoreload)
         unless possible_lines.member?(line)
-          return errmsg("Line #{line} is not a valid breakpoint in file #{path}\n")
+          return errmsg("Line #{line} is not a valid breakpoint in file #{path}")
         end
 
         b = Byebug.add_breakpoint file, line, expr
         print "Created breakpoint #{b.id} at #{path}:#{line}\n"
 
         unless syntax_valid?(expr)
-          errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.\n")
+          errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
           b.enabled = false
         end
 
@@ -62,7 +62,7 @@ module Byebug
         if klass && klass.is_a?(Module)
           class_name = klass.name
         else
-          return errmsg("Unknown class #{file}\n")
+          return errmsg("Unknown class #{file}")
         end
 
         method = line.intern

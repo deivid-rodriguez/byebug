@@ -8,9 +8,8 @@ module Byebug
 
     # Common routine for reporting byebug error messages.
     # Derived classes may want to override this to capture output.
-    def errmsg(*args)
-      print '*** '
-      print(*args)
+    def errmsg(message)
+      print("*** #{message}\n")
     end
 
     def escape(msg)

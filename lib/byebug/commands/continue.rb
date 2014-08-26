@@ -17,7 +17,7 @@ module Byebug
         return unless num
 
         unless LineCache.trace_line_numbers(filename).member?(num)
-          return errmsg("Line #{num} is not a valid stopping point in file\n")
+          return errmsg("Line #{num} is not a valid stopping point in file")
         end
         Byebug.add_breakpoint filename, num
       end

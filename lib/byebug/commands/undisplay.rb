@@ -17,7 +17,7 @@ module Byebug
         if @state.display[pos - 1]
           @state.display[pos - 1][0] = nil
         else
-          errmsg "Display expression %d is not defined.\n", pos
+          errmsg("Display expression #{pos} is not defined.")
         end
       else
         return unless confirm('Clear all expressions? (y/n) ')
