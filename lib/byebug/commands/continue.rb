@@ -22,6 +22,7 @@ module Byebug
 
         Breakpoint.add(filename, num)
       end
+
       @state.proceed
     end
 
