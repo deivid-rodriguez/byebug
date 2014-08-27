@@ -4,6 +4,8 @@
  * Fix `verbose` setting (`set verbose` works now)
  * Fix unsetting post_mortem mode (`set post_mortem false` works now)
  * Fix some cases where the debugger would stop in byebug internal frames.
+ * Fix some crashes when displaying backtraces (with `nofullpath` setting and
+when calculated stack size was smaller than the real one).
 
 - Removals
  * `info locals` has been removed, use `var local` instead.

@@ -117,9 +117,13 @@ module Byebug
       end
     end
 
+    require 'pathname'
+
     def shortpath(fullpath)
-      separator = File::ALT_SEPARATOR || File::SEPARATOR
-      "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
+      components = Pathname(fullpath).each_filename.to_a
+      return File.join(components) if components.size <= 2
+
+      File.join('...', components[-3..-1])
     end
 
     def print_frame(pos, mark_current = true)
