@@ -21,10 +21,6 @@ module Byebug
     def errmsg(message)
       print("*** #{message}\n")
     end
-
-    def escape(msg)
-      msg.gsub('%', '%%')
-    end
   end
 
   require 'byebug/interfaces/local_interface'
