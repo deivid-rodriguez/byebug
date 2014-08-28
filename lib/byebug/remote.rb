@@ -40,7 +40,7 @@ module Byebug
       @thread = DebugThread.new do
         while (session = server.accept)
           self.interface = RemoteInterface.new(session)
-          mutex.synchronize { proceed.signal } unless wait_connection
+          mutex.synchronize { proceed.signal } if wait_connection
         end
       end
 
