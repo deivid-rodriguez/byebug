@@ -909,6 +909,35 @@ Also, since this relies on the OS `exec` call, this command is available only if
 your OS supports `exec`.
 
 
+## Debugging remote programs
+
+It is possible to set up debugging so that you can issue byebug commands from
+outside the process running the Ruby code. In fact, you might even be on a
+different computer than the one running the Ruby program.
+
+To setup remote debugging, drop the following somewhere before the point in the
+program that you want to debug (In Rails, the
+`config/environments/development.rb` could be a good canditate).
+
+```ruby
+  require 'byebug'
+  Byebug.wait_connection = true
+  Byebug.start_server('localhost', <port>)
+```
+
+Once this piece gets executed, you can connect to the remote debugger from your
+local machine, by running: `byebug -R localhost:<port>`.
+
+Next, at a place of program execution which gets run just before the code you
+want to debug, add a call to `byebug` as was done without remote execution:
+
+```ruby
+   # work, work, work...
+   byebug
+   some ruby code  # byebug will stop before this line is run
+```
+
+
 ## Byebug Command Reference
 
 ### Command Syntax
