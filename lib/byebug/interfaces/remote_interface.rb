@@ -27,7 +27,7 @@ module Byebug
     end
 
     def puts(message)
-      @socket.printf(message)
+      @socket.puts(message)
     end
 
     private
