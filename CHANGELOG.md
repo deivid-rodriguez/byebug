@@ -1,4 +1,4 @@
-# 3.3.0 (Unreleased)
+# 3.3.0
 
 - Bugfixes
  * Fix "verbose" setting ("set verbose" works now).
