@@ -1,3 +1,7 @@
+# 3.4.0
+* Better fix for deivid-rodriguez/pry-byebug#32
+
+
 # 3.3.0
 
 - Bugfixes
