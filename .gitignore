@@ -1,6 +1,7 @@
 tmp
 pkg
 doc
+coverage
 
 .gdb_history
 .bundle
