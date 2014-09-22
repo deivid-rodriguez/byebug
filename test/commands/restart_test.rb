@@ -15,13 +15,7 @@ module Byebug
         RestartExample.new.concat_args(a, b, c)
       end
 
-      @old_prog_script = Byebug::PROG_SCRIPT if defined?(Byebug::PROG_SCRIPT)
-
       super
-    end
-
-    def after
-      force_set_const(Byebug, 'PROG_SCRIPT', @old_prog_script)
     end
 
     def must_restart(cmd = nil)
@@ -32,23 +26,26 @@ module Byebug
 
     def test_restarts_with_manual_arguments
       force_set_const(Byebug, 'BYEBUG_SCRIPT', 'byebug_script')
-      cmd = "#{BYEBUG_SCRIPT} #{PROG_SCRIPT} 1 2 3"
+      cmd = "#{BYEBUG_SCRIPT} #{Byebug.debugged_program} 1 2 3"
       must_restart(cmd)
+
       enter 'restart 1 2 3'
       debug_proc(@example)
       check_output_includes "Re exec'ing:\n\t#{cmd}"
     end
 
-    def test_does_not_restart_when_no_script_specified
-      force_unset_const(Byebug, 'PROG_SCRIPT')
-      must_restart.never
+    def test_restart_with_a_default_script_if_nil_script_specified
+      force_set_const(Byebug, 'BYEBUG_SCRIPT', 'byebug_script')
+      Byebug.debugged_program = nil
+      must_restart
+
       enter 'restart'
       debug_proc(@example)
-      check_error_includes "Don't know name of debugged program"
+      check_output_includes(/Re exec'ing:\s*#{BYEBUG_SCRIPT} #{$PROGRAM_NAME}/)
     end
 
     def test_does_not_restart_when_script_specified_does_not_exist
-      force_set_const(Byebug, 'PROG_SCRIPT', 'blabla')
+      Byebug.debugged_program = 'blabla'
       must_restart.never
       enter 'restart'
       debug_proc(@example)
@@ -61,8 +58,9 @@ module Byebug
       enter 'restart'
       debug_proc(@example)
       check_output_includes 'Byebug was not called from the outset...'
-      check_output_includes "Ruby program #{PROG_SCRIPT} not executable... " \
-                            "We'll wrap it in a ruby call"
+      check_output_includes \
+        "Ruby program #{Byebug.debugged_program} not executable... " \
+        "We'll wrap it in a ruby call"
     end
   end
 end

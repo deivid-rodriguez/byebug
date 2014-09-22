@@ -20,9 +20,17 @@ module Byebug
 
   class << self
     attr_accessor :handler
+    attr_writer :debugged_program
   end
 
   Byebug.handler = CommandProcessor.new
+
+  #
+  # Program being debugged (or a default one if not set yet)
+  #
+  def self.debugged_program
+    @debugged_program ||= $PROGRAM_NAME
+  end
 
   def self.source_reload
     hsh = 'SCRIPT_LINES__'

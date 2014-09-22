@@ -1,6 +1,4 @@
 module Byebug
-  # Stores program being debugged to make restarts possible
-  PROG_SCRIPT = $PROGRAM_NAME unless defined?(PROG_SCRIPT)
   #
   # Enters byebug right before (or right after if _before_ is false) return
   # events occur. Before entering byebug the init script is read.

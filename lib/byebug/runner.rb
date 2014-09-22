@@ -16,13 +16,13 @@ module Byebug
     # Debug a script only if syntax checks okay.
     #
     def debug_program(options)
-      output = `ruby -c "#{Byebug::PROG_SCRIPT}" 2>&1`
+      output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
       if $CHILD_STATUS.exitstatus != 0
         Byebug.puts output
         exit $CHILD_STATUS.exitstatus
       end
 
-      status = Byebug.debug_load(Byebug::PROG_SCRIPT, options[:stop])
+      status = Byebug.debug_load(Byebug.debugged_program, options[:stop])
       Byebug.puts "#{status}\n#{status.backtrace}" if status
     end
 
@@ -46,6 +46,23 @@ module Byebug
     end
 
     #
+    # Save path to program to be debugged
+    #
+    # Used for restarts.
+    #
+    def save_debugged_program
+      if ARGV.empty?
+        Byebug.puts 'You must specify a program to debug...'
+        abort
+      end
+
+      prog_script = ARGV.pop
+      prog_script = whence_file(prog_script) unless File.exist?(prog_script)
+
+      Byebug.debugged_program = File.expand_path(prog_script)
+    end
+
+    #
     # Starts byebug to debug a program
     #
     def run
@@ -61,19 +78,9 @@ module Byebug
         return
       end
 
-      if ARGV.empty?
-        Byebug.puts 'You must specify a program to debug...'
-        abort
-      end
+      save_debugged_program
 
-      # Save debugged program
-      prog_script = ARGV.pop
-      prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 
-      if Byebug.const_defined?('PROG_SCRIPT')
-        Byebug.send(:remove_const, 'PROG_SCRIPT')
-      end
-      Byebug.const_set('PROG_SCRIPT', File.expand_path(prog_script))
 
       # Set up trace hook for byebug
       Byebug.start

@@ -10,10 +10,9 @@ module Byebug
     end
 
     def execute
-      prog = PROG_SCRIPT if defined?(PROG_SCRIPT)
       byebug_script = BYEBUG_SCRIPT if defined?(BYEBUG_SCRIPT)
 
-      return errmsg("Don't know name of debugged program") unless prog
+      prog = Byebug.debugged_program
 
       unless File.exist?(File.expand_path(prog))
         return errmsg("Ruby program #{prog} doesn't exist")
