@@ -431,7 +431,7 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (n_frames < 0 || n_frames >= context->calced_stack_size)
+  if (n_frames < 0 || n_frames > context->calced_stack_size)
     rb_raise(rb_eRuntimeError,
              "You wan't to finish %d frames, but stack size is only %d",
              n_frames, context->calced_stack_size);
