@@ -537,7 +537,7 @@ this way finishes, byebug is turned off and the application proceeds at regular
 speed.
 
 Of course, inside the block you will probably want to enter the byebug using
-`Byebug.byebug()`, otherwise there would be little point in using the `start`.
+`Byebug.byebug`, otherwise there would be little point in using the `start`.
 For example, you can do this in `irb`:
 
 ```bash
