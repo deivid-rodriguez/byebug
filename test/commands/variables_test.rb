@@ -5,7 +5,7 @@ module Byebug
     def initialize
       @inst_a = 1
       @inst_b = 2
-      @inst_c = "1" * 40
+      @inst_c = '1' * 40
       @inst_d = BasicObject.new
     end
 
