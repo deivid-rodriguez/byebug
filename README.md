@@ -16,14 +16,15 @@ Note that byebug works only for ruby 2.0.0 or newer. For debugging ruby 1.9.3 or
 older, use [debugger](https://github.com/cldwalker/debugger).
 
 It allows you to see what is going on _inside_ a Ruby program while it executes
-and can do four main kinds of things to help you catch bugs in the act:
+and offers many of the traditional debugging features such as:
 
-* Start your program or attach to it, specifying anything that might affect its
-behavior.
-* Make your program stop on specified conditions.
-* Examine what has happened when your program has stopped.
-* Change things in your program, so you can experiment with correcting the
-effects of one bug and go on to learn about another.
+* Stepping: Running your program one line at a time.
+* Breaking: Pausing the program at some event or specified instruction, to
+examine the current state.
+* Evaluating: Basic REPL functionality, although [pry][] does a better job at
+that.
+* Tracking: Keeping tracking of the different values of your variables or the
+different lines executed by your program.
 
 
 ## Install
@@ -158,3 +159,5 @@ starting point of this.
 [CoverageURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.svg
 [GittipURL]: https://www.gittip.com/deivid-rodriguez
+
+[pry]: https://github.com/pry/pry
