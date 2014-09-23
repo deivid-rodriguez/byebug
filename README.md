@@ -21,7 +21,7 @@ and offers many of the traditional debugging features such as:
 examine the current state.
 * Evaluating: Basic REPL functionality, although [pry][] does a better job at
 that.
-* Tracking: Keeping tracking of the different values of your variables or the
+* Tracking: Keeping track of the different values of your variables or the
 different lines executed by your program.
 
 
