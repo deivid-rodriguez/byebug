@@ -45,9 +45,6 @@ module Byebug
   end
 end
 
-# Init globals to avoid warnings
-$binding = binding # this is from irb...
-
 # Load the test files from the command line.
 argv = ARGV.select do |argument|
   case argument
