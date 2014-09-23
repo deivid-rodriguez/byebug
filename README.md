@@ -55,8 +55,7 @@ wherever you want to start debugging and the execution will stop there. If you
 are debugging rails, start the server and once the execution gets to your
 `byebug` command you will get a debugging prompt.
 
-Former [debugger](https://github.com/cldwalker/debugger) or
-[ruby-debug](https://github.com/mark-moseley/ruby-debug) users, notice:
+Former [debugger][] or [ruby-debug][] users, notice:
 
 * Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
 require and start the debugger. These flags are a performance penalty and byebug
@@ -116,9 +115,8 @@ both rails and rspec have deprecated these flags in their latest versions.
 
 Byebug tries to follow [semantic versioning](http://semver.org) and tries to
 bump major version only when backwards incompatible changes are released.
-Backwards compatibility is targeted to
-[pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) and any other
-plugins relying on `byebug`.
+Backwards compatibility is targeted to [pry-byebug][] and any other plugins
+relying on `byebug`.
 
 
 ## Getting Started
@@ -130,14 +128,12 @@ started. Proper documentation will be eventually written.
 
 ## Related projects
 
-* [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug) adds `next`,
-`step`, `finish`, `continue` and `break` commands to pry using byebug.
-* [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger)
-adds a rake task that restarts Passenger with byebug connected.
-* [minitest-byebug](https://github.com/kaspth/minitest-byebug) starts a byebug
-session on minitest failures.
-* [sublime-debugger](https://github.com/shuky19/sublime_debugger) provides a plugin
-for ruby debugging on Sublime Text.
+* [pry-byebug][] adds `next`, `step`, `finish`, `continue` and `break` commands
+to `pry` using `byebug`.
+* [ruby-debug-passenger][] adds a rake task that restarts Passenger with Byebug
+connected.
+* [minitest-byebug][] starts a byebug session on minitest failures.
+* [sublime_debugger][] provides a plugin for ruby debugging on Sublime Text.
 
 
 ## TODO List (by priority)
@@ -154,9 +150,8 @@ Everybody who has ever contributed to this forked and reforked piece of
 software, specially:
 
 * @ko1, author of the awesome TracePoint API for Ruby.
-* @cldwalker, [debugger](https://github.com/cldwalker/debugger)'s mantainer.
-* @denofevil, author of [debase](https://github.com/denofevil/debase), the
-starting point of this.
+* @cldwalker, [debugger][]'s mantainer.
+* @denofevil, author of [debase][], the starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 * @FooBarWidget for working and helping with remote debugging.
 
@@ -175,3 +170,9 @@ starting point of this.
 
 [debugger]: https://github.com/cldwalker/debugger
 [pry]: https://github.com/pry/pry
+[ruby-debug]: https://github.com/mark-moseley/ruby-debug
+[debase]: https://github.com/denofevil/debase
+[pry-byebug]: https://github.com/deivid-rodriguez/pry-byebug
+[ruby-debug-passenger]: https://github.com/davejamesmiller/ruby-debug-passenger
+[minitest-byebug]: https://github.com/kaspth/minitest-byebug
+[sublime_debugger]: https://github.com/shuky19/sublime_debugger
