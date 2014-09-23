@@ -132,6 +132,8 @@ for ruby debugging on Sublime Text.
 * Add printers support.
 * Support rubies other than MRI.
 
+[Getting Started with Development](CONTRIBUTING.md)
+
 ## Credits
 
 Everybody who has ever contributed to this forked and reforked piece of
