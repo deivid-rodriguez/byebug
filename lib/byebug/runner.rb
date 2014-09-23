@@ -80,8 +80,6 @@ module Byebug
 
       save_debugged_program
 
-
-
       # Set up trace hook for byebug
       Byebug.start
 
