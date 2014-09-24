@@ -317,6 +317,16 @@ c_return_event(VALUE trace_point, void *data)
 }
 
 static void
+thread_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP
+
+  EVENT_COMMON
+
+  cleanup(dc);
+}
+
+static void
 raise_event(VALUE trace_point, void *data)
 {
   VALUE expn_class, ancestors;
@@ -393,6 +403,7 @@ register_tracepoints(VALUE self)
     int c_call_msk = RUBY_EVENT_C_CALL;
     int c_ret_msk  = RUBY_EVENT_C_RETURN;
     int raise_msk  = RUBY_EVENT_RAISE;
+    int thread_msk = RUBY_EVENT_THREAD_BEGIN | RUBY_EVENT_THREAD_END;
 
     VALUE tpLine    = rb_tracepoint_new(Qnil, line_msk  , line_event    , 0);
     VALUE tpCall    = rb_tracepoint_new(Qnil, call_msk  , call_event    , 0);
@@ -400,6 +411,7 @@ register_tracepoints(VALUE self)
     VALUE tpCCall   = rb_tracepoint_new(Qnil, c_call_msk, c_call_event  , 0);
     VALUE tpCReturn = rb_tracepoint_new(Qnil, c_ret_msk , c_return_event, 0);
     VALUE tpRaise   = rb_tracepoint_new(Qnil, raise_msk , raise_event   , 0);
+    VALUE tpThread  = rb_tracepoint_new(Qnil, thread_msk, thread_event  , 0);
 
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
@@ -408,6 +420,7 @@ register_tracepoints(VALUE self)
     rb_ary_push(traces, tpCCall);
     rb_ary_push(traces, tpCReturn);
     rb_ary_push(traces, tpRaise);
+    rb_ary_push(traces, tpThread);
 
     tracepoints = traces;
   }
