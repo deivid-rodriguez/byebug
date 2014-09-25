@@ -1,3 +1,9 @@
+# 3.4.1
+* Fix #54, you can use threads when "evaling" stuff now.
+* Fix bug in list command where user could not list backwards if current
+listing was reaching the end of the file.
+
+
 # 3.4.0
 * Better fix for deivid-rodriguez/pry-byebug#32
 
