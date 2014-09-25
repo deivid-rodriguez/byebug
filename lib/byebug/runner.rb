@@ -58,7 +58,7 @@ module Byebug
         abort
       end
 
-      prog_script = ARGV.pop
+      prog_script = ARGV.first
       prog_script = whence_file(prog_script) unless File.exist?(prog_script)
 
       Byebug.debugged_program = File.expand_path(prog_script)
