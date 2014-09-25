@@ -29,17 +29,6 @@ module Byebug
       super
     end
 
-    def lines_between(min, max, mark_current = true)
-      lines = [*File.open(__FILE__)][min-1..max-1]
-      numbers = (min..max).to_a
-      output = numbers.zip(lines).map { |l| format("%2d: %s", l[0], l[1]) }
-      if mark_current
-        middle = (output.size/2.0).ceil
-        output[middle] = "=> #{output[middle]}"
-      end
-      output
-    end
-
     def test_lists_source_code_lines
       Setting[:listsize] = 10
       enter 'list'
@@ -75,27 +64,25 @@ module Byebug
     def test_lists_surrounding_lines_after_the_first_call_to_list
       enter 'break 8', 'cont', 'list'
       debug_proc(@example)
-      check_output_includes("[3, 12] in #{__FILE__}", *lines_between(3, 12))
+      check_output_includes "[3, 12] in #{__FILE__}"
     end
 
     def test_lists_forwards_after_the_second_call_to_list
       enter 'break 8', 'cont', 'list', 'list'
       debug_proc(@example)
-      check_output_includes("[13, 22] in #{__FILE__}",
-                            *lines_between(13, 22, false))
+      check_output_includes "[13, 22] in #{__FILE__}"
     end
 
     def test_lists_surrounding_lines_after_the_first_call_to_list_minus
       enter 'break 18', 'cont', 'list -'
       debug_proc(@example)
-      check_output_includes("[13, 22] in #{__FILE__}", *lines_between(13, 22))
+      check_output_includes "[13, 22] in #{__FILE__}"
     end
 
     def test_lists_backwards_after_the_second_call_to_list_minus
       enter 'break 18', 'cont', 'list -', 'list -'
       debug_proc(@example)
-      check_output_includes("[3, 12] in #{__FILE__}",
-                            *lines_between(3, 12, false))
+      check_output_includes "[3, 12] in #{__FILE__}"
     end
 
     def test_lists_backwards_from_end_of_file
@@ -108,21 +95,19 @@ module Byebug
     def test_lists_surrounding_lines_when_list_equals_is_called
       enter 'break 8', 'cont', 'list ='
       debug_proc(@example)
-      check_output_includes("[3, 12] in #{__FILE__}", *lines_between(3, 12))
+      check_output_includes "[3, 12] in #{__FILE__}"
     end
 
     def test_lists_specific_range_when_requested_in_hyphen_format
       enter 'list 7-9'
       debug_proc(@example)
-      check_output_includes("[7, 9] in #{__FILE__}",
-                            *lines_between(7, 9, false))
+      check_output_includes "[7, 9] in #{__FILE__}"
     end
 
     def test_lists_specific_range_when_requested_in_comma_format
       enter 'list 7,9'
       debug_proc(@example)
-      check_output_includes("[7, 9] in #{__FILE__}",
-                            *lines_between(7, 9, false))
+      check_output_includes "[7, 9] in #{__FILE__}"
     end
 
     def test_lists_nothing_if_unexistent_range_is_specified
@@ -142,15 +127,13 @@ module Byebug
     def test_list_proper_lines_when_range_around_specific_line_with_hyphen
       enter 'list 17-'
       debug_proc(@example)
-      check_output_includes("[12, 21] in #{__FILE__}",
-                            *lines_between(12, 21, false))
+      check_output_includes "[12, 21] in #{__FILE__}"
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_comma
       enter 'list 17,'
       debug_proc(@example)
-      check_output_includes("[12, 21] in #{__FILE__}",
-                            *lines_between(12, 21, false))
+      check_output_includes "[12, 21] in #{__FILE__}"
     end
 
     def test_shows_an_error_when_the_file_to_list_does_not_exist
