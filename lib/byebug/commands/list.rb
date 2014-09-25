@@ -19,8 +19,9 @@ module Byebug
       b, e = set_line_range(Setting[:listsize], lines.size)
       return @state.previous_line if b < 0
 
-      puts "\n[#{b}, #{e}] in #{@state.file}"
-      @state.previous_line = display_list(b, e, lines, @state.line)
+      display_lines(b, e, lines)
+
+      @state.previous_line = b > lines.size ? @previous_line : b
     end
 
     class << self
@@ -94,20 +95,16 @@ module Byebug
       [b, e]
     end
 
-    ##
-    # Show file lines in LINES from line B to line E where CURRENT is the
-    # current line number. If we can show from B to E then we return B,
-    # otherwise we return the previous line @state.previous_line.
     #
-    def display_list(b, e, lines, current)
-      width = e.to_s.size
-      b.upto(e) do |n|
-        next unless n > 0 && lines[n - 1]
-        line = n == current ? '=>' : '  '
-        line += format(" %#{width}d: %s", n, lines[n - 1].chomp)
-        puts(line)
+    # Show file lines in <lines> from line number <min> to line number <max>.
+    #
+    def display_lines(min, max, lines)
+      puts "\n[#{min}, #{max}] in #{@state.file}"
+
+      (min..max).to_a.zip(lines[min-1..max-1]).map do |l|
+        mark = l[0] == @state.line ? '=> ' : '   '
+        puts format("#{mark}%#{max.to_s.size}d: %s", l[0], l[1])
       end
-      e == b > lines.size ? @state.previous_line : b
     end
   end
 end
