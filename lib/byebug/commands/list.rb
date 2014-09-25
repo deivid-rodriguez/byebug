@@ -107,7 +107,7 @@ module Byebug
         line += format(" %#{width}d: %s", n, lines[n - 1].chomp)
         puts(line)
       end
-      e == lines.size ? @state.previous_line : b
+      e == b > lines.size ? @state.previous_line : b
     end
   end
 end

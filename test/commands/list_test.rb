@@ -98,6 +98,13 @@ module Byebug
                             *lines_between(3, 12, false))
     end
 
+    def test_lists_backwards_from_end_of_file
+      n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
+      enter 'break 18', 'cont', "list #{n_lines-9}-#{n_lines}", 'list -'
+      debug_proc(@example)
+      check_output_includes "[#{n_lines-19}, #{n_lines-10}] in #{__FILE__}"
+    end
+
     def test_lists_surrounding_lines_when_list_equals_is_called
       enter 'break 8', 'cont', 'list ='
       debug_proc(@example)
