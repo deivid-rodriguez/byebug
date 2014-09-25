@@ -781,23 +781,23 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "add_catchpoint"   , bb_add_catchpoint  ,  1);
-  rb_define_module_function(mByebug, "breakpoints"      , bb_breakpoints     ,  0);
-  rb_define_module_function(mByebug, "catchpoints"      , bb_catchpoints     ,  0);
-  rb_define_module_function(mByebug, "contexts"         , bb_contexts        ,  0);
-  rb_define_module_function(mByebug, "current_context"  , bb_current_context ,  0);
-  rb_define_module_function(mByebug, "debug_load"       , bb_load            , -1);
-  rb_define_module_function(mByebug, "post_mortem?"     , bb_post_mortem     ,  0);
-  rb_define_module_function(mByebug, "post_mortem="     , bb_set_post_mortem ,  1);
-  rb_define_module_function(mByebug, "raised_exception" , bb_raised_exception,  0);
-  rb_define_module_function(mByebug, "start"            , bb_start           ,  0);
-  rb_define_module_function(mByebug, "started?"         , bb_started         ,  0);
-  rb_define_module_function(mByebug, "stop"             , bb_stop            ,  0);
-  rb_define_module_function(mByebug, "thread_context"   , bb_thread_context  ,  1);
-  rb_define_module_function(mByebug, "tracing?"         , bb_tracing         ,  0);
-  rb_define_module_function(mByebug, "tracing="         , bb_set_tracing     ,  1);
-  rb_define_module_function(mByebug, "verbose?"         , bb_verbose         ,  0);
-  rb_define_module_function(mByebug, "verbose="         , bb_set_verbose     ,  1);
+  rb_define_module_function(mByebug, "add_catchpoint"  , bb_add_catchpoint  ,  1);
+  rb_define_module_function(mByebug, "breakpoints"     , bb_breakpoints     ,  0);
+  rb_define_module_function(mByebug, "catchpoints"     , bb_catchpoints     ,  0);
+  rb_define_module_function(mByebug, "contexts"        , bb_contexts        ,  0);
+  rb_define_module_function(mByebug, "current_context" , bb_current_context ,  0);
+  rb_define_module_function(mByebug, "debug_load"      , bb_load            , -1);
+  rb_define_module_function(mByebug, "post_mortem?"    , bb_post_mortem     ,  0);
+  rb_define_module_function(mByebug, "post_mortem="    , bb_set_post_mortem ,  1);
+  rb_define_module_function(mByebug, "raised_exception", bb_raised_exception,  0);
+  rb_define_module_function(mByebug, "start"           , bb_start           ,  0);
+  rb_define_module_function(mByebug, "started?"        , bb_started         ,  0);
+  rb_define_module_function(mByebug, "stop"            , bb_stop            ,  0);
+  rb_define_module_function(mByebug, "thread_context"  , bb_thread_context  ,  1);
+  rb_define_module_function(mByebug, "tracing?"        , bb_tracing         ,  0);
+  rb_define_module_function(mByebug, "tracing="        , bb_set_tracing     ,  1);
+  rb_define_module_function(mByebug, "verbose?"        , bb_verbose         ,  0);
+  rb_define_module_function(mByebug, "verbose="        , bb_set_verbose     ,  1);
 
   Init_threads_table(mByebug);
   Init_context(mByebug);
