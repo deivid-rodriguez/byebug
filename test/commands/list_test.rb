@@ -50,7 +50,10 @@ module Byebug
     end
 
     def test_moves_range_down_when_it_goes_after_the_end_of_file
-      skip "Can't test this with the current setup"
+      n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
+      enter 'break 18', 'cont', "list #{n_lines-3}-#{n_lines+6}"
+      debug_proc(@example)
+      check_output_includes "[#{n_lines-9}, #{n_lines}] in #{__FILE__}"
     end
 
     def test_lists_the_whole_file_if_number_of_lines_is_smaller_than_listsize
