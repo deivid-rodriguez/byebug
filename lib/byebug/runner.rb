@@ -16,10 +16,12 @@ module Byebug
     # Debug a script only if syntax checks okay.
     #
     def debug_program(options)
-      output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
-      if $CHILD_STATUS.exitstatus != 0
-        Byebug.puts output
-        exit $CHILD_STATUS.exitstatus
+      unless File.executable?(Byebug.debugged_program)
+        output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
+        if $CHILD_STATUS.exitstatus != 0
+          Byebug.puts output
+          exit $CHILD_STATUS.exitstatus
+        end
       end
 
       status = Byebug.debug_load(Byebug.debugged_program, options[:stop])
