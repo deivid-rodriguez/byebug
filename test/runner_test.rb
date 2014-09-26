@@ -63,10 +63,20 @@ module Byebug
       @runner.run
     end
 
-    def test_debugged_program_from_argv
-      ARGV.replace(%w(my_script -opt value))
+    def test_run_with_a_script_and_params_does_not_consume_script_params
+      ARGV.replace(%w(-- my_script -opt value))
+      expect_it_debugs_script
 
-      assert_match 'my_script', @runner.debugged_program_from_argv
+      @runner.run
+      assert_equal %w(my_script -opt value), ARGV
+    end
+
+    def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
+      ARGV.replace(%w(-- ruby ruby_script))
+      expect_it_debugs_script
+
+      @runner.run
+      assert_equal %w(ruby_script), ARGV
     end
 
     def test_run_with_no_rc_option

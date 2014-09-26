@@ -40,10 +40,13 @@ module Byebug
         abort
       end
 
-      prog_script = ARGV.first
-      prog_script = which(prog_script)
+      prog_script_try = which(ARGV.first)
+      if prog_script_try == which('ruby')
+        ARGV.shift
+        return which(ARGV.first)
+      end
 
-      prog_script
+      prog_script_try
     end
 
     #
