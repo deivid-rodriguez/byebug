@@ -1,3 +1,8 @@
+# 3.4.2
+* Fix #67, you can debug commands starting with `ruby` now, as in `byebug --
+ruby -Itest test/controllers/posts_controller_test.rb -n test_should_get_index`
+
+
 # 3.4.1
 * Fix #54, you can use threads when "evaling" stuff now.
 * Fix bug in list command where user could not list backwards if current
