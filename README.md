@@ -136,13 +136,10 @@ connected.
 * [sublime_debugger][] provides a plugin for ruby debugging on Sublime Text.
 
 
-## TODO List (by priority)
+## Contribute
 
-* Write tests for remote debugging support.
-* Add printers support.
-* Support rubies other than MRI.
+See [Getting Started with Development](CONTRIBUTING.md).
 
-[Getting Started with Development](CONTRIBUTING.md)
 
 ## Credits
 
