@@ -63,11 +63,10 @@ module Byebug
       Byebug::Runner.new.run
     end
 
-    def test_saved_debugged_program
+    def test_debugged_program_from_argv
       ARGV.replace(%w(my_script -opt value))
 
-      Byebug::Runner.new.save_debugged_program
-      assert_match 'my_script', Byebug.debugged_program
+      assert_match 'my_script', Byebug::Runner.new.debugged_program_from_argv
     end
 
     def test_run_with_no_rc_option

@@ -30,11 +30,11 @@ module Byebug
 
     include MiscUtils
     #
-    # Save path to program to be debugged
+    # Extracts path to program to be debugged from ARGV
     #
     # Used for restarts.
     #
-    def save_debugged_program
+    def debugged_program_from_argv
       if ARGV.empty?
         Byebug.puts 'You must specify a program to debug...'
         abort
@@ -43,7 +43,7 @@ module Byebug
       prog_script = ARGV.first
       prog_script = which(prog_script)
 
-      Byebug.debugged_program = prog_script
+      prog_script
     end
 
     #
@@ -62,7 +62,7 @@ module Byebug
         return
       end
 
-      save_debugged_program
+      Byebug.debugged_program = debugged_program_from_argv
 
       # Set up trace hook for byebug
       Byebug.start
