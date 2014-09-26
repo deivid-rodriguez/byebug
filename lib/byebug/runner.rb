@@ -28,25 +28,7 @@ module Byebug
       Byebug.puts "#{status}\n#{status.backtrace}" if status
     end
 
-    #
-    # Do a shell-like path lookup for prog_script and return the results. If we
-    # can't find anything return prog_script.
-    #
-    def whence_file(prog_script)
-      if prog_script.index(File::SEPARATOR)
-        # Don't search since this name has path separator components
-        return prog_script
-      end
-
-      ENV['PATH'].split(File::PATH_SEPARATOR).each do |dirname|
-        prog_script_try = File.join(dirname, prog_script)
-        return prog_script_try if File.exist?(prog_script_try)
-      end
-
-      # Failure
-      prog_script
-    end
-
+    include MiscUtils
     #
     # Save path to program to be debugged
     #
@@ -59,9 +41,9 @@ module Byebug
       end
 
       prog_script = ARGV.first
-      prog_script = whence_file(prog_script) unless File.exist?(prog_script)
+      prog_script = which(prog_script)
 
-      Byebug.debugged_program = File.expand_path(prog_script)
+      Byebug.debugged_program = prog_script
     end
 
     #

@@ -204,7 +204,7 @@ Pathname          fail                  process_options             trap
 Rational          fork                  public                      untrace_var
 String            format                putc                        using      
 __callee__        gem                   puts                        warn       
-__dir__           gem_original_require  raise                       whence_file
+__dir__           gem_original_require  raise                     
 __method__        gets                  rand                      
 `                 global_variables      readline                  
 abort             include               readlines                 
