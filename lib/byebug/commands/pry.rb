@@ -1,10 +1,3 @@
-begin
-  require 'pry'
-  has_pry = true
-rescue LoadError
-  has_pry = false
-end
-
 module Byebug
   #
   # Enter Pry from byebug's prompt
@@ -32,4 +25,4 @@ module Byebug
       end
     end
   end
-end if has_pry
+end if defined?(Pry)
