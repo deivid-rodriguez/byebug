@@ -1,17 +1,8 @@
-require 'byebug/history'
-
 module Byebug
   #
   # Interface class for standard byebug use.
   #
   class LocalInterface < Interface
-    attr_reader :history
-
-    def initialize
-      super
-      History.load
-    end
-
     def read_command(prompt)
       readline(prompt, true)
     end
@@ -25,16 +16,17 @@ module Byebug
     end
 
     def close
-      History.save
     end
 
     private
 
     def readline(prompt, hist)
-      Readline.readline(prompt, hist)
+      line = Readline.readline(prompt, false)
     rescue Interrupt
-      puts '^C'
+      puts('^C')
       retry
+    ensure
+      save_history(line) unless !hist
     end
   end
 end

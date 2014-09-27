@@ -28,6 +28,7 @@ module Byebug
 
       Byebug::Setting.load
       Byebug::Setting[:autolist] = false
+      Byebug::Setting[:autosave] = false
       Byebug::Setting[:testing] = true
       Byebug::Setting[:width] = 80
 

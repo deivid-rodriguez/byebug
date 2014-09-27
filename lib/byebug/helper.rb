@@ -34,9 +34,9 @@ module Byebug
 
       int = str.to_i
       if min && int < min
-        return nil, "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}"
+        return min, "\"#{cmd}\" argument \"#{str}\" needs to be at least #{min}"
       elsif max && int > max
-        return nil, "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}"
+        return max, "\"#{cmd}\" argument \"#{str}\" needs to be at most #{max}"
       end
 
       int

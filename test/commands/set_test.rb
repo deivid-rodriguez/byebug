@@ -105,6 +105,7 @@ module Byebug
       debug_proc(@example)
       assert_equal filename, Setting[:histfile]
       check_output_includes "The command history file is #{filename}"
+      Setting[:histfile] = HistfileSetting::DEFAULT
     end
 
     def test_set_histfile_shows_an_error_message_if_no_filename_is_provided

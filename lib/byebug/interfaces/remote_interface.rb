@@ -5,12 +5,9 @@ module Byebug
   # Interface class for remote use of byebug.
   #
   class RemoteInterface < Interface
-    attr_reader :history
-
     def initialize(socket)
       super()
       @socket = socket
-      @history = History.new
     end
 
     def close

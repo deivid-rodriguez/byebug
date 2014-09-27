@@ -1,3 +1,5 @@
+require 'byebug/history'
+
 #
 # Namespace for all of byebug's code
 #
@@ -8,10 +10,10 @@ module Byebug
   # Contains common functionality to all implemented interfaces.
   #
   class Interface
-    attr_accessor :command_queue, :restart_file
+    attr_accessor :command_queue, :restart_file, :history
 
     def initialize
-      @command_queue, @restart_file = [], nil
+      @command_queue, @restart_file, @history = [], nil, History.new
     end
 
     #
@@ -20,6 +22,15 @@ module Byebug
     #
     def errmsg(message)
       print("*** #{message}\n")
+    end
+
+    protected
+
+    #
+    # Stores <cmd> in commands history.
+    #
+    def save_history(cmd)
+      @history.push(cmd) unless @history.ignore?(cmd)
     end
   end
 

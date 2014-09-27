@@ -169,6 +169,7 @@ module Byebug
       preloop(commands, context)
       puts(state.location) if Setting[:autolist] == 0
 
+      @interface.history.restore if Setting[:autosave]
       until state.proceed?
         input = if @interface.command_queue.empty?
                   @interface.read_command(prompt(context))
@@ -187,6 +188,7 @@ module Byebug
           one_cmd(commands, context, cmd)
         end
       end
+      Setting[:autosave] ? @interface.history.save : @interface.history.clear
     end
 
     #

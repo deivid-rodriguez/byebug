@@ -41,7 +41,7 @@ module Byebug
 
       args.each do |pos|
         pos, err = get_int(pos, "#{is_enable} display", 1, @state.display.size)
-        return errmsg(err) unless pos
+        return errmsg(err) unless err.nil?
 
         @state.display[pos - 1][0] = ('enable' == is_enable)
       end

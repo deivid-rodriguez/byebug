@@ -11,8 +11,8 @@ module Byebug
 
     def execute
       if @match[1]
-        pos, err = get_int(@match[1], 'Undisplay')
-        return errmsg(err) unless pos
+        pos, err = get_int(@match[1], 'Undisplay', 1, @state.display.size)
+        return errmsg(err) unless err.nil?
 
         unless @state.display[pos - 1]
           return errmsg("Display expression #{pos} is not defined.")

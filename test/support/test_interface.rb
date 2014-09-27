@@ -1,18 +1,16 @@
-require 'byebug/history'
-
 module Byebug
   #
   # Custom interface for easier assertions
   #
   class TestInterface < Interface
-    attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue,
-                :history
+    attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue
 
     attr_accessor :test_block
 
     def initialize
-      @input_queue, @output_queue, @error_queue = [], [], []
-      @confirm_queue, @command_queue, @history = [], [], History.new
+      super()
+      @input_queue, @output_queue = [], []
+      @error_queue, @confirm_queue = [], []
     end
 
     def errmsg(*args)
@@ -20,14 +18,11 @@ module Byebug
     end
 
     def read_command(*)
-      if @input_queue.empty?
-        if test_block
-          test_block.call
-          self.test_block = nil
-        end
-      else
-        result = @input_queue.shift
-        result.is_a?(Proc) ? result.call : result
+      return readline(true) unless @input_queue.empty?
+
+      if test_block
+        test_block.call
+        self.test_block = nil
       end
     end
 
@@ -37,7 +32,7 @@ module Byebug
 
     def confirm(message)
       @confirm_queue << message
-      read_command message
+      readline(false)
     end
 
     def close
@@ -50,6 +45,15 @@ module Byebug
         "error_queue: #{error_queue.inspect}",
         "confirm_queue: #{confirm_queue.inspect}"
       ].join("\n")
+    end
+
+    private
+
+    def readline(hist)
+      cmd = @input_queue.shift
+      cmd = cmd.is_a?(Proc) ? cmd.call : cmd
+      save_history(cmd) unless !hist
+      cmd
     end
   end
 end
