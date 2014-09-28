@@ -127,10 +127,11 @@ module Byebug
       Setting[:autolist] = false if ['(irb)', '-e'].include?(file)
 
       # Bind commands to the current state.
-      commands = cmds.map { |cmd| cmd.new(state) }
-
-      commands.select { |cmd| cmd.class.always_run >= run_level }
-              .each { |cmd| cmd.execute }
+      commands = cmds.map do |cmd_class|
+        cmd = cmd_class.new(state)
+        cmd.execute if cmd.class.always_run >= run_level
+        cmd
+      end
 
       [state, commands]
     end
