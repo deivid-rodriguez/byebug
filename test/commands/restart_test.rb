@@ -42,8 +42,8 @@ module Byebug
       debug_proc(@example)
       check_output_includes 'Byebug was not called from the outset...'
       check_output_includes \
-        "Ruby program #{Byebug.debugged_program} not executable... " \
-        "We'll wrap it in a ruby call"
+        "Program #{Byebug.debugged_program} not executable... " \
+        "Wrapping it in a ruby call"
     end
   end
 end

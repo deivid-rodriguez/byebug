@@ -19,8 +19,7 @@ module Byebug
         if File.executable?(prog)
           cmd = prog
         else
-          puts "Ruby program #{prog} not executable... " \
-               "We'll wrap it in a ruby call"
+          puts "Program #{prog} not executable... Wrapping it in a ruby call"
           cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} #{prog}"
         end
       end
