@@ -12,10 +12,14 @@ require 'tracer'
 require 'linecache19'
 
 module Byebug
+  #
   # List of files byebug will ignore while debugging
+  #
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
+  #
   # Configuration file used for startup commands. Default value is .byebugrc
+  #
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
   class << self
