@@ -16,7 +16,7 @@ module Byebug
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
   # Configuration file used for startup commands. Default value is .byebugrc
-  INITFILE = '.byebugrc' unless defined?(INITFILE)
+  INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
   class << self
     attr_accessor :handler
@@ -62,10 +62,10 @@ module Byebug
   # program you are debugging, in the directory where you invoke byebug.
   #
   def self.run_init_script(out = handler.interface)
-    cwd_script  = File.expand_path(File.join('.', INITFILE))
+    cwd_script  = File.expand_path(File.join('.', INIT_FILE))
     run_script(cwd_script, out, true) if File.exist?(cwd_script)
 
-    home_script = File.expand_path(File.join(ENV['HOME'].to_s, INITFILE))
+    home_script = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
     if File.exist?(home_script) && cwd_script != home_script
       run_script(home_script, out, true)
     end
