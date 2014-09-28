@@ -12,10 +12,6 @@ module Byebug
     def execute
       prog = Byebug.debugged_program
 
-      unless File.exist?(File.expand_path(prog))
-        return errmsg("Ruby program #{prog} doesn't exist")
-      end
-
       if defined?(BYEBUG_SCRIPT)
         cmd = "#{BYEBUG_SCRIPT} #{prog}"
       else

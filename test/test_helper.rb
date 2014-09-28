@@ -32,10 +32,6 @@ module Byebug
       Byebug::Setting[:testing] = true
       Byebug::Setting[:width] = 80
 
-      byebug_bin = File.expand_path('../../../bin/byebug', __FILE__)
-      force_set_const(Byebug, 'BYEBUG_SCRIPT', byebug_bin)
-      Byebug.debugged_program = $PROGRAM_NAME
-
       # include test files as ignored files
       glob_exp = File.expand_path('../../{lib,test/support}/**/*.rb', __FILE__)
       ignored_files = Dir.glob(glob_exp) + ['test/test_helper.rb']

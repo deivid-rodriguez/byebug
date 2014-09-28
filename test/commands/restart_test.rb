@@ -32,30 +32,13 @@ module Byebug
       enter 'restart 1 2 3'
       debug_proc(@example)
       check_output_includes "Re exec'ing:\n\t#{cmd}"
-    end
-
-    def test_restart_with_a_default_script_if_nil_script_specified
-      force_set_const(Byebug, 'BYEBUG_SCRIPT', 'byebug_script')
-      Byebug.debugged_program = nil
-      must_restart
-
-      enter 'restart'
-      debug_proc(@example)
-      check_output_includes(/Re exec'ing:\s*#{BYEBUG_SCRIPT} #{$PROGRAM_NAME}/)
-    end
-
-    def test_does_not_restart_when_script_specified_does_not_exist
-      Byebug.debugged_program = 'blabla'
-      must_restart.never
-      enter 'restart'
-      debug_proc(@example)
-      check_error_includes 'Ruby program blabla doesn\'t exist'
+      force_unset_const(Byebug, 'BYEBUG_SCRIPT')
     end
 
     def test_still_restarts_when_byebug_attached_to_running_program
-      force_unset_const(Byebug, 'BYEBUG_SCRIPT')
       must_restart
       enter 'restart'
+
       debug_proc(@example)
       check_output_includes 'Byebug was not called from the outset...'
       check_output_includes \

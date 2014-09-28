@@ -19,18 +19,13 @@ module Byebug
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
   class << self
-    attr_accessor :handler
-    attr_writer :debugged_program
+    attr_accessor :handler, :debugged_program
+
+    extend Forwardable
+    def_delegators :handler, :errmsg, :puts
   end
 
   Byebug.handler = CommandProcessor.new
-
-  #
-  # Program being debugged (or a default one if not set yet)
-  #
-  def self.debugged_program
-    @debugged_program ||= $PROGRAM_NAME
-  end
 
   def self.source_reload
     hsh = 'SCRIPT_LINES__'
@@ -43,13 +38,6 @@ module Byebug
   #
   def self.interface=(value)
     handler.interface = value
-  end
-
-  #
-  # Byebug's prints according to its handler's interface
-  #
-  def self.puts(message)
-    handler.interface.puts(message)
   end
 
   #

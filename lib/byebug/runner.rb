@@ -35,10 +35,7 @@ module Byebug
     # Used for restarts.
     #
     def debugged_program_from_argv
-      if ARGV.empty?
-        Byebug.puts 'You must specify a program to debug...'
-        abort
-      end
+      abort_with_err('You must specify a program to debug...') if ARGV.empty?
 
       prog_script_try = which(ARGV.first)
       if prog_script_try == which('ruby')
@@ -47,6 +44,11 @@ module Byebug
       end
 
       prog_script_try
+    end
+
+    def abort_with_err(msg)
+      Byebug.errmsg(msg)
+      abort
     end
 
     #
@@ -66,6 +68,7 @@ module Byebug
       end
 
       Byebug.debugged_program = debugged_program_from_argv
+      abort_with_err("The script doesn't exist") unless Byebug.debugged_program
 
       # Set up trace hook for byebug
       Byebug.start

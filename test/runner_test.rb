@@ -47,7 +47,15 @@ module Byebug
 
       assert_raises(SystemExit) { @runner.run }
 
-      check_output_includes(/You must specify a program to debug.../)
+      check_error_includes(/You must specify a program to debug.../)
+    end
+
+    def test_run_with_an_nonexistent_script
+      ARGV.replace(%w(non_existent_script.rb))
+
+      assert_raises(SystemExit) { @runner.run }
+
+      check_error_includes("The script doesn't exist")
     end
 
     def expect_it_debugs_script
@@ -57,30 +65,30 @@ module Byebug
     end
 
     def test_run_with_a_script_to_debug
-      ARGV.replace(%w(my_script))
+      ARGV.replace(%w(lib/byebug.rb))
       expect_it_debugs_script
 
       @runner.run
     end
 
     def test_run_with_a_script_and_params_does_not_consume_script_params
-      ARGV.replace(%w(-- my_script -opt value))
+      ARGV.replace(%w(-- lib/byebug.rb -opt value))
       expect_it_debugs_script
 
       @runner.run
-      assert_equal %w(my_script -opt value), ARGV
+      assert_equal %w(lib/byebug.rb -opt value), ARGV
     end
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
-      ARGV.replace(%w(-- ruby ruby_script))
+      ARGV.replace(%w(-- ruby lib/byebug.rb))
       expect_it_debugs_script
 
       @runner.run
-      assert_equal %w(ruby_script), ARGV
+      assert_equal %w(lib/byebug.rb), ARGV
     end
 
     def test_run_with_no_rc_option
-      ARGV.replace(%w(--no-rc my_script))
+      ARGV.replace(%w(--no-rc lib/byebug.rb))
       Byebug.expects(:start)
       Byebug::Runner.any_instance.expects(:debug_program)
       Byebug.expects(:run_init_script).never
@@ -89,7 +97,7 @@ module Byebug
     end
 
     def test_run_with_post_mortem_mode_flag
-      ARGV.replace(%w(-m my_script))
+      ARGV.replace(%w(-m lib/byebug.rb))
       expect_it_debugs_script
       @runner.run
 
@@ -98,7 +106,7 @@ module Byebug
     end
 
     def test_run_with_linetracing_flag
-      ARGV.replace(%w(-t my_script))
+      ARGV.replace(%w(-t lib/byebug.rb))
       expect_it_debugs_script
       @runner.run
 
@@ -108,14 +116,14 @@ module Byebug
 
     def test_run_with_no_quit_flag
       skip 'for now'
-      ARGV.replace(%w(--no-quit my_script))
+      ARGV.replace(%w(--no-quit lib/byebug.rb))
       @runner.run
 
       check_output_includes('(byebug:ctrl)')
     end
 
     def test_run_with_require_flag
-      ARGV.replace(%w(-r abbrev my_script))
+      ARGV.replace(%w(-r abbrev lib/byebug.rb))
       expect_it_debugs_script
       @runner.run
 
@@ -124,7 +132,7 @@ module Byebug
     end
 
     def test_run_with_include_flag
-      ARGV.replace(%w(-I custom_dir my_script))
+      ARGV.replace(%w(-I custom_dir lib/byebug.rb))
       expect_it_debugs_script
       @runner.run
 
@@ -132,7 +140,7 @@ module Byebug
     end
 
     def test_run_with_debug_flag
-      ARGV.replace(%w(-d my_script))
+      ARGV.replace(%w(-d lib/byebug.rb))
       expect_it_debugs_script
       @runner.run
 
