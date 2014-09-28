@@ -10,10 +10,10 @@ module Byebug
   # Contains common functionality to all implemented interfaces.
   #
   class Interface
-    attr_accessor :command_queue, :restart_file, :history
+    attr_accessor :command_queue, :history
 
     def initialize
-      @command_queue, @restart_file, @history = [], nil, History.new
+      @command_queue, @history = [], History.new
     end
 
     #

@@ -1,19 +1,8 @@
 module Byebug
   #
-  # Utilities for the save command.
+  # Default file where commands are saved
   #
-  module SaveFunctions
-    # Create a temporary file to write in if file is nil
-    def open_save
-      require 'tempfile'
-      file = Tempfile.new('byebug-save')
-      # We want close to not unlink, so redefine.
-      def file.close
-        @tmpfile.close if @tmpfile
-      end
-      file
-    end
-  end
+  RESTART_FILE = '.byebug-save' unless defined?(RESTART_FILE)
 
   #
   # Save current settings to use them in another debug session.
@@ -48,17 +37,14 @@ module Byebug
     end
 
     def execute
-      if !@match[1]
-        file = open_save
-      else
-        file = open(@match[1], 'w')
-      end
+      file = open(@match[1] || RESTART_FILE, 'w')
+
       save_breakpoints(file)
       save_catchpoints(file)
       save_displays(file)
       save_settings(file)
+
       puts "Saved to '#{file.path}'"
-      @state.interface.restart_file = file.path if @state && @state.interface
       file.close
     end
 

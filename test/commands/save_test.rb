@@ -53,15 +53,15 @@ module Byebug
     def test_save_without_a_filename_uses_a_default_file
       enter 'save'
       debug_proc(@example)
-      assert_includes File.read(interface.restart_file), 'set autoirb false'
-      File.delete(interface.restart_file)
+      assert_includes File.read(RESTART_FILE), 'set autoirb false'
+      File.delete(RESTART_FILE)
     end
 
     def test_save_without_a_filename_shows_a_message_with_the_file_used
       enter 'save'
       debug_proc(@example)
-      check_output_includes "Saved to '#{interface.restart_file}'"
-      File.delete(interface.restart_file)
+      check_output_includes "Saved to '#{RESTART_FILE}'"
+      File.delete(RESTART_FILE)
     end
   end
 end
