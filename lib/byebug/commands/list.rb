@@ -11,17 +11,14 @@ module Byebug
       Byebug.source_reload if Setting[:autoreload]
 
       lines = get_lines(@state.file)
-      unless lines
-        errmsg "No sourcefile available for #{@state.file}\n"
-        return @state.previous_line
-      end
+      return errmsg "No sourcefile available for #{@state.file}\n" unless lines
 
-      b, e = set_line_range(Setting[:listsize], lines.size)
-      return @state.previous_line if b < 0
-
+      @match ||= match('list')
+      b, e = range(@match[2], lines.size)
+      return errmsg('Invalid line range') unless valid_range?(b, e, lines.size)
       display_lines(b, e, lines)
 
-      @state.previous_line = b > lines.size ? @previous_line : b
+      @state.prev_line = b
     end
 
     class << self
@@ -42,57 +39,70 @@ module Byebug
 
     private
 
-    ##
+    #
+    # Line range to be printed by `list`.
+    #
+    # If <input> is set, range is parsed from it.
+    #
+    # Otherwise it's automatically chosen.
+    #
+    def range(input, max_line)
+      size = [Setting[:listsize], max_line].min
+
+      return set_range(size, max_line) unless input
+
+      parse_range(input, size, max_line)
+    end
+
+    def valid_range?(first, last, max)
+      first <= last && (1..max).include?(first) && (1..max).include?(last)
+    end
+
+    #
     # Set line range to be printed by list
     #
-    # @param listsize - number of lines to be printed
-    # @param maxline - max line number that can be printed
+    # @param size - number of lines to be printed
+    # @param max_line - max line number that can be printed
     #
-    def set_line_range(listsize, maxline)
-      if !@match || !(@match[1] || @match[2])
-        b = if @state.previous_line
-              @state.previous_line + listsize
-            else
-              @state.line - (listsize / 2)
-            end
-      elsif @match[1] == '-'
-        b = if @state.previous_line
-              if  @state.previous_line > 0
-                @state.previous_line - listsize
-              else
-                @state.previous_line
-              end
-            else
-              @state.line - (listsize / 2)
-            end
-      elsif @match[1] == '='
-        @state.previous_line = nil
-        b = @state.line - (listsize / 2)
+    # @return first line number to list
+    # @return last line number to list
+    #
+    def set_range(size, max_line)
+      first = amend(lower(size, @match[1] || '+'), size, max_line - size + 1)
+
+      [first, move(first, size - 1)]
+    end
+
+    def parse_range(input, size, max_line)
+      first, err = get_int(input.split(/[-,]/)[0], 'List', 1, max_line)
+      return [-1, -1] if err
+
+      if input.split(/[-,]/)[1]
+        last, err = get_int(input.split(/[-,]/)[1], 'List', 1, max_line)
+        return [-1, -1] unless last
+
+        last = amend(last, size, max_line)
       else
-        b, e = @match[2].split(/[-,]/)
-        if e
-          b = b.to_i
-          e = e.to_i
-        else
-          b = b.to_i - (listsize / 2)
-        end
+        first -= (size / 2)
       end
 
-      if b > maxline
-        errmsg 'Invalid line range'
-        return [-1, -1]
-      end
+      [first, last || move(first, size - 1)]
+    end
 
-      b = [1, b].max
-      e ||=  b + listsize - 1
+    def amend(line, size, max_line)
+      return 1 if line < 1
 
-      if e > maxline
-        e = maxline
-        b = e - listsize + 1
-        b = [1, b].max
-      end
+      [max_line, line].min
+    end
 
-      [b, e]
+    def lower(size, direction = '+')
+      return @state.line - size / 2 if direction == '=' || !@state.prev_line
+
+      move(@state.prev_line, size, direction)
+    end
+
+    def move(line, size, direction = '+')
+      line.send(direction, size)
     end
 
     #

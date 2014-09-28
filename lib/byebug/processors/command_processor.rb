@@ -248,13 +248,13 @@ module Byebug
     end
 
     class State
-      attr_accessor :commands, :context, :display, :file, :frame_pos
-      attr_accessor :interface, :line, :previous_line
+      attr_accessor :commands, :context, :display, :file, :frame_pos,
+                    :interface, :line, :prev_line
 
       def initialize(commands, context, display, file, interface, line)
         @commands, @context, @display = commands, context, display
         @file, @interface, @line = file, interface, line
-        @frame_pos, @previous_line, @proceed = 0, nil, false
+        @frame_pos, @prev_line, @proceed = 0, nil, false
       end
 
       extend Forwardable

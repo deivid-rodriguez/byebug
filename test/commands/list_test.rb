@@ -49,11 +49,11 @@ module Byebug
       check_output_includes "[1, 12] in #{__FILE__}"
     end
 
-    def test_moves_range_down_when_it_goes_after_the_end_of_file
+    def test_does_not_list_after_the_end_of_file
       n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
       enter 'break 18', 'cont', "list #{n_lines-3}-#{n_lines+6}"
       debug_proc(@example)
-      check_output_includes "[#{n_lines-9}, #{n_lines}] in #{__FILE__}"
+      check_output_includes "[#{n_lines-3}, #{n_lines}] in #{__FILE__}"
     end
 
     def test_lists_the_whole_file_if_number_of_lines_is_smaller_than_listsize
@@ -118,13 +118,13 @@ module Byebug
       debug_proc(@example)
       check_error_includes 'Invalid line range'
       check_output_doesnt_include "[500, 505] in #{__FILE__}"
-      check_output_doesnt_include(/^500  \S/)
     end
 
     def test_lists_nothing_if_invalid_range_is_specified
       enter 'list 5,4'
       debug_proc(@example)
-      check_output_includes "[5, 4] in #{__FILE__}"
+      check_error_includes 'Invalid line range'
+      check_output_doesnt_include "[5, 4] in #{__FILE__}"
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_hyphen
@@ -150,17 +150,9 @@ module Byebug
       debug_proc(@example)
       check_output_includes "26:         a = '%26'"
     end
-  end
 
-  class ListTestCaseAutoreload < ListTestCase
-    def setup
-      super
-      Setting[:autoreload] = true
-      enter 'list' # force first reading of file
-    end
-
-    def test_lists_file_changes_with_autoreload_enabled
-      enter -> do
+    def test_lists_file_changes_by_default
+      enter 'list', -> do
         change_line_in_file(__FILE__, 7, '        a = 100')
         'list 7-7'
       end
@@ -168,20 +160,12 @@ module Byebug
       check_output_includes(/7:\s+a = 100/)
       change_line_in_file(__FILE__, 7, '        a = 7')
     end
-  end
-
-  class ListTestCaseNoAutoreload < ListTestCase
-    def setup
-      super
-      Setting[:autoreload] = false
-      enter 'list' # force first reading of file
-    end
 
     def test_does_not_list_file_changes_with_autoreload_disabled
-      enter -> do
+      enter 'set noautoreload', 'list', -> do
         change_line_in_file(__FILE__, 7, '        a = 100')
         'list 7-7'
-      end
+      end, 'set autoreload'
       debug_proc(@example)
       check_output_doesnt_include(/7:\s+a = 100/)
       change_line_in_file(__FILE__, 7, '        a = 7')

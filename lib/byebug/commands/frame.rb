@@ -45,7 +45,7 @@ module Byebug
       @state.frame_pos = abs_frame_pos
       @state.file = @state.context.frame_file @state.frame_pos
       @state.line = @state.context.frame_line @state.frame_pos
-      @state.previous_line = nil
+      @state.prev_line = nil
       ListCommand.new(@state).execute
     end
 
