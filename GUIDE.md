@@ -941,18 +941,18 @@ want to debug, add a call to `byebug` as was done without remote execution:
 ## Byebug Command Reference
 
 ### Command Syntax
-Usually a command is put on a single line. There is no limit on how long it can be.
-It starts with a command name, which is followed by arguments whose meaning depends
-on the command name. For example, the command `step` accepts an argument which is the
-number of times to step, as in `step 5`. You can also use the `step` command with no
-arguments. Some commands do not allow any arguments.
+Usually a command is put on a single line. There is no limit on how long it can
+be. It starts with a command name, which is followed by arguments whose meaning
+depends on the command name. For example, the command `step` accepts an
+argument which is the number of times to step, as in `step 5`. You can also use
+the `step` command with no arguments. Some commands do not allow any arguments.
 
-Multiple commands can be put on a line by separating each with a semicolon `;`. You
-can disable the meaning of a semicolon to separate commands by escaping it with a
-backslash.
+Multiple commands can be put on a line by separating each with a semicolon `;`.
+You can disable the meaning of a semicolon to separate commands by escaping it
+with a backslash.
 
-For example, if you have [autoeval]() set, which is the default, you might want to
-enter the following code to compute the 5th Fibonacci number.
+For example, if you have [autoeval]() set, which is the default, you might want
+to enter the following code to compute the 5th Fibonacci number.
 
 ```bash
 (byebug) fib1=0; fib2=1; 5.times {|temp| temp=fib1; fib1=fib2; fib2 += temp }
@@ -975,10 +975,11 @@ nil
 8
 ```
 
-You might also consider using the [irb]() or [pry]() commands and then you won't have
-to escape semicolons.
+You might also consider using the [irb]() or [pry]() commands and then you
+won't have to escape semicolons.
 
-A blank line as input (typing just `<RET>`) means to repeat the previous command.
+A blank line as input (typing just `<RET>`) means to repeat the previous
+command.
 
 Byebug uses readline, which handles line editing and retrieval of previous commands.
 Up arrow, for example, moves to the previous byebug command; down arrow moves to the
@@ -1309,7 +1310,7 @@ same as running `ps <object>.instance_methods(false)`.
 `<class-or-module>`. Basically this is the same as running
 `ps <class-or-module>.methods`.
 
-### Examining Program Source Files (`list`)
+### Examining Program Source Files: list
 
 `byebug` can print parts of your script's source.  When your script stops,
 `byebug` spontaneously lists the source code around the line where it stopped
@@ -1342,7 +1343,7 @@ equivalent to typing just `list`.  This is more useful than listing the same
 lines again. An exception is made for an argument of `-`: that argument is
 preserved in repetition so that each repetition moves up in the source file.
 
-### Editing Source files (`edit`)
+### Editing Source files: edit
 
 To edit a source file, use the `edit` command.  The editor of your choice is invoked
 with the current line set to the active line in the program. Alternatively, you can
@@ -1370,3 +1371,75 @@ or in the `csh` shell,
 setenv EDITOR /usr/bin/vi
 byebug ...
 ```
+
+### The stack trace
+
+When your script has stopped, one thing you'll probably want to know is where
+it stopped and some idea of how it got there.
+
+Each time your script calls a method or enters a block, information about this
+action is saved. This information is what we call a _stack frame_ or just a
+_frame_. The set of all frames at a certain point in the program's execution is
+called the _stack trace_ or just the _stack_. Each frame contains a line number
+and the source-file name that the line refers to. If the frame is the beginning
+of a method it also contains the method name.
+
+When your script is started, the stack has only one frame, that of the `main`
+method. This is called the _initial frame_ or the _outermost frame_. Each time
+a method is called, a new frame is added to the stack trace. Each time a method
+returns, the frame for that method invocation is removed. If a method is
+recursive, there can be many frames for the same method. The frame for the
+method in which execution is actually occurring is called the _innermost
+frame_. This is the most recently created of all the stack frames that still
+exist.
+
+Every time the debugger stops, one entry in the stack is selected as the
+current frame. Many byebug commands refer implicitly to the selected block. In
+particular, whenever you ask Byebug to list lines without giving a line number
+or location the value is found in the selected frame. There are special
+commands to select whichever frame you're interested in, such as `up`, `down`
+and `frame`.
+
+After switching frames, when you issue a `list` command without any position
+information, the position used is the location in the frame that you just
+switched between, rather than a location that got updated via a prior `list`
+command.
+
+Byebug assigns numbers to all existing stack frames, starting with zero for the
+_innermost frame_, one for the frame that called it, and so on upward. These
+numbers do not really exist in your script, they are assigned by Byebug to give
+you a way of designating stack frames in commands.
+
+### Printing the Stack: `where` command
+
+The command `where`, aliased to `bt` or `backtrace` prints the call stack., It
+shows one line per frame, for many frames, starting with the place that you are
+stopped at (frame zero), followed by its caller (frame one), and on up the
+stack. Each frame is numbered and can be referred to in the `frame` command.
+The position of the current frame is marked with `-->`.
+
+The are some special frames generated for methods that are implemented in C.
+One such method is `each`. They are marked differently in the call stack to
+indicate that we cannot switch to those frames. This is because they have no
+source code in Ruby, so we can not debug them using Byebug.
+
+```bash
+(byebug) where
+--> #0 Object.gcd(a#Fixnum, b#Fixnum) at line gcd.rb:6
+    #1 at line gcd.rb:19
+```
+
+### Selecting a frame: `up`, `down` and `frame` commands
+
+* `up <n>`: Move `n` frames up the stack, towards the outermost frame (higher
+frame numbers, frames that have existed longer). `n` defaults to one.
+
+* `down <n>`: Move `n` frames down the stack, towards the _innermost frame_
+(lower frame numbers, frames that were created more recently). `n` defaults to
+one.
+
+* `frame <n>`: Allows you to move to an arbitrary frame. `n` is the stack frame
+number or 0 if no frame number is given. `frame 0` will show the current and
+most recent stack frame. If a negative number is given, counting is from the
+other end of the stack frame, so `frame -1` shows the least-recent, outermost
+stack frame. Without an argument, `frame` prints the current stack frame.
