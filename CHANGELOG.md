@@ -1,3 +1,18 @@
+# 3.5.0
+- Bugfixes
+  * Fix #81, byebug's history does not mess with other programs that use
+Readline too.
+  * Fix more issues with readline's history. Now it should always be properly
+saved and inmediately available.
+  * Fix issue where user would not be notified when trying to debug a non
+existent script.
+
+- Improvements
+  * Complete rewrite of byebug's history.
+  * Complete rewrite of list command.
+  * Docs about stacktrace related commands (up, down, frame, backtrace).
+
+
 # 3.4.2
 * Fix #67, you can debug commands starting with `ruby` now, as in `byebug --
 ruby -Itest test/controllers/posts_controller_test.rb -n test_should_get_index`
