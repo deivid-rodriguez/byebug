@@ -254,8 +254,8 @@ module Byebug
 
       def initialize(commands, context, display, file, interface, line)
         @commands, @context, @display = commands, context, display
-        @file, @interface, @line = file, interface, line
-        @frame_pos, @prev_line, @proceed = 0, nil, false
+        @file, @frame_pos, @interface = file, 0, interface
+        @line, @prev_line, @proceed = line, nil, false
       end
 
       extend Forwardable
