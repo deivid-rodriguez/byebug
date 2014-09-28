@@ -21,7 +21,6 @@ module Byebug
     def must_restart(cmd = nil)
       expectation = RestartCommand.any_instance.expects(:exec)
       expectation = expectation.with(cmd) if cmd
-      expectation
     end
 
     def test_restarts_with_manual_arguments
