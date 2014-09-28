@@ -58,10 +58,11 @@ module Byebug
       check_error_includes("The script doesn't exist")
     end
 
-    def expect_it_debugs_script
+    def expect_it_debugs_script(rc = true)
       Byebug.expects(:start)
-      Byebug::Runner.any_instance.expects(:debug_program)
-      Byebug.expects(:run_init_script)
+      rc_expectation = Byebug.expects(:run_init_script)
+      rc_expectation.never unless rc
+      @runner.expects(:debug_program)
     end
 
     def test_run_with_a_script_to_debug
@@ -89,9 +90,7 @@ module Byebug
 
     def test_run_with_no_rc_option
       ARGV.replace(%w(--no-rc lib/byebug.rb))
-      Byebug.expects(:start)
-      Byebug::Runner.any_instance.expects(:debug_program)
-      Byebug.expects(:run_init_script).never
+      expect_it_debugs_script(false)
 
       @runner.run
     end
