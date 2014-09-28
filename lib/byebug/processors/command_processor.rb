@@ -158,25 +158,24 @@ module Byebug
     # Handle byebug commands.
     #
     def process_commands(context, file, line)
-      state, commands = always_run(context, file, line, 1)
+      state, commands = preloop(context, file, line)
 
-      if Setting[:testing]
-        Thread.current.thread_variable_set('state', state)
-      else
-        Thread.current.thread_variable_set('state', nil)
-      end
+      repl(state, commands, context)
 
-      preloop(commands, context)
-      puts(state.location) if Setting[:autolist] == 0
+      postloop
+    end
 
-      @interface.history.restore if Setting[:autosave]
+    #
+    # Main byebug's REPL
+    #
+    def repl(state, commands, context)
       until state.proceed?
         input = if @interface.command_queue.empty?
                   @interface.read_command(prompt(context))
                 else
                   @interface.command_queue.shift
                 end
-        break unless input
+        return unless input
 
         if input == ''
           next unless @last_cmd
@@ -184,11 +183,11 @@ module Byebug
         else
           @last_cmd = input
         end
+
         split_commands(input).each do |cmd|
           one_cmd(commands, context, cmd)
         end
       end
-      Setting[:autosave] ? @interface.history.save : @interface.history.clear
     end
 
     #
@@ -217,14 +216,35 @@ module Byebug
     end
 
     #
-    # Tasks to do before processor loop
+    # Tasks to do before processor loop.
     #
-    def preloop(_commands, context)
-      @context_was_dead = true if context.dead? && !@context_was_dead
-      return unless @context_was_dead
+    def preloop(context, file, line)
+      state, commands = always_run(context, file, line, 1)
 
-      puts 'The program finished.'
-      @context_was_dead = false
+      if Setting[:testing]
+        Thread.current.thread_variable_set('state', state)
+      else
+        Thread.current.thread_variable_set('state', nil)
+      end
+
+      @context_was_dead = true if context.dead? && !@context_was_dead
+      if @context_was_dead
+        puts 'The program finished.'
+        @context_was_dead = false
+      end
+
+      puts(state.location) if Setting[:autolist] == 0
+
+      @interface.history.restore if Setting[:autosave]
+
+      [state, commands]
+    end
+
+    #
+    # Tasks to do after processor loop.
+    #
+    def postloop
+      Setting[:autosave] ? @interface.history.save : @interface.history.clear
     end
 
     class State
