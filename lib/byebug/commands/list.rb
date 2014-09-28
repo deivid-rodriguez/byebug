@@ -68,7 +68,7 @@ module Byebug
     # @return last line number to list
     #
     def set_range(size, max_line)
-      first = amend(lower(size, @match[1] || '+'), size, max_line - size + 1)
+      first = amend(lower(size, @match[1] || '+'), max_line - size + 1)
 
       [first, move(first, size - 1)]
     end
@@ -78,10 +78,10 @@ module Byebug
       return [-1, -1] if err
 
       if input.split(/[-,]/)[1]
-        last, err = get_int(input.split(/[-,]/)[1], 'List', 1, max_line)
+        last, _ = get_int(input.split(/[-,]/)[1], 'List', 1, max_line)
         return [-1, -1] unless last
 
-        last = amend(last, size, max_line)
+        last = amend(last, max_line)
       else
         first -= (size / 2)
       end
@@ -89,7 +89,7 @@ module Byebug
       [first, last || move(first, size - 1)]
     end
 
-    def amend(line, size, max_line)
+    def amend(line, max_line)
       return 1 if line < 1
 
       [max_line, line].min
@@ -111,7 +111,7 @@ module Byebug
     def display_lines(min, max, lines)
       puts "\n[#{min}, #{max}] in #{@state.file}"
 
-      (min..max).to_a.zip(lines[min-1..max-1]).map do |l|
+      (min..max).to_a.zip(lines[min - 1..max - 1]).map do |l|
         mark = l[0] == @state.line ? '=> ' : '   '
         puts format("#{mark}%#{max.to_s.size}d: %s", l[0], l[1])
       end

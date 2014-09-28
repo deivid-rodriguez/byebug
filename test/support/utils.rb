@@ -82,6 +82,18 @@ module Byebug
       end
     end
 
+    #
+    # Set default settings for testing
+    #
+    def set_defaults
+      Byebug::Setting.load
+
+      Byebug::Setting[:autolist] = false
+      Byebug::Setting[:autosave] = false
+      Byebug::Setting[:testing] = true
+      Byebug::Setting[:width] = 80
+    end
+
     def interface
       Byebug.handler.interface
     end

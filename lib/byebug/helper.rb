@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Miscelaneous Utilities
+  #
   module MiscUtils
     #
     # Cross-platform way of finding an executable in the $PATH.
@@ -20,7 +23,7 @@ module Byebug
   end
 
   #
-  # Miscelaneous Utilities
+  # Utilities to assist command parsing
   #
   module ParseFunctions
     #

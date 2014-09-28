@@ -26,11 +26,7 @@ module Byebug
       Byebug.breakpoints.clear if Byebug.breakpoints
       Byebug.catchpoints.clear if Byebug.catchpoints
 
-      Byebug::Setting.load
-      Byebug::Setting[:autolist] = false
-      Byebug::Setting[:autosave] = false
-      Byebug::Setting[:testing] = true
-      Byebug::Setting[:width] = 80
+      set_defaults
 
       # Include test files as ignored files
       glob_exp = File.expand_path('../../{lib,test/support}/**/*.rb', __FILE__)

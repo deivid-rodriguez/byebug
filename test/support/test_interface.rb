@@ -20,10 +20,10 @@ module Byebug
     def read_command(*)
       return readline(true) unless @input_queue.empty?
 
-      if test_block
-        test_block.call
-        self.test_block = nil
-      end
+      return unless test_block
+
+      test_block.call
+      self.test_block = nil
     end
 
     def puts(*args)
@@ -52,7 +52,7 @@ module Byebug
     def readline(hist)
       cmd = @input_queue.shift
       cmd = cmd.is_a?(Proc) ? cmd.call : cmd
-      save_history(cmd) unless !hist
+      save_history(cmd) if hist
       cmd
     end
   end

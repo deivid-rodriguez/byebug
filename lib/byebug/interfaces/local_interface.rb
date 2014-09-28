@@ -26,7 +26,7 @@ module Byebug
       puts('^C')
       retry
     ensure
-      save_history(line) unless !hist
+      save_history(line) if hist
     end
   end
 end

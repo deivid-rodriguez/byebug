@@ -24,7 +24,7 @@ module Byebug
     # Saves history to disk.
     #
     def save
-      n_cmds = Setting[:histsize] > self.size ? self.size : Setting[:histsize]
+      n_cmds = Setting[:histsize] > size ? size : Setting[:histsize]
 
       open(Setting[:histfile], 'w') do |file|
         n_cmds.times { file.puts(pop) }
@@ -37,7 +37,7 @@ module Byebug
     # Discards history.
     #
     def clear
-      self.size.times { pop }
+      size.times { pop }
     end
 
     #
@@ -65,7 +65,7 @@ module Byebug
       commands = Readline::HISTORY.to_a.last(show_size)
 
       (self.size - show_size + 1..self.size).to_a.zip(commands).map do |l|
-        format("%5d  %s", l[0], l[1])
+        format('%5d  %s', l[0], l[1])
       end.join("\n") + "\n"
     end
 
