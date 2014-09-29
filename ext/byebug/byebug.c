@@ -594,7 +594,6 @@ bb_start(VALUE self)
   else
   {
     locker      = Qnil;
-    breakpoints = rb_ary_new();
     catchpoints = rb_hash_new();
     threads     = create_threads_table();
 
