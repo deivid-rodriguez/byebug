@@ -18,6 +18,21 @@ VALUE locker = Qnil;
 /* Hash table with active threads and their associated contexts */
 VALUE threads = Qnil;
 
+/*
+ *  call-seq:
+ *    Byebug.breakpoints -> array
+ *
+ *  Returns an array of breakpoints.
+ */
+static VALUE
+bb_breakpoints(VALUE self)
+{
+  if (NIL_P(breakpoints))
+    breakpoints = rb_ary_new();
+
+  return breakpoints;
+}
+
 #define IS_STARTED  (catchpoints != Qnil)
 static void
 check_started()
@@ -182,7 +197,7 @@ call_at_line_check(VALUE context_obj, debug_context_t *dc,
 static void
 line_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, file, line, binding;
+  VALUE breakpoint, file, line, binding, self;
   int moved = 0;
 
   EVENT_SETUP
@@ -191,6 +206,7 @@ line_event(VALUE trace_point, void *data)
   file    = rb_tracearg_path(trace_arg);
   line    = rb_tracearg_lineno(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
+  self    = rb_tracearg_self(trace_arg);
 
   EVENT_COMMON
 
@@ -223,7 +239,7 @@ line_event(VALUE trace_point, void *data)
   if (dc->steps == 0 || dc->lines == 0 ||
       (CTX_FL_TEST(dc, CTX_FL_ENABLE_BKPT) &&
       (!NIL_P(
-       breakpoint = find_breakpoint_by_pos(breakpoints, file, line, binding)))))
+       breakpoint = find_breakpoint_by_pos(bb_breakpoints(self), file, line, binding)))))
   {
     call_at_line_check(context, dc, breakpoint, file, line);
   }
@@ -254,7 +270,7 @@ call_event(VALUE trace_point, void *data)
   file    = rb_tracearg_path(trace_arg);
   line    = rb_tracearg_lineno(trace_arg);
 
-  breakpoint = find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
+  breakpoint = find_breakpoint_by_method(bb_breakpoints(self), klass, mid, binding, self);
   if (breakpoint != Qnil)
   {
     call_at_breakpoint(context, dc, breakpoint);
@@ -711,21 +727,6 @@ bb_set_post_mortem(VALUE self, VALUE value)
 {
   post_mortem = RTEST(value) ? Qtrue : Qfalse;
   return value;
-}
-
-/*
- *  call-seq:
- *    Byebug.breakpoints -> array
- *
- *  Returns an array of breakpoints.
- */
-static VALUE
-bb_breakpoints(VALUE self)
-{
-  if (NIL_P(breakpoints))
-    breakpoints = rb_ary_new();
-
-  return breakpoints;
 }
 
 /*
