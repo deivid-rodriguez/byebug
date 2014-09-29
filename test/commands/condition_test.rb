@@ -74,9 +74,12 @@ module Byebug
     end
 
     def test_shows_error_if_breakpoint_id_is_incorrect
-      enter 'break 7', 'cond 8 b == 3', 'cont'
+      enter 'break 7', 'cond 2 b == 3'
 
-      debug_proc(@example) { assert_equal 7, state.line }
+      debug_proc(@example)
+      check_error_includes \
+        'Invalid breakpoint id. ' \
+        'Use "info breakpoint" to find out the correct id'
     end
   end
 end
