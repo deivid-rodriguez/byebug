@@ -107,12 +107,8 @@ module Byebug
     end
 
     def force_set_const(klass, const, value)
-      force_unset_const(klass, const)
-      klass.const_set(const, value)
-    end
-
-    def force_unset_const(klass, const)
       klass.send(:remove_const, const) if klass.const_defined?(const)
+      klass.const_set(const, value)
     end
 
     def change_line_in_file(file, line, new_line_content)
