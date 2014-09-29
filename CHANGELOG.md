@@ -1,3 +1,9 @@
+# 3.5.1
+- Fix windows installation (#79)
+- Fix bug in "condition" command where invalid breakpoint ids wouldn't be
+properly detected.
+
+
 # 3.5.0
 - Bugfixes
   * Fix #81, byebug's history does not mess with other programs that use
