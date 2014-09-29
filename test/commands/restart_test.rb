@@ -24,17 +24,15 @@ module Byebug
     end
 
     def test_restarts_with_manual_arguments
-      force_set_const(Byebug, 'BYEBUG_SCRIPT', 'byebug_script')
-      cmd = "#{BYEBUG_SCRIPT} #{Byebug.debugged_program} 1 2 3"
+      cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} test/test_helper.rb 1 2"
       must_restart(cmd)
 
-      enter 'restart 1 2 3'
+      enter 'restart 1 2'
       debug_proc(@example)
       check_output_includes "Re exec'ing:\n\t#{cmd}"
-      force_unset_const(Byebug, 'BYEBUG_SCRIPT')
     end
 
-    def test_still_restarts_when_byebug_attached_to_running_program
+    def test_still_restarts_shows_messages_when_attached_to_running_program
       must_restart
       enter 'restart'
 
