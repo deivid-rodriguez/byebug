@@ -33,6 +33,30 @@ bb_breakpoints(VALUE self)
   return breakpoints;
 }
 
+/*
+ *  call-seq:
+ *    Byebug.catchpoints -> array
+ *
+ *  Returns an array of catchpoints.
+ */
+static VALUE
+bb_catchpoints(VALUE self)
+{
+  return catchpoints;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.raised_exception -> exception
+ *
+ *  Returns raised exception when in post_mortem mode.
+ */
+static VALUE
+bb_raised_exception(VALUE self)
+{
+  return raised_exception;
+}
+
 #define IS_STARTED  (catchpoints != Qnil)
 static void
 check_started()
@@ -730,18 +754,6 @@ bb_set_post_mortem(VALUE self, VALUE value)
 
 /*
  *  call-seq:
- *    Byebug.catchpoints -> array
- *
- *  Returns an array of catchpoints.
- */
-static VALUE
-bb_catchpoints(VALUE self)
-{
-  return catchpoints;
-}
-
-/*
- *  call-seq:
  *    Byebug.add_catchpoint(exception) -> exception
  *
  *  Adds a new exception to the catchpoints array.
@@ -754,18 +766,6 @@ bb_add_catchpoint(VALUE self, VALUE value)
 
   rb_hash_aset(catchpoints, rb_str_dup(value), INT2FIX(0));
   return value;
-}
-
-/*
- *  call-seq:
- *    Byebug.raised_exception -> exception
- *
- *  Returns raised exception when in post_mortem mode.
- */
-static VALUE
-bb_raised_exception(VALUE self)
-{
-  return raised_exception;
 }
 
 /*
