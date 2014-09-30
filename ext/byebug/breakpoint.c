@@ -329,6 +329,16 @@ filename_cmp(VALUE source, char *file)
 #endif
 }
 
+int
+classname_cmp(VALUE name, VALUE klass)
+{
+  VALUE mod_name;
+  VALUE class_name = (Qnil == name) ? rb_str_new2("main") : name;
+  if (klass == Qnil) return(0);
+  mod_name = rb_mod_name(klass);
+  return (mod_name != Qnil && rb_str_cmp(class_name, mod_name) == 0);
+}
+
 static int
 check_breakpoint_by_hit_condition(VALUE breakpoint_object)
 {

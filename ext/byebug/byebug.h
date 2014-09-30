@@ -85,16 +85,6 @@ extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
 extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
                                    void *data);
 
-static inline int
-classname_cmp(VALUE name, VALUE klass)
-{
-    VALUE mod_name;
-    VALUE class_name = (Qnil == name) ? rb_str_new2("main") : name;
-    if (klass == Qnil) return(0);
-    mod_name = rb_mod_name(klass);
-    return (mod_name != Qnil && rb_str_cmp(class_name, mod_name) == 0);
-}
-
 /* breakpoints & catchpoints */
 enum bp_type { BP_POS_TYPE, BP_METHOD_TYPE };
 
