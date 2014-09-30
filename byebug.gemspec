@@ -17,13 +17,14 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version     = '>= 2.0.0'
 
-  s.files            = `git ls-files`.split("\n")
-  s.test_files       = `git ls-files -- test/*`.split("\n")
-  s.bindir           = 'bin'
-  s.executables      = ['byebug']
-  s.extra_rdoc_files = %w(README.md GUIDE.md)
-  s.extensions       = ['ext/byebug/extconf.rb']
-  s.require_path     = 'lib'
+  s.files        = Dir['lib/**/*.rb', 'ext/**/*.[ch]', '.gitignore', 'LICENSE']
+  s.files       += %w(.rubocop.yml .travis.yml byebug.gemspec Gemfile Rakefile)
+  s.test_files   = Dir.glob('test/**/*.rb')
+  s.bindir       = 'bin'
+  s.executables  = ['byebug']
+  s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md)
+  s.extensions   = ['ext/byebug/extconf.rb']
+  s.require_path = 'lib'
 
   s.add_dependency 'columnize', '~> 0.8'
   s.add_dependency 'slop', '~> 3.6'
