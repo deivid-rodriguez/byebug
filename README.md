@@ -1,10 +1,24 @@
 # Byebug
-[![Version][VersionBadge]][VersionURL]
-[![Build][TravisBadge]][TravisURL]
-[![Climate][CodeClimateBadge]][CodeClimateURL]
-[![Dependencies][GemnasiumBadge]][GemnasiumURL]
-[![Coverage][CoverageBadge]][CoverageURL]
-[![Gittip][GittipBadge]][GittipURL]
+[![Ver][gem]][gem_url]
+[![Bui][bui]][bui_url]
+[![Gpa][gpa]][gpa_url]
+[![Dep][dep]][dep_url]
+[![Cov][cov]][cov_url]
+[![Git][tip]][tip_url]
+
+[gem]: https://img.shields.io/gem/v/byebug.svg
+[bui]: https://img.shields.io/travis/deivid-rodriguez/byebug.svg
+[gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
+[dep]: https://img.shields.io/gemnasium/deivid-rodriguez/byebug.svg
+[cov]: https://img.shields.io/codeclimate/coverage/github/deivid-rodriguez/byebug.svg
+[tip]: https://img.shields.io/gittip/deivid-rodriguez.svg
+
+[gem_url]: https://rubygems.org/gems/byebug
+[bui_url]: https://travis-ci.org/deivid-rodriguez/byebug
+[gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
+[dep_url]: https://gemnasium.com/deivid-rodriguez/byebug
+[cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
+[tip_url]: https://www.gittip.com/deivid-rodriguez
 
 _Debugging in Ruby 2_
 
@@ -151,19 +165,6 @@ software, specially:
 * @denofevil, author of [debase][], the starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 * @FooBarWidget for working and helping with remote debugging.
-
-[VersionBadge]: https://badge.fury.io/rb/byebug.svg
-[VersionURL]: http://badge.fury.io/rb/byebug
-[TravisBadge]: https://travis-ci.org/deivid-rodriguez/byebug.svg
-[TravisURL]: http://travis-ci.org/deivid-rodriguez/byebug
-[CodeClimateBadge]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
-[CodeClimateURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[GemnasiumBadge]: https://gemnasium.com/deivid-rodriguez/byebug.svg
-[GemnasiumURL]: https://gemnasium.com/deivid-rodriguez/byebug
-[CoverageBadge]: https://codeclimate.com/github/deivid-rodriguez/byebug/badges/coverage.svg
-[CoverageURL]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[GittipBadge]: http://img.shields.io/gittip/deivid-rodriguez.svg
-[GittipURL]: https://www.gittip.com/deivid-rodriguez
 
 [debugger]: https://github.com/cldwalker/debugger
 [pry]: https://github.com/pry/pry
