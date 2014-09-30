@@ -17,6 +17,8 @@ module Byebug
 
     def teardown
       File.delete('source_example.txt')
+    rescue
+      retry
     end
 
     %w(source so).each do |cmd_alias|
