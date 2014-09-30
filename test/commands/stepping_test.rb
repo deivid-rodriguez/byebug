@@ -189,4 +189,29 @@ module Byebug
       debug_proc(example_raise) { assert_equal 168, state.line }
     end
   end
+
+  class SteppingAndBacktracesExample
+    def a
+      r = b
+      r += 1
+    end
+
+    def b
+      r = 2
+      r += 1
+    end
+  end
+
+  class StepUpNextTestCase < TestCase
+    def test_step_the_up_then_next_advances_in_the_upper_frame
+      example_up = -> do
+        byebug
+
+        SteppingAndBacktracesExample.new.a
+      end
+
+      enter 'b 195', 'cont', 'step', 'up', 'next'
+      debug_proc(example_up) { assert_equal 196, state.line }
+    end
+  end
 end
