@@ -29,37 +29,18 @@ module Minitest
     private
 
     def _includes_in_order(original_collection, given_collection)
-      result = true
-      given_collection.each do |given_item|
-        result &&=
-          case given_item
-          when String
-            index = original_collection.index(given_item)
-            if index
-              original_collection = original_collection[(index + 1)..-1]
-              true
-            else
-              false
-            end
-          when Regexp
-            index = nil
-            original_collection.each_with_index do |original_item, i|
-              if original_item =~ given_item
-                index = i
-                break
-              end
-            end
-            if index
-              original_collection = original_collection[(index + 1)..-1]
-              true
-            else
-              false
-            end
-          else
-            false
-          end
+      given_collection.each_with_index do |given_item, i|
+        index = case given_item
+                when String
+                  original_collection[i..-1].index(given_item)
+                when Regexp
+                  original_collection[i..-1].index { |it| it =~ given_item }
+                end
+
+        return false unless index
       end
-      result
+
+      true
     end
   end
 end
