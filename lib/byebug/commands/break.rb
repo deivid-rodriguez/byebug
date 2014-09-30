@@ -37,20 +37,21 @@ module Byebug
       line = @state.line.to_s if line.nil?
 
       if line =~ /^\d+$/
-        path = CommandProcessor.canonic_file(file)
-        return errmsg("No file named #{path}") unless File.exist?(file)
+        path = File.expand_path(file)
+        file = CommandProcessor.canonic_file(file)
+        return errmsg("No file named #{file}") unless File.exist?(path)
 
-        l, n = line.to_i, File.foreach(file).count
-        return errmsg("There are only #{n} lines in file #{path}") if l > n
+        l, n = line.to_i, File.foreach(path).count
+        return errmsg("There are only #{n} lines in file #{file}") if l > n
 
         autoreload = Setting[:autoreload]
-        possible_lines = LineCache.trace_line_numbers(file, autoreload)
+        possible_lines = LineCache.trace_line_numbers(path, autoreload)
         unless possible_lines.member?(l)
-          return errmsg("Line #{l} is not a valid breakpoint in file #{path}")
+          return errmsg("Line #{l} is not a valid breakpoint in file #{file}")
         end
 
-        b = Breakpoint.add(file, l, expr)
-        puts "Created breakpoint #{b.id} at #{path}:#{l}"
+        b = Breakpoint.add(path, l, expr)
+        puts "Created breakpoint #{b.id} at #{file}:#{l}"
 
         unless syntax_valid?(expr)
           errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
