@@ -7,11 +7,7 @@ require 'mkmf'
 
 RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
 
-if RbConfig::MAKEFILE_CONFIG['CC'] =~ /gcc/
-  $CFLAGS ||= ''
-  $CFLAGS += ' -Wall -Werror -Wno-unused-parameter'
-  $CFLAGS += ' -gdwarf-2 -g3 -O0' if ENV['debug']
-end
+RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -Wall -Werror -Wno-unused-parameter'
+RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -gdwarf-2 -g3 -O0' if ENV['debug']
 
-dir_config('ruby')
 create_makefile('byebug/byebug')
