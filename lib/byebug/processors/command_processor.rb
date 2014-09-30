@@ -28,9 +28,10 @@ module Byebug
     #
     # Regularize file name.
     #
-    # This is also used as a common funnel place if basename is desired or if we
-    # are working remotely and want to change the basename. Or we are eliding
-    # filenames.
+    # This is also used as a common funnel place if basename is desired or if
+    # we are working remotely and want to change the basename. Or we are
+    # eliding filenames.
+    #
     def self.canonic_file(filename)
       return filename if ['(irb)', '-e'].include?(filename)
 
