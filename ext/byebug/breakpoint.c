@@ -411,7 +411,7 @@ check_breakpoint_by_method(VALUE breakpoint_object, VALUE klass, ID mid,
 }
 
 static int
-check_breakpoint_by_expr(VALUE breakpoint_object, VALUE binding)
+check_breakpoint_by_expr(VALUE breakpoint_object, VALUE bind)
 {
   breakpoint_t *breakpoint;
   VALUE args, expr_result;
@@ -427,15 +427,14 @@ check_breakpoint_by_expr(VALUE breakpoint_object, VALUE binding)
   if (NIL_P(breakpoint->expr))
     return 1;
 
-  args = rb_ary_new3(2, breakpoint->expr, binding);
+  args = rb_ary_new3(2, breakpoint->expr, bind);
   expr_result = rb_protect(eval_expression, args, 0);
 
   return RTEST(expr_result);
 }
 
 extern VALUE
-find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
-                       VALUE binding)
+find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos, VALUE bind)
 {
   VALUE breakpoint_object;
   char *file;
@@ -448,7 +447,7 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     if (check_breakpoint_by_pos(breakpoint_object, file, line) &&
-        check_breakpoint_by_expr(breakpoint_object, binding)   &&
+        check_breakpoint_by_expr(breakpoint_object, bind) &&
         check_breakpoint_by_hit_condition(breakpoint_object))
     {
       return breakpoint_object;
@@ -458,7 +457,7 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
 }
 
 extern VALUE
-find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
+find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE bind,
                           VALUE self)
 {
   VALUE breakpoint_object;
@@ -468,7 +467,7 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE binding,
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
     if (check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
-        check_breakpoint_by_expr(breakpoint_object, binding)            &&
+        check_breakpoint_by_expr(breakpoint_object, bind) &&
         check_breakpoint_by_hit_condition(breakpoint_object))
     {
       return breakpoint_object;

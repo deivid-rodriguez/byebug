@@ -119,8 +119,8 @@ typedef struct {
 extern void Init_breakpoint(VALUE mByebug);
 extern VALUE catchpoint_hit_count(VALUE catchpoints, VALUE exception, VALUE *exception_name);
 extern VALUE find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
-                                    VALUE binding);
+                                    VALUE bind);
 extern VALUE find_breakpoint_by_method(VALUE breakpoints, VALUE klass,
-                                       VALUE mid, VALUE binding, VALUE self);
+                                       VALUE mid, VALUE bind, VALUE self);
 
 #endif
