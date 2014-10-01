@@ -1,6 +1,6 @@
 module Byebug
   #
-  # Show information about every line that is executed.
+  # Show (and possibily stop) at every line that changes a global variable.
   #
   class TracevarCommand < Command
     def regexp
