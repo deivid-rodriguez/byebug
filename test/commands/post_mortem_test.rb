@@ -59,7 +59,7 @@ module Byebug
 
     ['restart', 'frame', 'quit', 'edit', 'info', 'irb', 'source', 'help',
      'var class', 'list', 'method', 'kill', 'eval', 'set', 'save', 'show',
-     'trace', 'thread list'].each do |cmd|
+     'thread list'].each do |cmd|
       define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do
         enter 'set post_mortem', "#{cmd}", 'set no_postmortem'
         class_name = cmd.gsub(/(^| )\w/) { |b| b[-1,1].upcase } + 'Command'
