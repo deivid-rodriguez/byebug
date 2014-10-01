@@ -2,7 +2,7 @@ module Byebug
   #
   # Show information about every line that is executed.
   #
-  class TraceCommand < Command
+  class TracevarCommand < Command
     def regexp
       /^\s* tr(?:acevar)? (?: \s+ (\S+))?  # (variable-name)?
                           (?: \s+ (\S+))?  # (stop | nostop)?
@@ -33,7 +33,7 @@ module Byebug
 
     class << self
       def names
-        %w(trace)
+        %w(tracevar)
       end
 
       def description
