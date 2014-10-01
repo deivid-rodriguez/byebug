@@ -13,7 +13,7 @@ module Byebug
 
     def execute
       var = @match[1]
-      if global_variables.include?("$#{var}".to_sym)
+      if global_variables.include?(:"$#{var}")
         if @match[2] && @match[2] !~ /(:?no)?stop/
           errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""
         else
