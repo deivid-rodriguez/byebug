@@ -1,5 +1,4 @@
 require_relative 'matchers'
-require_relative 'test_interface'
 
 module Byebug
   #
