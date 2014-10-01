@@ -45,7 +45,7 @@ module Byebug
     end
 
     def test_tracevar_stop_makes_program_stop_when_global_var_changes
-      enter 'tracevar $VERBOSE stop', 'break 10', 'cont', 'untracevar $VERBOSE'
+      enter 'tracevar $VERBOSE stop', 'cont 10', 'untracevar $VERBOSE'
       debug_proc(@example) { assert_equal 8, state.line }
     end
 
