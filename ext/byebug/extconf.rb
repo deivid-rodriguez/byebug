@@ -11,4 +11,6 @@ RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -Wall -Werror -Wno-unused-parameter'
 RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -gdwarf-2 -g3 -O0' if ENV['debug']
 
 dir_config('ruby')
-create_makefile('byebug/byebug')
+with_cflags(RbConfig::MAKEFILE_CONFIG['CFLAGS']) do
+  create_makefile('byebug/byebug')
+end
