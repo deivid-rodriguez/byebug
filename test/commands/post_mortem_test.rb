@@ -44,7 +44,8 @@ module Byebug
       end
     end
 
-    %w(step next finish break condition display reload tracevar).each do |cmd|
+    %w(step next finish break condition display reload tracevar
+       untracevar).each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
         enter 'set noautoeval', 'set post_mortem', "#{cmd}", 'set no_postmortem'
         Context.any_instance.stubs(:dead?).returns(:true)
