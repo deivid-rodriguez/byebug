@@ -40,30 +40,30 @@ module Byebug
     end
 
     def test_tracevar_tracks_global_variables
-      enter 'tracevar bla'
+      enter 'tracevar $bla'
       debug_proc(@example)
-      check_output_includes "traced global variable 'bla' has value '7'",
-                            "traced global variable 'bla' has value '10'"
+      check_output_includes "traced global variable '$bla' has value '7'",
+                            "traced global variable '$bla' has value '10'"
     end
 
     def test_tracevar_stop_makes_program_stop_when_global_var_changes
-      enter 'tracevar bla stop', 'break 10', 'cont'
+      enter 'tracevar $bla stop', 'break 10', 'cont'
       debug_proc(@example) { assert_equal 8, state.line }
     end
 
     def test_tracevar_nostop_does_not_stop_when_global_var_changes
-      enter 'tracevar bla nostop', 'break 10', 'cont'
+      enter 'tracevar $bla nostop', 'break 10', 'cont'
       debug_proc(@example) { assert_equal 10, state.line }
     end
 
     def test_tracevar_shows_an_error_message_if_there_is_no_such_global_var
-      enter 'tracevar foo'
+      enter 'tracevar $foo'
       debug_proc(@example)
-      check_error_includes "'foo' is not a global variable."
+      check_error_includes "'$foo' is not a global variable."
     end
 
     def test_tracevar_shows_an_error_message_if_subcommand_is_invalid
-      enter 'tracevar bla foo'
+      enter 'tracevar $bla foo'
       debug_proc(@example)
       check_error_includes 'expecting "stop" or "nostop"; got "foo"'
     end
