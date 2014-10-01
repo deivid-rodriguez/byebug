@@ -14,7 +14,7 @@ module Byebug
     def test_asks_for_confirmation
       enter 'display d', 'display d + 1', 'undisplay'
       debug_proc(@example)
-      check_confirm_includes 'Clear all expressions? (y/n)'
+      check_output_includes 'Clear all expressions? (y/n)'
     end
 
     def test_removes_all_expressions_from_list_if_confirmed

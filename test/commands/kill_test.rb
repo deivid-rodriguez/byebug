@@ -32,7 +32,7 @@ module Byebug
       Process.expects(:kill).with('KILL', Process.pid)
       enter 'kill', 'y'
       debug_proc(@example)
-      check_confirm_includes 'Really kill? (y/n)'
+      check_output_includes 'Really kill? (y/n)'
     end
 
     def test_kill_does_not_send_an_unknown_signal

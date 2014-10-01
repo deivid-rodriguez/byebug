@@ -26,7 +26,7 @@ module Byebug
     attr_accessor :handler, :debugged_program
 
     extend Forwardable
-    def_delegators :handler, :errmsg, :puts
+    def_delegators :handler, :interface, :interface=, :errmsg, :puts
   end
 
   Byebug.handler = CommandProcessor.new
@@ -35,13 +35,6 @@ module Byebug
     hsh = 'SCRIPT_LINES__'
     Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
     Object.const_set(hsh, {})
-  end
-
-  #
-  # Byebug's interface is its handler's interface
-  #
-  def self.interface=(value)
-    handler.interface = value
   end
 
   #

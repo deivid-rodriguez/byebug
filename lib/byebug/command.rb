@@ -22,11 +22,7 @@ module Byebug
     protected
 
     extend Forwardable
-    def_delegators :@state, :errmsg, :puts
-
-    def confirm(msg)
-      @state.confirm(msg) == 'y'
-    end
+    def_delegators :@state, :errmsg, :puts, :confirm
 
     def bb_eval(str, b = get_binding)
       eval(str, b)

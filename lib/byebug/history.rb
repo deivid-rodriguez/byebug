@@ -44,6 +44,8 @@ module Byebug
     # Adds a new command to Readline's history.
     #
     def push(cmd)
+      return if ignore?(cmd)
+
       self.size += 1
       Readline::HISTORY.push(cmd)
     end

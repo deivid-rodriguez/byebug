@@ -3,30 +3,27 @@ module Byebug
   # Interface class for standard byebug use.
   #
   class LocalInterface < Interface
-    def read_command(prompt)
-      readline(prompt, true)
+    def initialize
+      super()
+      @input, @output, @error = STDIN, STDOUT, STDERR
     end
 
-    def confirm(prompt)
-      readline(prompt, false)
-    end
-
-    def puts(*args)
-      STDOUT.puts(*args)
-    end
-
-    def close
-    end
-
-    private
-
+    #
+    # Reads a single line of input using Readline.
+    #
+    # If Ctrl-C is pressed in the middle of input, the line is reset to only
+    # the prompt and we ask for input again.
+    #
+    # @param prompt Prompt to be displayed.
+    # @param hist Whether to save input in Readline's history or not.
+    #
     def readline(prompt, hist)
       line = Readline.readline(prompt, false)
     rescue Interrupt
       puts('^C')
       retry
     ensure
-      save_history(line) if hist
+      @history.push(line) if hist
     end
   end
 end

@@ -7,32 +7,30 @@ module Byebug
   class RemoteInterface < Interface
     def initialize(socket)
       super()
-      @socket = socket
-    end
-
-    def close
-      @socket.close
-    rescue IOError
-    end
-
-    def confirm(prompt)
-      send_command "CONFIRM #{prompt}"
+      @input, @output, @error = socket, socket, socket
     end
 
     def read_command(prompt)
-      send_command "PROMPT #{prompt}"
+      super("PROMPT #{prompt}")
     end
 
-    def puts(message)
-      @socket.puts(message)
+    def confirm(prompt)
+      super("CONFIRM #{prompt}")
     end
 
-    private
+    def close
+      output.close
+    rescue IOError
+    end
 
-    def send_command(msg)
-      @socket.puts msg
-      result = @socket.gets
+    def readline(prompt, hist)
+      output.puts(prompt)
+
+      result = input.gets
       fail IOError unless result
+
+      @history.push(result) if hist
+
       result.chomp
     end
   end

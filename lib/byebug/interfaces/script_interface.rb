@@ -3,31 +3,27 @@ module Byebug
   # Interface class for command execution from script files.
   #
   class ScriptInterface < Interface
-    def initialize(file, out, verbose = false)
+    def initialize(file, verbose = false)
       super()
-      @file = file.respond_to?(:gets) ? file : open(file)
-      @out, @verbose = out, verbose
+      @input = File.open(file)
+      @output = verbose ? STDOUT : StringIO.new
+      @error = verbose ? STDERR : StringIO.new
     end
 
     def read_command(_prompt)
-      while (result = @file.gets)
-        puts "# #{result}" if @verbose
-        next if result =~ /^\s*#/
-        next if result.strip.empty?
-        return result.chomp
-      end
-    end
-
-    def confirm(_prompt)
-      'y'
-    end
-
-    def puts(message)
-      @out.printf(message)
+      readline(_prompt, false)
     end
 
     def close
-      @file.close
+      input.close
+    end
+
+    def readline(prompt, hist)
+      while (result = input.gets)
+        output.puts "# #{result}"
+        next if result =~ /^\s*#/
+        return result.chomp
+      end
     end
   end
 end
