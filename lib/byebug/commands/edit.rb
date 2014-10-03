@@ -12,7 +12,7 @@ module Byebug
     def execute
       if !@match[1]
         unless @state.file
-          return errmsg "We are not in a state that has an associated file.\n"
+          return errmsg "We are not in a state that has an associated file."
         end
         file = @state.file
         line = @state.line if @state.line
@@ -21,7 +21,7 @@ module Byebug
       elsif File.exist?(@match[1])
         file = @match[1]
       else
-        return errmsg "Invalid file[:line] number specification: #{@match[1]}\n"
+        return errmsg "Invalid file[:line] number specification: #{@match[1]}"
       end
 
       editor = ENV['EDITOR'] || 'vim'
