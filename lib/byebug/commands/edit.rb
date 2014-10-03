@@ -26,12 +26,12 @@ module Byebug
 
       editor = ENV['EDITOR'] || 'vim'
 
-      if File.readable?(file)
-        system("#{editor} +#{line} #{file}") if line
-        system("#{editor} #{file}") unless line
-      else
-        errmsg "File \"#{file}\" is not readable.\n"
-      end
+      return \
+        errmsg("File \"#{file}\" is not readable.") unless File.readable?(file)
+
+      cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
+
+      system(cmd)
     end
 
     class << self
