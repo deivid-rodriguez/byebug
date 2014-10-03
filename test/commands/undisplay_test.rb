@@ -1,7 +1,7 @@
 module Byebug
   class UndisplayTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         d = 0
         byebug
         d = d + 3

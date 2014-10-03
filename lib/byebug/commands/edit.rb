@@ -12,7 +12,7 @@ module Byebug
     def execute
       if !@match[1]
         unless @state.file
-          return errmsg "We are not in a state that has an associated file."
+          return errmsg 'We are not in a state that has an associated file.'
         end
         file = @state.file
         line = @state.line if @state.line

@@ -7,7 +7,7 @@ module Byebug
 
   class RestartTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         a = ARGV[0]
         b = ARGV[1]

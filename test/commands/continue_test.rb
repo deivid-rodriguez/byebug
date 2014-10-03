@@ -7,7 +7,7 @@ module Byebug
 
   class ContinueTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
 
         b = 5

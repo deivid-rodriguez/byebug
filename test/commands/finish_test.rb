@@ -21,7 +21,7 @@ module Byebug
 
   class FinishTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         FinishExample.new.a
       end

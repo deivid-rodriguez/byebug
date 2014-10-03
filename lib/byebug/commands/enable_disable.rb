@@ -6,7 +6,7 @@ module Byebug
     def enable_disable_breakpoints(is_enable, args)
       return errmsg('No breakpoints have been set') if Breakpoint.none?
 
-      all_breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
+      all_breakpoints = Byebug.breakpoints.sort_by(&:id)
       if args.empty?
         selected_breakpoints = all_breakpoints
       else

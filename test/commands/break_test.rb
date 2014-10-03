@@ -11,7 +11,7 @@ module Byebug
 
   class BreakTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         y = 3
         # A comment
         byebug

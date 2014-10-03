@@ -20,7 +20,7 @@ module Byebug
 
   class VariablesTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
 
         v = VariablesExample.new

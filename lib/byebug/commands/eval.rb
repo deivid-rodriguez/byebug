@@ -113,8 +113,7 @@ module Byebug
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
-          vals = vals.map { |item| item.to_s }
-          puts "#{columnize(vals, Setting[:width])}"
+          puts "#{columnize(vals.map(&:to_s), Setting[:width])}"
         else
           PP.pp(vals, out)
           puts out.string
@@ -157,8 +156,7 @@ module Byebug
           vals = bb_warning_eval(@match.post_match, b)
         end
         if vals.is_a?(Array)
-          vals = vals.map { |item| item.to_s }
-          puts "#{columnize(vals.sort!, Setting[:width])}"
+          puts "#{columnize(vals.map(&:to_s).sort!, Setting[:width])}"
         else
           PP.pp(vals, out)
           puts out.string

@@ -76,7 +76,7 @@ module Byebug
 
     def self.help(cmd, subcmd)
       if subcmd
-        camelized = subcmd.split('_').map { |w| w.capitalize }.join
+        camelized = subcmd.split('_').map(&:capitalize).join
         setting = Byebug.const_get("#{camelized}Setting").new
         <<-EOH.gsub(/^ {8}/, '')
 

@@ -1,7 +1,7 @@
 module Byebug
   class ReloadTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         a = 6
         a = 7

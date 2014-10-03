@@ -18,7 +18,7 @@ module Byebug
 
   class InterruptTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         ex = InterruptExample.a(7)
         2.times do

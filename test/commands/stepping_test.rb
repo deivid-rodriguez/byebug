@@ -18,7 +18,7 @@ module Byebug
 
   class BasicSteppingTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
 
         ex = Example.c(7)
@@ -56,7 +56,7 @@ module Byebug
 
   class AdvancedSteppingTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
 
         ex = Example.a(7)

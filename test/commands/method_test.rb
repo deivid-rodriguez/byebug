@@ -16,7 +16,7 @@ module Byebug
 
   class MethodTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         a = MethodExample.new
         a.bla

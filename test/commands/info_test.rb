@@ -32,7 +32,7 @@ module Byebug
     include Columnize
 
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         i = InfoExample.new
         i.b

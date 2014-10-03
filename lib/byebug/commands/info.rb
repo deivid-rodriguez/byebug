@@ -43,9 +43,9 @@ module Byebug
     def info_breakpoints(*args)
       return puts('No breakpoints.') if Byebug.breakpoints.empty?
 
-      brkpts = Byebug.breakpoints.sort_by { |b| b.id }
+      brkpts = Byebug.breakpoints.sort_by(&:id)
       unless args.empty?
-        indices = args.map { |a| a.to_i }
+        indices = args.map(&:to_i)
         brkpts = brkpts.select { |b| indices.member?(b.id) }
         return errmsg('No breakpoints found among list given') if brkpts.empty?
       end

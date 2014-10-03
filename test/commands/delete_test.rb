@@ -1,7 +1,7 @@
 module Byebug
   class DeleteTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         x = 1
         x += 1

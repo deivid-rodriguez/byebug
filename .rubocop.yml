@@ -1,5 +1,5 @@
 AllCops:
   Exclude:
-    - test/**/*_test.rb
+    - test/commands/*.rb
 TrivialAccessors:
   ExactNameMatch: true

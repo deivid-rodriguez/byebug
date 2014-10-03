@@ -29,7 +29,7 @@ module Byebug
 
   class ThreadTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
 
         t = ThreadExample.new

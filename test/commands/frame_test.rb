@@ -25,7 +25,7 @@ module Byebug
 
   class FrameTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         fr_ex = FrameExample.new('f')
         fr_ex.a()

@@ -1,7 +1,7 @@
 module Byebug
   class TraceTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         initial = $VERBOSE
         byebug
         $VERBOSE = false

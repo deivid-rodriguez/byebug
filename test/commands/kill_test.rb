@@ -7,7 +7,7 @@ module Byebug
 
   class KillTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         KillExample.kill_me
       end

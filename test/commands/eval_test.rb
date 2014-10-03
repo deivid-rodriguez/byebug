@@ -11,7 +11,7 @@ module Byebug
 
   class EvalTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         @foo = EvalExample.new
         @foo.sum(1, 2)

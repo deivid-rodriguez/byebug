@@ -10,15 +10,15 @@ module Byebug
       @error = verbose ? STDERR : StringIO.new
     end
 
-    def read_command(_prompt)
-      readline(_prompt, false)
+    def read_command(prompt)
+      readline(prompt, false)
     end
 
     def close
       input.close
     end
 
-    def readline(prompt, hist)
+    def readline(*)
       while (result = input.gets)
         output.puts "# #{result}"
         next if result =~ /^\s*#/

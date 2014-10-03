@@ -14,7 +14,7 @@ module Byebug
     def execute
       return puts(ConditionCommand.help) unless @match[1]
 
-      breakpoints = Byebug.breakpoints.sort_by { |b| b.id }
+      breakpoints = Byebug.breakpoints.sort_by(&:id)
       return errmsg('No breakpoints have been set') unless breakpoints.any?
 
       pos, err = get_int(@match[1], 'Condition', 1)

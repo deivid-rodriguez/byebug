@@ -10,7 +10,7 @@ module Byebug
 
   class PostMortemTestCase < TestCase
     def setup
-      @example = -> do
+      @example = lambda do
         byebug
         c = PostMortemExample.new
         c.a

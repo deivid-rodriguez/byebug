@@ -9,9 +9,7 @@ module Byebug
     end
 
     def process_commands(verbose = false)
-      control_cmds = Command.commands.select do |cmd|
-        cmd.allow_in_control
-      end
+      control_cmds = Command.commands.select(&:allow_in_control)
       state = State.new(@interface, control_cmds)
       commands = control_cmds.map { |cmd| cmd.new(state) }
 
