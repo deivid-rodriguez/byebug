@@ -60,7 +60,7 @@ module Byebug
         if args && args[1]
           output = format_subcmd(args[1])
         else
-          output = description.gsub(/^ +/, '') + "\n"
+          output = description
           output += format_subcmds if defined? self::Subcommands
         end
         output
