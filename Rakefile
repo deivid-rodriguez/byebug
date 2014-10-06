@@ -26,7 +26,7 @@ task :test do
   end
 end
 
-task default: :test
+task default: [:clean, :compile, :test]
 
 desc 'Run a test in looped mode so that you can look for memory leaks'
 task 'test_loop' do
