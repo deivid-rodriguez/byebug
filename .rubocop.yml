@@ -1,5 +1,4 @@
-AllCops:
-  Exclude:
-    - test/commands/*.rb
 TrivialAccessors:
   ExactNameMatch: true
+Lint/Debugger:
+  Enabled: false
