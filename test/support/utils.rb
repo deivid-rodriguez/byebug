@@ -107,7 +107,14 @@ module Byebug
       klass.const_set(const, value)
     end
 
-    def change_line_in_file(file, line, new_line_content)
+    #
+    # Modifies a line number in a file with new content.
+    #
+    # @param file File to be changed
+    # @param line Line number to be changed
+    # @param new_line_content New line content
+    #
+    def change_line(file, line, new_line_content)
       old_content = File.read(file)
       new_content = old_content.split("\n")
                                .tap { |c| c[line - 1] = new_line_content }

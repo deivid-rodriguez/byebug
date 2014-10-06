@@ -55,7 +55,7 @@ module Byebug
       enter 'set noautosave', 'next', 'history 2'
       debug_proc(@example)
 
-      check_output_includes("1  history 2")
+      check_output_includes('1  history 2')
     end
   end
 end

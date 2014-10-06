@@ -38,7 +38,7 @@ module Byebug
     end
 
     def test_edit_shows_an_error_if_file_specified_does_not_exists
-      enter "edit no_such_file:6"
+      enter 'edit no_such_file:6'
       debug_proc(@example)
       check_error_includes 'File "no_such_file" is not readable.'
     end

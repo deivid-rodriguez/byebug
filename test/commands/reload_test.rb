@@ -1,13 +1,17 @@
 module Byebug
+  #
+  # Tests for "reload" command
+  #
   class ReloadTestCase < TestCase
     def setup
       @example = lambda do
         byebug
-        a = 6
-        a = 7
-        a = 8
         a = 9
-        a = 10
+        a += 10
+        a += 11
+        a += 12
+        a += 13
+        a + 14
       end
 
       super
@@ -27,13 +31,19 @@ module Byebug
         'Source code was reloaded. Automatic reloading is off'
     end
 
+    def reload_after_change(file, line, content)
+      change_line(file, line, content)
+      'reload'
+    end
+
     def test_reload_properly_reloads_source_code
-      enter 'break 7', 'cont', 'l 8-8',
-        -> { change_line_in_file(__FILE__, 8, '        a = 100'); 'reload' },
-        'l 8-8'
+      enter 'l 10-10',
+            -> { reload_after_change(__FILE__, 10, '        a += 100') },
+            'l 10-10'
       debug_proc(@example)
-      check_output_includes '8:         a = 100'
-      change_line_in_file(__FILE__, 8, '        a = 8')
+      check_output_includes '10:         a += 100'
+    ensure
+      change_line(__FILE__, 10, '        a += 10')
     end
   end
 end

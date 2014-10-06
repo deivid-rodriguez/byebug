@@ -21,7 +21,7 @@ module Byebug
       debug_proc(@example)
     end
 
-    def test_kill_closes_interface_when_sending_KILL_signal_explicitly
+    def test_kill_closes_interface_when_sending_kill_signal_explicitly
       Process.stubs(:kill).with('KILL', Process.pid)
       interface.expects(:close)
       enter 'kill KILL'

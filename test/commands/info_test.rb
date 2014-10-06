@@ -18,7 +18,7 @@ module Byebug
 
     def b
       a('a', 'b')
-      e = "%.2f"
+      e = '%.2f'
       e
     end
 
@@ -86,7 +86,7 @@ module Byebug
     def test_info_display_shows_all_display_expressions
       enter 'display 3 + 3', 'display a + b', 'info display'
       debug_proc(@example)
-      check_output_includes "Auto-display expressions now in effect:",
+      check_output_includes 'Auto-display expressions now in effect:',
                             'Num Enb Expression',
                             '1: y  3 + 3',
                             '2: y  a + b'
@@ -218,9 +218,13 @@ module Byebug
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
     end
 
+    def stub_stop_reason_before_info_program_cmd
+      context.stubs(:stop_reason).returns('blabla')
+      'info program'
+    end
+
     def test_info_program_shows_the_unknown_stop_reason
-      enter 'break 39', 'cont',
-             ->{ context.stubs(:stop_reason).returns('blabla'); 'info program' }
+      enter 'break 39', 'cont', -> { stub_stop_reason_before_info_program_cmd }
       debug_proc(@example)
       check_output_includes 'Program stopped.', 'Unknown reason: blabla'
     end

@@ -4,15 +4,16 @@ module Byebug
       @example = lambda do
         byebug
         a = 2
-        a += 1
+        a + 1
       end
 
       super
     end
 
-    [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
-     :fullpath, :post_mortem, :stack_on_error, :testing,
-     :tracing_plus].each do |set|
+    settings = %i(autoeval autolist autoreload autosave basename forcestep
+                  fullpath post_mortem stack_on_error testing tracing_plus)
+
+    settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
         define_method(:"test_enable_boolean_setting_#{set}_using_#{key}") do
           Setting[set] = false
@@ -22,7 +23,7 @@ module Byebug
         end
       end
 
-      ['off', '0', 'false'].each do |key|
+      %w(off 0 false).each do |key|
         define_method(:"test_disable_boolean_setting_#{set}_using_#{key}") do
           Setting[set] = true
           enter "set #{set} #{key}"

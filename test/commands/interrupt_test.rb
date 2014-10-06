@@ -6,7 +6,7 @@ module Byebug
     end
 
     def self.b(num)
-      v2 = 5 if 1 == num ; [1, 2, v2].map { |a| a.to_f }
+      [1, 2, 5].select { |v| v < 5 }.map(&:to_f)
       c(num)
     end
 

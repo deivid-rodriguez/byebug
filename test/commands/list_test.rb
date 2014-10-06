@@ -153,22 +153,22 @@ module Byebug
 
     def test_lists_file_changes_by_default
       enter 'list', -> do
-        change_line_in_file(__FILE__, 7, '        a = 100')
+        change_line(__FILE__, 7, '        a = 100')
         'list 7-7'
       end
       debug_proc(@example)
       check_output_includes(/7:\s+a = 100/)
-      change_line_in_file(__FILE__, 7, '        a = 7')
+      change_line(__FILE__, 7, '        a = 7')
     end
 
     def test_does_not_list_file_changes_with_autoreload_disabled
       enter 'set noautoreload', 'list', -> do
-        change_line_in_file(__FILE__, 7, '        a = 100')
+        change_line(__FILE__, 7, '        a = 100')
         'list 7-7'
       end, 'set autoreload'
       debug_proc(@example)
       check_output_doesnt_include(/7:\s+a = 100/)
-      change_line_in_file(__FILE__, 7, '        a = 7')
+      change_line(__FILE__, 7, '        a = 7')
     end
   end
 end
