@@ -41,10 +41,10 @@ module Byebug
   # Runs normal byebug initialization scripts.
   #
   # Reads and executes the commands from init file (if any) in the current
-  # working directory.  This is only done if the current directory is
-  # different from your home directory.  Thus, you can have more than one init
-  # file, one generic in your home directory, and another, specific to the
-  # program you are debugging, in the directory where you invoke byebug.
+  # working directory. This is only done if the current directory is different
+  # from your home directory. Thus, you can have more than one init file, one
+  # generic in your home directory, and another, specific to the program you
+  # are debugging, in the directory where you invoke byebug.
   #
   def self.run_init_script(out = handler.interface)
     cwd_script  = File.expand_path(File.join('.', INIT_FILE))
