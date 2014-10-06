@@ -48,17 +48,17 @@ module Byebug
   #
   def self.run_init_script(out = handler.interface)
     cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
-    run_script(cwd_rc, out, true) if File.exist?(cwd_rc)
+    run_script(cwd_rc) if File.exist?(cwd_rc)
 
     home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
-    run_script(home_rc, out, true) if File.exist?(home_rc) && cwd_rc != home_rc
+    run_script(home_rc) if File.exist?(home_rc) && cwd_rc != home_rc
   end
 
   #
   # Runs a script file
   #
-  def self.run_script(file, out = handler.interface, verbose = false)
-    interface = ScriptInterface.new(File.expand_path(file), out)
+  def self.run_script(file, verbose = false)
+    interface = ScriptInterface.new(File.expand_path(file), verbose)
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands(verbose)
   end
