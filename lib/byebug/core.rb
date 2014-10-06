@@ -47,13 +47,11 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def self.run_init_script(out = handler.interface)
-    cwd_script  = File.expand_path(File.join('.', INIT_FILE))
-    run_script(cwd_script, out, true) if File.exist?(cwd_script)
+    cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
+    run_script(cwd_rc, out, true) if File.exist?(cwd_rc)
 
-    home_script = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
-    if File.exist?(home_script) && cwd_script != home_script
-      run_script(home_script, out, true)
-    end
+    home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
+    run_script(home_rc, out, true) if File.exist?(home_rc) && cwd_rc != home_rc
   end
 
   #
