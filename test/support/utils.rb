@@ -53,6 +53,46 @@ module Byebug
     end
 
     #
+    # Runs the code block passed as a string
+    #
+    # @param string String code block to be run. This string can be labeled
+    # with line numbers to the left, like the following:
+    #
+    #   1: some_ruby_code
+    #   2:
+    #   3: some_more_ruby_code
+    #
+    # This labels are removed before evaluating the code but can be useful to
+    # make assertions on the final line number, after running the commands in
+    # the interface's input.
+    #
+    # @param &block Proc containing checks to be performed once the Processor
+    # have extracted and run all the commands in the interface's input. You can
+    # use this block to make assertions on the current test. If you specified
+    # the block and it was never executed, the test will fail.
+    #
+    # @example
+    #   debug_code("byebug; puts 'Hello'")
+    #
+    # @example
+    #   enter 'next'
+    #   code <<-EOC
+    #     byebug
+    #     puts 'hello'
+    #     puts 'byebye'
+    #   EOC
+    #
+    #   debug_proc(code) { assert_equal 4, state.line }
+    #
+    def debug_code(string, &block)
+      interface.test_block = block
+      filename = caller_locations[0].base_label
+      instance_eval(string.gsub(/  *\d+:/, ''), filename, 1)
+    ensure
+      interface.test_block.call if interface.test_block
+    end
+
+    #
     # Checks the confirm/output/error streams.
     #
     # Usage:
