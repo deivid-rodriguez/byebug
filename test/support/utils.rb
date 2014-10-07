@@ -43,13 +43,10 @@ module Byebug
     #   debug_proc(code) { assert_equal 4, state.line }
     #
     def debug_proc(program, &block)
-      Byebug.stubs(:run_init_script)
       interface.test_block = block
-      begin
-        program.call
-      ensure
-        interface.test_block.call if interface.test_block
-      end
+      program.call
+    ensure
+      interface.test_block.call if interface.test_block
     end
 
     #
