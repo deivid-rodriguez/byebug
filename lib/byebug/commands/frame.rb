@@ -99,22 +99,16 @@ module Byebug
     end
 
     def print_backtrace
-      realsize = Context.stack_size
       calcedsize = @state.context.calced_stack_size
-      if calcedsize != realsize
-        if Byebug.post_mortem?
-          stacksize = calcedsize
-        else
-          errmsg "Byebug's stacksize (#{calcedsize}) should be #{realsize}. " \
-                 "This might be a bug in byebug or ruby's debugging API's\n"
-          stacksize = realsize
-        end
-      else
-        stacksize = calcedsize
+      stacksize = Context.stack_size
+      if calcedsize != stacksize
+        errmsg "Byebug's stacksize (#{calcedsize}) should be #{stacksize}. " \
+               "This might be a bug in byebug or ruby's debugging API's\n"
+
+        stacksize = calcedsize if Byebug.post_mortem?
       end
-      (0...stacksize).each do |idx|
-        print_frame(idx)
-      end
+
+      (0...stacksize).each { |idx| print_frame(idx) }
     end
 
     require 'pathname'
