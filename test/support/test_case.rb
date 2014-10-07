@@ -17,10 +17,15 @@ module Byebug
 
       set_defaults
 
-      # Include test files as ignored files
-      list = File.expand_path('../../../{lib,test/support}/**/*.rb', __FILE__)
-      ignored_files = Dir.glob(list) + ['test/test_helper.rb']
       force_set_const(Byebug, 'IGNORED_FILES', ignored_files)
+    end
+
+    #
+    # List of files to be ignored during a test run.
+    #
+    def ignored_files
+      list = File.expand_path('../../../{lib,test/support}/**/*.rb', __FILE__)
+      Dir.glob(list) + ['test/test_helper.rb']
     end
   end
 end
