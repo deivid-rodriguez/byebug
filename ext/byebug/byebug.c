@@ -89,8 +89,8 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
 
     rb_funcall(mByebug, rb_intern("puts"), 1,
-       rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
-                  dc->calced_stack_size, dc->thnum, event, path, line, mid));
+      rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
+                 dc->calced_stack_size, dc->thnum, event, path, line, mid));
   }
 }
 
