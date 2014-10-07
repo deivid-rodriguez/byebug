@@ -67,17 +67,27 @@ check_started()
   }
 }
 
+const char *safe_sym_to_str(VALUE sym)
+{
+  VALUE id = NIL_P(sym) ? Qnil : SYM2ID(sym);
+
+  return NIL_P(id) ? "" : rb_id2name(id);
+}
+
 static void
 trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 {
   if (trace_arg)
   {
-    const char *event = rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)));
-    char *path = RSTRING_PTR(rb_tracearg_path(trace_arg));
+    const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
+
+    VALUE path_sym = rb_tracearg_path(trace_arg);
+    const char *path = NIL_P(path_sym) ? "" : RSTRING_PTR(path_sym);
+
     int line = NUM2INT(rb_tracearg_lineno(trace_arg));
-    VALUE v_mid_sym = rb_tracearg_method_id(trace_arg);
-    VALUE v_mid_id = NIL_P(v_mid_sym) ? Qnil : SYM2ID(v_mid_sym);
-    const char *mid = NIL_P(v_mid_id) ? "" : rb_id2name(v_mid_id);
+
+    const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
+
     rb_funcall(mByebug, rb_intern("puts"), 1,
        rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
                   dc->calced_stack_size, dc->thnum, event, path, line, mid));
