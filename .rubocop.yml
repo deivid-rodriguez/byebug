@@ -1,3 +1,9 @@
+# Until https://github.com/bbatsov/rubocop/issues/1151 is closed
+AllCops:
+  Exclude:
+    - tmp/**/*
+    - pkg/**/*
+
 TrivialAccessors:
   ExactNameMatch: true
 Lint/Debugger:
