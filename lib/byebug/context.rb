@@ -30,34 +30,32 @@ module Byebug
     end
 
     def frame_locals(frame_no = 0)
-      bind = frame_binding frame_no
+      bind = frame_binding(frame_no)
       eval 'local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}', bind
     end
 
     def c_frame_args(frame_no)
-      myself = frame_self frame_no
+      myself = frame_self(frame_no)
       return [] unless myself.to_s != 'main'
+
       myself.send(:method, frame_method(frame_no)).parameters
     end
 
     def ruby_frame_args(bind)
-      return [] unless eval '__method__', bind
-      begin
-        eval 'self.method(__method__).parameters', bind
-      rescue NameError => e
-        puts "WARNING: Got exception #{e.class}: \"#{e.message}\" " \
-             'while retreving parameters from frame'
-        return []
-      end
+      return [] unless bind.eval('__method__')
+
+      bind.eval('method(__method__).parameters')
+    rescue NameError => e
+      puts "WARNING: Got exception #{e.class}: \"#{e.message}\" " \
+           'while retreving parameters from frame'
+      []
     end
 
     def frame_args(frame_no = 0)
-      bind = frame_binding frame_no
-      if bind.nil?
-        c_frame_args frame_no
-      else
-        ruby_frame_args bind
-      end
+      bind = frame_binding(frame_no)
+      return c_frame_args(frame_no) unless bind
+
+      ruby_frame_args(bind)
     end
 
     def handler

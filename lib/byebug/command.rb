@@ -25,16 +25,16 @@ module Byebug
     def_delegators :@state, :errmsg, :puts, :confirm
 
     def bb_eval(str, b = get_binding)
-      eval(str, b)
+      b.eval(str)
     rescue StandardError, ScriptError => e
-      at = eval('Thread.current.backtrace_locations', b)
+      at = b.eval('Thread.current.backtrace_locations')
       puts "#{at.shift}: #{e.class} Exception(#{e.message})"
       at.each { |path| puts "\tfrom #{path}" }
       nil
     end
 
     def bb_warning_eval(str, b = get_binding)
-      eval(str, b)
+      b.eval(str)
     rescue StandardError, ScriptError => e
       puts "#{e.class} Exception: #{e.message}"
       nil

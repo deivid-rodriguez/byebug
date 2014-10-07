@@ -73,8 +73,8 @@ module Byebug
       # Set up trace hook for byebug
       Byebug.start
 
-      # load initrc script (e.g. .byebugrc)
-      Byebug.run_init_script(StringIO.new) if opts[:rc]
+      # Load initrc script (e.g. .byebugrc)
+      Byebug.run_init_script if opts[:rc]
 
       # Post Mortem mode status
       Byebug::Setting[:post_mortem] = opts[:'post-mortem']

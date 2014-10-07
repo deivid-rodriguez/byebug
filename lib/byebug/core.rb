@@ -46,7 +46,7 @@ module Byebug
   # generic in your home directory, and another, specific to the program you
   # are debugging, in the directory where you invoke byebug.
   #
-  def self.run_init_script(out = handler.interface)
+  def self.run_init_script
     cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
     run_script(cwd_rc) if File.exist?(cwd_rc)
 
