@@ -7,7 +7,6 @@ else
 end
 
 require 'minitest'
-require 'pathname'
 require 'mocha/mini_test'
 require 'byebug'
 require 'byebug/interfaces/test_interface'
