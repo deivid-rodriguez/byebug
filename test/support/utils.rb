@@ -50,42 +50,42 @@ module Byebug
     end
 
     #
-    # Runs the code block passed as a string
+    # Runs the code block passed as a string.
     #
-    # @param string String code block to be run. This string can be labeled
-    # with line numbers to the left, like the following:
+    # The string is copied to a new file and then that file is run. This is
+    # done, instead of using `instance_eval` or similar techniques, because
+    # it's useful to load a real file in order to make assertions on backtraces
+    # or file names.
     #
-    #   1: some_ruby_code
-    #   2:
-    #   3: some_more_ruby_code
+    # @param program String containing Ruby code to be run. This string could
+    # be any valid Ruby code, but in order to avoid redefinition warnings in
+    # the test suite, it should define at most one class inside the Byebug
+    # namespace. The name of this class is defined by the `example_class'
+    # method.
     #
-    # This labels are removed before evaluating the code but can be useful to
-    # make assertions on the final line number, after running the commands in
-    # the interface's input.
-    #
-    # @param &block Proc containing checks to be performed once the Processor
-    # have extracted and run all the commands in the interface's input. You can
-    # use this block to make assertions on the current test. If you specified
-    # the block and it was never executed, the test will fail.
-    #
-    # @example
-    #   debug_code("byebug; puts 'Hello'")
+    # @param &block Optional proc which will be executed when Processor
+    # extracts all the commands from the input queue. You can use that for
+    # making assertions on the current test. If you specified the block and it
+    # was never executed, the test will fail.
     #
     # @example
+    #
     #   enter 'next'
-    #   code <<-EOC
+    #   prog <<-EOC
     #     byebug
     #     puts 'hello'
     #     puts 'byebye'
     #   EOC
     #
-    #   debug_proc(code) { assert_equal 4, state.line }
+    #   debug_code(prog) { assert_equal 3, state.line }
     #
-    def debug_code(string, &block)
+    def debug_code(program, &block)
       interface.test_block = block
-      filename = caller_locations[0].base_label
-      instance_eval(string.gsub(/  *\d+:/, ''), filename, 1)
+      File.open(example_file, 'w') { |file| file.write(program) }
+      load(example_file)
     ensure
+      Byebug.send(:remove_const, example_class)
+      File.delete(example_file)
       interface.test_block.call if interface.test_block
     end
 
@@ -113,6 +113,32 @@ module Byebug
         stream = interface.send(stream_name)
         send(:check_stream, :refute_includes_in_order, stream, *args)
       end
+    end
+
+    #
+    # Strips line numbers from a here doc containing ruby code.
+    #
+    # @param str_with_ruby_code A here doc containing lines of ruby code, each
+    # one labeled with a line number
+    #
+    # @example
+    #
+    #   strip_line_numbers <<-EOF
+    #     1:  puts 'hello'
+    #     2:
+    #     3:  puts 'bye'
+    #   EOF
+    #
+    #   returns
+    #
+    #   <<-EOF
+    #   puts 'hello'
+    #
+    #   puts 'bye'
+    #   EOF
+    #
+    def strip_line_numbers(str_with_ruby_code)
+      str_with_ruby_code.gsub(/  *\d+: ? ?/, '')
     end
 
     #

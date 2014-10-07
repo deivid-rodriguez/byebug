@@ -27,5 +27,19 @@ module Byebug
       list = File.expand_path('../../../{lib,test/support}/**/*.rb', __FILE__)
       Dir.glob(list) + ['test/test_helper.rb']
     end
+
+    #
+    # Temporary file created during a test run to store a test program.
+    #
+    def example_file
+      'test/current_example.rb'
+    end
+
+    #
+    # Name of the temporary test class.
+    #
+    def example_class
+      'TestExample'
+    end
   end
 end
