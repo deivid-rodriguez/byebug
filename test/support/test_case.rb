@@ -31,8 +31,15 @@ module Byebug
     #
     # Temporary file created during a test run to store a test program.
     #
-    def example_file
+    def example_path
       'test/current_example.rb'
+    end
+
+    #
+    # Full path to example_path.
+    #
+    def example_fullpath
+      File.expand_path(example_path)
     end
 
     #

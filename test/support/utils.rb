@@ -81,11 +81,11 @@ module Byebug
     #
     def debug_code(program, &block)
       interface.test_block = block
-      File.open(example_file, 'w') { |file| file.write(program) }
-      load(example_file)
+      File.open(example_path, 'w') { |file| file.write(program) }
+      load(example_path)
     ensure
       Byebug.send(:remove_const, example_class)
-      File.delete(example_file)
+      File.delete(example_path)
       interface.test_block.call if interface.test_block
     end
 
