@@ -1,0 +1,25 @@
+version: "{build}"
+
+branches:
+  only:
+    - master
+
+build: off
+
+install:
+  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - ruby --version
+  - gem --version
+  - gem install bundler
+  - bundler --version
+  - bundle install
+
+test_script:
+  - bundle exec rake
+
+environment:
+  matrix:
+    - ruby_version: '200'
+    - ruby_version: '200-x64'
+    - ruby_version: '21'
+    - ruby_version: '21-x64'
