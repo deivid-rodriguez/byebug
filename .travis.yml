@@ -1,3 +1,7 @@
+os:
+- linux
+- osx
+
 before_script: bundle exec rake compile
 
 rvm:

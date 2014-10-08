@@ -39,7 +39,7 @@ different lines executed by your program.
 
 ## Build Status
 
-Unix [![Tra][tra]][tra_url]
+Linux & OSX [![Tra][tra]][tra_url]
 
 Windows [![Vey][vey]][vey_url]
 
