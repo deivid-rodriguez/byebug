@@ -1,20 +1,24 @@
 # Byebug
+
 [![Ver][gem]][gem_url]
-[![Bui][bui]][bui_url]
+[![Tra][tra]][tra_url]
+[![Vey][vey]][vey_url]
 [![Gpa][gpa]][gpa_url]
 [![Dep][dep]][dep_url]
 [![Cov][cov]][cov_url]
 [![Git][tip]][tip_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
-[bui]: https://img.shields.io/travis/deivid-rodriguez/byebug.svg
+[tra]: https://img.shields.io/travis/deivid-rodriguez/byebug.svg
+[vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
 [gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
 [dep]: https://img.shields.io/gemnasium/deivid-rodriguez/byebug.svg
 [cov]: https://img.shields.io/codeclimate/coverage/github/deivid-rodriguez/byebug.svg
 [tip]: https://img.shields.io/gittip/deivid-rodriguez.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
-[bui_url]: https://travis-ci.org/deivid-rodriguez/byebug
+[tra_url]: https://travis-ci.org/deivid-rodriguez/byebug
+[vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
 [gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [dep_url]: https://gemnasium.com/deivid-rodriguez/byebug
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
