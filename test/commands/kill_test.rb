@@ -16,8 +16,8 @@ module Byebug
     end
 
     def test_kill_sends_signal_to_some_pid
-      Process.expects(:kill).with('USR1', Process.pid)
-      enter 'kill USR1'
+      Process.expects(:kill).with('TERM', Process.pid)
+      enter 'kill TERM'
       debug_proc(@example)
     end
 
