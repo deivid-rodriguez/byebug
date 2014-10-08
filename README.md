@@ -43,7 +43,7 @@ that.
 different lines executed by your program.
 
 
-## Ruby Version Support
+## Requirements
 
 Byebug works only for Ruby 2.0.0 or newer. For debugging ruby 1.9.3 or older,
 use [debugger][].
