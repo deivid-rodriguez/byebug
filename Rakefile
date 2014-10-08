@@ -47,4 +47,4 @@ task :devkit do
   end
 end
 
-task default: [:clean, :compile, :test]
+task default: [:native, :test]
