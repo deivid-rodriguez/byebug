@@ -90,7 +90,7 @@ module Byebug
       myself = frame_self(frame_no)
       return [] unless myself.to_s != 'main'
 
-      myself.send(:method, frame_method(frame_no)).parameters
+      myself.method(frame_method(frame_no)).parameters
     end
 
     #
