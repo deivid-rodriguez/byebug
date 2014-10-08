@@ -52,17 +52,13 @@ Windows [![Vey][vey]][vey_url]
 
 ## Requirements
 
-Byebug works only for Ruby 2.0.0 or newer. For debugging ruby 1.9.3 or older,
-use [debugger][].
+* Required: MRI 2.0.0 or higher. For debugging ruby 1.9.3 or older, use
+[debugger][].
 
-Furthermore, Byebug uses the TracePoint API which was just first developed for
-Ruby 2.0.0. Since it was released, a lot of bugs directly impacting Byebug have
-been corrected, so for the best debugging experience, the following Ruby
-versions are recommended:
-
-* Ruby 2.0.0-p576 or higher.
-* Ruby 2.1.3 or higher.
-* Ruby 2.2.0-preview1 or higher.
+* Recommended:
+  - MRI 2.0.0-p576 or higher.
+  - MRI 2.1.3 or higher.
+  - MRI 2.2.0-preview1 or higher.
 
 
 ## Install
