@@ -1,11 +1,16 @@
+#
+# Prepend DevKit into compilation phase
+#
+if RUBY_PLATFORM =~ /mingw/
+  task compile: :devkit
+  task native: :devkit
+end
+
 require 'rake/extensiontask'
 
 spec = Gem::Specification.load('byebug.gemspec')
-
 Rake::ExtensionTask.new('byebug', spec) do |ext|
   ext.lib_dir = 'lib/byebug'
-  ext.cross_compile = true if RUBY_PLATFORM !~ /mswin|mingw/
-  ext.cross_platform = 'x86-mingw32'
 end
 
 require 'rake/testtask'
@@ -28,14 +33,6 @@ task :test do
     t.warning = true
     t.pattern = 'test/**/*_test.rb'
   end
-end
-
-#
-# Prepend DevKit into compilation phase
-#
-if RUBY_PLATFORM =~ /mingw/
-  task compile: [:devkit]
-  task native: [:devkit]
 end
 
 desc 'Activates DevKit'

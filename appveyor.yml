@@ -4,8 +4,6 @@ branches:
   only:
     - master
 
-build: off
-
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
@@ -14,8 +12,11 @@ install:
   - bundler --version
   - bundle install
 
+build_script:
+  - bundle exec rake native
+
 test_script:
-  - bundle exec rake
+  - bundle exec rake test
 
 environment:
   matrix:
