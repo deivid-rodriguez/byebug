@@ -5,7 +5,7 @@ module Byebug
         byebug
         b = 5
         c = b + 5
-        c = Object.new
+        c + 3
       end
 
       super
@@ -24,15 +24,17 @@ module Byebug
     end
 
     def test_setting_condition_w_wrong_syntax_does_not_enable_breakpoint
-      enter 'break 7', -> { "disable #{Breakpoint.first.id}" },
-                       -> { "cond #{Breakpoint.first.id} b ==" }
+      enter 'break 7',
+            -> { "disable #{Breakpoint.first.id}" },
+            -> { "cond #{Breakpoint.first.id} b ==" }
 
       debug_proc(@example) { assert_equal false, Breakpoint.first.enabled? }
     end
 
     def test_setting_condition_w_wrong_syntax_shows_error
-      enter 'break 7', -> { "disable #{Breakpoint.first.id}" },
-                       -> { "cond #{Breakpoint.first.id} b ==" }
+      enter 'break 7',
+            -> { "disable #{Breakpoint.first.id}" },
+            -> { "cond #{Breakpoint.first.id} b ==" }
 
       debug_proc(@example)
       check_error_includes \

@@ -4,8 +4,8 @@ module Byebug
       @example = lambda do
         d = 0
         byebug
-        d = d + 3
-        d = d + 6
+        d += 3
+        d + 6
       end
 
       super

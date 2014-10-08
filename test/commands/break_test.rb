@@ -150,7 +150,7 @@ module Byebug
     end
 
     def test_disabling_breakpoints_with_short_syntax_properly_ignores_them
-      enter 'b 19', 'b 20', -> { "disable #{Breakpoint.first.id}" } , 'cont'
+      enter 'b 19', 'b 20', -> { "disable #{Breakpoint.first.id}" }, 'cont'
 
       debug_proc(@example) { assert_equal 20, state.line }
     end
@@ -172,8 +172,8 @@ module Byebug
       enter 'break 19', 'break 20', 'disable breakpoints'
 
       debug_proc(@example) do
-         assert_equal false, Breakpoint.first.enabled?
-         assert_equal false, Breakpoint.last.enabled?
+        assert_equal false, Breakpoint.first.enabled?
+        assert_equal false, Breakpoint.last.enabled?
       end
     end
 
@@ -225,8 +225,8 @@ module Byebug
       enter 'break 19', 'break 20', 'disable breakpoints', 'enable breakpoints'
 
       debug_proc(@example) do
-         assert_equal true, Breakpoint.first.enabled?
-         assert_equal true, Breakpoint.last.enabled?
+        assert_equal true, Breakpoint.first.enabled?
+        assert_equal true, Breakpoint.last.enabled?
       end
     end
 
@@ -310,7 +310,7 @@ module Byebug
     def test_setting_breakpoint_to_nonexistent_line_shows_an_error
       enter 'break 1000'
       debug_proc(@example)
-      n = %x{wc -l #{__FILE__}}.split.first.to_i
+      n = `wc -l #{__FILE__}`.split.first.to_i
       check_error_includes "There are only #{n} lines in file #{@filename}"
     end
 
@@ -343,22 +343,20 @@ module Byebug
   end
 
   def test_setting_breakpoint_with_autoreload_uses_new_source
-    enter 'set autoreload', -> do
-      change_line(__FILE__, 19, '')
-      'break 19'
-    end
+    enter 'set autoreload',
+          -> { cmd_after_replace(__FILE__, 19, '', 'break 19') }
 
     debug_proc(@example) { assert_empty Byebug.breakpoints }
-    change_line(__FILE__,19, '        BreakExample.new.b')
+  ensure
+    change_line(__FILE__, 19, '        BreakExample.new.b')
   end
 
   def test_setting_breakpoint_with_noautoreload_uses_old_source
-    enter 'set noautoreload', -> do
-      change_line(__FILE__, 19, '')
-      'break 19'
-    end
+    enter 'set noautoreload',
+          -> { cmd_after_replace(__FILE__, 19, '', 'break 19') }
 
     debug_proc(@example) { assert_equal 1, Byebug.breakpoints.size }
-    change_line(__FILE__,19, '        BreakExample.new.b')
+  ensure
+    change_line(__FILE__, 19, '        BreakExample.new.b')
   end
 end

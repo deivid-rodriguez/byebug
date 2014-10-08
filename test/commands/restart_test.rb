@@ -20,7 +20,7 @@ module Byebug
 
     def must_restart(cmd = nil)
       expectation = RestartCommand.any_instance.expects(:exec)
-      expectation = expectation.with(cmd) if cmd
+      expectation.with(cmd) if cmd
     end
 
     def test_restarts_with_manual_arguments
@@ -40,7 +40,7 @@ module Byebug
       check_output_includes 'Byebug was not called from the outset...'
       check_output_includes \
         "Program #{Byebug.debugged_program} not executable... " \
-        "Wrapping it in a ruby call"
+        'Wrapping it in a ruby call'
     end
   end
 end

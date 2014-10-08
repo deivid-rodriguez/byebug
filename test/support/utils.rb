@@ -184,5 +184,18 @@ module Byebug
                                .join("\n") + "\n"
       File.open(file, 'w') { |f| f.write(new_content) }
     end
+
+    #
+    # Replaces line number <lineno> in file <file> with content <content>
+    #
+    # @param lineno Line number of line to be replaced.
+    # @param file File containing the line to be replaced.
+    # @param content New content for the line.
+    # @param cmd Command to be run right after changing the line.
+    #
+    def cmd_after_replace(file, lineno, content, cmd)
+      change_line(file, lineno, content)
+      cmd
+    end
   end
 end

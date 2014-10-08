@@ -3,27 +3,27 @@ module Byebug
     def setup
       @example = lambda do
         byebug
-        a = 6
-        a = 7
-        a = 8
-        a = 9
-        a = 10
-        a = 11
-        a = 12
-        a = 13
-        a = 14
-        a = 15
-        a = 16
-        a = 17
-        a = 18
-        a = 19
-        a = 20
-        a = 21
-        a = 22
-        a = 23
-        a = 24
-        a = 25
-        a = '%26'
+        a = '6'
+        a += '7'
+        a += '8'
+        a += '9'
+        a += '10'
+        a += '11'
+        a += '12'
+        a += '13'
+        a += '14'
+        a += '15'
+        a += '16'
+        a += '17'
+        a += '18'
+        a += '19'
+        a += '20'
+        a += '21'
+        a += '22'
+        a += '23'
+        a += '24'
+        a += '25'
+        a + '%26'
       end
 
       super
@@ -50,15 +50,15 @@ module Byebug
     end
 
     def test_does_not_list_after_the_end_of_file
-      n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
-      enter 'break 18', 'cont', "list #{n_lines-3}-#{n_lines+6}"
+      n_lines = `wc -l #{__FILE__}`.split.first.to_i
+      enter 'break 18', 'cont', "list #{n_lines - 3}-#{n_lines + 6}"
       debug_proc(@example)
-      check_output_includes "[#{n_lines-3}, #{n_lines}] in #{__FILE__}"
+      check_output_includes "[#{n_lines - 3}, #{n_lines}] in #{__FILE__}"
     end
 
     def test_lists_the_whole_file_if_number_of_lines_is_smaller_than_listsize
       Setting[:listsize] = 1000
-      n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
+      n_lines = `wc -l #{__FILE__}`.split.first.to_i
       enter 'list'
       debug_proc(@example)
       check_output_includes "[1, #{n_lines}] in #{__FILE__}"
@@ -89,10 +89,10 @@ module Byebug
     end
 
     def test_lists_backwards_from_end_of_file
-      n_lines = %x{wc -l #{__FILE__}}.split.first.to_i
-      enter 'break 18', 'cont', "list #{n_lines-9}-#{n_lines}", 'list -'
+      n_lines = `wc -l #{__FILE__}`.split.first.to_i
+      enter 'break 18', 'cont', "list #{n_lines - 9}-#{n_lines}", 'list -'
       debug_proc(@example)
-      check_output_includes "[#{n_lines-19}, #{n_lines-10}] in #{__FILE__}"
+      check_output_includes "[#{n_lines - 19}, #{n_lines - 10}] in #{__FILE__}"
     end
 
     def test_lists_surrounding_lines_when_list_equals_is_called
@@ -148,27 +148,29 @@ module Byebug
     def test_correctly_print_lines_containing_the_percentage_symbol
       enter 'list 26'
       debug_proc(@example)
-      check_output_includes "26:         a = '%26'"
+      check_output_includes "26:         a + '%26'"
     end
 
     def test_lists_file_changes_by_default
-      enter 'list', -> do
-        change_line(__FILE__, 7, '        a = 100')
-        'list 7-7'
-      end
+      enter \
+        -> { cmd_after_replace(__FILE__, 7, "        a += '-1'", 'list 7-7') }
+
       debug_proc(@example)
-      check_output_includes(/7:\s+a = 100/)
-      change_line(__FILE__, 7, '        a = 7')
+      check_output_includes(/7:\s+a \+= '-1'/)
+    ensure
+      change_line(__FILE__, 7, "        a += '7'")
     end
 
     def test_does_not_list_file_changes_with_autoreload_disabled
-      enter 'set noautoreload', 'list', -> do
-        change_line(__FILE__, 7, '        a = 100')
-        'list 7-7'
-      end, 'set autoreload'
+      enter \
+        'set noautoreload', 'list', # to force a first read of the file
+        -> { cmd_after_replace(__FILE__, 7, "        a += '-1'", 'list 7-7') },
+        'set autoreload'
+
       debug_proc(@example)
-      check_output_doesnt_include(/7:\s+a = 100/)
-      change_line(__FILE__, 7, '        a = 7')
+      check_output_doesnt_include(/7:\s+a \+= '-1'/)
+    ensure
+      change_line(__FILE__, 7, "        a += '7'")
     end
   end
 end

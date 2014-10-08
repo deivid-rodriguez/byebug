@@ -4,7 +4,7 @@ module Byebug
       @example = lambda do
         byebug
         a = 2
-        a = 3
+        a + 3
       end
 
       File.open('source_example.txt', 'w') do |f|

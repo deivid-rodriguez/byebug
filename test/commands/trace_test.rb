@@ -18,8 +18,8 @@ module Byebug
       enter 'set linetrace', 'cont 10', 'set nolinetrace'
       debug_proc(@example)
       check_output_includes 'linetrace is on',
-        "Tracing: #{__FILE__}:8         initial &&= true",
-        "Tracing: #{__FILE__}:9         $VERBOSE = false"
+                            "Tracing: #{__FILE__}:8         initial &&= true",
+                            "Tracing: #{__FILE__}:9         $VERBOSE = false"
     end
 
     def test_basename_setting_affects_tracing_output

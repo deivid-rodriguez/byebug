@@ -23,7 +23,7 @@ module Byebug
     end
 
     def d
-      raise 'bang'
+      fail 'bang'
     rescue
     end
   end

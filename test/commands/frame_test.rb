@@ -91,11 +91,11 @@ module Byebug
       full_example = File.expand_path(example_path)
       check_output_includes(
         /--> #0  .*integerize\(str#String\)\s* at #{full_example}:16/,
-            /#1  .*encode\(str#String\)\s* at #{full_example}:11/,
-            /#2  .*initialize\(letter#String\)\s* at #{full_example}:7/,
-            /ͱ-- #3  Class\.new\(\*args\)\s* at #{full_example}:20/,
-            /#4  <module:Byebug>\s* at #{full_example}:20/,
-            /#5  <top \(required\)>\s* at #{full_example}:1/)
+        /#1  .*encode\(str#String\)\s* at #{full_example}:11/,
+        /#2  .*initialize\(letter#String\)\s* at #{full_example}:7/,
+        /ͱ-- #3  Class\.new\(\*args\)\s* at #{full_example}:20/,
+        /#4  <module:Byebug>\s* at #{full_example}:20/,
+        /#5  <top \(required\)>\s* at #{full_example}:1/)
     end
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled

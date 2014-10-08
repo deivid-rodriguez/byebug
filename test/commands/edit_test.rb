@@ -21,7 +21,7 @@ module Byebug
       debug_proc(@example)
     end
 
-    def test_edit_calls_vim_if_no_EDITOR_environment_variable_is_set
+    def test_edit_calls_vim_if_no_editor_environment_variable_is_set
       ENV['EDITOR'] = nil
       file = __FILE__
       EditCommand.any_instance.expects(:system).with("vim +6 #{file}")

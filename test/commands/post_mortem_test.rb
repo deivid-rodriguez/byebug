@@ -1,10 +1,7 @@
 module Byebug
   class PostMortemExample
     def a
-      z = 4
-      raise 'blabla'
-      x = 6
-      x + z
+      fail 'blabla'
     end
   end
 
@@ -40,7 +37,7 @@ module Byebug
       begin
         debug_proc(@example)
       rescue
-        assert_equal 5, Byebug.raised_exception.__bb_line
+        assert_equal 4, Byebug.raised_exception.__bb_line
       end
     end
 
@@ -62,7 +59,7 @@ module Byebug
      'thread list'].each do |cmd|
       define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do
         enter 'set post_mortem', "#{cmd}", 'set no_postmortem'
-        class_name = cmd.gsub(/(^| )\w/) { |b| b[-1,1].upcase } + 'Command'
+        class_name = cmd.gsub(/(^| )\w/) { |b| b[-1, 1].upcase } + 'Command'
 
         Byebug.const_get(class_name).any_instance.stubs(:execute)
         assert_raises(RuntimeError) { debug_proc(@example) }

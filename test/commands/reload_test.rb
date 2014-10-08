@@ -31,15 +31,11 @@ module Byebug
         'Source code was reloaded. Automatic reloading is off'
     end
 
-    def reload_after_change(file, line, content)
-      change_line(file, line, content)
-      'reload'
-    end
-
     def test_reload_properly_reloads_source_code
-      enter 'l 10-10',
-            -> { reload_after_change(__FILE__, 10, '        a += 100') },
-            'l 10-10'
+      enter \
+        'l 10-10',
+        -> { cmd_after_replace(__FILE__, 10, '        a += 100', 'reload') },
+        'l 10-10'
       debug_proc(@example)
       check_output_includes '10:         a += 100'
     ensure
