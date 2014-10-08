@@ -21,7 +21,18 @@ module Rake
   end
 end
 
-# prepend DevKit into compilation phase
+desc 'Run the test suite'
+task :test do
+  Rake::TestTask.new do |t|
+    t.verbose = true
+    t.warning = true
+    t.pattern = 'test/**/*_test.rb'
+  end
+end
+
+#
+# Prepend DevKit into compilation phase
+#
 if RUBY_PLATFORM =~ /mingw/
   task compile: :devkit
   task native: :devkit
@@ -33,15 +44,6 @@ task :devkit do
     require 'devkit'
   rescue LoadError
     abort "Failed to activate RubyInstaller's DevKit required for compilation."
-  end
-end
-
-desc 'Run the test suite'
-task :test do
-  Rake::TestTask.new do |t|
-    t.verbose = true
-    t.warning = true
-    t.pattern = 'test/**/*_test.rb'
   end
 end
 
