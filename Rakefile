@@ -1,10 +1,14 @@
-require 'rake/testtask'
 require 'rake/extensiontask'
-require 'bundler/gem_tasks'
 
-Rake::ExtensionTask.new('byebug') do |ext|
+spec = Gem::Specification.load('byebug.gemspec')
+
+Rake::ExtensionTask.new('byebug', spec) do |ext|
   ext.lib_dir = 'lib/byebug'
+  ext.cross_compile = true if RUBY_PLATFORM !~ /mswin|mingw/
+  ext.cross_platform = 'x86-mingw32'
 end
+
+require 'rake/testtask'
 
 module Rake
   #
@@ -19,15 +23,15 @@ end
 
 # prepend DevKit into compilation phase
 if RUBY_PLATFORM =~ /mingw/
- task compile: :devkit
- task native: :devkit
+  task compile: :devkit
+  task native: :devkit
 end
 
 desc 'Activates DevKit'
 task :devkit do
   begin
     require 'devkit'
-  rescue LoadError => e
+  rescue LoadError
     abort "Failed to activate RubyInstaller's DevKit required for compilation."
   end
 end

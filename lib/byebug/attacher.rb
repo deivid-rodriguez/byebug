@@ -1,3 +1,6 @@
+#
+# Main Container for all of Byebug's code
+#
 module Byebug
   #
   # Enters byebug right before (or right after if _before_ is false) return

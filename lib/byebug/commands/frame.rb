@@ -62,7 +62,7 @@ module Byebug
     end
 
     def get_frame_args(style, pos)
-      args = @state.context.frame_args pos
+      args = @state.context.frame_args(pos)
       return '' if args.empty?
 
       locals = @state.context.frame_locals pos if style == 'long'

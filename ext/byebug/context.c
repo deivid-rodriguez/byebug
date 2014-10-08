@@ -240,7 +240,7 @@ Context_frame_file(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_line(frame_position) -> int
+ *    context.frame_line(frame_position = 0) -> int
  *
  *  Returns the line number in the file.
  */
@@ -258,7 +258,7 @@ Context_frame_line(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_method(frame_position=0) -> sym
+ *    context.frame_method(frame_position = 0) -> sym
  *
  *  Returns the sym of the called method.
  */
@@ -276,7 +276,7 @@ Context_frame_method(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_self(frame_postion=0) -> obj
+ *    context.frame_self(frame_postion = 0) -> obj
  *
  *  Returns self object of the frame.
  */
