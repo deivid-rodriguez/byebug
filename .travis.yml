@@ -2,6 +2,8 @@ os:
 - linux
 - osx
 
+language: ruby
+
 before_script: bundle exec rake compile
 
 rvm:
