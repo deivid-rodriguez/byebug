@@ -18,16 +18,15 @@ module Byebug
         line = @state.line if @state.line
       elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1]))
         file, line = @pos_match.captures
-      elsif File.exist?(@match[1])
-        file = @match[1]
       else
-        return errmsg "Invalid file[:line] number specification: #{@match[1]}"
+        file = @match[1]
       end
 
       editor = ENV['EDITOR'] || 'vim'
+      file = File.expand_path(file)
 
-      return \
-        errmsg("File \"#{file}\" is not readable.") unless File.readable?(file)
+      return errmsg("File #{file} does not exist.") unless File.exist?(file)
+      return errmsg("File #{file} not readable.") unless File.readable?(file)
 
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 

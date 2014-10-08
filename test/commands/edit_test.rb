@@ -31,22 +31,29 @@ module Byebug
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
       ENV['EDITOR'] = 'edi'
-      file = File.expand_path('test/test_helper.rb')
+      file = File.expand_path('README.md')
       EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
-      enter "edit #{file}:3"
+      enter "edit README.md:3"
       debug_proc(@example)
     end
 
-    def test_edit_shows_an_error_if_file_specified_does_not_exists
+    def test_edit_shows_an_error_if_specified_file_does_not_exist
+      file = File.expand_path('no_such_file')
       enter 'edit no_such_file:6'
       debug_proc(@example)
-      check_error_includes 'File "no_such_file" is not readable.'
+      check_error_includes "File #{file} does not exist."
     end
 
-    def test_edit_shows_an_error_if_incorrect_syntax_is_used
-      enter 'edit blabla'
+    def test_edit_shows_an_error_if_the_specified_file_is_not_readable
+      skip('for now')
+    end
+
+    def test_edit_accepts_no_line_specification
+      ENV['EDITOR'] = 'edi'
+      file = File.expand_path('README.md')
+      EditCommand.any_instance.expects(:system).with("edi #{file}")
+      enter 'edit README.md'
       debug_proc(@example)
-      check_error_includes 'Invalid file[:line] number specification: blabla'
     end
   end
 end
