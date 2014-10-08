@@ -34,8 +34,8 @@ end
 # Prepend DevKit into compilation phase
 #
 if RUBY_PLATFORM =~ /mingw/
-  task compile: :devkit
-  task native: :devkit
+  task compile: [:devkit]
+  task native: [:devkit]
 end
 
 desc 'Activates DevKit'
