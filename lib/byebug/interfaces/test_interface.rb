@@ -24,7 +24,7 @@ module Byebug
     end
 
     def puts(message)
-      output.push(message)
+      output.push(message.to_s)
     end
 
     def inspect
