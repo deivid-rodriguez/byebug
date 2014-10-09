@@ -65,11 +65,5 @@ module Byebug
       debug_proc(@example)
       check_error_includes "'$FOO' is not a global variable."
     end
-
-    def test_tracevar_shows_an_error_message_if_subcommand_is_invalid
-      enter 'tracevar $VERBOSE foo'
-      debug_proc(@example)
-      check_error_includes "expecting 'stop' or 'nostop'; got 'foo'"
-    end
   end
 end

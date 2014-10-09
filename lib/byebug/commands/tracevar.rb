@@ -7,7 +7,7 @@ module Byebug
 
     def regexp
       /^\s* tr(?:acevar)? (?: \s+ (\S+))?  # (variable-name)?
-                          (?: \s+ (\S+))?  # (stop | nostop)?
+                          (?: \s+ (stop|nostop))?
        \s*$/x
     end
 
@@ -17,10 +17,6 @@ module Byebug
 
       unless global_variables.include?(:"#{var}")
         return errmsg("'#{var}' is not a global variable.")
-      end
-
-      if @match[2] && @match[2] !~ /(:?no)?stop/
-        return errmsg("expecting 'stop' or 'nostop'; got '#{@match[2]}'")
       end
 
       stop = @match[2] && @match[2] !~ /nostop/
