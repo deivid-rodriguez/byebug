@@ -15,7 +15,7 @@ module Byebug
       var = @match[1]
       if global_variables.include?(:"#{var}")
         if @match[2] && @match[2] !~ /(:?no)?stop/
-          errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""
+          return errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""
         else
           dbg_cmd = if @match[2] && @match[2] !~ /nostop/
                       'byebug(1, false)'
