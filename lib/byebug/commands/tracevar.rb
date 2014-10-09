@@ -15,24 +15,21 @@ module Byebug
       var = @match[1]
       return errmsg('tracevar needs a global variable name') unless var
 
-      if global_variables.include?(:"#{var}")
-        if @match[2] && @match[2] !~ /(:?no)?stop/
-          return errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""
-        else
-          dbg_cmd = if @match[2] && @match[2] !~ /nostop/
-                      'byebug(1, false)'
-                    else
-                      ''
-                    end
-        end
-        eval("trace_var(:\"#{var}\") do |val|
-                puts \"traced global variable '#{var}' has value '\#{val}'\"
-                #{dbg_cmd}
-              end")
-        puts "Tracing global variable \"#{var}\"."
-      else
-        errmsg "'#{var}' is not a global variable."
+      unless global_variables.include?(:"#{var}")
+        return errmsg("'#{var}' is not a global variable.")
       end
+
+      if @match[2] && @match[2] !~ /(:?no)?stop/
+        return errmsg("expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\"")
+      end
+
+      dbg_cmd = @match[2] && @match[2] !~ /nostop/ ? 'byebug(1, false)' : ''
+
+      eval("trace_var(:\"#{var}\") do |val|
+              puts \"traced global variable '#{var}' has value '\#{val}'\"
+              #{dbg_cmd}
+            end")
+      puts "Tracing global variable \"#{var}\"."
     end
 
     class << self
