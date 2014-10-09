@@ -23,13 +23,18 @@ module Byebug
         return errmsg("expecting 'stop' or 'nostop'; got '#{@match[2]}'")
       end
 
-      dbg_cmd = @match[2] && @match[2] !~ /nostop/ ? 'byebug(1, false)' : ''
+      stop = @match[2] && @match[2] !~ /nostop/
 
-      eval("trace_var(:\"#{var}\") do |val|
-              puts \"traced global variable '#{var}' has value '\#{val}'\"
-              #{dbg_cmd}
-            end")
+      instance_eval do
+        trace_var(:"#{var}") { |val| on_change(var, val, stop) }
+      end
+
       puts "Tracing global variable \"#{var}\"."
+    end
+
+    def on_change(name, value, stop)
+      puts "traced global variable '#{name}' has value '#{value}'"
+      byebug(1, false) if stop
     end
 
     class << self
