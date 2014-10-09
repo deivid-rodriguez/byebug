@@ -33,7 +33,7 @@ module Byebug
       ENV['EDITOR'] = 'edi'
       file = File.expand_path('README.md')
       EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
-      enter "edit README.md:3"
+      enter 'edit README.md:3'
       debug_proc(@example)
     end
 
