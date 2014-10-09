@@ -38,9 +38,9 @@ module Byebug
 
       if line =~ /^\d+$/
         path = File.expand_path(file)
-        file = CommandProcessor.canonic_file(file)
         return errmsg("No file named #{file}") unless File.exist?(path)
 
+        file = CommandProcessor.canonic_file(path)
         l, n = line.to_i, File.foreach(path).count
         return errmsg("There are only #{n} lines in file #{file}") if l > n
 
