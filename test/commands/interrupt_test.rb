@@ -1,45 +1,30 @@
 module Byebug
-  class InterruptExample
-    def self.a(num)
-      num += 2
-      b(num)
-    end
-
-    def self.b(num)
-      [1, 2, 5].select { |v| v < 5 }.map(&:to_f)
-      c(num)
-    end
-
-    def self.c(num)
-      num += 4
-      num
-    end
-  end
-
+  #
+  # Tests interrupt command.
+  #
   class InterruptTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        ex = InterruptExample.a(7)
-        2.times do
-          ex += 1
-        end
-        InterruptExample.b(ex)
-      end
-
-      super
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    byebug
+         3:
+         4:    ex = 0
+         5:
+         6:    1.times do
+         7:      ex += 1
+         8:    end
+         9:  end
+      EOC
     end
 
     def test_interrupt_stops_at_the_next_statement
       enter 'interrupt', 'continue'
-      debug_proc(@example) do
-        assert_equal [__FILE__, 4], [state.file, state.line]
-      end
+      debug_code(program) { assert_equal 6, state.line }
     end
 
     def test_interrupt_steps_into_blocks
-      enter 'break 24', 'cont', 'interrupt', 'cont'
-      debug_proc(@example) { assert_equal 25, state.line }
+      enter 'next', 'interrupt', 'continue'
+      debug_code(program) { assert_equal 7, state.line }
     end
   end
 end
