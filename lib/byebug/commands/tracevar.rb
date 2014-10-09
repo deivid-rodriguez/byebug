@@ -13,6 +13,8 @@ module Byebug
 
     def execute
       var = @match[1]
+      return errmsg('tracevar needs a global variable name') unless var
+
       if global_variables.include?(:"#{var}")
         if @match[2] && @match[2] !~ /(:?no)?stop/
           return errmsg "expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\""

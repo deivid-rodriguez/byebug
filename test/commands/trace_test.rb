@@ -54,6 +54,12 @@ module Byebug
       debug_proc(@example) { assert_equal 10, state.line }
     end
 
+    def test_tracevar_shows_an_error_message_if_no_global_variable_is_specified
+      enter 'tracevar'
+      debug_proc(@example)
+      check_error_includes('tracevar needs a global variable name')
+    end
+
     def test_tracevar_shows_an_error_message_if_there_is_no_such_global_var
       enter 'tracevar $FOO'
       debug_proc(@example)
