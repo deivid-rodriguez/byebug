@@ -20,7 +20,7 @@ module Byebug
       end
 
       if @match[2] && @match[2] !~ /(:?no)?stop/
-        return errmsg("expecting \"stop\" or \"nostop\"; got \"#{@match[2]}\"")
+        return errmsg("expecting 'stop' or 'nostop'; got '#{@match[2]}'")
       end
 
       dbg_cmd = @match[2] && @match[2] !~ /nostop/ ? 'byebug(1, false)' : ''
