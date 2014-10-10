@@ -180,11 +180,9 @@ module Byebug
     # @param new_line_content New line content
     #
     def change_line(file, line, new_line_content)
-      old_content = File.read(file)
-      new_content = old_content.split("\n")
-                               .tap { |c| c[line - 1] = new_line_content }
-                               .join("\n") + "\n"
-      File.open(file, 'w') { |f| f.write(new_content) }
+      content = File.read(file).split("\n")
+      content[line - 1] = new_line_content
+      File.open(file, 'w') { |f| f.write(content.join("\n") + "\n") }
     end
 
     #
