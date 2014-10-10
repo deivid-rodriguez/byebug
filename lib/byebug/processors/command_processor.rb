@@ -260,7 +260,7 @@ module Byebug
       end
 
       extend Forwardable
-      def_delegators :@interface, :errmsg, :puts, :confirm
+      def_delegators :@interface, :errmsg, :puts, :print, :confirm
 
       def proceed?
         @proceed

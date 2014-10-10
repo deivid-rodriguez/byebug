@@ -4,11 +4,7 @@ module Byebug
   #
   module ThreadFunctions
     def display_context(context, should_show_top_frame = true)
-      args = thread_arguments(context, should_show_top_frame)
-      interp = format("%s%s%d %s\t%s",
-                      args[:status_flag], args[:debug_flag], args[:id],
-                      args[:thread], args[:file_line])
-      puts interp
+      puts pr("thread.context", thread_arguments(context, should_show_top_frame))
     end
 
     def thread_arguments(context, should_show_top_frame = true)
@@ -41,7 +37,9 @@ module Byebug
     end
 
     def parse_thread_num(subcmd, arg)
-      return errmsg("\"#{subcmd}\" needs a thread number") if '' == arg
+      if '' == arg
+        return errmsg(pr("thread.errors.no_number", subcmd: subcmd))
+      end
 
       thread_num, err = get_int(arg, subcmd, 1)
       return errmsg(err) unless thread_num
@@ -55,11 +53,11 @@ module Byebug
 
       case
       when nil == c
-        errmsg 'No such thread'
+        errmsg pr("thread.errors.no_thread")
       when @state.context == c
-        errmsg "It's the current thread"
+        errmsg pr("thread.errors.current_thread")
       when c.ignored?
-        errmsg "Can't #{subcmd} thread #{arg}"
+        errmsg pr("thread.errors.wrong_action", subcmd: subcmd, arg: arg)
       else
         c
       end
@@ -77,8 +75,10 @@ module Byebug
     end
 
     def execute
-      Byebug.contexts.select { |c| Thread.list.include?(c.thread) }
-                     .sort_by(&:thnum).each { |c| display_context(c) }
+      contexts = Byebug.contexts.select do |c|
+        Thread.list.include?(c.thread)
+      end.sort_by(&:thnum)
+      print prc("thread.context", contexts) { |context, _| thread_arguments(context) }
     end
 
     class << self
@@ -159,7 +159,7 @@ module Byebug
     def execute
       c = parse_thread_num_for_cmd('thread resume', @match[1])
       return unless c
-      return errmsg('Already running') unless c.suspended?
+      return errmsg pr("thread.errors.already_running") unless c.suspended?
       c.resume
       display_context(c)
     end

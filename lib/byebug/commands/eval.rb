@@ -30,11 +30,12 @@ module Byebug
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        if Setting[:stack_on_error]
-          puts "#{bb_eval(expr, b).inspect}"
+        result = if Setting[:stack_on_error]
+          bb_eval(expr, b)
         else
-          puts "#{bb_warning_eval(expr, b).inspect}"
+          bb_warning_eval(expr, b)
         end
+        print pr("eval.result", expr: expr, result: result.inspect)
       end
     rescue
       puts "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}"

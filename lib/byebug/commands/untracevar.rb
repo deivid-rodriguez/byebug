@@ -13,9 +13,9 @@ module Byebug
       var = @match[1]
       if global_variables.include?(:"#{var}")
         eval("untrace_var(:\"#{var}\")")
-        puts "Not tracing global variable \"#{var}\" anymore."
+        puts pr("trace.messages.undo", var: var)
       else
-        errmsg "'#{var}' is not a global variable."
+        errmsg pr("trace.errors.not_global", var: var)
       end
     end
 

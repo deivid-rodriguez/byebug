@@ -10,7 +10,7 @@ module Byebug
     end
 
     def execute
-      return unless @match[1] || confirm('Really quit? (y/n) ')
+      return unless @match[1] || confirm(pr("quit.confirmations.really"))
 
       @state.interface.close
       exit! # exit -> exit!: No graceful way to stop...

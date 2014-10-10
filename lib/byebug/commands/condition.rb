@@ -15,17 +15,17 @@ module Byebug
       return puts(ConditionCommand.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by(&:id)
-      return errmsg('No breakpoints have been set') unless breakpoints.any?
+      return errmsg(pr("conditions.errors.no_breakpoints")) unless breakpoints.any?
 
       pos, err = get_int(@match[1], 'Condition', 1)
       return errmsg(err) if err
 
       breakpoint = breakpoints.find { |b| b.id == pos }
-      return errmsg('Invalid breakpoint id. Use "info breakpoint" to find ' \
-                    'out the correct id') unless breakpoint
+      return errmsg(pr("breakpoints.errors.no_breakpoint")) unless breakpoint
 
-      return errmsg("Incorrect expression \"#{@match[2]}\", " \
-                    'breakpoint not changed') unless syntax_valid?(@match[2])
+      unless syntax_valid?(@match[2])
+        return errmsg(pr("breakpoints.errors.not_changed", expr: @match[2]))
+      end
 
       breakpoint.expr = @match[2]
     end

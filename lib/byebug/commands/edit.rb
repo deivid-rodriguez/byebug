@@ -12,7 +12,7 @@ module Byebug
     def execute
       if !@match[1]
         unless @state.file
-          return errmsg 'We are not in a state that has an associated file.'
+          return errmsg(pr("edit.errors.state"))
         end
         file = @state.file
         line = @state.line if @state.line
@@ -25,8 +25,8 @@ module Byebug
       editor = ENV['EDITOR'] || 'vim'
       file = File.expand_path(file)
 
-      return errmsg("File #{file} does not exist.") unless File.exist?(file)
-      return errmsg("File #{file} not readable.") unless File.readable?(file)
+      return errmsg(pr("edit.errors.not_exist", file: file)) unless File.exist?(file)
+      return errmsg(pr("edit.errors.not_readable", file: file)) unless File.readable?(file)
 
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 

@@ -15,7 +15,7 @@ module Byebug
       return puts(self.class.help) if self.class.names.include?(@match[0])
 
       file = File.expand_path(@match[1]).strip
-      return errmsg("File \"#{file}\" not found") unless File.exist?(file)
+      return errmsg(pr("source.errors.not_found", file: file)) unless File.exist?(file)
 
       if @state && @state.interface
         @state.interface.command_queue += File.open(file).readlines

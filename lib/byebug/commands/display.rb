@@ -4,7 +4,7 @@ module Byebug
   #
   module DisplayFunctions
     def display_expression(exp)
-      "#{exp} = #{bb_warning_eval(exp).inspect}"
+      print pr("display.result", n: @state.display.size, exp: exp, result: bb_warning_eval(exp).inspect)
     end
 
     def active_display_expressions?
@@ -12,11 +12,11 @@ module Byebug
     end
 
     def print_display_expressions
-      n = 1
-      @state.display.each do |d|
-        puts "#{n}: #{display_expression(d[1])}" if d[0]
-        n += 1
+      result = prc("display.result", @state.display) do |item, index|
+        is_active, expression = item
+        {n: index + 1, exp: expression, result: bb_warning_eval(expression).inspect} if is_active
       end
+      print result
     end
   end
 
@@ -34,7 +34,7 @@ module Byebug
     def execute
       exp = @match[1]
       @state.display.push [true, exp]
-      puts "#{@state.display.size}: #{display_expression(exp)}"
+      display_expression(exp)
     end
 
     class << self

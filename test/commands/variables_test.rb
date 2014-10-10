@@ -44,7 +44,7 @@ module Byebug
       define_method(:"test_#{cmd_alias}_shows_constants_in_class_or_module") do
         enter "#{cmd_alias} Byebug::TestExample"
         debug_code(program)
-        check_output_includes 'SOMECONST => "foo"'
+        check_output_includes 'SOMECONST = foo'
       end
     end
 
@@ -91,7 +91,7 @@ module Byebug
     def test_var_local_shows_local_variables
       enter 'break 17', 'cont', 'var local'
       debug_code(program)
-      check_output_includes 'level => 2', 'i => 1'
+      check_output_includes 'level = 2', 'i = 1'
     end
 
     ['var all', 'v a'].each do |cmd_alias|
@@ -101,7 +101,7 @@ module Byebug
         check_output_includes '@@class_variable = "bar"',
                               '$ERROR_INFO = nil',
                               '@instance_variable = "11111111111111111111"',
-                              'level => 2'
+                              'level = 2'
       end
     end
   end

@@ -15,11 +15,11 @@ module Byebug
       if defined?(BYEBUG_SCRIPT)
         cmd = "#{BYEBUG_SCRIPT} #{prog}"
       else
-        puts 'Byebug was not called from the outset...'
+        puts pr("restart.debug.outset")
         if File.executable?(prog)
           cmd = prog
         else
-          puts "Program #{prog} not executable... Wrapping it in a ruby call"
+          puts pr("restart.debug.not_executable", prog: prog)
           cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} #{prog}"
         end
       end
@@ -32,10 +32,10 @@ module Byebug
       end
 
       # An execv would be preferable to the "exec" below.
-      puts "Re exec'ing:\n\t#{cmd}"
+      puts pr("restart.success", cmd: cmd)
       exec cmd
     rescue Errno::EOPNOTSUPP
-      puts 'Restart command is not available at this time.'
+      puts pr("restart.errors.not_available")
     end
 
     class << self

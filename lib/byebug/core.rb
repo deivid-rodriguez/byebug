@@ -7,6 +7,7 @@ require 'byebug/processor'
 require 'byebug/setting'
 require 'byebug/remote'
 require 'byebug/filecache'
+require 'byebug/printers/plain'
 
 module Byebug
   #
@@ -20,7 +21,7 @@ module Byebug
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
   class << self
-    attr_accessor :handler, :debugged_program
+    attr_accessor :handler, :debugged_program, :printer
 
     extend Forwardable
     def_delegators :handler, :interface, :interface=, :errmsg, :puts
@@ -53,6 +54,8 @@ module Byebug
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands(verbose)
   end
+
+  self.printer ||= Byebug::Printers::Plain.new
 end
 
 #

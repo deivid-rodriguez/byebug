@@ -22,15 +22,15 @@ module Byebug
       end
 
       if expr && file.nil? && line.nil?
-        return errmsg("Invalid breakpoint location: #{expr}")
+        return errmsg(pr("breakpoints.errors.location", expr: expr))
       elsif expr && expr !~ /^\s*if\s+(.+)/
-        return errmsg("Expecting \"if\" in breakpoint condition, got: #{expr}")
+        return errmsg(pr("breakpoints.errors.if", expr: expr))
       else
         expr = $1
       end
 
       if file.nil? && !@state.context
-        return errmsg('We are not in a state that has an associated file')
+        return errmsg(pr("breakpoints.errors.state"))
       end
 
       file = @state.file if file.nil?
@@ -38,32 +38,32 @@ module Byebug
 
       if line =~ /^\d+$/
         path = File.expand_path(file)
-        return errmsg("No file named #{file}") unless File.exist?(path)
+        return errmsg(pr("breakpoints.errors.source", file: file)) unless File.exist?(path)
 
         file = CommandProcessor.canonic_file(path)
         l, n = line.to_i, File.foreach(path).count
-        return errmsg("There are only #{n} lines in file #{file}") if l > n
+        return errmsg(pr("breakpoints.errors.far_line", lines: n, file: file)) if l > n
 
         autoreload = Setting[:autoreload]
         unless Filecache.stopping_points(path, autoreload).member?(l)
-          return errmsg("Line #{l} is not a valid breakpoint in file #{file}")
+          return errmsg(pr("breakpoints.errors.line", line: l, file: file))
         end
 
         b = Breakpoint.add(path, l, expr)
-        puts "Created breakpoint #{b.id} at #{file}:#{l}"
+        puts pr("breakpoints.set_breakpoint_to_line", id: b.id, file: file, line: l)
 
         unless syntax_valid?(expr)
-          errmsg("Incorrect expression \"#{expr}\"; breakpoint disabled.")
+          errmsg(pr("breakpoints.errors.expression", expr: expr))
           b.enabled = false
         end
 
       else
         kl = bb_warning_eval(file)
-        return errmsg("Unknown class #{file}") unless kl && kl.is_a?(Module)
+        return errmsg(pr("breakpoints.errors.class", file: file)) unless kl && kl.is_a?(Module)
 
         class_name, method = kl.name, line.intern
         b = Breakpoint.add(class_name, method, expr)
-        puts "Created breakpoint #{b.id} at #{class_name}::#{method}"
+        puts pr("breakpoints.set_breakpoint_to_method", id: b.id, class: class_name, method: method)
       end
     end
 

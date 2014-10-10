@@ -4,21 +4,19 @@ module Byebug
   #
   module VarFunctions
     def var_list(ary, b = get_binding)
-      ary.sort.each do |v|
-        begin
-          val = b.eval(v.to_s).inspect
+      vars = ary.sort.map do |v|
+        s = begin
+          b.eval(v.to_s).inspect
         rescue
           begin
-            val = b.eval(v.to_s).to_s
+            b.eval(v.to_s).to_s
           rescue
-            val = '*Error in evaluation*'
+            '*Error in evaluation*'
           end
         end
-
-        s = "#{v} = #{val}"
-        s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
-        puts s
+        [v, s]
       end
+      puts prv(vars)
     end
 
     def var_class_self
@@ -42,9 +40,7 @@ module Byebug
     def var_local
       _self = @state.context.frame_self(@state.frame_pos)
       locals = @state.context.frame_locals
-      locals.keys.sort.each do |name|
-        puts format('  %s => %p', name, locals[name])
-      end
+      puts prv(locals.keys.sort.map { |k| [k, locals[k]] })
     end
   end
 
@@ -85,7 +81,7 @@ module Byebug
     end
 
     def execute
-      return errmsg "can't get class variables here.\n" unless @state.context
+      return errmsg(pr("variable.errors.cant_get_class_vars")) unless @state.context
       var_class_self
     end
 
@@ -113,12 +109,9 @@ module Byebug
       if obj.is_a? Module
         constants = bb_eval("#{@match.post_match}.constants")
         constants.sort!
-        constants.each do |c|
-          value = obj.const_get(c)
-          puts format(' %s => %p', c, value)
-        end
+        puts prv(constants.map { |c| [c, obj.const_get(c)] })
       else
-        puts "Should be Class/Module: #{@match.post_match}"
+        puts pr("variable.errors.not_class_module", object: @match.post_match)
       end
     end
 

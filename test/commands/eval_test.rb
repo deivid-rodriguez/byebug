@@ -72,19 +72,19 @@ module Byebug
     def test_pp_pretty_print_the_expressions_result
       enter "pp { a: '3' * 40, b: '4' * 30 }"
       debug_proc(@example)
-      check_output_includes "{:a=>\"#{'3' * 40}\",\n :b=>\"#{'4' * 30}\"}"
+      check_output_includes "{:a=>\"#{'3' * 40}\",", ":b=>\"#{'4' * 30}\"}"
     end
 
     def test_putl_prints_expression_and_columnize_the_result
       enter 'set width 20', 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_proc(@example)
-      check_output_includes "1  3  5  8  6\n2  4  9  7"
+      check_output_includes "1  3  5  8  6", "2  4  9  7"
     end
 
     def test_putl_prints_expression_and_sorts_and_columnize_the_result
       enter 'set width 20', 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_proc(@example)
-      check_output_includes "1  3  5  7  9\n2  4  6  8"
+      check_output_includes "1  3  5  7  9", "2  4  6  8"
     end
   end
 end
