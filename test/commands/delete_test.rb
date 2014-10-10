@@ -1,26 +1,38 @@
 module Byebug
+  #
+  # Tests deleting breakpoints.
+  #
   class DeleteTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        x = 1
-        x += 1
-        return x
-      end
-
-      super
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    #
+        3:    # Toy class to test breakpoints
+        4:    #
+        5:    class TestExample
+        6:      def add_two(n)
+        7:        byebug
+        8:        n += 1
+        9:        n += 1
+       10:        n
+       11:      end
+       12:    end
+       13:
+       14:    TestExample.new.add_two(0)
+       15:  end
+      EOC
     end
 
     def test_deleting_a_breakpoint_removes_it_from_breakpoints_list
-      enter 'break 7', -> { "delete #{Breakpoint.first.id}" }
+      enter 'break 9', -> { "delete #{Breakpoint.first.id}" }
 
-      debug_proc(@example) { assert_empty Byebug.breakpoints }
+      debug_code(program) { assert_empty Byebug.breakpoints }
     end
 
     def test_does_not_stop_at_the_deleted_breakpoint
-      enter 'b 7', 'b 8', -> { "delete #{Breakpoint.first.id}" }, 'cont'
+      enter 'b 9', 'b 10', -> { "delete #{Breakpoint.first.id}" }, 'cont'
 
-      debug_proc(@example) { assert_equal 8, state.line }
+      debug_code(program) { assert_equal 10, state.line }
     end
   end
 end
