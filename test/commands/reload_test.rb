@@ -3,43 +3,41 @@ module Byebug
   # Tests for "reload" command
   #
   class ReloadTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        a = 9
-        a += 10
-        a += 11
-        a += 12
-        a += 13
-        a + 14
-      end
-
-      super
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    #
+        3:    # Toy class to test code reloading
+        4:    #
+        5:    class TestExample
+        6:      byebug
+        7:    end
+        8:  end
+      EOC
     end
 
     def test_reload_notifies_about_default_setting
       enter 'reload'
-      debug_proc(@example)
+      debug_code(program)
       check_output_includes \
         'Source code was reloaded. Automatic reloading is on'
     end
 
     def test_reload_notifies_that_automatic_reloading_is_off_is_setting_changed
       enter 'set noautoreload', 'reload'
-      debug_proc(@example)
+      debug_code(program)
       check_output_includes \
         'Source code was reloaded. Automatic reloading is off'
     end
 
     def test_reload_properly_reloads_source_code
       enter \
-        'l 10-10',
-        -> { cmd_after_replace(__FILE__, 10, '        a += 100', 'reload') },
-        'l 10-10'
-      debug_proc(@example)
-      check_output_includes '10:         a += 100'
-    ensure
-      change_line(__FILE__, 10, '        a += 10')
+        'l 3-3',
+        -> { cmd_after_replace(example_path, 3, '# New comment', 'reload') },
+        'l 3-3'
+
+      debug_code(program)
+      check_output_includes(/3:\s+# New comment/)
     end
   end
 end
