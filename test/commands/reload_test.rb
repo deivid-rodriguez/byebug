@@ -33,7 +33,7 @@ module Byebug
     def test_reload_properly_reloads_source_code
       enter \
         'l 3-3',
-        -> { cmd_after_replace(example_path, 3, '# New comment', 'reload') },
+        -> { cmd_after_replace(example_path, 3, '  # New comment', 'reload') },
         'l 3-3'
 
       debug_code(program)
