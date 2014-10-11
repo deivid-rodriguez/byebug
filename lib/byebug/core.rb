@@ -32,9 +32,8 @@ module Byebug
   Byebug.handler = CommandProcessor.new
 
   def self.source_reload
-    hsh = 'SCRIPT_LINES__'
-    Object.send(:remove_const, hsh) if Object.const_defined?(hsh)
-    Object.const_set(hsh, {})
+    Object.send(:remove_const, 'SCRIPT_LINES__') if defined?('SCRIPT_LINES__')
+    Object.const_set('SCRIPT_LINES__', {})
   end
 
   #
