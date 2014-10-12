@@ -9,7 +9,7 @@ module Byebug
       super
     end
 
-    def after
+    def teardown
       ENV['EDITOR'] = @previous_editor
     end
 
