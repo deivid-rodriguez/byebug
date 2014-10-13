@@ -9,6 +9,7 @@ before_script: bundle exec rake compile
 rvm:
 - 2.0.0
 - 2.1
+- 2.2
 - ruby-head
 
 matrix:
