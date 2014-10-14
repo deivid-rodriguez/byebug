@@ -84,12 +84,12 @@ module Byebug
       File.open(example_path, 'w') { |file| file.write(program) }
       Filecache.cache(example_path, true)
       load(example_path)
+      interface.test_block.call if interface.test_block
     ensure
       if Byebug.const_defined?(example_class)
         Byebug.send(:remove_const, example_class)
       end
       File.delete(example_path)
-      interface.test_block.call if interface.test_block
     end
 
     #
