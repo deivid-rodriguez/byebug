@@ -16,7 +16,7 @@ module Byebug
          9:      def initialize
         10:        @instance_variable = '1' * 20
         11:        byebug
-        12:        @weird_instance_variable = BasicObject.new
+        12:        @empty_object = BasicObject.new
         13:      end
         14:
         15:      def run(level)
@@ -85,7 +85,7 @@ module Byebug
     def test_v_ins_shows_error_if_value_does_not_have_to_s_or_inspect_methods
       enter 'break 23', 'cont', 'v ins v'
       debug_code(program)
-      check_output_includes '@weird_instance_variable = *Error in evaluation*'
+      check_output_includes '@empty_object = *Error in evaluation*'
     end
 
     def test_var_local_shows_local_variables
