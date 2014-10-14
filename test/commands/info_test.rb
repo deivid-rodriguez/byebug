@@ -137,7 +137,6 @@ module Byebug
     end
 
     def test_info_file_without_args_shows_basic_info_about_current_file
-      #enter 'list' # list command explicitly reloads current file
       enter 'info file'
       debug_code(program) do
         check_output_includes basic
