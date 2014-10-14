@@ -6,9 +6,6 @@ require 'byebug/interface'
 require 'byebug/processor'
 require 'byebug/setting'
 require 'byebug/remote'
-
-require 'stringio'
-require 'tracer'
 require 'byebug/filecache'
 
 module Byebug
