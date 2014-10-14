@@ -271,8 +271,7 @@ module Byebug
       end
 
       def location
-        path = self.class.canonic_file(@file)
-        loc = "#{path} @ #{@line}\n"
+        loc = "#{self.class.canonic_file(@file)} @ #{@line}\n"
         unless ['(irb)', '-e'].include? @file
           loc += "#{get_line(@file, @line, Setting[:autoreload])}\n"
         end
