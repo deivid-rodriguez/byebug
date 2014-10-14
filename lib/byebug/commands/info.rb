@@ -108,22 +108,6 @@ module Byebug
       puts "Line #{@state.line} of \"#{@state.file}\""
     end
 
-    def print_hash(vars)
-      vars.keys.sort.each do |name|
-        begin
-          s = "#{name} = #{vars[name].inspect}"
-        rescue
-          begin
-            s = "#{name} = #{vars[name]}"
-            rescue
-              s = "#{name} = *Error in evaluation*"
-          end
-        end
-        s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
-        puts s
-      end
-    end
-
     def info_stop_reason(stop_reason)
       case stop_reason
       when :step
@@ -146,16 +130,6 @@ module Byebug
 
       puts 'Program stopped. '
       info_stop_reason @state.context.stop_reason
-    end
-
-    def info_variables(*_args)
-      locals = @state.context.frame_locals
-      locals[:self] = @state.context.frame_self(@state.frame_pos)
-      print_hash(locals)
-
-      obj = bb_eval('self')
-      var_list(obj.instance_variables, obj.instance_eval { binding })
-      var_class_self
     end
   end
 
