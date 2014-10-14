@@ -176,14 +176,14 @@ module Byebug
     #
     # Modifies a line number in a file with new content.
     #
-    # @param file File to be changed
-    # @param line Line number to be changed
-    # @param new_line_content New line content
+    # @param filename File to be changed
+    # @param lineno Line number to be changed
+    # @param new_line New line content
     #
-    def change_line(file, line, new_line_content)
-      content = File.read(file).split("\n")
-      content[line - 1] = new_line_content
-      File.open(file, 'w') { |f| f.write(content.join("\n") + "\n") }
+    def change_line(file, lineno, new_line)
+      lines = File.readlines(file).tap { |c| c[lineno - 1] = "#{new_line}\n" }
+
+      File.open(file, 'w') { |f| f.write(lines.join) }
     end
 
     #
