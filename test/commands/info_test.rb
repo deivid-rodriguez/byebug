@@ -42,7 +42,6 @@ module Byebug
 
       super
     end
-
     def test_info_about_all_args
       enter 'break 11', 'cont', 'info args'
       debug_proc(@example)
@@ -99,9 +98,8 @@ module Byebug
     end
 
     def files
-      @files ||= SCRIPT_LINES__.keys.uniq.sort
+      Filecache.cached_files.sort
     end
-
     %w(file files).each do |subcmd_alias|
       define_method(:"test_info_#{subcmd_alias}_shows_all_files_read_in") do
         enter 'list' # list command explicitly reloads current file into cache
@@ -122,14 +120,12 @@ module Byebug
     def mtime
       @mtime ||= File.stat(__FILE__).mtime.to_s
     end
-
     def sha1
       @sha1 ||= Digest::SHA1.hexdigest(__FILE__)
     end
-
     def breakpoint_line_numbers
       @breakpoint_line_numbers ||=
-        columnize(LineCache.trace_line_numbers(__FILE__).to_a.sort,
+        columnize(Filecache.stopping_points(example_fullpath).sort,
                   Byebug::Setting[:width])
     end
 

@@ -11,7 +11,8 @@ module Byebug
     end
 
     def execute
-      Byebug.source_reload
+      Filecache.clear
+
       onoff = Setting[:autoreload] ? 'on' : 'off'
       puts "Source code was reloaded. Automatic reloading is #{onoff}"
     end

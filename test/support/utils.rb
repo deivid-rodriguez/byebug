@@ -82,6 +82,7 @@ module Byebug
     def debug_code(program, &block)
       interface.test_block = block
       File.open(example_path, 'w') { |file| file.write(program) }
+      Filecache.cache(example_path, true)
       load(example_path)
     ensure
       if Byebug.const_defined?(example_class)

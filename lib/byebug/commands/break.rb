@@ -45,8 +45,7 @@ module Byebug
         return errmsg("There are only #{n} lines in file #{file}") if l > n
 
         autoreload = Setting[:autoreload]
-        possible_lines = LineCache.trace_line_numbers(path, autoreload)
-        unless possible_lines.member?(l)
+        unless Filecache.stopping_points(path, autoreload).member?(l)
           return errmsg("Line #{l} is not a valid breakpoint in file #{file}")
         end
 

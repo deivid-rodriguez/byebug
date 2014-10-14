@@ -46,32 +46,6 @@ module Byebug
     end
 
     #
-    # Fills SCRIPT_LINES__ entry for <filename> if not already filled.
-    #
-    def lines(filename)
-      SCRIPT_LINES__[filename] ||= File.readlines(filename)
-    end
-
-    #
-    # Gets all lines in a source code file
-    #
-    def get_lines(filename)
-      return nil unless File.exist?(filename)
-
-      lines(filename)
-    end
-
-    #
-    # Gets a single line in a source code file
-    #
-    def get_line(filename, lineno)
-      lines = get_lines(filename)
-      return nil unless lines
-
-      lines[lineno - 1]
-    end
-
-    #
     # Returns true if code is syntactically correct for Ruby.
     #
     def syntax_valid?(code)

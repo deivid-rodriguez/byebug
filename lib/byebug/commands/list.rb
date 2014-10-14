@@ -8,9 +8,7 @@ module Byebug
     end
 
     def execute
-      Byebug.source_reload if Setting[:autoreload]
-
-      lines = get_lines(@state.file)
+      lines = Filecache.lines(@state.file, Setting[:autoreload])
       return errmsg "No sourcefile available for #{@state.file}\n" unless lines
 
       @match ||= match('list')

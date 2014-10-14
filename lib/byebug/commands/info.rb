@@ -80,7 +80,7 @@ module Byebug
     end
 
     def info_file_breakpoints(file)
-      breakpoints = LineCache.trace_line_numbers(file)
+      breakpoints = Filecache.stopping_points(file)
       return unless breakpoints
 
       puts "\tbreakpoint line numbers:"
@@ -97,8 +97,8 @@ module Byebug
     end
 
     def info_files(*_args)
-      files = SCRIPT_LINES__.keys
-      files.uniq.sort.each do |file|
+      Filecache.cached_files.sort.each do |file|
+        next unless Filecache.cache(file, true)
         info_file_path(file)
         info_file_mtime(file)
       end

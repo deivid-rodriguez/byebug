@@ -84,15 +84,15 @@ module Byebug
     def at_tracing(context, file, line)
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
         path = self.class.canonic_file(file)
+        source = Filecache.line(file, line, Setting[:autoreload])
+        puts "Tracing: #{path}:#{line} #{source}"
         @last_file, @last_line = file, line
-        puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
       end
       always_run(context, file, line, 2)
     end
     protect :at_tracing
 
     def at_line(context, file, line)
-      Byebug.source_reload if Setting[:autoreload]
       process_commands(context, file, line)
     end
     protect :at_line
@@ -273,8 +273,9 @@ module Byebug
       def location
         path = self.class.canonic_file(@file)
         loc = "#{path} @ #{@line}\n"
-        loc += "#{get_line(@file, @line)}\n" unless
-          ['(irb)', '-e'].include? @file
+        unless ['(irb)', '-e'].include? @file
+          loc += "#{get_line(@file, @line, Setting[:autoreload])}\n"
+        end
         loc
       end
     end

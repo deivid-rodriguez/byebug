@@ -9,7 +9,7 @@ require 'byebug/remote'
 
 require 'stringio'
 require 'tracer'
-require 'linecache19'
+require 'byebug/filecache'
 
 module Byebug
   #
@@ -30,11 +30,6 @@ module Byebug
   end
 
   Byebug.handler = CommandProcessor.new
-
-  def self.source_reload
-    Object.send(:remove_const, 'SCRIPT_LINES__') if defined?('SCRIPT_LINES__')
-    Object.const_set('SCRIPT_LINES__', {})
-  end
 
   #
   # Runs normal byebug initialization scripts.

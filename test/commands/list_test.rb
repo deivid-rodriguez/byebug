@@ -134,19 +134,21 @@ module Byebug
       check_output_includes(/7:\s+'%1'/)
     end
 
+    def replace_build_percentage_string_line_and_list_it
+      cmd_after_replace(example_path, 7, "      '%11'", 'list 7-7')
+    end
+
     def test_lists_file_changes_by_default
-      enter \
-        -> { cmd_after_replace(example_path, 7, "      '%2'", 'list 7-7') }
+      enter -> { replace_build_percentage_string_line_and_list_it }
 
       debug_code(program)
-      check_output_includes(/7:\s+'%2'/)
+      check_output_includes(/7:\s+'%11'/)
     end
 
     def test_does_not_list_file_changes_with_autoreload_disabled
-      enter \
-        'list',
-        'set noautoreload',
-        -> { cmd_after_replace(example_path, 7, "      '%2'", 'list 7-7') }
+      enter 'list',
+            'set noautoreload',
+            -> { replace_build_percentage_string_line_and_list_it }
 
       debug_code(program)
       check_output_doesnt_include(/7:\s+'%2'/)
