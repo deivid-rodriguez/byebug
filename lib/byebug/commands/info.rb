@@ -116,8 +116,6 @@ module Byebug
         puts 'It stopped at a breakpoint.'
       when :catchpoint
         puts 'It stopped at a catchpoint.'
-      else
-        puts "Unknown reason: #{@state.context.stop_reason}"
       end
     end
 

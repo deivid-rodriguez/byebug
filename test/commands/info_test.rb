@@ -214,17 +214,6 @@ module Byebug
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
     end
 
-    def stub_stop_reason_before_info_program_cmd
-      context.stubs(:stop_reason).returns('blabla')
-      'info program'
-    end
-
-    def test_info_program_shows_the_unknown_stop_reason
-      enter 'break 39', 'cont', -> { stub_stop_reason_before_info_program_cmd }
-      debug_proc(@example)
-      check_output_includes 'Program stopped.', 'Unknown reason: blabla'
-    end
-
     def test_shows_an_error_if_the_program_is_crashed
       skip('TODO')
     end
