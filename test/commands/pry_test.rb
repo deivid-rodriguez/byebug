@@ -20,7 +20,7 @@ module Byebug
     end
 
     def test_autopry_calls_pry_automatically_after_every_stop
-      skip 'TODO'
+      skip('for now')
     end
   end
 end if defined?(Pry)

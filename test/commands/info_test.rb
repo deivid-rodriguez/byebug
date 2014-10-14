@@ -229,7 +229,7 @@ module Byebug
     end
 
     def test_shows_an_error_if_the_program_is_crashed
-      skip('TODO')
+      skip('for now')
     end
 
     def test_shows_help_when_typing_just_info
