@@ -4,18 +4,18 @@ module Byebug
   #
   module VarFunctions
     def var_list(ary, b = get_binding)
-      ary.sort!
-      ary.each do |v|
+      ary.sort.each do |v|
         begin
-          s = bb_eval(v.to_s, b).inspect
+          val = b.eval(v.to_s).inspect
         rescue
           begin
-            s = bb_eval(v.to_s, b).to_s
+            val = b.eval(v.to_s).to_s
           rescue
-            s = '*Error in evaluation*'
+            val = '*Error in evaluation*'
           end
         end
-        s = "#{v} = #{s}"
+
+        s = "#{v} = #{val}"
         s[Setting[:width] - 3..-1] = '...' if s.size > Setting[:width]
         puts s
       end
