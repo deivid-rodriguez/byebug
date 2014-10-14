@@ -67,16 +67,12 @@ module Byebug
       end
     end
 
-    def info_file_path(file)
-      s = "File #{file}"
+    def info_file_basic(file)
       path = File.expand_path(file)
-      s = "#{s} - #{path}" if path && path != file
-      puts s
-    end
+      lines = Filecache.lines(path)
+      return unless lines
 
-    def info_file_lines(file)
-      lines = File.foreach(file)
-      puts "\t#{lines.count} lines" if lines
+      puts "File #{path} (#{lines.count} lines)"
     end
 
     def info_file_breakpoints(file)
@@ -99,7 +95,8 @@ module Byebug
     def info_files(*_args)
       Filecache.cached_files.sort.each do |file|
         next unless Filecache.cache(file, true)
-        info_file_path(file)
+
+        info_file_basic(file)
         info_file_mtime(file)
       end
     end
@@ -147,8 +144,8 @@ module Byebug
       ['display', 2, 'Expressions to display when program stops'],
       ['file', 4, 'Info about a particular file read in',
        'After the file name is supplied, you can list file attributes that ' \
-       'you wish to see. Attributes include: "all", "basic", "breakpoint", ' \
-       '"lines", "mtime", "path" and "sha1".'],
+       'you wish to see. Attributes are: "all", "breakpoint", "mtime" and ' \
+       'A header show file path and number of lines is always displayed.'],
       ['files', 5, 'File names and timestamps of files read in'],
       ['line', 2, 'Line number and file name of current position in source ' \
                   'file.'],
@@ -158,38 +155,29 @@ module Byebug
     end unless defined?(Subcommands)
 
     InfoFileSubcommands = [
-      ['all', 1, 'All file information available - breakpoints, lines, '     \
-                 'mtime, path and sha1'],
-      ['basic', 2, 'basic information - path, number of lines'],
-      ['breakpoints', 2, 'Show trace line numbers',
-       'These are the line number where a breakpoint can be set.'],
-      ['lines', 1, 'Show number of lines in the file'],
+      ['all', 1, 'All information available - breakpoints, mtime and sha1'],
+      ['breakpoints', 1, 'Show possible stopping points in the file'],
       ['mtime', 1, 'Show modification time of file'],
-      ['path', 4, 'Show full file path name for file'],
       ['sha1', 1, 'Show SHA1 hash of contents of the file']
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
     end unless defined?(InfoFileSubcommands)
 
     def info_file(*args)
-      return info_files unless args[0]
+      file = args[0] || @state.file
+      return "Don't know which file you want info about\n" unless file
 
-      mode = args[1] || 'basic'
-      subcmd = Command.find(InfoFileSubcommands, mode)
-      return errmsg "Invalid parameter #{args[1]}\n" unless subcmd
+      info_file_basic(file)
+      return unless args[1]
 
-      if %w(all basic).member?(subcmd.name)
-        info_file_path(args[0])
-        info_file_lines(args[0])
-        if subcmd.name == 'all'
-          info_file_breakpoints(args[0])
-          info_file_mtime(args[0])
-          info_file_sha1(args[0])
-        end
-      else
-        puts("File #{args[0]}") if subcmd.name != 'path'
-        send("info_file_#{subcmd.name}", args[0])
-      end
+      subcmd = Command.find(InfoFileSubcommands, args[1])
+      return errmsg("Invalid parameter #{args[1]}\n") unless subcmd
+
+      return send("info_file_#{subcmd.name}", file) unless subcmd.name == 'all'
+
+      info_file_breakpoints(file)
+      info_file_mtime(file)
+      info_file_sha1(file)
     end
 
     def regexp
