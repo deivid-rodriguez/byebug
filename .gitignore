@@ -5,7 +5,6 @@ coverage
 
 .gdb_history
 .bundle
-.tags
 .byebugrc
 .byebug_hist
 
