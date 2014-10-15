@@ -1,3 +1,6 @@
+#
+# Only generated files & Byebug specific files to be kept here.
+#
 tmp
 pkg
 doc
