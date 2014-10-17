@@ -6,6 +6,8 @@ module Byebug
         Object.new
       end
 
+      @previous_editor = ENV['EDITOR']
+
       super
     end
 
