@@ -6,5 +6,8 @@ AllCops:
 
 TrivialAccessors:
   ExactNameMatch: true
+
 Lint/Debugger:
   Enabled: false
+
+inherit_from: .rubocop_todo.yml

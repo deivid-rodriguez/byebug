@@ -44,4 +44,11 @@ task :devkit do
   end
 end
 
-task default: [:native, :test]
+require 'rubocop/rake_task'
+
+desc 'Run RuboCop'
+task :rubocop do
+  RuboCop::RakeTask.new
+end
+
+task default: [:rubocop, :native, :test]
