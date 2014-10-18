@@ -6,14 +6,14 @@ module Byebug
 
     def launch
       @t1 = Thread.new do
-        while true
+        loop do
           break if Thread.main[:should_break]
           sleep 0.02
         end
       end
 
       @t2 = Thread.new do
-        while true
+        loop do
           sleep 0.02
         end
       end
@@ -104,7 +104,7 @@ module Byebug
     def test_thread_resume_removes_threads_from_the_suspended_state
       thnum = nil
       enter 'break 21', 'cont',
-            -> { thnum = last_thnum ; "thread stop #{thnum}" },
+            -> { thnum = last_thnum; "thread stop #{thnum}" },
             -> { "thread resume #{thnum}" }, release
       debug_proc(@example) do
         assert_equal false, Byebug.contexts.last.suspended?
