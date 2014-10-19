@@ -38,9 +38,7 @@ module Byebug
     end
 
     def parse_thread_num(subcmd, arg)
-      if '' == arg
-        return errmsg(pr('thread.errors.no_number', subcmd: subcmd))
-      end
+      return errmsg(pr('thread.errors.no_number', subcmd: subcmd)) if '' == arg
 
       thread_num, err = get_int(arg, subcmd, 1)
       return errmsg(err) unless thread_num

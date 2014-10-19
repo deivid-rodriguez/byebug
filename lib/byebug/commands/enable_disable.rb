@@ -34,9 +34,7 @@ module Byebug
     end
 
     def enable_disable_display(is_enable, args)
-      if 0 == @state.display.size
-        return errmsg(pr('toggle.errors.no_display'))
-      end
+      return errmsg(pr('toggle.errors.no_display')) if 0 == @state.display.size
 
       args.each do |pos|
         pos, err = get_int(pos, "#{is_enable} display", 1, @state.display.size)
