@@ -18,20 +18,20 @@ module Byebug
       if !@match[2]
         if 'off' == @match[1]
           Byebug.catchpoints.clear if
-            confirm(pr("catch.confirmations.delete_all"))
+            confirm(pr('catch.confirmations.delete_all'))
         else
-          puts pr("catch.errors.not_class", class: @match[1]) unless
+          puts pr('catch.errors.not_class', class: @match[1]) unless
             bb_eval "#{@match[1]}.is_a?(Class)", get_binding
           Byebug.add_catchpoint @match[1]
-          puts pr("catch.catching", exception: @match[1])
+          puts pr('catch.catching', exception: @match[1])
         end
       elsif @match[2] != 'off'
-        errmsg pr("catch.errors.off", off: @match[2])
+        errmsg pr('catch.errors.off', off: @match[2])
       elsif Byebug.catchpoints.member?(@match[1])
         Byebug.catchpoints.delete @match[1]
-        errmsg pr("catch.errors.removed", exception: @match[1])
+        errmsg pr('catch.errors.removed', exception: @match[1])
       else
-        errmsg pr("catch.errors.not_found", exception: @match[1])
+        errmsg pr('catch.errors.not_found', exception: @match[1])
       end
     end
 

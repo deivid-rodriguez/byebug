@@ -14,10 +14,10 @@ module Byebug
       return puts(SetCommand.help) if key.nil? && value.nil?
 
       full_key = Setting.find(key)
-      return errmsg(pr("set.errors.unknown_setting", key: key)) unless full_key
+      return errmsg(pr('set.errors.unknown_setting', key: key)) unless full_key
 
       if !Setting.boolean?(full_key) && value.nil?
-        value, err = nil, pr("set.errors.must_specify_value", key: key)
+        value, err = nil, pr('set.errors.must_specify_value', key: key)
       elsif Setting.boolean?(full_key)
         value, err = get_onoff(value, key =~ /^no/ ? false : true)
       elsif Setting.integer?(full_key)
@@ -39,7 +39,7 @@ module Byebug
       when '0', 'off', 'false'
         false
       else
-        [nil, pr("set.errors.on_off", arg: arg)]
+        [nil, pr('set.errors.on_off', arg: arg)]
       end
     end
 

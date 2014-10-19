@@ -132,7 +132,7 @@ module Byebug
       enter 'info files'
       debug_code(program) do
         check_output_includes basic, mtime
-        check_output_doesnt_include *breakpoint_numbers, sha1
+        check_output_doesnt_include(*breakpoint_numbers, sha1)
       end
     end
 
@@ -140,7 +140,7 @@ module Byebug
       enter 'info file'
       debug_code(program) do
         check_output_includes basic
-        check_output_doesnt_include *breakpoint_numbers, mtime, sha1
+        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
       end
     end
 
@@ -148,7 +148,7 @@ module Byebug
       enter "info file #{example_fullpath}"
       debug_code(program) do
         check_output_includes basic
-        check_output_doesnt_include *breakpoint_numbers, mtime, sha1
+        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
       end
     end
 
@@ -156,7 +156,7 @@ module Byebug
       enter "info file #{example_fullpath} mtime"
       debug_code(program) do
         check_output_includes basic, mtime
-        check_output_doesnt_include *breakpoint_numbers, sha1
+        check_output_doesnt_include(*breakpoint_numbers, sha1)
       end
     end
 
@@ -164,7 +164,7 @@ module Byebug
       enter "info file #{example_fullpath} sha1"
       debug_code(program) do
         check_output_includes basic, sha1
-        check_output_doesnt_include *breakpoint_numbers, mtime
+        check_output_doesnt_include(*breakpoint_numbers, mtime)
       end
     end
 

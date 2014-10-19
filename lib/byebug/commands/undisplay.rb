@@ -15,12 +15,12 @@ module Byebug
         return errmsg(err) unless err.nil?
 
         unless @state.display[pos - 1]
-          return errmsg(pr("display.errors.undefined", expr: pos))
+          return errmsg(pr('display.errors.undefined', expr: pos))
         end
 
         @state.display[pos - 1][0] = nil
       else
-        return unless confirm(pr("display.confirmations.clear_all"))
+        return unless confirm(pr('display.confirmations.clear_all'))
 
         @state.display.each { |d| d[0] = false }
       end

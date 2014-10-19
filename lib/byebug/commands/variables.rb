@@ -81,7 +81,9 @@ module Byebug
     end
 
     def execute
-      return errmsg(pr("variable.errors.cant_get_class_vars")) unless @state.context
+      unless @state.context
+        return errmsg(pr('variable.errors.cant_get_class_vars'))
+      end
       var_class_self
     end
 
@@ -111,7 +113,7 @@ module Byebug
         constants.sort!
         puts prv(constants.map { |c| [c, obj.const_get(c)] })
       else
-        puts pr("variable.errors.not_class_module", object: @match.post_match)
+        puts pr('variable.errors.not_class_module', object: @match.post_match)
       end
     end
 

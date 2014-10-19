@@ -34,15 +34,15 @@ module Byebug
     def adjust_frame(frame_pos, absolute)
       if absolute
         abs_frame_pos = switch_to_frame(frame_pos)
-        return errmsg(pr("frame.errors.c_frame")) if c_frame?(abs_frame_pos)
+        return errmsg(pr('frame.errors.c_frame')) if c_frame?(abs_frame_pos)
       else
         abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
       if abs_frame_pos >= Context.stack_size
-        return errmsg(pr("frame.errors.too_low"))
+        return errmsg(pr('frame.errors.too_low'))
       elsif abs_frame_pos < 0
-        return errmsg(pr("frame.errors.too_high"))
+        return errmsg(pr('frame.errors.too_high'))
       end
 
       @state.frame_pos = abs_frame_pos
@@ -112,7 +112,11 @@ module Byebug
       mark += c_frame?(pos) ? ' ͱ-- ' : ''
       call_str = get_frame_call(pos)
 
-      {mark: mark, pos: format('%-2d', pos), call_str: "#{call_str} ", file: file, line: line}
+      { mark: mark,
+        pos: format('%-2d', pos),
+        call_str: "#{call_str} ",
+        file: file,
+        line: line }
     end
 
     def print_backtrace
@@ -120,10 +124,11 @@ module Byebug
       stacksize = Context.stack_size
 
       if calcedsize != stacksize
-        errmsg(pr("frame.errors.stacksize", calcedsize: calcedsize, realsize: stacksize))
+        errmsg(pr('frame.errors.stacksize',
+                  calcedsize: calcedsize, realsize: stacksize))
         stacksize = calcedsize if Byebug.post_mortem?
       end
-      print(prc("frame.line", (0...stacksize)) do |item, index|
+      print(prc('frame.line', (0...stacksize)) do |_, index|
         get_pr_arguments(index)
       end)
     end
@@ -221,7 +226,7 @@ module Byebug
 
     def execute
       unless @match[1]
-        print(pr("frame.line", get_pr_arguments(@state.frame_pos)))
+        print(pr('frame.line', get_pr_arguments(@state.frame_pos)))
       end
 
       pos, err = get_int(@match[1], 'Frame')

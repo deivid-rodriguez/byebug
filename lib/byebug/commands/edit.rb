@@ -11,9 +11,7 @@ module Byebug
 
     def execute
       if !@match[1]
-        unless @state.file
-          return errmsg(pr("edit.errors.state"))
-        end
+        return errmsg(pr('edit.errors.state')) unless @state.file
         file = @state.file
         line = @state.line if @state.line
       elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1]))
@@ -25,8 +23,12 @@ module Byebug
       editor = ENV['EDITOR'] || 'vim'
       file = File.expand_path(file)
 
-      return errmsg(pr("edit.errors.not_exist", file: file)) unless File.exist?(file)
-      return errmsg(pr("edit.errors.not_readable", file: file)) unless File.readable?(file)
+      unless File.exist?(file)
+        return errmsg(pr('edit.errors.not_exist', file: file))
+      end
+      unless File.readable?(file)
+        return errmsg(pr('edit.errors.not_readable', file: file))
+      end
 
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 

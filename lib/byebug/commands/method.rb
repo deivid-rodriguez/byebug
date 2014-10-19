@@ -11,13 +11,16 @@ module Byebug
 
     def execute
       obj = bb_eval(@match.post_match)
-      result = if @match[1]
-        prc("method.methods", obj.methods.sort) { |item, _| {name: item} }
-      elsif !obj.is_a?(Module)
-        pr("variable.errors.not_class_module", object: @match.post_match)
-      else
-        prc("method.methods", obj.instance_methods(false).sort) { |item, _| {name: item} }
-      end
+      result =
+        if @match[1]
+          prc('method.methods', obj.methods.sort) { |item, _| { name: item } }
+        elsif !obj.is_a?(Module)
+          pr('variable.errors.not_class_module', object: @match.post_match)
+        else
+          prc('method.methods', obj.instance_methods(false).sort) do |item, _|
+            { name: item }
+          end
+        end
       puts result
     end
 

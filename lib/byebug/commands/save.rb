@@ -44,7 +44,7 @@ module Byebug
       save_displays(file)
       save_settings(file)
 
-      print pr("save.messages.done", path: file.path)
+      print pr('save.messages.done', path: file.path)
       file.close
     end
 

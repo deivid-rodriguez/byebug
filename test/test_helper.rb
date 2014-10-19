@@ -15,8 +15,6 @@ require_relative 'support/utils'
 require_relative 'support/test_case'
 require_relative 'support/printer_helpers'
 
-$byebug_test_dir = File.expand_path("..", __FILE__)
-
 #
 # Load the test files from the command line.
 #

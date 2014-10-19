@@ -4,7 +4,8 @@ module Byebug
   #
   module ThreadFunctions
     def display_context(context, should_show_top_frame = true)
-      puts pr("thread.context", thread_arguments(context, should_show_top_frame))
+      puts pr('thread.context',
+              thread_arguments(context, should_show_top_frame))
     end
 
     def thread_arguments(context, should_show_top_frame = true)
@@ -38,7 +39,7 @@ module Byebug
 
     def parse_thread_num(subcmd, arg)
       if '' == arg
-        return errmsg(pr("thread.errors.no_number", subcmd: subcmd))
+        return errmsg(pr('thread.errors.no_number', subcmd: subcmd))
       end
 
       thread_num, err = get_int(arg, subcmd, 1)
@@ -53,11 +54,11 @@ module Byebug
 
       case
       when nil == c
-        errmsg pr("thread.errors.no_thread")
+        errmsg pr('thread.errors.no_thread')
       when @state.context == c
-        errmsg pr("thread.errors.current_thread")
+        errmsg pr('thread.errors.current_thread')
       when c.ignored?
-        errmsg pr("thread.errors.wrong_action", subcmd: subcmd, arg: arg)
+        errmsg pr('thread.errors.wrong_action', subcmd: subcmd, arg: arg)
       else
         c
       end
@@ -78,7 +79,9 @@ module Byebug
       contexts = Byebug.contexts.select do |c|
         Thread.list.include?(c.thread)
       end.sort_by(&:thnum)
-      print prc("thread.context", contexts) { |context, _| thread_arguments(context) }
+      print prc('thread.context', contexts) do |context, _|
+        thread_arguments(context)
+      end
     end
 
     class << self
@@ -159,7 +162,7 @@ module Byebug
     def execute
       c = parse_thread_num_for_cmd('thread resume', @match[1])
       return unless c
-      return errmsg pr("thread.errors.already_running") unless c.suspended?
+      return errmsg pr('thread.errors.already_running') unless c.suspended?
       c.resume
       display_context(c)
     end
