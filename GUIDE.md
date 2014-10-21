@@ -250,7 +250,7 @@ Okay, lets go on and talk about program arguments.
 []
 ```
 
-Ooops. We forgot to specify any parameters to this program. Let's try again. We
+Oops. We forgot to specify any parameters to this program. Let's try again. We
 can use the `restart` command here.
 
 ```bash
@@ -766,7 +766,7 @@ letter option name, such as `-h`. The list of options is detailed below:
 exit.
 * **-d | --debug**. Set `$DEBUG` to `true`. Compatible with Ruby's.
 * **-I | --include <path>**. Add `path` to load path. `path` can be a single
-path ar a colon separated path list.
+path or a colon separated path list.
 * **--post-mortem**. If your program raises an exception that isn't caught you
 can enter byebug for inspection of what went wrong. You may also want to use
 this option in conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
@@ -780,7 +780,7 @@ already a debugger. This option is compatible with Ruby's.
 * **--script <file>**. Script to run before byebug's execution.
 * **-x | --trace**. Turn on line tracing. Running `byebug --trace
 <rubyscript>.rb` is pretty much like running `ruby -rtracer
-<rubyscript>.rb`. If all you want to do however is get a linetrace, `tracer` is
+<rubyscript>.rb`. If all you want to do however is get a line trace, `tracer` is
 most likely faster than `byebug`
 
 ```bash
@@ -917,7 +917,7 @@ different computer than the one running the Ruby program.
 
 To setup remote debugging, drop the following somewhere before the point in the
 program that you want to debug (In Rails, the
-`config/environments/development.rb` could be a good canditate).
+`config/environments/development.rb` could be a good candidate).
 
 ```ruby
   require 'byebug'
