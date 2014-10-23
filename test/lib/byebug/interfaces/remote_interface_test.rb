@@ -15,83 +15,112 @@ module Byebug
       ARGV.replace(@old_argv)
     end
 
-    def test_read_command
-      # socket expected output, return value, args
-      @remote_socket_mock.expect(:puts, nil, ["PROMPT test_command"])
-      # socket expected input
-      @remote_socket_mock.expect(:gets, "foo\r\n")
-      # history object records the user input
-      assert_send([@remote_interface.history, :push, "foo\r\n"])
-
-      result = @remote_interface.read_command("test_command")
-      # it should return input with trailing whitespace stripped
-      assert_equal(result, "foo")
-
-      @remote_socket_mock.verify()
-    end
-
-    def test_read_command_with_no_input
-      # socket expected output
-      @remote_socket_mock.expect(:puts, nil, ["PROMPT test_command"])
-      # socket expected input
-      @remote_socket_mock.expect(:gets, nil)
-
-      assert_raises(IOError) do
-        @remote_interface.read_command("test_command")
-      end
-      @remote_socket_mock.verify()
-    end
-
-    def test_close
-      # (output) socket mock receives close
-      @remote_socket_mock.expect(:close, nil)
-
-      result = @remote_interface.close()
-      @remote_socket_mock.verify()
-    end
-
-    def test_close_with_error
-      def @remote_socket_mock.close
-        raise IOError
+    class ReadCommandTest < RemoteInterfaceTest
+      def test_read_command_prints_to_output
+        @remote_socket_mock.expect(:puts, nil, ["PROMPT test_command"])
+        @remote_socket_mock.stub(:gets, "") do
+          @remote_interface.read_command("test_command")
+        end
+        @remote_socket_mock.verify()
       end
 
-      @remote_socket_mock.expect(:print, nil,
-                                 [ "*** Error closing the interface...\n"])
+      def test_read_command_records_history_of_user_input
+        @history_mock = Minitest::Mock.new
+        @history_mock.expect(:push, nil, ["foo"])
+        @remote_interface.history = @history_mock
 
-      result = @remote_interface.close()
-      @remote_socket_mock.verify()
+        @remote_socket_mock.stub(:gets, "foo") do
+          @remote_socket_mock.stub(:puts, nil) do
+            @remote_interface.read_command("test_command")
+          end
+        end
+        @history_mock.verify()
+      end
+
+      def test_read_command_returns_input_with_trailing_whitespace_stripped
+        @remote_socket_mock.stub(:puts, nil) do
+          @remote_socket_mock.stub(:gets, "foo\r\n") do
+            result = @remote_interface.read_command("test_command")
+
+            assert_equal(result, "foo")
+          end
+        end
+      end
+
+      def test_read_command_with_no_input_raises_io_error
+        @remote_socket_mock.stub(:puts, nil) do
+          @remote_socket_mock.stub(:gets, nil) do
+            assert_raises(IOError) do
+              @remote_interface.read_command("test_command")
+            end
+            @remote_socket_mock.verify()
+          end
+        end
+      end
     end
 
-    def test_confirm
-      # it prompts for input with CONFIRM
-      @remote_socket_mock.expect(:puts, nil, ["CONFIRM test_command"])
-      # it reads user input
-      @remote_socket_mock.expect(:gets, "y")
 
-      # it doesn't log history
-      fail_on_push = -> (pushed_message) do
-        flunk("history should not be called, was called with #{pushed_message}")
+    class CloseTest < RemoteInterfaceTest
+      def test_close_calls_close_on_the_output_socket
+        @remote_socket_mock.expect(:close, nil)
+
+        @remote_interface.close()
+        @remote_socket_mock.verify()
       end
-      @remote_interface.history.stub(:push, fail_on_push) do
-        result = @remote_interface.confirm("test_command")
-        # it returns true when the user input is "y"
-        assert_equal(result, true)
 
+      def test_close_with_error_calls_print_on_error_socket
+        def @remote_socket_mock.close
+          raise IOError
+        end
+
+        @remote_socket_mock.expect(:print, nil,
+                                   [ "*** Error closing the interface...\n"])
+
+        @remote_interface.close()
         @remote_socket_mock.verify()
       end
     end
 
-    def test_confirm_with_non_yes
-      # it prompts for input with CONFIRM
-      @remote_socket_mock.expect(:puts, nil, ["CONFIRM test_command"])
-      # it reads user input
-      @remote_socket_mock.expect(:gets, "anything else")
+    class ConfirmTest < RemoteInterfaceTest
+      def test_confirm_prompts_for_input_with_CONFIRM
+        @remote_socket_mock.expect(:puts, nil, ["CONFIRM test_command"])
+        @remote_socket_mock.stub(:gets, "y") do
+          @remote_interface.confirm("test_command")
+        end
+        @remote_socket_mock.verify()
+      end
 
-      result = @remote_interface.confirm("test_command")
-      # it returns false when the user input is not "y"
-      assert_equal(result, false)
+      def test_confirm_does_not_log_history
+        fail_on_push = -> (pushed_message) do
+          flunk("history should not be called, was called with #{pushed_message}")
+        end
+        @remote_socket_mock.stub(:puts, nil) do
+          @remote_socket_mock.stub(:gets, "y") do
+            @remote_interface.history.stub(:push, fail_on_push) do
+              @remote_interface.confirm("test_command")
+            end
+          end
+        end
+        @remote_socket_mock.verify()
+      end
 
-      @remote_socket_mock.verify()
+      def test_confirm_returns_true_when_user_enters_y
+        @remote_socket_mock.stub(:puts, nil) do
+          @remote_socket_mock.stub(:gets, "y") do
+            result = @remote_interface.confirm("test_command")
+            assert_equal(result, true)
+          end
+        end
+      end
+
+      def test_confirm_returns_false_when_user_does_not_enter_y
+        @remote_socket_mock.stub(:puts, nil) do
+          @remote_socket_mock.stub(:gets, "not y") do
+            result = @remote_interface.confirm("test_command")
+            assert_equal(result, false)
+          end
+        end
+      end
     end
   end
 end
