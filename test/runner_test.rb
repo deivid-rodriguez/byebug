@@ -8,7 +8,7 @@ module Byebug
       @runner = Byebug::Runner.new
     end
 
-    def after
+    def teardown
       ARGV.replace(@old_argv)
     end
 

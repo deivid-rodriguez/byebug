@@ -6,10 +6,12 @@ module Byebug
         Object.new
       end
 
+      @previous_editor = ENV['EDITOR']
+
       super
     end
 
-    def after
+    def teardown
       ENV['EDITOR'] = @previous_editor
     end
 
