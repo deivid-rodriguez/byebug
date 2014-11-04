@@ -10,4 +10,7 @@ TrivialAccessors:
 Lint/Debugger:
   Enabled: false
 
+Metrics/MethodLength:
+  Max: 50
+
 inherit_from: .rubocop_todo.yml
