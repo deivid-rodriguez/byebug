@@ -29,6 +29,7 @@ module Byebug
     end
 
     def test_eval_properly_evaluates_an_expression_using_timeout
+      require 'timeout'
       enter 'eval Timeout::timeout(60) { 1 }'
       debug_proc(@example)
       check_output_includes '1'
