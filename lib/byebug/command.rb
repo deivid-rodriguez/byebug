@@ -9,6 +9,8 @@ module Byebug
   # Subclasses need to implement a `regexp` and an `execute` command.
   #
   class Command
+    extend Forwardable
+
     Subcmd = Struct.new(:name, :min, :help)
 
     def initialize(state)
@@ -19,24 +21,38 @@ module Byebug
       @match = regexp.match(input)
     end
 
+    def_delegator :"Byebug.printer", :print, :pr
+    def_delegator :"Byebug.printer", :print_collection, :prc
+    def_delegator :"Byebug.printer", :print_variables, :prv
+
     protected
 
-    extend Forwardable
-    def_delegators :@state, :errmsg, :puts, :confirm
+    def_delegators :@state, :errmsg, :puts, :print, :confirm
 
     def bb_eval(str, b = get_binding)
       b.eval(str)
     rescue StandardError, ScriptError => e
       at = b.eval('Thread.current.backtrace_locations')
-      puts "#{at.shift}: #{e.class} Exception(#{e.message})"
-      at.each { |path| puts "\tfrom #{path}" }
+      backtraces = []
+      backtraces << "#{at.shift}: #{e.class} Exception(#{e.message})"
+      backtraces += at.map { |path| puts "\tfrom #{path}" }
+      errmsg(pr('eval.exception',
+                text_message: backtraces.join("\n"),
+                class:        e.class,
+                value: e.to_s
+      ))
       nil
     end
 
     def bb_warning_eval(str, b = get_binding)
       b.eval(str)
     rescue StandardError, ScriptError => e
-      puts "#{e.class} Exception: #{e.message}"
+      text_message = "#{e.class} Exception: #{e.message}"
+      print(pr('eval.exception',
+               text_message: text_message,
+               class: e.class,
+               value: e.to_s
+      ))
       nil
     end
 

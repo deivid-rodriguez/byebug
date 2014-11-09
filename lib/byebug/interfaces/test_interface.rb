@@ -11,7 +11,15 @@ module Byebug
     end
 
     def errmsg(message)
-      error.push(message)
+      error.concat(message.to_s.split("\n"))
+    end
+
+    def print(message)
+      output.concat(message.to_s.split("\n"))
+    end
+
+    def puts(message)
+      output.concat(message.to_s.split("\n"))
     end
 
     def read_command(prompt)
@@ -21,10 +29,6 @@ module Byebug
 
       test_block.call
       self.test_block = nil
-    end
-
-    def puts(message)
-      output.push(message.to_s)
     end
 
     def inspect

@@ -29,7 +29,7 @@ module Byebug
 
       enter 'restart 1 2'
       debug_proc(@example)
-      check_output_includes "Re exec'ing:\n\t#{cmd}"
+      check_output_includes "Re exec'ing:", "\t#{cmd}"
     end
 
     def test_still_restarts_shows_messages_when_attached_to_running_program

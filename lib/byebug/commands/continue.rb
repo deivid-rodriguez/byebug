@@ -18,7 +18,7 @@ module Byebug
         filename = File.expand_path(@state.file)
         autoreload = Setting[:autoreload]
         unless Filecache.stopping_points(filename, autoreload).member?(num)
-          return errmsg("Line #{num} is not a valid stopping point in file")
+          return errmsg(pr('continue.errors.unstopped_line', line: num))
         end
 
         Breakpoint.add(filename, num)

@@ -66,7 +66,7 @@ module Byebug
 
     def breakpoint_numbers
       columnize(Filecache.stopping_points(example_fullpath).sort,
-                Byebug::Setting[:width])
+                Byebug::Setting[:width]).split("\n")
     end
 
     include Columnize
@@ -132,7 +132,7 @@ module Byebug
       enter 'info files'
       debug_code(program) do
         check_output_includes basic, mtime
-        check_output_doesnt_include breakpoint_numbers, sha1
+        check_output_doesnt_include(*breakpoint_numbers, sha1)
       end
     end
 
@@ -140,7 +140,7 @@ module Byebug
       enter 'info file'
       debug_code(program) do
         check_output_includes basic
-        check_output_doesnt_include breakpoint_numbers, mtime, sha1
+        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
       end
     end
 
@@ -148,7 +148,7 @@ module Byebug
       enter "info file #{example_fullpath}"
       debug_code(program) do
         check_output_includes basic
-        check_output_doesnt_include breakpoint_numbers, mtime, sha1
+        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
       end
     end
 
@@ -156,7 +156,7 @@ module Byebug
       enter "info file #{example_fullpath} mtime"
       debug_code(program) do
         check_output_includes basic, mtime
-        check_output_doesnt_include breakpoint_numbers, sha1
+        check_output_doesnt_include(*breakpoint_numbers, sha1)
       end
     end
 
@@ -164,7 +164,7 @@ module Byebug
       enter "info file #{example_fullpath} sha1"
       debug_code(program) do
         check_output_includes basic, sha1
-        check_output_doesnt_include breakpoint_numbers, mtime
+        check_output_doesnt_include(*breakpoint_numbers, mtime)
       end
     end
 
@@ -176,7 +176,7 @@ module Byebug
           /Created breakpoint \d+ at #{example_fullpath}:37/,
           /Created breakpoint \d+ at #{example_fullpath}:38/,
           basic,
-          'breakpoint line numbers:', breakpoint_numbers)
+          'breakpoint line numbers:', *breakpoint_numbers)
         check_output_doesnt_include mtime, sha1
       end
     end
@@ -184,7 +184,7 @@ module Byebug
     def test_info_file_all_shows_all_available_info_about_a_specific_file
       enter "info file #{example_fullpath} all"
       debug_code(program) do
-        check_output_includes basic, breakpoint_numbers, mtime, sha1
+        check_output_includes basic, *breakpoint_numbers, mtime, sha1
       end
     end
 

@@ -1,4 +1,7 @@
 # encoding: utf-8
+
+require 'pathname'
+
 module Byebug
   #
   # Mixin to assist command parsing
@@ -31,15 +34,15 @@ module Byebug
     def adjust_frame(frame_pos, absolute)
       if absolute
         abs_frame_pos = switch_to_frame(frame_pos)
-        return errmsg("Can't navigate to c-frame") if c_frame?(abs_frame_pos)
+        return errmsg(pr('frame.errors.c_frame')) if c_frame?(abs_frame_pos)
       else
         abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
       if abs_frame_pos >= Context.stack_size
-        return errmsg("Can't navigate beyond the oldest frame")
+        return errmsg(pr('frame.errors.too_low'))
       elsif abs_frame_pos < 0
-        return errmsg("Can't navigate beyond the newest frame")
+        return errmsg(pr('frame.errors.too_high'))
       end
 
       @state.frame_pos = abs_frame_pos
@@ -56,7 +59,7 @@ module Byebug
 
     def get_frame_block_and_method(pos)
       frame_deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
-      frame_deco_method = "#{@state.context.frame_method pos}"
+      frame_deco_method = "#{@state.context.frame_method(pos)}"
       frame_block_and_method = frame_deco_regexp.match(frame_deco_method)[1..2]
       frame_block_and_method.map { |x| x.nil? ? '' : x }
     end
@@ -83,35 +86,13 @@ module Byebug
       "(#{my_args.join(', ')})"
     end
 
-    def get_frame_call(prefix, pos)
+    def get_frame_call(pos)
       frame_block, frame_method = get_frame_block_and_method(pos)
       frame_class = get_frame_class(Setting[:callstyle], pos)
       frame_args = get_frame_args(Setting[:callstyle], pos)
 
-      call_str = frame_block + frame_class + frame_method + frame_args
-
-      max_call_str_size = Setting[:width] - prefix.size
-      if call_str.size > max_call_str_size
-        call_str = call_str[0..max_call_str_size - 5] + '...)'
-      end
-
-      call_str
+      frame_block + frame_class + frame_method + frame_args
     end
-
-    def print_backtrace
-      calcedsize = @state.context.calced_stack_size
-      stacksize = Context.stack_size
-      if calcedsize != stacksize
-        errmsg "Byebug's stacksize (#{calcedsize}) should be #{stacksize}. " \
-               "This might be a bug in byebug or ruby's debugging API's\n"
-
-        stacksize = calcedsize if Byebug.post_mortem?
-      end
-
-      (0...stacksize).each { |idx| print_frame(idx) }
-    end
-
-    require 'pathname'
 
     def shortpath(fullpath)
       components = Pathname(fullpath).each_filename.to_a
@@ -120,28 +101,36 @@ module Byebug
       File.join('...', components[-3..-1])
     end
 
-    def print_frame(pos, mark_current = true)
+    def get_pr_arguments(pos)
       fullpath = @state.context.frame_file(pos)
-      file = Setting[:fullpath] ? fullpath : shortpath(fullpath)
+      file = CommandProcessor.canonic_file(
+        Setting[:fullpath] ? fullpath : shortpath(fullpath)
+      )
       line = @state.context.frame_line(pos)
 
-      if mark_current
-        frame_str = (pos == @state.frame_pos) ? '--> ' : '    '
-      else
-        frame_str = ''
-      end
-      frame_str += c_frame?(pos) ? ' ͱ-- ' : ''
+      mark = (pos == @state.frame_pos) ? '--> ' : '    '
+      mark += c_frame?(pos) ? ' ͱ-- ' : ''
+      call_str = get_frame_call(pos)
 
-      frame_str += format('#%-2d ', pos)
-      frame_str += get_frame_call frame_str, pos
-      file_line = "at #{CommandProcessor.canonic_file(file)}:#{line}"
-      if frame_str.size + file_line.size + 1 > Setting[:width]
-        frame_str += "\n      #{file_line}"
-      else
-        frame_str += " #{file_line}"
-      end
+      { mark: mark,
+        pos: format('%-2d', pos),
+        call_str: "#{call_str} ",
+        file: file,
+        line: line }
+    end
 
-      puts frame_str
+    def print_backtrace
+      calcedsize = @state.context.calced_stack_size
+      stacksize = Context.stack_size
+
+      if calcedsize != stacksize
+        errmsg(pr('frame.errors.stacksize',
+                  calcedsize: calcedsize, realsize: stacksize))
+        stacksize = calcedsize if Byebug.post_mortem?
+      end
+      print(prc('frame.line', (0...stacksize)) do |_, index|
+        get_pr_arguments(index)
+      end)
     end
   end
 
@@ -236,7 +225,9 @@ module Byebug
     end
 
     def execute
-      return print_frame @state.frame_pos unless @match[1]
+      unless @match[1]
+        print(pr('frame.line', get_pr_arguments(@state.frame_pos)))
+      end
 
       pos, err = get_int(@match[1], 'Frame')
       return errmsg(err) unless pos

@@ -13,10 +13,10 @@ module Byebug
 
     def execute
       var = @match[1]
-      return errmsg('tracevar needs a global variable name') unless var
+      return errmsg(pr('trace.errors.needs_global_variable')) unless var
 
       unless global_variables.include?(:"#{var}")
-        return errmsg("'#{var}' is not a global variable.")
+        return errmsg(pr('trace.errors.var_is_not_global', name: var))
       end
 
       stop = @match[2] && @match[2] !~ /nostop/
@@ -25,11 +25,11 @@ module Byebug
         trace_var(:"#{var}") { |val| on_change(var, val, stop) }
       end
 
-      puts "Tracing global variable \"#{var}\"."
+      puts pr('trace.messages.success', var: var)
     end
 
     def on_change(name, value, stop)
-      puts "traced global variable '#{name}' has value '#{value}'"
+      puts pr('trace.messages.on_change', name: name, value: value)
       byebug(1, false) if stop
     end
 

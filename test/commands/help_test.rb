@@ -18,25 +18,29 @@ module Byebug
       define_method(:"test_#{cmd_alias}_shows_help_for_help_command_itself") do
         enter 'set width 50', cmd_alias
         debug_proc(@example)
-        check_output_includes <<-EOD.gsub(/^ {8}/, '')
+        (<<-TEXT
           h[elp][ <command>[ <subcommand>]]
-
           "help" alone prints this help.
           "help <command>" prints help on <command>.
           "help <command> <subcommand>" prints help on <subcommand>.
-        EOD
+        TEXT
+        ).split("\n").each do |line|
+          check_output_includes line
+        end
       end
     end
 
     def test_help_with_specific_command_shows_help_for_it
       enter 'help break'
       debug_proc(@example)
-      check_output_includes <<-EOH.gsub(/^ {6}/, '')
+      (<<-TEXT
         b[reak] file:line [if expr]
         b[reak] class(.|#)method [if expr]
-
         Set breakpoint to some position, (optionally) if expr == true
-      EOH
+      TEXT
+      ).split("\n").each do |line|
+        check_output_includes line
+      end
     end
 
     def test_help_with_undefined_command_shows_an_error

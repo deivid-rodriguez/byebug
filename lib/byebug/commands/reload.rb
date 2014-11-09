@@ -14,7 +14,7 @@ module Byebug
       Filecache.clear
 
       onoff = Setting[:autoreload] ? 'on' : 'off'
-      puts "Source code was reloaded. Automatic reloading is #{onoff}"
+      puts pr('reload.messages.done', source_reloading: onoff)
     end
 
     class << self

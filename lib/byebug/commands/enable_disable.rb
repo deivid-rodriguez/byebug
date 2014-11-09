@@ -4,7 +4,7 @@ module Byebug
   #
   module EnableDisableFunctions
     def enable_disable_breakpoints(is_enable, args)
-      return errmsg('No breakpoints have been set') if Breakpoint.none?
+      return errmsg(pr('toggle.errors.no_breakpoints')) if Breakpoint.none?
 
       all_breakpoints = Byebug.breakpoints.sort_by(&:id)
       if args.empty?
@@ -26,8 +26,7 @@ module Byebug
       selected_breakpoints.each do |b|
         enabled = ('enable' == is_enable)
         if enabled && !syntax_valid?(b.expr)
-          return errmsg("Expression \"#{b.expr}\" syntactically incorrect; " \
-                        'breakpoint remains disabled.')
+          return errmsg(pr('toggle.errors.expression', expr: b.expr))
         end
 
         b.enabled = enabled
@@ -35,9 +34,7 @@ module Byebug
     end
 
     def enable_disable_display(is_enable, args)
-      if 0 == @state.display.size
-        return errmsg('No display expressions have been set')
-      end
+      return errmsg(pr('toggle.errors.no_display')) if 0 == @state.display.size
 
       args.each do |pos|
         pos, err = get_int(pos, "#{is_enable} display", 1, @state.display.size)
@@ -73,8 +70,7 @@ module Byebug
     def execute
       cmd = @match[1] == 'dis' ? 'disable' : 'enable'
 
-      return errmsg("\"#{cmd}\" must be followed by \"display\", " \
-                    "\"breakpoints\" or breakpoint ids") unless @match[2]
+      return errmsg(pr('toggle.errors.syntax', toggle: cmd)) unless @match[2]
 
       args = @match[2].split(/[ \t]+/)
       param = args.shift

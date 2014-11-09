@@ -11,13 +11,17 @@ module Byebug
 
     def execute
       obj = bb_eval(@match.post_match)
-      if @match[1]
-        puts "#{columnize(obj.methods.sort, Setting[:width])}"
-      elsif !obj.is_a?(Module)
-        puts "Should be Class/Module: #{@match.post_match}"
-      else
-        puts "#{columnize(obj.instance_methods(false).sort, Setting[:width])}"
-      end
+      result =
+        if @match[1]
+          prc('method.methods', obj.methods.sort) { |item, _| { name: item } }
+        elsif !obj.is_a?(Module)
+          pr('variable.errors.not_class_module', object: @match.post_match)
+        else
+          prc('method.methods', obj.instance_methods(false).sort) do |item, _|
+            { name: item }
+          end
+        end
+      puts result
     end
 
     class << self

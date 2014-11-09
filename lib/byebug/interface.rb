@@ -38,6 +38,10 @@ module Byebug
       output.puts(message)
     end
 
+    def print(message)
+      output.print(message)
+    end
+
     #
     # Confirms user introduced an affirmative response to the input stream.
     #
