@@ -29,11 +29,12 @@ module Byebug
       def translate(string, args = {})
         # they may contain #{} string interpolation
         string.gsub(/\|\w+$/, '').gsub(/([^#]?){([^}]*)}/) do
-          key = $2.to_s.to_sym
-          unless args.key?(key)
-            fail MissedArgument, "Missed argument #{$2} for '#{string}'"
+          key = Regexp.last_match[2].to_s
+          unless args.key?(key.to_sym)
+            fail MissedArgument, "Missed argument #{key} for '#{string}'"
           end
-          "#{$1}#{args[key]}"
+
+          "#{Regexp.last_match[1]}#{args[key.to_sym]}"
         end
       end
 

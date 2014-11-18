@@ -66,9 +66,18 @@ module Byebug
 
       commands = Readline::HISTORY.to_a.last(show_size)
 
-      (self.size - show_size + 1..self.size).to_a.zip(commands).map do |l|
+      last_ids(show_size).zip(commands).map do |l|
         format('%5d  %s', l[0], l[1])
       end.join("\n") + "\n"
+    end
+
+    #
+    # Array of ids of the last n commands.
+    #
+    def last_ids(n)
+      from, to = 1 + self.size - n, self.size
+
+      (from..to).to_a
     end
 
     #

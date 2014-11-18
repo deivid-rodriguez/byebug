@@ -6,7 +6,7 @@ gem 'rake', '~> 10.3'
 
 group :development do
   gem 'rake-compiler', '0.9.3'
-  gem 'rubocop', '0.26.1'
+  gem 'rubocop', '0.27.1'
 end
 
 group :test do

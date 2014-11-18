@@ -34,15 +34,11 @@ module Byebug
     def test_setting_breakpoint_sets_correct_fields
       enter 'break 21'
 
-      file = example_fullpath
-
       debug_code(program) do
-        assert_equal 21, Breakpoint.first.pos
-        assert_equal file, Breakpoint.first.source
-        assert_equal nil, Breakpoint.first.expr
-        assert_equal 0, Breakpoint.first.hit_count
-        assert_equal 0, Breakpoint.first.hit_value
-        assert_equal true, Breakpoint.first.enabled?
+        b = Breakpoint.first
+        exp = [b.pos, b.source, b.expr, b.hit_count, b.hit_value, b.enabled?]
+        act = [21, example_fullpath, nil, 0, 0, true]
+        assert_equal act, exp
       end
     end
 

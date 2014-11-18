@@ -11,9 +11,10 @@ module Byebug
         return 0 unless backtrace
 
         unless byebug_frames
-          backtrace = backtrace.drop_while { |l| !ignored(l.path) }
-                               .drop_while { |l|  ignored(l.path) }
-                               .take_while { |l| !ignored(l.path) }
+          backtrace = backtrace
+                      .drop_while { |l| !ignored(l.path) }
+                      .drop_while { |l|  ignored(l.path) }
+                      .take_while { |l| !ignored(l.path) }
         end
 
         backtrace.size

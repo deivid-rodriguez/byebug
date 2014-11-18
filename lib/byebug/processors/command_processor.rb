@@ -223,23 +223,26 @@ module Byebug
     def preloop(context, file, line)
       state, commands = always_run(context, file, line, 1)
 
-      if Setting[:testing]
-        Thread.current.thread_variable_set('state', state)
-      else
-        Thread.current.thread_variable_set('state', nil)
-      end
+      thread_state = Setting[:testing] ? state : nil
+      Thread.current.thread_variable_set('state', thread_state)
 
-      @context_was_dead = true if context.dead? && !@context_was_dead
-      if @context_was_dead
-        puts 'The program finished.'
-        @context_was_dead = false
-      end
+      puts 'The program finished.' if program_just_finished?(context)
 
       puts(state.location) if Setting[:autolist] == 0
 
       @interface.history.restore if Setting[:autosave]
 
       [state, commands]
+    end
+
+    #
+    # Returns true first time control is given to the user after program
+    # termination.
+    #
+    def program_just_finished?(context)
+      result = context.dead? && !@context_was_dead
+      @context_was_dead = false if result == true
+      result
     end
 
     #
