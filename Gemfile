@@ -5,13 +5,13 @@ gemspec
 gem 'rake', '~> 10.3'
 
 group :development do
-  gem 'rake-compiler', '~> 0.9'
+  gem 'rake-compiler', '0.9.3'
   gem 'rubocop', '0.26.1'
 end
 
 group :test do
   gem 'mocha', '~> 1.1'
   gem 'minitest', '~> 5.4'
-  gem 'simplecov', '~> 0.9', require: false
-  gem 'codeclimate-test-reporter', '~> 0.4', require: false
+  gem 'simplecov', '0.9.1', require: false
+  gem 'codeclimate-test-reporter', '0.4.1', require: false
 end

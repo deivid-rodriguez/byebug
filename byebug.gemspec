@@ -26,6 +26,6 @@ Gem::Specification.new do |s|
   s.extensions = ['ext/byebug/extconf.rb']
   s.require_path = 'lib'
 
-  s.add_dependency 'columnize', '~> 0.8'
+  s.add_dependency 'columnize', '0.8.9'
   s.add_dependency 'slop', '~> 3.6'
 end
