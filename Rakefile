@@ -51,4 +51,4 @@ task :rubocop do
   RuboCop::RakeTask.new
 end
 
-task default: [:rubocop, :native, :test]
+task default: [:native, :test, :rubocop]
