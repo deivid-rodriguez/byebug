@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rake', '~> 10.3'
+gem 'rake', '~> 10.4'
 
 group :development do
   gem 'rake-compiler', '0.9.3'
