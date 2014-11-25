@@ -85,6 +85,15 @@ module Byebug
       interface.test_block.call if interface.test_block
     end
 
+    #
+    # Writes a string containing Ruby code to a file and then debugs that file.
+    # After debugging is done, file is deleted. The code is supposed to be a
+    # standard test case for Byebug which might define the class defined by
+    # method +example_class+ inside the Byebug module. This convention is just
+    # to allow removing the class and keeping Byebug's module unpolluted.
+    #
+    # @param program [String] Ruby code to be debugged
+    #
     def write_to_file_and_debug(program)
       File.open(example_path, 'w') { |file| file.write(program) }
       Filecache.cache(example_path, true)
