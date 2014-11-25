@@ -433,7 +433,7 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
 
   if (n_frames < 0 || n_frames > context->calced_stack_size)
     rb_raise(rb_eRuntimeError,
-             "You wan't to finish %d frames, but stack size is only %d",
+             "You want to finish %d frames, but stack size is only %d",
              n_frames, context->calced_stack_size);
 
   context->steps_out = n_frames;
