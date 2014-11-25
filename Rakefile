@@ -1,10 +1,7 @@
 #
 # Prepend DevKit into compilation phase
 #
-if RUBY_PLATFORM =~ /mingw/
-  task compile: :devkit
-  task native: :devkit
-end
+task compile: :devkit if RUBY_PLATFORM =~ /mingw/
 
 require 'rake/extensiontask'
 
@@ -51,4 +48,4 @@ task :rubocop do
   RuboCop::RakeTask.new
 end
 
-task default: [:native, :test, :rubocop]
+task default: [:compile, :test, :rubocop]

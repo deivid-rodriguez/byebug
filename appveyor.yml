@@ -13,7 +13,7 @@ install:
   - bundle install
 
 build_script:
-  - bundle exec rake native
+  - bundle exec rake compile
 
 test_script:
   - bundle exec rake test
