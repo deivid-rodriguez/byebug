@@ -100,7 +100,7 @@ module Byebug
     end
 
     def test_info_breakpoints_shows_error_if_specific_breakpoint_do_not_exist
-      enter 'break 37', 'info breakpoints 100'
+      enter 'break 37', 'break 38', 'delete 100', 'info breakpoints 100'
       debug_code(program)
       check_error_includes 'No breakpoints found among list given'
     end
