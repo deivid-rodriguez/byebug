@@ -67,16 +67,17 @@ module Byebug
       end
     end
 
+    include FileFunctions
+
     def info_file_basic(file)
       path = File.expand_path(file)
-      lines = Filecache.lines(path)
-      return unless lines
+      return unless File.exist?(path)
 
-      puts "File #{path} (#{lines.count} lines)"
+      puts "File #{path} (#{n_lines(path)} lines)"
     end
 
     def info_file_breakpoints(file)
-      breakpoints = Filecache.stopping_points(file)
+      breakpoints = Breakpoint.potential_lines(file)
       return unless breakpoints
 
       puts "\tbreakpoint line numbers:"
@@ -90,15 +91,6 @@ module Byebug
 
     def info_file_sha1(file)
       puts "\t#{Digest::SHA1.hexdigest(file)}"
-    end
-
-    def info_files(*_args)
-      Filecache.cached_files.sort.each do |file|
-        next unless Filecache.cache(file, true)
-
-        info_file_basic(file)
-        info_file_mtime(file)
-      end
     end
 
     def info_line(*_args)
@@ -146,7 +138,6 @@ module Byebug
        'After the file name is supplied, you can list file attributes that ' \
        'you wish to see. Attributes are: "all", "breakpoint", "mtime" and ' \
        'A header show file path and number of lines is always displayed.'],
-      ['files', 5, 'File names and timestamps of files read in'],
       ['line', 2, 'Line number and file name of current position in source ' \
                   'file.'],
       ['program', 2, 'Execution status of the program']

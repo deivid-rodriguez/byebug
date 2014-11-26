@@ -10,8 +10,8 @@ module Byebug
       super
     end
 
-    settings = %i(autoeval autolist autoreload autosave basename forcestep
-                  fullpath post_mortem stack_on_error testing tracing_plus)
+    settings = %i(autoeval autolist autosave basename forcestep fullpath
+                  post_mortem stack_on_error testing tracing_plus)
 
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|

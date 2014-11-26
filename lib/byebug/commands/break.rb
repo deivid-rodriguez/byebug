@@ -48,8 +48,7 @@ module Byebug
           return errmsg(pr('breakpoints.errors.far_line', lines: n, file: file))
         end
 
-        autoreload = Setting[:autoreload]
-        unless Filecache.stopping_points(path, autoreload).member?(l)
+        unless Breakpoint.potential_line?(path, l)
           return errmsg(pr('breakpoints.errors.line', line: l, file: file))
         end
 

@@ -79,13 +79,12 @@ module Byebug
     end
     protect :at_catchpoint
 
-    include ParseFunctions
+    include FileFunctions
 
     def at_tracing(context, file, line)
       if file != @last_file || line != @last_line || Setting[:tracing_plus]
         path = self.class.canonic_file(file)
-        source = Filecache.line(file, line, Setting[:autoreload])
-        puts "Tracing: #{path}:#{line} #{source}"
+        puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
         @last_file, @last_line = file, line
       end
       always_run(context, file, line, 2)
@@ -274,11 +273,9 @@ module Byebug
       end
 
       def location
-        loc = "#{self.class.canonic_file(@file)} @ #{@line}\n"
-        unless ['(irb)', '-e'].include? @file
-          loc += "#{get_line(@file, @line, Setting[:autoreload])}\n"
-        end
-        loc
+        l = "#{self.class.canonic_file(@file)} @ #{@line}\n"
+        l += "#{get_line(@file, @line)}\n" unless %w((irb) -e').include?(@file)
+        l
       end
     end
   end

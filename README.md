@@ -117,11 +117,10 @@ both rails and rspec have deprecated these flags in their latest versions.
     `ps`        |              |
     `putl`      |              |
     `quit`      | `exit`       |
-    `reload`    |              |
     `restart`   |              |
     `save`      |              |
-    `set`       |              | `autoeval` `autoirb` `autolist` `autoreload` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
-    `show`      |              | `autoeval` `autoirb` `autolist` `autoreload` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
+    `set`       |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
+    `show`      |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `forcestep` `fullpath` `histfile` `histsize` `linetrace` `tracing_plus` `listsize` `post_mortem` `stack_on_error` `testing` `verbose` `width`
     `skip`      |              |
     `source`    |              |
     `step`      |              |

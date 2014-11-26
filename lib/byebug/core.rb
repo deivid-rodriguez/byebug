@@ -6,7 +6,6 @@ require 'byebug/interface'
 require 'byebug/processor'
 require 'byebug/setting'
 require 'byebug/remote'
-require 'byebug/filecache'
 require 'byebug/printers/plain'
 
 module Byebug

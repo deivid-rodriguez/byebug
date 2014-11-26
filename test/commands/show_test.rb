@@ -8,9 +8,8 @@ module Byebug
       super
     end
 
-    [:autoeval, :autolist, :autoreload, :autosave, :basename, :forcestep,
-     :fullpath, :post_mortem, :stack_on_error, :testing,
-     :tracing_plus].each do |set|
+    [:autoeval, :autolist, :autosave, :basename, :forcestep, :fullpath,
+     :post_mortem, :stack_on_error, :testing, :tracing_plus].each do |set|
       define_method(:"test_show_#{set}_shows_disabled_bool_setting_#{set}") do
         Setting[set] = false
         enter "show #{set}"

@@ -60,10 +60,6 @@ quit:
   confirmations:
     really: "Really quit?"
 
-reload:
-  messages:
-    done: "Source code was reloaded. Automatic reloading is {source_reloading}"
-
 restart:
   errors:
     not_available: "Restart command is not available at this time"

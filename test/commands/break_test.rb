@@ -276,17 +276,10 @@ module Byebug
       check_output_includes(/b\[reak\] file:line \[if expr\]/)
     end
 
-    def test_setting_breakpoint_with_autoreload_uses_new_source
+    def test_setting_breakpoint_uses_new_source
       enter -> { cmd_after_replace(example_fullpath, 21, '', 'break 21') }
 
       debug_code(program) { assert_empty Byebug.breakpoints }
-    end
-
-    def test_setting_breakpoint_with_noautoreload_uses_old_source
-      enter 'set noautoreload',
-            -> { cmd_after_replace(example_fullpath, 21, '', 'break 21') }
-
-      debug_code(program) { assert_equal 1, Byebug.breakpoints.size }
     end
 
     module FilenameTests

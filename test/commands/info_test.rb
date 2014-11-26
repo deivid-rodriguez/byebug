@@ -52,10 +52,6 @@ module Byebug
       "File #{example_fullpath} (#{lines.count} lines)"
     end
 
-    def files
-      Filecache.cached_files.sort
-    end
-
     def mtime
       File.stat(example_fullpath).mtime.to_s
     end
@@ -65,8 +61,8 @@ module Byebug
     end
 
     def breakpoint_numbers
-      columnize(Filecache.stopping_points(example_fullpath).sort,
-                Byebug::Setting[:width]).split("\n")
+      width, path = Byebug::Setting[:width], example_fullpath
+      columnize(Breakpoint.potential_lines(path).sort, width).split("\n")
     end
 
     include Columnize
@@ -125,15 +121,6 @@ module Byebug
       enter 'info display'
       debug_code(program)
       check_output_includes 'There are no auto-display expressions now.'
-    end
-
-    def test_info_files_shows_all_files_read_in
-      enter 'list' # explicitly load current file into cache
-      enter 'info files'
-      debug_code(program) do
-        check_output_includes basic, mtime
-        check_output_doesnt_include(*breakpoint_numbers, sha1)
-      end
     end
 
     def test_info_file_without_args_shows_basic_info_about_current_file

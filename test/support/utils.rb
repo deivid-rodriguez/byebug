@@ -96,7 +96,6 @@ module Byebug
     #
     def write_to_file_and_debug(program)
       File.open(example_path, 'w') { |file| file.write(program) }
-      Filecache.cache(example_path, true)
       load(example_path)
     ensure
       if Byebug.const_defined?(example_class)

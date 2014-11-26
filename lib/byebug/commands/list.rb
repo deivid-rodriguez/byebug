@@ -8,13 +8,15 @@ module Byebug
     end
 
     def execute
-      lines = Filecache.lines(@state.file, Setting[:autoreload])
-      return errmsg "No sourcefile available for #{@state.file}\n" unless lines
+      exist = File.exist?(@state.file)
+      return errmsg "No sourcefile available for #{@state.file}\n" unless exist
 
       @match ||= match('list')
-      b, e = range(@match[2], lines.size)
-      return errmsg('Invalid line range') unless valid_range?(b, e, lines.size)
-      display_lines(b, e, lines)
+      max_lines = n_lines(@state.file)
+      b, e = range(@match[2], max_lines)
+      return errmsg('Invalid line range') unless valid_range?(b, e, max_lines)
+
+      display_lines(b, e)
 
       @state.prev_line = b
     end
@@ -104,14 +106,17 @@ module Byebug
     end
 
     #
-    # Show file lines in <lines> from line number <min> to line number <max>.
+    # Show lines in @state.file from line number <min> to line number <max>.
     #
-    def display_lines(min, max, lines)
+    def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{@state.file}"
 
-      (min..max).to_a.zip(lines[min - 1..max - 1]).map do |l|
-        mark = l[0] == @state.line ? '=> ' : '   '
-        puts format("#{mark}%#{max.to_s.size}d: %s", l[0], l[1])
+      File.foreach(@state.file).with_index do |line, lineno|
+        return if lineno + 1 > max
+        next unless (min..max).include?(lineno + 1)
+
+        mark = lineno + 1 == @state.line ? '=> ' : '   '
+        puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
       end
     end
   end

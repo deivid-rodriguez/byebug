@@ -41,7 +41,7 @@ module Byebug
       end
     end
 
-    %w(step next finish break condition display reload tracevar
+    %w(step next finish break condition display tracevar
        untracevar).each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
         enter 'set noautoeval', 'set post_mortem', "#{cmd}", 'set no_postmortem'

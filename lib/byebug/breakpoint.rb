@@ -40,6 +40,36 @@ module Byebug
     end
 
     #
+    # Returns an array of line numbers in file named +filename+ where
+    # breakpoints could be set. The list will contain an entry for each
+    # distinct line event call so it is possible (and possibly useful) for a
+    # line number appear more than once.
+    #
+    # @param filename [String] File name to inspect for possible breakpoints
+    #
+    def self.potential_lines(filename)
+      name, lines = "#{Time.new.to_i}_#{rand(2**31)}", {}
+      iseq = RubyVM::InstructionSequence.compile(File.read(filename), name)
+
+      iseq.disasm.each_line do |line|
+        res = /^\d+ (?<insn>\w+)\s+.+\(\s*(?<lineno>\d+)\)$/.match(line)
+        next unless res && res[:insn] == 'trace'
+
+        lines[res[:lineno].to_i] = true
+      end
+
+      lines.keys
+    end
+
+    #
+    # Returns true if a breakpoint could be set in line number +lineno+ in file
+    # name +filename.
+    #
+    def self.potential_line?(filename, lineno)
+      potential_lines(filename).member?(lineno)
+    end
+
+    #
     # True if there's no breakpoints
     #
     def self.none?
