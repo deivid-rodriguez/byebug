@@ -1,3 +1,24 @@
+# 4.0.0 (unreleased)
+- Additions
+  * `untracevar` command that stops tracing a global variable.
+  * Window CI build through AppVeyor.
+  * OSX CI build through Travis.
+  * Style enforcement through RuboCop.
+  * Some remote debugging tests (thanks @eric-hu).
+  * Printer's support (thanks @astashov).
+
+- Changed
+  * `tracevar` now requires the full global variable name (with "$").
+  * Fixed various code reloading issues.
+  * `set fullpath` was not showing fullpaths. Now it is.
+  * A lot of refactoring.
+
+- Removed
+  * `autoreload` setting as it's not necessary anymore. Code should always be
+up to date.
+  * `reload` command for the same reason.
+  * drop `debugger-linecache` dependency.
+
 # 3.5.1
 - Fix windows installation (#79)
 - Fix bug in "condition" command where invalid breakpoint ids wouldn't be
