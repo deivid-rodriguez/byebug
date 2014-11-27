@@ -12,27 +12,34 @@ module Byebug
     end
 
     def execute
-      excn = @match[1]
-      return info_catch unless excn
+      ex = @match[1]
+      return info_catch unless ex
 
-      if !@match[2]
-        if 'off' == @match[1]
+      cmd = @match[2]
+      unless cmd
+        if 'off' == ex
           Byebug.catchpoints.clear if
             confirm(pr('catch.confirmations.delete_all'))
-        else
-          puts pr('catch.errors.not_class', class: @match[1]) unless
-            bb_eval "#{@match[1]}.is_a?(Class)", get_binding
-          Byebug.add_catchpoint @match[1]
-          puts pr('catch.catching', exception: @match[1])
+
+          return
         end
-      elsif @match[2] != 'off'
-        errmsg pr('catch.errors.off', off: @match[2])
-      elsif Byebug.catchpoints.member?(@match[1])
-        Byebug.catchpoints.delete @match[1]
-        errmsg pr('catch.errors.removed', exception: @match[1])
-      else
-        errmsg pr('catch.errors.not_found', exception: @match[1])
+
+        is_class = bb_eval("#{ex.is_a?(Class)}")
+        puts pr('catch.errors.not_class', class: ex) unless is_class
+
+        Byebug.add_catchpoint(ex)
+        return puts pr('catch.catching', exception: ex)
       end
+
+      if cmd == 'off'
+        exists = Byebug.catchpoints.member?(ex)
+        return errmsg pr('catch.errors.not_found', exception: ex) unless exists
+
+        Byebug.catchpoints.delete(ex)
+        return errmsg pr('catch.errors.removed', exception: ex)
+      end
+
+      errmsg pr('catch.errors.off', off: cmd)
     end
 
     class << self
