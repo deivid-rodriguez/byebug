@@ -12,7 +12,7 @@ module Byebug
     end
 
     def switch_to_frame(frame_no)
-      frame_no >= 0 ? frame_no : Context.stack_size + frame_no
+      frame_no >= 0 ? frame_no : @state.context.calced_stack_size + frame_no
     end
 
     def navigate_to_frame(jump_no)
@@ -21,7 +21,7 @@ module Byebug
       step = jump_no / total_jumps
       loop do
         new_pos += step
-        return new_pos if new_pos < 0 || new_pos >= Context.stack_size
+        break if new_pos < 0 || new_pos >= @state.context.calced_stack_size
 
         next if c_frame?(new_pos)
 
@@ -39,7 +39,7 @@ module Byebug
         abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
-      if abs_frame_pos >= Context.stack_size
+      if abs_frame_pos >= @state.context.calced_stack_size
         return errmsg(pr('frame.errors.too_low'))
       elsif abs_frame_pos < 0
         return errmsg(pr('frame.errors.too_high'))

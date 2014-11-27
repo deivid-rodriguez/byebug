@@ -12,6 +12,7 @@
   * Fixed various code reloading issues.
   * `set fullpath` was not showing fullpaths. Now it is.
   * A lot of refactoring.
+  * Fix `up`, `down` and `frame` commands in post_mortem mode (#93).
 
 - Removed
   * `autoreload` setting as it's not necessary anymore. Code should always be
