@@ -14,6 +14,7 @@ module Byebug
       Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
       Byebug.breakpoints.clear if Byebug.breakpoints
       Byebug.catchpoints.clear if Byebug.catchpoints
+      Byebug.stubs(:run_init_script)
 
       set_defaults
 
