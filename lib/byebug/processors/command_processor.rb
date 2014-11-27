@@ -113,8 +113,8 @@ module Byebug
     #
     # Run commands everytime.
     #
-    # For example display commands or possibly the list or irb in an
-    # "autolist" or "autoirb".
+    # For example display commands or possibly the list or irb in an "autolist"
+    # or "autoirb".
     #
     # @return List of commands acceptable to run bound to the current state
     #
