@@ -32,7 +32,7 @@ module Byebug
       end
     end
 
-    def test_execution_is_stop_at_the_correct_line_after_exception
+    def test_execution_is_stopped_at_the_correct_line_after_exception
       enter 'set post_mortem', 'cont', 'set nopost_mortem'
       begin
         debug_proc(@example)
