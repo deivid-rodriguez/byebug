@@ -26,6 +26,8 @@ module Byebug
   # prompt back to the user before program termination.
   #
   def self.handle_post_mortem
+    return unless Byebug.raised_exception
+
     context = Byebug.raised_exception.__bb_context
     file = Byebug.raised_exception.__bb_file
     line = Byebug.raised_exception.__bb_line
