@@ -122,12 +122,11 @@ module Byebug
 
     def print_backtrace
       calcedsize = @state.context.calced_stack_size
-      stacksize = Context.stack_size
+      stacksize = Byebug.post_mortem? ? calcedsize : Context.stack_size
 
       if calcedsize != stacksize
         errmsg(pr('frame.errors.stacksize',
                   calcedsize: calcedsize, realsize: stacksize))
-        stacksize = calcedsize if Byebug.post_mortem?
       end
 
       print(prc('frame.line', (0...stacksize)) do |_, index|
