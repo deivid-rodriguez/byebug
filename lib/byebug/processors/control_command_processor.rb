@@ -20,7 +20,10 @@ module Byebug
 
       while (input = @interface.read_command(prompt(nil)))
         cmd = commands.find { |c| c.match(input) }
-        return errmsg('Unknown command') unless cmd
+        unless cmd
+          errmsg('Unknown command')
+          next
+        end
 
         cmd.execute
       end
