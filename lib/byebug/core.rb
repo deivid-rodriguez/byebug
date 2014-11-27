@@ -51,7 +51,7 @@ module Byebug
   def self.run_script(file, verbose = false)
     interface = ScriptInterface.new(File.expand_path(file), verbose)
     processor = ControlCommandProcessor.new(interface)
-    processor.process_commands(verbose)
+    processor.process_commands
   end
 
   self.printer ||= Byebug::Printers::Plain.new

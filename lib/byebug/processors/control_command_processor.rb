@@ -8,7 +8,7 @@ module Byebug
       @context_was_dead = false # Assume we haven't started.
     end
 
-    def process_commands(verbose = false)
+    def process_commands
       control_cmds = Command.commands.select(&:allow_in_control)
       state = State.new(@interface, control_cmds)
       commands = control_cmds.map { |cmd| cmd.new(state) }
@@ -19,8 +19,6 @@ module Byebug
       end
 
       while (input = @interface.read_command(prompt(nil)))
-        puts("+#{input}") if verbose
-
         cmd = commands.find { |c| c.match(input) }
         return errmsg('Unknown command') unless cmd
 

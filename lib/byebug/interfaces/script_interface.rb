@@ -20,7 +20,7 @@ module Byebug
 
     def readline(*)
       while (result = input.gets)
-        output.puts "# #{result}"
+        output.puts "+ #{result}"
         next if result =~ /^\s*#/
         return result.chomp
       end
