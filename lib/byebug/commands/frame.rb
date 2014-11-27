@@ -19,6 +19,7 @@ module Byebug
       return if jump_no == 0
       total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame_pos
       step = jump_no / total_jumps
+
       loop do
         new_pos += step
         break if new_pos < 0 || new_pos >= @state.context.calced_stack_size
@@ -128,6 +129,7 @@ module Byebug
                   calcedsize: calcedsize, realsize: stacksize))
         stacksize = calcedsize if Byebug.post_mortem?
       end
+
       print(prc('frame.line', (0...stacksize)) do |_, index|
         get_pr_arguments(index)
       end)

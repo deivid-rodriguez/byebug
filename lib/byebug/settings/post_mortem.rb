@@ -27,8 +27,9 @@ module Byebug
   #
   def self.handle_post_mortem
     context = Byebug.raised_exception.__bb_context
-    file    = Byebug.raised_exception.__bb_file
-    line    = Byebug.raised_exception.__bb_line
+    file = Byebug.raised_exception.__bb_file
+    line = Byebug.raised_exception.__bb_line
+
     Byebug.handler.at_line(context, file, line)
   end
 
