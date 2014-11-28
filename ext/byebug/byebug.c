@@ -247,11 +247,8 @@ line_event(VALUE trace_point, void *data)
 
   if (dc->calced_stack_size == 0) dc->calced_stack_size++;
 
-  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
-      dc->last_file != rb_tracearg_path(trace_arg))
-  {
+  if (dc->last_line != line || dc->last_file != file)
     moved = 1;
-  }
 
   if (RTEST(tracing))
     call_at_tracing(context, dc, file, line);
