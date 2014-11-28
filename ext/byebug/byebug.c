@@ -262,8 +262,6 @@ line_event(VALUE trace_point, void *data)
       if (dc->calced_stack_size < dc->dest_frame)
       {
         dc->dest_frame = dc->calced_stack_size;
-        rb_funcall(mByebug, rb_intern("puts"), 1,
-          rb_str_new2("Next went up a frame because previous frame finished\n"));
       }
     }
   }

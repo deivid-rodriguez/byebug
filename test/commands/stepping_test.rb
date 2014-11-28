@@ -139,8 +139,6 @@ module Byebug
     def test_next_advances_the_specified_number_of_frame_statements
       enter 'next 2'
       debug_code(program) { assert_equal 17, state.line }
-      check_output_includes \
-          'Next went up a frame because previous frame finished'
     end
 
     def step_goes_the_specified_number_of_statements_forward_by_default
