@@ -1,10 +1,10 @@
 #include <byebug.h>
 
-static VALUE mByebug; /* Ruby Byebug Module object */
+static VALUE mByebug;   /* Ruby Byebug Module object */
 
-static VALUE tracing     = Qfalse;
+static VALUE tracing = Qfalse;
 static VALUE post_mortem = Qfalse;
-static VALUE verbose     = Qfalse;
+static VALUE verbose = Qfalse;
 
 static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
@@ -67,7 +67,8 @@ check_started()
   }
 }
 
-const char *safe_sym_to_str(VALUE sym)
+const char *
+safe_sym_to_str(VALUE sym)
 {
   VALUE id = NIL_P(sym) ? Qnil : SYM2ID(sym);
 
@@ -75,7 +76,7 @@ const char *safe_sym_to_str(VALUE sym)
 }
 
 static void
-trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
+trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc)
 {
   if (trace_arg)
   {
@@ -89,13 +90,14 @@ trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc)
     const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
 
     rb_funcall(mByebug, rb_intern("puts"), 1,
-      rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n", dc->calced_stack_size, "",
-                 dc->calced_stack_size, dc->thnum, event, path, line, mid));
+               rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n",
+                          dc->calced_stack_size, "", dc->calced_stack_size,
+                          dc->thnum, event, path, line, mid));
   }
 }
 
 static void
-cleanup(debug_context_t *dc)
+cleanup(debug_context_t * dc)
 {
   VALUE thread;
 
@@ -125,7 +127,7 @@ cleanup(debug_context_t *dc)
   if (!trace_common(trace_arg, dc)) { return; }                         \
 
 static int
-trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
+trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
 {
   /* return if thread marked as 'ignored', like byebug's control thread */
   if (CTX_FL_TEST(dc, CTX_FL_IGNORE))
@@ -140,8 +142,8 @@ trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
   locker = rb_thread_current();
 
   /* Many events per line, but only *one* breakpoint */
-  if (dc->last_line != rb_tracearg_lineno(trace_arg) ||
-      dc->last_file != rb_tracearg_path(trace_arg))
+  if (dc->last_line != rb_tracearg_lineno(trace_arg)
+      || dc->last_file != rb_tracearg_path(trace_arg))
   {
     CTX_FL_SET(dc, CTX_FL_ENABLE_BKPT);
   }
@@ -150,7 +152,7 @@ trace_common(rb_trace_arg_t *trace_arg, debug_context_t *dc)
 }
 
 static void
-save_current_position(debug_context_t *dc, VALUE file, VALUE line)
+save_current_position(debug_context_t * dc, VALUE file, VALUE line)
 {
   dc->last_file = file;
   dc->last_line = line;
@@ -161,8 +163,8 @@ save_current_position(debug_context_t *dc, VALUE file, VALUE line)
 /* Functions that return control to byebug after the different events */
 
 static VALUE
-call_at(VALUE context_obj, debug_context_t *dc, ID mid, int argc, VALUE a0,
-                                                                  VALUE a1)
+call_at(VALUE context_obj, debug_context_t * dc, ID mid, int argc, VALUE a0,
+        VALUE a1)
 {
   struct call_with_inspection_data cwi;
   VALUE argv[2];
@@ -170,52 +172,54 @@ call_at(VALUE context_obj, debug_context_t *dc, ID mid, int argc, VALUE a0,
   argv[0] = a0;
   argv[1] = a1;
 
-  cwi.dc          = dc;
+  cwi.dc = dc;
   cwi.context_obj = context_obj;
-  cwi.id          = mid;
-  cwi.argc        = argc;
-  cwi.argv        = &argv[0];
+  cwi.id = mid;
+  cwi.argc = argc;
+  cwi.argv = &argv[0];
 
   return call_with_debug_inspector(&cwi);
 }
 
 static VALUE
-call_at_line(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+call_at_line(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
   save_current_position(dc, file, line);
   return call_at(context_obj, dc, rb_intern("at_line"), 2, file, line);
 }
 
 static VALUE
-call_at_tracing(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+call_at_tracing(VALUE context_obj, debug_context_t * dc, VALUE file,
+                VALUE line)
 {
   return call_at(context_obj, dc, rb_intern("at_tracing"), 2, file, line);
 }
 
 static VALUE
-call_at_breakpoint(VALUE context_obj, debug_context_t *dc, VALUE breakpoint)
+call_at_breakpoint(VALUE context_obj, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
-  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
+  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint,
+                 0);
 }
 
 static VALUE
-call_at_catchpoint(VALUE context_obj, debug_context_t *dc, VALUE exp)
+call_at_catchpoint(VALUE context_obj, debug_context_t * dc, VALUE exp)
 {
   dc->stop_reason = CTX_STOP_CATCHPOINT;
   return call_at(context_obj, dc, rb_intern("at_catchpoint"), 1, exp, 0);
 }
 
 static VALUE
-call_at_return(VALUE context_obj, debug_context_t *dc, VALUE file, VALUE line)
+call_at_return(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
   CTX_FL_UNSET(dc, CTX_FL_STOP_ON_RET);
   return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
 }
 
 static void
-call_at_line_check(VALUE context_obj, debug_context_t *dc,
-                   VALUE breakpoint, VALUE file, VALUE line)
+call_at_line_check(VALUE context_obj, debug_context_t * dc, VALUE breakpoint,
+                   VALUE file, VALUE line)
 {
   dc->stop_reason = CTX_STOP_STEP;
 
@@ -235,17 +239,18 @@ line_event(VALUE trace_point, void *data)
   VALUE breakpoint, file, line, binding, self;
   int moved = 0;
 
-  EVENT_SETUP
+  EVENT_SETUP;
 
   breakpoint = Qnil;
-  file    = rb_tracearg_path(trace_arg);
-  line    = rb_tracearg_lineno(trace_arg);
+  file = rb_tracearg_path(trace_arg);
+  line = rb_tracearg_lineno(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
-  self    = rb_tracearg_self(trace_arg);
+  self = rb_tracearg_self(trace_arg);
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
-  if (dc->calced_stack_size == 0) dc->calced_stack_size++;
+  if (dc->calced_stack_size == 0)
+    dc->calced_stack_size++;
 
   if (dc->last_line != line || dc->last_file != file)
     moved = 1;
@@ -266,10 +271,13 @@ line_event(VALUE trace_point, void *data)
     }
   }
 
-  if (dc->steps == 0 || dc->lines == 0 ||
-      (CTX_FL_TEST(dc, CTX_FL_ENABLE_BKPT) &&
-      (!NIL_P(
-       breakpoint = find_breakpoint_by_pos(bb_breakpoints(self), file, line, binding)))))
+  if (dc->steps == 0 || dc->lines == 0
+      || (CTX_FL_TEST(dc, CTX_FL_ENABLE_BKPT)
+          &&
+          (!NIL_P
+           (breakpoint =
+            find_breakpoint_by_pos(bb_breakpoints(self), file, line,
+                                   binding)))))
   {
     call_at_line_check(context, dc, breakpoint, file, line);
   }
@@ -282,25 +290,26 @@ call_event(VALUE trace_point, void *data)
 {
   VALUE breakpoint, klass, msym, mid, binding, self, file, line;
 
-  EVENT_SETUP
+  EVENT_SETUP;
 
   dc->calced_stack_size++;
 
   if (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET))
     dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
   breakpoint = Qnil;
-  klass   = rb_tracearg_defined_class(trace_arg);
-  msym    = rb_tracearg_method_id(trace_arg);
-  mid     = NIL_P(msym) ? Qnil : SYM2ID(msym);
+  klass = rb_tracearg_defined_class(trace_arg);
+  msym = rb_tracearg_method_id(trace_arg);
+  mid = NIL_P(msym) ? Qnil : SYM2ID(msym);
   binding = rb_tracearg_binding(trace_arg);
-  self    = rb_tracearg_self(trace_arg);
-  file    = rb_tracearg_path(trace_arg);
-  line    = rb_tracearg_lineno(trace_arg);
+  self = rb_tracearg_self(trace_arg);
+  file = rb_tracearg_path(trace_arg);
+  line = rb_tracearg_lineno(trace_arg);
 
-  breakpoint = find_breakpoint_by_method(bb_breakpoints(self), klass, mid, binding, self);
+  breakpoint =
+    find_breakpoint_by_method(bb_breakpoints(self), klass, mid, binding, self);
   if (breakpoint != Qnil)
   {
     call_at_breakpoint(context, dc, breakpoint);
@@ -313,11 +322,12 @@ call_event(VALUE trace_point, void *data)
 static void
 return_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP
+  EVENT_SETUP;
 
-  if (dc->calced_stack_size > 0) dc->calced_stack_size--;
+  if (dc->calced_stack_size > 0)
+    dc->calced_stack_size--;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
   if (dc->steps_out == 1)
   {
@@ -341,11 +351,11 @@ return_event(VALUE trace_point, void *data)
 static void
 c_call_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP
+  EVENT_SETUP;
 
   dc->calced_stack_size++;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
   cleanup(dc);
 }
@@ -353,11 +363,12 @@ c_call_event(VALUE trace_point, void *data)
 static void
 c_return_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP
+  EVENT_SETUP;
 
-  if (dc->calced_stack_size > 0) dc->calced_stack_size--;
+  if (dc->calced_stack_size > 0)
+    dc->calced_stack_size--;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
   cleanup(dc);
 }
@@ -365,9 +376,9 @@ c_return_event(VALUE trace_point, void *data)
 static void
 thread_event(VALUE trace_point, void *data)
 {
-  EVENT_SETUP
+  EVENT_SETUP;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
   cleanup(dc);
 }
@@ -380,30 +391,30 @@ raise_event(VALUE trace_point, void *data)
   int i;
   debug_context_t *new_dc;
 
-  EVENT_SETUP
+  EVENT_SETUP;
 
-  EVENT_COMMON
+  EVENT_COMMON;
 
-  path             = rb_tracearg_path(trace_arg);
-  lineno           = rb_tracearg_lineno(trace_arg);
-  binding          = rb_tracearg_binding(trace_arg);
+  path = rb_tracearg_path(trace_arg);
+  lineno = rb_tracearg_lineno(trace_arg);
+  binding = rb_tracearg_binding(trace_arg);
   raised_exception = rb_tracearg_raised_exception(trace_arg);
 
   if (post_mortem == Qtrue)
   {
     post_mortem_context = context_dup(dc);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_file")   , path);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_line")   , lineno);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_file"), path);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_line"), lineno);
     rb_ivar_set(raised_exception, rb_intern("@__bb_binding"), binding);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_context"), post_mortem_context);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_context"),
+                post_mortem_context);
 
     Data_Get_Struct(post_mortem_context, debug_context_t, new_dc);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
-  if (catchpoints == Qnil ||
-      dc->calced_stack_size == 0 ||
-      RHASH_TBL(catchpoints)->num_entries == 0)
+  if (catchpoints == Qnil || dc->calced_stack_size == 0
+      || RHASH_TBL(catchpoints)->num_entries == 0)
   {
     cleanup(dc);
     return;
@@ -416,8 +427,8 @@ raise_event(VALUE trace_point, void *data)
     VALUE ancestor_class, module_name, hit_count;
 
     ancestor_class = rb_ary_entry(ancestors, i);
-    module_name    = rb_mod_name(ancestor_class);
-    hit_count      = rb_hash_aref(catchpoints, module_name);
+    module_name = rb_mod_name(ancestor_class);
+    hit_count = rb_hash_aref(catchpoints, module_name);
 
     /* increment exception */
     if (hit_count != Qnil)
@@ -443,21 +454,21 @@ register_tracepoints(VALUE self)
 
   if (NIL_P(traces))
   {
-    int line_msk   = RUBY_EVENT_LINE;
-    int call_msk   = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
+    int line_msk = RUBY_EVENT_LINE;
+    int call_msk = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
     int return_msk = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
     int c_call_msk = RUBY_EVENT_C_CALL;
-    int c_ret_msk  = RUBY_EVENT_C_RETURN;
-    int raise_msk  = RUBY_EVENT_RAISE;
+    int c_ret_msk = RUBY_EVENT_C_RETURN;
+    int raise_msk = RUBY_EVENT_RAISE;
     int thread_msk = RUBY_EVENT_THREAD_BEGIN | RUBY_EVENT_THREAD_END;
 
-    VALUE tpLine    = rb_tracepoint_new(Qnil, line_msk  , line_event    , 0);
-    VALUE tpCall    = rb_tracepoint_new(Qnil, call_msk  , call_event    , 0);
-    VALUE tpReturn  = rb_tracepoint_new(Qnil, return_msk, return_event  , 0);
-    VALUE tpCCall   = rb_tracepoint_new(Qnil, c_call_msk, c_call_event  , 0);
-    VALUE tpCReturn = rb_tracepoint_new(Qnil, c_ret_msk , c_return_event, 0);
-    VALUE tpRaise   = rb_tracepoint_new(Qnil, raise_msk , raise_event   , 0);
-    VALUE tpThread  = rb_tracepoint_new(Qnil, thread_msk, thread_event  , 0);
+    VALUE tpLine = rb_tracepoint_new(Qnil, line_msk, line_event, 0);
+    VALUE tpCall = rb_tracepoint_new(Qnil, call_msk, call_event, 0);
+    VALUE tpReturn = rb_tracepoint_new(Qnil, return_msk, return_event, 0);
+    VALUE tpCCall = rb_tracepoint_new(Qnil, c_call_msk, c_call_event, 0);
+    VALUE tpCReturn = rb_tracepoint_new(Qnil, c_ret_msk, c_return_event, 0);
+    VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
+    VALUE tpThread = rb_tracepoint_new(Qnil, thread_msk, thread_event, 0);
 
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
@@ -480,7 +491,7 @@ clear_tracepoints(VALUE self)
 {
   int i;
 
-  for (i = RARRAY_LENINT(tracepoints)-1; i >= 0; i--)
+  for (i = RARRAY_LENINT(tracepoints) - 1; i >= 0; i--)
     rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
 }
 
@@ -511,6 +522,7 @@ bb_contexts(VALUE self)
   for (i = 0; i < RARRAY_LENINT(list); i++)
   {
     VALUE thread = rb_ary_entry(list, i);
+
     thread_context_lookup(thread, &context);
     rb_ary_push(new_list, context);
   }
@@ -593,7 +605,7 @@ bb_stop(VALUE self)
 
     breakpoints = Qnil;
     catchpoints = Qnil;
-    threads     = Qnil;
+    threads = Qnil;
 
     return Qfalse;
   }
@@ -623,9 +635,9 @@ bb_start(VALUE self)
     result = Qfalse;
   else
   {
-    locker      = Qnil;
+    locker = Qnil;
     catchpoints = rb_hash_new();
-    threads     = create_threads_table();
+    threads = create_threads_table();
 
     register_tracepoints(self);
     result = Qtrue;
@@ -645,7 +657,7 @@ bb_start(VALUE self)
  *  +stop+ parameter forces byebug to stop at the first line of code in +file+
  */
 static VALUE
-bb_load(int argc, VALUE *argv, VALUE self)
+bb_load(int argc, VALUE * argv, VALUE self)
 {
   VALUE file, stop, context;
   debug_context_t *dc;
@@ -664,7 +676,8 @@ bb_load(int argc, VALUE *argv, VALUE self)
 
   dc->calced_stack_size = 1;
 
-  if (RTEST(stop)) dc->steps = 1;
+  if (RTEST(stop))
+    dc->steps = 1;
 
   /* Initializing $0 to the script's path */
   ruby_script(RSTRING_PTR(file));
@@ -787,23 +800,24 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "add_catchpoint"  , bb_add_catchpoint  ,  1);
-  rb_define_module_function(mByebug, "breakpoints"     , bb_breakpoints     ,  0);
-  rb_define_module_function(mByebug, "catchpoints"     , bb_catchpoints     ,  0);
-  rb_define_module_function(mByebug, "contexts"        , bb_contexts        ,  0);
-  rb_define_module_function(mByebug, "current_context" , bb_current_context ,  0);
-  rb_define_module_function(mByebug, "debug_load"      , bb_load            , -1);
-  rb_define_module_function(mByebug, "post_mortem?"    , bb_post_mortem     ,  0);
-  rb_define_module_function(mByebug, "post_mortem="    , bb_set_post_mortem ,  1);
-  rb_define_module_function(mByebug, "raised_exception", bb_raised_exception,  0);
-  rb_define_module_function(mByebug, "start"           , bb_start           ,  0);
-  rb_define_module_function(mByebug, "started?"        , bb_started         ,  0);
-  rb_define_module_function(mByebug, "stop"            , bb_stop            ,  0);
-  rb_define_module_function(mByebug, "thread_context"  , bb_thread_context  ,  1);
-  rb_define_module_function(mByebug, "tracing?"        , bb_tracing         ,  0);
-  rb_define_module_function(mByebug, "tracing="        , bb_set_tracing     ,  1);
-  rb_define_module_function(mByebug, "verbose?"        , bb_verbose         ,  0);
-  rb_define_module_function(mByebug, "verbose="        , bb_set_verbose     ,  1);
+  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint, 1);
+  rb_define_module_function(mByebug, "breakpoints", bb_breakpoints, 0);
+  rb_define_module_function(mByebug, "catchpoints", bb_catchpoints, 0);
+  rb_define_module_function(mByebug, "contexts", bb_contexts, 0);
+  rb_define_module_function(mByebug, "current_context", bb_current_context, 0);
+  rb_define_module_function(mByebug, "debug_load", bb_load, -1);
+  rb_define_module_function(mByebug, "post_mortem?", bb_post_mortem, 0);
+  rb_define_module_function(mByebug, "post_mortem=", bb_set_post_mortem, 1);
+  rb_define_module_function(mByebug, "raised_exception", bb_raised_exception,
+                            0);
+  rb_define_module_function(mByebug, "start", bb_start, 0);
+  rb_define_module_function(mByebug, "started?", bb_started, 0);
+  rb_define_module_function(mByebug, "stop", bb_stop, 0);
+  rb_define_module_function(mByebug, "thread_context", bb_thread_context, 1);
+  rb_define_module_function(mByebug, "tracing?", bb_tracing, 0);
+  rb_define_module_function(mByebug, "tracing=", bb_set_tracing, 1);
+  rb_define_module_function(mByebug, "verbose?", bb_verbose, 0);
+  rb_define_module_function(mByebug, "verbose=", bb_set_verbose, 1);
 
   Init_threads_table(mByebug);
   Init_context(mByebug);

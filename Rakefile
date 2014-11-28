@@ -48,6 +48,7 @@ task :rubocop do
   RuboCop::RakeTask.new
 end
 
+require_relative 'tasks/ccop.rb'
 require_relative 'tasks/dev_utils.rb'
 
 task default: [:compile, :test, :rubocop]

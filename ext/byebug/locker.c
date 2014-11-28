@@ -1,6 +1,7 @@
 #include <byebug.h>
 
-typedef struct locked_thread_t {
+typedef struct locked_thread_t
+{
   VALUE thread;
   struct locked_thread_t *next;
 } locked_thread_t;
@@ -13,11 +14,13 @@ is_in_locked(VALUE thread)
 {
   locked_thread_t *node;
 
-  if (!locked_head) return 0;
+  if (!locked_head)
+    return 0;
 
   for (node = locked_head; node != locked_tail; node = node->next)
   {
-    if (node->thread == thread) return 1;
+    if (node->thread == thread)
+      return 1;
   }
   return 0;
 }
@@ -27,14 +30,17 @@ add_to_locked(VALUE thread)
 {
   locked_thread_t *node;
 
-  if (is_in_locked(thread)) return;
+  if (is_in_locked(thread))
+    return;
 
   node = ALLOC(locked_thread_t);
   node->thread = thread;
   node->next = NULL;
-  if (locked_tail) locked_tail->next = node;
+  if (locked_tail)
+    locked_tail->next = node;
   locked_tail = node;
-  if (!locked_head) locked_head = node;
+  if (!locked_head)
+    locked_head = node;
 }
 
 extern VALUE
@@ -43,11 +49,13 @@ remove_from_locked()
   VALUE thread;
   locked_thread_t *node;
 
-  if (locked_head == NULL) return Qnil;
+  if (locked_head == NULL)
+    return Qnil;
 
   node = locked_head;
   locked_head = locked_head->next;
-  if (locked_tail == node) locked_tail = NULL;
+  if (locked_tail == node)
+    locked_tail = NULL;
   thread = node->thread;
   xfree(node);
   return thread;

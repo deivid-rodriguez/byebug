@@ -6,28 +6,31 @@ static VALUE cThreadsTable;
 static int
 t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
-  VALUE thread = (VALUE)key;
+  VALUE thread = (VALUE) key;
 
-  if (!value) return ST_CONTINUE;
+  if (!value)
+    return ST_CONTINUE;
 
-  rb_gc_mark((VALUE)value);
+  rb_gc_mark((VALUE) value);
   rb_gc_mark(thread);
 
   return ST_CONTINUE;
 }
 
 static void
-t_tbl_mark(void* data)
+t_tbl_mark(void *data)
 {
-  threads_table_t *t_tbl = (threads_table_t *)data;
+  threads_table_t *t_tbl = (threads_table_t *) data;
   st_table *tbl = t_tbl->tbl;
-  st_foreach(tbl, t_tbl_mark_keyvalue, (st_data_t)tbl);
+
+  st_foreach(tbl, t_tbl_mark_keyvalue, (st_data_t) tbl);
 }
 
 static void
-t_tbl_free(void* data)
+t_tbl_free(void *data)
 {
-  threads_table_t *t_tbl = (threads_table_t*)data;
+  threads_table_t *t_tbl = (threads_table_t *) data;
+
   st_free_table(t_tbl->tbl);
   xfree(t_tbl);
 }
@@ -65,9 +68,11 @@ is_living_thread(VALUE thread)
 static int
 check_thread_i(st_data_t key, st_data_t value, st_data_t dummy)
 {
-  if (!value) return ST_DELETE;
+  if (!value)
+    return ST_DELETE;
 
-  if (!is_living_thread((VALUE)key)) return ST_DELETE;
+  if (!is_living_thread((VALUE) key))
+    return ST_DELETE;
 
   return ST_CONTINUE;
 }
@@ -85,7 +90,7 @@ check_threads_table(void)
 }
 
 void
-thread_context_lookup(VALUE thread, VALUE *context)
+thread_context_lookup(VALUE thread, VALUE * context)
 {
   threads_table_t *t_tbl;
 
@@ -98,7 +103,7 @@ thread_context_lookup(VALUE thread, VALUE *context)
 }
 
 void
-halt_while_other_thread_is_active(debug_context_t *dc)
+halt_while_other_thread_is_active(debug_context_t * dc)
 {
   while (1)
   {
@@ -115,7 +120,8 @@ halt_while_other_thread_is_active(debug_context_t *dc)
       CTX_FL_SET(dc, CTX_FL_WAS_RUNNING);
       rb_thread_stop();
     }
-    else break;
+    else
+      break;
   }
 }
 

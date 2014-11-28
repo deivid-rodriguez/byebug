@@ -45,10 +45,10 @@ brkpt_enabled(VALUE self)
 static VALUE
 brkpt_set_enabled(VALUE self, VALUE bool)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    return breakpoint->enabled = bool;
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return breakpoint->enabled = bool;
 }
 
 /*
@@ -80,7 +80,7 @@ brkpt_set_expr(VALUE self, VALUE expr)
   breakpoint_t *breakpoint;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
-  breakpoint->expr = NIL_P(expr) ? expr: StringValue(expr);
+  breakpoint->expr = NIL_P(expr) ? expr : StringValue(expr);
   return expr;
 }
 
@@ -97,7 +97,7 @@ brkpt_hit_condition(VALUE self)
   breakpoint_t *breakpoint;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
-  switch(breakpoint->hit_condition)
+  switch (breakpoint->hit_condition)
   {
     case HIT_COND_GE:
       return ID2SYM(rb_intern("greater_or_equal"));
@@ -130,11 +130,11 @@ brkpt_set_hit_condition(VALUE self, VALUE value)
   Data_Get_Struct(self, breakpoint_t, breakpoint);
   id_value = rb_to_id(value);
 
-  if(rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
+  if (rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
     breakpoint->hit_condition = HIT_COND_GE;
-  else if(rb_intern("equal") == id_value || rb_intern("eq") == id_value)
+  else if (rb_intern("equal") == id_value || rb_intern("eq") == id_value)
     breakpoint->hit_condition = HIT_COND_EQ;
-  else if(rb_intern("modulo") == id_value || rb_intern("mod") == id_value)
+  else if (rb_intern("modulo") == id_value || rb_intern("mod") == id_value)
     breakpoint->hit_condition = HIT_COND_MOD;
   else
     rb_raise(rb_eArgError, "Invalid condition parameter");
@@ -166,10 +166,10 @@ brkpt_hit_count(VALUE self)
 static VALUE
 brkpt_hit_value(VALUE self)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    return INT2FIX(breakpoint->hit_value);
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  return INT2FIX(breakpoint->hit_value);
 }
 
 /*
@@ -182,11 +182,11 @@ brkpt_hit_value(VALUE self)
 static VALUE
 brkpt_set_hit_value(VALUE self, VALUE value)
 {
-    breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint;
 
-    Data_Get_Struct(self, breakpoint_t, breakpoint);
-    breakpoint->hit_value = FIX2INT(value);
-    return value;
+  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  breakpoint->hit_value = FIX2INT(value);
+  return value;
 }
 
 /*
@@ -239,7 +239,7 @@ brkpt_source(VALUE self)
 }
 
 static void
-mark_breakpoint(breakpoint_t *breakpoint)
+mark_breakpoint(breakpoint_t * breakpoint)
 {
   rb_gc_mark(breakpoint->source);
   rb_gc_mark(breakpoint->expr);
@@ -261,10 +261,10 @@ brkpt_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
   Data_Get_Struct(self, breakpoint_t, breakpoint);
 
   breakpoint->type = FIXNUM_P(pos) ? BP_POS_TYPE : BP_METHOD_TYPE;
-  if(breakpoint->type == BP_POS_TYPE)
-      breakpoint->pos.line = FIX2INT(pos);
+  if (breakpoint->type == BP_POS_TYPE)
+    breakpoint->pos.line = FIX2INT(pos);
   else
-      breakpoint->pos.mid = SYM2ID(pos);
+    breakpoint->pos.mid = SYM2ID(pos);
 
   breakpoint->id = ++breakpoint_max;
   breakpoint->source = StringValue(source);
@@ -282,7 +282,7 @@ filename_cmp_impl(VALUE source, char *file)
 {
   char *source_ptr, *file_ptr;
   long s_len, f_len, min_len;
-  long s,f;
+  long s, f;
   int dirsep_flag = 0;
 
   s_len = RSTRING_LEN(source);
@@ -290,19 +290,20 @@ filename_cmp_impl(VALUE source, char *file)
   min_len = s_len < f_len ? s_len : f_len;
 
   source_ptr = RSTRING_PTR(source);
-  file_ptr   = file;
+  file_ptr = file;
 
-  for( s = s_len - 1, f = f_len - 1; s >= s_len - min_len && f >= f_len - min_len; s--, f-- )
+  for (s = s_len - 1, f = f_len - 1;
+       s >= s_len - min_len && f >= f_len - min_len; s--, f--)
   {
-    if((source_ptr[s] == '.' || file_ptr[f] == '.') && dirsep_flag)
+    if ((source_ptr[s] == '.' || file_ptr[f] == '.') && dirsep_flag)
       return 1;
-    if(isdirsep(source_ptr[s]) && isdirsep(file_ptr[f]))
+    if (isdirsep(source_ptr[s]) && isdirsep(file_ptr[f]))
       dirsep_flag = 1;
 #ifdef DOSISH_DRIVE_LETTER
     else if (s == 0)
-      return(toupper(source_ptr[s]) == toupper(file_ptr[f]));
+      return (toupper(source_ptr[s]) == toupper(file_ptr[f]));
 #endif
-    else if(source_ptr[s] != file_ptr[f])
+    else if (source_ptr[s] != file_ptr[f])
       return 0;
   }
   return 1;
@@ -316,11 +317,13 @@ filename_cmp(VALUE source, char *file)
 #else
 #ifdef PATH_MAX
   char path[PATH_MAX + 1];
+
   path[PATH_MAX] = 0;
   return filename_cmp_impl(source, realpath(file, path) != NULL ? path : file);
 #else
   char *path;
   int result;
+
   path = realpath(file, NULL);
   result = filename_cmp_impl(source, path == NULL ? file : path);
   free(path);
@@ -334,7 +337,9 @@ classname_cmp(VALUE name, VALUE klass)
 {
   VALUE mod_name;
   VALUE class_name = (Qnil == name) ? rb_str_new2("main") : name;
-  if (klass == Qnil) return(0);
+
+  if (klass == Qnil)
+    return (0);
   mod_name = rb_mod_name(klass);
   return (mod_name != Qnil && rb_str_cmp(class_name, mod_name) == 0);
 }
@@ -389,9 +394,8 @@ check_breakpoint_by_pos(VALUE breakpoint_object, char *file, int line)
 
   Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
 
-  if ( (Qtrue != breakpoint->enabled)    ||
-       (breakpoint->type != BP_POS_TYPE) ||
-       (breakpoint->pos.line != line) )
+  if ((Qtrue != breakpoint->enabled) || (breakpoint->type != BP_POS_TYPE)
+      || (breakpoint->pos.line != line))
     return 0;
 
   return filename_cmp(breakpoint->source, file);
@@ -408,13 +412,13 @@ check_breakpoint_by_method(VALUE breakpoint_object, VALUE klass, ID mid,
 
   Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
 
-  if ( (Qfalse == breakpoint->enabled)      ||
-       (breakpoint->type != BP_METHOD_TYPE) ||
-       (breakpoint->pos.mid != mid) )
+  if ((Qfalse == breakpoint->enabled) || (breakpoint->type != BP_METHOD_TYPE)
+      || (breakpoint->pos.mid != mid))
     return 0;
 
-  if ( (classname_cmp(breakpoint->source, klass)) ||
-       ((rb_type(self) == T_CLASS) && classname_cmp(breakpoint->source, self)) )
+  if ((classname_cmp(breakpoint->source, klass))
+      || ((rb_type(self) == T_CLASS)
+          && classname_cmp(breakpoint->source, self)))
     return 1;
 
   return 0;
@@ -456,9 +460,9 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos, VALUE bind)
   for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
-    if (check_breakpoint_by_pos(breakpoint_object, file, line) &&
-        check_breakpoint_by_expr(breakpoint_object, bind) &&
-        check_breakpoint_by_hit_condition(breakpoint_object))
+    if (check_breakpoint_by_pos(breakpoint_object, file, line)
+        && check_breakpoint_by_expr(breakpoint_object, bind)
+        && check_breakpoint_by_hit_condition(breakpoint_object))
     {
       return breakpoint_object;
     }
@@ -476,9 +480,9 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE bind,
   for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
     breakpoint_object = rb_ary_entry(breakpoints, i);
-    if (check_breakpoint_by_method(breakpoint_object, klass, mid, self) &&
-        check_breakpoint_by_expr(breakpoint_object, bind) &&
-        check_breakpoint_by_hit_condition(breakpoint_object))
+    if (check_breakpoint_by_method(breakpoint_object, klass, mid, self)
+        && check_breakpoint_by_expr(breakpoint_object, bind)
+        && check_breakpoint_by_hit_condition(breakpoint_object))
     {
       return breakpoint_object;
     }
@@ -496,18 +500,18 @@ Init_breakpoint(VALUE mByebug)
   rb_define_alloc_func(cBreakpoint, brkpt_create);
   rb_define_method(cBreakpoint, "initialize", brkpt_initialize, 3);
 
-  rb_define_method(cBreakpoint, "enabled?"      , brkpt_enabled          , 0);
-  rb_define_method(cBreakpoint, "enabled="      , brkpt_set_enabled      , 1);
-  rb_define_method(cBreakpoint, "expr"          , brkpt_expr             , 0);
-  rb_define_method(cBreakpoint, "expr="         , brkpt_set_expr         , 1);
-  rb_define_method(cBreakpoint, "hit_count"     , brkpt_hit_count        , 0);
-  rb_define_method(cBreakpoint, "hit_condition" , brkpt_hit_condition    , 0);
+  rb_define_method(cBreakpoint, "enabled?", brkpt_enabled, 0);
+  rb_define_method(cBreakpoint, "enabled=", brkpt_set_enabled, 1);
+  rb_define_method(cBreakpoint, "expr", brkpt_expr, 0);
+  rb_define_method(cBreakpoint, "expr=", brkpt_set_expr, 1);
+  rb_define_method(cBreakpoint, "hit_count", brkpt_hit_count, 0);
+  rb_define_method(cBreakpoint, "hit_condition", brkpt_hit_condition, 0);
   rb_define_method(cBreakpoint, "hit_condition=", brkpt_set_hit_condition, 1);
-  rb_define_method(cBreakpoint, "hit_value"     , brkpt_hit_value        , 0);
-  rb_define_method(cBreakpoint, "hit_value="    , brkpt_set_hit_value    , 1);
-  rb_define_method(cBreakpoint, "id"            , brkpt_id               , 0);
-  rb_define_method(cBreakpoint, "pos"           , brkpt_pos              , 0);
-  rb_define_method(cBreakpoint, "source"        , brkpt_source           , 0);
+  rb_define_method(cBreakpoint, "hit_value", brkpt_hit_value, 0);
+  rb_define_method(cBreakpoint, "hit_value=", brkpt_set_hit_value, 1);
+  rb_define_method(cBreakpoint, "id", brkpt_id, 0);
+  rb_define_method(cBreakpoint, "pos", brkpt_pos, 0);
+  rb_define_method(cBreakpoint, "source", brkpt_source, 0);
 
   idEval = rb_intern("eval");
 }

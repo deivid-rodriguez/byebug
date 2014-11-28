@@ -1,0 +1,27 @@
+--blank-lines-after-declarations
+--blank-lines-after-procedures
+--brace-indent 0
+--braces-after-if-line
+--break-before-boolean-operator
+--case-brace-indentation 0
+--case-indentation 2
+--comment-indentation 1
+--continuation-indentation 0
+--continue-at-parentheses
+--declaration-comment-column 1
+--ignore-newlines
+--indent-level 2
+--leave-optional-blank-lines
+--dont-left-justify-declarations
+--line-comments-indentation 0
+--line-length 79
+--no-blank-lines-after-commas
+--no-parameter-indentation
+--no-space-after-casts
+--no-space-after-function-call-names
+--no-space-after-parentheses
+--no-tabs
+--remove-preprocessor-space
+--space-after-for
+--space-after-if
+--space-after-while
