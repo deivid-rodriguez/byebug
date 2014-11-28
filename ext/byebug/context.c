@@ -40,7 +40,7 @@ context_mark(void *data)
 static int
 real_stack_size()
 {
-  return FIX2INT(rb_funcall(cContext, rb_intern("stack_size"), 0));
+  return FIX2INT(rb_funcall(cContext, rb_intern("stack_size"), 1, Qtrue));
 }
 
 extern VALUE
