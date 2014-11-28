@@ -122,28 +122,40 @@ module Byebug
          5:    class TestExample
          6:      def self.add_three(num)
          7:        byebug
-         8:        3.times do
+         8:        2.times do
          9:          num += 1
         10:        end
-        11:        num
-        12:      end
-        13:    end
-        14:
-        15:    res = TestExample.add_three(7)
+        11:
+        12:        num *= 2
+        13:        num
+        14:      end
+        15:    end
         16:
-        17:    res
-        18:  end
+        17:    res = TestExample.add_three(7)
+        18:
+        19:    res
+        20:  end
       EOC
     end
 
-    def test_next_advances_the_specified_number_of_frame_statements
+    def test_next_stays_in_current_frame_while_not_finished
       enter 'next 2'
-      debug_code(program) { assert_equal 17, state.line }
+      debug_code(program) { assert_equal 13, state.line }
     end
 
-    def step_goes_the_specified_number_of_statements_forward_by_default
+    def test_next_goes_up_a_frame_when_current_frame_finishes
+      enter 'next 3'
+      debug_code(program) { assert_equal 19, state.line }
+    end
+
+    def step_steps_into_blocks
       enter 'step 2'
       debug_code(program) { assert_equal 9, state.line }
+    end
+
+    def step_steps_out_of_blocks_when_done
+      enter 'step 3'
+      debug_code(program) { assert_equal 12, state.line }
     end
   end
 
