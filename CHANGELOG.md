@@ -15,7 +15,8 @@
   * Fix `up`, `down` and `frame` commands in post_mortem mode (#93).
   * `catch` command is not allowed in post_mortem mode anymore. It was not
 working anyways (#92).
-  * Fix .byebugrc loading, now it ignores invalid commands instead of aborting.
+  * Fix .byebugrc loading: it ignores invalid commands instead of aborting.
+  * Fix .byebugrc priority: proyect's .byebugrc overrides global .byebugrc.
 
 - Removed
   * `autoreload` setting as it's not necessary anymore. Code should always be

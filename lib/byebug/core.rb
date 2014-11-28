@@ -38,11 +38,11 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def self.run_init_script
-    cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
-    run_script(cwd_rc) if File.exist?(cwd_rc)
-
     home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
-    run_script(home_rc) if File.exist?(home_rc) && cwd_rc != home_rc
+    run_script(home_rc) if File.exist?(home_rc)
+
+    cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
+    run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 
   #
