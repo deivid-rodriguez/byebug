@@ -39,10 +39,22 @@ context_mark(void *data)
   rb_gc_mark(context->backtrace);
 }
 
+static VALUE
+dc_backtrace(const debug_context_t * context)
+{
+  return context->backtrace;
+}
+
+static int
+dc_stack_size(const debug_context_t * context)
+{
+  return RARRAY_LENINT(dc_backtrace(context));
+}
+
 static int
 real_stack_size()
 {
-  return FIX2INT(rb_funcall(cContext, rb_intern("stack_size"), 1, Qtrue));
+  return FIX2INT(rb_funcall(cContext, rb_intern("stack_size"), 0));
 }
 
 extern VALUE
@@ -79,11 +91,6 @@ context_dup(debug_context_t * context)
   return Data_Wrap_Struct(cContext, context_mark, 0, new_context);
 }
 
-static VALUE
-dc_backtrace(const debug_context_t * context)
-{
-  return context->backtrace;
-}
 
 static VALUE
 dc_frame_get(const debug_context_t * context, int frame_index,
@@ -344,21 +351,21 @@ Context_resume(VALUE self)
 
 /*
  *  call-seq:
- *    context.calced_stack_size-> int
+ *    context.stack_size-> int
  *
- *  Returns the calculated size of the context stack.
- *
- *  NOTE: it shouldn't be necessary to expose this, this is only done to ease
- *  the detection of TracePoint API bugs.
+ *  Returns the size of the context's stack.
  */
 static inline VALUE
-Context_calced_stack_size(VALUE self)
+Context_stack_size(VALUE self)
 {
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  return INT2FIX(context->calced_stack_size);
+  if (NIL_P(dc_backtrace(context)))
+    rb_raise(rb_eRuntimeError, "Backtrace not loaded.");
+
+  return INT2FIX(dc_stack_size(context));
 }
 
 static VALUE
@@ -639,8 +646,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
   rb_define_method(cContext, "ignored?", Context_ignored, 0);
   rb_define_method(cContext, "resume", Context_resume, 0);
-  rb_define_method(cContext, "calced_stack_size", Context_calced_stack_size,
-                   0);
+  rb_define_method(cContext, "stack_size", Context_stack_size, 0);
   rb_define_method(cContext, "step_into", Context_step_into, -1);
   rb_define_method(cContext, "step_out", Context_step_out, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);

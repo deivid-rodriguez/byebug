@@ -12,7 +12,7 @@ module Byebug
     end
 
     def switch_to_frame(frame_no)
-      frame_no >= 0 ? frame_no : @state.context.calced_stack_size + frame_no
+      frame_no >= 0 ? frame_no : @state.context.stack_size + frame_no
     end
 
     def navigate_to_frame(jump_no)
@@ -22,7 +22,7 @@ module Byebug
 
       loop do
         new_pos += step
-        break if new_pos < 0 || new_pos >= @state.context.calced_stack_size
+        break if new_pos < 0 || new_pos >= @state.context.stack_size
 
         next if c_frame?(new_pos)
 
@@ -40,7 +40,7 @@ module Byebug
         abs_frame_pos = navigate_to_frame(frame_pos)
       end
 
-      if abs_frame_pos >= @state.context.calced_stack_size
+      if abs_frame_pos >= @state.context.stack_size
         return errmsg(pr('frame.errors.too_low'))
       elsif abs_frame_pos < 0
         return errmsg(pr('frame.errors.too_high'))
@@ -121,17 +121,11 @@ module Byebug
     end
 
     def print_backtrace
-      calcedsize = @state.context.calced_stack_size
-      stacksize = Byebug.post_mortem? ? calcedsize : Context.stack_size
-
-      if calcedsize != stacksize
-        errmsg(pr('frame.errors.stacksize',
-                  calcedsize: calcedsize, realsize: stacksize))
+      bt = prc('frame.line', (0...@state.context.stack_size)) do |_, index|
+        get_pr_arguments(index)
       end
 
-      print(prc('frame.line', (0...stacksize)) do |_, index|
-        get_pr_arguments(index)
-      end)
+      print(bt)
     end
   end
 

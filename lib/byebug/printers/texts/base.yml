@@ -51,7 +51,6 @@ edit:
 
 frame:
   errors:
-    stacksize: "Byebug's stacksize ({calcedsize}) should be {realsize}. This might be a bug in byebug or ruby's debugging API's"
     too_low: "Can't navigate beyond the oldest frame"
     too_high: "Can't navigate beyond the newest frame"
     c_frame: "Can't navigate to c-frame"

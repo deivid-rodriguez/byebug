@@ -6,24 +6,12 @@ module Byebug
   #
   class Context
     class << self
-      def stack_size(byebug_frames = false)
+      def stack_size
         backtrace = Thread.current.backtrace_locations(0)
         return 0 unless backtrace
 
-        unless byebug_frames
-          backtrace = backtrace
-                      .drop_while { |l| !ignored(l.path) }
-                      .drop_while { |l|  ignored(l.path) }
-                      .take_while { |l| !ignored(l.path) }
-        end
-
         backtrace.size
       end
-
-      def ignored(path)
-        IGNORED_FILES.include?(path)
-      end
-      private :ignored
     end
 
     def interrupt
