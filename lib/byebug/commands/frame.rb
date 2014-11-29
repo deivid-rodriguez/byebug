@@ -18,7 +18,7 @@ module Byebug
     def navigate_to_frame(jump_no)
       return if jump_no == 0
       total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame_pos
-      step = jump_no / total_jumps
+      step = jump_no / total_jumps # +1 (up) or -1 (down)
 
       loop do
         new_pos += step
