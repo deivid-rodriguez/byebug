@@ -1,366 +1,358 @@
-# 4.0.0 (unreleased)
-- Additions
-  * `untracevar` command that stops tracing a global variable.
-  * Window CI build through AppVeyor.
-  * OSX CI build through Travis.
-  * Style enforcement through RuboCop.
-  * Some remote debugging tests (thanks @eric-hu).
-  * Printer's support (thanks @astashov).
+## 4.0.0 (unreleased)
+### Added
+- `untracevar` command that stops tracing a global variable.
+- Window CI build through AppVeyor.
+- OSX CI build through Travis.
+- Style enforcement through RuboCop.
+- Some remote debugging tests (thanks @eric-hu).
+- Printer's support (thanks @astashov).
 
-- Changed
-  * `tracevar` now requires the full global variable name (with "$").
-  * Fixed various code reloading issues.
-  * `set fullpath` was not showing fullpaths. Now it is.
-  * A lot of refactoring.
-  * Fix `up`, `down` and `frame` commands in post_mortem mode (#93).
-  * `catch` command is not allowed in post_mortem mode anymore. It was not
+### Changed
+- A lot of internal refactoring.
+- `tracevar` now requires the full global variable name (with "$").
+- `catch` command is not allowed in post_mortem mode anymore. It was not
 working anyways (#92).
-  * Fix .byebugrc loading: it ignores invalid commands instead of aborting.
-  * Fix .byebugrc priority: proyect's .byebugrc overrides global .byebugrc.
 
-- Removed
-  * `autoreload` setting as it's not necessary anymore. Code should always be
-up to date.
-  * `reload` command for the same reason.
-  * drop `debugger-linecache` dependency.
+### Fixed
+- Code reloading issues.
+- `set fullpath` was not showing fullpaths. Now it is.
+- `up`, `down` and `frame` commands now work in post_mortem mode (#93).
+- Loading of .byebugrc. Now it ignores invalid commands instead of aborting.
+- Priority of .byebugrc files. Project's file overrides global (home) file.
 
-# 3.5.1
-- Fix windows installation (#79)
-- Fix bug in "condition" command where invalid breakpoint ids wouldn't be
-properly detected.
+### Removed
+- `autoreload` setting as it's not necessary anymore. Code should always be up
+to date.
+- `reload` command for the same reason.
+- Gem dependency on `debugger-linecache`.
 
+## 3.5.1 - 2014-09-29
+### Fixed
+- Windows installation (#79).
+- `condition` command not properly detecting invalid breakpoint ids.
 
-# 3.5.0
-- Bugfixes
-  * Fix #81, byebug's history does not mess with other programs that use
-Readline too.
-  * Fix more issues with readline's history. Now it should always be properly
-saved and inmediately available.
-  * Fix issue where user would not be notified when trying to debug a non
-existent script.
+## 3.5.0 - 2014-09-28
+### Fixed
+- Byebug's history messing other programs using Readline (#81).
+- Readline's history not being properly saved and inmediately available.
+- User not being notified when trying to debug a non existent script.
 
-- Improvements
-  * Complete rewrite of byebug's history.
-  * Complete rewrite of list command.
-  * Docs about stacktrace related commands (up, down, frame, backtrace).
+### Changed
+- Complete rewrite of byebug's history.
+- Complete rewrite of list command.
+- Docs about stacktrace related commands (up, down, frame, backtrace).
 
-
-# 3.4.2
-* Fix #67, you can debug commands starting with `ruby` now, as in `byebug --
-ruby -Itest test/controllers/posts_controller_test.rb -n test_should_get_index`
-
-
-# 3.4.1
-* Fix #54, you can use threads when "evaling" stuff now.
-* Fix bug in list command where user could not list backwards if current
-listing was reaching the end of the file.
+## 3.4.2 - 2014-09-26
+### Fixed
+- Debugging commands invoked by ruby exectuable (#67), as in `byebug --
+ruby -Itest test/controllers/posts_controller_test.rb -n
+test_should_get_index`.
 
 
-# 3.4.0
-* Better fix for deivid-rodriguez/pry-byebug#32
+## 3.4.1 - 2014-09-25
+### Fixed
+- Use of threads inside `eval` command (#54).
+- `list` command not listing backwards after reaching the end of the file.
+
+## 3.4.0 - 2014-09-01
+### Fixed
+- deivid-rodriguez/pry-byebug#32 in a better way.
 
 
-# 3.3.0
+## 3.3.0 - 2014-08-28
+### Fixed
+- `set verbose` command.
+- `set post_mortem false` command.
+- Debugger stopping in `byebug`'s internal frames in some cases.
+- `backtrace` crashing when `fullpath` setting disabled and calculated stack
+size being smaller than the real one.
 
-- Bugfixes
- * Fix "verbose" setting ("set verbose" works now).
- * Fix unsetting post_mortem mode ("set post_mortem false" works now).
- * Fix some cases where the debugger would stop in byebug internal frames.
- * Fix some crashes when displaying backtraces (with "nofullpath" setting and
-when calculated stack size was smaller than the real one).
+## Changed
+- The `-t` option for `bin/byebug` now turns tracing on whereas the `-x` option
+tells byebug to run the initialization file (.byebugrc) on startup. This is the
+default behaviour though.
+- `bin/byebug` libified and tests added.
 
-- Removals
- * "info locals" has been removed, use "var local" instead.
- * "info instance_variables" has been removed, use "var instance" instead.
- * "info global_variables" has been removed, use "var global" instead.
- * "info variables" has been removed, use "var all" instead.
- * "irb" command stepping capabilities were removed, see
+### Removed
+- `info locals` command. Use `var local` instead.
+- `info instance_variables` command. Use `var instance` instead.
+- `info global_variables` command. Use `var global` instead.
+- `info variables` command. Use `var all` instead.
+- `irb` command stepping capabilities, see
 [8e226d0](https://github.com/deivid-rodriguez/byebug/commit/8e226d0).
- * --script and --restart-script options from byebug's executable were removed.
-Also, '-t' option now turns tracing on whereas '-x' options tells byebug to run
-the initialization file (.byebugrc) on startup. This is the default behaviour
-though.
+- `script` and `restart-script` options for `bin/byebug`.
 
-- Improvements
- * byebug's script has been libified and tests have been added.
+## 3.2.0 - 2014-08-02
+### Fixed
+- Remote debugging (#71), thanks @shuky19.
+- `source` command (#68), thanks @Olgagr.
+- `ruby-head` support (#71).
 
+### Removed
+- `post_mortem` activation through `Byebug.post_mortem`. Use `set post_mortem`
+instead.
+- `info stack` command. Use `where` instead.
+- `method iv` command. Use `var instance` instead.
+- Warning reported in #77.
 
-# 3.2.0
+## 3.1.2 - 2014-04-23
+### Fixed
+- (Really) `post_mortem` mode in `bin/byebug`.
+- Line tracing in `bin/byebug`.
 
-- Bugfixes
- * Fix bug in remote debugging (#71), thanks @shuky19.
- * Fix source command (#68), thanks @Olgagr.
- * Fix bug #71 preventing the test suite from running against ruby-head.
- * Remove warning reported in #77.
+## 3.1.1 - 2014-04-23
+### Fixed
+- `post_mortem` mode in bin/byebug.
 
-- Removals
- * "post_mortem" activation through "Byebug.post_mortem" is no longer allowed.
-Use "set post_mortem" instead.
- * "info stack" command has been removed. Use "where"|"backtrace" instead.
- * "method iv" command has been removed. Use "var instance" instead.
+## 3.1.0 - 2014-04-23
+### Removed
+- `show commands` command. Use `history` instead.
+- Byebug.start accepting options. Any program settings you want applied from
+the start should be set in `.byebugrc`.
+- `trace` command. Use `set linetrace` for line tracing and `tracevar` for
+global variable tracing.
+- `show version` command. Use `byebug --version` to check byebug's version.
+- `set arg` setting. Use the `restart` command instead.
 
+### Changed
+- `linetrace_plus` setting renamed to `tracing_plus`.
 
-# 3.1.2
+### Added
+- `history` command to check byebug's history of previous commands.
 
-* Really fix starting "post_mortem" mode in bin/byebug.
-* Fix starting line tracing in bin/byebug.
-
-
-# 3.1.1
-
-* Fix starting "post_mortem" mode in bin/byebug.
-
-
-# 3.1.0
-
-* "show commands" moved to a separate "history" command.
-* Byebug.start can't recieve options any more. Any program settings you
-want applied from the start should be set in .byebugrc.
-* "trace" command has been removed. Line tracing functionality should be
-enabled through the "linetrace" setting whereas the global variable
-tracing functionality is now provided through the "tracevar" command.
-* "version" setting has been removed. It was not really a setting because it
-couldn't be set. Use "byebug --version" to check byebug's version.
-* "arg" setting removed. Program restart arguments should be set through
-"restart" command from now on.
-* "linetrace\_plus" setting has been renamed to "tracing\_plus".
-
-
-# 3.0.0
-
-- Bugfixes
- * Fix post_mortem mode.
- * Command history is also saved after regular program termination, not only
-after quitting with the "q" command.
- * Fix failure when calling Byebug.start with Timeout::timeout (see #54), thanks
+## 3.0.0 - 2014-04-17
+### Fixed
+- Plain `byebug` not working when `pry-byebug` installed.
+- `post_mortem` mode.
+- Command history not being saved after regular program termination.
+- (Again) Calling `Byebug.start` with `Timeout.timeout` (#54), thanks
 @zmoazeni!
 
-- Changes
- * "show commands" command for listing history of previous byebug commands now
-behaves like shell's "history" command.
- * Changes in "history" commands: see
-[50e6ad8](https://github.com/deivid-rodriguez/byebug/commit/50e6ad8).
- * Changes in "finish" semantics and in the C extension API: see
+### Added
+- Allow disabling `post_mortem` mode.
+
+### Changed
+- `show commands` command for listing history of previous commands now behaves
+like shell's `history` command.
+- `show/set history filename` is now `show/set histfile`
+- `show/set history size` is now `show/set histsize`
+- `show/set history save` is now `show/set autosave`
+- `finish` semantic, see
 [61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d).
- * The "init" option for Byebug.start has been removed. Information to make the
-"restart" command work is always saved now.
+- Use `per project` history file by default.
 
-- Features
- * Allow disabling post_mortem mode.
+## Removed
+- The `init` option for `Byebug.start`. Information to make the `restart`
+command work is always saved now.
 
+## 2.7.0 - 2014-02-24
+- `IGNORED_FILES` slowing down startup (#52).
+- Calling `Byebug.start` with `Timeout.timeout` (#53, #54).
 
-# 2.7.0
-* Bugfix release (#52, #53 and #54).
+## 2.6.0 - 2014-02-08
+### Fixed
+- Circular dependency affecting `pry-byebug` (thanks @andreychernih).
 
+## 2.5.0 - 2013-12-14
+### Added
+- Support for `sublime-debugger`.
 
-# 2.6.0
+## 2.4.1 - 2013-12-05
+### Fixed
+- Installation error in Mac OSX (#40), thanks @luislavena.
 
-* Fix circular dependency that was affecting "pry-byebug" (thanks
-@andreychernih).
-
-
-# 2.5.0
-
-* Support for "sublime-debugger".
-
-
-# 2.4.1
-
-* Fix installation error in Mac OSX (#40), thanks @luislavena.
-
-
-# 2.4.0
-
-* Use "require" instead of "require_relative" for loading byebug's extension
-library (thanks @nobu).
-* Adds back "debugger" as an alias to "byebug" (thanks @wallace).
-* Adds -R option to byebug's binary to specify server's hostname:port for remote
-debugging (thanks @mrkn).
-* Fixes "thread list" showing too many threads.
-* Change in tracing global variables. Use "trace variable foo" instead of "trace
-variable $foo".
-* Fix setting post mortem mode with "set post_mortem". Now this is the only
+## 2.4.0 - 2013-12-02
+### Fixed
+- `thread list` showing too many threads.
+- Fix setting post mortem mode with "set post_mortem". Now this is the only
 post mortem functionality available as specifying "Byebug.post_mortem" with a
 block has been removed in this version.
 
+### Added
+- (Again) `debugger` as an alias to `byebug` (thanks @wallace).
+- `-R` option for `bin/byebug` to specify server's hostname:port for remote
+debugging (thanks @mrkn).
 
-# 2.3.1
+### Changed
+- Use `require` instead of `require_relative` for loading byebug's extension
+library (thanks @nobu).
+- `trace variable $foo` should be now `trace variable $foo`.
 
-* Fixes bug preventing users from deleting breakpoints.
-* Fix broken test suite.
+## 2.3.1 - 2013-10-17
+### Fixed
+- Breakpoint removal.
+- Broken test suite.
 
+## 2.3.0 - 2013-10-09
+### Added
+- Compatibility with Phusion Passenger Enterprise (thanks @FooBarWidget).
 
-# 2.3.0
+### Changed
+- More minimalist help system.
 
-* Compatibility with Phusion Passenger Enterprise (thanks @FooBarWidget).
-* More minimalist help system.
+## 2.2.2 - 2013-09-25
+### Fixed
+- Compilation issue in 64 bit systems.
 
+## 2.2.1 - 2013-09-24
+### Fixed
+- Compilation issue introduced in 2.2.0 (#26).
 
-# 2.2.2
+### Changed
+- `show/set stack_trace_on_error` is now `show/set stack_on_error`.
 
-* Fix another compilation issue in 64 bit systems.
+## 2.2.0 - 2013-09-22
+### Fixed
+- Stack size calculations.
+- Setting `post_mortem` mode.
 
+### Added
+- `verbose` setting for TracePoint API event inspection.
 
-# 2.2.1
+### Changed
+- Warning free byebug.
+- Allow `edit <filename>` without a line number.
 
-* Fix compilation issue introduced by 2.2.0 (#26).
-* "show" and "set" option "stack_trace_on_error" is now called "stack_on_error".
+## 2.1.1 - 2013-09-10
+### Fixed
+- Debugging code inside `-e` Ruby flag.
 
+## 2.1.0 - 2013-09-08
+### Fixed
+- Remote debugging display.
+- `eval` crashing when inspecting raised an exception (reported by @iblue).
 
-# 2.2.0
+### Changed
+- `enable breakpoints` now enables every breakpoint.
+- `disable breakpoints` now disables every breakpoint.
 
-* Small fixes in stack_size calculations.
-* Warning free byebug.
-* Add "verbose" setting for TracePoint API event inspection.
-* Fix setting "post_mortem" mode.
-* Allow "edit <filename>" without a line number.
+## 2.0.0 - 2013-08-30
+### Added
+- "Official" definition of a command API.
+- Thread support.
 
+### Removed
+- `jump` command. It had never worked.
 
-# 2.1.1
+### Changed
+- Varoius internal refactorings.
 
-* Fix bug when debugging code inside '-e' flag.
+## 1.8.2 - 2013-08-16
+### Fixed
+- `save` command now saves the list of `displays`.
+- Stack size calculation.
 
+### Changed
+- More user friendly regexps for commands.
+- Better help for some commands.
 
-# 2.1.0
+## 1.8.1 - 2013-08-12
+### Fixed
+- Major regression introduced in 1.8.0.
 
-* Fix bug in remote debugging display.
-* Fix bug where eval would crash when inspect raised an exception (reported by
-@iblue).
-* "enable breakpoints" now enables every breakpoint.
-* "disable breakpoints" now disables every breakpoint.
+## 1.8.0 - 2013-08-12
+### Added
+- Remote debugging support.
 
+## 1.7.0 - 2013-08-03
+### Added
+- List command automatically called after callstack navigation commands.
+- C-frames specifically marked in the callstack.
+- C-frames skipped when navigating the callstack.
 
-# 2.0.0
+## 1.6.1 - 2013-07-10
+### Fixed
+- Windows compatibiliy: compilation and terminal width issues.
 
-* Various bug fixes.
-* "Official" definition of a command API.
-* Thread support.
+## 1.6.0 - 2013-07-10
+### Fixed
+- `byebug` placed at the end of a block or method call not working as expected.
+- `autolist` being applied when Ruby `-e` option used.
 
+### Changed
+- Backtrace callstyles. Use `long` for detailed frames in callstack and `short`
+for more concise frames.
 
-## 1.8.2
+## 1.5.0 - 2013-06-21
+### Fixed
+- Incomplete backtraces when the debugger was not started at program startup.
 
-* More user friendly regexps for commands.
-* Better help for some commands.
-* "save" command now saves the list of "displays".
-* Fixes bug in calculating stacksize.
+## 1.4.2 - 2013-06-20
+### Fixed
+- `help command subcommand` command.
+- Interaction with Rails Console debugging flag.
+- `post_mortem` mode when running byebug from the outset.
+- `no-quit` flag when running byebug from the outset.
 
-
-## 1.8.1
-
-* Bugfix release.
-
-
-## 1.8.0
-
-* Remote debugging support.
-
-
-## 1.7.0
-
-* Callstack display: specifically mark c-frames.
-* Callstack navigation: skip c-frames.
-* Callstack navigation: autolist after navigation commands.
-
-
-## 1.6.1
-
-* Windows compatibiliy: compilation and terminal width issues.
-
-
-## 1.6.0
-
-* "byebug" placed at the end of a block or method call now works as expected.
-* Don't autolist when ruby '-e' option is used.
-* Fixes callstyles. From now on, use 'long' for detailed frames in callstack and
-'short' for more concise frames.
-
-
-## 1.5.0
-
-* No more Byebug.start to get correct callstack information! Dropping "byebug"
-anywhere and inmediately printing the stack just works now. :)
-
-
-## 1.4.2
-
-* Fixes crash when using "help command subcommand".
-* Byebug now works with Rails Console debugging flag.
-* Fix post-mortem mode when running byebug from the outset.
-* Fix --no-quit flag when running byebug from the outset.
-
-
-## 1.4.1
-
-* Fixes crash when printing some filenames in backtraces.
-* Allows byebug developers to easily use compilers different from gcc (thanks
+## 1.4.1 - 2013-06-15
+### Fixed
+- Crash when printing some filenames in backtraces.
+- Allow byebug developers to easily use compilers different from gcc (thanks
 @GarthSnyder!).
 
+## 1.4.0 - 2013-06-05
+### Fixed
+- Memory leaks causing `byebug` to randomly crash.
 
-## 1.4.0
+### Changed
+- Use the Debug Inspector API for backtrace information.
 
-* Byebug now uses the Debug Inspector API: faster and nicer!
-* Fixes bug that prevents some random crashes.
+## 1.3.1 - 2013-06-02
+### Fixed
+- Interaction with Rails debugging flag.
+- Crash when trying to print lines of code containing the character '%'.
+- `basename` and `linetrace` options not working together.
 
+## 1.3.0 - 2013-05-25
+### Added
+- Support colon-delimited include paths in command-line front-end (@ender672).
 
-## 1.3.1
+## 1.2.0 - 2013-05-20
+### Fixed
+- Ctrl+C during command line editing (works like pry/irb).
 
-* Byebug now works with Rails debugging flag.
-* Fix bug which would make byebug crash when trying to print lines of code
-containing the character '%'.
-* Fix bug which prevented basename and linetrace options from working together.
+### Added
+- `pry` command.
 
+## 1.1.1 - 2013-05-07
+### Added
+- `pry-byebug` compatibility.
 
-## 1.3.0
+### Changed
+- Better help system.
+- Code cleanup.
 
-* Support colon-delimited include paths in command-line front-end (@ender672).
+## 1.1.0 - 2013-04-30
+### Added
+- Post Mortem support.
 
+## 1.0.3 - 2013-04-23
+### Fixed
+- Negative line numbers shown by list command at the beginning of file.
+- `backtrace` command segfaulting when trying to show info on some frame args.
+Don't know the reason yet, but the exception is handled now and command does
+not segfault anymore.
 
-## 1.2.0
+### Changed
+- `autoreload` is set by default now.
+- Try some thread support (not even close to usable).
 
-* Added 'pry' command.
-* Ctrl+C during command line editing is handled and works like pry/irb.
+## 1.0.2 - 2013-04-09
+### Fixed
+- backtraces messed up when using both `next`/`step` and backtrace navigation
+commands.
 
+### Changed
+- `autolist` and `autoeval` are default settings now.
 
-## 1.1.1
+## 1.0.1 - 2013-04-06
+### Fixed
+- Byebug not loading properly.
 
-* Better help system.
-* Code cleanup.
-* First version compatible with pry-byebug.
+## 1.0.0 - 2013-03-29
+### Fixed
+- Green test suite.
 
-
-## 1.1.0
-
-* Post-mortem support.
-
-
-## 1.0.3
-
-* "autoreload" is set by default now.
-* "list" command: no negative line numbers shown, and line range behaves as
-expected at the begining/end of file.
-* In some weird cases, "backtrace" command segfaults when trying to show info on
-some frame args. Don't know the reason yet, but the exception is handled now and
-and the command doesn't segfault anymore.
-* Try some thread support (not even close to usable).
-
-
-## 1.0.2
-
-* "autolist" and "autoeval" are default settings now.
-* Fixes bug which messed up the call-stack when manipulating backtrace
-information and when nexting/stepping.
-
-
-## 1.0.1
-
-* Corrected small bug preventing byebug from loading.
-
-
-## 1.0.0
-
-* Green test suite.
-
-
-## 0.0.1
-
-* Initial release.
+## 0.0.1 - 2013-03-18
+### Added
+- Initial release.
