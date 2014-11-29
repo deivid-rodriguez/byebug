@@ -69,7 +69,7 @@ module Byebug
       args = @state.context.frame_args(pos)
       return '' if args.empty?
 
-      locals = @state.context.frame_locals pos if style == 'long'
+      locals = @state.context.frame_locals(pos) unless style == 'short'
       my_args = args.map do |arg|
         case arg[0]
         when :block
@@ -80,7 +80,12 @@ module Byebug
           prefix, default = '', nil
         end
 
-        klass = style == 'long' && arg[1] ? "##{locals[arg[1]].class}" : ''
+        klass = if style == 'short' || arg[1].nil? || locals.empty?
+                  ''
+                else
+                  "##{locals[arg[1]].class}"
+                end
+
         "#{prefix}#{arg[1] || default}#{klass}"
       end
 
