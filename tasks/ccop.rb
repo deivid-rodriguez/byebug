@@ -23,7 +23,9 @@ task :ccop do
   file_list.each do |file|
     corrected = "#{file}_corrected"
     begin
-      system("indent #{file} -o #{corrected}")
+      result = `indent #{file} -o #{corrected}`
+      break unless result
+
       if FileUtils.compare_file(file, corrected)
         print(green('.'))
       else
