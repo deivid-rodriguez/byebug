@@ -4,6 +4,8 @@ os:
 
 language: ruby
 
+install: sudo apt-get install indent
+
 rvm:
 - 2.0.0
 - 2.1

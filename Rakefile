@@ -51,4 +51,4 @@ end
 require_relative 'tasks/ccop.rb'
 require_relative 'tasks/dev_utils.rb'
 
-task default: [:compile, :test, :rubocop]
+task default: [:compile, :test, :rubocop, :ccop]
