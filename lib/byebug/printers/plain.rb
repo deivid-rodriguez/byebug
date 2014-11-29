@@ -16,6 +16,7 @@ module Byebug
         lines = array_of_args(collection, &block).map do |args|
           print(path, args)
         end
+
         if modifier == 'c'
           columnize(lines.map { |l| l.gsub(/\n$/, '') }, Setting[:width])
         else

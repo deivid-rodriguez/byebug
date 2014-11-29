@@ -169,6 +169,7 @@ open_debug_inspector_i(const rb_debug_inspector_t * inspector, void *data)
 {
   struct call_with_inspection_data *cwi =
     (struct call_with_inspection_data *)data;
+
   cwi->dc->backtrace = load_backtrace(inspector);
 
   return rb_funcall2(cwi->context_obj, cwi->id, cwi->argc, cwi->argv);

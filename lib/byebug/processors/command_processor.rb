@@ -87,6 +87,7 @@ module Byebug
         puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
         @last_file, @last_line = file, line
       end
+
       always_run(context, file, line, 2)
     end
     protect :at_tracing
