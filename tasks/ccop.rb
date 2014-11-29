@@ -1,3 +1,17 @@
+#
+# ASCII sequence for green
+#
+def green(string)
+  "\033[0;32m#{string}\033[0m"
+end
+
+#
+# ASCII sequence for red
+#
+def red(string)
+  "\033[0;33m#{string}\033[0m"
+end
+
 desc 'Enforces code style in the C extension using indent'
 task :ccop do
   puts 'Running CCop...'
@@ -11,9 +25,9 @@ task :ccop do
     begin
       system("indent #{file} -o #{corrected}")
       if FileUtils.compare_file(file, corrected)
-        print('.')
+        print(green('.'))
       else
-        print('F')
+        print(red('F'))
         offenses += 1
       end
     ensure
@@ -23,9 +37,8 @@ task :ccop do
 
   print "\n#{file_list.size} files inspected, "
   if offenses == 0
-    puts "\033[0;32mno offenses detected\033[0m\n"
+    puts green('no offenses detected')
   else
-    puts "\033[0;33m#{offenses} offenses detected.\033[0m" \
-         'Run `indent` manually to fix them'
+    puts red("#{offenses} offenses detected.") + ' Run `indent` to fix them'
   end
 end
