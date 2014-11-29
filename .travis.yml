@@ -5,12 +5,12 @@ os:
 language: ruby
 
 install:
-- if ["$TRAVIS_OS_NAME" == "linux"]; then sudo apt-get install indent; fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install indent; fi
 - bundle install --jobs=3 --retry=3
 
 script:
-- if ["$TRAVIS_OS_NAME" == "linux"]; then bundle exec rake ; fi
-- if ["$TRAVIS_OS_NAME" == "osx"]; then bundle exec rake compile test ; fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then bundle exec rake ; fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then bundle exec rake compile test ; fi
 
 rvm:
 - 2.0.0
