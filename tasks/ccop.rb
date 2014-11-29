@@ -24,7 +24,6 @@ task :ccop do
     corrected = "#{file}_corrected"
     begin
       system("indent #{file} -o #{corrected}")
-      sleep(0.1) until File.exist?(corrected)
 
       if FileUtils.compare_file(file, corrected)
         print(green('.'))
