@@ -5,8 +5,12 @@ os:
 language: ruby
 
 install:
-- sudo apt-get install indent
+- ["$TRAVIS_OS_NAME" == "linux"] && sudo apt-get install indent
 - bundle install --jobs=3 --retry=3
+
+script:
+- ["$TRAVIS_OS_NAME" == "osx"] && bundle exec rake compile test rubocop
+- ["$TRAVIS_OS_NAME" == "linux"] && bundle exec rake
 
 rvm:
 - 2.0.0
