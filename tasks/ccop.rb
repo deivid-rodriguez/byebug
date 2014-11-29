@@ -23,8 +23,8 @@ task :ccop do
   file_list.each do |file|
     corrected = "#{file}_corrected"
     begin
-      result = `indent #{file} -o #{corrected}`
-      break unless result
+      system("indent #{file} -o #{corrected}")
+      sleep(0.1) until File.exist?(corrected)
 
       if FileUtils.compare_file(file, corrected)
         print(green('.'))
