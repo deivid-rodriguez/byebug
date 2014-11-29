@@ -116,11 +116,10 @@ module Byebug
 
       mark = (pos == @state.frame_pos) ? '--> ' : '    '
       mark += c_frame?(pos) ? ' ͱ-- ' : ''
-      call_str = get_frame_call(pos)
 
       { mark: mark,
         pos: format('%-2d', pos),
-        call_str: "#{call_str} ",
+        call_str: "#{get_frame_call(pos)} ",
         file: file,
         line: line }
     end
