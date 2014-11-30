@@ -288,7 +288,7 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, klass, msym, mid, binding, self, file, line;
+  VALUE breakpoint, klass, mid, binding, self, file, line;
 
   EVENT_SETUP;
 
@@ -301,9 +301,8 @@ call_event(VALUE trace_point, void *data)
 
   breakpoint = Qnil;
   klass = rb_tracearg_defined_class(trace_arg);
-  msym = rb_tracearg_method_id(trace_arg);
-  mid = NIL_P(msym) ? Qnil : SYM2ID(msym);
   binding = rb_tracearg_binding(trace_arg);
+  mid = SYM2ID(rb_tracearg_method_id(trace_arg));
   self = rb_tracearg_self(trace_arg);
   file = rb_tracearg_path(trace_arg);
   line = rb_tracearg_lineno(trace_arg);
@@ -349,7 +348,7 @@ return_event(VALUE trace_point, void *data)
 }
 
 static void
-c_call_event(VALUE trace_point, void *data)
+msc_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
@@ -361,7 +360,7 @@ c_call_event(VALUE trace_point, void *data)
 }
 
 static void
-c_return_event(VALUE trace_point, void *data)
+msc_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
@@ -455,27 +454,29 @@ register_tracepoints(VALUE self)
   if (NIL_P(traces))
   {
     int line_msk = RUBY_EVENT_LINE;
-    int call_msk = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
-    int return_msk = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
-    int c_call_msk = RUBY_EVENT_C_CALL;
-    int c_ret_msk = RUBY_EVENT_C_RETURN;
+    int call_msk = RUBY_EVENT_CALL;
+    int ret_msk = RUBY_EVENT_RETURN;
+    int msc_call_msk =
+      RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
+    int msc_ret_msk =
+      RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
     int raise_msk = RUBY_EVENT_RAISE;
     int thread_msk = RUBY_EVENT_THREAD_BEGIN | RUBY_EVENT_THREAD_END;
 
     VALUE tpLine = rb_tracepoint_new(Qnil, line_msk, line_event, 0);
     VALUE tpCall = rb_tracepoint_new(Qnil, call_msk, call_event, 0);
-    VALUE tpReturn = rb_tracepoint_new(Qnil, return_msk, return_event, 0);
-    VALUE tpCCall = rb_tracepoint_new(Qnil, c_call_msk, c_call_event, 0);
-    VALUE tpCReturn = rb_tracepoint_new(Qnil, c_ret_msk, c_return_event, 0);
+    VALUE tpRet = rb_tracepoint_new(Qnil, ret_msk, return_event, 0);
+    VALUE tpMscCall = rb_tracepoint_new(Qnil, msc_call_msk, msc_call_event, 0);
+    VALUE tpMscRet = rb_tracepoint_new(Qnil, msc_ret_msk, msc_return_event, 0);
     VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
     VALUE tpThread = rb_tracepoint_new(Qnil, thread_msk, thread_event, 0);
 
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
     rb_ary_push(traces, tpCall);
-    rb_ary_push(traces, tpReturn);
-    rb_ary_push(traces, tpCCall);
-    rb_ary_push(traces, tpCReturn);
+    rb_ary_push(traces, tpRet);
+    rb_ary_push(traces, tpMscCall);
+    rb_ary_push(traces, tpMscRet);
     rb_ary_push(traces, tpRaise);
     rb_ary_push(traces, tpThread);
 
