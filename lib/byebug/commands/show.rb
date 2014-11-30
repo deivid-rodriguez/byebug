@@ -16,7 +16,7 @@ module Byebug
       full_key = Setting.find(key)
       return errmsg(pr('show.errors.unknown_setting', key: key)) unless full_key
 
-      puts Setting.settings[full_key.to_sym].to_s
+      puts Setting.settings[full_key.to_sym]
     end
 
     class << self
