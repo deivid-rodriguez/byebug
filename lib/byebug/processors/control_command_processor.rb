@@ -1,3 +1,5 @@
+require 'byebug/states/control_state'
+
 module Byebug
   #
   # Processes commands in 'control' mode, when there's no program running
@@ -10,7 +12,7 @@ module Byebug
 
     def process_commands
       control_cmds = Command.commands.select(&:allow_in_control)
-      state = State.new(@interface, control_cmds)
+      state = Byebug::ControlState.new(@interface, control_cmds)
       commands = control_cmds.map { |cmd| cmd.new(state) }
 
       if @context_was_dead
@@ -42,33 +44,6 @@ module Byebug
     #
     def prompt(_context)
       '(byebug:ctrl) '
-    end
-
-    class State
-      attr_reader :commands, :interface
-
-      def initialize(interface, commands)
-        @interface = interface
-        @commands = commands
-      end
-
-      def proceed
-      end
-
-      extend Forwardable
-      def_delegators :@interface, :errmsg, :puts
-
-      def confirm(*_args)
-        'y'
-      end
-
-      def context
-        nil
-      end
-
-      def file
-        errmsg 'No filename given.'
-      end
     end
   end
 end

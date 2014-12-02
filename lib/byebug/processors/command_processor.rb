@@ -1,3 +1,5 @@
+require 'byebug/states/regular_state'
+
 module Byebug
   #
   # Processes commands in regular mode
@@ -122,7 +124,12 @@ module Byebug
     def always_run(context, file, line, run_level)
       cmds = Command.commands
 
-      state = State.new(cmds, context, @display, file, @interface, line)
+      state = Byebug::RegularState.new(cmds,
+                                       context,
+                                       @display,
+                                       file,
+                                       @interface,
+                                       line)
 
       # Change default when in irb or code included in command line
       Setting[:autolist] = false if ['(irb)', '-e'].include?(file)
@@ -250,34 +257,6 @@ module Byebug
     #
     def postloop
       Setting[:autosave] ? @interface.history.save : @interface.history.clear
-    end
-
-    class State
-      attr_accessor :commands, :context, :display, :file, :frame_pos,
-                    :interface, :line, :prev_line
-
-      def initialize(commands, context, display, file, interface, line)
-        @commands, @context, @display = commands, context, display
-        @file, @frame_pos, @interface = file, 0, interface
-        @line, @prev_line, @proceed = line, nil, false
-      end
-
-      extend Forwardable
-      def_delegators :@interface, :errmsg, :puts, :print, :confirm
-
-      def proceed?
-        @proceed
-      end
-
-      def proceed
-        @proceed = true
-      end
-
-      def location
-        l = "#{self.class.canonic_file(@file)} @ #{@line}\n"
-        l += "#{get_line(@file, @line)}\n" unless %w((irb) -e').include?(@file)
-        l
-      end
     end
   end
 end

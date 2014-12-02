@@ -80,7 +80,7 @@ module Byebug
       Setting[:testing] = false
       enter 'set testing', 'cont 5'
 
-      debug_code(program) { assert_kind_of CommandProcessor::State, state }
+      debug_code(program) { assert_kind_of Byebug::RegularState, state }
     end
 
     def test_set_notesting_unsets_the_thread_state_variable
