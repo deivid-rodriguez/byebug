@@ -14,4 +14,8 @@ Lint/Debugger:
 Style/SingleLineBlockParams:
   Enabled: false
 
+# https://github.com/bbatsov/rubocop/pull/72
+Style/AsciiComments:
+  Enabled: false
+
 inherit_from: .rubocop_todo.yml

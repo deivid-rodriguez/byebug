@@ -7,24 +7,20 @@ module Byebug
   # Mixin to assist command parsing
   #
   module FrameFunctions
-    def c_frame?(frame_no)
-      @state.context.frame_binding(frame_no).nil?
-    end
-
     def switch_to_frame(frame_no)
       frame_no >= 0 ? frame_no : @state.context.stack_size + frame_no
     end
 
     def navigate_to_frame(jump_no)
       return if jump_no == 0
-      total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame_pos
+      total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame
       step = jump_no / total_jumps # +1 (up) or -1 (down)
 
       loop do
         new_pos += step
         break if new_pos < 0 || new_pos >= @state.context.stack_size
 
-        next if c_frame?(new_pos)
+        next if @state.c_frame?(new_pos)
 
         current_jumps += 1
         break if current_jumps == total_jumps
@@ -32,100 +28,36 @@ module Byebug
       new_pos
     end
 
-    def adjust_frame(frame_pos, absolute)
+    def adjust_frame(frame, absolute)
       if absolute
-        abs_frame_pos = switch_to_frame(frame_pos)
-        return errmsg(pr('frame.errors.c_frame')) if c_frame?(abs_frame_pos)
+        abs_frame = switch_to_frame(frame)
+        return errmsg(pr('frame.errors.c_frame')) if @state.c_frame?(abs_frame)
       else
-        abs_frame_pos = navigate_to_frame(frame_pos)
+        abs_frame = navigate_to_frame(frame)
       end
 
-      if abs_frame_pos >= @state.context.stack_size
+      if abs_frame >= @state.context.stack_size
         return errmsg(pr('frame.errors.too_low'))
-      elsif abs_frame_pos < 0
+      elsif abs_frame < 0
         return errmsg(pr('frame.errors.too_high'))
       end
 
-      @state.frame_pos = abs_frame_pos
-      @state.file = @state.context.frame_file @state.frame_pos
-      @state.line = @state.context.frame_line @state.frame_pos
+      @state.frame = abs_frame
+      @state.file = @state.context.frame_file(@state.frame)
+      @state.line = @state.context.frame_line(@state.frame)
       @state.prev_line = nil
+
       ListCommand.new(@state).execute
     end
 
-    def frame_class(style, pos)
-      frame_class = style == 'short' ? '' : "#{@state.context.frame_class pos}"
-      frame_class == '' ? '' : "#{frame_class}."
-    end
+    def get_pr_arguments(frame_no)
+      file = @state.frame_file(frame_no)
+      line = @state.frame_line(frame_no)
+      call = @state.frame_call(frame_no)
+      mark = @state.frame_mark(frame_no)
+      pos = @state.frame_pos(frame_no)
 
-    def frame_block_and_method(pos)
-      deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
-      deco_method = "#{@state.context.frame_method(pos)}"
-      block_and_method = deco_regexp.match(deco_method)[1..2]
-      block_and_method.map { |x| x.nil? ? '' : x }
-    end
-
-    def frame_args(style, pos)
-      args = @state.context.frame_args(pos)
-      return '' if args.empty?
-
-      locals = @state.context.frame_locals(pos) unless style == 'short'
-      my_args = args.map do |arg|
-        case arg[0]
-        when :block
-          prefix, default = '&', 'block'
-        when :rest
-          prefix, default = '*', 'args'
-        else
-          prefix, default = '', nil
-        end
-
-        klass = if style == 'short' || arg[1].nil? || locals.empty?
-                  ''
-                else
-                  "##{locals[arg[1]].class}"
-                end
-
-        "#{prefix}#{arg[1] || default}#{klass}"
-      end
-
-      "(#{my_args.join(', ')})"
-    end
-
-    def frame_call(pos)
-      block, method = frame_block_and_method(pos)
-      klass = frame_class(Setting[:callstyle], pos)
-      args = frame_args(Setting[:callstyle], pos)
-
-      block + klass + method + args
-    end
-
-    def frame_file(pos)
-      fullpath = @state.context.frame_file(pos)
-      path = Setting[:fullpath] ? fullpath : shortpath(fullpath)
-      CommandProcessor.canonic_file(path)
-    end
-
-    def frame_line(pos)
-      @state.context.frame_line(pos)
-    end
-
-    def frame_pos(pos)
-      format('%-2d', pos)
-    end
-
-    def frame_mark(pos)
-      mark = (pos == @state.frame_pos) ? '-->' : '   '
-      c_frame?(pos) ? mark + ' ͱ--' : mark
-    end
-
-    def get_pr_arguments(pos)
-      file = frame_file(pos)
-      line = frame_line(pos)
-      call = frame_call(pos)
-      mark = frame_mark(pos)
-
-      { mark: mark, pos: frame_pos(pos), call: call, file: file, line: line }
+      { mark: mark, pos: pos, call: call, file: file, line: line }
     end
 
     def print_backtrace
@@ -134,15 +66,6 @@ module Byebug
       end
 
       print(bt)
-    end
-
-    private
-
-    def shortpath(fullpath)
-      components = Pathname(fullpath).each_filename.to_a
-      return File.join(components) if components.size <= 2
-
-      File.join('...', components[-3..-1])
     end
   end
 
@@ -238,7 +161,8 @@ module Byebug
 
     def execute
       unless @match[1]
-        print(pr('frame.line', get_pr_arguments(@state.frame_pos)))
+        print(pr('frame.line', get_pr_arguments(@state.frame)))
+        return
       end
 
       pos, err = get_int(@match[1], 'Frame')

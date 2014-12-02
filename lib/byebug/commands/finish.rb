@@ -12,7 +12,7 @@ module Byebug
     end
 
     def execute
-      max_frames = @state.context.stack_size - @state.frame_pos
+      max_frames = @state.context.stack_size - @state.frame
       if @match[1]
         n_frames, err = get_int(@match[1], 'finish', 0, max_frames - 1)
         return errmsg(err) unless n_frames
@@ -21,8 +21,8 @@ module Byebug
       end
 
       force = n_frames == 0 ? true : false
-      @state.context.step_out(@state.frame_pos + n_frames, force)
-      @state.frame_pos = 0
+      @state.context.step_out(@state.frame + n_frames, force)
+      @state.frame = 0
       @state.proceed
     end
 

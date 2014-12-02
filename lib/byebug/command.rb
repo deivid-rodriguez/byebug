@@ -56,7 +56,7 @@ module Byebug
       nil
     end
 
-    def get_binding(pos = @state.frame_pos)
+    def get_binding(pos = @state.frame)
       @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
     end
 

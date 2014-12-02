@@ -32,7 +32,7 @@ module Byebug
       steps, err = parse_steps(@match[2], 'Next')
       return errmsg(err) unless steps
 
-      @state.context.step_over(steps, @state.frame_pos, parse_force(@match[1]))
+      @state.context.step_over(steps, @state.frame, parse_force(@match[1]))
       @state.proceed
     end
 

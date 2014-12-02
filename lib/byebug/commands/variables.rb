@@ -38,7 +38,7 @@ module Byebug
     end
 
     def var_local
-      _self = @state.context.frame_self(@state.frame_pos)
+      _self = @state.context.frame_self(@state.frame)
       locals = @state.context.frame_locals
       puts prv(locals.keys.sort.map { |k| [k, locals[k]] })
     end
