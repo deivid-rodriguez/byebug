@@ -53,19 +53,19 @@ module Byebug
       ListCommand.new(@state).execute
     end
 
-    def get_frame_class(style, pos)
+    def frame_class(style, pos)
       frame_class = style == 'short' ? '' : "#{@state.context.frame_class pos}"
       frame_class == '' ? '' : "#{frame_class}."
     end
 
-    def get_frame_block_and_method(pos)
-      frame_deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
-      frame_deco_method = "#{@state.context.frame_method(pos)}"
-      frame_block_and_method = frame_deco_regexp.match(frame_deco_method)[1..2]
-      frame_block_and_method.map { |x| x.nil? ? '' : x }
+    def frame_block_and_method(pos)
+      deco_regexp = /((?:block(?: \(\d+ levels\))?|rescue) in )?(.+)/
+      deco_method = "#{@state.context.frame_method(pos)}"
+      block_and_method = deco_regexp.match(deco_method)[1..2]
+      block_and_method.map { |x| x.nil? ? '' : x }
     end
 
-    def get_frame_args(style, pos)
+    def frame_args(style, pos)
       args = @state.context.frame_args(pos)
       return '' if args.empty?
 
@@ -92,36 +92,40 @@ module Byebug
       "(#{my_args.join(', ')})"
     end
 
-    def get_frame_call(pos)
-      frame_block, frame_method = get_frame_block_and_method(pos)
-      frame_class = get_frame_class(Setting[:callstyle], pos)
-      frame_args = get_frame_args(Setting[:callstyle], pos)
+    def frame_call(pos)
+      block, method = frame_block_and_method(pos)
+      klass = frame_class(Setting[:callstyle], pos)
+      args = frame_args(Setting[:callstyle], pos)
 
-      frame_block + frame_class + frame_method + frame_args
+      block + klass + method + args
     end
 
-    def shortpath(fullpath)
-      components = Pathname(fullpath).each_filename.to_a
-      return File.join(components) if components.size <= 2
+    def frame_file(pos)
+      fullpath = @state.context.frame_file(pos)
+      path = Setting[:fullpath] ? fullpath : shortpath(fullpath)
+      CommandProcessor.canonic_file(path)
+    end
 
-      File.join('...', components[-3..-1])
+    def frame_line(pos)
+      @state.context.frame_line(pos)
+    end
+
+    def frame_pos(pos)
+      format('%-2d', pos)
+    end
+
+    def frame_mark(pos)
+      mark = (pos == @state.frame_pos) ? '-->' : '   '
+      c_frame?(pos) ? mark + ' ͱ--' : mark
     end
 
     def get_pr_arguments(pos)
-      fullpath = @state.context.frame_file(pos)
-      file = CommandProcessor.canonic_file(
-        Setting[:fullpath] ? fullpath : shortpath(fullpath)
-      )
-      line = @state.context.frame_line(pos)
+      file = frame_file(pos)
+      line = frame_line(pos)
+      call = frame_call(pos)
+      mark = frame_mark(pos)
 
-      mark = (pos == @state.frame_pos) ? '--> ' : '    '
-      mark += c_frame?(pos) ? ' ͱ-- ' : ''
-
-      { mark: mark,
-        pos: format('%-2d', pos),
-        call_str: "#{get_frame_call(pos)} ",
-        file: file,
-        line: line }
+      { mark: mark, pos: frame_pos(pos), call: call, file: file, line: line }
     end
 
     def print_backtrace
@@ -130,6 +134,15 @@ module Byebug
       end
 
       print(bt)
+    end
+
+    private
+
+    def shortpath(fullpath)
+      components = Pathname(fullpath).each_filename.to_a
+      return File.join(components) if components.size <= 2
+
+      File.join('...', components[-3..-1])
     end
   end
 

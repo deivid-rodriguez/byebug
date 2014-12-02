@@ -10,7 +10,7 @@ eval:
   result: "{result}"
 
 frame:
-  line: "{mark}#{pos} {call_str}at {file}:{line}"
+  line: "{mark} #{pos} {call} at {file}:{line}"
 
 method:
   methods: "{name}|c"
