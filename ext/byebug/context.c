@@ -51,12 +51,6 @@ dc_stack_size(const debug_context_t * context)
   return RARRAY_LENINT(dc_backtrace(context));
 }
 
-static int
-real_stack_size()
-{
-  return FIX2INT(rb_funcall(cContext, rb_intern("stack_size"), 0));
-}
-
 extern VALUE
 context_create(VALUE thread)
 {
@@ -65,11 +59,13 @@ context_create(VALUE thread)
   context->last_file = Qnil;
   context->last_line = Qnil;
   context->flags = 0;
-  context->calced_stack_size = real_stack_size();
   context->thnum = ++thnum_max;
   context->thread = thread;
   reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
+
+  rb_debug_inspector_open(context_backtrace_set, (void *)context);
+  context->calced_stack_size = dc_stack_size(context);
   context->backtrace = Qnil;
 
   if (rb_obj_class(thread) == cDebugThread)

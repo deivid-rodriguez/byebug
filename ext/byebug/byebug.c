@@ -675,8 +675,6 @@ bb_load(int argc, VALUE * argv, VALUE self)
   context = bb_current_context(self);
   Data_Get_Struct(context, debug_context_t, dc);
 
-  dc->calced_stack_size = 1;
-
   if (RTEST(stop))
     dc->steps = 1;
 

@@ -5,15 +5,6 @@ module Byebug
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
   class Context
-    class << self
-      def stack_size
-        backtrace = Thread.current.backtrace_locations(0)
-        return 0 unless backtrace
-
-        backtrace.size
-      end
-    end
-
     def interrupt
       step_into 1
     end
