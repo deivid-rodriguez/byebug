@@ -20,7 +20,8 @@ module Byebug
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
   class << self
-    attr_accessor :handler, :debugged_program, :printer
+    attr_accessor :handler, :printer
+    attr_reader :debugged_program
 
     extend Forwardable
     def_delegators :handler, :errmsg, :puts
@@ -55,6 +56,55 @@ module Byebug
   end
 
   self.printer ||= Byebug::Printers::Plain.new
+
+  def self.set_debugged_program
+    @debugged_program = program_from_args
+  end
+
+  #
+  # Extracts debugged program from command line args
+  #
+  def self.program_from_args
+    return $PROGRAM_NAME unless $PROGRAM_NAME.include?('bin/byebug')
+
+    abort_with_err('You must specify a program to debug...') if ARGV.empty?
+
+    argv = ARGV.dup
+
+    program = which(argv.shift)
+    program = which(argv.shift) if program == which('ruby')
+    abort_with_err("The script doesn't exist") unless program
+
+    program
+  end
+
+  private
+
+  #
+  # Cross-platform way of finding an executable in the $PATH.
+  # Borrowed from: http://stackoverflow.com/questions/2108727
+  #
+  def self.which(cmd)
+    return File.expand_path(cmd) if File.exist?(cmd)
+
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+      exts.each do |ext|
+        exe = File.join(path, "#{cmd}#{ext}")
+        return exe if File.executable?(exe) && !File.directory?(exe)
+      end
+    end
+
+    nil
+  end
+
+  #
+  # Prints an error message and aborts Byebug execution
+  #
+  def self.abort_with_err(msg)
+    Byebug.errmsg(msg)
+    abort
+  end
 end
 
 #

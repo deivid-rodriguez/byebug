@@ -16,39 +16,14 @@ module Byebug
     # Debug a script only if syntax checks okay.
     #
     def debug_program(options)
-      unless File.executable?(Byebug.debugged_program)
-        output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
-        if $CHILD_STATUS.exitstatus != 0
-          Byebug.puts output
-          exit $CHILD_STATUS.exitstatus
-        end
+      output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
+      if $CHILD_STATUS.exitstatus != 0
+        Byebug.puts output
+        exit $CHILD_STATUS.exitstatus
       end
 
       status = Byebug.debug_load(Byebug.debugged_program, options[:stop])
       Byebug.puts "#{status}\n#{status.backtrace}" if status
-    end
-
-    include MiscUtils
-    #
-    # Extracts path to program to be debugged from ARGV
-    #
-    # Used for restarts.
-    #
-    def debugged_program_from_argv
-      abort_with_err('You must specify a program to debug...') if ARGV.empty?
-
-      prog_script_try = which(ARGV.first)
-      if prog_script_try == which('ruby')
-        ARGV.shift
-        return which(ARGV.first)
-      end
-
-      prog_script_try
-    end
-
-    def abort_with_err(msg)
-      Byebug.errmsg(msg)
-      abort
     end
 
     #
@@ -67,8 +42,7 @@ module Byebug
         return
       end
 
-      Byebug.debugged_program = debugged_program_from_argv
-      abort_with_err("The script doesn't exist") unless Byebug.debugged_program
+      Byebug.set_debugged_program
 
       # Set up trace hook for byebug
       Byebug.start

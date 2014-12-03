@@ -62,9 +62,6 @@ quit:
 restart:
   errors:
     not_available: "Restart command is not available at this time"
-  debug:
-    outset: "Byebug was not called from the outset..."
-    not_executable: "Program {prog} not executable... Wrapping it in a ruby call"
 
 save:
   messages:

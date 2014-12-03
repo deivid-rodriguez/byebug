@@ -10,19 +10,7 @@ module Byebug
     end
 
     def execute
-      prog = Byebug.debugged_program
-
-      if defined?(BYEBUG_SCRIPT)
-        cmd = "#{BYEBUG_SCRIPT} #{prog}"
-      else
-        puts pr('restart.debug.outset')
-        if File.executable?(prog)
-          cmd = prog
-        else
-          puts pr('restart.debug.not_executable', prog: prog)
-          cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} #{prog}"
-        end
-      end
+      cmd = Byebug.debugged_program
 
       if @match[:args]
         cmd += " #{@match[:args]}"

@@ -3,61 +3,60 @@ require 'byebug/runner'
 module Byebug
   class RunnerTest < TestCase
     def setup
-      super
-      @old_argv = ARGV
       @runner = Byebug::Runner.new
-    end
 
-    def teardown
-      ARGV.replace(@old_argv)
+      super
     end
 
     def test_run_with_version_flag
-      ARGV.replace(%w(--version))
-      @runner.run
+      with_command_line('bin/byebug', '--version') do
+        @runner.run
 
-      check_output_includes(/#{Byebug::VERSION}/)
+        check_output_includes(/#{Byebug::VERSION}/)
+      end
     end
 
     def test_run_with_help_flag
-      ARGV.replace(%w(--help))
-      @runner.run
+      with_command_line('bin/byebug', '--help') do
+        @runner.run
 
-      check_output_includes(
-        /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/
-      )
+        check_output_includes(
+          /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/)
+      end
     end
 
     def test_run_with_remote_option_only_with_a_port_number
-      ARGV.replace(%w(--remote 9999))
-      Byebug.expects(:start_client)
-      @runner.run
+      with_command_line('bin/byebug', '--remote', '9999') do
+        Byebug.expects(:start_client)
+        @runner.run
 
-      check_output_includes(/Connecting to byebug server localhost:9999/)
+        check_output_includes(/Connecting to byebug server localhost:9999/)
+      end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
-      ARGV.replace(%w(--remote myhost:9999))
-      Byebug.expects(:start_client)
-      @runner.run
+      with_command_line('bin/byebug', '--remote', 'myhost:9999') do
+        Byebug.expects(:start_client)
+        @runner.run
 
-      check_output_includes(/Connecting to byebug server myhost:9999/)
+        check_output_includes(/Connecting to byebug server myhost:9999/)
+      end
     end
 
     def test_run_without_a_script_to_debug
-      ARGV.replace([])
+      with_command_line('bin/byebug') do
+        assert_raises(SystemExit) { @runner.run }
 
-      assert_raises(SystemExit) { @runner.run }
-
-      check_error_includes(/You must specify a program to debug.../)
+        check_error_includes(/You must specify a program to debug.../)
+      end
     end
 
     def test_run_with_an_nonexistent_script
-      ARGV.replace(%w(non_existent_script.rb))
+      with_command_line('bin/byebug', 'non_existent_script.rb') do
+        assert_raises(SystemExit) { @runner.run }
 
-      assert_raises(SystemExit) { @runner.run }
-
-      check_error_includes("The script doesn't exist")
+        check_error_includes("The script doesn't exist")
+      end
     end
 
     def expect_it_debugs_script(rc = true)
@@ -68,85 +67,96 @@ module Byebug
     end
 
     def test_run_with_a_script_to_debug
-      ARGV.replace(%w(lib/byebug.rb))
-      expect_it_debugs_script
+      with_command_line('bin/byebug', 'lib/byebug.rb') do
+        expect_it_debugs_script
 
-      @runner.run
+        @runner.run
+        assert_equal Byebug.debugged_program, File.expand_path('lib/byebug.rb')
+      end
     end
 
     def test_run_with_a_script_and_params_does_not_consume_script_params
-      ARGV.replace(%w(-- lib/byebug.rb -opt value))
-      expect_it_debugs_script
+      with_command_line('bin/byebug', '--', 'lib/byebug.rb', '-opt', 'value') do
+        expect_it_debugs_script
 
-      @runner.run
-      assert_equal %w(lib/byebug.rb -opt value), ARGV
+        @runner.run
+        assert_equal %w(lib/byebug.rb -opt value), ARGV
+      end
     end
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
-      ARGV.replace(%w(-- ruby lib/byebug.rb))
-      expect_it_debugs_script
+      with_command_line('bin/byebug', '--', 'ruby', 'lib/byebug.rb') do
+        expect_it_debugs_script
 
-      @runner.run
-      assert_equal %w(lib/byebug.rb), ARGV
+        @runner.run
+        assert_equal Byebug.debugged_program, File.expand_path('lib/byebug.rb')
+      end
     end
 
     def test_run_with_no_rc_option
-      ARGV.replace(%w(--no-rc lib/byebug.rb))
-      expect_it_debugs_script(false)
+      with_command_line('bin/byebug', '--no-rc', 'lib/byebug.rb') do
+        expect_it_debugs_script(false)
 
-      @runner.run
+        @runner.run
+      end
     end
 
     def test_run_with_post_mortem_mode_flag
-      ARGV.replace(%w(-m lib/byebug.rb))
-      expect_it_debugs_script
-      @runner.run
+      with_command_line('bin/byebug', '--post-mortem', 'lib/byebug.rb') do
+        expect_it_debugs_script
+        @runner.run
 
-      assert_equal true, Byebug.post_mortem?
-      Byebug::Setting[:post_mortem] = false
+        assert_equal true, Byebug.post_mortem?
+        Byebug::Setting[:post_mortem] = false
+      end
     end
 
     def test_run_with_linetracing_flag
-      ARGV.replace(%w(-t lib/byebug.rb))
-      expect_it_debugs_script
-      @runner.run
+      with_command_line('bin/byebug', '-t', 'lib/byebug.rb') do
+        expect_it_debugs_script
+        @runner.run
 
-      assert_equal true, Byebug.tracing?
-      Byebug::Setting[:linetrace] = false
+        assert_equal true, Byebug.tracing?
+        Byebug::Setting[:linetrace] = false
+      end
     end
 
     def test_run_with_no_quit_flag
       skip 'for now'
-      ARGV.replace(%w(--no-quit lib/byebug.rb))
-      @runner.run
+      with_command_line('bin/byebug', '--no-quit', 'lib/byebug.rb') do
+        @runner.run
 
-      check_output_includes('(byebug:ctrl)')
+        check_output_includes('(byebug:ctrl)')
+      end
     end
 
     def test_run_with_require_flag
-      ARGV.replace(%w(-r abbrev lib/byebug.rb))
-      expect_it_debugs_script
-      @runner.run
+      with_command_line('bin/byebug', '-r', 'abbrev', 'lib/byebug.rb') do
+        expect_it_debugs_script
+        @runner.run
 
-      hsh = { 'can' => 'can', 'cat' => 'cat' }
-      assert_equal hsh, %w(can cat).abbrev
+        hsh = { 'can' => 'can', 'cat' => 'cat' }
+        assert_equal hsh, %w(can cat).abbrev
+      end
     end
 
     def test_run_with_include_flag
-      ARGV.replace(%w(-I custom_dir lib/byebug.rb))
-      expect_it_debugs_script
-      @runner.run
+      with_command_line('bin/byebug', '-I', 'custom_dir', 'lib/byebug.rb') do
+        expect_it_debugs_script
+        @runner.run
 
-      assert_includes $LOAD_PATH, 'custom_dir'
+        assert_includes $LOAD_PATH, 'custom_dir'
+      end
     end
 
     def test_run_with_debug_flag
-      ARGV.replace(%w(-d lib/byebug.rb))
-      expect_it_debugs_script
-      @runner.run
+      with_command_line('bin/byebug', '-d', 'lib/byebug.rb') do
+        expect_it_debugs_script
+        @runner.run
 
-      assert_equal $DEBUG, true
-      $DEBUG = false
+        assert_equal $DEBUG, true
+        $DEBUG = false
+      end
     end
   end
 end

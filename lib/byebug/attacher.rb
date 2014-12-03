@@ -8,7 +8,7 @@ module Byebug
   #
   def self.attach(steps_out, before)
     start
-    self.debugged_program = $PROGRAM_NAME
+    set_debugged_program
     run_init_script
     current_context.step_out(steps_out, before)
   end

@@ -11,29 +11,24 @@ module Byebug
       EOC
     end
 
-    def must_restart(cmd = nil)
-      expectation = RestartCommand.any_instance.expects(:exec)
-      expectation.with(cmd) if cmd
+    def test_restarts_without_arguments_uses_original_arguments
+      with_command_line(example_path, '1', '2') do
+        RestartCommand.any_instance.expects(:exec).with("#{example_path} 1 2")
+
+        enter 'restart 1 2'
+        debug_code(program)
+        check_output_includes "Re exec'ing:", "\t#{example_path} 1 2"
+      end
     end
 
-    def test_restarts_with_manual_arguments
-      cmd = "ruby -rbyebug -I#{$LOAD_PATH.join(' -I')} test/test_helper.rb 1 2"
-      must_restart(cmd)
+    def test_restarts_with_arguments_uses_passed_arguments
+      with_command_line(example_path, '1', '2') do
+        RestartCommand.any_instance.expects(:exec).with("#{example_path} 3 4")
 
-      enter 'restart 1 2'
-      debug_code(program)
-      check_output_includes "Re exec'ing:", "\t#{cmd}"
-    end
-
-    def test_still_restarts_shows_messages_when_attached_to_running_program
-      must_restart
-      enter 'restart'
-
-      debug_code(program)
-      check_output_includes 'Byebug was not called from the outset...'
-      check_output_includes \
-        "Program #{Byebug.debugged_program} not executable... " \
-        'Wrapping it in a ruby call'
+        enter 'restart 3 4'
+        debug_code(program)
+        check_output_includes "Re exec'ing:", "\t#{example_path} 3 4"
+      end
     end
   end
 end

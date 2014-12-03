@@ -209,5 +209,23 @@ module Byebug
       change_line(file, lineno, content)
       cmd
     end
+
+    #
+    # Yields a block using temporary values for command line program name and
+    # command line arguments.
+    #
+    # @param program_name [String] New value for the program name
+    # @param *args [Array] New value for the program arguments
+    #
+    def with_command_line(program_name, *args)
+      original_program_name, original_argv = $PROGRAM_NAME, ARGV
+      $PROGRAM_NAME = program_name
+      ARGV.replace(args)
+
+      yield
+    ensure
+      $PROGRAM_NAME = original_program_name
+      ARGV.replace(original_argv)
+    end
   end
 end
