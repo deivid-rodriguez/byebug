@@ -23,7 +23,7 @@ module Byebug
     attr_accessor :handler, :debugged_program, :printer
 
     extend Forwardable
-    def_delegators :handler, :interface, :interface=, :errmsg, :puts
+    def_delegators :handler, :errmsg, :puts
   end
 
   Byebug.handler = CommandProcessor.new
