@@ -1,21 +1,14 @@
 module Byebug
-  class RestartExample
-    def concat_args(a, b, c)
-      a.to_s + b.to_s + c.to_s
-    end
-  end
-
+  #
+  # Tests restarting functionality.
+  #
   class RestartTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        a = ARGV[0]
-        b = ARGV[1]
-        c = ARGV[2]
-        RestartExample.new.concat_args(a, b, c)
-      end
-
-      super
+    def program
+      strip_line_numbers <<-EOC
+        1:  byebug
+        2:
+        3:  ARGV.join(' ')
+      EOC
     end
 
     def must_restart(cmd = nil)
@@ -28,7 +21,7 @@ module Byebug
       must_restart(cmd)
 
       enter 'restart 1 2'
-      debug_proc(@example)
+      debug_code(program)
       check_output_includes "Re exec'ing:", "\t#{cmd}"
     end
 
@@ -36,7 +29,7 @@ module Byebug
       must_restart
       enter 'restart'
 
-      debug_proc(@example)
+      debug_code(program)
       check_output_includes 'Byebug was not called from the outset...'
       check_output_includes \
         "Program #{Byebug.debugged_program} not executable... " \
