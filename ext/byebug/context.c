@@ -48,7 +48,7 @@ dc_backtrace(const debug_context_t * context)
 static int
 dc_stack_size(const debug_context_t * context)
 {
-  return RARRAY_LENINT(dc_backtrace(context));
+  return context->calced_stack_size;
 }
 
 extern VALUE
@@ -64,9 +64,8 @@ context_create(VALUE thread)
   reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
 
-  rb_debug_inspector_open(context_backtrace_set, (void *)context);
-  context->calced_stack_size = dc_stack_size(context);
   context->backtrace = Qnil;
+  context->calced_stack_size = 0;
 
   if (rb_obj_class(thread) == cDebugThread)
     CTX_FL_SET(context, CTX_FL_IGNORE);
