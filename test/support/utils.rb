@@ -20,7 +20,6 @@ module Byebug
     #   enter 'b 12', ->{"disable #{breakpoint.id}"}, 'cont'
     #
     def enter(*messages)
-      messages = messages.first.is_a?(Array) ? messages.first : messages
       interface.input.concat(messages)
     end
 
