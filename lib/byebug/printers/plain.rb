@@ -31,6 +31,7 @@ module Byebug
             key_size = "#{key} = ".size
             value = value[0..Setting[:width] - key_size - 4] + '...'
           end
+
           { key: key, value: value }
         end
       end
