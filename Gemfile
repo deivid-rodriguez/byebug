@@ -11,4 +11,5 @@ group :development, :test do
   gem 'minitest', '~> 5.4'
   gem 'simplecov', '0.9.1', require: false
   gem 'codeclimate-test-reporter', '0.4.2', require: false
+  gem 'pry', '0.10.1', require: false
 end

@@ -12,6 +12,12 @@ module Byebug
         return errmsg(pr('base.errors.only_local'))
       end
 
+      begin
+        require 'pry'
+      rescue LoadError
+        errmsg(pr('pry.errors.not_installed'))
+      end
+
       get_binding.pry
     end
 
@@ -25,4 +31,4 @@ module Byebug
       end
     end
   end
-end if defined?(Pry)
+end

@@ -7,11 +7,8 @@ module Byebug
       strip_line_numbers <<-EOC
         1:  module Byebug
         2:    byebug
-        3
-        4:    a = 2
-        5:    a += 3
-        6:    a + 4
-        7:  end
+        3:    BasicObject.new
+        4:  end
       EOC
     end
 
@@ -21,8 +18,9 @@ module Byebug
       super
     end
 
-    def test_pry_command_starts_a_pry_session
+    def test_pry_command_starts_a_pry_session_if_pry_installed
       PryCommand.any_instance.expects(:execute)
+
       enter 'pry'
       debug_code(program)
     end
@@ -31,4 +29,4 @@ module Byebug
       skip('for now')
     end
   end
-end if defined?(Pry)
+end

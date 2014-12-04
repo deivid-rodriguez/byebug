@@ -55,6 +55,10 @@ frame:
     too_high: "Can't navigate beyond the newest frame"
     c_frame: "Can't navigate to c-frame"
 
+pry:
+  errors:
+    not_installed: 'You need to install pry in order to run this command'
+
 quit:
   confirmations:
     really: "Really quit?"
