@@ -25,8 +25,8 @@ module Byebug
     # List of files to be ignored during a test run.
     #
     def ignored_files
-      list = File.expand_path('../../../{lib,test/support}/**/*.rb', __FILE__)
-      Dir.glob(list) + ['test/test_helper.rb']
+      pattern = File.expand_path('../../../{lib,test}/**/*.rb', __FILE__)
+      Dir.glob(pattern) - [example_path]
     end
 
     #

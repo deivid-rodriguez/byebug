@@ -1,17 +1,24 @@
 module Byebug
+  #
+  # Tests saving Byebug commands to a file.
+  #
   class SaveTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        a = 2
-        a + 3
-      end
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    byebug
+        3:    a = 2
+        4:    a + 3
+        5:  end
+      EOC
+    end
 
+    def setup
       super
 
-      enter 'break 2', 'break 3 if true', 'catch NoMethodError',
+      enter 'break 3', 'break 4 if true', 'catch NoMethodError',
             'display 2 + 3', 'save save_output.txt'
-      debug_proc(@example)
+      debug_code(program)
     end
 
     def teardown
@@ -23,11 +30,11 @@ module Byebug
     end
 
     def test_save_records_regular_breakpoints
-      assert_includes file_contents, "break #{__FILE__}:2"
+      assert_includes file_contents, "break #{example_fullpath}:3"
     end
 
     def test_save_records_conditional_breakpoints
-      assert_includes file_contents, "break #{__FILE__}:3 if true"
+      assert_includes file_contents, "break #{example_fullpath}:4 if true"
     end
 
     def test_save_records_catchpoints
@@ -52,14 +59,14 @@ module Byebug
 
     def test_save_without_a_filename_uses_a_default_file
       enter 'save'
-      debug_proc(@example)
+      debug_code(program)
       assert_includes File.read(RESTART_FILE), 'set autoirb false'
       File.delete(RESTART_FILE)
     end
 
     def test_save_without_a_filename_shows_a_message_with_the_file_used
       enter 'save'
-      debug_proc(@example)
+      debug_code(program)
       check_output_includes "Saved to '#{RESTART_FILE}'"
       File.delete(RESTART_FILE)
     end

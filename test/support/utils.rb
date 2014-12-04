@@ -24,31 +24,6 @@ module Byebug
     end
 
     #
-    # Runs the provided Proc
-    #
-    # You also can specify a block, which will be executed when Processor
-    # extracts all the commands from the input queue. You can use that for
-    # making assertions on the current test. If you specified the block and it
-    # was never executed, the test will fail.
-    #
-    # Usage:
-    #   debug_proc -> { byebug; puts 'Hello' }
-    #
-    #   enter 'b 4', 'cont'
-    #   code = -> do
-    #     byebug
-    #     puts 'hello'
-    #   end
-    #   debug_proc(code) { assert_equal 4, state.line }
-    #
-    def debug_proc(program, &block)
-      interface.test_block = block
-      program.call
-    ensure
-      interface.test_block.call if interface.test_block
-    end
-
-    #
     # Runs the code block passed as a string.
     #
     # The string is copied to a new file and then that file is run. This is

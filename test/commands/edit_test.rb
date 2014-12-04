@@ -1,11 +1,19 @@
 module Byebug
+  #
+  # Tests file editing from within Byebug.
+  #
   class EditTestCase < TestCase
-    def setup
-      @example = lambda do
-        byebug
-        Object.new
-      end
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    byebug
+        3:
+        4:    Object.new
+        5:  end
+      EOC
+    end
 
+    def setup
       @previous_editor = ENV['EDITOR']
 
       super
@@ -17,18 +25,18 @@ module Byebug
 
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       ENV['EDITOR'] = 'edi'
-      file = __FILE__
-      EditCommand.any_instance.expects(:system).with("edi +6 #{file}")
+      file = example_fullpath
+      EditCommand.any_instance.expects(:system).with("edi +4 #{file}")
       enter 'edit'
-      debug_proc(@example)
+      debug_code(program)
     end
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
       ENV['EDITOR'] = nil
-      file = __FILE__
-      EditCommand.any_instance.expects(:system).with("vim +6 #{file}")
+      file = example_fullpath
+      EditCommand.any_instance.expects(:system).with("vim +4 #{file}")
       enter 'edit'
-      debug_proc(@example)
+      debug_code(program)
     end
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
@@ -36,13 +44,13 @@ module Byebug
       file = File.expand_path('README.md')
       EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
       enter 'edit README.md:3'
-      debug_proc(@example)
+      debug_code(program)
     end
 
     def test_edit_shows_an_error_if_specified_file_does_not_exist
       file = File.expand_path('no_such_file')
       enter 'edit no_such_file:6'
-      debug_proc(@example)
+      debug_code(program)
       check_error_includes "File #{file} does not exist."
     end
 
@@ -55,7 +63,7 @@ module Byebug
       file = File.expand_path('README.md')
       EditCommand.any_instance.expects(:system).with("edi #{file}")
       enter 'edit README.md'
-      debug_proc(@example)
+      debug_code(program)
     end
   end
 end

@@ -1,28 +1,36 @@
 module Byebug
+  #
+  # Tests entering IRB from within Byebug.
+  #
   class IrbTestCase < TestCase
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    byebug
+        3:
+        4:    a = 2
+        5:    a += 3
+        6:    a + 4
+        7:  end
+      EOC
+    end
+
     def setup
-      @example = lambda do
-        byebug
-        a = 2
-        a += 3
-        a + 4
-      end
+      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
 
       super
-
-      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
     end
 
     def test_irb_command_starts_an_irb_session
       IrbCommand.any_instance.expects(:execute)
       enter 'irb'
-      debug_proc(@example)
+      debug_code(program)
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
       IrbCommand.any_instance.expects(:execute)
-      enter 'set autoirb', 'break 8', 'cont'
-      debug_proc(@example)
+      enter 'set autoirb', 'cont 6'
+      debug_code(program)
     end
   end
 end
