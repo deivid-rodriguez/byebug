@@ -55,7 +55,11 @@ module Byebug
     end
 
     def test_edit_shows_an_error_if_the_specified_file_is_not_readable
-      skip('for now')
+      file = File.expand_path('README.md')
+      File.stubs(:readable?).returns(false)
+      enter 'edit README.md:6'
+      debug_code(program)
+      check_error_includes "File #{file} is not readable."
     end
 
     def test_edit_accepts_no_line_specification
