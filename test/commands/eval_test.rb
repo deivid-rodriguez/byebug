@@ -56,7 +56,7 @@ module Byebug
 
     def test_auto_eval_can_be_turned_off_and_back_on
       enter 'set noautoeval', '[5, 6, 7].inject(&:+)',
-            'set autoeval',   '[1, 2, 3].inject(&:+)'
+            'set autoeval', '[1, 2, 3].inject(&:+)'
       debug_code(program)
       check_output_doesnt_include '18'
       check_output_includes '6'

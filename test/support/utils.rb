@@ -34,7 +34,7 @@ module Byebug
     # @param program String containing Ruby code to be run. This string could
     # be any valid Ruby code, but in order to avoid redefinition warnings in
     # the test suite, it should define at most one class inside the Byebug
-    # namespace. The name of this class is defined by the `example_class'
+    # namespace. The name of this class is defined by the +example_class+
     # method.
     #
     # @param &block Optional proc which will be executed when Processor
@@ -142,12 +142,12 @@ module Byebug
       Byebug::Setting[:width] = 80
     end
 
-    def interface
-      Byebug.handler.interface
-    end
-
     def state
       Thread.current.thread_variable_get('state')
+    end
+
+    def interface
+      Byebug.handler.interface
     end
 
     def context

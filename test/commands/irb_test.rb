@@ -9,9 +9,8 @@ module Byebug
         2:    byebug
         3:
         4:    a = 2
-        5:    a += 3
-        6:    a + 4
-        7:  end
+        5:    a + 4
+        6:  end
       EOC
     end
 
@@ -23,13 +22,15 @@ module Byebug
 
     def test_irb_command_starts_an_irb_session
       IrbCommand.any_instance.expects(:execute)
+
       enter 'irb'
       debug_code(program)
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
       IrbCommand.any_instance.expects(:execute)
-      enter 'set autoirb', 'cont 6'
+
+      enter 'set autoirb', 'cont 5'
       debug_code(program)
     end
   end

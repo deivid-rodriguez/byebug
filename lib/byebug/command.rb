@@ -39,8 +39,7 @@ module Byebug
       errmsg(pr('eval.exception',
                 text_message: backtraces.join("\n"),
                 class:        e.class,
-                value: e.to_s
-      ))
+                value: e.to_s))
       nil
     end
 
@@ -51,8 +50,7 @@ module Byebug
       print(pr('eval.exception',
                text_message: text_message,
                class: e.class,
-               value: e.to_s
-      ))
+               value: e.to_s))
       nil
     end
 
