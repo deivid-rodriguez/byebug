@@ -15,6 +15,15 @@ module Byebug
   IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
 
   #
+  # Tells whether a file is ignored by the debugger.
+  #
+  # @param path [String] filename to be checked.
+  #
+  def self.ignored?(path)
+    IGNORED_FILES.include?(path)
+  end
+
+  #
   # Configuration file used for startup commands. Default value is .byebugrc
   #
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)

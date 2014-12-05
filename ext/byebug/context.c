@@ -46,9 +46,13 @@ dc_backtrace(const debug_context_t * context)
 }
 
 static int
-dc_stack_size(const debug_context_t * context)
+dc_stack_size(debug_context_t * context)
 {
-  return context->calced_stack_size;
+
+  if (NIL_P(dc_backtrace(context)))
+    return 0;
+
+  return RARRAY_LENINT(dc_backtrace(context));
 }
 
 extern VALUE
@@ -64,8 +68,8 @@ context_create(VALUE thread)
   reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
 
-  context->backtrace = Qnil;
-  context->calced_stack_size = 0;
+  rb_debug_inspector_open(context_backtrace_set, (void *)context);
+  context->calced_stack_size = dc_stack_size(context);
 
   if (rb_obj_class(thread) == cDebugThread)
     CTX_FL_SET(context, CTX_FL_IGNORE);
@@ -347,21 +351,18 @@ Context_resume(VALUE self)
 
 /*
  *  call-seq:
- *    context.stack_size-> int
+ *    context.backtrace-> int
  *
- *  Returns the size of the context's stack.
+ *  Returns the frame stack of a context.
  */
 static inline VALUE
-Context_stack_size(VALUE self)
+Context_backtrace(VALUE self)
 {
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (NIL_P(dc_backtrace(context)))
-    rb_raise(rb_eRuntimeError, "Backtrace not loaded.");
-
-  return INT2FIX(dc_stack_size(context));
+  return dc_backtrace(context);
 }
 
 static VALUE
@@ -642,7 +643,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
   rb_define_method(cContext, "ignored?", Context_ignored, 0);
   rb_define_method(cContext, "resume", Context_resume, 0);
-  rb_define_method(cContext, "stack_size", Context_stack_size, 0);
+  rb_define_method(cContext, "backtrace", Context_backtrace, 0);
   rb_define_method(cContext, "step_into", Context_step_into, -1);
   rb_define_method(cContext, "step_out", Context_step_out, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);

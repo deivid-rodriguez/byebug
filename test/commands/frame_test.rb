@@ -31,6 +31,14 @@ module Byebug
       EOP
     end
 
+    #
+    # After a single 'bt' command, gives the backtrace size from the output.
+    # It's the number of lines input except for the prompt.
+    #
+    def backtrace_size
+      (interface.output - ['(byebug) ']).size
+    end
+
     def test_up_moves_up_in_the_callstack
       enter 'up'
       debug_code(program) { assert_equal 11, state.line }
@@ -86,8 +94,11 @@ module Byebug
     end
 
     def test_where_displays_current_backtrace_with_fullpaths
-      enter 'set fullpath', 'where'
+      Setting[:fullpath] = true
+
+      enter 'where'
       debug_code(program)
+
       full_example = File.expand_path(example_path)
       check_output_includes(
         /--> #0  .*integerize\(str#String\)\s* at #{full_example}:16/,
@@ -96,11 +107,15 @@ module Byebug
         /ͱ-- #3  Class\.new\(\*args\)\s* at #{full_example}:20/,
         /#4  <module:Byebug>\s* at #{full_example}:20/,
         /#5  <top \(required\)>\s* at #{full_example}:1/)
+      assert_equal 6, backtrace_size
     end
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
-      enter 'set nofullpath', 'where'
+      Setting[:fullpath] = false
+
+      enter 'where'
       debug_code(program)
+
       check_output_includes(
         /--> #0  .*integerize\(str#String\)\s* at .*#{example_path}:16/,
         /#1  .*encode\(str#String\)\s* at .*#{example_path}:11/,
@@ -108,11 +123,16 @@ module Byebug
         /ͱ-- #3  Class\.new\(\*args\) at .*#{example_path}:20/,
         /#4  <module:Byebug> at .*#{example_path}:20/,
         /#5  <top \(required\)> at .*#{example_path}:1/)
+
+      assert_equal 6, backtrace_size
     end
 
     def test_where_displays_backtraces_using_long_callstyle
-      enter 'set callstyle long', 'where'
+      Setting[:callstyle] = 'long'
+
+      enter 'where'
       debug_code(program)
+
       kl = 'Byebug::TestExample'
       check_output_includes(
         /--> #0  #{kl}.integerize\(str#String\)\s* at #{example_fullpath}:16/,
@@ -121,11 +141,16 @@ module Byebug
         /ͱ-- #3  Class\.new\(\*args\)\s* at #{example_fullpath}:20/,
         /#4  <module:Byebug>\s* at #{example_fullpath}:20/,
         /#5  <top \(required\)>\s* at #{example_fullpath}:1/)
+
+      assert_equal 6, backtrace_size
     end
 
     def test_where_displays_backtraces_using_short_callstyle
-      enter 'set callstyle short', 'where'
+      Setting[:callstyle] = 'short'
+
+      enter 'where'
       debug_code(program)
+
       check_output_includes(
         /--> #0  integerize\(str\)\s* at #{example_fullpath}:16/,
         /#1  encode\(str\)\s* at #{example_fullpath}:11/,
@@ -133,6 +158,8 @@ module Byebug
         /ͱ-- #3  new\(\*args\)\s* at #{example_fullpath}:20/,
         /#4  <module:Byebug>\s* at #{example_fullpath}:20/,
         /#5  <top \(required\)>\s* at #{example_fullpath}:1/)
+
+      assert_equal 6, backtrace_size
     end
 
     def test_up_skips_c_frames

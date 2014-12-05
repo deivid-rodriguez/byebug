@@ -5,6 +5,14 @@ module Byebug
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
   class Context
+    def stack_size
+      return 0 unless backtrace
+
+      backtrace.drop_while { |l| Byebug.ignored?(l.first.path) }
+        .take_while { |l| !Byebug.ignored?(l.first.path) }
+        .size
+    end
+
     def interrupt
       step_into 1
     end
