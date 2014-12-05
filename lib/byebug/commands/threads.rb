@@ -40,25 +40,24 @@ module Byebug
     def parse_thread_num(subcmd, arg)
       return errmsg(pr('thread.errors.no_number', subcmd: subcmd)) if '' == arg
 
-      thread_num, err = get_int(arg, subcmd, 1)
-      return errmsg(err) unless thread_num
+      thnum, err = get_int(arg, subcmd, 1)
+      return errmsg(err) unless thnum
 
       Byebug.contexts.find { |c| c.thnum == thnum }
     end
 
     def parse_thread_num_for_cmd(subcmd, arg)
       c = parse_thread_num(subcmd, arg)
-      return unless c
 
       case
-      when nil == c
-        errmsg pr('thread.errors.no_thread')
+      when c.nil?
+        [c, pr('thread.errors.no_thread')]
       when @state.context == c
-        errmsg pr('thread.errors.current_thread')
+        [c, pr('thread.errors.current_thread')]
       when c.ignored?
-        errmsg pr('thread.errors.wrong_action', subcmd: subcmd, arg: arg)
+        [c, pr('thread.errors.wrong_action', subcmd: subcmd, arg: arg)]
       else
-        c
+        [c, nil]
       end
     end
   end
@@ -132,8 +131,8 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd('thread stop', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread stop', @match[1])
+      return errmsg(err) if err
 
       c.suspend
       display_context(c)

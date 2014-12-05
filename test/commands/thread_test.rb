@@ -53,6 +53,10 @@ module Byebug
       Byebug.contexts.last.thnum
     end
 
+    def curr_thnum
+      Byebug.contexts.find { |ctx| ctx.thread == Thread.current }.thnum
+    end
+
     def test_thread_list_marks_current_thread_with_a_plus_sign
       thnum, file = nil, example_path
       enter 'cont 13', 'thread list', 'lock << 0'
@@ -104,7 +108,7 @@ module Byebug
     end
 
     def test_thread_stop_shows_error_when_trying_to_stop_current_thread
-      enter 'cont 13', -> { "thread stop #{first_thnum}" }, 'lock << 0'
+      enter 'cont 13', -> { "thread stop #{curr_thnum}" }, 'lock << 0'
       debug_code(program)
 
       check_error_includes "It's the current thread"
