@@ -9,6 +9,8 @@ require 'byebug/remote'
 require 'byebug/printers/plain'
 
 module Byebug
+  extend self
+
   #
   # List of files byebug will ignore while debugging
   #
@@ -28,15 +30,16 @@ module Byebug
   #
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
 
-  class << self
-    attr_accessor :handler, :printer
-    attr_reader :debugged_program
+  attr_accessor :handler
+  self.handler = CommandProcessor.new
 
-    extend Forwardable
-    def_delegators :handler, :errmsg, :puts
-  end
+  extend Forwardable
+  def_delegators :handler, :errmsg, :puts
 
-  Byebug.handler = CommandProcessor.new
+  attr_accessor :printer
+  self.printer = Printers::Plain.new
+
+  attr_reader :debugged_program
 
   #
   # Runs normal byebug initialization scripts.
@@ -47,7 +50,7 @@ module Byebug
   # generic in your home directory, and another, specific to the program you
   # are debugging, in the directory where you invoke byebug.
   #
-  def self.run_init_script
+  def run_init_script
     home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
     run_script(home_rc) if File.exist?(home_rc)
 
@@ -58,22 +61,20 @@ module Byebug
   #
   # Runs a script file
   #
-  def self.run_script(file, verbose = false)
+  def run_script(file, verbose = false)
     interface = ScriptInterface.new(File.expand_path(file), verbose)
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands
   end
 
-  self.printer ||= Byebug::Printers::Plain.new
-
-  def self.set_debugged_program
+  def set_debugged_program
     @debugged_program = program_from_args
   end
 
   #
   # Extracts debugged program from command line args
   #
-  def self.program_from_args
+  def program_from_args
     return $PROGRAM_NAME unless $PROGRAM_NAME.include?('bin/byebug')
 
     abort_with_err('You must specify a program to debug...') if ARGV.empty?
@@ -93,7 +94,7 @@ module Byebug
   # Cross-platform way of finding an executable in the $PATH.
   # Borrowed from: http://stackoverflow.com/questions/2108727
   #
-  def self.which(cmd)
+  def which(cmd)
     return File.expand_path(cmd) if File.exist?(cmd)
 
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
@@ -110,7 +111,7 @@ module Byebug
   #
   # Prints an error message and aborts Byebug execution
   #
-  def self.abort_with_err(msg)
+  def abort_with_err(msg)
     Byebug.errmsg(msg)
     abort
   end

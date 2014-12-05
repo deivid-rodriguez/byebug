@@ -7,6 +7,9 @@ AllCops:
 TrivialAccessors:
   ExactNameMatch: true
 
+Style/ModuleFunction:
+  Enabled: false
+
 # https://github.com/bbatsov/rubocop/issues/1466
 Style/SingleLineBlockParams:
   Enabled: false
