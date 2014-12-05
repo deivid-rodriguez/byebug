@@ -4,6 +4,7 @@
 - Window CI build through AppVeyor.
 - OSX CI build through Travis.
 - Style enforcement through RuboCop.
+- C style enforment using the `indent` command line utility.
 - Some remote debugging tests (thanks @eric-hu).
 - Printer's support (thanks @astashov).
 
@@ -19,6 +20,7 @@ working anyways (#92).
 - `up`, `down` and `frame` commands now work in post_mortem mode (#93).
 - Loading of .byebugrc. Now it ignores invalid commands instead of aborting.
 - Priority of .byebugrc files. Project's file overrides global (home) file.
+- Backtraces not working in `post_mortem` mode (#93).
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up
