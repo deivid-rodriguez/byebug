@@ -305,8 +305,9 @@ module Byebug
 
     class BreakTestCaseBasename < BreakTestCase
       def setup
-        @filename = File.basename(example_fullpath)
         super
+
+        @filename = File.basename(example_fullpath)
         enter 'set basename'
       end
 
@@ -315,8 +316,9 @@ module Byebug
 
     class BreakTestCaseNobasename < BreakTestCase
       def setup
-        @filename = example_fullpath
         super
+
+        @filename = example_fullpath
         enter 'set nobasename'
       end
 

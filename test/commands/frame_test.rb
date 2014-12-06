@@ -95,70 +95,76 @@ module Byebug
 
     def test_where_displays_current_backtrace_with_fullpaths
       Setting[:fullpath] = true
-
       enter 'where'
       debug_code(program)
 
-      full_example = File.expand_path(example_path)
-      check_output_includes(
-        /--> #0  .*integerize\(str#String\)\s* at #{full_example}:16/,
-        /#1  .*encode\(str#String\)\s* at #{full_example}:11/,
-        /#2  .*initialize\(letter#String\)\s* at #{full_example}:7/,
-        /ͱ-- #3  Class\.new\(\*args\)\s* at #{full_example}:20/,
-        /#4  <module:Byebug>\s* at #{full_example}:20/,
-        /#5  <top \(required\)>\s* at #{full_example}:1/)
+      path = example_fullpath
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
+            #1  Byebug::TestExample.encode(str#String) at #{path}:11
+            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+            ͱ-- #3  Class.new(*args) at #{path}:20
+            #4  <module:Byebug> at #{path}:20
+            #5  <top (required)> at #{path}:1
+      TXT
+
+      check_output_includes(*expected_output)
       assert_equal 6, backtrace_size
     end
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
       Setting[:fullpath] = false
-
       enter 'where'
       debug_code(program)
 
-      check_output_includes(
-        /--> #0  .*integerize\(str#String\)\s* at .*#{example_path}:16/,
-        /#1  .*encode\(str#String\)\s* at .*#{example_path}:11/,
-        /#2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/,
-        /ͱ-- #3  Class\.new\(\*args\) at .*#{example_path}:20/,
-        /#4  <module:Byebug> at .*#{example_path}:20/,
-        /#5  <top \(required\)> at .*#{example_path}:1/)
+      path = example_path
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
+            #1  Byebug::TestExample.encode(str#String) at #{path}:11
+            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+            ͱ-- #3  Class.new(*args) at #{path}:20
+            #4  <module:Byebug> at #{path}:20
+            #5  <top (required)> at #{path}:1
+      TXT
 
+      check_output_includes(*expected_output)
       assert_equal 6, backtrace_size
     end
 
     def test_where_displays_backtraces_using_long_callstyle
       Setting[:callstyle] = 'long'
-
       enter 'where'
       debug_code(program)
 
-      kl = 'Byebug::TestExample'
-      check_output_includes(
-        /--> #0  #{kl}.integerize\(str#String\)\s* at #{example_fullpath}:16/,
-        /#1  #{kl}.encode\(str#String\)\s* at #{example_fullpath}:11/,
-        /#2  #{kl}.initialize\(letter#String\)\s* at #{example_fullpath}:7/,
-        /ͱ-- #3  Class\.new\(\*args\)\s* at #{example_fullpath}:20/,
-        /#4  <module:Byebug>\s* at #{example_fullpath}:20/,
-        /#5  <top \(required\)>\s* at #{example_fullpath}:1/)
+      path = example_fullpath
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
+            #1  Byebug::TestExample.encode(str#String) at #{path}:11
+            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+            ͱ-- #3  Class.new\(*args) at #{path}:20
+            #4  <module:Byebug> at #{path}:20
+            #5  <top (required)> at #{path}:1
+      TXT
 
+      check_output_includes(*expected_output)
       assert_equal 6, backtrace_size
     end
 
     def test_where_displays_backtraces_using_short_callstyle
       Setting[:callstyle] = 'short'
-
       enter 'where'
       debug_code(program)
 
-      check_output_includes(
-        /--> #0  integerize\(str\)\s* at #{example_fullpath}:16/,
-        /#1  encode\(str\)\s* at #{example_fullpath}:11/,
-        /#2  initialize\(letter\)\s* at #{example_fullpath}:7/,
-        /ͱ-- #3  new\(\*args\)\s* at #{example_fullpath}:20/,
-        /#4  <module:Byebug>\s* at #{example_fullpath}:20/,
-        /#5  <top \(required\)>\s* at #{example_fullpath}:1/)
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  integerize(str) at #{example_fullpath}:16
+            #1  encode(str) at #{example_fullpath}:11
+            #2  initialize(letter) at #{example_fullpath}:7
+            ͱ-- #3  new(*args) at #{example_fullpath}:20
+            #4  <module:Byebug> at #{example_fullpath}:20
+            #5  <top (required)> at #{example_fullpath}:1
+      TXT
 
+      check_output_includes(*expected_output)
       assert_equal 6, backtrace_size
     end
 

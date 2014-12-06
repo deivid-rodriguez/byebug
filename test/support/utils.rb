@@ -153,6 +153,19 @@ module Byebug
     end
 
     #
+    # Prepares a string to get feed to an assertion accepting arrays of
+    # Regexp's. The string is split into lines and each of them is converted to
+    # a regexp, properly escaping it and ignoring whitespace.
+    #
+    # @param output_str [String]
+    #
+    def prepare_for_regexp(output_str)
+      splitted = split_lines(output_str)
+
+      splitted.each { |str| Regexp.new(Regexp.escape(str), Regexp::EXTENDED) }
+    end
+
+    #
     # Set default settings for testing
     #
     def set_defaults
