@@ -131,6 +131,28 @@ module Byebug
     end
 
     #
+    # Split a string (normally a here doc containing byebug's output) into
+    # stripped lines
+    #
+    # @param str_output [String]
+    #
+    # @example
+    #
+    #   split_lines <<-EOF
+    #     Sample command
+    #
+    #     It does an amazing thing.
+    #   EOF
+    #
+    #   returns
+    #
+    #   ['Sample command', 'It does an amazing thing.']
+    #
+    def split_lines(output_str)
+      output_str.split("\n").map(&:strip)
+    end
+
+    #
     # Set default settings for testing
     #
     def set_defaults

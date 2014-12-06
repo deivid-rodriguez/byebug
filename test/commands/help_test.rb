@@ -18,15 +18,14 @@ module Byebug
         enter 'set width 50', cmd_alias
         debug_code(program)
 
-        (<<-TEXT
+        expected_output = split_lines <<-TXT
           h[elp][ <command>[ <subcommand>]]
           "help" alone prints this help.
           "help <command>" prints help on <command>.
           "help <command> <subcommand>" prints help on <subcommand>.
-        TEXT
-        ).split("\n").each do |line|
-          check_output_includes line
-        end
+        TXT
+
+        check_output_includes(*expected_output)
       end
     end
 
@@ -34,14 +33,13 @@ module Byebug
       enter 'help break'
       debug_code(program)
 
-      (<<-TEXT
+      expected_output = split_lines <<-TXT
         b[reak] file:line [if expr]
         b[reak] class(.|#)method [if expr]
         Set breakpoint to some position, (optionally) if expr == true
-      TEXT
-      ).split("\n").each do |line|
-        check_output_includes line
-      end
+      TXT
+
+      check_output_includes(*expected_output)
     end
 
     def test_help_with_undefined_command_shows_an_error
