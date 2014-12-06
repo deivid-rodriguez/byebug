@@ -37,7 +37,7 @@ module Byebug
     end
 
     def execute
-      file = open(@match[1] || RESTART_FILE, 'w')
+      file = File.open(@match[1] || RESTART_FILE, 'w')
 
       save_breakpoints(file)
       save_catchpoints(file)
