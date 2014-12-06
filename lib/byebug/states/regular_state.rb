@@ -170,7 +170,7 @@ module Byebug
 
     def shortpath(fullpath)
       components = Pathname(fullpath).each_filename.to_a
-      return File.join(components) if components.size <= 2
+      return fullpath if components.size <= 2
 
       File.join('...', components[-3..-1])
     end
