@@ -1,11 +1,13 @@
 require 'byebug/runner'
 
 module Byebug
-  class RunnerTest < TestCase
-    def setup
-      @runner = Byebug::Runner.new
+  class RunnerTest < Minitest::Test
+    include Byebug::TestUtils
 
-      super
+    def setup
+      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
+
+      @runner = Byebug::Runner.new
     end
 
     def test_run_with_version_flag

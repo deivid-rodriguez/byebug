@@ -2,10 +2,8 @@ require 'byebug/runner'
 require 'mocha/mini_test'
 
 module Byebug
-  class RemoteInterfaceTest < TestCase
+  class RemoteInterfaceTest < Minitest::Test
     def setup
-      super
-
       @old_argv = ARGV
       @remote_socket_mock = mock('remote socket')
       @remote_interface = Byebug::RemoteInterface.new(@remote_socket_mock)
