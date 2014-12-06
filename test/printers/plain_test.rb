@@ -1,5 +1,5 @@
 module Byebug
-  class PrintersPlainTestCase < TestCase
+  class PrintersPlainTestCase < Minitest::Test
     include Byebug::PrinterHelpers
 
     def klass
