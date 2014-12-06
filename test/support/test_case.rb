@@ -25,7 +25,6 @@ module Byebug
     # Cleanup after each test
     #
     def teardown
-      force_remove_const(Byebug, example_class)
       example_file.unlink
     end
 

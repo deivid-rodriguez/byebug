@@ -74,9 +74,7 @@ module Byebug
 
       load(example_path)
     ensure
-      if Byebug.const_defined?(example_class)
-        Byebug.send(:remove_const, example_class)
-      end
+      force_remove_const(Byebug, example_class)
     end
 
     #
@@ -191,8 +189,12 @@ module Byebug
     end
 
     def force_set_const(klass, const, value)
-      klass.send(:remove_const, const) if klass.const_defined?(const)
+      force_remove_const(klass, const)
       klass.const_set(const, value)
+    end
+
+    def force_remove_const(klass, const)
+      klass.send(:remove_const, const) if klass.const_defined?(const)
     end
 
     #
