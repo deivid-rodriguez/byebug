@@ -13,10 +13,6 @@ module Byebug
       EOC
     end
 
-    def available_cmds
-      @available_cmds ||= Command.commands.map(&:names).flatten.uniq.sort
-    end
-
     %w(help h).each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_help_for_help_command_itself") do
         enter 'set width 50', cmd_alias
