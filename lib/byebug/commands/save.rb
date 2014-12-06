@@ -2,7 +2,7 @@ module Byebug
   #
   # Default file where commands are saved
   #
-  RESTART_FILE = '.byebug-save' unless defined?(RESTART_FILE)
+  RESTART_FILE = '.byebug-save'
 
   #
   # Save current settings to use them in another debug session.
