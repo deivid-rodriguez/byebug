@@ -25,6 +25,7 @@ module Byebug
 
     def teardown
       File.delete('source_example.txt')
+      super
     rescue
       retry
     end

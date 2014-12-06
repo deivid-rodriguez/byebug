@@ -14,13 +14,15 @@ module Byebug
     end
 
     def setup
-      @previous_editor = ENV['EDITOR']
-
       super
+
+      @previous_editor = ENV['EDITOR']
     end
 
     def teardown
       ENV['EDITOR'] = @previous_editor
+
+      super
     end
 
     def test_edit_opens_current_file_in_current_line_in_configured_editor

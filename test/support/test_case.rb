@@ -22,6 +22,14 @@ module Byebug
     end
 
     #
+    # Cleanup after each test
+    #
+    def teardown
+      force_remove_const(Byebug, example_class)
+      example_file.unlink
+    end
+
+    #
     # List of files to be ignored during a test run.
     #
     def ignored_files
@@ -30,14 +38,21 @@ module Byebug
     end
 
     #
-    # Temporary file created during a test run to store a test program.
+    # File where test code is saved
     #
-    def example_path
-      'test/current_example.rb'
+    def example_file
+      @example_file ||= Tempfile.new(['byebug_test', '.rb'])
     end
 
     #
-    # Full path to example_path.
+    # Path to file where test code is saved
+    #
+    def example_path
+      example_file.path
+    end
+
+    #
+    # Full path to file where test code is saved
     #
     def example_fullpath
       File.expand_path(example_path)

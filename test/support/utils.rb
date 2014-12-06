@@ -55,7 +55,7 @@ module Byebug
     #
     def debug_code(program, &block)
       interface.test_block = block
-      write_to_file_and_debug(program)
+      debug_in_temp_file(program)
       interface.test_block.call if interface.test_block
     end
 
@@ -68,14 +68,15 @@ module Byebug
     #
     # @param program [String] Ruby code to be debugged
     #
-    def write_to_file_and_debug(program)
-      File.open(example_path, 'w') { |file| file.write(program) }
+    def debug_in_temp_file(program)
+      example_file.write(program)
+      example_file.close
+
       load(example_path)
     ensure
       if Byebug.const_defined?(example_class)
         Byebug.send(:remove_const, example_class)
       end
-      File.delete(example_path)
     end
 
     #
