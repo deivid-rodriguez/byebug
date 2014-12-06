@@ -134,7 +134,7 @@ module Byebug
     # Split a string (normally a here doc containing byebug's output) into
     # stripped lines
     #
-    # @param str_output [String]
+    # @param output_str [String]
     #
     # @example
     #
