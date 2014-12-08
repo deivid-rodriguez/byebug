@@ -77,20 +77,20 @@ module Byebug
     end
 
     def self.help(cmd, subcmd)
-      if subcmd
-        camelized = subcmd.split('_').map(&:capitalize).join
-        setting = Byebug.const_get("#{camelized}Setting").new
-        <<-EOH.gsub(/^ {8}/, '')
-
-          #{cmd} #{setting.to_sym} <value>
-
-          #{setting.banner}.
-
-        EOH
-      else
+      unless subcmd
         command = Byebug.const_get("#{cmd.capitalize}Command")
-        command.description + help_all
+        return command.description + help_all
       end
+
+      camelized = StringFunctions.camelize(subcmd)
+      setting = Byebug.const_get("#{camelized}Setting").new
+      <<-EOH.gsub(/^ {8}/, '')
+
+        #{cmd} #{setting.to_sym} <value>
+
+        #{setting.banner}.
+
+      EOH
     end
 
     def help
