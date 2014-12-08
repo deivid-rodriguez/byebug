@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test breakpoints
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def build_percentage_string
          7:        '%1'
          8:      end
@@ -17,7 +17,7 @@ module Byebug
         10:
         11:    byebug
         12:
-        13:    str = TestExample.new.build_percentage_string
+        13:    str = #{example_class}.new.build_percentage_string
         14:
         15:    str
         16:  end

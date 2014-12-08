@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test continue command.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def add_four(num)
          7:        num + 4
          8:      end
@@ -19,7 +19,7 @@ module Byebug
         12:
         13:    b = 5
         14:    c = b + 5
-        15:    TestExample.new.add_four(c)
+        15:    #{example_class}.new.add_four(c)
         16:  end
       EOC
     end

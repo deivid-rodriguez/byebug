@@ -61,10 +61,6 @@ module Byebug
 
     #
     # Writes a string containing Ruby code to a file and then debugs that file.
-    # After debugging is done, file is deleted. The code is supposed to be a
-    # standard test case for Byebug which might define the class defined by
-    # method +example_class+ inside the Byebug module. This convention is just
-    # to allow removing the class and keeping Byebug's module unpolluted.
     #
     # @param program [String] Ruby code to be debugged
     #
@@ -73,8 +69,6 @@ module Byebug
       example_file.close
 
       load(example_path)
-    ensure
-      force_remove_const(Byebug, example_class)
     end
 
     #

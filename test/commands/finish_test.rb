@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test the +finish+ command
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def a
          7:        b
          8:      end
@@ -31,7 +31,7 @@ module Byebug
         24:
         25:    byebug
         26:
-        27:    TestExample.new.a
+        27:    #{example_class}.new.a
         28:  end
       EOC
     end

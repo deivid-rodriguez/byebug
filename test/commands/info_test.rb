@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test information about files.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def initialize
          7:        @foo = 'bar'
          8:        @bla = 'blabla'
@@ -39,7 +39,7 @@ module Byebug
         32:    end
         33:
         34:    byebug
-        35:    i = TestExample.new
+        35:    i = #{example_class}.new
         36:    i.b
         37:    i.c
         38:    i.d

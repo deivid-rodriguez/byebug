@@ -30,6 +30,16 @@ module Byebug
   end
 
   #
+  # Utilities for interaction with files
+  #
+  module StringFunctions
+    def camelize(str)
+      str.dup.split(/[_-]/).map(&:capitalize).join('')
+    end
+    module_function :camelize
+  end
+
+  #
   # Utilities to assist command parsing
   #
   module ParseFunctions

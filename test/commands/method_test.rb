@@ -6,7 +6,7 @@ module Byebug
          2:    #
          3:    # Toy class to test the method command.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def initialize
          7:        @a = 'b'
          8:        @c = 'd'
@@ -23,7 +23,7 @@ module Byebug
         19:
         20:    byebug
         21:
-        22:    a = TestExample.new
+        22:    a = #{example_class}.new
         23:    a.bla
         24:  end
       EOC
@@ -31,7 +31,7 @@ module Byebug
 
     %w(method m).each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_instance_methods_of_a_class") do
-        enter 'cont 7', "#{cmd_alias} TestExample"
+        enter 'cont 7', "#{cmd_alias} #{example_class}"
         debug_code(program)
         check_output_includes(/bla/)
         check_output_doesnt_include(/foo/)

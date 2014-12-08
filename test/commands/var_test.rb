@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test variable evaluation.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      SOMECONST = 'foo' unless defined?(SOMECONST)
          7:      @@class_variable = 'bar'
          8:
@@ -26,7 +26,7 @@ module Byebug
         19:      end
         20:    end
         21:
-        22:    v = TestExample.new
+        22:    v = #{example_class}.new
         23:    v.run(2)
         24:  end
       EOC
@@ -42,7 +42,7 @@ module Byebug
 
     ['var const', 'v co'].each do |cmd_alias|
       define_method(:"test_#{cmd_alias}_shows_constants_in_class_or_module") do
-        enter "#{cmd_alias} Byebug::TestExample"
+        enter "#{cmd_alias} Byebug::#{example_class}"
         debug_code(program)
         check_output_includes 'SOMECONST = foo'
       end

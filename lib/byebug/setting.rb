@@ -1,3 +1,5 @@
+require 'byebug/helper'
+
 module Byebug
   #
   # Parent class for all byebug settings.

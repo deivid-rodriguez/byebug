@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test evaluation in Byebug's prompt
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def sum(a, b)
          7:        a + b
          8:      end
@@ -21,7 +21,7 @@ module Byebug
         14:
         15:    byebug
         16:
-        17:    @foo = TestExample.new
+        17:    @foo = #{example_class}.new
         18:    @foo.sum(1, 2)
         19:  end
       EOC

@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test stepping.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def self.add_four(num)
          7:        num += 4
          8:        num
@@ -18,7 +18,7 @@ module Byebug
         11:
         12:    byebug
         13:
-        14:    res = TestExample.add_four(7)
+        14:    res = #{example_class}.add_four(7)
         15:
         16:    res + 1
         17:  end
@@ -63,7 +63,7 @@ module Byebug
          2:    #
          3:    # Toy class to test advanced stepping.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def self.add_three(num)
          7:        byebug
          8:        num += 2 ; num += 1
@@ -71,7 +71,7 @@ module Byebug
         10:      end
         11:    end
         12:
-        13:    TestExample.add_three(7)
+        13:    #{example_class}.add_three(7)
         14:  end
       EOC
     end
@@ -119,7 +119,7 @@ module Byebug
          2:    #
          3:    # Toy class to test advanced stepping.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def self.add_three(num)
          7:        byebug
          8:        2.times do
@@ -131,7 +131,7 @@ module Byebug
         14:      end
         15:    end
         16:
-        17:    res = TestExample.add_three(7)
+        17:    res = #{example_class}.add_three(7)
         18:
         19:    res
         20:  end
@@ -169,7 +169,7 @@ module Byebug
          2:    #
          3:    # Toy class to test stepping and rescue interaction.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def self.raise_from_c
          7:        unknown
          8:      rescue NameError
@@ -189,19 +189,19 @@ module Byebug
         22:
         23:    byebug
         24:
-        25:    TestExample.raise_from_c
-        26:    TestExample.raise_from_ruby
+        25:    #{example_class}.raise_from_c
+        26:    #{example_class}.raise_from_ruby
         27:  end
       EOC
     end
 
     def test_next_steps_over_rescue_when_raising_from_c_method
-      enter 'break Byebug::TestExample.raise_from_c', 'cont', 'next 2'
+      enter "break Byebug::#{example_class}.raise_from_c", 'cont', 'next 2'
       debug_code(program) { assert_equal 9, state.line }
     end
 
     def test_next_steps_over_rescue_when_raising_from_ruby_method
-      enter 'break Byebug::TestExample.raise_from_ruby', 'cont', 'next 2'
+      enter "break Byebug::#{example_class}.raise_from_ruby", 'cont', 'next 2'
       debug_code(program) { assert_equal 15, state.line }
     end
   end
@@ -216,7 +216,7 @@ module Byebug
          2:    #
          3:    # Toy class to test the combination of "up" and "next" commands.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def a
          7:        byebug
          8:        r = b
@@ -229,7 +229,7 @@ module Byebug
         15:      end
         16:    end
         17:
-        18:    TestExample.new.a
+        18:    #{example_class}.new.a
         19:  end
       EOC
     end

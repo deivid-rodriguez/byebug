@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test backtraces.
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def initialize(letter)
          7:        @letter = encode(letter)
          8:      end
@@ -24,7 +24,7 @@ module Byebug
         17:      end
         18:    end
         19:
-        20:    frame = TestExample.new('f')
+        20:    frame = #{example_class}.new('f')
         21:
         22:    frame
         23:  end
@@ -100,9 +100,9 @@ module Byebug
 
       path = example_fullpath
       expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
-            #1  Byebug::TestExample.encode(str#String) at #{path}:11
-            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
+            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
+            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
             ͱ-- #3  Class.new(*args) at #{path}:20
             #4  <module:Byebug> at #{path}:20
             #5  <top (required)> at #{path}:1
@@ -119,9 +119,9 @@ module Byebug
 
       path = example_path
       expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
-            #1  Byebug::TestExample.encode(str#String) at #{path}:11
-            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
+            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
+            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
             ͱ-- #3  Class.new(*args) at #{path}:20
             #4  <module:Byebug> at #{path}:20
             #5  <top (required)> at #{path}:1
@@ -138,9 +138,9 @@ module Byebug
 
       path = example_fullpath
       expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::TestExample.integerize(str#String) at #{path}:16
-            #1  Byebug::TestExample.encode(str#String) at #{path}:11
-            #2  Byebug::TestExample.initialize(letter#String) at #{path}:7
+        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
+            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
+            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
             ͱ-- #3  Class.new\(*args) at #{path}:20
             #4  <module:Byebug> at #{path}:20
             #5  <top (required)> at #{path}:1

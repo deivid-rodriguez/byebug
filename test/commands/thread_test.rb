@@ -9,7 +9,7 @@
 #          2:    #
 #          3:    # Toy class to test threading
 #          4:    #
-#          5:    class TestExample
+#          5:    class #{example_class}
 #          6:      def initialize
 #          7:        Thread.main[:should_break] = false
 #          8:      end
@@ -39,7 +39,7 @@
 #         32:
 #         33:    byebug
 #         34:
-#         35:    t = ThreadExample.new
+#         35:    t = #{example_class}.new
 #         36:    t.launch
 #         37:    t.kill
 #         38:  end

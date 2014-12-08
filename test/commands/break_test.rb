@@ -9,7 +9,7 @@ module Byebug
          2:    #
          3:    # Toy class to test breakpoints
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def self.a(num)
          7:        4
          8:      end
@@ -25,8 +25,8 @@ module Byebug
         18:
         19:    z = 5
         20:
-        21:    TestExample.new.b
-        22:    TestExample.a(y+z)
+        21:    #{example_class}.new.b
+        22:    #{example_class}.a(y+z)
         23:  end
       EOC
     end
@@ -72,7 +72,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_to_an_instance_method_stops_at_correct_place
-      enter 'break TestExample#b', 'cont'
+      enter "break #{example_class}#b", 'cont'
 
       debug_code(program) do
         assert_equal 10, state.line
@@ -81,7 +81,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_to_a_class_method_stops_at_correct_place
-      enter 'break TestExample.a', 'cont'
+      enter "break #{example_class}.a", 'cont'
 
       debug_code(program) do
         assert_equal 6, state.line
@@ -336,7 +336,7 @@ module Byebug
          2:    #
          3:    # Toy class to test breakpoints
          4:    #
-         5:    class TestExample
+         5:    class #{example_class}
          6:      def a
          7:        byebug
          8:      end
