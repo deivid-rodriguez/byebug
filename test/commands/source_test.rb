@@ -34,9 +34,9 @@ module Byebug
       define_method(:"test_#{cmd_alias}_runs_byebug_commands_from_file") do
         enter "#{cmd_alias} source_example.txt"
         debug_code(program) do
-          assert_equal 4, Byebug.breakpoints[0].pos
-          assert_equal 5, Byebug.breakpoints[1].pos
-          assert_equal 'true', Byebug.breakpoints[1].expr
+          assert_equal 4, Breakpoint.first.pos
+          assert_equal 5, Breakpoint.last.pos
+          assert_equal 'true', Breakpoint.last.expr
         end
       end
 
