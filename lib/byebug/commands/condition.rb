@@ -16,7 +16,7 @@ module Byebug
 
       breakpoints = Byebug.breakpoints.sort_by(&:id)
       unless breakpoints.any?
-        return errmsg(pr('conditions.errors.no_breakpoints'))
+        return errmsg(pr('condition.errors.no_breakpoints'))
       end
 
       pos, err = get_int(@match[1], 'Condition', 1)

@@ -28,7 +28,7 @@ catch:
   confirmations:
     delete_all: "Delete all catchpoints? (y or n) "
 
-conditions:
+condition:
   errors:
     no_breakpoints: "No breakpoints have been set"
 
