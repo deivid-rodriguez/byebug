@@ -23,9 +23,9 @@ module Byebug
     end
 
     def read_command(prompt)
-      return readline(prompt, true) unless input.empty?
+      cmd = super(prompt)
 
-      return unless test_block
+      return cmd unless cmd.nil? && test_block
 
       test_block.call
       self.test_block = nil
@@ -39,13 +39,11 @@ module Byebug
       ].join("\n")
     end
 
-    def readline(prompt, hist)
+    def readline(prompt)
       puts(prompt)
 
       cmd = input.shift
-      cmd = cmd.is_a?(Proc) ? cmd.call : cmd
-      @history.push(cmd) if hist
-      cmd
+      cmd.is_a?(Proc) ? cmd.call : cmd
     end
   end
 end

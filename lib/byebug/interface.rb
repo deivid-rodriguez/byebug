@@ -1,4 +1,5 @@
 require 'byebug/history'
+require 'byebug/helper'
 
 #
 # Namespace for all of byebug's code
@@ -18,10 +19,36 @@ module Byebug
     end
 
     #
-    # Reads a command from the input stream.
+    # Pops a command from the input stream.
     #
     def read_command(prompt)
-      readline(prompt, true)
+      return command_queue.shift unless command_queue.empty?
+
+      cmds = read_input(prompt)
+      return unless cmds
+
+      command_queue.concat(cmds)
+      command_queue.shift
+    end
+
+    include FileFunctions
+    #
+    # Pushes lines in +filename+ to the command queue.
+    #
+    def read_file(filename)
+      command_queue.concat(get_lines(filename))
+    end
+
+    #
+    # Reads a new line from the interface's input stream.
+    #
+    def read_input(prompt, save_hist = true)
+      line = readline(prompt)
+      return unless line
+
+      history.push(line) if save_hist
+
+      split_commands(line)
     end
 
     #
@@ -46,10 +73,30 @@ module Byebug
     # Confirms user introduced an affirmative response to the input stream.
     #
     def confirm(prompt)
-      readline(prompt, false) == 'y'
+      readline(prompt) == 'y'
     end
 
     def close
+    end
+
+    private
+
+    #
+    # Splits a command line of the form "cmd1 ; cmd2 ; ... ; cmdN" into an
+    # array of commands: [cmd1, cmd2, ..., cmdN]
+    #
+    def split_commands(cmd_line)
+      return [''] if cmd_line.empty?
+
+      cmd_line.split(/;/).each_with_object([]) do |v, m|
+        if m.empty? || m.last[-1] != '\\'
+          m << v
+          next
+        end
+
+        m.last[-1, 1] = ''
+        m.last << ';' << v
+      end
     end
   end
 

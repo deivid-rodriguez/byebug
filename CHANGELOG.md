@@ -21,6 +21,8 @@ working anyways (#92).
 - Loading of .byebugrc. Now it ignores invalid commands instead of aborting.
 - Priority of .byebugrc files. Project's file overrides global (home) file.
 - Backtraces not working in `post_mortem` mode (#93).
+- 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
+sequentially.
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up

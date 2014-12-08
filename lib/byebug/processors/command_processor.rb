@@ -145,25 +145,6 @@ module Byebug
     end
 
     #
-    # Splits a command line of the form "cmd1 ; cmd2 ; ... ; cmdN" into an
-    # array of commands: [cmd1, cmd2, ..., cmdN]
-    #
-    def split_commands(cmd_line)
-      cmd_line.split(/;/).each_with_object([]) do |v, m|
-        if m.empty?
-          m << v
-        else
-          if m.last[-1] == '\\'
-            m.last[-1, 1] = ''
-            m.last << ';' << v
-          else
-            m << v
-          end
-        end
-      end
-    end
-
-    #
     # Handle byebug commands.
     #
     def process_commands(context, file, line)
@@ -179,23 +160,14 @@ module Byebug
     #
     def repl(state, commands, context)
       until state.proceed?
-        input = if @interface.command_queue.empty?
-                  @interface.read_command(prompt(context))
-                else
-                  @interface.command_queue.shift
-                end
-        return unless input
+        cmd = @interface.read_command(prompt(context))
+        return unless cmd
 
-        if input == ''
-          next unless @last_cmd
-          input = @last_cmd
-        else
-          @last_cmd = input
-        end
+        next if cmd == '' && @last_cmd.nil?
 
-        split_commands(input).each do |cmd|
-          one_cmd(commands, context, cmd)
-        end
+        cmd.empty? ? cmd = @last_cmd : @last_cmd = cmd
+
+        one_cmd(commands, context, cmd)
       end
     end
 

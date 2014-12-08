@@ -24,13 +24,11 @@ module Byebug
       errmsg('Error closing the interface...')
     end
 
-    def readline(prompt, hist)
+    def readline(prompt)
       output.puts(prompt)
 
       result = input.gets
       fail IOError unless result
-
-      @history.push(result) if hist
 
       result.chomp
     end

@@ -14,16 +14,16 @@ module Byebug
     def execute
       return puts(self.class.help) if self.class.names.include?(@match[0])
 
+      unless @state && @state.interface
+        return errmsg(pr('source.errors.not_available'))
+      end
+
       file = File.expand_path(@match[1]).strip
       unless File.exist?(file)
         return errmsg(pr('source.errors.not_found', file: file))
       end
 
-      if @state && @state.interface
-        @state.interface.command_queue += File.open(file).readlines
-      else
-        Byebug.run_script(file, @state)
-      end
+      @state.interface.read_file(file)
     end
 
     class << self

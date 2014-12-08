@@ -4,6 +4,13 @@ module Byebug
   #
   module FileFunctions
     #
+    # Reads lines of source file +filename+ into an array
+    #
+    def get_lines(filename)
+      File.foreach(filename).reduce([]) { |a, e| a << e.chomp }
+    end
+
+    #
     # Reads line number +lineno+ from file named +filename+
     #
     def get_line(filename, lineno)
