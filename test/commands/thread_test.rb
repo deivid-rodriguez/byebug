@@ -65,14 +65,6 @@ module Byebug
       check_output_includes(/\+ #{thnum} #<Thread:\S+ run>\t#{file}:13/)
     end
 
-    def test_thread_list_works_with_shortcut
-      thnum, file = nil, example_path
-      enter 'cont 13', 'th list', 'lock << 0'
-      debug_code(program) { thnum = first_thnum }
-
-      check_output_includes(/\+ #{thnum} #<Thread:\S+ run>\t#{file}:13/)
-    end
-
     def test_thread_list_shows_all_available_threads
       enter 'cont 24', 'thread list', 'lock << 0'
       debug_code(program)
