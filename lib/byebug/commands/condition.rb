@@ -15,9 +15,7 @@ module Byebug
       return puts(ConditionCommand.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by(&:id)
-      unless breakpoints.any?
-        return errmsg(pr('condition.errors.no_breakpoints'))
-      end
+      return errmsg(pr('condition.errors.no_breakpoints')) if breakpoints.empty?
 
       pos, err = get_int(@match[1], 'Condition', 1)
       return errmsg(err) if err
