@@ -15,6 +15,11 @@ module Byebug
       EOC
     end
 
+    def test_empty_command_repeats_last_command
+      enter 'n', ''
+      debug_code(program) { assert_equal 6, state.line }
+    end
+
     def test_multiple_commands_are_executed_sequentially
       enter 'n ; n'
       debug_code(program) { assert_equal 6, state.line }
