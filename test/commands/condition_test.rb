@@ -80,7 +80,7 @@ module Byebug
     end
 
     def test_shows_error_if_breakpoint_id_is_incorrect
-      enter 'break 5', 'cond 2 b == 3'
+      enter 'break 5', -> { "cond #{Breakpoint.last.id + 1} b == 3" }
 
       debug_code(program)
       check_error_includes \
