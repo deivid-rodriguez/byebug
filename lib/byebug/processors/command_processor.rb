@@ -25,7 +25,7 @@ module Byebug
       end
     end
 
-    require 'pathname'  # For cleanpath
+    require 'pathname' # For cleanpath
 
     #
     # Regularize file name.
@@ -110,7 +110,7 @@ module Byebug
     # Prompt shown before reading a command.
     #
     def prompt(context)
-      "(byebug#{context.dead?  ? ':post-mortem' : ''}) "
+      "(byebug#{context.dead? ? ':post-mortem' : ''}) "
     end
 
     #

@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/lib/byebug/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'byebug'
-  s.version     = Byebug::VERSION
-  s.authors     = ['David Rodriguez', 'Kent Sibilev', 'Mark Moseley']
-  s.email       = 'deivid.rodriguez@mail.com'
-  s.license     = 'BSD'
-  s.homepage    = 'http://github.com/deivid-rodriguez/byebug'
-  s.summary     = 'Ruby 2.0 fast debugger - base + CLI'
+  s.name = 'byebug'
+  s.version = Byebug::VERSION
+  s.authors = ['David Rodriguez', 'Kent Sibilev', 'Mark Moseley']
+  s.email = 'deivid.rodriguez@mail.com'
+  s.license = 'BSD'
+  s.homepage = 'http://github.com/deivid-rodriguez/byebug'
+  s.summary = 'Ruby 2.0 fast debugger - base + CLI'
   s.description = "Byebug is a Ruby 2 debugger. It's implemented using the
     Ruby 2 TracePoint C API for execution control and the Debug Inspector C API
     for call stack navigation.  The core component provides support that

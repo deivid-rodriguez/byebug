@@ -120,7 +120,7 @@ module Byebug
   # Stop execution of a thread.
   #
   class ThreadStopCommand < Command
-    self.allow_in_control     = true
+    self.allow_in_control = true
     self.allow_in_post_mortem = false
 
     def regexp
@@ -150,7 +150,7 @@ module Byebug
   # Resume execution of a thread.
   #
   class ThreadResumeCommand < Command
-    self.allow_in_control     = true
+    self.allow_in_control = true
     self.allow_in_post_mortem = false
 
     def regexp
@@ -180,7 +180,7 @@ module Byebug
   # Switch execution to a different thread.
   #
   class ThreadSwitchCommand < Command
-    self.allow_in_control     = true
+    self.allow_in_control = true
     self.allow_in_post_mortem = false
 
     def regexp

@@ -38,7 +38,7 @@ module Byebug
       backtraces += at.map { |path| puts "\tfrom #{path}" }
       errmsg(pr('eval.exception',
                 text_message: backtraces.join("\n"),
-                class:        e.class,
+                class: e.class,
                 value: e.to_s))
       nil
     end

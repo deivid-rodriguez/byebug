@@ -54,7 +54,7 @@ module Byebug
     home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
     run_script(home_rc) if File.exist?(home_rc)
 
-    cwd_rc  = File.expand_path(File.join('.', INIT_FILE))
+    cwd_rc = File.expand_path(File.join('.', INIT_FILE))
     run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 

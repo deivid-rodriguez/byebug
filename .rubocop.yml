@@ -18,4 +18,7 @@ Style/SingleLineBlockParams:
 Style/AsciiComments:
   Enabled: false
 
+Style/ExtraSpacing:
+  Enabled: true
+
 inherit_from: .rubocop_todo.yml
