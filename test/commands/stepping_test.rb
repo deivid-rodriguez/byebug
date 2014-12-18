@@ -54,62 +54,6 @@ module Byebug
   end
 
   #
-  # Tests advanced stepping behaviour.
-  #
-  class AdvancedSteppingTestCase < TestCase
-    def program
-      strip_line_numbers <<-EOC
-         1:  module Byebug
-         2:    #
-         3:    # Toy class to test advanced stepping.
-         4:    #
-         5:    class #{example_class}
-         6:      def self.add_three(num)
-         7:        byebug
-         8:        num += 2 ; num += 1
-         9:        num
-        10:      end
-        11:    end
-        12:
-        13:    #{example_class}.add_three(7)
-        14:  end
-      EOC
-    end
-
-    %w(next step).each do |cmd|
-      define_method(:"test_#{cmd}_stays_by_default") do
-        enter cmd
-        debug_code(program) { assert_equal 8, state.line }
-      end
-
-      define_method(:"test_#{cmd}+_goes_to_next_line") do
-        enter "#{cmd}+"
-        debug_code(program) { assert_equal 9, state.line }
-      end
-
-      define_method(:"test_#{cmd}-_stays") do
-        enter "#{cmd}-"
-        debug_code(program) { assert_equal 8, state.line }
-      end
-
-      define_method(:"test_#{cmd}_goes_to_next_line_if_forcestep_is_set") do
-        enter 'set forcestep', cmd
-        debug_code(program) { assert_equal 9, state.line }
-      end
-
-      define_method(:"test_#{cmd}+_goes_to_next_line_regardless_forcestep") do
-        enter 'set forcestep', "#{cmd}+"
-        debug_code(program) { assert_equal 9, state.line }
-      end
-
-      define_method(:"test_#{cmd}-_stays_regardless_forcestep") do
-        enter 'set forcestep', "#{cmd}-"
-        debug_code(program) { assert_equal 8, state.line }
-      end
-    end
-  end
-
-  #
   # Tests step/next with arguments higher than one.
   #
   class MoreThanOneStepTestCase < TestCase

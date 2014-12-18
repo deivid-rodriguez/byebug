@@ -14,8 +14,8 @@ module Byebug
       EOC
     end
 
-    settings = %i(autoeval autolist autosave basename forcestep fullpath
-                  post_mortem stack_on_error testing tracing_plus)
+    settings = %i(autoeval autolist autosave basename fullpath post_mortem
+                  stack_on_error testing)
 
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
@@ -44,36 +44,29 @@ module Byebug
       end
     end
 
-    def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
-      Setting[:forcestep] = false
-      enter 'set fo'
-      debug_code(program)
-      assert_equal true, Setting[:forcestep]
-    end
-
     def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
-      Setting[:forcestep] = false
-      Setting[:fullpath] = false
-      enter 'set f'
+      Setting[:autoeval] = false
+      Setting[:autolist] = false
+      enter 'set auto'
       debug_code(program)
-      assert_equal false, Setting[:forcestep]
-      assert_equal false, Setting[:fullpath]
+      assert_equal false, Setting[:autoeval]
+      assert_equal false, Setting[:autolist]
     end
 
     def test_set_disables_a_setting_using_shorcut_when_not_ambiguous
-      Setting[:forcestep] = true
-      enter 'set nofo'
+      Setting[:autoeval] = false
+      enter 'set autoe'
       debug_code(program)
-      assert_equal false, Setting[:forcestep]
+      assert_equal true, Setting[:autoeval]
     end
 
     def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
-      Setting[:forcestep] = true
-      Setting[:fullpath] = true
-      enter 'set nof'
+      Setting[:autoeval] = true
+      Setting[:autolist] = true
+      enter 'set noauto'
       debug_code(program)
-      assert_equal true, Setting[:forcestep]
-      assert_equal true, Setting[:fullpath]
+      assert_equal true, Setting[:autoeval]
+      assert_equal true, Setting[:autolist]
     end
 
     def test_set_testing_sets_the_thread_state_variable

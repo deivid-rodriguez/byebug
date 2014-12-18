@@ -60,8 +60,6 @@ context_create(VALUE thread)
 {
   debug_context_t *context = ALLOC(debug_context_t);
 
-  context->last_file = Qnil;
-  context->last_line = Qnil;
   context->flags = 0;
   context->thnum = ++thnum_max;
   context->thread = thread;
@@ -396,29 +394,22 @@ Context_stop_reason(VALUE self)
 
 /*
  *  call-seq:
- *    context.step_into(steps, force = false)
+ *    context.step_into(steps)
  *
  *  Stops the current context after a number of +steps+ are made.
- *  +force+ parameter (if true) ensures that the cursor moves away from the
- *  current line.
  */
 static VALUE
 Context_step_into(int argc, VALUE * argv, VALUE self)
 {
-  VALUE steps, force;
+  VALUE steps;
   debug_context_t *context;
 
-  rb_scan_args(argc, argv, "11", &steps, &force);
+  rb_scan_args(argc, argv, "10", &steps);
   if (FIX2INT(steps) < 0)
     rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
 
   Data_Get_Struct(self, debug_context_t, context);
   context->steps = FIX2INT(steps);
-
-  if (RTEST(force))
-    CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
-  else
-    CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
 
   return steps;
 }
@@ -460,18 +451,16 @@ Context_step_out(int argc, VALUE * argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.step_over(lines, frame = 0, force = false)
+ *    context.step_over(lines, frame = 0)
  *
  *  Steps over +lines+ lines.
  *  Make step over operation on +frame+, by default the newest frame.
- *  +force+ parameter (if true) ensures that the cursor moves away from the
- *  current line.
  */
 static VALUE
 Context_step_over(int argc, VALUE * argv, VALUE self)
 {
   int n_args, frame;
-  VALUE lines, v_frame, force;
+  VALUE lines, v_frame;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
@@ -479,7 +468,7 @@ Context_step_over(int argc, VALUE * argv, VALUE self)
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
-  n_args = rb_scan_args(argc, argv, "12", &lines, &v_frame, &force);
+  n_args = rb_scan_args(argc, argv, "11", &lines, &v_frame);
   frame = n_args == 1 ? 0 : FIX2INT(v_frame);
 
   if (frame < 0 || frame >= context->calced_stack_size)
@@ -488,11 +477,6 @@ Context_step_over(int argc, VALUE * argv, VALUE self)
 
   context->lines = FIX2INT(lines);
   context->dest_frame = context->calced_stack_size - frame;
-
-  if (n_args == 3 && RTEST(force))
-    CTX_FL_SET(context, CTX_FL_FORCE_MOVE);
-  else
-    CTX_FL_UNSET(context, CTX_FL_FORCE_MOVE);
 
   return Qnil;
 }

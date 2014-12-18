@@ -141,23 +141,7 @@ trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
   /* Get the lock! */
   locker = rb_thread_current();
 
-  /* Many events per line, but only *one* breakpoint */
-  if (dc->last_line != rb_tracearg_lineno(trace_arg)
-      || dc->last_file != rb_tracearg_path(trace_arg))
-  {
-    CTX_FL_SET(dc, CTX_FL_ENABLE_BKPT);
-  }
-
   return 1;
-}
-
-static void
-save_current_position(debug_context_t * dc, VALUE file, VALUE line)
-{
-  dc->last_file = file;
-  dc->last_line = line;
-  CTX_FL_UNSET(dc, CTX_FL_ENABLE_BKPT);
-  CTX_FL_UNSET(dc, CTX_FL_FORCE_MOVE);
 }
 
 /* Functions that return control to byebug after the different events */
@@ -184,7 +168,6 @@ call_at(VALUE context_obj, debug_context_t * dc, ID mid, int argc, VALUE a0,
 static VALUE
 call_at_line(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
-  save_current_position(dc, file, line);
   return call_at(context_obj, dc, rb_intern("at_line"), 2, file, line);
 }
 
@@ -237,7 +220,6 @@ static void
 line_event(VALUE trace_point, void *data)
 {
   VALUE breakpoint, file, line, binding, self;
-  int moved = 0;
 
   EVENT_SETUP;
 
@@ -252,32 +234,24 @@ line_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size == 0)
     dc->calced_stack_size++;
 
-  if (dc->last_line != line || dc->last_file != file)
-    moved = 1;
-
   if (RTEST(tracing))
     call_at_tracing(context, dc, file, line);
 
-  if (moved || !CTX_FL_TEST(dc, CTX_FL_FORCE_MOVE))
+  dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
+  if (dc->calced_stack_size <= dc->dest_frame)
   {
-    dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
-    if (dc->calced_stack_size <= dc->dest_frame)
+    dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
+    if (dc->calced_stack_size < dc->dest_frame)
     {
-      dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
-      if (dc->calced_stack_size < dc->dest_frame)
-      {
-        dc->dest_frame = dc->calced_stack_size;
-      }
+      dc->dest_frame = dc->calced_stack_size;
     }
   }
 
   if (dc->steps == 0 || dc->lines == 0
-      || (CTX_FL_TEST(dc, CTX_FL_ENABLE_BKPT)
-          &&
-          (!NIL_P
-           (breakpoint =
-            find_breakpoint_by_pos(bb_breakpoints(self), file, line,
-                                   binding)))))
+      ||
+      (!NIL_P
+       (breakpoint =
+        find_breakpoint_by_pos(bb_breakpoints(self), file, line, binding))))
   {
     call_at_line_check(context, dc, breakpoint, file, line);
   }

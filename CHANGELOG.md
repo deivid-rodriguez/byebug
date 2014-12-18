@@ -29,6 +29,12 @@ sequentially.
 to date.
 - `reload` command for the same reason.
 - Gem dependency on `debugger-linecache`.
+- `step+`, `step-`, `next+`, `next-`, `set/show linetrace_plus` and
+`set/show forcestep` commands. These were all mechanisms to deal with TracePoint
+API event dupplication, but this duplicated events have been completely removed
+from the API since
+[r48609](bugs.ruby-lang.org/projects/ruby-trunk/repository/revisions/48609), so
+they are no longer necessary.
 
 ## 3.5.1 - 2014-09-29
 ### Fixed

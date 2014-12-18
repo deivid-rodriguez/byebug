@@ -1,21 +1,5 @@
 module Byebug
   #
-  # Mixin to assist command parsing
-  #
-  module SteppingFunctions
-    def parse_force(str)
-      return Setting[:forcestep] unless str
-
-      case str
-      when '+' then
-        true
-      when '-' then
-        false
-      end
-    end
-  end
-
-  #
   # Implements the next functionality.
   #
   # Allows the user the continue execution until the next instruction in the
@@ -25,14 +9,14 @@ module Byebug
     self.allow_in_post_mortem = false
 
     def regexp
-      /^\s* n(?:ext)?([+-])? (?:\s+(\S+))? \s*$/x
+      /^\s* n(?:ext)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
-      steps, err = parse_steps(@match[2], 'Next')
+      steps, err = parse_steps(@match[1], 'Next')
       return errmsg(err) unless steps
 
-      @state.context.step_over(steps, @state.frame, parse_force(@match[1]))
+      @state.context.step_over(steps, @state.frame)
       @state.proceed
     end
 
@@ -42,11 +26,9 @@ module Byebug
       end
 
       def description
-        %(n[ext][+-]?[ nnn]
+        %(n[ext][ nnn]
 
-        Steps over once or nnn times.
-          '+' forces to move to another line.
-          '-' is the opposite of '+' and disables the :forcestep setting.)
+        Steps over once or nnn times.)
       end
     end
   end
@@ -61,14 +43,14 @@ module Byebug
     self.allow_in_post_mortem = false
 
     def regexp
-      /^\s* s(?:tep)?([+-]) ?(?:\s+(\S+))? \s*$/x
+      /^\s* s(?:tep)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
-      steps, err = parse_steps(@match[2], 'Steps')
+      steps, err = parse_steps(@match[1], 'Steps')
       return errmsg(err) unless steps
 
-      @state.context.step_into(steps, parse_force(@match[1]))
+      @state.context.step_into(steps)
       @state.proceed
     end
 
@@ -78,11 +60,9 @@ module Byebug
       end
 
       def description
-        %{s[tep][+-]?[ nnn]
+        %{s[tep][ nnn]
 
-          Steps (into methods) once or nnn times.
-            '+' forces to move to another line.
-            '-' is the opposite of '+' and disables the :forcestep setting.}
+          Steps (into methods) once or nnn times.}
       end
     end
   end

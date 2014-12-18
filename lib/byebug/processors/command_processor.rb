@@ -13,8 +13,6 @@ module Byebug
       @display = []
       @mutex = Mutex.new
       @last_cmd = nil # To allow empty (just <RET>) commands
-      @last_file = nil # Filename the last time we stopped
-      @last_line = nil # Line number the last time we stopped
       @context_was_dead = false # Assume we haven't started.
     end
 
@@ -84,11 +82,8 @@ module Byebug
     include FileFunctions
 
     def at_tracing(context, file, line)
-      if file != @last_file || line != @last_line || Setting[:tracing_plus]
-        path = self.class.canonic_file(file)
-        puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
-        @last_file, @last_line = file, line
-      end
+      path = self.class.canonic_file(file)
+      puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
 
       always_run(context, file, line, 2)
     end
