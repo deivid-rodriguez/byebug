@@ -12,6 +12,8 @@ static VALUE tracepoints = Qnil;
 
 static VALUE raised_exception = Qnil;
 
+static ID idPuts;
+
 /* To allow thread syncronization, we must stop threads when debugging */
 VALUE locker = Qnil;
 
@@ -76,23 +78,42 @@ safe_sym_to_str(VALUE sym)
 }
 
 static void
-trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc)
+trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
+            const char *file_filter, const char *debug_msg)
 {
-  if (trace_arg)
+  char *fullpath, *basename;
+  int filtered = 0;
+  const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
+
+  VALUE path_sym = rb_tracearg_path(trace_arg);
+  const char *path = NIL_P(path_sym) ? "" : RSTRING_PTR(path_sym);
+
+  int line = NUM2INT(rb_tracearg_lineno(trace_arg));
+
+  const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
+
+  if (!trace_arg)
+    return;
+
+  if (file_filter)
   {
-    const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
+    fullpath = realpath(path, NULL);
+    basename = fullpath ? strrchr(fullpath, '/') : NULL;
 
-    VALUE path_sym = rb_tracearg_path(trace_arg);
-    const char *path = NIL_P(path_sym) ? "" : RSTRING_PTR(path_sym);
+    if (!basename || strncmp(basename + 1, file_filter, strlen(file_filter)))
+      filtered = 1;
 
-    int line = NUM2INT(rb_tracearg_lineno(trace_arg));
+    free(fullpath);
+  }
 
-    const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
-
-    rb_funcall(mByebug, rb_intern("puts"), 1,
-               rb_sprintf("%*s (%d)->[#%d] %s@%s:%d %s\n",
-                          dc->calced_stack_size, "", dc->calced_stack_size,
-                          dc->thnum, event, path, line, mid));
+  if (!filtered)
+  {
+    if (debug_msg)
+      rb_funcall(mByebug, idPuts, 1, rb_sprintf("%s\n", debug_msg));
+    else
+      rb_funcall(mByebug, idPuts, 1,
+                 rb_sprintf("%*s [#%d] %s@%s:%d %s\n", dc->calced_stack_size,
+                            "", dc->thnum, event, path, line, mid));
   }
 }
 
@@ -136,7 +157,7 @@ trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
   }
 
   if (verbose == Qtrue)
-    trace_print(trace_arg, dc);
+    trace_print(trace_arg, dc, 0, 0);
 
   halt_while_other_thread_is_active(dc);
 
@@ -791,4 +812,6 @@ Init_byebug()
   rb_global_variable(&tracepoints);
   rb_global_variable(&raised_exception);
   rb_global_variable(&threads);
+
+  idPuts = rb_intern("puts");
 }
