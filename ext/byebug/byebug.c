@@ -132,10 +132,10 @@ cleanup(debug_context_t * dc)
   /* checks for dead threads */
   check_threads_table();
 
-  /* release a lock */
+  /* Release lock */
   locker = Qnil;
 
-  /* let the next thread to run */
+  /* Let next thread run */
   thread = remove_from_locked();
   if (thread != Qnil)
     rb_thread_run(thread);
