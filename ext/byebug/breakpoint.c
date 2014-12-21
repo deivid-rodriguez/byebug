@@ -385,38 +385,38 @@ check_breakpoint_by_hit_condition(VALUE breakpoint_object)
 }
 
 static int
-check_breakpoint_by_pos(VALUE breakpoint_object, char *file, int line)
+check_breakpoint_by_pos(VALUE rb_breakpoint, char *file, int line)
 {
   breakpoint_t *breakpoint;
 
-  if (breakpoint_object == Qnil)
+  if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
 
-  if ((Qtrue != breakpoint->enabled) || (breakpoint->type != BP_POS_TYPE)
-      || (breakpoint->pos.line != line))
+  if (Qfalse == breakpoint->enabled || breakpoint->type != BP_POS_TYPE
+      || breakpoint->pos.line != line)
     return 0;
 
   return filename_cmp(breakpoint->source, file);
 }
 
 static int
-check_breakpoint_by_method(VALUE breakpoint_object, VALUE klass, ID mid,
+check_breakpoint_by_method(VALUE rb_breakpoint, VALUE klass, ID mid,
                            VALUE self)
 {
   breakpoint_t *breakpoint;
 
-  if (breakpoint_object == Qnil)
+  if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
 
-  if ((Qfalse == breakpoint->enabled) || (breakpoint->type != BP_METHOD_TYPE)
-      || (breakpoint->pos.mid != mid))
+  if (Qfalse == breakpoint->enabled || breakpoint->type != BP_METHOD_TYPE
+      || breakpoint->pos.mid != mid)
     return 0;
 
-  if ((classname_cmp(breakpoint->source, klass))
+  if (classname_cmp(breakpoint->source, klass)
       || ((rb_type(self) == T_CLASS)
           && classname_cmp(breakpoint->source, self)))
     return 1;
@@ -425,17 +425,17 @@ check_breakpoint_by_method(VALUE breakpoint_object, VALUE klass, ID mid,
 }
 
 static int
-check_breakpoint_by_expr(VALUE breakpoint_object, VALUE bind)
+check_breakpoint_by_expr(VALUE rb_breakpoint, VALUE bind)
 {
   breakpoint_t *breakpoint;
   VALUE args, expr_result;
 
-  if (NIL_P(breakpoint_object))
+  if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
 
-  if (Qtrue != breakpoint->enabled)
+  if (Qfalse == breakpoint->enabled)
     return 0;
 
   if (NIL_P(breakpoint->expr))
