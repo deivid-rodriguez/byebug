@@ -121,10 +121,9 @@ cleanup(debug_context_t * dc)
   VALUE context;                                                        \
   thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
-
-#define EVENT_COMMON                                                    \
-  if (verbose == Qtrue) trace_print(trace_arg, dc);                     \
-  if (!trace_common(trace_arg, dc)) { return; }                         \
+                                                                        \
+  if (!trace_common(trace_arg, dc))                                     \
+    return;
 
 static int
 trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
@@ -135,6 +134,9 @@ trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
     cleanup(dc);
     return 0;
   }
+
+  if (verbose == Qtrue)
+    trace_print(trace_arg, dc);
 
   halt_while_other_thread_is_active(dc);
 
@@ -247,8 +249,6 @@ line_event(VALUE trace_point, void *data)
   binding = rb_tracearg_binding(trace_arg);
   self = rb_tracearg_self(trace_arg);
 
-  EVENT_COMMON;
-
   if (dc->calced_stack_size == 0)
     dc->calced_stack_size++;
 
@@ -297,8 +297,6 @@ call_event(VALUE trace_point, void *data)
   if (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET))
     dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
 
-  EVENT_COMMON;
-
   breakpoint = Qnil;
   klass = rb_tracearg_defined_class(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
@@ -326,8 +324,6 @@ return_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size > 0)
     dc->calced_stack_size--;
 
-  EVENT_COMMON;
-
   if (dc->steps_out == 1)
   {
     dc->steps = 1;
@@ -354,8 +350,6 @@ msc_call_event(VALUE trace_point, void *data)
 
   dc->calced_stack_size++;
 
-  EVENT_COMMON;
-
   cleanup(dc);
 }
 
@@ -367,8 +361,6 @@ msc_return_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size > 0)
     dc->calced_stack_size--;
 
-  EVENT_COMMON;
-
   cleanup(dc);
 }
 
@@ -376,8 +368,6 @@ static void
 thread_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
-
-  EVENT_COMMON;
 
   cleanup(dc);
 }
@@ -391,8 +381,6 @@ raise_event(VALUE trace_point, void *data)
   debug_context_t *new_dc;
 
   EVENT_SETUP;
-
-  EVENT_COMMON;
 
   path = rb_tracearg_path(trace_arg);
   lineno = rb_tracearg_lineno(trace_arg);
