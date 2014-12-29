@@ -37,7 +37,7 @@ module Byebug
       debug_code(program) do
         b = Breakpoint.first
         exp = [b.pos, b.source, b.expr, b.hit_count, b.hit_value, b.enabled?]
-        act = [21, example_fullpath, nil, 0, 0, true]
+        act = [21, example_path, nil, 0, 0, true]
         assert_equal act, exp
       end
     end
@@ -274,7 +274,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_uses_new_source
-      enter -> { cmd_after_replace(example_fullpath, 21, '', 'break 21') }
+      enter -> { cmd_after_replace(example_path, 21, '', 'break 21') }
 
       debug_code(program) { assert_empty Byebug.breakpoints }
     end
@@ -307,7 +307,7 @@ module Byebug
       def setup
         super
 
-        @filename = File.basename(example_fullpath)
+        @filename = File.basename(example_path)
         enter 'set basename'
       end
 
@@ -318,7 +318,7 @@ module Byebug
       def setup
         super
 
-        @filename = example_fullpath
+        @filename = example_path
         enter 'set nobasename'
       end
 

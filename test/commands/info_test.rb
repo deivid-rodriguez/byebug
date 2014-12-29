@@ -48,20 +48,20 @@ module Byebug
     end
 
     def basic
-      lines = File.foreach(example_fullpath)
-      "File #{example_fullpath} (#{lines.count} lines)"
+      lines = File.foreach(example_path)
+      "File #{example_path} (#{lines.count} lines)"
     end
 
     def mtime
-      File.stat(example_fullpath).mtime.to_s
+      File.stat(example_path).mtime.to_s
     end
 
     def sha1
-      Digest::SHA1.hexdigest(example_fullpath)
+      Digest::SHA1.hexdigest(example_path)
     end
 
     def breakpoint_numbers
-      width, path = Byebug::Setting[:width], example_fullpath
+      width, path = Byebug::Setting[:width], example_path
       columnize(Breakpoint.potential_lines(path).sort, width).split("\n")
     end
 
@@ -77,16 +77,15 @@ module Byebug
       enter 'break 37', 'break 38 if y == z', 'info breakpoints'
       debug_code(program)
       check_output_includes 'Num Enb What',
-                            /\d+ +y   at #{example_fullpath}:37/,
-                            /\d+ +y   at #{example_fullpath}:38 if y == z/
+                            /\d+ +y   at #{example_path}:37/,
+                            /\d+ +y   at #{example_path}:38 if y == z/
     end
 
     def test_info_about_specific_breakpoints
       enter 'b 37', 'b 38', -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
-      check_output_includes 'Num Enb What',
-                            /\d+ +y   at #{example_fullpath}:37/
-      check_output_doesnt_include(/\d+ +y   at #{example_fullpath}:38/)
+      check_output_includes 'Num Enb What', /\d+ +y   at #{example_path}:37/
+      check_output_doesnt_include(/\d+ +y   at #{example_path}:38/)
     end
 
     def test_info_breakpoints_shows_a_message_when_no_breakpoints_found
@@ -104,7 +103,7 @@ module Byebug
     def test_info_breakpoints_shows_hit_counts
       enter 'break 38', 'cont', 'info breakpoints'
       debug_code(program)
-      check_output_includes(/\d+ +y   at #{example_fullpath}:38/,
+      check_output_includes(/\d+ +y   at #{example_path}:38/,
                             'breakpoint already hit 1 time')
     end
 
@@ -132,7 +131,7 @@ module Byebug
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
-      enter "info file #{example_fullpath}"
+      enter "info file #{example_path}"
       debug_code(program) do
         check_output_includes basic
         check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
@@ -140,7 +139,7 @@ module Byebug
     end
 
     def test_info_file_mtime_shows_mtime_of_a_specific_file
-      enter "info file #{example_fullpath} mtime"
+      enter "info file #{example_path} mtime"
       debug_code(program) do
         check_output_includes basic, mtime
         check_output_doesnt_include(*breakpoint_numbers, sha1)
@@ -148,7 +147,7 @@ module Byebug
     end
 
     def test_info_file_sha1_shows_sha1_signature_of_a_specific_file
-      enter "info file #{example_fullpath} sha1"
+      enter "info file #{example_path} sha1"
       debug_code(program) do
         check_output_includes basic, sha1
         check_output_doesnt_include(*breakpoint_numbers, mtime)
@@ -157,11 +156,11 @@ module Byebug
 
     def test_info_file_breakpoints_shows_breakpoints_in_a_specific_file
       enter 'break 37', 'break 38',
-            "info file #{example_fullpath} breakpoints"
+            "info file #{example_path} breakpoints"
       debug_code(program) do
         check_output_includes(
-          /Created breakpoint \d+ at #{example_fullpath}:37/,
-          /Created breakpoint \d+ at #{example_fullpath}:38/,
+          /Created breakpoint \d+ at #{example_path}:37/,
+          /Created breakpoint \d+ at #{example_path}:38/,
           basic,
           'breakpoint line numbers:', *breakpoint_numbers)
         check_output_doesnt_include mtime, sha1
@@ -169,14 +168,14 @@ module Byebug
     end
 
     def test_info_file_all_shows_all_available_info_about_a_specific_file
-      enter "info file #{example_fullpath} all"
+      enter "info file #{example_path} all"
       debug_code(program) do
         check_output_includes basic, *breakpoint_numbers, mtime, sha1
       end
     end
 
     def test_info_file_does_not_show_any_info_if_parameter_is_invalid
-      enter "info file #{example_fullpath} blabla"
+      enter "info file #{example_path} blabla"
       debug_code(program)
       check_error_includes 'Invalid parameter blabla'
     end

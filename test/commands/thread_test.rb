@@ -59,14 +59,14 @@
 #     end
 #
 #     def test_thread_list_marks_current_thread_with_a_plus_sign
-#       thnum, file = nil. example_fullpath
+#       thnum, file = nil. example_path
 #       enter 'break 11', 'cont', 'thread list', release
 #       debug_code(program) { thnum = first_thnum }
 #       check_output_includes(/\+ #{thnum} #<Thread:\S+ run>\t#{file}:11/)
 #     end
 #
 #     def test_thread_list_works_with_shortcut
-#       thnum, file = nil, example_fullpath
+#       thnum, file = nil, example_path
 #       enter 'break 11', 'cont', 'th list', release
 #       debug_code(program) { thnum = first_thnum }
 #       check_output_includes(/\+ #{thnum} #<Thread:\S+ run>\t#{file}:11/)
@@ -88,7 +88,7 @@
 #     end
 #
 #     def test_thread_stop_actually_suspends_thread_execution
-#       file = example_fullpath
+#       file = example_path
 #       enter 'break 24', 'cont', 'trace on',
 #             -> { "thread stop #{last_thnum}" }, release
 #       debug_code(program)

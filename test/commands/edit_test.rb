@@ -27,16 +27,14 @@ module Byebug
 
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       ENV['EDITOR'] = 'edi'
-      file = example_fullpath
-      EditCommand.any_instance.expects(:system).with("edi +4 #{file}")
+      EditCommand.any_instance.expects(:system).with("edi +4 #{example_path}")
       enter 'edit'
       debug_code(program)
     end
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
       ENV['EDITOR'] = nil
-      file = example_fullpath
-      EditCommand.any_instance.expects(:system).with("vim +4 #{file}")
+      EditCommand.any_instance.expects(:system).with("vim +4 #{example_path}")
       enter 'edit'
       debug_code(program)
     end

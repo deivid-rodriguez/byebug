@@ -57,13 +57,6 @@ module Byebug
       example_file.path
     end
 
-    #
-    # Full path to file where test code is saved
-    #
-    def example_fullpath
-      File.expand_path(example_path)
-    end
-
     include StringFunctions
     #
     # Name of the temporary test class.

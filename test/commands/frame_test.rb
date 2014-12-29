@@ -98,7 +98,7 @@ module Byebug
       enter 'where'
       debug_code(program)
 
-      path = example_fullpath
+      path = example_path
       expected_output = prepare_for_regexp <<-TXT
         --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
             #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
@@ -138,7 +138,7 @@ module Byebug
       enter 'where'
       debug_code(program)
 
-      path = example_fullpath
+      path = example_path
       expected_output = prepare_for_regexp <<-TXT
         --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
             #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
@@ -158,12 +158,12 @@ module Byebug
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT
-        --> #0  integerize(str) at #{example_fullpath}:16
-            #1  encode(str) at #{example_fullpath}:11
-            #2  initialize(letter) at #{example_fullpath}:7
-            ͱ-- #3  new(*args) at #{example_fullpath}:20
-            #4  <module:Byebug> at #{example_fullpath}:20
-            #5  <top (required)> at #{example_fullpath}:1
+        --> #0  integerize(str) at #{example_path}:16
+            #1  encode(str) at #{example_path}:11
+            #2  initialize(letter) at #{example_path}:7
+            ͱ-- #3  new(*args) at #{example_path}:20
+            #4  <module:Byebug> at #{example_path}:20
+            #5  <top (required)> at #{example_path}:1
       TXT
 
       check_output_includes(*expected_output)

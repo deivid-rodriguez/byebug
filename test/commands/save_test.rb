@@ -33,14 +33,14 @@ module Byebug
       enter 'break 3', 'save'
       debug_code(program)
 
-      assert_includes file_contents, "break #{example_fullpath}:3"
+      assert_includes file_contents, "break #{example_path}:3"
     end
 
     def test_save_records_conditional_breakpoints
       enter 'break 4 if true', 'save'
       debug_code(program)
 
-      assert_includes file_contents, "break #{example_fullpath}:4 if true"
+      assert_includes file_contents, "break #{example_path}:4 if true"
     end
 
     def test_save_records_catchpoints
