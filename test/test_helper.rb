@@ -36,4 +36,4 @@ end
 #
 # Run the tests
 #
-Minitest.run argv
+exit Minitest.run(argv)
