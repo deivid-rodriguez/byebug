@@ -114,10 +114,12 @@ module Byebug
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
       Setting[:fullpath] = false
+      path = '.../shortpath/to/example.rb'
+      RegularState.any_instance.stubs(:shortpath).returns(path)
+
       enter 'where'
       debug_code(program)
 
-      path = example_path
       expected_output = prepare_for_regexp <<-TXT
         --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
             #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
