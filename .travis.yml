@@ -7,7 +7,7 @@ os:
 language: ruby
 
 install:
-- if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install indent; fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then apt-get install indent; fi
 - bundle install --jobs=3 --retry=3
 
 script:
