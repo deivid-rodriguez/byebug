@@ -6,13 +6,11 @@
 
 /* flags */
 #define CTX_FL_DEAD         (1<<1) /* this context belonged to a dead thread */
-#define CTX_FL_ENABLE_BKPT  (1<<2) /* can check for breakpoints              */
-#define CTX_FL_FORCE_MOVE   (1<<3) /* don't stop unless we've changed line   */
-#define CTX_FL_IGNORE       (1<<4) /* this context belongs to ignored thread */
-#define CTX_FL_SUSPEND      (1<<5) /* thread currently suspended             */
-#define CTX_FL_TRACING      (1<<6) /* call at_tracing method                 */
-#define CTX_FL_WAS_RUNNING  (1<<7) /* thread was previously running          */
-#define CTX_FL_STOP_ON_RET  (1<<8) /* can stop on method 'end'               */
+#define CTX_FL_IGNORE       (1<<2) /* this context belongs to ignored thread */
+#define CTX_FL_SUSPEND      (1<<3) /* thread currently suspended             */
+#define CTX_FL_TRACING      (1<<4) /* call at_tracing method                 */
+#define CTX_FL_WAS_RUNNING  (1<<5) /* thread was previously running          */
+#define CTX_FL_STOP_ON_RET  (1<<6) /* can stop on method 'end'               */
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))
@@ -39,9 +37,6 @@ typedef struct {
   int lines;                   /* # of lines in dest_frame before stopping */
   int steps;                   /* # of steps before stopping               */
   int steps_out;               /* # of returns before stopping             */
-
-  VALUE last_file;
-  VALUE last_line;
 
   VALUE backtrace;             /* [[loc, self, klass, binding], ...] */
 } debug_context_t;
