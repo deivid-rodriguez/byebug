@@ -123,8 +123,7 @@ module Byebug
     #
     def frame_file(pos)
       fullpath = context.frame_file(pos)
-      path = Setting[:fullpath] ? fullpath : shortpath(fullpath)
-      CommandProcessor.canonic_file(path)
+      Setting[:fullpath] ? fullpath : shortpath(fullpath)
     end
 
     #
