@@ -4,11 +4,10 @@ base:
 
 breakpoints:
   errors:
-    if: "Expecting \"if\" in breakpoint condition, got: {expr}"
     line: "Line {line} is not a valid breakpoint in file {file}"
-    location: "Invalid breakpoint location: {expr}"
+    location: "Invalid breakpoint location"
     state: "We are not in a state that has an associated file"
-    class: "Unknown class {file}"
+    class: "Unknown class {klass}"
     far_line: "There are only {lines} lines in file {file}"
     source: "No file named {file}"
     expression: "Incorrect expression \"{expr}\"; breakpoint disabled."

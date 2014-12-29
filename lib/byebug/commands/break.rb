@@ -9,69 +9,67 @@ module Byebug
     POSITION_REGEXP = '(?:(\d+)|(.+?)[:.#]([^.:\s]+))'
 
     def regexp
-      /^\s* b(?:reak)? (?:\s+ #{POSITION_REGEXP})? (?:\s+(.+))? \s*$/x
+      /^\s* b(?:reak)? (?:\s+ #{POSITION_REGEXP})? (?:\s+ if \s+(.+))? \s*$/x
     end
 
     def execute
       return puts(self.class.help) if self.class.names.include?(@match[0])
 
       if @match[1]
-        line, _, _, expr = @match.captures
+        file, line, expr = @state.file, @match[1], @match[4]
       else
-        _, file, line, expr = @match.captures
+        file, line, expr = @match[2..4]
       end
 
-      if expr && file.nil? && line.nil?
-        return errmsg(pr('breakpoints.errors.location', expr: expr))
-      elsif expr && expr !~ /^\s*if\s+(.+)/
-        return errmsg(pr('breakpoints.errors.if', expr: expr))
+      return errmsg(pr('breakpoints.errors.no_breakpoint')) if line.nil? && expr
+      return errmsg(pr('breakpoints.errors.location')) unless line
+      return errmsg(pr('breakpoints.errors.state')) unless file
+
+      breakpoint = if line =~ /^\d+$/
+                     line_breakpoint(file, line, expr)
+                   else
+                     method_breakpoint(file, line, expr)
+                   end
+
+      return if syntax_valid?(expr)
+
+      errmsg(pr('breakpoints.errors.expression', expr: expr))
+      breakpoint.enabled = false
+    end
+
+    def line_breakpoint(file, line, expr)
+      path = File.expand_path(file)
+      unless File.exist?(path)
+        return errmsg(pr('breakpoints.errors.source', file: file))
+      end
+
+      f = CommandProcessor.canonic_file(path)
+      l, n = line.to_i, File.foreach(path).count
+      if l > n
+        return errmsg(pr('breakpoints.errors.far_line', lines: n, file: f))
+      end
+
+      unless Breakpoint.potential_line?(path, l)
+        return errmsg(pr('breakpoints.errors.line', line: l, file: f))
+      end
+
+      b = Breakpoint.add(path, l, expr)
+      puts pr('breakpoints.created_line', id: b.id, file: f, line: l)
+      b
+    end
+
+    def method_breakpoint(klass, method, expr)
+      k = bb_warning_eval(klass)
+      if k && k.is_a?(Module)
+        k = k.name
       else
-        expr = $1
+        return errmsg(pr('breakpoints.errors.class', klass: klass))
       end
 
-      if file.nil? && !@state.context
-        return errmsg(pr('breakpoints.errors.state'))
-      end
-
-      file = @state.file if file.nil?
-      line = @state.line.to_s if line.nil?
-
-      if line =~ /^\d+$/
-        path = File.expand_path(file)
-        unless File.exist?(path)
-          return errmsg(pr('breakpoints.errors.source', file: file))
-        end
-
-        file = CommandProcessor.canonic_file(path)
-        l, n = line.to_i, File.foreach(path).count
-        if l > n
-          return errmsg(pr('breakpoints.errors.far_line', lines: n, file: file))
-        end
-
-        unless Breakpoint.potential_line?(path, l)
-          return errmsg(pr('breakpoints.errors.line', line: l, file: file))
-        end
-
-        b = Breakpoint.add(path, l, expr)
-        puts pr('breakpoints.set_breakpoint_to_line',
-                id: b.id, file: file, line: l)
-
-        unless syntax_valid?(expr)
-          errmsg(pr('breakpoints.errors.expression', expr: expr))
-          b.enabled = false
-        end
-
-      else
-        kl = bb_warning_eval(file)
-        unless kl && kl.is_a?(Module)
-          return errmsg(pr('breakpoints.errors.class', file: file))
-        end
-
-        class_name, method = kl.name, line.intern
-        b = Breakpoint.add(class_name, method, expr)
-        puts pr('breakpoints.set_breakpoint_to_method',
-                id: b.id, class: class_name, method: method)
-      end
+      m = method.intern
+      b = Breakpoint.add(k, m, expr)
+      puts pr('breakpoints.created_method', id: b.id, class: k, method: m)
+      b
     end
 
     class << self

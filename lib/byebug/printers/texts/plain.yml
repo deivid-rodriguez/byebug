@@ -1,6 +1,6 @@
 breakpoints:
-  set_breakpoint_to_line: "Created breakpoint {id} at {file}:{line}"
-  set_breakpoint_to_method: "Created breakpoint {id} at {class}::{method}"
+  created_line: "Created breakpoint {id} at {file}:{line}"
+  created_method: "Created breakpoint {id} at {class}::{method}"
 
 display:
   result: "{n}: {exp} = {result}"
