@@ -26,7 +26,7 @@ module Byebug
     #
     def teardown
       force_remove_const(Byebug, example_class)
-      example_file.unlink
+      clear_example_file
     end
 
     #
@@ -35,6 +35,12 @@ module Byebug
     def ignored_files
       pattern = File.expand_path('../../../{lib,test}/**/*.rb', __FILE__)
       Dir.glob(pattern) - [example_path]
+    end
+
+    def clear_example_file
+      example_file.unlink
+
+      @example_file = nil
     end
 
     #
@@ -47,8 +53,6 @@ module Byebug
 
       @example_file
     end
-
-    attr_writer :example_file
 
     #
     # Path to file where test code is saved
