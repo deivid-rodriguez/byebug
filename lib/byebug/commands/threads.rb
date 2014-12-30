@@ -38,20 +38,22 @@ module Byebug
     end
 
     def parse_thread_num(subcmd, arg)
-      return errmsg(pr('thread.errors.no_number', subcmd: subcmd)) if '' == arg
+      return [nil, pr('thread.errors.no_number', subcmd: subcmd)] if '' == arg
 
       thnum, err = get_int(arg, subcmd, 1)
-      return errmsg(err) unless thnum
+      return [nil, err] unless thnum
 
       Byebug.contexts.find { |c| c.thnum == thnum }
     end
 
     def parse_thread_num_for_cmd(subcmd, arg)
-      c = parse_thread_num(subcmd, arg)
+      c, err = parse_thread_num(subcmd, arg)
 
       case
+      when err
+        [c, err]
       when c.nil?
-        [c, pr('thread.errors.no_thread')]
+        [nil, pr('thread.errors.no_thread')]
       when @state.context == c
         [c, pr('thread.errors.current_thread')]
       when c.ignored?
