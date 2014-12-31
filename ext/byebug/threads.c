@@ -50,16 +50,6 @@ create_threads_table(void)
 }
 
 /*
- *  The condition to be in the thread's table is to be either running or
- *  sleeping, namely, to be Thread#alive?
- */
-static int
-is_living_thread(VALUE thread)
-{
-  return rb_funcall(thread, rb_intern("alive?"), 0) == Qtrue;
-}
-
-/*
  *  Checks a single entry in the threads table.
  *
  *  If it has no associated context or the key doesn't correspond to a living
@@ -75,6 +65,24 @@ check_thread_i(st_data_t key, st_data_t value, st_data_t dummy)
     return ST_DELETE;
 
   return ST_CONTINUE;
+}
+
+/*
+ *  Checks whether a thread is either in the running or sleeping state.
+ */
+int
+is_living_thread(VALUE thread)
+{
+  VALUE status = rb_funcall(thread, rb_intern("status"), 0);
+
+  if (status == Qfalse)
+    return 0;
+
+  if (rb_str_cmp(status, rb_str_new2("run")) == 0
+      || rb_str_cmp(status, rb_str_new2("sleep")) == 0)
+    return 1;
+
+  return 0;
 }
 
 /*

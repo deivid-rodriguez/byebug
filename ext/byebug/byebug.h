@@ -66,6 +66,7 @@ extern VALUE create_threads_table(void);
 extern void check_threads_table(void);
 extern void thread_context_lookup(VALUE thread, VALUE *context);
 extern void halt_while_other_thread_is_active(debug_context_t *dc);
+extern int is_living_thread(VALUE thread);
 
 /* global variables */
 extern VALUE locker;

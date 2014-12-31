@@ -145,6 +145,10 @@ cleanup(debug_context_t * dc)
   rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   debug_context_t *dc;                                                  \
   VALUE context;                                                        \
+                                                                        \
+  if (!is_living_thread(rb_thread_current()))                           \
+    return;                                                             \
+                                                                        \
   thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
                                                                         \
