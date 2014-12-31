@@ -16,4 +16,4 @@ end
 # TODO: My guess is some bug fix in MRI's Coverage module was not backported to
 # 2.0. Investigate this.
 #
-start_coverage_tracking if ENV['COV'] || (ENV['CI'] && RUBY_VERSION < '2.1')
+start_coverage_tracking if ENV['COV'] || (ENV['CI'] && RUBY_VERSION > '2.0')
