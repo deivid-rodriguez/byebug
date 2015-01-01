@@ -598,28 +598,37 @@ not necessarily go to the first statement after the method header. It's possible
 that the call will continue after a `yield` statement from a prior call.
 
 ```ruby
+#
 # Enumerator for primes
+#
 class SievePrime
-  @@odd_primes = []
-  def self.next_prime(&block)
+  def initialize
+    @odd_primes = []
+  end
+
+  def next_prime
     candidate = 2
     yield candidate
     not_prime = false
     candidate += 1
-    while true do
-      @@odd_primes.each do |p|
+
+    loop do
+      @odd_primes.each do |p|
         not_prime = (0 == (candidate % p))
         break if not_prime
       end
+
       unless not_prime
-        @@odd_primes << candidate
+        @odd_primes << candidate
         yield candidate
       end
+
       candidate += 2
     end
   end
 end
-SievePrime.next_prime do |prime|
+
+SievePrime.new.next_prime do |prime|
   puts prime
   break if prime > 10
 end
@@ -627,48 +636,50 @@ end
 
 ```bash
 $ byebug primes.rb
-[1, 10] in /home/davidr/Proyectos/byebug/old_doc/primes.rb
-    1: # Enumerator for primes
-=>  2: class SievePrime
-    3:   @@odd_primes = []
-    4:   def self.next_prime(&block)
-    5:     candidate = 2
-    6:     yield candidate
-    7:     not_prime = false
-    8:     candidate += 1
-    9:     while true do
-   10:       @@odd_primes.each do |p|
+[1, 10] in /path/to/primes.rb
+    1: #
+    2: # Enumerator for primes
+    3: #
+=>  4: class SievePrime
+    5:   def initialize
+    6:     @odd_primes = []
+    7:   end
+    8:
+    9:   def self.next_prime(&block)
+   10:    candidate = 2
 (byebug) set tracing
 line tracing is on.
 (byebug) set basename
 basename in on.
 (byebug) step 9
-Tracing: primes.rb:3 @@odd_primes = []
-Tracing: primes.rb:4 def self.next_prime(&block)
-Tracing: primes.rb:22 SievePrime.next_prime do |prime|
-Tracing: primes.rb:5 candidate = 2
-Tracing: primes.rb:6 yield candidate
-Tracing: primes.rb:23 puts prime
+Tracing: primes.rb:5   def initialize
+Tracing: primes.rb:9   def next_prime
+Tracing: primes.rb:31 SievePrime.new.next_prime do |prime|
+Tracing: primes.rb:6     @odd_primes = []
+Tracing: primes.rb:10     candidate = 2
+Tracing: primes.rb:11     yield candidate
+Tracing: primes.rb:32   puts prime
 2
-Tracing: primes.rb:24 break if prime > 10
-Tracing: primes.rb:7 not_prime = false
-Tracing: primes.rb:8 candidate += 1
-[3, 12] in /home/davidr/Proyectos/byebug/old_doc/primes.rb
-    3:   @@odd_primes = []
-    4:   def self.next_prime(&block)
-    5:     candidate = 2
-    6:     yield candidate
-    7:     not_prime = false
-=>  8:     candidate += 1
-    9:     while true do
-   10:       @@odd_primes.each do |p|
-   11:         not_prime = (0 == (candidate % p))
-   12:         break if not_prime
+Tracing: primes.rb:33   break if prime > 10
+Tracing: primes.rb:12     not_prime = false
+
+[7, 16] in /path/to/primes.rb
+    7:   end
+    8:
+    9:   def next_prime
+   10:     candidate = 2
+   11:     yield candidate
+=> 12:     not_prime = false
+   13:     candidate += 1
+   14:
+   15:     loop do
+   16:       @odd_primes.each do |p|
+   17:         not_prime = (0 == (candidate % p))
 (byebug)
 ```
 
-The loop between lines 23-26 gets interleaved between those of
-`Sieve::next_prime`, lines 6-19 above.
+The loop between lines 31-34 gets interleaved between those of
+`SievePrime#next_prime`, lines 9-28 above.
 
 
 #### No Parameter Values in a Call Stack
