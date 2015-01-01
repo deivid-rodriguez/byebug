@@ -481,21 +481,6 @@ Context_step_over(int argc, VALUE * argv, VALUE self)
   return Qnil;
 }
 
-static void
-context_suspend_0(debug_context_t * context)
-{
-  VALUE status = rb_funcall(context->thread, rb_intern("status"), 0);
-
-  if (rb_str_cmp(status, rb_str_new2("run")) == 0)
-    CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
-  else if (rb_str_cmp(status, rb_str_new2("sleep")) == 0)
-    CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
-  else
-    return;
-
-  CTX_FL_SET(context, CTX_FL_SUSPEND);
-}
-
 /*
  *  call-seq:
  *    context.suspend -> nil
@@ -505,12 +490,22 @@ context_suspend_0(debug_context_t * context)
 static VALUE
 Context_suspend(VALUE self)
 {
+  VALUE status;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
 
+  status = rb_funcall(context->thread, rb_intern("status"), 0);
 
-  context_suspend_0(context);
+  if (rb_str_cmp(status, rb_str_new2("run")) == 0)
+    CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
+  else if (rb_str_cmp(status, rb_str_new2("sleep")) == 0)
+    CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
+  else
+    return Qnil;
+
+  CTX_FL_SET(context, CTX_FL_SUSPEND);
+
   return Qnil;
 }
 
