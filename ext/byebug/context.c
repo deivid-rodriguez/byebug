@@ -509,8 +509,6 @@ Context_suspend(VALUE self)
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    rb_raise(rb_eRuntimeError, "Already suspended.");
 
   context_suspend_0(context);
   return Qnil;
