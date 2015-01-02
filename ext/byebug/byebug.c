@@ -85,8 +85,8 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
   int filtered = 0;
   const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
 
-  VALUE path_sym = rb_tracearg_path(trace_arg);
-  const char *path = NIL_P(path_sym) ? "" : RSTRING_PTR(path_sym);
+  VALUE rb_path = rb_tracearg_path(trace_arg);
+  const char *path = NIL_P(rb_path) ? "" : RSTRING_PTR(rb_path);
 
   int line = NUM2INT(rb_tracearg_lineno(trace_arg));
 
