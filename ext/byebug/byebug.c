@@ -81,7 +81,8 @@ static void
 trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
             const char *file_filter, const char *debug_msg)
 {
-  char *fullpath, *basename;
+  char *fullpath = NULL;
+  const char *basename;
   int filtered = 0;
   const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
 
@@ -97,13 +98,17 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 
   if (file_filter)
   {
+#ifndef _WIN32_
     fullpath = realpath(path, NULL);
-    basename = fullpath ? strrchr(fullpath, '/') : NULL;
+#endif
+    basename = fullpath ? strrchr(fullpath, '/') : path;
 
     if (!basename || strncmp(basename + 1, file_filter, strlen(file_filter)))
       filtered = 1;
 
+#ifndef _WIN32_
     free(fullpath);
+#endif
   }
 
   if (!filtered)
