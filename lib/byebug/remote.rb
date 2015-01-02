@@ -65,8 +65,9 @@ module Byebug
     #
     def start_client(host = 'localhost', port = PORT)
       interface = LocalInterface.new
+      interface.puts 'Connecting to byebug server...'
       socket = TCPSocket.new(host, port)
-      puts 'Connected.'
+      interface.puts 'Connected.'
 
       catch(:exit) do
         while (line = socket.gets)
@@ -85,6 +86,11 @@ module Byebug
         end
       end
       socket.close
+    end
+
+    def parse_host_and_port(host_port_spec)
+      location = host_port_spec.split(':')
+      location[1] ? [location[0], location[1].to_i] : ['localhost', location[0]]
     end
   end
 end

@@ -1,18 +1,16 @@
 require 'byebug/runner'
 
 module Byebug
-  class RunnerTest < Minitest::Test
-    include Byebug::TestUtils
-
+  class RunnerTest < TestCase
     def setup
-      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
+      super
 
-      @runner = Byebug::Runner.new
+      @runner = Byebug::Runner.new(false)
     end
 
     def test_run_with_version_flag
       with_command_line('bin/byebug', '--version') do
-        @runner.run
+        assert_raises(SystemExit) { @runner.run }
 
         check_output_includes(/#{Byebug::VERSION}/)
       end
@@ -20,7 +18,7 @@ module Byebug
 
     def test_run_with_help_flag
       with_command_line('bin/byebug', '--help') do
-        @runner.run
+        assert_raises(SystemExit) { @runner.run }
 
         check_output_includes(
           /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/)
@@ -30,18 +28,14 @@ module Byebug
     def test_run_with_remote_option_only_with_a_port_number
       with_command_line('bin/byebug', '--remote', '9999') do
         Byebug.expects(:start_client)
-        @runner.run
-
-        check_output_includes(/Connecting to byebug server localhost:9999/)
+        assert_raises(SystemExit) { @runner.run }
       end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
       with_command_line('bin/byebug', '--remote', 'myhost:9999') do
         Byebug.expects(:start_client)
-        @runner.run
-
-        check_output_includes(/Connecting to byebug server myhost:9999/)
+        assert_raises(SystemExit) { @runner.run }
       end
     end
 
@@ -61,71 +55,76 @@ module Byebug
       end
     end
 
-    def expect_it_debugs_script(rc = true)
-      Byebug.expects(:start)
-      rc_expectation = Byebug.expects(:run_init_script)
-      rc_expectation.never unless rc
-      @runner.expects(:debug_program)
+    def setup_dummy_script
+      example_file.write('sleep 0')
+      example_file.close
     end
 
     def test_run_with_a_script_to_debug
-      with_command_line('bin/byebug', 'lib/byebug.rb') do
-        expect_it_debugs_script
+      setup_dummy_script
 
+      with_command_line('bin/byebug', example_path) do
         @runner.run
-        assert_equal Byebug.debugged_program, File.expand_path('lib/byebug.rb')
+
+        assert_equal Byebug.debugged_program, example_path
       end
     end
 
     def test_run_with_a_script_and_params_does_not_consume_script_params
-      with_command_line('bin/byebug', '--', 'lib/byebug.rb', '-opt', 'value') do
-        expect_it_debugs_script
+      setup_dummy_script
 
+      with_command_line('bin/byebug', '--', example_path, '-opt', 'value') do
         @runner.run
-        assert_equal %w(lib/byebug.rb -opt value), ARGV
+
+        assert_equal [example_path, '-opt', 'value'], ARGV
       end
     end
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
-      with_command_line('bin/byebug', '--', 'ruby', 'lib/byebug.rb') do
-        expect_it_debugs_script
+      setup_dummy_script
 
+      with_command_line('bin/byebug', '--', 'ruby', example_path) do
         @runner.run
-        assert_equal Byebug.debugged_program, File.expand_path('lib/byebug.rb')
+
+        assert_equal Byebug.debugged_program, example_path
       end
     end
 
     def test_run_with_no_rc_option
-      with_command_line('bin/byebug', '--no-rc', 'lib/byebug.rb') do
-        expect_it_debugs_script(false)
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '--no-rc', example_path) do
+        Byebug.expects(:run_init_script).never
 
         @runner.run
       end
     end
 
     def test_run_with_post_mortem_mode_flag
-      with_command_line('bin/byebug', '--post-mortem', 'lib/byebug.rb') do
-        expect_it_debugs_script
-        @runner.run
+      setup_dummy_script
 
-        assert_equal true, Byebug.post_mortem?
-        Byebug::Setting[:post_mortem] = false
+      with_command_line('bin/byebug', '--post-mortem', example_path) do
+        Setting.expects(:[]=).with(:post_mortem, true)
+
+        @runner.run
       end
     end
 
     def test_run_with_linetracing_flag
-      with_command_line('bin/byebug', '-t', 'lib/byebug.rb') do
-        expect_it_debugs_script
-        @runner.run
+      setup_dummy_script
 
-        assert_equal true, Byebug.tracing?
-        Byebug::Setting[:linetrace] = false
+      with_command_line('bin/byebug', '-t', example_path) do
+        Setting.expects(:[]=).with(:linetrace, true)
+
+        @runner.run
       end
     end
 
     def test_run_with_no_quit_flag
-      skip 'for now'
-      with_command_line('bin/byebug', '--no-quit', 'lib/byebug.rb') do
+      skip('TODO')
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '--no-quit', example_path) do
         @runner.run
 
         check_output_includes('(byebug:ctrl)')
@@ -133,8 +132,9 @@ module Byebug
     end
 
     def test_run_with_require_flag
-      with_command_line('bin/byebug', '-r', 'abbrev', 'lib/byebug.rb') do
-        expect_it_debugs_script
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '-r', 'abbrev', example_path) do
         @runner.run
 
         hsh = { 'can' => 'can', 'cat' => 'cat' }
@@ -142,18 +142,31 @@ module Byebug
       end
     end
 
-    def test_run_with_include_flag
-      with_command_line('bin/byebug', '-I', 'custom_dir', 'lib/byebug.rb') do
-        expect_it_debugs_script
+    def test_run_with_a_single_include_flag
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '-I', 'dir1', example_path) do
         @runner.run
 
-        assert_includes $LOAD_PATH, 'custom_dir'
+        assert_includes $LOAD_PATH, 'dir1'
+      end
+    end
+
+    def test_run_with_several_include_flags
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '-I', 'dir1:dir2', example_path) do
+        @runner.run
+
+        assert_includes $LOAD_PATH, 'dir1'
+        assert_includes $LOAD_PATH, 'dir2'
       end
     end
 
     def test_run_with_debug_flag
-      with_command_line('bin/byebug', '-d', 'lib/byebug.rb') do
-        expect_it_debugs_script
+      setup_dummy_script
+
+      with_command_line('bin/byebug', '-d', example_path) do
         @runner.run
 
         assert_equal $DEBUG, true
