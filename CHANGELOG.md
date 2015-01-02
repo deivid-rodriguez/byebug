@@ -23,6 +23,7 @@ working anyways (#92).
 - Backtraces not working in `post_mortem` mode (#93).
 - 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
 sequentially.
+- Finish command not stopping at the correct line (#101).
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up

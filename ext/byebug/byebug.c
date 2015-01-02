@@ -289,8 +289,7 @@ call_event(VALUE trace_point, void *data)
 
   dc->calced_stack_size++;
 
-  if (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET))
-    dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
+  dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
 
   breakpoint = Qnil;
   klass = rb_tracearg_defined_class(trace_arg);
