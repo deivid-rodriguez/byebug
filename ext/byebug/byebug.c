@@ -98,7 +98,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 
   if (file_filter)
   {
-#ifndef _WIN32_
+#ifndef _WIN32
     fullpath = realpath(path, NULL);
 #endif
     basename = fullpath ? strrchr(fullpath, '/') : path;
@@ -106,7 +106,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
     if (!basename || strncmp(basename + 1, file_filter, strlen(file_filter)))
       filtered = 1;
 
-#ifndef _WIN32_
+#ifndef _WIN32
     free(fullpath);
 #endif
   }
