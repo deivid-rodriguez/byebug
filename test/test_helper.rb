@@ -13,14 +13,8 @@ require_relative 'support/printer_helpers'
 # Load the test files from the command line.
 #
 argv = ARGV.select do |argument|
-  case argument
-  when /^-/ then
+  if argument =~ /^-/
     argument
-  when /\*/ then
-    Dir.glob('test/**/*_test.rb').each do |file|
-      require File.expand_path file
-    end
-    false
   else
     require File.expand_path argument
     false

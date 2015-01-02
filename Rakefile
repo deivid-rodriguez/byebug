@@ -12,7 +12,8 @@ end
 
 desc 'Run the test suite'
 task :test do
-  system('ruby -w -Ilib test/test_helper.rb test/**/*_test.rb') || exit(false)
+  files = Dir.glob('test/**/*_test.rb').join(' ')
+  system("ruby -w -Ilib test/test_helper.rb #{files}") || exit(false)
 end
 
 desc 'Activates DevKit'
