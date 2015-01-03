@@ -186,16 +186,12 @@ module Byebug
     self.allow_in_post_mortem = false
 
     def regexp
-      /^\s* th(?:read)? \s+ (?:sw(?:itch)?\s+)? (\S+) \s*$/x
+      /^\s* th(?:read)? \s+ sw(?:itch)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
-      if @match[1] =~ /switch/
-        return errmsg('"thread switch" needs a thread number')
-      end
-
-      c = parse_thread_num_for_cmd('thread switch', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread switch', @match[1])
+      return errmsg(err) if err
 
       display_context(c)
       c.step_into 1
