@@ -62,22 +62,22 @@ module Byebug
       enter 'cont 13', 'thread list', 'lock << 0'
       debug_code(program) { thnum = first_thnum }
 
-      check_output_includes(/\+ #{thnum} #<Thread:\S+ run>\t#{file}:13/)
+      check_output_includes(/\+ #{thnum} #<Thread:0x\h+ run>\t#{file}:13/)
     end
 
     def test_thread_list_shows_all_available_threads
       enter 'cont 24', 'thread list', 'lock << 0'
       debug_code(program)
 
-      check_output_includes(/(\+)?\d+ #<Thread:\S+ (sleep|run)>/,
-                            /(\+)?\d+ #<Thread:\S+ (sleep|run)>/,
-                            /(\+)?\d+ #<Thread:\S+ (sleep|run)>/)
+      check_output_includes(/(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/,
+                            /(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/,
+                            /(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/)
     end
 
     def test_thread_stop_marks_thread_as_suspended
       thnum = nil
-      enter 'cont 24', -> { "thread stop #{last_thnum}" }, 'lock << 0'
-      debug_code(program) { thnum = last_thnum }
+      enter 'cont 24', -> { "thread stop #{t2_thnum}" }, 'lock << 0'
+      debug_code(program) { thnum = t2_thnum }
 
       check_output_includes(/\$ #{thnum} #<Thread:/)
     end
@@ -96,7 +96,7 @@ module Byebug
       enter 'cont 13', 'thread stop', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread stop" needs a thread number'
+      check_error_includes '"thread stop" argument "" needs to be a number'
     end
 
     def test_thread_stop_shows_error_when_trying_to_stop_current_thread
@@ -117,14 +117,15 @@ module Byebug
         assert_equal false, Byebug.contexts.last.suspended?
       end
 
-      check_output_includes(/\$ #{thnum} #<Thread:/, /#{thnum} #<Thread:/)
+      check_output_includes(/\$ #{thnum} #<Thread:0x\h+/,
+                            /#{thnum} #<Thread:0x\h+/)
     end
 
     def test_thread_resume_shows_error_if_thread_number_not_specified
       enter 'cont 13', 'thread resume', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread resume" needs a thread number'
+      check_error_includes '"thread resume" argument "" needs to be a number'
     end
 
     def test_thread_resume_shows_error_when_trying_to_resume_current_thread
@@ -151,7 +152,7 @@ module Byebug
       enter 'cont 13', 'thread switch', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread switch" needs a thread number'
+      check_error_includes '"thread switch" argument "" needs to be a number'
     end
 
     def test_thread_switch_shows_error_when_trying_to_switch_current_thread

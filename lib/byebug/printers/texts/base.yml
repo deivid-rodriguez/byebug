@@ -87,7 +87,6 @@ source:
 
 thread:
   errors:
-    no_number: "\"{subcmd}\" needs a thread number"
     no_thread: "No such thread"
     current_thread: "It's the current thread"
     wrong_action: "Can't {subcmd} thread {arg}"

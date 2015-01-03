@@ -36,8 +36,6 @@ module Byebug
     end
 
     def parse_thread_num(subcmd, arg)
-      return [nil, pr('thread.errors.no_number', subcmd: subcmd)] if '' == arg
-
       thnum, err = get_int(arg, subcmd, 1)
       return [nil, err] unless thnum
 
