@@ -1,4 +1,3 @@
-require 'slop'
 require 'ostruct'
 require 'English'
 require 'byebug/core'
