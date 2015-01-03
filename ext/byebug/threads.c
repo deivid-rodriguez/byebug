@@ -8,11 +8,12 @@ t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
   VALUE thread = (VALUE) key;
 
+  rb_gc_mark(thread);
+
   if (!value)
     return ST_CONTINUE;
 
   rb_gc_mark((VALUE) value);
-  rb_gc_mark(thread);
 
   return ST_CONTINUE;
 }
