@@ -644,7 +644,6 @@ bb_start(VALUE self)
     result = Qfalse;
   else
   {
-    locker = Qnil;
     catchpoints = rb_hash_new();
     threads = create_threads_table();
 
