@@ -1,4 +1,3 @@
-require 'ostruct'
 require 'English'
 require 'byebug/core'
 

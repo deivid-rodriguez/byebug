@@ -813,27 +813,7 @@ sys 0m0.056s
 Byebug has many command-line options,; it seems that some people want to set
 them differently from the defaults. For example, some people may want
 `--no-quit` to be the default behavior. One could write a wrapper script or set
-a shell alias to handle this. But `byebug` has another way to do it. Before
-processing command options, if the file `$HOME/.byebugoptrc` is found, it is
-loaded. If you want to set the defaults in some other way, you can put Ruby code
-here and set variable `options` which is an OpenStruct. For example here's how
-you'd set `-no-quit` and a personal message.
-
-```ruby
-# This file contains how you want the default options to byebug to be set. Any
-# Ruby code can be put here.
-#
-# byebug # Uncomment if you want to debug byebug!
-options.control = false
-puts "rocky's byebugrc run"
-```
-
-Here are the default values in `options`
-
-```
-#<OpenStruct nx=false, quit=true, restart_script=nil, script=nil, stop=true,
-             tracing=false, verbose=false>
-```
+a shell alias to handle this.
 
 ### Command Files
 
