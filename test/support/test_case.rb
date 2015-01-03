@@ -5,6 +5,8 @@ module Byebug
   # Extends Minitest's base test case and provides defaults for all tests.
   #
   class TestCase < Minitest::Test
+    self.make_my_diffs_pretty!
+
     include Byebug::TestUtils
 
     #
