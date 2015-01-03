@@ -1,3 +1,4 @@
+require 'optparse'
 require 'English'
 require 'byebug/core'
 
