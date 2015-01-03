@@ -676,10 +676,6 @@ bb_load(int argc, VALUE * argv, VALUE self)
     reset_stepping_stop_points(dc);
   }
 
-  /* We should run all at_exit handler's in order to provide, for instance, a
-   * chance to run all defined test cases */
-  rb_exec_end_proc();
-
   return status;
 }
 
