@@ -15,25 +15,23 @@ module Byebug
                       context.thread == Thread.current ? '+' : ' '
                     end
       debug_flag = context.ignored? ? '!' : ' '
+
       if should_show_top_frame
-        if context.thread == Thread.current && !context.dead?
-          file = context.frame_file(0)
-          line = context.frame_line(0)
+        if context == Byebug.current_context
+          file_line = "#{@state.file}:#{@state.line}"
         else
-          if context.thread.backtrace_locations &&
-             context.thread.backtrace_locations[0]
-            file = context.thread.backtrace_locations[0].path
-            line = context.thread.backtrace_locations[0].lineno
+          backtrace = context.thread.backtrace_locations
+          if backtrace && backtrace[0]
+            file_line = "#{backtrace[0].path}:#{backtrace[0].lineno}"
           end
         end
-        file_line = "#{file}:#{line}"
       end
       {
         status_flag: status_flag,
         debug_flag: debug_flag,
         id: context.thnum,
         thread: context.thread.inspect,
-        file_line: file_line ? file_line : ''
+        file_line: file_line || ''
       }
     end
 
