@@ -95,7 +95,7 @@ module Byebug
             'set linetrace',
             -> { "thread stop #{t2_thnum}" },
             'lock << 0'
-      debug_code(program)
+      debug_code(program) { Setting[:linetrace] = false }
 
       check_output_doesnt_include(/Tracing: #{example_path}:21/)
     end
