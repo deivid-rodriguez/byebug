@@ -159,9 +159,10 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd('thread resume', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread resume', @match[1])
+      return errmsg(err) if err
       return errmsg pr('thread.errors.already_running') unless c.suspended?
+
       c.resume
       display_context(c)
     end
