@@ -314,18 +314,6 @@ Context_ignored(VALUE self)
   return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
-static void
-context_resume_0(debug_context_t * context)
-{
-  if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    return;
-
-  CTX_FL_UNSET(context, CTX_FL_SUSPEND);
-
-  if (CTX_FL_TEST(context, CTX_FL_WAS_RUNNING))
-    rb_thread_wakeup(context->thread);
-}
-
 /*
  *  call-seq:
  *    context.resume -> nil
@@ -340,9 +328,12 @@ Context_resume(VALUE self)
   Data_Get_Struct(self, debug_context_t, context);
 
   if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    rb_raise(rb_eRuntimeError, "Thread is not suspended.");
+    return Qnil;
 
-  context_resume_0(context);
+  CTX_FL_UNSET(context, CTX_FL_SUSPEND);
+
+  if (CTX_FL_TEST(context, CTX_FL_WAS_RUNNING))
+    rb_thread_wakeup(context->thread);
 
   return Qnil;
 }
