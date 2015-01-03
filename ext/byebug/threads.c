@@ -114,26 +114,22 @@ thread_context_lookup(VALUE thread, VALUE * context)
   }
 }
 
+/*
+ * Holds thread execution while another thread is active.
+ *
+ * Thanks to this, all threads are "frozen" while the user is typing commands.
+ */
 void
 halt_while_other_thread_is_active(debug_context_t * dc)
 {
-  while (1)
+  while (locker != Qnil && locker != rb_thread_current()
+         || CTX_FL_TEST(dc, CTX_FL_SUSPEND))
   {
-    /* halt execution of current thread if debugger is activated in another */
-    while (locker != Qnil && locker != rb_thread_current())
-    {
-      add_to_locked(rb_thread_current());
-      rb_thread_stop();
-    }
+    add_to_locked(rb_thread_current());
+    rb_thread_stop();
 
-    /* stop the current thread if it's marked as suspended */
-    if (CTX_FL_TEST(dc, CTX_FL_SUSPEND) && locker != rb_thread_current())
-    {
+    if (CTX_FL_TEST(dc, CTX_FL_SUSPEND))
       CTX_FL_SET(dc, CTX_FL_WAS_RUNNING);
-      rb_thread_stop();
-    }
-    else
-      break;
   }
 }
 
