@@ -10,10 +10,6 @@ TrivialAccessors:
 Style/ModuleFunction:
   Enabled: false
 
-# https://github.com/bbatsov/rubocop/issues/1466
-Style/SingleLineBlockParams:
-  Enabled: false
-
 # https://github.com/bbatsov/rubocop/pull/72
 Style/AsciiComments:
   Enabled: false
