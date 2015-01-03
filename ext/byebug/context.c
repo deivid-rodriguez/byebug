@@ -618,6 +618,7 @@ Init_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
 
+  rb_define_method(cContext, "backtrace", Context_backtrace, 0);
   rb_define_method(cContext, "dead?", Context_dead, 0);
   rb_define_method(cContext, "frame_binding", Context_frame_binding, -1);
   rb_define_method(cContext, "frame_class", Context_frame_class, -1);
@@ -627,7 +628,6 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "frame_self", Context_frame_self, -1);
   rb_define_method(cContext, "ignored?", Context_ignored, 0);
   rb_define_method(cContext, "resume", Context_resume, 0);
-  rb_define_method(cContext, "backtrace", Context_backtrace, 0);
   rb_define_method(cContext, "step_into", Context_step_into, -1);
   rb_define_method(cContext, "step_out", Context_step_out, -1);
   rb_define_method(cContext, "step_over", Context_step_over, -1);
