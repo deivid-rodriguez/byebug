@@ -45,12 +45,20 @@ module Byebug
       EOC
     end
 
-    def first_thnum
-      Byebug.contexts.first.thnum
+    def t1_context
+      Byebug.contexts[-2]
     end
 
-    def last_thnum
-      Byebug.contexts.last.thnum
+    def t1_thnum
+      t1_context.thnum
+    end
+
+    def t2_context
+      Byebug.contexts[-1]
+    end
+
+    def t2_thnum
+      t2_context.thnum
     end
 
     def curr_thnum
@@ -60,7 +68,7 @@ module Byebug
     def test_thread_list_marks_current_thread_with_a_plus_sign
       thnum, file = nil, example_path
       enter 'cont 13', 'thread list', 'lock << 0'
-      debug_code(program) { thnum = first_thnum }
+      debug_code(program) { thnum = curr_thnum }
 
       check_output_includes(/\+ #{thnum} #<Thread:0x\h+ run>\t#{file}:13/)
     end
@@ -85,7 +93,7 @@ module Byebug
     def test_thread_stop_actually_suspends_thread_execution
       enter 'cont 24',
             'set linetrace',
-            -> { "thread stop #{last_thnum}" },
+            -> { "thread stop #{t2_thnum}" },
             'lock << 0'
       debug_code(program)
 
@@ -107,18 +115,15 @@ module Byebug
     end
 
     def test_thread_resume_removes_threads_from_the_suspended_state
-      thnum = nil
+      ctx = nil
       enter 'cont 24',
-            -> { thnum = last_thnum; "thread stop #{thnum}" },
-            -> { "thread resume #{thnum}" },
+            -> { ctx = t2_context; "thread stop #{t2_thnum}" },
+            -> { "thread resume #{t2_thnum}" },
             'lock << 0'
 
-      debug_code(program) do
-        assert_equal false, Byebug.contexts.last.suspended?
-      end
-
-      check_output_includes(/\$ #{thnum} #<Thread:0x\h+/,
-                            /#{thnum} #<Thread:0x\h+/)
+      debug_code(program) { assert_equal false, ctx.suspended? }
+      check_output_includes(/\$ #{ctx.thnum} #<Thread:0x\h+/,
+                            /#{ctx.thnum} #<Thread:0x\h+/)
     end
 
     def test_thread_resume_shows_error_if_thread_number_not_specified
@@ -129,21 +134,21 @@ module Byebug
     end
 
     def test_thread_resume_shows_error_when_trying_to_resume_current_thread
-      enter 'cont 13', -> { "thread resume #{first_thnum}" }, 'lock << 0'
+      enter 'cont 13', -> { "thread resume #{curr_thnum}" }, 'lock << 0'
       debug_code(program)
 
       check_error_includes "It's the current thread"
     end
 
     def test_thread_resume_shows_error_if_thread_is_already_running
-      enter 'cont 24', -> { "thread resume #{last_thnum}" }, 'lock << 0'
+      enter 'cont 24', -> { "thread resume #{t2_thnum}" }, 'lock << 0'
       debug_code(program)
 
       check_error_includes 'Already running'
     end
 
     def test_thread_switch_changes_execution_to_another_thread
-      enter 'cont 24', -> { "thread switch #{last_thnum}" }, 'lock << 0'
+      enter 'cont 24', -> { "thread switch #{t2_thnum}" }, 'lock << 0'
 
       debug_code(program) { assert_equal state.line, 21 }
     end
@@ -156,7 +161,7 @@ module Byebug
     end
 
     def test_thread_switch_shows_error_when_trying_to_switch_current_thread
-      enter 'cont 13', -> { "thread switch #{first_thnum}" }, 'lock << 0'
+      enter 'cont 13', -> { "thread switch #{curr_thnum}" }, 'lock << 0'
       debug_code(program)
 
       check_error_includes "It's the current thread"
