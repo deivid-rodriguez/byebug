@@ -9,7 +9,14 @@ module Byebug
     BYEBUG_SCRIPT = File.expand_path('../../../../bin/byebug')
     IGNORED_FILES << BYEBUG_SCRIPT
 
-    def initialize(stop = false, quit = true)
+    #
+    # @param stop [Boolean] Whether the runner should stop right before
+    # starting the program.
+    #
+    # @param quit [Boolean] Whether the runner should quit right after
+    # finishing the program.
+    #
+    def initialize(stop = true, quit = true)
       @stop, @quit = stop, quit
     end
 
