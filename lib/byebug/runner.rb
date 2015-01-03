@@ -52,9 +52,7 @@ module Byebug
     def run
       prepare_options.order!(ARGV)
 
-      Byebug.set_debugged_program
-
-      Byebug.start
+      Byebug.start_debugger
 
       loop do
         debug_program

@@ -67,8 +67,14 @@ module Byebug
     processor.process_commands
   end
 
-  def set_debugged_program
+  #
+  # Finds the correct script to debug from command line arguments and starts
+  # the debugger
+  #
+  def start_debugger
     @debugged_program = program_from_args
+
+    start
   end
 
   #
