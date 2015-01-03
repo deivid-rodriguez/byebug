@@ -97,12 +97,16 @@ check_threads_table(void)
   st_foreach(t_tbl->tbl, check_thread_i, 0);
 }
 
+/*
+ * Looks up a context in the threads table. If not present, it creates it.
+ */
 void
 thread_context_lookup(VALUE thread, VALUE * context)
 {
   threads_table_t *t_tbl;
 
   Data_Get_Struct(threads, threads_table_t, t_tbl);
+
   if (!st_lookup(t_tbl->tbl, thread, context) || !*context)
   {
     *context = context_create(thread);
