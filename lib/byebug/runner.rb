@@ -11,6 +11,11 @@ module Byebug
     IGNORED_FILES << BYEBUG_SCRIPT
 
     #
+    # Special working modes that don't actually start the debugger.
+    #
+    attr_accessor :help, :version, :remote
+
+    #
     # @param stop [Boolean] Whether the runner should stop right before
     # starting the program.
     #
@@ -52,6 +57,21 @@ module Byebug
     #
     def run
       prepare_options.order!(ARGV)
+
+      if version
+        Byebug.puts("\n  Running byebug #{version}\n")
+        return
+      end
+
+      if help
+        Byebug.puts(help)
+        return
+      end
+
+      if remote
+        Byebug.start_client(*remote)
+        return
+      end
 
       Byebug.start_debugger
 
@@ -98,9 +118,7 @@ module Byebug
         end
 
         opts.on '-R', '--remote [HOST:]PORT', 'remote debug [host:]port' do |p|
-          @host, @port = Byebug.parse_host_and_port(p)
-          Byebug.start_client(@host, @port)
-          exit(0)
+          self.remote = Byebug.parse_host_and_port(p)
         end
 
         opts.on '-t', '--[no-]trace', 'Turn on line tracing' do |v|
@@ -108,23 +126,13 @@ module Byebug
         end
 
         opts.on '-v', '--version', 'Print program version' do
-          exit_with_info("\n  Running byebug #{VERSION}\n")
+          self.version = VERSION
         end
 
-        opts.on '-h', '--help', 'Display this message' do
-          exit_with_info(opts.help)
+        opts.on('-h', '--help', 'Display this message') do
+          self.help = opts.help
         end
       end
-    end
-
-    private
-
-    #
-    # Prints a message and exits Byebug
-    #
-    def exit_with_info(msg)
-      Byebug.puts(msg)
-      exit(0)
     end
   end
 end

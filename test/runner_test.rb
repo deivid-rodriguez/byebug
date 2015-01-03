@@ -10,7 +10,7 @@ module Byebug
 
     def test_run_with_version_flag
       with_command_line('bin/byebug', '--version') do
-        assert_raises(SystemExit) { @runner.run }
+        @runner.run
 
         check_output_includes(/#{Byebug::VERSION}/)
       end
@@ -18,7 +18,7 @@ module Byebug
 
     def test_run_with_help_flag
       with_command_line('bin/byebug', '--help') do
-        assert_raises(SystemExit) { @runner.run }
+        @runner.run
 
         check_output_includes(
           /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/)
@@ -28,14 +28,14 @@ module Byebug
     def test_run_with_remote_option_only_with_a_port_number
       with_command_line('bin/byebug', '--remote', '9999') do
         Byebug.expects(:start_client)
-        assert_raises(SystemExit) { @runner.run }
+        @runner.run
       end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
       with_command_line('bin/byebug', '--remote', 'myhost:9999') do
         Byebug.expects(:start_client)
-        assert_raises(SystemExit) { @runner.run }
+        @runner.run
       end
     end
 
