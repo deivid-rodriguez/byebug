@@ -41,17 +41,13 @@ module Byebug
 
     def test_run_without_a_script_to_debug
       with_command_line('bin/byebug') do
-        assert_raises(SystemExit) { @runner.run }
-
-        check_error_includes(/You must specify a program to debug.../)
+        assert_raises(NoScript) { @runner.run }
       end
     end
 
     def test_run_with_an_nonexistent_script
       with_command_line('bin/byebug', 'non_existent_script.rb') do
-        assert_raises(SystemExit) { @runner.run }
-
-        check_error_includes("The script doesn't exist")
+        assert_raises(NonExistentScript) { @runner.run }
       end
     end
 

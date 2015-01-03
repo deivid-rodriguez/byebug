@@ -11,6 +11,12 @@ require 'byebug/printers/plain'
 module Byebug
   extend self
 
+  class NoScript < StandardError
+  end
+
+  class NonExistentScript < StandardError
+  end
+
   #
   # List of files byebug will ignore while debugging
   #
@@ -83,13 +89,13 @@ module Byebug
   def program_from_args
     return $PROGRAM_NAME unless $PROGRAM_NAME.include?('bin/byebug')
 
-    abort_with_err('You must specify a program to debug...') if ARGV.empty?
+    fail(NoScript, 'You must specify a program to debug...') if ARGV.empty?
 
     argv = ARGV.dup
 
     program = which(argv.shift)
     program = which(argv.shift) if program == which('ruby')
-    abort_with_err("The script doesn't exist") unless program
+    fail(NonExistentScript, "The script doesn't exist") unless program
 
     program
   end
@@ -112,14 +118,6 @@ module Byebug
     end
 
     nil
-  end
-
-  #
-  # Prints an error message and aborts Byebug execution
-  #
-  def abort_with_err(msg)
-    Byebug.errmsg(msg)
-    abort
   end
 end
 
