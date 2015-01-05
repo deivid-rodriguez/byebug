@@ -583,7 +583,7 @@ Context_set_tracing(VALUE self, VALUE value)
 
 /* :nodoc: */
 static VALUE
-DebugThread_inherited(VALUE klass)
+dt_inherited(VALUE klass)
 {
   rb_raise(rb_eRuntimeError, "Can't inherit Byebug::DebugThread class");
 
@@ -624,6 +624,5 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
 
   cDebugThread = rb_define_class_under(mByebug, "DebugThread", rb_cThread);
-  rb_define_singleton_method(cDebugThread, "inherited", DebugThread_inherited,
-                             1);
+  rb_define_singleton_method(cDebugThread, "inherited", dt_inherited, 1);
 }
