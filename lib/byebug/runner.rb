@@ -7,9 +7,6 @@ module Byebug
   # Responsible for starting the debugger when started from the command line.
   #
   class Runner
-    BYEBUG_SCRIPT = File.expand_path('../../../../bin/byebug')
-    IGNORED_FILES << BYEBUG_SCRIPT
-
     #
     # Special working modes that don't actually start the debugger.
     #
@@ -42,13 +39,13 @@ module Byebug
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      output = `ruby -c "#{Byebug.debugged_program}" 2>&1`
+      output = `ruby -c "#{$PROGRAM_NAME}" 2>&1`
       if $CHILD_STATUS.exitstatus != 0
         Byebug.puts output
         exit $CHILD_STATUS.exitstatus
       end
 
-      status = Byebug.debug_load(Byebug.debugged_program, @stop)
+      status = Byebug.debug_load($PROGRAM_NAME, @stop)
       Byebug.puts "#{status}\n#{status.backtrace}" if status
     end
 
@@ -73,7 +70,7 @@ module Byebug
         return
       end
 
-      Byebug.start_debugger
+      Byebug.setup_cmd_line_args
 
       loop do
         debug_program

@@ -45,7 +45,13 @@ module Byebug
   attr_accessor :printer
   self.printer = Printers::Plain.new
 
-  attr_reader :debugged_program
+  #
+  # Running mode of the debugger. Can be either:
+  #
+  # * :attached => Attached to a running program through the `byebug` method.
+  # * :standalone => Started through `bin/byebug` script.
+  #
+  attr_accessor :mode
 
   #
   # Runs normal byebug initialization scripts.
@@ -74,30 +80,24 @@ module Byebug
   end
 
   #
-  # Finds the correct script to debug from command line arguments and starts
-  # the debugger
-  #
-  def start_debugger
-    @debugged_program = program_from_args
-
-    start
-  end
-
-  #
   # Extracts debugged program from command line args
   #
-  def program_from_args
-    return $PROGRAM_NAME unless $PROGRAM_NAME.include?('bin/byebug')
+  def setup_cmd_line_args
+    unless $PROGRAM_NAME.include?('bin/byebug')
+      self.mode = :attached
+      return
+    end
 
-    fail(NoScript, 'You must specify a program to debug...') if ARGV.empty?
+    self.mode = :standalone
+    IGNORED_FILES << Gem.bin_path('byebug', 'byebug')
 
-    argv = ARGV.dup
+    fail(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
 
-    program = which(argv.shift)
-    program = which(argv.shift) if program == which('ruby')
+    program = which($ARGV.shift)
+    program = which($ARGV.shift) if program == which('ruby')
     fail(NonExistentScript, "The script doesn't exist") unless program
 
-    program
+    $PROGRAM_NAME = program
   end
 
   private

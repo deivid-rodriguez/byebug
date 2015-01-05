@@ -667,8 +667,6 @@ bb_load(int argc, VALUE * argv, VALUE self)
   if (RTEST(stop))
     dc->steps = 1;
 
-  /* Initializing $0 to the script's path */
-  ruby_script(RSTRING_PTR(file));
   rb_load_protect(file, 0, &state);
   if (0 != state)
   {

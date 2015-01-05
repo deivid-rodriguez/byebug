@@ -11,23 +11,23 @@ module Byebug
       EOC
     end
 
-    def test_restarts_without_arguments_uses_original_arguments
-      with_command_line(example_path, '1', '2') do
-        RestartCommand.any_instance.expects(:exec).with("#{example_path} 1 2")
+    def test_restart_without_arguments_uses_original_arguments
+      with_command_line(example_path, '1') do
+        RestartCommand.any_instance.expects(:exec).with("#{example_path} 1")
 
-        enter 'restart 1 2'
+        enter 'restart'
         debug_code(program)
-        check_output_includes "Re exec'ing:", "\t#{example_path} 1 2"
+        check_output_includes "Re exec'ing:", "\t#{example_path} 1"
       end
     end
 
-    def test_restarts_with_arguments_uses_passed_arguments
-      with_command_line(example_path, '1', '2') do
-        RestartCommand.any_instance.expects(:exec).with("#{example_path} 3 4")
+    def test_restart_with_arguments_uses_passed_arguments
+      with_command_line(example_path, '1') do
+        RestartCommand.any_instance.expects(:exec).with("#{example_path} 2")
 
-        enter 'restart 3 4'
+        enter 'restart 2'
         debug_code(program)
-        check_output_includes "Re exec'ing:", "\t#{example_path} 3 4"
+        check_output_includes "Re exec'ing:", "\t#{example_path} 2"
       end
     end
   end

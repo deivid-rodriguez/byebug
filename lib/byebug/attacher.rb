@@ -7,8 +7,11 @@ module Byebug
   # events occur. Before entering byebug the init script is read.
   #
   def self.attach(steps_out, before)
-    start_debugger
+    setup_cmd_line_args
+
+    start
     run_init_script
+
     current_context.step_out(steps_out, before)
   end
 end

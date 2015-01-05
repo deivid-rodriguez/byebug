@@ -62,7 +62,7 @@ module Byebug
       with_command_line('bin/byebug', example_path) do
         @runner.run
 
-        assert_equal Byebug.debugged_program, example_path
+        assert_equal $PROGRAM_NAME, example_path
       end
     end
 
@@ -72,7 +72,7 @@ module Byebug
       with_command_line('bin/byebug', '--', example_path, '-opt', 'value') do
         @runner.run
 
-        assert_equal [example_path, '-opt', 'value'], ARGV
+        assert_equal ['-opt', 'value'], $ARGV
       end
     end
 
@@ -82,7 +82,7 @@ module Byebug
       with_command_line('bin/byebug', '--', 'ruby', example_path) do
         @runner.run
 
-        assert_equal Byebug.debugged_program, example_path
+        assert_equal example_path, $PROGRAM_NAME
       end
     end
 

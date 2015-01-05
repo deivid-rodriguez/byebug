@@ -10,20 +10,21 @@ module Byebug
     end
 
     def execute
-      cmd = Byebug.debugged_program
+      if Byebug.mode == :standalone
+        cmd = "#{Gem.bin_path('byebug', 'byebug')} #{$PROGRAM_NAME}"
+      else
+        cmd = $PROGRAM_NAME
+      end
 
       if @match[:args]
         cmd += " #{@match[:args]}"
       else
         require 'shellwords'
-        cmd += " #{ARGV.compact.shelljoin}"
+        cmd += " #{$ARGV.compact.shelljoin}"
       end
 
-      # An execv would be preferable to the "exec" below.
       puts pr('restart.success', cmd: cmd)
-      exec cmd
-    rescue Errno::EOPNOTSUPP
-      puts pr('restart.errors.not_available')
+      exec(cmd)
     end
 
     class << self
