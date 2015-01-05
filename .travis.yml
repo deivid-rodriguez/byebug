@@ -18,9 +18,9 @@ rvm:
 - 2.2.0
 - ruby-head
 
-compiler:
-- clang
-- gcc
+env:
+- CC=gcc
+- CC=clang
 
 matrix:
   allow_failures:
