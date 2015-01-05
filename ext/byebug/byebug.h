@@ -4,6 +4,9 @@
 #include <ruby.h>
 #include <ruby/debug.h>
 
+/* To prevent unused parameter warnings */
+#define UNUSED(x) (void)(x)
+
 /* flags */
 #define CTX_FL_DEAD         (1<<1) /* this context belonged to a dead thread */
 #define CTX_FL_IGNORE       (1<<2) /* this context belongs to ignored thread */

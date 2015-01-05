@@ -18,6 +18,10 @@ rvm:
 - 2.2.0
 - ruby-head
 
+compiler:
+- clang
+- gcc
+
 matrix:
   allow_failures:
   - rvm: ruby-head

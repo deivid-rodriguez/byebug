@@ -8,6 +8,8 @@ t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
   VALUE thread = (VALUE) key;
 
+  UNUSED(tbl);
+
   rb_gc_mark(thread);
 
   if (!value)
@@ -57,8 +59,10 @@ create_threads_table(void)
  *  thread, the entry is removed from the thread's list.
  */
 static int
-check_thread_i(st_data_t key, st_data_t value, st_data_t dummy)
+check_thread_i(st_data_t key, st_data_t value, st_data_t data)
 {
+  UNUSED(data);
+
   if (!value)
     return ST_DELETE;
 
@@ -123,7 +127,7 @@ thread_context_lookup(VALUE thread, VALUE * context)
 void
 halt_while_other_thread_is_active(debug_context_t * dc)
 {
-  while (locker != Qnil && locker != rb_thread_current()
+  while ((locker != Qnil && locker != rb_thread_current())
          || CTX_FL_TEST(dc, CTX_FL_SUSPEND))
   {
     add_to_locked(rb_thread_current());

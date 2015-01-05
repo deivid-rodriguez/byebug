@@ -29,6 +29,8 @@ VALUE threads = Qnil;
 static VALUE
 bb_breakpoints(VALUE self)
 {
+  UNUSED(self);
+
   if (NIL_P(breakpoints))
     breakpoints = rb_ary_new();
 
@@ -44,6 +46,8 @@ bb_breakpoints(VALUE self)
 static VALUE
 bb_catchpoints(VALUE self)
 {
+  UNUSED(self);
+
   return catchpoints;
 }
 
@@ -56,6 +60,8 @@ bb_catchpoints(VALUE self)
 static VALUE
 bb_raised_exception(VALUE self)
 {
+  UNUSED(self);
+
   return raised_exception;
 }
 
@@ -142,10 +148,13 @@ cleanup(debug_context_t * dc)
 }
 
 #define EVENT_SETUP                                                     \
-  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   debug_context_t *dc;                                                  \
   VALUE context;                                                        \
+  rb_trace_arg_t *trace_arg;                                            \
                                                                         \
+  UNUSED(data);                                                         \
+                                                                        \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point);                 \
   if (!is_living_thread(rb_thread_current()))                           \
     return;                                                             \
                                                                         \
@@ -450,6 +459,8 @@ register_tracepoints(VALUE self)
   int i;
   VALUE traces = tracepoints;
 
+  UNUSED(self);
+
   if (NIL_P(traces))
   {
     int line_msk = RUBY_EVENT_LINE;
@@ -500,6 +511,8 @@ clear_tracepoints(VALUE self)
 {
   int i;
 
+  UNUSED(self);
+
   for (i = RARRAY_LENINT(tracepoints) - 1; i >= 0; i--)
     rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
 }
@@ -522,6 +535,8 @@ bb_contexts(VALUE self)
   threads_table_t *t_tbl;
   debug_context_t *dc;
   int i;
+
+  UNUSED(self);
 
   check_started();
 
@@ -560,6 +575,8 @@ bb_thread_context(VALUE self, VALUE thread)
 {
   VALUE context;
 
+  UNUSED(self);
+
   check_started();
 
   thread_context_lookup(thread, &context);
@@ -579,6 +596,8 @@ bb_current_context(VALUE self)
 {
   VALUE context;
 
+  UNUSED(self);
+
   check_started();
 
   thread_context_lookup(rb_thread_current(), &context);
@@ -595,6 +614,8 @@ bb_current_context(VALUE self)
 static VALUE
 bb_started(VALUE self)
 {
+  UNUSED(self);
+
   return IS_STARTED;
 }
 
@@ -608,6 +629,8 @@ bb_started(VALUE self)
 static VALUE
 bb_stop(VALUE self)
 {
+  UNUSED(self);
+
   if (IS_STARTED)
   {
     clear_tracepoints(self);
@@ -640,6 +663,8 @@ bb_start(VALUE self)
 {
   VALUE result;
 
+  UNUSED(self);
+
   if (IS_STARTED)
     result = Qfalse;
   else
@@ -671,6 +696,8 @@ bb_load(int argc, VALUE * argv, VALUE self)
   debug_context_t *dc;
   VALUE status = Qnil;
   int state = 0;
+
+  UNUSED(self);
 
   if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
   {
@@ -708,6 +735,8 @@ bb_load(int argc, VALUE * argv, VALUE self)
 static VALUE
 bb_verbose(VALUE self)
 {
+  UNUSED(self);
+
   return verbose;
 }
 
@@ -721,6 +750,8 @@ bb_verbose(VALUE self)
 static VALUE
 bb_set_verbose(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   verbose = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -734,6 +765,8 @@ bb_set_verbose(VALUE self, VALUE value)
 static VALUE
 bb_tracing(VALUE self)
 {
+  UNUSED(self);
+
   return tracing;
 }
 
@@ -746,6 +779,8 @@ bb_tracing(VALUE self)
 static VALUE
 bb_set_tracing(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   tracing = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -759,6 +794,8 @@ bb_set_tracing(VALUE self, VALUE value)
 static VALUE
 bb_post_mortem(VALUE self)
 {
+  UNUSED(self);
+
   return post_mortem;
 }
 
@@ -771,6 +808,8 @@ bb_post_mortem(VALUE self)
 static VALUE
 bb_set_post_mortem(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   post_mortem = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -784,6 +823,8 @@ bb_set_post_mortem(VALUE self, VALUE value)
 static VALUE
 bb_add_catchpoint(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   if (TYPE(value) != T_STRING)
     rb_raise(rb_eTypeError, "value of a catchpoint must be String");
 
