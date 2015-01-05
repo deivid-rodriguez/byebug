@@ -6,9 +6,9 @@ static VALUE cThreadsTable;
 static int
 t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
-  VALUE thread = (VALUE) key;
-
   UNUSED(tbl);
+
+  rb_gc_mark((VALUE) key);
 
   rb_gc_mark(thread);
 
