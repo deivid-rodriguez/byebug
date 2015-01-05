@@ -56,7 +56,7 @@ module Byebug
     end
 
     def at_tracing(file, line)
-      handler.at_tracing(self, file, line)
+      handler.at_tracing(self, file, line) unless IGNORED_FILES.include?(file)
     end
 
     def at_line(file, line)
