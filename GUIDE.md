@@ -22,7 +22,7 @@ puts t
 
 Let's debug it.
 
-```
+```bash
 $ byebug triangle.rb
 
 [1, 10] in /path/to/triangle.rb
@@ -58,7 +58,7 @@ accordingly so that only actual real lines of code are displayed.
 
 Now let us step through the program.
 
-```
+```bash
 (byebug) step
 
 [5, 14] in /path/to/triangle.rb
@@ -114,7 +114,7 @@ previously. However after issuing another `step` command we see that the value
 is 0 as expected. If every time we stop we want to see the value of `tri` to see
 how things are going, there is a better way by setting a display expression:
 
-```
+```bash
 (byebug) display tri
 1: tri = 0
 ```
@@ -123,7 +123,7 @@ Now let us run the program until right before we return from the function. We'll
 want to see which lines get run, so we turn on _line tracing_. If we don't want
 whole paths to be displayed when tracing, we can turn on _basename_.
 
-```
+```bash
 (byebug) set linetrace
 linetrace is on
 (byebug) set basename
@@ -170,7 +170,7 @@ Below we will debug a simple Ruby program to solve the classic Towers of Hanoi
 puzzle. It is augmented by the bane of programming: some command-parameter
 processing with error checking.
 
-```
+```ruby
 #
 # Solves the classic Towers of Hanoi puzzle.
 #
@@ -453,28 +453,27 @@ conditionally run this line if that file is invoked directly, but skip it if it
 is not. _NOTE: `byebug` resets `$0` to try to make things like this work._
 
 ```ruby
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   t = triangle(3)
   puts t
 end
 ```
 
-Okay, we're now ready to write our unit test. We'll use `minitest` which comes
-with the standard Ruby distribution.  Here's the test code; it should be in the
-same directory as `triangle.rb`.
+Okay, we're now ready to write our unit test and we'll use the `minitest`
+framework for that. Here's the test code, it should be placed in the same
+directory as `triangle.rb`.
 
 ```ruby
 require 'minitest/autorun'
 require_relative 'triangle.rb'
 
-class TestTri < Minitest::Unit::TestCase
+class TestTriangle < Minitest::Test
   def test_basic
     solutions = []
-    0.upto(5) do |i|
-      solutions << triangle(i)
-    end
-    assert_equal([0, 1, 3, 6, 10, 15], solutions,
-                 'Testing the first 5 triangle numbers')
+
+    0.upto(5) { |i| solutions << triangle(i) }
+
+    assert_equal([0, 1, 3, 6, 10, 15], solutions, 'First 5 triangle numbers')
   end
 end
 ```
@@ -493,22 +492,23 @@ def test_basic
 Now we run the program, requiring `byebug`
 
 ```bash
-$ ruby -rbyebug test-triangle.rb
-Run options: --seed 13073
+$ ruby -rbyebug test_triangle.rb
+Run options: --seed 31679
 
-# Running tests:
+# Running:
 
-[2, 11] in test-triangle.rb
+
+[2, 11] in test_triangle.rb
     2: require_relative 'triangle.rb'
     3: 
-    4: class TestTri < Minitest::Unit::TestCase
+    4: class TestTriangle < Minitest::Test
     5:   def test_basic
     6:     byebug
 =>  7:     solutions = []
-    8:     0.upto(5) do |i|
-    9:       solutions << triangle(i)
-   10:     end
-   11:     assert_equal([0, 1, 3, 6, 10, 15], solutions,
+    8:
+    9:     0.upto(5) { |i| solutions << triangle(i) }
+   10:
+   11:     assert_equal([0, 1, 3, 6, 10, 15], solutions, 'First 5 triangle numbers')
 (byebug)
 ```
 
@@ -521,79 +521,32 @@ Now let's see where we are...
 (byebug) set nofullpath
 Displaying frame's full file names is off.
 (byebug) bt
---> #0  TestTri.test_basic at test-triangle.rb:7
-    #1  Minitest::Unit::TestCase.run(runner#Minitest::Unit) at .../2.0.0/minitest/unit.rb:1301
-    #2  Minitest::Unit.block in _run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:919
-     +-- #3  Array.map at .../2.0.0/minitest/unit.rb:912
-    #4  Minitest::Unit._run_suite(suite#Class, type#Symbol) at .../2.0.0/minitest/unit.rb:912
-    #5  Minitest::Unit.block in _run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
-     +-- #6  Array.map at .../2.0.0/minitest/unit.rb:899
-    #7  Minitest::Unit._run_suites(suites#Array, type#Symbol) at .../2.0.0/minitest/unit.rb:899
-    #8  Minitest::Unit._run_anything(type#Symbol) at .../2.0.0/minitest/unit.rb:867
-    #9  Minitest::Unit.run_tests at .../2.0.0/minitest/unit.rb:1060
-    #10 Minitest::Unit.block in _run(args#Array) at .../2.0.0/minitest/unit.rb:1047
-     +-- #11 Array.each at .../2.0.0/minitest/unit.rb:1046
-    #12 Minitest::Unit._run(args#Array) at .../2.0.0/minitest/unit.rb:1046
-    #13 Minitest::Unit.run(args#Array) at .../2.0.0/minitest/unit.rb:1035
-    #14 #<Class:Minitest::Unit>.block in autorun at .../2.0.0/minitest/unit.rb:789
+--> #0  TestTriangle.test_basic at .../Proyectos/byebug/test_triangle.rb:7
+    #1  block (3 levels) in Minitest::Test.run at .../lib/minitest/test.rb:108
+    #2  Minitest::Test.capture_exceptions at .../lib/minitest/test.rb:206
+    #3  block (2 levels) in Minitest::Test.run at .../lib/minitest/test.rb:105
+    #4  Minitest::Test.time_it at .../lib/minitest/test.rb:258
+    #5  block in Minitest::Test.run at .../lib/minitest/test.rb:104
+    #6  #<Class:Minitest::Runnable>.on_signal(name#String, action#Proc) at .../minitest-5.5.0/lib/minitest.rb:321
+    #7  Minitest::Test.with_info_handler(&block#Proc) at .../lib/minitest/test.rb:278
+    #8  Minitest::Test.run at .../lib/minitest/test.rb:103
+    #9  #<Class:Minitest>.run_one_method(klass#Class, method_name#String) at .../minitest-5.5.0/lib/minitest.rb:768
+    #10 #<Class:Minitest::Runnable>.run_one_method(klass#Class, method_name#String, reporter#Minitest::CompositeReporter) at .../minitest-5.5.0/lib/minitest.rb:295
+    #11 block (2 levels) in #<Class:Minitest::Runnable>.run(reporter#Minitest::CompositeReporter, options#Hash) at .../minitest-5.5.0/lib/minitest.rb:289
+    ͱ-- #12 Array.each at .../minitest-5.5.0/lib/minitest.rb:288
+    #13 block in #<Class:Minitest::Runnable>.run(reporter#Minitest::CompositeReporter, options#Hash) at .../minitest-5.5.0/lib/minitest.rb:288
+    #14 #<Class:Minitest::Runnable>.on_signal(name#String, action#Proc) at .../minitest-5.5.0/lib/minitest.rb:321
+    #15 #<Class:Minitest::Runnable>.with_info_handler(reporter#Minitest::CompositeReporter, &block#Proc) at .../minitest-5.5.0/lib/minitest.rb:308
+    #16 #<Class:Minitest::Runnable>.run(reporter#Minitest::CompositeReporter, options#Hash) at .../minitest-5.5.0/lib/minitest.rb:287
+    #17 block in #<Class:Minitest>.__run(reporter#Minitest::CompositeReporter, options#Hash) at .../minitest-5.5.0/lib/minitest.rb:150
+    ͱ-- #18 Array.map at .../minitest-5.5.0/lib/minitest.rb:150
+    #19 #<Class:Minitest>.__run(reporter#Minitest::CompositeReporter, options#Hash) at .../minitest-5.5.0/lib/minitest.rb:150
+    #20 #<Class:Minitest>.run(args#Array) at .../minitest-5.5.0/lib/minitest.rb:127
+    #21 block in #<Class:Minitest>.autorun at .../minitest-5.5.0/lib/minitest.rb:56
 (byebug)
 ```
 
-We get the same result as if we had run byebug from the outset, just faster!
-
-__NOTICE: In ruby-debug, debugger and older versions of byebug, this would not
-work as expected. If you are having issues, please upgrade to byebug >= 1.5.0__
-
-
-### Byebug.start with a block
-
-We saw that `Byebug.start()` and `Byebug.stop()` allow fine-grain control over
-where byebug tracking should occur.
-
-Rather than use an explicit `stop()`, you can also pass a block to the `start()`
-method. This causes `start()` to run and then `yield` to that block. When the
-block is finished, `stop()` is run. In other words, this wraps a
-`Byebug.start()` and `Byebug.stop()` around the block of code. But it also has a
-side benefit of ensuring that in the presence of an uncaught exception `stop` is
-run, without having to explicitly use `begin ... ensure Byebug.stop() end`.
-
-For example, in Ruby on Rails you might want to debug code in one of the
-controllers without causing any slowdown to any other code. And this can be done
-by wrapping the controller in a `start()` with a block; when the method wrapped
-this way finishes, byebug is turned off and the application proceeds at regular
-speed.
-
-Of course, inside the block you will probably want to enter the byebug using
-`Byebug.byebug`, otherwise there would be little point in using the `start`.
-For example, you can do this in `irb`:
-
-```bash
-$ irb
-2.0.0p195 :001 > require 'byebug'
- => true
-2.0.0p195 :002 > def foo
-2.0.0p195 :003?>   x=1
-2.0.0p195 :004?>   puts 'foo'
-2.0.0p195 :005?>   end
- => nil
-2.0.0p195 :006 > Byebug.start{byebug; foo}
-(irb) @ 6
-(byebug) s
-(irb) @ 3
-(byebug) s
-(irb) @ 4
-(byebug) p x
-1
-(byebug) s
-foo
- => true
-2.0.0p195 :007 >
-```
-
-There is a counter inside of `Byebug.start` method to make sure that this works
-when another `Byebug.start` method is called inside of the outer one. However,
-if you are stopped inside byebug, issuing another `byebug` call will not have
-any effect even if it is nested inside another `Byebug.start`.
+We get the same result as if we had run byebug from the outset.
 
 
 ### Debugging Oddities: How debugging Ruby may be different from other languages
@@ -604,7 +557,7 @@ seem or feel a little bit different and may confuse you. A number of these
 things aren't oddities of the debugger per se but differences in how Ruby works
 compared to those other languages. Because Ruby works a little differently from
 those other languages, writing a debugger has to also be a little different as
-well if it is to be useful. In this respect, using byebug may help you
+well if it is to be useful. In this respect, using Byebug may help you
 understand Ruby better.
 
 We've already seen one such difference: the fact that we stop on method
@@ -724,16 +677,10 @@ object can change.
 
 So at present, the name of the parameter is shown. The call-style setting
 ([callstyle]()) can be used to set whether the name is shown or the name and the
-_current_ class of the object. It has been contemplated that a style might be
-added which saves on call shorter "scalar" types of values and the class name.
+_current_ class of the object.
 
 
 #### Lines You Can Stop At
-
-As with the duplicate stops per control (e.g. `if` statement), until tools like
-debuggers get more traction among core ruby developers there are going to be
-weirdness. Here we describe the stopping locations which effects the breakpoint
-line numbers you can stop at.
 
 Consider the following little Ruby program.
 
@@ -752,10 +699,10 @@ Inside `byebug` you can get a list of stoppable lines for a file using the `info
 file` command with the attribute `breakpoints`.
 
 To be continued...
-* more complex example with objects, pretty printing and irb.
-* line tracing and non-interactive tracing.
-* mixing in Byebug.debug with byebug
-* post-mortem debugging and setting up for that
+* Threading Support.
+* More complex examples with objects, pretty printing and irb.
+* Line tracing and non-interactive tracing.
+* Post-mortem debugging.
 
 
 ## Getting in & out
