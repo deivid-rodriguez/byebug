@@ -70,10 +70,6 @@ quit:
   confirmations:
     really: "Really quit?"
 
-restart:
-  errors:
-    not_available: "Restart command is not available at this time"
-
 save:
   messages:
     done: "Saved to '{path}'"
