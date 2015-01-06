@@ -47,26 +47,6 @@ module Byebug
       EOC
     end
 
-    def basic
-      lines = File.foreach(example_path)
-      "File #{example_path} (#{lines.count} lines)"
-    end
-
-    def mtime
-      File.stat(example_path).mtime.to_s
-    end
-
-    def sha1
-      Digest::SHA1.hexdigest(example_path)
-    end
-
-    def breakpoint_numbers
-      width, path = Byebug::Setting[:width], example_path
-      columnize(Breakpoint.potential_lines(path).sort, width).split("\n")
-    end
-
-    include Columnize
-
     def test_info_about_all_args
       enter 'break 12', 'cont', 'info args'
       debug_code(program)
@@ -122,62 +102,93 @@ module Byebug
       check_output_includes 'There are no auto-display expressions now.'
     end
 
-    def test_info_file_without_args_shows_basic_info_about_current_file
+    def test_info_file_shows_basic_info_about_current_file
       enter 'info file'
-      debug_code(program) do
-        check_output_includes basic
-        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
+
+      debug_code(program)
+      check_output_includes "File #{example_path} (39 lines)"
+    end
+
+    def with_dummy_script
+      Tempfile.create('dummy_script') do |file|
+        file.write('sleep 0')
+        file.close
+
+        yield(file.path)
       end
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
-      enter "info file #{example_path}"
-      debug_code(program) do
-        check_output_includes basic
-        check_output_doesnt_include(*breakpoint_numbers, mtime, sha1)
+      with_dummy_script do |script_name|
+        enter "info file #{script_name}"
+        debug_code(program)
+
+        check_output_includes "File #{script_name} (1 line)"
       end
     end
 
-    def test_info_file_mtime_shows_mtime_of_a_specific_file
-      enter "info file #{example_path} mtime"
-      debug_code(program) do
-        check_output_includes basic, mtime
-        check_output_doesnt_include(*breakpoint_numbers, sha1)
-      end
-    end
-
-    def test_info_file_sha1_shows_sha1_signature_of_a_specific_file
-      enter "info file #{example_path} sha1"
-      debug_code(program) do
-        check_output_includes basic, sha1
-        check_output_doesnt_include(*breakpoint_numbers, mtime)
-      end
-    end
-
-    def test_info_file_breakpoints_shows_breakpoints_in_a_specific_file
-      enter 'break 37', 'break 38',
-            "info file #{example_path} breakpoints"
-      debug_code(program) do
-        check_output_includes(
-          /Created breakpoint \d+ at #{example_path}:37/,
-          /Created breakpoint \d+ at #{example_path}:38/,
-          basic,
-          'breakpoint line numbers:', *breakpoint_numbers)
-        check_output_doesnt_include mtime, sha1
-      end
-    end
-
-    def test_info_file_all_shows_all_available_info_about_a_specific_file
-      enter "info file #{example_path} all"
-      debug_code(program) do
-        check_output_includes basic, *breakpoint_numbers, mtime, sha1
-      end
-    end
-
-    def test_info_file_does_not_show_any_info_if_parameter_is_invalid
-      enter "info file #{example_path} blabla"
+    def test_info_file_shows_mtime_of_current_file
+      enter 'info file'
       debug_code(program)
-      check_error_includes 'Invalid parameter blabla'
+
+      check_output_includes \
+        "Modification time: #{File.stat(example_path).mtime}"
+    end
+
+    def test_info_file_w_filename_shows_mtime_of_filename
+      with_dummy_script do |script_name|
+        enter "info file #{script_name}"
+        debug_code(program)
+
+        check_output_includes \
+          "Modification time: #{File.stat(script_name).mtime}"
+      end
+    end
+
+    def test_info_file_shows_sha1_signature_of_current_file
+      enter 'info file'
+      debug_code(program)
+
+      check_output_includes \
+        "Sha1 Signature: #{Digest::SHA1.hexdigest(example_path)}"
+    end
+
+    def test_info_file_w_filename_shows_sha1_signature_of_filename
+      with_dummy_script do |script_name|
+        enter "info file #{script_name}"
+        debug_code(program)
+
+        check_output_includes \
+          "Sha1 Signature: #{Digest::SHA1.hexdigest(script_name)}"
+      end
+    end
+
+    def test_info_file_shows_potential_breakpoint_lines_in_current_file
+      enter 'info file'
+      debug_code(program)
+
+      potential_lines = [1, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20,
+                         22, 23, 24, 25, 26, 28, 29, 31, 32, 34, 35, 36, 37, 38,
+                         39]
+
+      check_output_includes \
+        'Breakpoint line numbers:', *potential_lines.columnize.split("\n")
+    end
+
+    def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename
+      with_dummy_script do |script_name|
+        enter "info file #{script_name}"
+        debug_code(program)
+
+        check_output_includes 'Breakpoint line numbers:', '1'
+      end
+    end
+
+    def test_info_file_does_not_show_any_info_if_filename_is_invalid
+      enter 'info file blabla'
+      debug_code(program)
+
+      check_error_includes 'blabla is not a valid source file'
     end
 
     def test_info_line_shows_info_about_the_current_line
