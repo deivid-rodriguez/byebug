@@ -73,24 +73,24 @@ module Byebug
       path = File.expand_path(file)
       return unless File.exist?(path)
 
-      puts "File #{path} (#{n_lines(path)} lines)"
+      s = n_lines(path) == 1 ? '' : 's'
+      "#{path} (#{n_lines(path)} line#{s})"
     end
 
     def info_file_breakpoints(file)
       breakpoints = Breakpoint.potential_lines(file)
       return unless breakpoints
 
-      puts "\tbreakpoint line numbers:"
-      puts columnize(breakpoints.to_a.sort, Setting[:width])
+      breakpoints.to_a.sort.columnize(line_prefix: '  ',
+                                      displaywidth: Setting[:width])
     end
 
     def info_file_mtime(file)
-      stat = File.stat(file)
-      puts "\t#{stat.mtime}" if stat
+      File.stat(file).mtime
     end
 
     def info_file_sha1(file)
-      puts "\t#{Digest::SHA1.hexdigest(file)}"
+      Digest::SHA1.hexdigest(file)
     end
 
     def info_line(*_args)
@@ -135,9 +135,8 @@ module Byebug
       ['catch', 3, 'Exceptions that can be caught in the current stack frame'],
       ['display', 2, 'Expressions to display when program stops'],
       ['file', 4, 'Info about a particular file read in',
-       'After the file name is supplied, you can list file attributes that ' \
-       'you wish to see. Attributes are: "all", "breakpoint", "mtime" and ' \
-       'A header show file path and number of lines is always displayed.'],
+       'File name, number of lines, possible breakpoints in the file, last ' \
+       'modification time and sha1 digest are listed.'],
       ['line', 2, 'Line number and file name of current position in source ' \
                   'file.'],
       ['program', 2, 'Execution status of the program']
@@ -145,30 +144,24 @@ module Byebug
       Subcmd.new(name, min, help)
     end unless defined?(Subcommands)
 
-    InfoFileSubcommands = [
-      ['all', 1, 'All information available - breakpoints, mtime and sha1'],
-      ['breakpoints', 1, 'Show possible stopping points in the file'],
-      ['mtime', 1, 'Show modification time of file'],
-      ['sha1', 1, 'Show SHA1 hash of contents of the file']
-    ].map do |name, min, help|
-      Subcmd.new(name, min, help)
-    end unless defined?(InfoFileSubcommands)
-
     def info_file(*args)
       file = args[0] || @state.file
-      return "Don't know which file you want info about\n" unless file
+      unless File.exist?(file)
+        return errmsg(pr('info.errors.undefined_file', file: file))
+      end
 
-      info_file_basic(file)
-      return unless args[1]
+      puts <<-EOC.gsub(/^ {6}/, '')
 
-      subcmd = Command.find(InfoFileSubcommands, args[1])
-      return errmsg("Invalid parameter #{args[1]}\n") unless subcmd
+        File #{info_file_basic(file)}
 
-      return send("info_file_#{subcmd.name}", file) unless subcmd.name == 'all'
+        Breakpoint line numbers:
+        #{info_file_breakpoints(file)}
 
-      info_file_breakpoints(file)
-      info_file_mtime(file)
-      info_file_sha1(file)
+        Modification time: #{info_file_mtime(file)}
+
+        Sha1 Signature: #{info_file_sha1(file)}
+
+      EOC
     end
 
     def regexp
@@ -203,18 +196,6 @@ module Byebug
           Generic command for showing things about the program being debugged.
 
         EOD
-      end
-
-      def help(subcmds = [])
-        return description + format_subcmds if subcmds.empty?
-
-        subcmd = subcmds.first
-        return format_subcmd(subcmd) unless 'file' == subcmd && subcmds[2]
-
-        subsubcmd = Command.find(InfoFileSubcommands, subcmds[2])
-        return "\nInvalid \"file\" attribute \"#{args[2]}\"." unless subsubcmd
-
-        subsubcmd.short_help
       end
     end
   end

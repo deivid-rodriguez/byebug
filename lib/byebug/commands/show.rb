@@ -35,8 +35,8 @@ module Byebug
         EOD
       end
 
-      def help(subcmds = [])
-        Setting.help('show', subcmds.first)
+      def help(subcmd = nil)
+        Setting.help('show', subcmd)
       end
     end
   end

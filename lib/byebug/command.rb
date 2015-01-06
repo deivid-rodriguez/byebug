@@ -70,13 +70,11 @@ module Byebug
         @always_run ||= 0
       end
 
-      def help(args = nil)
-        if args && args[1]
-          output = format_subcmd(args[1])
-        else
-          output = description
-          output += format_subcmds if defined? self::Subcommands
-        end
+      def help(subcmd = nil)
+        return format_subcmd(subcmd) if subcmd
+
+        output = description
+        output += format_subcmds if defined? self::Subcommands
         output
       end
 

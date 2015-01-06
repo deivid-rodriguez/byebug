@@ -696,7 +696,7 @@ puts $1
 The stopping points that Ruby records are the last two lines, lines 5 and 6.
 
 Inside `byebug` you can get a list of stoppable lines for a file using the `info
-file` command with the attribute `breakpoints`.
+file` command.
 
 To be continued...
 * Threading Support.

@@ -3,24 +3,19 @@ module Byebug
   # Ask for help from byebug's prompt.
   #
   class HelpCommand < Command
-    include Columnize
-
     self.allow_in_control = true
 
     def regexp
-      /^\s* h(?:elp)? (?:\s+(.+))? \s*$/x
+      /^\s* h(?:elp)? (?: \s+(\S+) (?:\s+(\S+))? )? \s*$/x
     end
 
     def execute
       return puts(self.class.help) unless @match[1]
 
-      args = @match[1].split
-      cmds = @state.commands.select { |cmd| cmd.names.include?(args[0]) }
-      if cmds.empty?
-        return errmsg("Undefined command: \"#{args[0]}\". Try \"help\"")
-      end
+      cmd = @state.commands.find { |c| c.names.include?(@match[1]) }
+      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
 
-      puts(cmds.map { |cmd| cmd.help(args[1..-1]) }.join("\n"))
+      puts cmd.help(@match[2])
     end
 
     class << self

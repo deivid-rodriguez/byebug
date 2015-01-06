@@ -36,6 +36,8 @@ API event dupplication, but this duplicated events have been completely removed
 from the API since
 [r48609](bugs.ruby-lang.org/projects/ruby-trunk/repository/revisions/48609), so
 they are no longer necessary.
+- `info file` subcommands: `info file breakpoints`, `info file mtime`, `info
+file sha1`, `info file all`. Now all information is listed under `info file`.
 
 ## 3.5.1 - 2014-09-29
 ### Fixed

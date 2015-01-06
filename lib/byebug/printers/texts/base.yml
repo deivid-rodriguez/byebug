@@ -54,6 +54,14 @@ frame:
     too_high: "Can't navigate beyond the newest frame"
     c_frame: "Can't navigate to c-frame"
 
+help:
+  errors:
+    undefined: "Undefined command: {cmd}. Try: help"
+
+info:
+  errors:
+    undefined_file: "{file} is not a valid source file"
+
 pry:
   errors:
     not_installed: 'You need to install pry in order to run this command'
