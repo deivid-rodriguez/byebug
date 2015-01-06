@@ -29,9 +29,10 @@ module Byebug
     def banner
       <<-EOB.gsub(/^ {8}/, '')
 
-        byebug #{Byebug::VERSION}
+          byebug #{Byebug::VERSION}
 
-        Usage: byebug [options] <script.rb> -- <script.rb parameters>
+          Usage: byebug [options] <script.rb> -- <script.rb parameters>
+
       EOB
     end
 
@@ -61,7 +62,7 @@ module Byebug
       end
 
       if help
-        Byebug.puts(help)
+        Byebug.puts("#{help}\n")
         return
       end
 
@@ -83,7 +84,7 @@ module Byebug
     end
 
     def prepare_options
-      OptionParser.new(banner, 2) do |opts|
+      OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
 
         opts.on '-d', '--debug', 'Set $DEBUG=true' do
@@ -114,7 +115,7 @@ module Byebug
           require lib
         end
 
-        opts.on '-R', '--remote [HOST:]PORT', 'remote debug [host:]port' do |p|
+        opts.on '-R', '--remote [host:]port', 'Remote debug [host:]port' do |p|
           self.remote = Byebug.parse_host_and_port(p)
         end
 
