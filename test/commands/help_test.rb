@@ -18,11 +18,12 @@ module Byebug
       debug_code(program)
 
       expected_output = split_lines <<-TXT
-        h[elp][ <commandd>[ <subcommand>]]
-        "help" alone prints this help.
-        "help <command>" prints help on <command>.
-        "help <command> <subcommand>" prints help on <subcommand>.
 
+        h[elp][ <cmd>[ <subcmd>]]
+
+        help                -- prints this help.
+        help <cmd>          -- prints help on command <cmd>.
+        help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
 
       TXT
 

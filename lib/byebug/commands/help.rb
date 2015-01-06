@@ -30,11 +30,13 @@ module Byebug
 
       def description
         <<-EOD.gsub(/^ {8}/, '')
-          h[elp][ <command>[ <subcommand>]]
 
-          "help" alone prints this help.
-          "help <command>" prints help on <command>.
-          "help <command> <subcommand>" prints help on <subcommand>.
+          h[elp][ <cmd>[ <subcmd>]]
+
+          help                -- prints this help.
+          help <cmd>          -- prints help on command <cmd>.
+          help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
+
         EOD
       end
     end
