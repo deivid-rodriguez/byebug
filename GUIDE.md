@@ -23,7 +23,7 @@ puts t
 Let's debug it.
 
 ```bash
-$ byebug triangle.rb
+$ byebug /path/to/triangle.rb
 
 [1, 10] in /path/to/triangle.rb
     1: #
@@ -711,75 +711,91 @@ To be continued...
 
 There is a wrapper script called `byebug` which basically `require`'s the gem
 then loads `byebug` before its argument (the program to be debugged) is started.
-
-```bash
-byebug [byebug-options] [--] ruby-script ruby-script-arguments
-```
-
 If you don't need to pass dash options to your program, which might be confused
 with byebug options, then you don't need to add the `--`. To get a brief list of
 options and descriptions, use the `--help` option.
 
 ```bash
 $ byebug --help
-byebug 1.6.1
-Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
-Options:
- -d, --debug               Set $DEBUG=true
- -I, --include PATH        Add PATH (single or multiple:path:list) to $LOAD_PATH
-     --no-quit             Do not quit when script finishes
-     --no-stop             Do not stop when script is loaded
-     --nx                  Don't run any byebug initialization files
-     --post-mortem         Enable post-mortem mode for uncaught exceptions
- -r, --require SCRIPT      Require library before script
-     --restart-script FILE Name of the script file to run. Erased after read
-     --script FILE         Name of the script file to run
-    -x, --trace            Turn on line tracing
+  byebug 3.5.1
 
-Common options:
-        --help             Show this message
-        --version          Print program version
-    -v                     Print version number, then turn on verbose mode
+  Usage: byebug [options] <script.rb> -- <script.rb parameters>
+
+    -d, --debug               Set $DEBUG=true
+    -I, --include list        Add to paths to $LOAD_PATH
+    -m, --[no-]post-mortem    Use post-mortem mode
+    -q, --[no-]quit           Quit when script finishes
+    -x, --[no-]rc             Run byebug initialization file
+    -s, --[no-]stop           Stop when script is loaded
+    -r, --require file        Require library before script
+    -R, --remote [host:]port  Remote debug [host:]port
+    -t, --[no-]trace          Turn on line tracing
+    -v, --version             Print program version
+    -h, --help                Display this message
+
 ```
 
 Many options appear as a long option name, such as `--help` and a short one
 letter option name, such as `-h`. The list of options is detailed below:
 
-* **-h | --help**. It causes `byebug` to print some basic help and exit
-* **-v | --version**. It causes `byebug` to print its version number and
-exit.
-* **-d | --debug**. Set `$DEBUG` to `true`. Compatible with Ruby's.
-* **-I | --include <path>**. Add `path` to load path. `path` can be a single
-path or a colon separated path list.
-* **--post-mortem**. If your program raises an exception that isn't caught you
-can enter byebug for inspection of what went wrong. You may also want to use
-this option in conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
-* **--no-quit**. Restart `byebug` when your program terminates normally.
-* **--no-stop**. Normally `byebug` stops before executing the first statement.
-If instead you want it to start running initially and perhaps break it later in
-the execution, use this option.
-* **--require | -r**. Require the library before executing the script. However,
-if the library happened to be `debug`, we'll just ignore the require since we're
-already a debugger. This option is compatible with Ruby's.
-* **--script <file>**. Script to run before byebug's execution.
-* **-x | --trace**. Turn on line tracing. Running `byebug --trace
-<rubyscript>.rb` is pretty much like running `ruby -rtracer
-<rubyscript>.rb`. If all you want to do however is get a line trace, `tracer` is
-most likely faster than `byebug`
+#### -h | --help
+
+It causes `byebug` to print some basic help and exit
+
+
+#### -v | --version
+
+It causes `byebug` to print its version number and exit.
+
+
+#### -d | --debug
+
+Sets `$DEBUG` to `true`. Compatible with Ruby's flag.
+
+#### -I | --include <path>
+
+Adds `path` to load path. `path` can be a single path or a colon separated path
+list.
+
+#### -m | --post-mortem
+
+If your program raises an exception that isn't caught you can enter byebug for
+inspection of what went wrong. You may also want to use this option in
+conjunction with `--no-stop`. See also [Post-Mortem Debugging]().
+
+#### --no-quit
+
+Keep inside `byebug` after your program terminates normally.
+
+#### --no-stop
+
+Normally `byebug` stops before executing the first statement. If instead you
+want it to start running initially and perhaps break it later in the execution,
+use this option.
+
+#### -r | --require <lib>
+
+Requires the library before executing the script.  This option is compatible
+with Ruby's.
+
+#### -t | --trace
+
+Turns on line tracing. Running `byebug --trace <rubyscript>.rb` is pretty much
+like running `ruby -rtracer <rubyscript>.rb`. If all you want to do however is
+get a line trace, `tracer` is most likely faster than `byebug`.
 
 ```bash
-$ time ruby -rtracer old_doc/gcd.rb 24 31 >/dev/null
+$ time byebug --trace --no-stop hanoi.rb > /dev/null
 
-real  0m0.066s
-user  0m0.048s
-sys 0m0.016s
+real	0m0.743s
+user	0m0.668s
+sys	0m0.068s
+$ time ruby -rtracer hanoi.rb > /dev/null
 
-$ time byebug --trace old_doc/gcd.rb 24 31 >/dev/null
-
-real  0m0.660s
-user  0m0.588s
-sys 0m0.056s
+real	0m0.077s
+user	0m0.072s
+sys	0m0.004s
 ```
 
 ### Byebug default options
@@ -805,8 +821,6 @@ directory is the directory named in the `$HOME` or `$HOMEPATH` environment
 variable. Thus, you can have more than one init file, one generic in your home
 directory, and another, specific to the program you are debugging, in the
 directory where you invoke `byebug`.
-
-* __Reads command files specified by the `--script` option.__
 
 You can also request the execution of a command file with the `source` command
 (see [Source]()).
