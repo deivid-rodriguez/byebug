@@ -110,12 +110,14 @@ module Byebug
     end
 
     def with_dummy_script
-      Tempfile.create('dummy_script') do |file|
-        file.write('sleep 0')
-        file.close
+      dummy_script = Tempfile.new('dummy_script')
+      dummy_script.write('sleep 0')
+      dummy_script.close
 
-        yield(file.path)
-      end
+      yield(dummy_script.path)
+    ensure
+      dummy_script.close
+      dummy_script.unlink
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
