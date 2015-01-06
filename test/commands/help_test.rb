@@ -13,20 +13,20 @@ module Byebug
       EOC
     end
 
-    %w(help h).each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_help_for_help_command_itself") do
-        enter 'set width 50', cmd_alias
-        debug_code(program)
+    def test_help_shows_help_for_help_command_itself
+      enter 'set width 50', 'help'
+      debug_code(program)
 
-        expected_output = split_lines <<-TXT
-          h[elp][ <command>[ <subcommand>]]
-          "help" alone prints this help.
-          "help <command>" prints help on <command>.
-          "help <command> <subcommand>" prints help on <subcommand>.
-        TXT
+      expected_output = split_lines <<-TXT
+        h[elp][ <commandd>[ <subcommand>]]
+        "help" alone prints this help.
+        "help <command>" prints help on <command>.
+        "help <command> <subcommand>" prints help on <subcommand>.
 
-        check_output_includes(*expected_output)
-      end
+
+      TXT
+
+      check_output_includes(*expected_output)
     end
 
     def test_help_with_specific_command_shows_help_for_it
