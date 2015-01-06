@@ -5,12 +5,16 @@ end
 
 require 'mkmf'
 
-RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
+makefile_config = RbConfig::MAKEFILE_CONFIG
 
-RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -Wall -Werror -Wno-unused-parameter'
-RbConfig::MAKEFILE_CONFIG['CFLAGS'] << ' -gdwarf-2 -g3 -O0' if ENV['debug']
+makefile_config['CC'] = ENV['CC'] if ENV['CC']
+
+makefile_config['CFLAGS'] << ' -Wall -Werror'
+makefile_config['CFLAGS'] << ' -gdwarf-2 -g3 -O0' if ENV['debug']
+
+if makefile_config['CC'] =~ /clang/
+  makefile_config['CFLAGS'] << ' -Wno-unknown-warning-option'
+end
 
 dir_config('ruby')
-with_cflags(RbConfig::MAKEFILE_CONFIG['CFLAGS']) do
-  create_makefile('byebug/byebug')
-end
+with_cflags(makefile_config['CFLAGS']) { create_makefile('byebug/byebug') }

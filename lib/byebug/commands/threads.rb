@@ -15,50 +15,47 @@ module Byebug
                       context.thread == Thread.current ? '+' : ' '
                     end
       debug_flag = context.ignored? ? '!' : ' '
+
       if should_show_top_frame
-        if context.thread == Thread.current && !context.dead?
-          file = context.frame_file(0)
-          line = context.frame_line(0)
+        if context == Byebug.current_context
+          file_line = "#{@state.file}:#{@state.line}"
         else
-          if context.thread.backtrace_locations &&
-             context.thread.backtrace_locations[0]
-            file = context.thread.backtrace_locations[0].path
-            line = context.thread.backtrace_locations[0].lineno
+          backtrace = context.thread.backtrace_locations
+          if backtrace && backtrace[0]
+            file_line = "#{backtrace[0].path}:#{backtrace[0].lineno}"
           end
         end
-        file_line = "#{file}:#{line}"
       end
       {
         status_flag: status_flag,
         debug_flag: debug_flag,
         id: context.thnum,
         thread: context.thread.inspect,
-        file_line: file_line ? file_line : ''
+        file_line: file_line || ''
       }
     end
 
     def parse_thread_num(subcmd, arg)
-      return errmsg(pr('thread.errors.no_number', subcmd: subcmd)) if '' == arg
-
-      thread_num, err = get_int(arg, subcmd, 1)
-      return errmsg(err) unless thread_num
+      thnum, err = get_int(arg, subcmd, 1)
+      return [nil, err] unless thnum
 
       Byebug.contexts.find { |c| c.thnum == thnum }
     end
 
     def parse_thread_num_for_cmd(subcmd, arg)
-      c = parse_thread_num(subcmd, arg)
-      return unless c
+      c, err = parse_thread_num(subcmd, arg)
 
       case
-      when nil == c
-        errmsg pr('thread.errors.no_thread')
+      when err
+        [c, err]
+      when c.nil?
+        [nil, pr('thread.errors.no_thread')]
       when @state.context == c
-        errmsg pr('thread.errors.current_thread')
+        [c, pr('thread.errors.current_thread')]
       when c.ignored?
-        errmsg pr('thread.errors.wrong_action', subcmd: subcmd, arg: arg)
+        [c, pr('thread.errors.wrong_action', subcmd: subcmd, arg: arg)]
       else
-        c
+        [c, nil]
       end
     end
   end
@@ -74,12 +71,16 @@ module Byebug
     end
 
     def execute
-      contexts = Byebug.contexts.select do |c|
-        Thread.list.include?(c.thread)
-      end.sort_by(&:thnum)
-      print prc('thread.context', contexts) do |context, _|
+      contexts = Byebug
+                 .contexts
+                 .select { |c| Thread.list.include?(c.thread) }
+                 .sort_by(&:thnum)
+
+      thread_list = prc('thread.context', contexts) do |context, _|
         thread_arguments(context)
       end
+
+      print(thread_list)
     end
 
     class << self
@@ -128,8 +129,8 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd('thread stop', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread stop', @match[1])
+      return errmsg(err) if err
 
       c.suspend
       display_context(c)
@@ -158,9 +159,10 @@ module Byebug
     end
 
     def execute
-      c = parse_thread_num_for_cmd('thread resume', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread resume', @match[1])
+      return errmsg(err) if err
       return errmsg pr('thread.errors.already_running') unless c.suspended?
+
       c.resume
       display_context(c)
     end
@@ -184,16 +186,12 @@ module Byebug
     self.allow_in_post_mortem = false
 
     def regexp
-      /^\s* th(?:read)? \s+ (?:sw(?:itch)?\s+)? (\S+) \s*$/x
+      /^\s* th(?:read)? \s+ sw(?:itch)? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
-      if @match[1] =~ /switch/
-        return errmsg('"thread switch" needs a thread number')
-      end
-
-      c = parse_thread_num_for_cmd('thread switch', @match[1])
-      return unless c
+      c, err = parse_thread_num_for_cmd('thread switch', @match[1])
+      return errmsg(err) if err
 
       display_context(c)
       c.step_into 1

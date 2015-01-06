@@ -314,18 +314,6 @@ Context_ignored(VALUE self)
   return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
-static void
-context_resume_0(debug_context_t * context)
-{
-  if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    return;
-
-  CTX_FL_UNSET(context, CTX_FL_SUSPEND);
-
-  if (CTX_FL_TEST(context, CTX_FL_WAS_RUNNING))
-    rb_thread_wakeup(context->thread);
-}
-
 /*
  *  call-seq:
  *    context.resume -> nil
@@ -340,9 +328,12 @@ Context_resume(VALUE self)
   Data_Get_Struct(self, debug_context_t, context);
 
   if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    rb_raise(rb_eRuntimeError, "Thread is not suspended.");
+    return Qnil;
 
-  context_resume_0(context);
+  CTX_FL_UNSET(context, CTX_FL_SUSPEND);
+
+  if (CTX_FL_TEST(context, CTX_FL_WAS_RUNNING))
+    rb_thread_wakeup(context->thread);
 
   return Qnil;
 }
@@ -481,21 +472,6 @@ Context_step_over(int argc, VALUE * argv, VALUE self)
   return Qnil;
 }
 
-static void
-context_suspend_0(debug_context_t * context)
-{
-  VALUE status = rb_funcall(context->thread, rb_intern("status"), 0);
-
-  if (rb_str_cmp(status, rb_str_new2("run")) == 0)
-    CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
-  else if (rb_str_cmp(status, rb_str_new2("sleep")) == 0)
-    CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
-  else
-    return;
-
-  CTX_FL_SET(context, CTX_FL_SUSPEND);
-}
-
 /*
  *  call-seq:
  *    context.suspend -> nil
@@ -505,14 +481,22 @@ context_suspend_0(debug_context_t * context)
 static VALUE
 Context_suspend(VALUE self)
 {
+  VALUE status;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  if (CTX_FL_TEST(context, CTX_FL_SUSPEND))
-    rb_raise(rb_eRuntimeError, "Already suspended.");
+  status = rb_funcall(context->thread, rb_intern("status"), 0);
 
-  context_suspend_0(context);
+  if (rb_str_cmp(status, rb_str_new2("run")) == 0)
+    CTX_FL_SET(context, CTX_FL_WAS_RUNNING);
+  else if (rb_str_cmp(status, rb_str_new2("sleep")) == 0)
+    CTX_FL_UNSET(context, CTX_FL_WAS_RUNNING);
+  else
+    return Qnil;
+
+  CTX_FL_SET(context, CTX_FL_SUSPEND);
+
   return Qnil;
 }
 
@@ -599,7 +583,7 @@ Context_set_tracing(VALUE self, VALUE value)
 
 /* :nodoc: */
 static VALUE
-DebugThread_inherited(VALUE klass)
+dt_inherited(VALUE klass)
 {
   rb_raise(rb_eRuntimeError, "Can't inherit Byebug::DebugThread class");
 
@@ -640,6 +624,5 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "tracing=", Context_set_tracing, 1);
 
   cDebugThread = rb_define_class_under(mByebug, "DebugThread", rb_cThread);
-  rb_define_singleton_method(cDebugThread, "inherited", DebugThread_inherited,
-                             1);
+  rb_define_singleton_method(cDebugThread, "inherited", dt_inherited, 1);
 }

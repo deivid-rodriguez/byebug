@@ -4,6 +4,9 @@
 #include <ruby.h>
 #include <ruby/debug.h>
 
+/* To prevent unused parameter warnings */
+#define UNUSED(x) (void)(x)
+
 /* flags */
 #define CTX_FL_DEAD         (1<<1) /* this context belonged to a dead thread */
 #define CTX_FL_IGNORE       (1<<2) /* this context belongs to ignored thread */
@@ -66,6 +69,7 @@ extern VALUE create_threads_table(void);
 extern void check_threads_table(void);
 extern void thread_context_lookup(VALUE thread, VALUE *context);
 extern void halt_while_other_thread_is_active(debug_context_t *dc);
+extern int is_living_thread(VALUE thread);
 
 /* global variables */
 extern VALUE locker;

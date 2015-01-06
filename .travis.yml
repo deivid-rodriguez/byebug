@@ -18,6 +18,10 @@ rvm:
 - 2.2.0
 - ruby-head
 
+env:
+- CC=gcc
+- CC=clang
+
 matrix:
   allow_failures:
   - rvm: ruby-head

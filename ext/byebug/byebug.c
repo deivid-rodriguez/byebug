@@ -29,6 +29,8 @@ VALUE threads = Qnil;
 static VALUE
 bb_breakpoints(VALUE self)
 {
+  UNUSED(self);
+
   if (NIL_P(breakpoints))
     breakpoints = rb_ary_new();
 
@@ -44,6 +46,8 @@ bb_breakpoints(VALUE self)
 static VALUE
 bb_catchpoints(VALUE self)
 {
+  UNUSED(self);
+
   return catchpoints;
 }
 
@@ -56,6 +60,8 @@ bb_catchpoints(VALUE self)
 static VALUE
 bb_raised_exception(VALUE self)
 {
+  UNUSED(self);
+
   return raised_exception;
 }
 
@@ -132,19 +138,26 @@ cleanup(debug_context_t * dc)
   /* checks for dead threads */
   check_threads_table();
 
-  /* release a lock */
+  /* Release lock */
   locker = Qnil;
 
-  /* let the next thread to run */
+  /* Let next thread run */
   thread = remove_from_locked();
   if (thread != Qnil)
     rb_thread_run(thread);
 }
 
 #define EVENT_SETUP                                                     \
-  rb_trace_arg_t *trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   debug_context_t *dc;                                                  \
   VALUE context;                                                        \
+  rb_trace_arg_t *trace_arg;                                            \
+                                                                        \
+  UNUSED(data);                                                         \
+                                                                        \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point);                 \
+  if (!is_living_thread(rb_thread_current()))                           \
+    return;                                                             \
+                                                                        \
   thread_context_lookup(rb_thread_current(), &context);                 \
   Data_Get_Struct(context, debug_context_t, dc);                        \
                                                                         \
@@ -364,7 +377,15 @@ msc_return_event(VALUE trace_point, void *data)
 }
 
 static void
-thread_event(VALUE trace_point, void *data)
+thread_begin_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP;
+
+  cleanup(dc);
+}
+
+static void
+thread_end_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
@@ -438,6 +459,8 @@ register_tracepoints(VALUE self)
   int i;
   VALUE traces = tracepoints;
 
+  UNUSED(self);
+
   if (NIL_P(traces))
   {
     int line_msk = RUBY_EVENT_LINE;
@@ -448,7 +471,6 @@ register_tracepoints(VALUE self)
     int msc_ret_msk =
       RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
     int raise_msk = RUBY_EVENT_RAISE;
-    int thread_msk = RUBY_EVENT_THREAD_BEGIN | RUBY_EVENT_THREAD_END;
 
     VALUE tpLine = rb_tracepoint_new(Qnil, line_msk, line_event, 0);
     VALUE tpCall = rb_tracepoint_new(Qnil, call_msk, call_event, 0);
@@ -456,7 +478,16 @@ register_tracepoints(VALUE self)
     VALUE tpMscCall = rb_tracepoint_new(Qnil, msc_call_msk, msc_call_event, 0);
     VALUE tpMscRet = rb_tracepoint_new(Qnil, msc_ret_msk, msc_return_event, 0);
     VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
-    VALUE tpThread = rb_tracepoint_new(Qnil, thread_msk, thread_event, 0);
+
+    VALUE tpThreadBegin = rb_tracepoint_new(Qnil,
+                                            RUBY_EVENT_THREAD_BEGIN,
+                                            thread_begin_event,
+                                            0);
+
+    VALUE tpThreadEnd = rb_tracepoint_new(Qnil,
+                                          RUBY_EVENT_THREAD_END,
+                                          thread_end_event,
+                                          0);
 
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
@@ -465,7 +496,8 @@ register_tracepoints(VALUE self)
     rb_ary_push(traces, tpMscCall);
     rb_ary_push(traces, tpMscRet);
     rb_ary_push(traces, tpRaise);
-    rb_ary_push(traces, tpThread);
+    rb_ary_push(traces, tpThreadBegin);
+    rb_ary_push(traces, tpThreadEnd);
 
     tracepoints = traces;
   }
@@ -478,6 +510,8 @@ static void
 clear_tracepoints(VALUE self)
 {
   int i;
+
+  UNUSED(self);
 
   for (i = RARRAY_LENINT(tracepoints) - 1; i >= 0; i--)
     rb_tracepoint_disable(rb_ary_entry(tracepoints, i));
@@ -501,6 +535,8 @@ bb_contexts(VALUE self)
   threads_table_t *t_tbl;
   debug_context_t *dc;
   int i;
+
+  UNUSED(self);
 
   check_started();
 
@@ -539,6 +575,8 @@ bb_thread_context(VALUE self, VALUE thread)
 {
   VALUE context;
 
+  UNUSED(self);
+
   check_started();
 
   thread_context_lookup(thread, &context);
@@ -558,6 +596,8 @@ bb_current_context(VALUE self)
 {
   VALUE context;
 
+  UNUSED(self);
+
   check_started();
 
   thread_context_lookup(rb_thread_current(), &context);
@@ -574,6 +614,8 @@ bb_current_context(VALUE self)
 static VALUE
 bb_started(VALUE self)
 {
+  UNUSED(self);
+
   return IS_STARTED;
 }
 
@@ -587,6 +629,8 @@ bb_started(VALUE self)
 static VALUE
 bb_stop(VALUE self)
 {
+  UNUSED(self);
+
   if (IS_STARTED)
   {
     clear_tracepoints(self);
@@ -619,11 +663,12 @@ bb_start(VALUE self)
 {
   VALUE result;
 
+  UNUSED(self);
+
   if (IS_STARTED)
     result = Qfalse;
   else
   {
-    locker = Qnil;
     catchpoints = rb_hash_new();
     threads = create_threads_table();
 
@@ -651,6 +696,8 @@ bb_load(int argc, VALUE * argv, VALUE self)
   debug_context_t *dc;
   VALUE status = Qnil;
   int state = 0;
+
+  UNUSED(self);
 
   if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
   {
@@ -686,6 +733,8 @@ bb_load(int argc, VALUE * argv, VALUE self)
 static VALUE
 bb_verbose(VALUE self)
 {
+  UNUSED(self);
+
   return verbose;
 }
 
@@ -699,6 +748,8 @@ bb_verbose(VALUE self)
 static VALUE
 bb_set_verbose(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   verbose = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -712,6 +763,8 @@ bb_set_verbose(VALUE self, VALUE value)
 static VALUE
 bb_tracing(VALUE self)
 {
+  UNUSED(self);
+
   return tracing;
 }
 
@@ -724,6 +777,8 @@ bb_tracing(VALUE self)
 static VALUE
 bb_set_tracing(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   tracing = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -737,6 +792,8 @@ bb_set_tracing(VALUE self, VALUE value)
 static VALUE
 bb_post_mortem(VALUE self)
 {
+  UNUSED(self);
+
   return post_mortem;
 }
 
@@ -749,6 +806,8 @@ bb_post_mortem(VALUE self)
 static VALUE
 bb_set_post_mortem(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   post_mortem = RTEST(value) ? Qtrue : Qfalse;
   return value;
 }
@@ -762,6 +821,8 @@ bb_set_post_mortem(VALUE self, VALUE value)
 static VALUE
 bb_add_catchpoint(VALUE self, VALUE value)
 {
+  UNUSED(self);
+
   if (TYPE(value) != T_STRING)
     rb_raise(rb_eTypeError, "value of a catchpoint must be String");
 

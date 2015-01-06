@@ -24,7 +24,7 @@ module Byebug
     end
 
     #
-    # Set of options that byebug's script accepts.
+    # Usage banner.
     #
     def banner
       <<-EOB.gsub(/^ {8}/, '')
