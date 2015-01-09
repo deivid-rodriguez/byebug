@@ -99,6 +99,10 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 
   const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
 
+  VALUE rb_cl = rb_tracearg_defined_class(trace_arg);
+  VALUE rb_cl_name = NIL_P(rb_cl) ? rb_cl : rb_mod_name(rb_cl);
+  const char *defined_class = NIL_P(rb_cl_name) ? "" : RSTRING_PTR(rb_cl_name);
+
   if (!trace_arg)
     return;
 
@@ -123,8 +127,9 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
       rb_funcall(mByebug, idPuts, 1, rb_sprintf("%s\n", debug_msg));
     else
       rb_funcall(mByebug, idPuts, 1,
-                 rb_sprintf("%*s [#%d] %s@%s:%d %s\n", dc->calced_stack_size,
-                            "", dc->thnum, event, path, line, mid));
+                 rb_sprintf("%*s [#%d] %s@%s:%d %s#%s\n",
+                            dc->calced_stack_size, "", dc->thnum, event, path,
+                            line, defined_class, mid));
   }
 }
 
