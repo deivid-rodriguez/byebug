@@ -448,8 +448,7 @@ Context_step_out(int argc, VALUE * argv, VALUE self)
  *  call-seq:
  *    context.step_over(lines, frame = 0)
  *
- *  Steps over +lines+ lines.
- *  Make step over operation on +frame+, by default the newest frame.
+ *  Steps over +lines+ lines in frame +frame+ (by default the newest one).
  */
 static VALUE
 Context_step_over(int argc, VALUE * argv, VALUE self)
