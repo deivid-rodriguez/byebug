@@ -385,14 +385,16 @@ Context_stop_reason(VALUE self)
 
 /*
  *  call-seq:
- *    context.step_into(steps)
+ *    context.step_into(steps, frame = 0)
  *
- *  Stops the current context after a number of +steps+ are made.
+ *  Stops the current context after a number of +steps+ are made from frame
+ *  +frame+ (by default the newest one).
  */
 static VALUE
 Context_step_into(int argc, VALUE * argv, VALUE self)
 {
-  VALUE steps;
+  VALUE steps, v_frame;
+  int n_args, from_frame;
   debug_context_t *context;
 
   Data_Get_Struct(self, debug_context_t, context);
@@ -400,11 +402,21 @@ Context_step_into(int argc, VALUE * argv, VALUE self)
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
 
-  rb_scan_args(argc, argv, "10", &steps);
-  if (FIX2INT(steps) < 0)
+  n_args = rb_scan_args(argc, argv, "11", &steps, &v_frame);
+
+  if (FIX2INT(steps) <= 0)
     rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
 
+  from_frame = n_args == 1 ? 0 : FIX2INT(v_frame);
+
+  if (from_frame < 0 || from_frame >= context->calced_stack_size)
+    rb_raise(rb_eRuntimeError, "Destination frame (%d) is out of range (%d)",
+             from_frame, context->calced_stack_size);
+  else if (from_frame > 0)
+    CTX_FL_SET(context, CTX_FL_IGNORE_STEPS);
+
   context->steps = FIX2INT(steps);
+  context->dest_frame = context->calced_stack_size - from_frame;
 
   return steps;
 }

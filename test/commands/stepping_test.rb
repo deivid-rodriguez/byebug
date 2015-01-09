@@ -163,24 +163,34 @@ module Byebug
          5:    class #{example_class}
          6:      def a
          7:        byebug
-         8:        r = b
+         8:        r = b(c)
          9:        r + 1
         10:      end
         11:
-        12:      def b
+        12:      def b(p)
         13:        r = 2
-        14:        r + 1
+        14:        p + r
         15:      end
-        16:    end
-        17:
-        18:    #{example_class}.new.a
-        19:  end
+        16:
+        17:      def c
+        18:        s = 3
+        19:        s + 2
+        20:      end
+        21:    end
+        22:
+        23:    #{example_class}.new.a
+        24:  end
       EOC
     end
 
     def test_step_then_up_then_next_advances_in_the_upper_frame
       enter 'step', 'up', 'next'
       debug_code(program) { assert_equal 9, state.line }
+    end
+
+    def test_step_then_up_then_steps_in_from_the_upper_frame
+      enter 'step', 'up', 'step'
+      debug_code(program) { assert_equal 13, state.line }
     end
   end
 end

@@ -14,6 +14,7 @@
 #define CTX_FL_TRACING      (1<<4) /* call at_tracing method                 */
 #define CTX_FL_WAS_RUNNING  (1<<5) /* thread was previously running          */
 #define CTX_FL_STOP_ON_RET  (1<<6) /* can stop on method 'end'               */
+#define CTX_FL_IGNORE_STEPS (1<<7) /* doesn't countdown steps to break       */
 
 /* macro functions */
 #define CTX_FL_TEST(c,f)  ((c)->flags & (f))

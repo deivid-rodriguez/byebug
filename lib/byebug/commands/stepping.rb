@@ -50,7 +50,7 @@ module Byebug
       steps, err = parse_steps(@match[1], 'Steps')
       return errmsg(err) unless steps
 
-      @state.context.step_into(steps)
+      @state.context.step_into(steps, @state.frame)
       @state.proceed
     end
 
