@@ -336,23 +336,24 @@ int
 classname_cmp(VALUE name, VALUE klass)
 {
   VALUE mod_name;
-  VALUE class_name = (Qnil == name) ? rb_str_new2("main") : name;
+  VALUE class_name = NIL_P(name) ? rb_str_new2("main") : name;
 
-  if (klass == Qnil)
-    return (0);
+  if (NIL_P(klass))
+    return 0;
+
   mod_name = rb_mod_name(klass);
   return (mod_name != Qnil && rb_str_cmp(class_name, mod_name) == 0);
 }
 
 static int
-check_breakpoint_by_hit_condition(VALUE breakpoint_object)
+check_breakpoint_by_hit_condition(VALUE rb_breakpoint)
 {
   breakpoint_t *breakpoint;
 
-  if (breakpoint_object == Qnil)
+  if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(breakpoint_object, breakpoint_t, breakpoint);
+  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
   breakpoint->hit_count++;
 
   if (Qtrue != breakpoint->enabled)
