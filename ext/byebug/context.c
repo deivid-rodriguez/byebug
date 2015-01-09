@@ -395,11 +395,15 @@ Context_step_into(int argc, VALUE * argv, VALUE self)
   VALUE steps;
   debug_context_t *context;
 
+  Data_Get_Struct(self, debug_context_t, context);
+
+  if (context->calced_stack_size == 0)
+    rb_raise(rb_eRuntimeError, "No frames collected.");
+
   rb_scan_args(argc, argv, "10", &steps);
   if (FIX2INT(steps) < 0)
     rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
 
-  Data_Get_Struct(self, debug_context_t, context);
   context->steps = FIX2INT(steps);
 
   return steps;
