@@ -178,7 +178,7 @@ module Byebug
       EOC
     end
 
-    def test_step_the_up_then_next_advances_in_the_upper_frame
+    def test_step_then_up_then_next_advances_in_the_upper_frame
       enter 'step', 'up', 'next'
       debug_code(program) { assert_equal 9, state.line }
     end
