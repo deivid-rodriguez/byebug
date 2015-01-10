@@ -78,7 +78,7 @@ is_living_thread(VALUE thread)
 {
   VALUE status = rb_funcall(thread, rb_intern("status"), 0);
 
-  if (status == Qfalse)
+  if (NIL_P(status) || status == Qfalse)
     return 0;
 
   if (rb_str_cmp(status, rb_str_new2("run")) == 0
