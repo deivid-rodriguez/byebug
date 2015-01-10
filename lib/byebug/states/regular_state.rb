@@ -6,10 +6,10 @@ module Byebug
   #
   class RegularState < State
     attr_accessor :context, :frame, :display, :file, :line, :prev_line
-    attr_writer :commands, :interface
+    attr_writer :interface
 
-    def initialize(commands, context, display, file, interface, line)
-      super(interface, commands)
+    def initialize(context, display, file, interface, line)
+      super(interface)
       @context = context
       @display = display
       @file = file

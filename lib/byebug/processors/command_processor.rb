@@ -117,12 +117,7 @@ module Byebug
     # @return List of commands acceptable to run bound to the current state
     #
     def always_run(context, file, line, run_level)
-      @state = Byebug::RegularState.new(Command.commands,
-                                        context,
-                                        @display,
-                                        file,
-                                        @interface,
-                                        line)
+      @state = RegularState.new(context, @display, file, @interface, line)
 
       # Change default when in irb or code included in command line
       Setting[:autolist] = false if ['(irb)', '-e'].include?(file)

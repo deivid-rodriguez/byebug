@@ -12,7 +12,7 @@ module Byebug
     def execute
       return puts(self.class.help) unless @match[1]
 
-      cmd = @state.commands.find { |c| c.names.include?(@match[1]) }
+      cmd = Command.commands.find { |c| c.names.include?(@match[1]) }
       return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
 
       puts cmd.help(@match[2])

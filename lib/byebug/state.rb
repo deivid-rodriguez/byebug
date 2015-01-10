@@ -3,11 +3,10 @@ module Byebug
   # Common parent class for all of Byebug's states
   #
   class State
-    attr_reader :commands, :interface
+    attr_reader :interface
 
-    def initialize(interface, commands)
+    def initialize(interface)
       @interface = interface
-      @commands = commands
     end
   end
 end
