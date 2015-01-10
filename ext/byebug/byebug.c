@@ -137,7 +137,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 }
 
 static void
-cleanup(debug_context_t * dc)
+cleanup(debug_context_t * dc, rb_trace_arg_t * trace_arg)
 {
   VALUE thread;
 
@@ -158,12 +158,15 @@ cleanup(debug_context_t * dc)
     thread = next_thread;
   }
 
-  if (thread == next_thread)
+  if (thread == next_thread
+      && !strcmp("line", safe_sym_to_str(rb_tracearg_event(trace_arg))))
     next_thread = Qnil;
 
   if (!NIL_P(thread))
     rb_thread_run(thread);
 }
+
+#define EVENT_TEARDOWN cleanup(dc, trace_arg);
 
 #define EVENT_SETUP                                                     \
   debug_context_t *dc;                                                  \
@@ -188,7 +191,7 @@ trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
   /* return if thread marked as 'ignored', like byebug's control thread */
   if (CTX_FL_TEST(dc, CTX_FL_IGNORE))
   {
-    cleanup(dc);
+    EVENT_TEARDOWN;
     return 0;
   }
 
@@ -321,7 +324,7 @@ line_event(VALUE trace_point, void *data)
     call_at_line_check(context, dc, breakpoint, file, line);
   }
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -356,7 +359,7 @@ call_event(VALUE trace_point, void *data)
     call_at_line(context, dc, file, line);
   }
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -383,7 +386,7 @@ return_event(VALUE trace_point, void *data)
 
   dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out - 1;
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -393,7 +396,7 @@ msc_call_event(VALUE trace_point, void *data)
 
   dc->calced_stack_size++;
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -404,7 +407,7 @@ msc_return_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size > 0)
     dc->calced_stack_size--;
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -412,7 +415,7 @@ thread_begin_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -420,7 +423,7 @@ thread_end_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 static void
@@ -454,7 +457,7 @@ raise_event(VALUE trace_point, void *data)
   if (catchpoints == Qnil || dc->calced_stack_size == 0
       || RHASH_TBL(catchpoints)->num_entries == 0)
   {
-    cleanup(dc);
+    EVENT_TEARDOWN;
     return;
   }
 
@@ -478,7 +481,7 @@ raise_event(VALUE trace_point, void *data)
     }
   }
 
-  cleanup(dc);
+  EVENT_TEARDOWN;
 }
 
 
