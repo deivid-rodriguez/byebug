@@ -62,7 +62,8 @@ typedef struct {
 /* functions from locker.c */
 extern int is_in_locked(VALUE thread_id);
 extern void add_to_locked(VALUE thread);
-extern VALUE remove_from_locked();
+extern VALUE pop_from_locked();
+extern void remove_from_locked(VALUE thread);
 
 /* functions from threads.c */
 extern void Init_threads_table(VALUE mByebug);
@@ -75,6 +76,7 @@ extern int is_living_thread(VALUE thread);
 /* global variables */
 extern VALUE locker;
 extern VALUE threads;
+extern VALUE next_thread;
 
 /* functions */
 extern void Init_context(VALUE mByebug);

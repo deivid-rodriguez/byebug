@@ -20,6 +20,9 @@ VALUE locker = Qnil;
 /* Hash table with active threads and their associated contexts */
 VALUE threads = Qnil;
 
+/* If not Qnil, holds the next thread that must be run */
+VALUE next_thread = Qnil;
+
 /*
  *  call-seq:
  *    Byebug.breakpoints -> array
@@ -147,8 +150,18 @@ cleanup(debug_context_t * dc)
   locker = Qnil;
 
   /* Let next thread run */
-  thread = remove_from_locked();
-  if (thread != Qnil)
+  if (NIL_P(next_thread))
+    thread = pop_from_locked();
+  else
+  {
+    remove_from_locked(next_thread);
+    thread = next_thread;
+  }
+
+  if (thread == next_thread)
+    next_thread = Qnil;
+
+  if (!NIL_P(thread))
     rb_thread_run(thread);
 }
 

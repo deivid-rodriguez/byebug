@@ -194,8 +194,8 @@ module Byebug
       return errmsg(err) if err
 
       display_context(c)
-      c.step_into 1
-      c.thread.run
+
+      c.switch
       @state.proceed
     end
 

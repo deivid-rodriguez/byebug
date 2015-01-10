@@ -50,7 +50,7 @@ add_to_locked(VALUE thread)
 }
 
 extern VALUE
-remove_from_locked()
+pop_from_locked()
 {
   VALUE thread;
   locked_thread_t *node;
@@ -68,4 +68,29 @@ remove_from_locked()
   xfree(node);
 
   return thread;
+}
+
+extern void
+remove_from_locked(VALUE thread)
+{
+  locked_thread_t *node;
+  locked_thread_t *next_node;
+
+  if (NIL_P(thread) || !locked_head || !is_in_locked(thread))
+    return;
+
+  if (locked_head->thread == thread)
+  {
+    pop_from_locked();
+    return;
+  }
+
+  for (node = locked_head; node != locked_tail; node = node->next)
+    if (node->next && node->next->thread == thread)
+    {
+      next_node = node->next;
+      node->next = next_node->next;
+      xfree(next_node);
+      return;
+    }
 }

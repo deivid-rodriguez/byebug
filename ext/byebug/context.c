@@ -517,6 +517,26 @@ Context_suspend(VALUE self)
 
 /*
  *  call-seq:
+ *    context.switch -> nil
+ *
+ *  Switches execution to this context.
+ */
+static VALUE
+Context_switch(VALUE self)
+{
+  debug_context_t *context;
+
+  Data_Get_Struct(self, debug_context_t, context);
+
+  context->steps = 1;
+
+  next_thread = context->thread;
+
+  return Qnil;
+}
+
+/*
+ *  call-seq:
  *    context.suspended? -> bool
  *
  *  Returns +true+ if the thread is suspended by debugger.
@@ -633,6 +653,7 @@ Init_context(VALUE mByebug)
   rb_define_method(cContext, "stop_reason", Context_stop_reason, 0);
   rb_define_method(cContext, "suspend", Context_suspend, 0);
   rb_define_method(cContext, "suspended?", Context_is_suspended, 0);
+  rb_define_method(cContext, "switch", Context_switch, 0);
   rb_define_method(cContext, "thnum", Context_thnum, 0);
   rb_define_method(cContext, "thread", Context_thread, 0);
   rb_define_method(cContext, "tracing", Context_tracing, 0);
