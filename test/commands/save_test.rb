@@ -63,7 +63,6 @@ module Byebug
 
       assert_includes file_contents, 'set autoeval true'
       assert_includes file_contents, 'set basename false'
-      assert_includes file_contents, 'set testing true'
       assert_includes file_contents, 'set autolist false'
       assert_includes file_contents, 'set autoirb false'
     end

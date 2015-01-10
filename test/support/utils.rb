@@ -166,12 +166,11 @@ module Byebug
 
       Byebug::Setting[:autolist] = false
       Byebug::Setting[:autosave] = false
-      Byebug::Setting[:testing] = true
       Byebug::Setting[:width] = 80
     end
 
     def state
-      Thread.current.thread_variable_get('state')
+      Byebug.handler.state
     end
 
     def interface

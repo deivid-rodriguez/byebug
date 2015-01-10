@@ -39,6 +39,8 @@ from the API since
 they are no longer necessary.
 - `info file` subcommands: `info file breakpoints`, `info file mtime`, `info
 file sha1`, `info file all`. Now all information is listed under `info file`.
+- `testing` setting. It was just a hack to be able to test `byebug`. Nobody was
+supposed to actually use it!
 
 ## 3.5.1 - 2014-09-29
 ### Fixed

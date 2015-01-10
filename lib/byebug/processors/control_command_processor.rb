@@ -5,20 +5,25 @@ module Byebug
   # Processes commands in 'control' mode, when there's no program running
   #
   class ControlCommandProcessor < Processor
+    attr_accessor :state
+
     def initialize(interface = LocalInterface.new)
       super(interface)
+
       @context_was_dead = false # Assume we haven't started.
     end
 
-    def process_commands
-      control_cmds = Command.commands.select(&:allow_in_control)
-      state = Byebug::ControlState.new(@interface, control_cmds)
-      commands = control_cmds.map { |cmd| cmd.new(state) }
+    def commands
+      Command.commands.select(&:allow_in_control).map { |cmd| cmd.new(@state) }
+    end
 
+    def process_commands
       if @context_was_dead
         puts 'The program finished.'
         @context_was_dead = false
       end
+
+      @state = ControlState.new(interface, commands)
 
       while (input = @interface.read_command(prompt(nil)))
         cmd = commands.find { |c| c.match(input) }

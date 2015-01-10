@@ -15,7 +15,7 @@ module Byebug
     end
 
     settings = %i(autoeval autolist autosave basename fullpath post_mortem
-                  stack_on_error testing)
+                  stack_on_error)
 
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
@@ -67,20 +67,6 @@ module Byebug
       debug_code(program)
       assert_equal true, Setting[:autoeval]
       assert_equal true, Setting[:autolist]
-    end
-
-    def test_set_testing_sets_the_thread_state_variable
-      Setting[:testing] = false
-      enter 'set testing', 'cont 5'
-
-      debug_code(program) { assert_kind_of Byebug::RegularState, state }
-    end
-
-    def test_set_notesting_unsets_the_thread_state_variable
-      Setting[:testing] = true
-      enter 'set notesting', 'cont 5'
-
-      debug_code(program) { assert_nil state }
     end
 
     def test_set_histsize_sets_maximum_history_size
