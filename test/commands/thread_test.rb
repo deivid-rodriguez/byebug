@@ -25,7 +25,7 @@ module Byebug
         18:        end
         19:
         20:        @t2 = Thread.new do
-        21:          sleep
+        21:          loop { sleep 0.01 }
         22:        end
         23:
         24:        t1.join
