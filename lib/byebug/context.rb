@@ -64,7 +64,7 @@ module Byebug
     end
 
     def at_return(file, line)
-      handler.at_return(self, file, line)
+      handler.at_return(self, file, line) unless IGNORED_FILES.include?(file)
     end
 
     private
