@@ -127,7 +127,8 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
   if (!filtered)
   {
     if (debug_msg)
-      rb_funcall(mByebug, idPuts, 1, rb_sprintf("[#%d] %s\n", dc->thnum, debug_msg));
+      rb_funcall(mByebug, idPuts, 1,
+                 rb_sprintf("[#%d] %s\n", dc->thnum, debug_msg));
     else
       rb_funcall(mByebug, idPuts, 1,
                  rb_sprintf("%*s [#%d] %s@%s:%d %s#%s\n",
@@ -168,21 +169,21 @@ cleanup(debug_context_t * dc, rb_trace_arg_t * trace_arg)
 
 #define EVENT_TEARDOWN cleanup(dc, trace_arg);
 
-#define EVENT_SETUP                                                     \
-  debug_context_t *dc;                                                  \
-  VALUE context;                                                        \
-  rb_trace_arg_t *trace_arg;                                            \
-                                                                        \
-  UNUSED(data);                                                         \
-                                                                        \
-  trace_arg = rb_tracearg_from_tracepoint(trace_point);                 \
-  if (!is_living_thread(rb_thread_current()))                           \
-    return;                                                             \
-                                                                        \
-  thread_context_lookup(rb_thread_current(), &context);                 \
-  Data_Get_Struct(context, debug_context_t, dc);                        \
-                                                                        \
-  if (!trace_common(trace_arg, dc))                                     \
+#define EVENT_SETUP                                     \
+  debug_context_t *dc;                                  \
+  VALUE context;                                        \
+  rb_trace_arg_t *trace_arg;                            \
+                                                        \
+  UNUSED(data);                                         \
+                                                        \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
+  if (!is_living_thread(rb_thread_current()))           \
+    return;                                             \
+                                                        \
+  thread_context_lookup(rb_thread_current(), &context); \
+  Data_Get_Struct(context, debug_context_t, dc);        \
+                                                        \
+  if (!trace_common(trace_arg, dc))                     \
     return;
 
 static int
