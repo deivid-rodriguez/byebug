@@ -124,7 +124,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
   if (!filtered)
   {
     if (debug_msg)
-      rb_funcall(mByebug, idPuts, 1, rb_sprintf("%s\n", debug_msg));
+      rb_funcall(mByebug, idPuts, 1, rb_sprintf("[#%d] %s\n", dc->thnum, debug_msg));
     else
       rb_funcall(mByebug, idPuts, 1,
                  rb_sprintf("%*s [#%d] %s@%s:%d %s#%s\n",
