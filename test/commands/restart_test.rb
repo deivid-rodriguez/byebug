@@ -7,7 +7,7 @@ module Byebug
       strip_line_numbers <<-EOC
         1:  byebug
         2:
-        3:  ARGV.join(' ')
+        3:  $ARGV.join(' ')
       EOC
     end
 

@@ -12,7 +12,7 @@ require_relative 'support/printer_helpers'
 #
 # Load the test files from the command line.
 #
-argv = ARGV.select do |argument|
+argv = $ARGV.select do |argument|
   if argument =~ /^-/
     argument
   else

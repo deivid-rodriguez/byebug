@@ -54,7 +54,7 @@ module Byebug
     # Starts byebug to debug a program
     #
     def run
-      prepare_options.order!(ARGV)
+      prepare_options.order!($ARGV)
 
       if version
         Byebug.puts("\n  Running byebug #{version}\n")

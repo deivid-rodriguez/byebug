@@ -182,7 +182,7 @@ def hanoi(n, a, b, c)
   hanoi(n - 1, c, b, a) if n - 1 > 0
 end
 
-n_args = ARGV.length
+n_args = $ARGV.length
 
 fail('*** Need number of disks or no parameter') if n_args > 1
 ```
@@ -264,7 +264,7 @@ false
     9:   hanoi(n - 1, c, b, a) if n - 1 > 0
    10: end
    11:
-=> 12: n_args = ARGV.length
+=> 12: n_args = $ARGV.length
    13:
    14: fail('*** Need number of disks or no parameter') if n_args > 1
 (byebug) private_methods.member?(:hanoi)
@@ -275,7 +275,7 @@ true
 Okay, lets go on and talk about program arguments.
 
 ```bash
-(byebug) ARGV
+(byebug) $ARGV
 []
 ```
 
@@ -390,9 +390,9 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
 
 [19, 28] in /path/to/hanoi.rb
    19:   begin
-   20:     n = ARGV[0].to_i
+   20:     n = $ARGV[0].to_i
    21:   rescue ValueError
-   22:     raise("** Expecting an integer, got: #{ARGV[0]}")
+   22:     raise("** Expecting an integer, got: #{$ARGV[0]}")
    23:   end
    24: end
    25:

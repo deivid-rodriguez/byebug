@@ -4,13 +4,13 @@ require 'mocha/mini_test'
 module Byebug
   class RemoteInterfaceTest < Minitest::Test
     def setup
-      @old_argv = ARGV
+      @old_argv = $ARGV
       @remote_socket_mock = mock('remote socket')
       @remote_interface = Byebug::RemoteInterface.new(@remote_socket_mock)
     end
 
     def teardown
-      ARGV.replace(@old_argv)
+      $ARGV.replace(@old_argv)
     end
 
     class ReadCommandTest < RemoteInterfaceTest
