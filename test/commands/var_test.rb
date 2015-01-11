@@ -32,20 +32,16 @@ module Byebug
       EOC
     end
 
-    ['var class', 'v cl'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_class_variables") do
-        enter cmd_alias
-        debug_code(program)
-        check_output_includes '@@class_variable = "bar"'
-      end
+    def test_var_class_shows_class_variables
+      enter 'var class'
+      debug_code(program)
+      check_output_includes '@@class_variable = "bar"'
     end
 
-    ['var const', 'v co'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_constants_in_class_or_module") do
-        enter "#{cmd_alias} Byebug::#{example_class}"
-        debug_code(program)
-        check_output_includes 'SOMECONST = foo'
-      end
+    def test_var_const_shows_constants_in_class_or_module
+      enter "var const Byebug::#{example_class}"
+      debug_code(program)
+      check_output_includes 'SOMECONST = foo'
     end
 
     def test_var_const_shows_error_if_given_object_is_not_a_class_or_module
@@ -54,20 +50,16 @@ module Byebug
       check_output_includes 'Should be Class/Module: v'
     end
 
-    ['var global', 'v g'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_global_variables") do
-        enter cmd_alias
-        debug_code(program)
-        check_output_includes '$ERROR_INFO = nil'
-      end
+    def test_var_global_shows_global_variables
+      enter 'var global'
+      debug_code(program)
+      check_output_includes '$ERROR_INFO = nil'
     end
 
-    ['var instance', 'v ins'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_instance_vars_of_an_object") do
-        enter 'break 23', 'cont', "#{cmd_alias} v"
-        debug_code(program)
-        check_output_includes '@instance_variable = "11111111111111111111"'
-      end
+    def test_var_instance_shows_instance_vars_of_an_object
+      enter 'break 23', 'cont', 'var instance v'
+      debug_code(program)
+      check_output_includes '@instance_variable = "11111111111111111111"'
     end
 
     def test_var_instance_shows_instance_variables_of_self_if_no_object_given
@@ -94,15 +86,13 @@ module Byebug
       check_output_includes 'level = 2', 'i = 1'
     end
 
-    ['var all', 'v a'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_all_variables") do
-        enter 'break 17', 'cont', cmd_alias
-        debug_code(program)
-        check_output_includes '@@class_variable = "bar"',
-                              '$ERROR_INFO = nil',
-                              '@instance_variable = "11111111111111111111"',
-                              'level = 2'
-      end
+    def test_var_all_shows_all_variables
+      enter 'break 17', 'cont', 'var all'
+      debug_code(program)
+      check_output_includes '@@class_variable = "bar"',
+                            '$ERROR_INFO = nil',
+                            '@instance_variable = "11111111111111111111"',
+                            'level = 2'
     end
   end
 end
