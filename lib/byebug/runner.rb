@@ -40,14 +40,21 @@ module Byebug
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      output = `ruby -c "#{$PROGRAM_NAME}" 2>&1`
-      if $CHILD_STATUS.exitstatus != 0
-        Byebug.puts output
-        exit $CHILD_STATUS.exitstatus
-      end
+      check_syntax($PROGRAM_NAME)
 
       status = Byebug.debug_load($PROGRAM_NAME, @stop)
       Byebug.puts "#{status}\n#{status.backtrace}" if status
+    end
+
+    #
+    # Exits and outputs error message if syntax of the given program is invalid.
+    #
+    def check_syntax(program_name)
+      output = `ruby -c "#{program_name}" 2>&1`
+      return unless $CHILD_STATUS.exitstatus != 0
+
+      Byebug.errmsg(output)
+      exit($CHILD_STATUS.exitstatus)
     end
 
     #
