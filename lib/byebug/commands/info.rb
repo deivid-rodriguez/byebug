@@ -90,6 +90,7 @@ module Byebug
     end
 
     def info_file_sha1(file)
+      require 'digest/sha1'
       Digest::SHA1.hexdigest(file)
     end
 
