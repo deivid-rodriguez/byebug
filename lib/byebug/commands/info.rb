@@ -180,7 +180,7 @@ module Byebug
       if @state.context
         send("info_#{subcmd.name}", *args)
       else
-        errmsg "info_#{subcmd.name} not available without a context.\n"
+        errmsg "'info #{subcmd.name}' not available without a context.\n"
       end
     end
 
