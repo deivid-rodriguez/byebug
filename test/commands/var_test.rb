@@ -37,6 +37,12 @@ module Byebug
       check_output_includes 'SOMECONST = foo'
     end
 
+    def test_var_const_shows_constants_in_current_scope_when_without_argument
+      enter 'var const'
+      debug_code(program)
+      check_output_includes 'SOMECONST = foo'
+    end
+
     def test_var_const_shows_error_if_given_object_is_not_a_class_or_module
       enter 'var const v'
       debug_code(program)

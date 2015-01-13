@@ -14,6 +14,8 @@
 - `catch` command is not allowed in post_mortem mode anymore. It was not
 working anyways (#92).
 - `step` is now more user friendly when used in combination with `up` (see #85).
+- `var const` can now be called without an argument and will show constants in
+the current scope.
 
 ### Fixed
 - Code reloading issues.
