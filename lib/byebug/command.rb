@@ -35,7 +35,7 @@ module Byebug
       at = e.backtrace
       locations = []
       locations << "#{at.shift}: #{e.class} Exception(#{e.message})"
-      locations += at.map { |path| puts "\tfrom #{path}" }
+      locations += at.map { |path| "\tfrom #{path}" }
       errmsg(pr('eval.exception',
                 text_message: locations.join("\n"),
                 class: e.class,
