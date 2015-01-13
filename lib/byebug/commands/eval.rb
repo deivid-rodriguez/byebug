@@ -10,6 +10,12 @@ module Byebug
       binding = get_binding
       yield binding
     end
+
+    def eval_with_setting(binding, expression, stack_on_error)
+      return bb_warning_eval(expression, binding) unless stack_on_error
+
+      bb_eval(expression, binding)
+    end
   end
 
   #
@@ -30,13 +36,9 @@ module Byebug
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        result =
-          if Setting[:stack_on_error]
-            bb_eval(expr, b)
-          else
-            bb_warning_eval(expr, b)
-          end
-        print pr('eval.result', expr: expr, result: result.inspect)
+        res = eval_with_setting(b, expr, Setting[:stack_on_error])
+
+        print pr('eval.result', expr: expr, result: res.inspect)
       end
     rescue
       puts "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}"
@@ -109,15 +111,12 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        if Setting[:stack_on_error]
-          vals = bb_eval(@match.post_match, b)
+        res = eval_with_setting(b, @match.post_match, Setting[:stack_on_error])
+
+        if res.is_a?(Array)
+          puts "#{columnize(res.map(&:to_s), Setting[:width])}"
         else
-          vals = bb_warning_eval(@match.post_match, b)
-        end
-        if vals.is_a?(Array)
-          puts "#{columnize(vals.map(&:to_s), Setting[:width])}"
-        else
-          PP.pp(vals, out)
+          PP.pp(res, out)
           puts out.string
         end
       end
@@ -152,15 +151,12 @@ module Byebug
     def execute
       out = StringIO.new
       run_with_binding do |b|
-        if Setting[:stack_on_error]
-          vals = bb_eval(@match.post_match, b)
+        res = eval_with_setting(b, @match.post_match, Setting[:stack_on_error])
+
+        if res.is_a?(Array)
+          puts "#{columnize(res.map(&:to_s).sort!, Setting[:width])}"
         else
-          vals = bb_warning_eval(@match.post_match, b)
-        end
-        if vals.is_a?(Array)
-          puts "#{columnize(vals.map(&:to_s).sort!, Setting[:width])}"
-        else
-          PP.pp(vals, out)
+          PP.pp(res, out)
           puts out.string
         end
       end
