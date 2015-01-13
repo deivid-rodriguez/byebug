@@ -32,7 +32,7 @@ module Byebug
     def bb_eval(str, b = get_binding)
       b.eval(str)
     rescue StandardError, ScriptError => e
-      at = b.eval('Thread.current.backtrace_locations')
+      at = e.backtrace
       backtraces = []
       backtraces << "#{at.shift}: #{e.class} Exception(#{e.message})"
       backtraces += at.map { |path| puts "\tfrom #{path}" }
