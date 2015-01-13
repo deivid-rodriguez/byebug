@@ -19,7 +19,7 @@ module Byebug
       puts prv(vars)
     end
 
-    def var_global
+    def var_global(_str = nil)
       globals = global_variables.reject do |v|
         [:$IGNORECASE, :$=, :$KCODE, :$-K, :$binding].include?(v)
       end
@@ -27,62 +27,62 @@ module Byebug
       var_list(globals)
     end
 
-    def var_instance(where)
-      obj = bb_eval(where)
+    def var_instance(str)
+      obj = bb_warning_eval(str || 'self')
       var_list(obj.instance_variables, obj.instance_eval { binding })
     end
 
-    def var_local
+    def var_constant(str)
+      str ||= 'self.class'
+      obj = bb_warning_eval(str)
+      is_mod = obj.is_a?(Module)
+      return errmsg(pr('variable.errors.not_module', object: str)) unless is_mod
+
+      constants = bb_eval("#{str}.constants")
+      puts prv(constants.sort.map { |c| [c, obj.const_get(c)] })
+    end
+
+    def var_local(_str = nil)
       _self = @state.context.frame_self(@state.frame)
       locals = @state.context.frame_locals
       puts prv(locals.keys.sort.map { |k| [k, locals[k]] })
     end
-  end
 
-  #
-  # Show all variables and its values.
-  #
-  class VarAllCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ a(?:ll)? \s*$/x
-    end
-
-    def execute
-      var_class_self
+    def var_all(_str = nil)
       var_global
       var_instance('self')
       var_local
     end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %(v[ar] a[ll]
-
-          Show local, global and instance & class variables of self.)
-      end
-    end
   end
 
   #
-  # Show constants and its values.
+  # Show variables and its values.
   #
-  class VarConstantCommand < Command
+  class VarCommand < Command
+    Subcommands = [
+      ['constant', 2, 'Show constants of an object'],
+      ['global', 1, 'Show global variables'],
+      ['instance', 1, 'Show instance variables of self or a specific object'],
+      ['local', 1, 'Show local variables in current scope'],
+      ['all', 1, 'Shows local, global and instance variables of self']
+    ].map do |name, min, help|
+      Subcmd.new(name, min, help)
+    end
+
     def regexp
-      /^\s* v(?:ar)? \s+ co(?:nst(?:ant)?)? \s+/x
+      /^\s* v(?:ar)? (?: \s+(\S+) (?:\s(\S+))? )? \s*$/x
     end
 
     def execute
-      obj = bb_eval(@match.post_match)
-      if obj.is_a? Module
-        constants = bb_eval("#{@match.post_match}.constants")
-        constants.sort!
-        puts prv(constants.map { |c| [c, obj.const_get(c)] })
+      return puts(self.class.help) unless @match[1]
+
+      subcmd = Command.find(Subcommands, @match[1])
+      return errmsg("Unknown var command #{@match[1]}\n") unless subcmd
+
+      if @state.context
+        send("var_#{subcmd.name}", @match[2])
       else
-        puts pr('variable.errors.not_class_module', object: @match.post_match)
+        errmsg "'var #{subcmd.name}' not available without a context.\n"
       end
     end
 
@@ -92,78 +92,12 @@ module Byebug
       end
 
       def description
-        %(v[ar] co[nst] <object>        Show constants of <object>.)
-      end
-    end
-  end
+        <<-EOD.gsub(/^ {8}/, '')
 
-  #
-  # Show global variables and its values.
-  #
-  class VarGlobalCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ g(?:lobal)? \s*$/x
-    end
+          [v]ar
 
-    def execute
-      var_global
-    end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %(v[ar] g[lobal]        Show global variables.)
-      end
-    end
-  end
-
-  #
-  # Show instance variables and its values.
-  #
-  class VarInstanceCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ ins(?:tance)? \s*/x
-    end
-
-    def execute
-      var_instance(@match.post_match.empty? ? 'self' : @match.post_match)
-    end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %(v[ar] i[nstance] <object>
-
-        Show instance variables of <object>.)
-      end
-    end
-  end
-
-  #
-  # Show local variables and its values.
-  #
-  class VarLocalCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ l(?:ocal)? \s*$/x
-    end
-
-    def execute
-      var_local
-    end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %(v[ar] l[ocal]        Sow local variables.)
+          Show variables and its values.
+        EOD
       end
     end
   end

@@ -48,8 +48,9 @@ module Byebug
       end
     end
 
-    %w(step next finish break condition display tracevar
-       untracevar).each do |cmd|
+    forbidden = %w(step next finish break condition display tracevar untracevar)
+
+    forbidden.each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
         enter 'set noautoeval', 'set post_mortem', "#{cmd}", 'set no_postmortem'
         Context.any_instance.stubs(:dead?).returns(:true)
@@ -61,9 +62,10 @@ module Byebug
       end
     end
 
-    ['restart', 'frame', 'quit', 'edit', 'info', 'irb', 'source', 'help',
-     'var class', 'list', 'method', 'kill', 'eval', 'set', 'save', 'show',
-     'thread list', 'up', 'where', 'down'].each do |cmd|
+    permitted = %w(restart frame quit edit info irb source help list method kill
+                   eval set save show up where down)
+
+    permitted.each do |cmd|
       define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do
         enter 'set post_mortem', "#{cmd}", 'set no_postmortem'
         class_name = cmd.gsub(/(^| )\w/) { |b| b[-1, 1].upcase } + 'Command'
