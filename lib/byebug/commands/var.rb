@@ -19,11 +19,6 @@ module Byebug
       puts prv(vars)
     end
 
-    def var_class_self
-      obj = bb_eval('self')
-      var_list(obj.class.class_variables, get_binding)
-    end
-
     def var_global
       globals = global_variables.reject do |v|
         [:$IGNORECASE, :$=, :$KCODE, :$-K, :$binding].include?(v)
@@ -68,32 +63,6 @@ module Byebug
         %(v[ar] a[ll]
 
           Show local, global and instance & class variables of self.)
-      end
-    end
-  end
-
-  #
-  # Show class variables and its values.
-  #
-  class VarClassCommand < Command
-    def regexp
-      /^\s* v(?:ar)? \s+ cl(?:ass)? \s*/x
-    end
-
-    def execute
-      unless @state.context
-        return errmsg(pr('variable.errors.cant_get_class_vars'))
-      end
-      var_class_self
-    end
-
-    class << self
-      def names
-        %w(var)
-      end
-
-      def description
-        %(v[ar] cl[ass]        Show class variables of self.)
       end
     end
   end

@@ -41,6 +41,7 @@ they are no longer necessary.
 file sha1`, `info file all`. Now all information is listed under `info file`.
 - `testing` setting. It was just a hack to be able to test `byebug`. Nobody was
 supposed to actually use it!
+- `var class` command, just use Ruby (`self.class.class_variables`).
 
 ## 3.5.1 - 2014-09-29
 ### Fixed

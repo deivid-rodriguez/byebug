@@ -11,31 +11,24 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      SOMECONST = 'foo' unless defined?(SOMECONST)
-         7:      @@class_variable = 'bar'
-         8:
-         9:      def initialize
-        10:        @instance_variable = '1' * 20
-        11:        byebug
-        12:        @empty_object = BasicObject.new
-        13:      end
-        14:
-        15:      def run(level)
-        16:        [1, 2, 3].map do |i|
-        17:          level * i
-        18:        end
-        19:      end
-        20:    end
-        21:
-        22:    v = #{example_class}.new
-        23:    v.run(2)
-        24:  end
+         7:
+         8:      def initialize
+         9:        @instance_variable = '1' * 20
+        10:        byebug
+        11:        @empty_object = BasicObject.new
+        12:      end
+        13:
+        14:      def run(level)
+        15:        [1, 2, 3].map do |i|
+        16:          level * i
+        17:        end
+        18:      end
+        19:    end
+        20:
+        21:    v = #{example_class}.new
+        22:    v.run(2)
+        22:  end
       EOC
-    end
-
-    def test_var_class_shows_class_variables
-      enter 'var class'
-      debug_code(program)
-      check_output_includes '@@class_variable = "bar"'
     end
 
     def test_var_const_shows_constants_in_class_or_module
@@ -57,7 +50,7 @@ module Byebug
     end
 
     def test_var_instance_shows_instance_vars_of_an_object
-      enter 'break 23', 'cont', 'var instance v'
+      enter 'break 22', 'cont', 'var instance v'
       debug_code(program)
       check_output_includes '@instance_variable = "11111111111111111111"'
     end
@@ -75,22 +68,21 @@ module Byebug
     end
 
     def test_v_ins_shows_error_if_value_does_not_have_to_s_or_inspect_methods
-      enter 'break 23', 'cont', 'v ins v'
+      enter 'break 22', 'cont', 'v ins v'
       debug_code(program)
       check_output_includes '@empty_object = *Error in evaluation*'
     end
 
     def test_var_local_shows_local_variables
-      enter 'break 17', 'cont', 'var local'
+      enter 'break 16', 'cont', 'var local'
       debug_code(program)
       check_output_includes 'level = 2', 'i = 1'
     end
 
     def test_var_all_shows_all_variables
-      enter 'break 17', 'cont', 'var all'
+      enter 'break 16', 'cont', 'var all'
       debug_code(program)
-      check_output_includes '@@class_variable = "bar"',
-                            '$ERROR_INFO = nil',
+      check_output_includes '$ERROR_INFO = nil',
                             '@instance_variable = "11111111111111111111"',
                             'level = 2'
     end

@@ -127,7 +127,7 @@ both rails and rspec have deprecated these flags in their latest versions.
     `tracevar`  |              |
     `undisplay` |              |
     `up`        |              |
-    `var`       |              | `all` `class` `constant` `global` `instance` `local`
+    `var`       |              | `all` `constant` `global` `instance` `local`
 
 
 ## Semantic Versioning
