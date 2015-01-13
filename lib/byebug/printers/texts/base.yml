@@ -112,5 +112,5 @@ parse:
 
 variable:
   errors:
-    not_class_module: "Should be Class/Module: {object}"
+    not_module: "Should be Class/Module: {object}"
     cant_get_class_vars: "can't get class variables here.\n"
