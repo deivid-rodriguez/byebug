@@ -33,11 +33,11 @@ module Byebug
       b.eval(str)
     rescue StandardError, ScriptError => e
       at = e.backtrace
-      backtraces = []
-      backtraces << "#{at.shift}: #{e.class} Exception(#{e.message})"
-      backtraces += at.map { |path| puts "\tfrom #{path}" }
+      locations = []
+      locations << "#{at.shift}: #{e.class} Exception(#{e.message})"
+      locations += at.map { |path| puts "\tfrom #{path}" }
       errmsg(pr('eval.exception',
-                text_message: backtraces.join("\n"),
+                text_message: locations.join("\n"),
                 class: e.class,
                 value: e.to_s))
       nil
