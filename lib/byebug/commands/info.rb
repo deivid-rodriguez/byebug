@@ -170,7 +170,7 @@ module Byebug
     end
 
     def execute
-      return puts(InfoCommand.help) unless @match[1]
+      return puts(self.class.help) unless @match[1]
 
       args = @match[1].split(/[ \t]+/)
       param = args.shift
