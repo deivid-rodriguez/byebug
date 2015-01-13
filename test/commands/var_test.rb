@@ -40,7 +40,7 @@ module Byebug
     def test_var_const_shows_error_if_given_object_is_not_a_class_or_module
       enter 'var const v'
       debug_code(program)
-      check_output_includes 'Should be Class/Module: v'
+      check_error_includes 'Should be Class/Module: v'
     end
 
     def test_var_global_shows_global_variables

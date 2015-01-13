@@ -65,7 +65,7 @@ module Byebug
     def test_eval_shows_backtrace_on_error_if_stack_on_error_enabled
       enter 'set stack_on_error', 'eval 2 / 0'
       debug_code(program)
-      check_output_includes(/\s*from \S+:in \`eval\'/)
+      check_error_includes(/\s*from \S+:in \`eval\'/)
       check_output_doesnt_include 'ZeroDivisionError Exception: divided by 0'
     end
 
