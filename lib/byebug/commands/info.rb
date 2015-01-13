@@ -1,6 +1,6 @@
 module Byebug
   #
-  # Utility methods to assist the info command
+  # Utilities for the info command.
   #
   module InfoFunctions
     def info_catch(*_args)
