@@ -36,10 +36,8 @@ module Byebug
       locations = []
       locations << "#{at.shift}: #{e.class} Exception(#{e.message})"
       locations += at.map { |path| "\tfrom #{path}" }
-      errmsg(pr('eval.exception',
-                text_message: locations.join("\n"),
-                class: e.class,
-                value: e.to_s))
+
+      errmsg(pr('eval.exception', text_message: locations.join("\n")))
       nil
     end
 
@@ -47,10 +45,7 @@ module Byebug
       b.eval(str)
     rescue StandardError, ScriptError => e
       text_message = "#{e.class} Exception: #{e.message}"
-      print(pr('eval.exception',
-               text_message: text_message,
-               class: e.class,
-               value: e.to_s))
+      print(pr('eval.exception', text_message: text_message))
       nil
     end
 
