@@ -355,7 +355,7 @@ call_event(VALUE trace_point, void *data)
 
   breakpoint =
     find_breakpoint_by_method(bb_breakpoints(self), klass, mid, binding, self);
-  if (breakpoint != Qnil)
+  if (!NIL_P(breakpoint))
   {
     call_at_breakpoint(context, dc, breakpoint);
     call_at_line(context, dc, file, line);
