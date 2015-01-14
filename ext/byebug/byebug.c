@@ -78,14 +78,6 @@ check_started()
   }
 }
 
-const char *
-safe_sym_to_str(VALUE sym)
-{
-  VALUE id = NIL_P(sym) ? Qnil : SYM2ID(sym);
-
-  return NIL_P(id) ? "" : rb_id2name(id);
-}
-
 static void
 trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
             const char *file_filter, const char *debug_msg)
@@ -100,7 +92,8 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 
   int line = NUM2INT(rb_tracearg_lineno(trace_arg));
 
-  const char *mid = safe_sym_to_str(rb_tracearg_method_id(trace_arg));
+  VALUE rb_mid = rb_tracearg_method_id(trace_arg);
+  const char *mid = NIL_P(rb_mid) ? "(top level)" : rb_id2name(SYM2ID(rb_mid));
 
   VALUE rb_cl = rb_tracearg_defined_class(trace_arg);
   VALUE rb_cl_name = NIL_P(rb_cl) ? rb_cl : rb_mod_name(rb_cl);
@@ -331,7 +324,7 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, klass, mid, binding, self, file, line;
+  VALUE breakpoint, klass, msym, mid, binding, self, file, line;
 
   EVENT_SETUP;
 
@@ -344,10 +337,18 @@ call_event(VALUE trace_point, void *data)
 
   dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
 
-  breakpoint = Qnil;
+  /* nil method_id means we are at top level so there can't be a method
+   * breakpoint here. Just leave then. */
+  msym = rb_tracearg_method_id(trace_arg);
+  if (NIL_P(msym))
+  {
+    EVENT_TEARDOWN;
+    return;
+  }
+
+  mid = SYM2ID(msym);
   klass = rb_tracearg_defined_class(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
-  mid = SYM2ID(rb_tracearg_method_id(trace_arg));
   self = rb_tracearg_self(trace_arg);
   file = rb_tracearg_path(trace_arg);
   line = rb_tracearg_lineno(trace_arg);
@@ -391,7 +392,7 @@ return_event(VALUE trace_point, void *data)
 }
 
 static void
-msc_call_event(VALUE trace_point, void *data)
+c_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
@@ -401,7 +402,7 @@ msc_call_event(VALUE trace_point, void *data)
 }
 
 static void
-msc_return_event(VALUE trace_point, void *data)
+c_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
@@ -499,19 +500,17 @@ register_tracepoints(VALUE self)
   if (NIL_P(traces))
   {
     int line_msk = RUBY_EVENT_LINE;
-    int call_msk = RUBY_EVENT_CALL;
-    int ret_msk = RUBY_EVENT_RETURN;
-    int msc_call_msk =
-      RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
-    int msc_ret_msk =
-      RUBY_EVENT_C_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
+    int call_msk = RUBY_EVENT_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
+    int return_msk = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
+    int c_call_msk = RUBY_EVENT_C_CALL;
+    int c_ret_msk = RUBY_EVENT_C_RETURN;
     int raise_msk = RUBY_EVENT_RAISE;
 
     VALUE tpLine = rb_tracepoint_new(Qnil, line_msk, line_event, 0);
     VALUE tpCall = rb_tracepoint_new(Qnil, call_msk, call_event, 0);
-    VALUE tpRet = rb_tracepoint_new(Qnil, ret_msk, return_event, 0);
-    VALUE tpMscCall = rb_tracepoint_new(Qnil, msc_call_msk, msc_call_event, 0);
-    VALUE tpMscRet = rb_tracepoint_new(Qnil, msc_ret_msk, msc_return_event, 0);
+    VALUE tpReturn = rb_tracepoint_new(Qnil, return_msk, return_event, 0);
+    VALUE tpCCall = rb_tracepoint_new(Qnil, c_call_msk, c_call_event, 0);
+    VALUE tpCReturn = rb_tracepoint_new(Qnil, c_ret_msk, c_return_event, 0);
     VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
 
     VALUE tpThreadBegin = rb_tracepoint_new(Qnil,
@@ -527,9 +526,9 @@ register_tracepoints(VALUE self)
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
     rb_ary_push(traces, tpCall);
-    rb_ary_push(traces, tpRet);
-    rb_ary_push(traces, tpMscCall);
-    rb_ary_push(traces, tpMscRet);
+    rb_ary_push(traces, tpReturn);
+    rb_ary_push(traces, tpCCall);
+    rb_ary_push(traces, tpCReturn);
     rb_ary_push(traces, tpRaise);
     rb_ary_push(traces, tpThreadBegin);
     rb_ary_push(traces, tpThreadEnd);

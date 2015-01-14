@@ -327,14 +327,14 @@ module Byebug
   end
 
   #
-  # Tests entering byebug at the end of a method.
+  # Tests using the byebug keyword at special places
   #
-  class BreakDeepTestCase < TestCase
-    def program
-      strip_line_numbers <<-EOC
+  class BreakWithByebugKeyword < TestCase
+    def test_stops_at_method_end_when_last_instruction_of_method
+      program = strip_line_numbers <<-EOC
          1:  module Byebug
          2:    #
-         3:    # Toy class to test breakpoints
+         3:    # Toy class to test byebug at the end of a method
          4:    #
          5:    class #{example_class}
          6:      def a
@@ -345,10 +345,50 @@ module Byebug
         11:    end
         12:  end
       EOC
+
+      debug_code(program) { assert_equal 8, state.line }
     end
 
-    def test_breaking_w_byebug_keywork_stops_at_frame_end_when_last_instruction
-      debug_code(program) { assert_equal 8, state.line }
+    def test_stops_at_block_end_when_last_instruction_of_block
+      program = strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test byebug at the end of a block
+         4:    #
+         5:    class #{example_class}
+         6:      def method_that_yields(b)
+         7:        yield(b)
+         8:        0
+         9:      end
+        10:
+        11:      new.method_that_yields(0) do |n|
+        12:        sleep n
+        13:        byebug
+        14:      end
+        15:    end
+        16:  end
+      EOC
+
+      debug_code(program) { assert_equal 14, state.line }
+    end
+
+    def test_stops_at_class_end_when_last_instruction_of_class
+      program = strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test byebug at the end of a class
+         4:    #
+         5:    class #{example_class}
+         6:      def a
+         7:        0
+         8:      end
+         9:
+        10:      byebug
+        11:    end
+        12:  end
+      EOC
+
+      debug_code(program) { assert_equal 11, state.line }
     end
   end
 end
