@@ -93,7 +93,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
   char *fullpath = NULL;
   const char *basename;
   int filtered = 0;
-  const char *event = safe_sym_to_str(rb_tracearg_event(trace_arg));
+  const char *event = rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)));
 
   VALUE rb_path = rb_tracearg_path(trace_arg);
   const char *path = NIL_P(rb_path) ? "" : RSTRING_PTR(rb_path);
@@ -160,7 +160,7 @@ cleanup(debug_context_t * dc, rb_trace_arg_t * trace_arg)
   }
 
   if (thread == next_thread
-      && !strcmp("line", safe_sym_to_str(rb_tracearg_event(trace_arg))))
+      && !strcmp("line", rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)))))
     next_thread = Qnil;
 
   if (!NIL_P(thread) && is_living_thread(thread))
