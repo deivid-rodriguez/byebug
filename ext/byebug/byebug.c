@@ -253,6 +253,7 @@ static VALUE
 call_at_return(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
   CTX_FL_UNSET(dc, CTX_FL_STOP_ON_RET);
+  dc->stop_reason = CTX_STOP_BREAKPOINT;
   return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
 }
 
