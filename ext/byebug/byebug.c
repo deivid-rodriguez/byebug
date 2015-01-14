@@ -131,7 +131,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 }
 
 static void
-cleanup(debug_context_t * dc, rb_trace_arg_t * trace_arg)
+cleanup(debug_context_t * dc)
 {
   VALUE thread;
 
@@ -152,15 +152,14 @@ cleanup(debug_context_t * dc, rb_trace_arg_t * trace_arg)
     thread = next_thread;
   }
 
-  if (thread == next_thread
-      && !strcmp("line", rb_id2name(SYM2ID(rb_tracearg_event(trace_arg)))))
+  if (thread == next_thread)
     next_thread = Qnil;
 
   if (!NIL_P(thread) && is_living_thread(thread))
     rb_thread_run(thread);
 }
 
-#define EVENT_TEARDOWN cleanup(dc, trace_arg);
+#define EVENT_TEARDOWN cleanup(dc);
 
 #define EVENT_SETUP                                     \
   debug_context_t *dc;                                  \
@@ -252,7 +251,6 @@ call_at_catchpoint(VALUE context_obj, debug_context_t * dc, VALUE exp)
 static VALUE
 call_at_return(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
-  CTX_FL_UNSET(dc, CTX_FL_STOP_ON_RET);
   dc->stop_reason = CTX_STOP_BREAKPOINT;
   return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
 }

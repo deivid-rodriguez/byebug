@@ -528,9 +528,11 @@ Context_switch(VALUE self)
 
   Data_Get_Struct(self, debug_context_t, context);
 
-  context->steps = 1;
-
   next_thread = context->thread;
+
+  context->steps = 1;
+  context->steps_out = 0;
+  CTX_FL_SET(context, CTX_FL_STOP_ON_RET);
 
   return Qnil;
 }
