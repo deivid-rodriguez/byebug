@@ -124,7 +124,7 @@ module Byebug
 
       # Bind commands to the current state.
       Command.commands.each do |cmd|
-        cmd.new(@state).execute if cmd.always_run >= run_level
+        cmd.new(state).execute if cmd.always_run >= run_level
       end
     end
 
@@ -143,7 +143,7 @@ module Byebug
     # Main byebug's REPL
     #
     def repl(context)
-      until @state.proceed?
+      until state.proceed?
         cmd = @interface.read_command(prompt(context))
         return unless cmd
 
@@ -163,7 +163,7 @@ module Byebug
         return errmsg("Unknown command: \"#{input}\". Try \"help\"")
       end
 
-      eval_cmd = EvalCommand.new(@state)
+      eval_cmd = EvalCommand.new(state)
       eval_cmd.match(input)
       eval_cmd.execute
     end
@@ -188,7 +188,7 @@ module Byebug
     #
     def match_cmd(input)
       Command.commands.each do |c|
-        cmd = c.new(@state)
+        cmd = c.new(state)
         return cmd if cmd.match(input)
       end
 
@@ -203,7 +203,7 @@ module Byebug
 
       puts 'The program finished.' if program_just_finished?(context)
 
-      puts(@state.location) if Setting[:autolist] == 0
+      puts(state.location) if Setting[:autolist] == 0
 
       @interface.history.restore if Setting[:autosave]
     end

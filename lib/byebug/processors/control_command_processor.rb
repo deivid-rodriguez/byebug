@@ -5,7 +5,7 @@ module Byebug
   # Processes commands in 'control' mode, when there's no program running
   #
   class ControlCommandProcessor < Processor
-    attr_accessor :state
+    attr_reader :state
 
     def initialize(interface = LocalInterface.new)
       super(interface)
@@ -14,7 +14,7 @@ module Byebug
     end
 
     def commands
-      Command.commands.select(&:allow_in_control).map { |cmd| cmd.new(@state) }
+      Command.commands.select(&:allow_in_control).map { |cmd| cmd.new(state) }
     end
 
     def process_commands
