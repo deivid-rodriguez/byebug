@@ -239,11 +239,16 @@ Context_frame_class(int argc, VALUE * argv, VALUE self)
 static VALUE
 Context_frame_file(int argc, VALUE * argv, VALUE self)
 {
-  VALUE loc;
+  VALUE loc, absolute_path;
 
   FRAME_SETUP;
 
   loc = dc_frame_location(context, frame_n);
+
+  absolute_path = rb_funcall(loc, rb_intern("absolute_path"), 0);
+
+  if (!NIL_P(absolute_path))
+    return absolute_path;
 
   return rb_funcall(loc, rb_intern("path"), 0);
 }
