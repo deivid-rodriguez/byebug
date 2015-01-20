@@ -33,7 +33,7 @@ module Byebug
 
     #
     # After a single 'bt' command, gives the backtrace size from the output.
-    # It's the number of lines input except for the prompt.
+    # It's the number of lines of input except for the prompt.
     #
     def backtrace_size
       (interface.output - ['(byebug) ']).size
