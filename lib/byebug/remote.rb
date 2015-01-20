@@ -25,7 +25,7 @@ module Byebug
     def start_server(host = nil, port = PORT)
       return if @thread
 
-      self.interface = nil
+      handler.interface = nil
       start
 
       start_control(host, port == 0 ? 0 : port + 1)
@@ -39,7 +39,7 @@ module Byebug
       self.actual_port = server.addr[1]
       @thread = DebugThread.new do
         while (session = server.accept)
-          self.interface = RemoteInterface.new(session)
+          handler.interface = RemoteInterface.new(session)
           mutex.synchronize { proceed.signal } if wait_connection
         end
       end
@@ -53,8 +53,8 @@ module Byebug
       @actual_control_port = server.addr[1]
       @control_thread = DebugThread.new do
         while (session = server.accept)
-          interface = RemoteInterface.new(session)
-          ControlCommandProcessor.new(interface).process_commands
+          handler.interface = RemoteInterface.new(session)
+          ControlCommandProcessor.new(handler.interface).process_commands
         end
       end
       @actual_control_port
@@ -64,20 +64,20 @@ module Byebug
     # Connects to the remote byebug
     #
     def start_client(host = 'localhost', port = PORT)
-      interface = LocalInterface.new
-      interface.puts 'Connecting to byebug server...'
+      handler.interface = LocalInterface.new
+      puts 'Connecting to byebug server...'
       socket = TCPSocket.new(host, port)
-      interface.puts 'Connected.'
+      puts 'Connected.'
 
       catch(:exit) do
         while (line = socket.gets)
           case line
           when /^PROMPT (.*)$/
-            input = interface.read_command(Regexp.last_match[1])
+            input = handler.interface.read_command(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           when /^CONFIRM (.*)$/
-            input = interface.confirm(Regexp.last_match[1])
+            input = handler.interface.confirm(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           else
