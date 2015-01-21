@@ -40,7 +40,7 @@ module Byebug
     # Current (formatted) location
     #
     def location
-      l = "#{CommandProcessor.canonic_file(file)} @ #{line}\n"
+      l = "#{normalize(file)} @ #{line}\n"
       l += "#{get_line(file, line)}\n" unless %w((irb) -e').include?(file)
       l
     end

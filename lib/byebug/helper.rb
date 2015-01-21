@@ -27,6 +27,19 @@ module Byebug
     def n_lines(filename)
       File.foreach(filename).reduce(0) { |a, _e| a + 1 }
     end
+
+    #
+    # Regularize file name.
+    #
+    def normalize(filename)
+      return filename if ['(irb)', '-e'].include?(filename)
+
+      return File.basename(filename) if Setting[:basename]
+
+      path = File.expand_path(filename)
+
+      File.exist?(path) ? File.realpath(path) : filename
+    end
   end
 
   #

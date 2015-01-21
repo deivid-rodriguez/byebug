@@ -23,26 +23,6 @@ module Byebug
       end
     end
 
-    require 'pathname' # For cleanpath
-
-    #
-    # Regularize file name.
-    #
-    # This is also used as a common funnel place if basename is desired or if
-    # we are working remotely and want to change the basename. Or we are
-    # eliding filenames.
-    #
-    def self.canonic_file(filename)
-      return filename if ['(irb)', '-e'].include?(filename)
-
-      # For now we want resolved filenames
-      if Setting[:basename]
-        File.basename(filename)
-      else
-        Pathname.new(filename).cleanpath.to_s
-      end
-    end
-
     def self.protect(mname)
       alias_method "__#{mname}", mname
       module_eval <<-END, __FILE__, __LINE__ + 1
@@ -66,15 +46,17 @@ module Byebug
 
     def at_breakpoint(_context, breakpoint)
       n = Byebug.breakpoints.index(breakpoint) + 1
-      file = self.class.canonic_file(breakpoint.source)
+      file = normalize(breakpoint.source)
       line = breakpoint.pos
+
       puts "Stopped by breakpoint #{n} at #{file}:#{line}"
     end
     protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
-      file = self.class.canonic_file(context.frame_file(0))
+      file = normalize(context.frame_file(0))
       line = context.frame_line(0)
+
       puts "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})"
     end
     protect :at_catchpoint
@@ -82,8 +64,7 @@ module Byebug
     include FileFunctions
 
     def at_tracing(context, file, line)
-      path = self.class.canonic_file(file)
-      puts "Tracing: #{path}:#{line} #{get_line(file, line)}"
+      puts "Tracing: #{normalize(file)}:#{line} #{get_line(file, line)}"
 
       always_run(context, file, line, 2)
     end
