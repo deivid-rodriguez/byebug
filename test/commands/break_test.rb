@@ -130,16 +130,8 @@ module Byebug
       debug_code(program) { assert_equal 22, state.line }
     end
 
-    def test_setting_conditional_breakpoint_shows_error_if_no_breakpoint_id
-      enter 'break if z == 3', 'break 22', 'cont'
-
-      debug_code(program) { assert_equal 22, state.line }
-      check_error_includes 'Invalid breakpoint id. Use "info breakpoint" to ' \
-                           'find out the correct id'
-    end
-
     def test_setting_conditional_breakpoint_using_wrong_expression_ignores_it
-      enter 'break if z -=) 3', 'break 22', 'cont'
+      enter 'break 21 if z -=) 3', 'break 22', 'cont'
 
       debug_code(program) { assert_equal 22, state.line }
     end
