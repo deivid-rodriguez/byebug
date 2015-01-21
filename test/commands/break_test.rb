@@ -156,50 +156,26 @@ module Byebug
       debug_code(program) { assert_empty Byebug.breakpoints }
     end
 
-    module FilenameTests
-      def test_setting_breakpoint_prints_confirmation_message
-        enter 'break 21'
-        debug_code(program) { @id = Breakpoint.first.id }
+    def test_setting_breakpoint_prints_confirmation_message
+      enter 'break 21'
+      debug_code(program) { @id = Breakpoint.first.id }
 
-        check_output_includes "Created breakpoint #{@id} at #{@filename}:21"
-      end
-
-      def test_setting_breakpoint_to_nonexistent_line_shows_an_error
-        enter 'break 1000'
-        debug_code(program)
-
-        check_error_includes "There are only 23 lines in file #{@filename}"
-      end
-
-      def test_setting_breakpoint_to_invalid_line_shows_an_error
-        enter 'break 9'
-        debug_code(program)
-
-        check_error_includes \
-          "Line 9 is not a valid breakpoint in file #{@filename}"
-      end
+      check_output_includes("Created breakpoint #{@id} at #{example_path}:21")
     end
 
-    class BreakTestCaseBasename < BreakTestCase
-      def setup
-        super
+    def test_setting_breakpoint_to_nonexistent_line_shows_an_error
+      enter 'break 1000'
+      debug_code(program)
 
-        @filename = File.basename(example_path)
-        enter 'set basename'
-      end
-
-      include FilenameTests
+      check_error_includes "There are only 23 lines in file #{example_path}"
     end
 
-    class BreakTestCaseNobasename < BreakTestCase
-      def setup
-        super
+    def test_setting_breakpoint_to_invalid_line_shows_an_error
+      enter 'break 9'
+      debug_code(program)
 
-        @filename = example_path
-        enter 'set nobasename'
-      end
-
-      include FilenameTests
+      check_error_includes \
+        "Line 9 is not a valid breakpoint in file #{example_path}"
     end
   end
 
