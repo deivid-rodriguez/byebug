@@ -60,7 +60,7 @@ module Byebug
     # Path to file where test code is saved
     #
     def example_path
-      example_file.path
+      File.realpath(example_file.path)
     end
 
     include StringFunctions
