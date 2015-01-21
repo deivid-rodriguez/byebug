@@ -136,6 +136,13 @@ module Byebug
       debug_code(program) { assert_equal 22, state.line }
     end
 
+    def test_setting_conditional_breakpoint_using_wrong_expression_shows_error
+      enter 'break 21 if z -=) 3'
+      debug_code(program)
+
+      check_error_includes 'Incorrect expression "z -=) 3"; breakpoint disabled'
+    end
+
     def test_shows_info_about_setting_breakpoints_when_using_just_break
       enter 'break', 'cont'
       debug_code(program)

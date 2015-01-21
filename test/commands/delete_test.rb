@@ -34,5 +34,24 @@ module Byebug
 
       debug_code(program) { assert_equal 10, state.line }
     end
+
+    def test_delete_by_itself_deletes_all_breakpoints_if_confirmed
+      enter 'break 9', 'break 10', 'delete', 'y'
+
+      debug_code(program) { assert_empty Byebug.breakpoints }
+    end
+
+    def test_delete_by_itself_keeps_current_breakpoints_if_not_confirmed
+      enter 'break 9', 'break 10', 'delete', 'n'
+
+      debug_code(program) { assert_equal 2, Byebug.breakpoints.size }
+    end
+
+    def test_delete_with_an_invalid_breakpoint_id_shows_error
+      enter 'break 9', -> { "delete #{Breakpoint.last.id + 1}" }, 'cont'
+      debug_code(program)
+
+      check_error_includes(/No breakpoint number/)
+    end
   end
 end
