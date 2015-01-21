@@ -76,7 +76,7 @@ module Byebug
       end
     end
 
-    def test_setting_breakpoint_to_an_instance_method_stops_at_correct_place
+    def test_break_with_instance_method_stops_at_correct_place
       enter "break #{example_class}#b", 'cont'
 
       debug_code(program) do
@@ -85,7 +85,16 @@ module Byebug
       end
     end
 
-    def test_setting_breakpoint_to_a_class_method_stops_at_correct_place
+    def test_break_with_namespaced_instance_method_stops_at_correct_place
+      enter "break Byebug::#{example_class}#b", 'cont'
+
+      debug_code(program) do
+        assert_equal 10, state.line
+        assert_equal example_path, state.file
+      end
+    end
+
+    def test_break_with_class_method_stops_at_correct_place
       enter "break #{example_class}.a", 'cont'
 
       debug_code(program) do
@@ -94,18 +103,27 @@ module Byebug
       end
     end
 
-    def test_setting_breakpoint_to_nonexistent_class_does_not_create_breakpoint
-      enter 'break B.a'
+    def test_break_with_namespaced_class_method_stops_at_correct_place
+      enter "break Byebug::#{example_class}.a", 'cont'
 
-      debug_code(program)
-      check_error_includes 'Unknown class B'
+      debug_code(program) do
+        assert_equal 6, state.line
+        assert_equal example_path, state.file
+      end
     end
 
-    def test_setting_breakpoint_to_nonexistent_class_shows_error_message
+    def test_setting_breakpoint_to_an_undefined_class_creates_breakpoint
       enter 'break B.a'
-
       debug_code(program)
-      check_error_includes 'Unknown class B'
+
+      check_output_includes(/Successfully created breakpoint with id/)
+    end
+
+    def test_setting_breakpoint_to_an_undefined_class_shows_error_message
+      enter 'break ::B.a'
+      debug_code(program)
+
+      check_error_includes 'NameError Exception: uninitialized constant B'
     end
 
     def test_setting_breakpoint_to_invalid_location_does_not_create_breakpoint
@@ -160,7 +178,7 @@ module Byebug
       enter 'break 21'
       debug_code(program) { @id = Breakpoint.first.id }
 
-      check_output_includes("Created breakpoint #{@id} at #{example_path}:21")
+      check_output_includes("Successfully created breakpoint with id #{@id}")
     end
 
     def test_setting_breakpoint_to_nonexistent_line_shows_an_error

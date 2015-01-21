@@ -16,6 +16,9 @@ working anyways (#92).
 - `step` is now more user friendly when used in combination with `up` (see #85).
 - `var const` can now be called without an argument and will show constants in
 the current scope.
+- `break` with a class name now creates breakpoints regardless of class not
+being yet defined. If that's the case, it gives a warning but the class is
+created anyways.
 
 ### Fixed
 - Code reloading issues.
@@ -27,6 +30,7 @@ the current scope.
 - 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
 sequentially.
 - Finish command not stopping at the correct line (#101).
+- `break` with namespaced class, like, `break A::B#c` should not work (#106)
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up
