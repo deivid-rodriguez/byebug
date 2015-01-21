@@ -72,7 +72,7 @@ module Byebug
     def test_eval_shows_only_exception_if_stack_on_error_disabled
       enter 'set stack_on_error off', 'eval 2 / 0'
       debug_code(program)
-      check_output_includes 'ZeroDivisionError Exception: divided by 0'
+      check_error_includes 'ZeroDivisionError Exception: divided by 0'
       check_output_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
     end
 

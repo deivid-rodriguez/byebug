@@ -45,7 +45,7 @@ module Byebug
       b.eval(str)
     rescue StandardError, ScriptError => e
       text_message = "#{e.class} Exception: #{e.message}"
-      print(pr('eval.exception', text_message: text_message))
+      errmsg(pr('eval.exception', text_message: text_message))
       nil
     end
 
