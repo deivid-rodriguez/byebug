@@ -12,7 +12,7 @@ module Byebug
 
     def execute
       unless @match[1]
-        if confirm(pr('breakpoints.confirmations.delete_all'))
+        if confirm(pr('break.confirmations.delete_all'))
           Byebug.breakpoints.clear
         end
 
@@ -25,7 +25,7 @@ module Byebug
         return errmsg(err) unless pos
 
         unless Breakpoint.remove(pos)
-          return errmsg(pr('breakpoints.errors.no_breakpoint_delete', pos: pos))
+          return errmsg(pr('break.errors.no_breakpoint_delete', pos: pos))
         end
       end
     end

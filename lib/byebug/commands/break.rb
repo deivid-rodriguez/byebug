@@ -21,9 +21,9 @@ module Byebug
         file, line, expr = @match[2..4]
       end
 
-      return errmsg(pr('breakpoints.errors.no_breakpoint')) if line.nil? && expr
-      return errmsg(pr('breakpoints.errors.location')) unless line
-      return errmsg(pr('breakpoints.errors.state')) unless file
+      return errmsg(pr('break.errors.no_breakpoint')) if line.nil? && expr
+      return errmsg(pr('break.errors.location')) unless line
+      return errmsg(pr('break.errors.state')) unless file
 
       breakpoint = if line =~ /^\d+$/
                      line_breakpoint(file, line, expr)
@@ -33,28 +33,28 @@ module Byebug
 
       return if syntax_valid?(expr)
 
-      errmsg(pr('breakpoints.errors.expression', expr: expr))
+      errmsg(pr('break.errors.expression', expr: expr))
       breakpoint.enabled = false
     end
 
     def line_breakpoint(file, line, expr)
       path = File.expand_path(file)
       unless File.exist?(path)
-        return errmsg(pr('breakpoints.errors.source', file: file))
+        return errmsg(pr('break.errors.source', file: file))
       end
 
       f = CommandProcessor.canonic_file(path)
       l, n = line.to_i, File.foreach(path).count
       if l > n
-        return errmsg(pr('breakpoints.errors.far_line', lines: n, file: f))
+        return errmsg(pr('break.errors.far_line', lines: n, file: f))
       end
 
       unless Breakpoint.potential_line?(path, l)
-        return errmsg(pr('breakpoints.errors.line', line: l, file: f))
+        return errmsg(pr('break.errors.line', line: l, file: f))
       end
 
       b = Breakpoint.add(path, l, expr)
-      puts pr('breakpoints.created_line', id: b.id, file: f, line: l)
+      puts pr('break.created_line', id: b.id, file: f, line: l)
       b
     end
 
@@ -63,12 +63,12 @@ module Byebug
       if k && k.is_a?(Module)
         k = k.name
       else
-        return errmsg(pr('breakpoints.errors.class', klass: klass))
+        return errmsg(pr('break.errors.class', klass: klass))
       end
 
       m = method.intern
       b = Breakpoint.add(k, m, expr)
-      puts pr('breakpoints.created_method', id: b.id, class: k, method: m)
+      puts pr('break.created_method', id: b.id, class: k, method: m)
       b
     end
 

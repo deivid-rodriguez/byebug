@@ -1,4 +1,4 @@
-breakpoints:
+break:
   created_line: "Created breakpoint {id} at {file}:{line}"
   created_method: "Created breakpoint {id} at {class}::{method}"
 

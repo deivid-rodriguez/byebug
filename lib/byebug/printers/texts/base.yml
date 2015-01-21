@@ -2,7 +2,7 @@ base:
   errors:
     only_local: 'Command is available only in local mode.'
 
-breakpoints:
+break:
   errors:
     line: "Line {line} is not a valid breakpoint in file {file}"
     location: "Invalid breakpoint location"

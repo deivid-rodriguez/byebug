@@ -21,10 +21,10 @@ module Byebug
       return errmsg(err) if err
 
       breakpoint = breakpoints.find { |b| b.id == pos }
-      return errmsg(pr('breakpoints.errors.no_breakpoint')) unless breakpoint
+      return errmsg(pr('break.errors.no_breakpoint')) unless breakpoint
 
       unless syntax_valid?(@match[2])
-        return errmsg(pr('breakpoints.errors.not_changed', expr: @match[2]))
+        return errmsg(pr('break.errors.not_changed', expr: @match[2]))
       end
 
       breakpoint.expr = @match[2]
