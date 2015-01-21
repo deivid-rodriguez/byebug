@@ -30,7 +30,7 @@ created anyways.
 - 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
 sequentially.
 - Finish command not stopping at the correct line (#101).
-- `break` with namespaced class, like, `break A::B#c` should not work (#106)
+- `break` with namespaced class, like, `break A::B#c` should now work (#106)
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up
