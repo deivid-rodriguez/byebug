@@ -35,8 +35,8 @@ module Byebug
       debug_code(program)
 
       expected_output = split_lines <<-TXT
-        b[reak] file:line [if expr]
-        b[reak] class(.|#)method [if expr]
+        b[reak] [file:]line [if expr]
+        b[reak] [module::...]class(.|#)method [if expr]
         Set breakpoint to some position, (optionally) if expr == true
       TXT
 
