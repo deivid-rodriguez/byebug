@@ -29,8 +29,8 @@ module Byebug
 
       def description
         <<-EOD.gsub(/^ {8}/, '')
-          b[reak] file:line [if expr]
-          b[reak] class(.|#)method [if expr]
+          b[reak] [file:]line [if expr]
+          b[reak] [module::...]class(.|#)method [if expr]
 
           Set breakpoint to some position, (optionally) if expr == true
         EOD
