@@ -74,7 +74,7 @@ module Byebug
   # Runs a script file
   #
   def run_script(file, verbose = false)
-    interface = ScriptInterface.new(File.expand_path(file), verbose)
+    interface = ScriptInterface.new(file, verbose)
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands
   end
