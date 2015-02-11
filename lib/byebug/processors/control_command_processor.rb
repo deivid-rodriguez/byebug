@@ -23,7 +23,7 @@ module Byebug
         @context_was_dead = false
       end
 
-      @state = ControlState.new(interface, commands)
+      @state = ControlState.new(interface)
 
       while (input = @interface.read_command(prompt(nil)))
         cmd = commands.find { |c| c.match(input) }
