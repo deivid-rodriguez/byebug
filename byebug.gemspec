@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
 
   s.files = Dir['lib/**/*.rb', 'ext/**/*.[ch]', '.gitignore', 'LICENSE']
   s.files += %w(.rubocop.yml .travis.yml byebug.gemspec Gemfile Rakefile)
-  s.test_files = Dir.glob('test/**/*.rb')
   s.bindir = 'bin'
   s.executables = ['byebug']
   s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md)
