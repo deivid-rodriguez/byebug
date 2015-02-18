@@ -678,13 +678,6 @@ Stop(VALUE self)
 /*
  *  call-seq:
  *    Byebug.start -> bool
- *    Byebug.start { ... } -> bool
- *
- *  If a block is given, it starts byebug and yields block. After the block is
- *  executed it stops byebug with Byebug.stop method. Inside the block you
- *  will probably want to have a call to Byebug.byebug. For example:
- *
- *      Byebug.start { byebug; foo }  # Stop inside of foo
  *
  *  The return value is the value of !Byebug.started? <i>before</i> issuing the
  *  +start+; That is, +true+ is returned, unless byebug was previously started.
@@ -706,9 +699,6 @@ Start(VALUE self)
     register_tracepoints(self);
     result = Qtrue;
   }
-
-  if (rb_block_given_p())
-    rb_ensure(rb_yield, self, bb_stop, self);
 
   return result;
 }
