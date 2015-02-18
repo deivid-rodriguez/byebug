@@ -289,9 +289,6 @@ line_event(VALUE trace_point, void *data)
   line = rb_tracearg_lineno(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
 
-  if (dc->calced_stack_size == 0)
-    dc->calced_stack_size++;
-
   if (RTEST(tracing))
     call_at_tracing(context, dc, file, line);
 
@@ -371,8 +368,7 @@ return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  if (dc->calced_stack_size > 0)
-    dc->calced_stack_size--;
+  dc->calced_stack_size--;
 
   if (dc->steps_out == 1)
   {
@@ -408,8 +404,7 @@ c_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  if (dc->calced_stack_size > 0)
-    dc->calced_stack_size--;
+  dc->calced_stack_size--;
 
   EVENT_TEARDOWN;
 }
@@ -745,7 +740,7 @@ Debug_load(int argc, VALUE * argv, VALUE self)
   context = Current_context(self);
   Data_Get_Struct(context, debug_context_t, dc);
 
-  dc->calced_stack_size = 0;
+  dc->calced_stack_size = 1;
 
   if (RTEST(stop))
     dc->steps = 1;

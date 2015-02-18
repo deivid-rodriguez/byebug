@@ -67,7 +67,7 @@ context_create(VALUE thread)
   context->stop_reason = CTX_STOP_NONE;
 
   rb_debug_inspector_open(context_backtrace_set, (void *)context);
-  context->calced_stack_size = dc_stack_size(context);
+  context->calced_stack_size = dc_stack_size(context) + 1;
 
   if (rb_obj_class(thread) == cDebugThread)
     CTX_FL_SET(context, CTX_FL_IGNORE);
