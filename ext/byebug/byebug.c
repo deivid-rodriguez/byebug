@@ -169,13 +169,13 @@ cleanup(debug_context_t * dc)
                                                         \
   UNUSED(data);                                         \
                                                         \
-  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   if (!is_living_thread(rb_thread_current()) || ignore) \
     return;                                             \
                                                         \
   thread_context_lookup(rb_thread_current(), &context); \
   Data_Get_Struct(context, debug_context_t, dc);        \
                                                         \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
   if (!trace_common(trace_arg, dc))                     \
     return;
 
