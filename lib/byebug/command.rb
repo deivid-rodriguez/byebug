@@ -29,6 +29,10 @@ module Byebug
 
     def_delegators :@state, :errmsg, :puts, :print, :confirm
 
+    #
+    # Evaluates a string containing Ruby code, using binding +b+. In case of
+    # error full stack trace and error are printed.
+    #
     def bb_eval(str, b = get_binding)
       b.eval(str)
     rescue StandardError, ScriptError => e
@@ -41,6 +45,10 @@ module Byebug
       nil
     end
 
+    #
+    # Evaluates a string containing Ruby code, using binding +b+. In case of
+    # error, an error message with the exception is printed.
+    #
     def bb_warning_eval(str, b = get_binding)
       b.eval(str)
     rescue StandardError, ScriptError => e
