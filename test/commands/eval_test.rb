@@ -35,6 +35,12 @@ module Byebug
       end
     end
 
+    def test_eval_properly_evals_expressions_involving_threads
+      enter 'Thread.new {}.join'
+      debug_code(program)
+      check_output_includes(/#<Thread:0x.* dead>/)
+    end
+
     def test_eval_properly_evaluates_an_expression_using_timeout
       require 'timeout'
       enter 'eval Timeout::timeout(60) { 1 }'
