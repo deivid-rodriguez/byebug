@@ -30,7 +30,7 @@ VALUE next_thread = Qnil;
  *  Returns an array of breakpoints.
  */
 static VALUE
-bb_breakpoints(VALUE self)
+Breakpoints(VALUE self)
 {
   UNUSED(self);
 
@@ -47,7 +47,7 @@ bb_breakpoints(VALUE self)
  *  Returns an array of catchpoints.
  */
 static VALUE
-bb_catchpoints(VALUE self)
+Catchpoints(VALUE self)
 {
   UNUSED(self);
 
@@ -61,7 +61,7 @@ bb_catchpoints(VALUE self)
  *  Returns raised exception when in post_mortem mode.
  */
 static VALUE
-bb_raised_exception(VALUE self)
+Raised_exception(VALUE self)
 {
   UNUSED(self);
 
@@ -281,15 +281,13 @@ update_frame_dest(debug_context_t * dc)
 static void
 line_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, file, line, binding, self;
+  VALUE brkpnt, file, line, binding;
 
   EVENT_SETUP;
 
-  breakpoint = Qnil;
   file = rb_tracearg_path(trace_arg);
   line = rb_tracearg_lineno(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
-  self = rb_tracearg_self(trace_arg);
 
   if (dc->calced_stack_size == 0)
     dc->calced_stack_size++;
@@ -308,14 +306,16 @@ line_event(VALUE trace_point, void *data)
     dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
   }
 
-  if (dc->steps == 0 || dc->lines == 0
-      ||
-      (!NIL_P
-       (breakpoint =
-        find_breakpoint_by_pos(bb_breakpoints(self), file, line, binding))))
-  {
-    call_at_line_check(context, dc, breakpoint, file, line);
-  }
+  if (dc->steps == 0 || dc->lines == 0)
+    call_at_line_check(context, dc, Qnil, file, line);
+
+  brkpnt = Qnil;
+
+  if (!NIL_P(breakpoints))
+    brkpnt = find_breakpoint_by_pos(breakpoints, file, line, binding);
+
+  if (!NIL_P(brkpnt))
+    call_at_line_check(context, dc, brkpnt, file, line);
 
   EVENT_TEARDOWN;
 }
@@ -323,7 +323,7 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
-  VALUE breakpoint, klass, msym, mid, binding, self, file, line;
+  VALUE brkpnt, klass, msym, mid, binding, self, file, line;
 
   EVENT_SETUP;
 
@@ -352,11 +352,14 @@ call_event(VALUE trace_point, void *data)
   file = rb_tracearg_path(trace_arg);
   line = rb_tracearg_lineno(trace_arg);
 
-  breakpoint =
-    find_breakpoint_by_method(bb_breakpoints(self), klass, mid, binding, self);
-  if (!NIL_P(breakpoint))
+  brkpnt = Qnil;
+
+  if (!NIL_P(breakpoints))
+    brkpnt = find_breakpoint_by_method(breakpoints, klass, mid, binding, self);
+
+  if (!NIL_P(brkpnt))
   {
-    call_at_breakpoint(context, dc, breakpoint);
+    call_at_breakpoint(context, dc, brkpnt);
     call_at_line(context, dc, file, line);
   }
 
@@ -560,7 +563,7 @@ clear_tracepoints(VALUE self)
  *   Returns an array of all contexts.
  */
 static VALUE
-bb_contexts(VALUE self)
+Contexts(VALUE self)
 {
   volatile VALUE list;
   volatile VALUE new_list;
@@ -604,7 +607,7 @@ bb_contexts(VALUE self)
  *   Returns context of the thread passed as an argument.
  */
 static VALUE
-bb_thread_context(VALUE self, VALUE thread)
+Thread_context(VALUE self, VALUE thread)
 {
   VALUE context;
 
@@ -625,7 +628,7 @@ bb_thread_context(VALUE self, VALUE thread)
  *    <i>Note:</i> Byebug.current_context.thread == Thread.current
  */
 static VALUE
-bb_current_context(VALUE self)
+Current_context(VALUE self)
 {
   VALUE context;
 
@@ -645,7 +648,7 @@ bb_current_context(VALUE self)
  *  Returns +true+ byebug is started.
  */
 static VALUE
-bb_started(VALUE self)
+Started(VALUE self)
 {
   UNUSED(self);
 
@@ -660,7 +663,7 @@ bb_started(VALUE self)
  *  disabled, otherwise it returns +false+.
  */
 static VALUE
-bb_stop(VALUE self)
+Stop(VALUE self)
 {
   UNUSED(self);
 
@@ -692,7 +695,7 @@ bb_stop(VALUE self)
  *  +start+; That is, +true+ is returned, unless byebug was previously started.
  */
 static VALUE
-bb_start(VALUE self)
+Start(VALUE self)
 {
   VALUE result;
 
@@ -723,7 +726,7 @@ bb_start(VALUE self)
  *  +stop+ parameter forces byebug to stop at the first line of code in +file+
  */
 static VALUE
-bb_load(int argc, VALUE * argv, VALUE self)
+Debug_load(int argc, VALUE * argv, VALUE self)
 {
   VALUE file, stop, context;
   debug_context_t *dc;
@@ -737,9 +740,9 @@ bb_load(int argc, VALUE * argv, VALUE self)
     stop = Qfalse;
   }
 
-  bb_start(self);
+  Start(self);
 
-  context = bb_current_context(self);
+  context = Current_context(self);
   Data_Get_Struct(context, debug_context_t, dc);
 
   dc->calced_stack_size = 0;
@@ -764,7 +767,7 @@ bb_load(int argc, VALUE * argv, VALUE self)
  *  Returns +true+ if verbose output of TracePoint API events is enabled.
  */
 static VALUE
-bb_verbose(VALUE self)
+Verbose(VALUE self)
 {
   UNUSED(self);
 
@@ -779,7 +782,7 @@ bb_verbose(VALUE self)
  *  byebug.
  */
 static VALUE
-bb_set_verbose(VALUE self, VALUE value)
+Set_verbose(VALUE self, VALUE value)
 {
   UNUSED(self);
 
@@ -794,7 +797,7 @@ bb_set_verbose(VALUE self, VALUE value)
  *  Returns +true+ if global tracing is enabled.
  */
 static VALUE
-bb_tracing(VALUE self)
+Tracing(VALUE self)
 {
   UNUSED(self);
 
@@ -808,7 +811,7 @@ bb_tracing(VALUE self)
  *  Sets the global tracing flag.
  */
 static VALUE
-bb_set_tracing(VALUE self, VALUE value)
+Set_tracing(VALUE self, VALUE value)
 {
   UNUSED(self);
 
@@ -823,7 +826,7 @@ bb_set_tracing(VALUE self, VALUE value)
  *  Returns +true+ if post-mortem debugging is enabled.
  */
 static VALUE
-bb_post_mortem(VALUE self)
+Post_mortem(VALUE self)
 {
   UNUSED(self);
 
@@ -837,7 +840,7 @@ bb_post_mortem(VALUE self)
  *  Sets post-moterm flag.
  */
 static VALUE
-bb_set_post_mortem(VALUE self, VALUE value)
+Set_post_mortem(VALUE self, VALUE value)
 {
   UNUSED(self);
 
@@ -852,7 +855,7 @@ bb_set_post_mortem(VALUE self, VALUE value)
  *  Adds a new exception to the catchpoints array.
  */
 static VALUE
-bb_add_catchpoint(VALUE self, VALUE value)
+Add_catchpoint(VALUE self, VALUE value)
 {
   UNUSED(self);
 
@@ -876,24 +879,23 @@ Init_byebug()
 {
   mByebug = rb_define_module("Byebug");
 
-  rb_define_module_function(mByebug, "add_catchpoint", bb_add_catchpoint, 1);
-  rb_define_module_function(mByebug, "breakpoints", bb_breakpoints, 0);
-  rb_define_module_function(mByebug, "catchpoints", bb_catchpoints, 0);
-  rb_define_module_function(mByebug, "contexts", bb_contexts, 0);
-  rb_define_module_function(mByebug, "current_context", bb_current_context, 0);
-  rb_define_module_function(mByebug, "debug_load", bb_load, -1);
-  rb_define_module_function(mByebug, "post_mortem?", bb_post_mortem, 0);
-  rb_define_module_function(mByebug, "post_mortem=", bb_set_post_mortem, 1);
-  rb_define_module_function(mByebug, "raised_exception", bb_raised_exception,
-                            0);
-  rb_define_module_function(mByebug, "start", bb_start, 0);
-  rb_define_module_function(mByebug, "started?", bb_started, 0);
-  rb_define_module_function(mByebug, "stop", bb_stop, 0);
-  rb_define_module_function(mByebug, "thread_context", bb_thread_context, 1);
-  rb_define_module_function(mByebug, "tracing?", bb_tracing, 0);
-  rb_define_module_function(mByebug, "tracing=", bb_set_tracing, 1);
-  rb_define_module_function(mByebug, "verbose?", bb_verbose, 0);
-  rb_define_module_function(mByebug, "verbose=", bb_set_verbose, 1);
+  rb_define_module_function(mByebug, "add_catchpoint", Add_catchpoint, 1);
+  rb_define_module_function(mByebug, "breakpoints", Breakpoints, 0);
+  rb_define_module_function(mByebug, "catchpoints", Catchpoints, 0);
+  rb_define_module_function(mByebug, "contexts", Contexts, 0);
+  rb_define_module_function(mByebug, "current_context", Current_context, 0);
+  rb_define_module_function(mByebug, "debug_load", Debug_load, -1);
+  rb_define_module_function(mByebug, "post_mortem?", Post_mortem, 0);
+  rb_define_module_function(mByebug, "post_mortem=", Set_post_mortem, 1);
+  rb_define_module_function(mByebug, "raised_exception", Raised_exception, 0);
+  rb_define_module_function(mByebug, "start", Start, 0);
+  rb_define_module_function(mByebug, "started?", Started, 0);
+  rb_define_module_function(mByebug, "stop", Stop, 0);
+  rb_define_module_function(mByebug, "thread_context", Thread_context, 1);
+  rb_define_module_function(mByebug, "tracing?", Tracing, 0);
+  rb_define_module_function(mByebug, "tracing=", Set_tracing, 1);
+  rb_define_module_function(mByebug, "verbose?", Verbose, 0);
+  rb_define_module_function(mByebug, "verbose=", Set_verbose, 1);
 
   Init_threads_table(mByebug);
   Init_context(mByebug);

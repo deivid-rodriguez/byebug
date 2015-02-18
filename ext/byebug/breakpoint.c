@@ -403,8 +403,7 @@ check_breakpoint_by_pos(VALUE rb_breakpoint, char *file, int line)
 }
 
 static int
-check_breakpoint_by_method(VALUE rb_breakpoint, VALUE klass, ID mid,
-                           VALUE self)
+check_breakpoint_by_method(VALUE rb_breakpoint, VALUE klass, ID mid, VALUE self)
 {
   breakpoint_t *breakpoint;
 
@@ -451,7 +450,7 @@ check_breakpoint_by_expr(VALUE rb_breakpoint, VALUE bind)
 extern VALUE
 find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos, VALUE bind)
 {
-  VALUE breakpoint_object;
+  VALUE breakpoint;
   char *file;
   int line;
   int i;
@@ -460,12 +459,12 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos, VALUE bind)
   line = FIX2INT(pos);
   for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
-    breakpoint_object = rb_ary_entry(breakpoints, i);
-    if (check_breakpoint_by_pos(breakpoint_object, file, line)
-        && check_breakpoint_by_expr(breakpoint_object, bind)
-        && check_breakpoint_by_hit_condition(breakpoint_object))
+    breakpoint = rb_ary_entry(breakpoints, i);
+    if (check_breakpoint_by_pos(breakpoint, file, line) &&
+        check_breakpoint_by_expr(breakpoint, bind) &&
+        check_breakpoint_by_hit_condition(breakpoint))
     {
-      return breakpoint_object;
+      return breakpoint;
     }
   }
   return Qnil;
@@ -475,17 +474,17 @@ extern VALUE
 find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE bind,
                           VALUE self)
 {
-  VALUE breakpoint_object;
+  VALUE breakpoint;
   int i;
 
   for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
-    breakpoint_object = rb_ary_entry(breakpoints, i);
-    if (check_breakpoint_by_method(breakpoint_object, klass, mid, self)
-        && check_breakpoint_by_expr(breakpoint_object, bind)
-        && check_breakpoint_by_hit_condition(breakpoint_object))
+    breakpoint = rb_ary_entry(breakpoints, i);
+    if (check_breakpoint_by_method(breakpoint, klass, mid, self)
+        && check_breakpoint_by_expr(breakpoint, bind)
+        && check_breakpoint_by_hit_condition(breakpoint))
     {
-      return breakpoint_object;
+      return breakpoint;
     }
   }
   return Qnil;
