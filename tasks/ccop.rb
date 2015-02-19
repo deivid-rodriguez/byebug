@@ -12,6 +12,23 @@ def red(string)
   "\033[0;33m#{string}\033[0m"
 end
 
+#
+# Checks whether +file+ is compliant with our c-style guidelines using the
+# `indent` utility.
+#
+def c_compliant?(file)
+  corrected = "#{file}_corrected"
+
+  status = system("indent #{file} -o #{corrected}")
+  return nil if status.nil?
+
+  return false unless FileUtils.compare_file(file, corrected)
+
+  return true
+ensure
+  FileUtils.rm_f(corrected)
+end
+
 desc 'Enforces code style in the C extension using indent'
 task :ccop do
   puts "Checking code style in Byebug's C extension..."
@@ -21,18 +38,14 @@ task :ccop do
 
   offenses = 0
   file_list.each do |file|
-    corrected = "#{file}_corrected"
-    begin
-      system("indent #{file} -o #{corrected}")
-
-      if FileUtils.compare_file(file, corrected)
-        print(green('.'))
-      else
-        print(red('F'))
-        offenses += 1
-      end
-    ensure
-      FileUtils.rm_f(corrected)
+    case c_compliant?(file)
+    when nil
+      fail('Error. Is `indent` installed?')
+    when true
+      print green('.')
+    when false
+      offenses += 1
+      print red('F')
     end
   end
 
@@ -40,6 +53,7 @@ task :ccop do
   if offenses == 0
     puts green('no offenses detected')
   else
-    puts red("#{offenses} offenses detected.") + ' Run `indent` to fix them'
+    puts red("#{offenses} offenses detected.") +
+      ' Run `indent ext/byebug/*.c` to fix them'
   end
 end
