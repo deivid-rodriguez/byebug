@@ -14,7 +14,7 @@ end
 
 desc 'Enforces code style in the C extension using indent'
 task :ccop do
-  puts 'Running CCop...'
+  puts "Checking code style in Byebug's C extension..."
 
   file_list = Dir['ext/byebug/*.c']
   puts "Inspecting #{file_list.size} files"
