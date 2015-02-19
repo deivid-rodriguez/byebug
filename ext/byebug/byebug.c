@@ -125,9 +125,9 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
                  rb_sprintf("[#%d] %s\n", dc->thnum, debug_msg));
     else
       rb_funcall(mByebug, idPuts, 1,
-                 rb_sprintf("%*s [#%d] %s@%s:%d %s#%s\n",
-                            dc->calced_stack_size, "", dc->thnum, event, path,
-                            line, defined_class, mid));
+                 rb_sprintf("%*s [#%d] %s@%s:%d %s#%s\n", dc->calced_stack_size,
+                            "", dc->thnum, event, path, line, defined_class,
+                            mid));
   }
 }
 
@@ -228,8 +228,7 @@ call_at_line(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 }
 
 static VALUE
-call_at_tracing(VALUE context_obj, debug_context_t * dc, VALUE file,
-                VALUE line)
+call_at_tracing(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
 {
   return call_at(context_obj, dc, rb_intern("at_tracing"), 2, file, line);
 }
@@ -238,8 +237,7 @@ static VALUE
 call_at_breakpoint(VALUE context_obj, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
-  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint,
-                 0);
+  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
 }
 
 static VALUE

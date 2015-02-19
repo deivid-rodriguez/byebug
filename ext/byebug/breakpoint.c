@@ -460,9 +460,9 @@ find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos, VALUE bind)
   for (i = 0; i < RARRAY_LENINT(breakpoints); i++)
   {
     breakpoint = rb_ary_entry(breakpoints, i);
-    if (check_breakpoint_by_pos(breakpoint, file, line) &&
-        check_breakpoint_by_expr(breakpoint, bind) &&
-        check_breakpoint_by_hit_condition(breakpoint))
+    if (check_breakpoint_by_pos(breakpoint, file, line)
+        && check_breakpoint_by_expr(breakpoint, bind)
+        && check_breakpoint_by_hit_condition(breakpoint))
     {
       return breakpoint;
     }

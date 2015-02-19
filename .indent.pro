@@ -14,7 +14,7 @@
 --leave-optional-blank-lines
 --dont-left-justify-declarations
 --line-comments-indentation 0
---line-length 79
+--line-length 80
 --no-blank-lines-after-commas
 --no-parameter-indentation
 --no-space-after-casts

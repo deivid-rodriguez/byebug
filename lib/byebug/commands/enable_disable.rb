@@ -18,8 +18,8 @@ module Byebug
 
           selected_ids << pos
         end
-        selected_breakpoints = all_breakpoints.select do
-          |b| selected_ids.include?(b.id)
+        selected_breakpoints = all_breakpoints.select do |b|
+          selected_ids.include?(b.id)
         end
       end
 
