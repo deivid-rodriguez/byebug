@@ -27,12 +27,10 @@ module Byebug
       EOC
     end
 
-    %w(eval e p).each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_properly_evaluates_expressions") do
-        enter 'eval 3 + 2'
-        debug_code(program)
-        check_output_includes '5'
-      end
+    def test_eval_properly_evaluates_expressions
+      enter 'eval 3 + 2'
+      debug_code(program)
+      check_output_includes '5'
     end
 
     def test_eval_properly_evals_expressions_involving_threads
@@ -49,7 +47,7 @@ module Byebug
     end
 
     def test_eval_works_when_inspect_raises_an_exception
-      enter 'c 18', 'p @foo'
+      enter 'c 18', 'eval @foo'
       debug_code(program) { assert_equal 18, state.line }
       check_output_includes 'RuntimeError Exception: Broken'
     end

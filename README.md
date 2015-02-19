@@ -101,6 +101,7 @@ both rails and rspec have deprecated these flags in their latest versions.
     `down`      |              |
     `edit`      |              |
     `enable`    |              | `breakpoints` `display`
+    `eval`      |              |
     `finish`    |              |
     `frame`     |              |
     `help`      |              |
@@ -111,7 +112,6 @@ both rails and rspec have deprecated these flags in their latest versions.
     `list`      |              |
     `method`    |              | `instance`
     `next`      |              |
-    `p`         | `eval`       |
     `pp`        |              |
     `pry`       |              |
     `ps`        |              |

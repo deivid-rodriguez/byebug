@@ -192,7 +192,7 @@ module Byebug
     end
 
     def test_eval_works_properly_when_moving_through_the_stack
-      enter 'p str', 'up', 'p str', 'up'
+      enter 'eval str', 'up', 'eval str', 'up'
       debug_code(program)
       check_output_includes '"fx"', '"f"'
     end

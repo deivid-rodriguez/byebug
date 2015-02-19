@@ -30,7 +30,7 @@ module Byebug
     end
 
     def regexp
-      /^\s* (p|e(?:val)?)\s+/x
+      /^\s* e(?:val)? \s+/x
     end
 
     def execute
@@ -46,16 +46,16 @@ module Byebug
 
     class << self
       def names
-        %w(p eval)
+        %w(eval)
       end
 
       def description
-        %{(p|e[val]) <expression>
+        %(e[val] <expression>
 
           Evaluates <expression> and prints its value.
 
           * NOTE - unknown input is automatically evaluated, to turn this off
-          use 'set noautoeval'.}
+          use 'set noautoeval'.)
       end
     end
   end
