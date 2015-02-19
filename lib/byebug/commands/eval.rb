@@ -133,7 +133,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* putl\s+/x
+      /^\s* putl \s+/x
     end
 
     def execute
@@ -173,7 +173,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* ps\s+/x
+      /^\s* ps \s+/x
     end
 
     def execute
