@@ -34,7 +34,7 @@ module Byebug
     end
 
     def test_eval_properly_evals_expressions_involving_threads
-      enter 'Thread.new {}.join'
+      enter 'eval Thread.new {}.join'
       debug_code(program)
       check_output_includes(/#<Thread:0x.* dead>/)
     end

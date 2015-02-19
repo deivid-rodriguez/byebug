@@ -146,20 +146,7 @@ module Byebug
 
       eval_cmd = EvalCommand.new(state)
       eval_cmd.match(input)
-      ignoring_events { eval_cmd.execute }
-    end
-
-    #
-    # Run block temporarily ignoring all TracePoint events.
-    #
-    # Used to evaluate stuff within Byebug's prompt. Otherwise, any code
-    # creating new threads won't be properly evaluated because new threads will
-    # get blocked by byebug's main thread.
-    #
-    def ignoring_events
-      Byebug.ignore = true
-      yield
-      Byebug.ignore = false
+      eval_cmd.execute
     end
 
     #

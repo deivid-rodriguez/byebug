@@ -7,6 +7,20 @@ module Byebug
   #
   module EvalFunctions
     #
+    # Run block temporarily ignoring all TracePoint events.
+    #
+    # Used to evaluate stuff within Byebug's prompt. Otherwise, any code
+    # creating new threads won't be properly evaluated because new threads will
+    # get blocked by byebug's main thread.
+    #
+    def ignoring_events
+      Byebug.ignore = true
+      res = yield
+      Byebug.ignore = false
+      res
+    end
+
+    #
     # Get current binding and yield it to the given block
     #
     def run_with_binding
@@ -22,9 +36,13 @@ module Byebug
     # @param stack_on_error [Boolean] Whether to show a stack trace on error.
     #
     def eval_with_setting(binding, expression, stack_on_error)
-      return bb_warning_eval(expression, binding) unless stack_on_error
-
-      bb_eval(expression, binding)
+      ignoring_events do
+        if stack_on_error
+          bb_eval(expression, binding)
+        else
+          bb_warning_eval(expression, binding)
+        end
+      end
     end
   end
 
