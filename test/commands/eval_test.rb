@@ -33,17 +33,17 @@ module Byebug
       check_output_includes '5'
     end
 
-    def test_eval_properly_evals_expressions_involving_threads
-      enter 'eval Thread.new {}.join'
-      debug_code(program)
-      check_output_includes(/#<Thread:0x.* dead>/)
-    end
-
-    def test_eval_properly_evaluates_an_expression_using_timeout
+    def test_eval_properly_evaluates_expressions_using_threads
       require 'timeout'
       enter 'eval Timeout::timeout(60) { 1 }'
       debug_code(program)
       check_output_includes '1'
+    end
+
+    def test_eval_does_not_hang_when_evaluating_expressions_using_new_threads
+      enter 'eval Thread.new {}.join'
+      debug_code(program)
+      check_output_includes(/#<Thread:0x.* dead>/)
     end
 
     def test_eval_works_when_inspect_raises_an_exception
@@ -96,6 +96,58 @@ module Byebug
       enter 'set width 20', 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
       debug_code(program)
       check_output_includes '1  3  5  7  9', '2  4  6  8'
+    end
+
+    def program_threads
+      <<-EOC
+        module Byebug
+          #
+          # Toy class to test evaluation in Byebug's prompt
+          #
+          class Hola
+            def initialize
+              Thread.new do
+                loop do
+                  sleep 0.01
+                  next if numbers.empty?
+                  squares << (numbers.pop)**2
+                end
+              end
+            end
+
+            def numbers
+              @numbers ||= Queue.new
+            end
+
+            def squares
+              @squares ||= []
+            end
+
+            def calc(number)
+              numbers.push(number)
+
+              loop do
+                next if squares.empty?
+
+                return squares.pop
+              end
+            end
+          end
+
+          worker = Hola.new
+
+          byebug
+
+          'Processed: ' + worker.squares.join(' ')
+        end
+      EOC
+    end
+
+    def test_eval_does_not_hang_when_evaluating_expressions_using_old_threads
+      skip
+      enter 'eval worker.calc(10)'
+      debug_code(program_threads)
+      check_output_includes '100'
     end
   end
 end
