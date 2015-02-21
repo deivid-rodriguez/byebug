@@ -53,7 +53,7 @@ module Byebug
     end
 
     def test_autoeval_works_by_default
-      enter '[5, 6 , 7].inject(&:+)'
+      enter '[5, 6, 7].inject(&:+)'
       debug_code(program)
       check_output_includes '18'
     end
