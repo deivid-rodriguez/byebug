@@ -174,6 +174,47 @@ release_lock(void)
 }
 
 /*
+ *  call-seq:
+ *    Byebug.unlock -> nil
+ *
+ *  Unlocks global switch so other threads can run.
+ */
+static VALUE
+Unlock(VALUE self)
+{
+  UNUSED(self);
+
+  release_lock();
+
+  return locker;
+}
+
+/*
+ *  call-seq:
+ *    Byebug.lock -> Thread.current
+ *
+ *  Locks global switch to reserve execution to current thread exclusively.
+ */
+static VALUE
+Lock(VALUE self)
+{
+  debug_context_t *dc;
+  VALUE context;
+
+  UNUSED(self);
+
+  if (!is_living_thread(rb_thread_current()))
+    rb_raise(rb_eRuntimeError, "Current thread is dead!");
+
+  thread_context_lookup(rb_thread_current(), &context);
+  Data_Get_Struct(context, debug_context_t, dc);
+
+  acquire_lock(dc);
+
+  return locker;
+}
+
+/*
  *
  *    Document-class: ThreadsTable
  *
@@ -185,4 +226,7 @@ void
 Init_threads_table(VALUE mByebug)
 {
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
+
+  rb_define_module_function(mByebug, "unlock", Unlock, 0);
+  rb_define_module_function(mByebug, "lock", Lock, 0);
 }

@@ -5,7 +5,6 @@ static VALUE mByebug;   /* Ruby Byebug Module object */
 static VALUE tracing = Qfalse;
 static VALUE post_mortem = Qfalse;
 static VALUE verbose = Qfalse;
-static VALUE ignore = Qfalse;
 
 static VALUE catchpoints = Qnil;
 static VALUE breakpoints = Qnil;
@@ -142,7 +141,7 @@ cleanup(debug_context_t * dc)
                                                         \
   UNUSED(data);                                         \
                                                         \
-  if (!is_living_thread(rb_thread_current()) || ignore) \
+  if (!is_living_thread(rb_thread_current()))           \
     return;                                             \
                                                         \
   thread_context_lookup(rb_thread_current(), &context); \
@@ -808,23 +807,6 @@ Add_catchpoint(VALUE self, VALUE value)
   return value;
 }
 
-static VALUE
-Ignore(VALUE self)
-{
-  UNUSED(self);
-
-  return ignore;
-}
-
-static VALUE
-Set_ignore(VALUE self, VALUE value)
-{
-  UNUSED(self);
-
-  ignore = RTEST(value) ? Qtrue : Qfalse;
-  return value;
-}
-
 /*
  *   Document-class: Byebug
  *
@@ -855,8 +837,6 @@ Init_byebug()
   rb_define_module_function(mByebug, "tracing=", Set_tracing, 1);
   rb_define_module_function(mByebug, "verbose?", Verbose, 0);
   rb_define_module_function(mByebug, "verbose=", Set_verbose, 1);
-  rb_define_module_function(mByebug, "ignore?", Ignore, 0);
-  rb_define_module_function(mByebug, "ignore=", Set_ignore, 1);
 
   Init_threads_table(mByebug);
   Init_context(mByebug);

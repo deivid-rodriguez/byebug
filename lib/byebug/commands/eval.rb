@@ -13,10 +13,10 @@ module Byebug
     # creating new threads won't be properly evaluated because new threads will
     # get blocked by byebug's main thread.
     #
-    def ignoring_events
-      Byebug.ignore = true
+    def allowing_other_threads
+      Byebug.unlock
       res = yield
-      Byebug.ignore = false
+      Byebug.lock
       res
     end
 
@@ -36,7 +36,7 @@ module Byebug
     # @param stack_on_error [Boolean] Whether to show a stack trace on error.
     #
     def eval_with_setting(binding, expression, stack_on_error)
-      ignoring_events do
+      allowing_other_threads do
         if stack_on_error
           bb_eval(expression, binding)
         else

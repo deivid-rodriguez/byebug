@@ -144,7 +144,6 @@ module Byebug
     end
 
     def test_eval_does_not_hang_when_evaluating_expressions_using_old_threads
-      skip
       enter 'eval worker.calc(10)'
       debug_code(program_threads)
       check_output_includes '100'
