@@ -117,6 +117,7 @@ module Byebug
 
       repl(context)
 
+    ensure
       postloop
     end
 
