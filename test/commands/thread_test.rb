@@ -172,4 +172,4 @@ module Byebug
       check_error_includes "It's the current thread"
     end
   end
-end unless RUBY_VERSION == '2.2.0'
+end unless RUBY_VERSION == '2.2.0' && ENV['CI']
