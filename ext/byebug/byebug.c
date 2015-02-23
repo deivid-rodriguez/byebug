@@ -15,14 +15,8 @@ static VALUE raised_exception = Qnil;
 
 static ID idPuts;
 
-/* To allow thread syncronization, we must stop threads when debugging */
-VALUE locker = Qnil;
-
 /* Hash table with active threads and their associated contexts */
 VALUE threads = Qnil;
-
-/* If not Qnil, holds the next thread that must be run */
-VALUE next_thread = Qnil;
 
 /*
  *  call-seq:
@@ -134,30 +128,9 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 static void
 cleanup(debug_context_t * dc)
 {
-  VALUE thread;
-
   dc->stop_reason = CTX_STOP_NONE;
 
-  /* checks for dead threads */
-  check_threads_table();
-
-  /* Release lock */
-  locker = Qnil;
-
-  /* Let next thread run */
-  if (NIL_P(next_thread))
-    thread = pop_from_locked();
-  else
-  {
-    remove_from_locked(next_thread);
-    thread = next_thread;
-  }
-
-  if (thread == next_thread)
-    next_thread = Qnil;
-
-  if (!NIL_P(thread) && is_living_thread(thread))
-    rb_thread_run(thread);
+  release_lock();
 }
 
 #define EVENT_TEARDOWN cleanup(dc);
@@ -175,30 +148,15 @@ cleanup(debug_context_t * dc)
   thread_context_lookup(rb_thread_current(), &context); \
   Data_Get_Struct(context, debug_context_t, dc);        \
                                                         \
+  if (CTX_FL_TEST(dc, CTX_FL_IGNORE))                   \
+    return;                                             \
+                                                        \
+  acquire_lock(dc);                                     \
+                                                        \
   trace_arg = rb_tracearg_from_tracepoint(trace_point); \
-  if (!trace_common(trace_arg, dc))                     \
-    return;
+  if (verbose == Qtrue)                                 \
+    trace_print(trace_arg, dc, 0, 0);                   \
 
-static int
-trace_common(rb_trace_arg_t * trace_arg, debug_context_t * dc)
-{
-  /* return if thread marked as 'ignored', like byebug's control thread */
-  if (CTX_FL_TEST(dc, CTX_FL_IGNORE))
-  {
-    EVENT_TEARDOWN;
-    return 0;
-  }
-
-  if (verbose == Qtrue)
-    trace_print(trace_arg, dc, 0, 0);
-
-  halt_while_other_thread_is_active(dc);
-
-  /* Get the lock! */
-  locker = rb_thread_current();
-
-  return 1;
-}
 
 /* Functions that return control to byebug after the different events */
 

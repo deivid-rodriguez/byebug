@@ -68,13 +68,12 @@ extern void remove_from_locked(VALUE thread);
 /* functions from threads.c */
 extern void Init_threads_table(VALUE mByebug);
 extern VALUE create_threads_table(void);
-extern void check_threads_table(void);
 extern void thread_context_lookup(VALUE thread, VALUE *context);
-extern void halt_while_other_thread_is_active(debug_context_t *dc);
 extern int is_living_thread(VALUE thread);
+extern void acquire_lock(debug_context_t *dc);
+extern void release_lock(void);
 
 /* global variables */
-extern VALUE locker;
 extern VALUE threads;
 extern VALUE next_thread;
 

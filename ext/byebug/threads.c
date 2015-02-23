@@ -3,6 +3,12 @@
 /* Threads table class */
 static VALUE cThreadsTable;
 
+/* If not Qnil, holds the next thread that must be run */
+VALUE next_thread = Qnil;
+
+/* To allow thread syncronization, we must stop threads when debugging */
+VALUE locker = Qnil;
+
 static int
 t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
@@ -92,7 +98,7 @@ is_living_thread(VALUE thread)
  *  Checks threads table for dead/finished threads.
  */
 void
-check_threads_table(void)
+cleanup_dead_threads(void)
 {
   threads_table_t *t_tbl;
 
@@ -123,9 +129,9 @@ thread_context_lookup(VALUE thread, VALUE * context)
  * Thanks to this, all threads are "frozen" while the user is typing commands.
  */
 void
-halt_while_other_thread_is_active(debug_context_t * dc)
+acquire_lock(debug_context_t * dc)
 {
-  while ((locker != Qnil && locker != rb_thread_current())
+  while ((!NIL_P(locker) && locker != rb_thread_current())
          || CTX_FL_TEST(dc, CTX_FL_SUSPEND))
   {
     add_to_locked(rb_thread_current());
@@ -134,6 +140,37 @@ halt_while_other_thread_is_active(debug_context_t * dc)
     if (CTX_FL_TEST(dc, CTX_FL_SUSPEND))
       CTX_FL_SET(dc, CTX_FL_WAS_RUNNING);
   }
+
+  locker = rb_thread_current();
+}
+
+/*
+ * Releases our global lock and passes execution on to another thread, either
+ * the thread specified by +next_thread+ or any other thread if +next_thread+
+ * is nil.
+ */
+void
+release_lock(void)
+{
+  VALUE thread;
+
+  cleanup_dead_threads();
+
+  locker = Qnil;
+
+  if (NIL_P(next_thread))
+    thread = pop_from_locked();
+  else
+  {
+    remove_from_locked(next_thread);
+    thread = next_thread;
+  }
+
+  if (thread == next_thread)
+    next_thread = Qnil;
+
+  if (!NIL_P(thread) && is_living_thread(thread))
+    rb_thread_run(thread);
 }
 
 /*
