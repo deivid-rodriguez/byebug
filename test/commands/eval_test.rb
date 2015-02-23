@@ -104,7 +104,7 @@ module Byebug
           #
           # Toy class to test evaluation in Byebug's prompt
           #
-          class Hola
+          class #{example_class}
             def initialize
               Thread.new do
                 loop do
@@ -134,7 +134,7 @@ module Byebug
             end
           end
 
-          worker = Hola.new
+          worker = #{example_class}.new
 
           byebug
 
