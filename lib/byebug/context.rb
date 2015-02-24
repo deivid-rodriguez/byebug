@@ -5,11 +5,35 @@ module Byebug
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
   class Context
+    #
+    # List of files byebug will ignore while debugging
+    #
+    def self.ignored_files
+      Byebug.mode == :standalone ? lib_files + [bin_file] : lib_files
+    end
+
+    def self.bin_file
+      @bin_file ||= Gem.bin_path('byebug', 'byebug')
+    end
+
+    def self.lib_files
+      @lib_files ||= Dir.glob(File.expand_path('../../**/*.rb', __FILE__))
+    end
+
+    #
+    # Tells whether a file is ignored by the debugger.
+    #
+    # @param path [String] filename to be checked.
+    #
+    def ignored_file?(path)
+      self.class.ignored_files.include?(path)
+    end
+
     def stack_size
       return 0 unless backtrace
 
-      backtrace.drop_while { |l| Byebug.ignored?(l.first.path) }
-        .take_while { |l| !Byebug.ignored?(l.first.path) }
+      backtrace.drop_while { |l| ignored_file?(l.first.path) }
+        .take_while { |l| !ignored_file?(l.first.path) }
         .size
     end
 
@@ -56,15 +80,15 @@ module Byebug
     end
 
     def at_tracing(file, line)
-      handler.at_tracing(self, file, line) unless IGNORED_FILES.include?(file)
+      handler.at_tracing(self, file, line) unless ignored_file?(file)
     end
 
     def at_line(file, line)
-      handler.at_line(self, file, line) unless IGNORED_FILES.include?(file)
+      handler.at_line(self, file, line) unless ignored_file?(file)
     end
 
     def at_return(file, line)
-      handler.at_return(self, file, line) unless IGNORED_FILES.include?(file)
+      handler.at_return(self, file, line) unless ignored_file?(file)
     end
 
     private

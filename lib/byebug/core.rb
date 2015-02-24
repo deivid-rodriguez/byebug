@@ -17,20 +17,6 @@ module Byebug
   end
 
   #
-  # List of files byebug will ignore while debugging
-  #
-  IGNORED_FILES = Dir.glob(File.expand_path('../**/*.rb', __FILE__))
-
-  #
-  # Tells whether a file is ignored by the debugger.
-  #
-  # @param path [String] filename to be checked.
-  #
-  def self.ignored?(path)
-    IGNORED_FILES.include?(path)
-  end
-
-  #
   # Configuration file used for startup commands. Default value is .byebugrc
   #
   INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
@@ -88,7 +74,6 @@ module Byebug
     end
 
     self.mode = :standalone
-    IGNORED_FILES << Gem.bin_path('byebug', 'byebug')
 
     fail(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
 

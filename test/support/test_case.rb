@@ -17,10 +17,9 @@ module Byebug
       Byebug.breakpoints.clear if Byebug.breakpoints
       Byebug.catchpoints.clear if Byebug.catchpoints
       Byebug.stubs(:run_init_script)
+      Byebug::Context.stubs(:ignored_files).returns(ignored_files)
 
       set_defaults
-
-      force_set_const(Byebug, 'IGNORED_FILES', ignored_files)
     end
 
     #
