@@ -18,7 +18,7 @@ restart:
   success: "Re exec'ing:\n\t{cmd}"
 
 thread:
-  context: "{status_flag}{debug_flag}{id} {thread}\t{file_line}"
+  context: "{status_flag}{debug_flag}{id} {thread} {file_line}"
 
 trace:
   messages:

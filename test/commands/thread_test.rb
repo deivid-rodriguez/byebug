@@ -70,7 +70,7 @@ module Byebug
       enter 'cont 13', 'thread list', 'lock << 0'
       debug_code(program) { thnum = curr_thnum }
 
-      check_output_includes(/\+ #{thnum} #<Thread:0x\h+ run>\t#{file}:13/)
+      check_output_includes(/\+ #{thnum} #<Thread:0x\h+ run> #{file}:13/)
     end
 
     def test_thread_list_shows_all_available_threads
