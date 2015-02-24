@@ -40,6 +40,9 @@ module Byebug
       @ignored_files = Dir.glob(pattern) - [example_path]
     end
 
+    #
+    # Removes test example file and its memoization
+    #
     def clear_example_file
       example_file.unlink
 
