@@ -10,9 +10,13 @@ Rake::ExtensionTask.new('byebug', spec) do |ext|
   ext.lib_dir = 'lib/byebug'
 end
 
-desc 'Run the test suite'
+desc 'Run the test suite.  Run a single file with TEST=<file>'
 task :test do
-  files = Dir.glob('test/**/*_test.rb').join(' ')
+  if ENV['TEST']
+    files = ENV['TEST']
+  else
+    files = Dir.glob('test/**/*_test.rb').join(' ')
+  end
   system("ruby -w -Ilib test/test_helper.rb #{files}") || exit(false)
 end
 

@@ -22,17 +22,18 @@ module Byebug
     #
     # Starts a remote byebug
     #
-    def start_server(host = nil, port = PORT)
-      return if @thread
+    def start_server(host = nil, port = PORT, mutex_factory: Mutex)
+      return if defined?(@thread)
 
       handler.interface = nil
+
       start
 
       start_control(host, port == 0 ? 0 : port + 1)
 
       yield if block_given?
 
-      mutex = Mutex.new
+      mutex = mutex_factory.new
       proceed = ConditionVariable.new
 
       server = TCPServer.new(host, port)
@@ -48,7 +49,7 @@ module Byebug
     end
 
     def start_control(host = nil, ctrl_port = PORT + 1)
-      return @actual_control_port if @control_thread
+      return @actual_control_port if defined?(@control_thread)
       server = TCPServer.new(host, ctrl_port)
       @actual_control_port = server.addr[1]
       @control_thread = DebugThread.new do
