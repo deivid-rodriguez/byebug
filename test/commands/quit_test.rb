@@ -47,11 +47,5 @@ module Byebug
       enter 'quit!'
       debug_code(program)
     end
-
-    def test_quits_if_used_with_exit_alias
-      QuitCommand.any_instance.expects(:exit!)
-      enter 'exit!'
-      debug_code(program)
-    end
   end
 end

@@ -8,7 +8,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* (?:q(?:uit)?|exit) \s* (!|\s+unconditionally)? \s*$/x
+      /^\s* q(?:uit)? \s* (?:(!|\s+unconditionally))? \s*$/x
     end
 
     def execute
@@ -20,7 +20,7 @@ module Byebug
 
     class << self
       def names
-        %w(quit exit)
+        %w(quit)
       end
 
       def description

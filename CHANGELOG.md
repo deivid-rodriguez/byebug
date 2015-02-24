@@ -51,6 +51,7 @@ supposed to actually use it!
 - `var class` command, just use Ruby (`self.class.class_variables`).
 - `p` command, just use `eval`, or just type your expression and `byebug` will
 autoevaluate it.
+- `exit` alias for `quit`.
 
 ## 3.5.1 - 2014-09-29
 ### Fixed
