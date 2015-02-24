@@ -14,7 +14,7 @@ module Byebug
     end
 
     def execute
-      return puts(ConditionCommand.help) unless @match[1]
+      return puts(self.class.help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by(&:id)
       return errmsg(pr('condition.errors.no_breakpoints')) if breakpoints.empty?

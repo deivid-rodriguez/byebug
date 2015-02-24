@@ -13,7 +13,7 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) if self.class.names.include?(@match[0])
+      return puts(self.class.help) unless @match[1]
 
       brkpt = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
       return puts(pr('break.created', id: brkpt.id)) if syntax_valid?(@match[2])
