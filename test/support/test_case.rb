@@ -34,8 +34,10 @@ module Byebug
     # List of files to be ignored during a test run
     #
     def ignored_files
+      return @ignored_files if defined?(@ignored_files)
+
       pattern = File.expand_path('../../../{lib,test}/**/*.rb', __FILE__)
-      Dir.glob(pattern) - [example_path]
+      @ignored_files = Dir.glob(pattern) - [example_path]
     end
 
     def clear_example_file
