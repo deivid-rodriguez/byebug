@@ -24,14 +24,13 @@ created anyways.
 - Code reloading issues.
 - `set fullpath` was not showing fullpaths. Now it is.
 - `up`, `down` and `frame` commands now work in post_mortem mode (#93).
-- Loading of .byebugrc. Now it ignores invalid commands instead of aborting.
-- Priority of .byebugrc files. Project's file overrides global (home) file.
+- Fixes in rc file (.byebugrc): invalid commands are just ignored instead of
+aborting, global (home) rc file is now properly loaded before project's file.
 - Backtraces not working in `post_mortem` mode (#93).
 - 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
 sequentially.
 - Finish command not stopping at the correct line (#101).
-- `break` with namespaced class, like, `break A::B#c` should now work (#106)
-- `.byebugrc` file not getting properly loaded.
+- `break` with namespaced class, like `break A::B#c` should now work (#106).
 - Command history is now persisted before exiting byebug.
 
 ### Removed
