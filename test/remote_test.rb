@@ -12,11 +12,17 @@ module Byebug
         end
       end
 
-      def test_start_server_starts_only_one_thread
-        Mutex.expects(:new).once
+      class MutexTestWrapper
+        def self.new
+          Mutex.new
+        end
+      end
 
-        Byebug.start_server()
-        Byebug.start_server()
+      def test_start_server_starts_only_one_thread
+        MutexTestWrapper.expects(:new).once
+
+        Byebug.start_server(nil, 8989, mutex_factory: MutexTestWrapper)
+        Byebug.start_server(nil, 8989, mutex_factory: MutexTestWrapper)
       end
 
       def test_start_server_calls_a_block_passed_in
