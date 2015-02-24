@@ -41,9 +41,12 @@ module Byebug
       check_output_doesnt_include 'Really quit? (y/n)'
     end
 
-    def test_closes_interface_before_quitting
+    def test_quit_saves_history_and_closes_interface_before_qutting
       QuitCommand.any_instance.stubs(:exit!)
+
+      interface.expects(:autosave).twice # When exiting REPL and before quitting
       interface.expects(:close)
+
       enter 'quit!'
       debug_code(program)
     end

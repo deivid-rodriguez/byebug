@@ -32,6 +32,7 @@ sequentially.
 - Finish command not stopping at the correct line (#101).
 - `break` with namespaced class, like, `break A::B#c` should now work (#106)
 - `.byebugrc` file not getting properly loaded.
+- Command history is now persisted before exiting byebug.
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up

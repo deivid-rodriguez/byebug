@@ -14,6 +14,7 @@ module Byebug
     def execute
       return unless @match[1] || confirm(pr('quit.confirmations.really'))
 
+      @state.interface.autosave
       @state.interface.close
       exit! # exit -> exit!: No graceful way to stop...
     end

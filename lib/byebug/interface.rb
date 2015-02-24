@@ -80,6 +80,20 @@ module Byebug
     def close
     end
 
+    #
+    # Saves or clears history according to +autosave+ setting.
+    #
+    def autosave
+      Setting[:autosave] ? history.save : history.clear
+    end
+
+    #
+    # Restores history according to +autosave+ setting.
+    #
+    def autorestore
+      history.restore if Setting[:autosave]
+    end
+
     private
 
     #

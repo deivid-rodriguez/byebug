@@ -188,7 +188,7 @@ module Byebug
 
       puts(state.location) if Setting[:autolist] == 0
 
-      @interface.history.restore if Setting[:autosave]
+      @interface.autorestore
     end
 
     #
@@ -205,7 +205,7 @@ module Byebug
     # Tasks to do after processor loop.
     #
     def postloop
-      Setting[:autosave] ? @interface.history.save : @interface.history.clear
+      @interface.autosave
     end
   end
 end
