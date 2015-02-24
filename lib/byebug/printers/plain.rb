@@ -7,8 +7,8 @@ module Byebug
 
       def print(path, args = {})
         message = translate(locate(path), args)
-        message << ' (y/n) ' if parts(path).include?('confirmations')
-        message << "\n"
+        tail = parts(path).include?('confirmations') ? ' (y/n) ' : "\n"
+        message << tail
       end
 
       def print_collection(path, collection, &block)

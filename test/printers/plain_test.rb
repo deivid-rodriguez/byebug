@@ -45,7 +45,7 @@ module Byebug
     end
 
     def test_add_yn_to_the_confirmation_strings
-      assert_equal("Okay? (y/n) \n", printer.print('foo.confirmations.okay'))
+      assert_equal('Okay? (y/n) ', printer.print('foo.confirmations.okay'))
     end
 
     def test_strings_inherited_from_base
