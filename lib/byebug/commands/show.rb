@@ -27,13 +27,11 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
-
+        prettify <<-EOD
           show <setting> <value>
 
           Generic command for showing byebug settings. You can change them with
           the "set" command.
-
         EOD
       end
 

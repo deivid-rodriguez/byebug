@@ -38,12 +38,14 @@ module Byebug
       end
 
       def description
-        %(cond[ition] <n>[ expr]
+        prettify <<-EOD
+          cond[ition] <n>[ expr]
 
           Specify breakpoint number <n> to break only if <expr> is true. <n> is
           an integer and <expr> is an expression to be evaluated whenever
           breakpoint <n> is reached. If no expression is specified, the
-          condition is removed.)
+          condition is removed.
+        EOD
       end
     end
   end

@@ -194,12 +194,10 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
-
+        prettify <<-EOD
           info[ subcommand]
 
           Generic command for showing things about the program being debugged.
-
         EOD
       end
     end

@@ -65,6 +65,8 @@ module Byebug
     end
 
     class << self
+      include StringFunctions
+
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run
 

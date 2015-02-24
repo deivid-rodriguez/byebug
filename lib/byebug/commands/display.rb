@@ -24,9 +24,11 @@ module Byebug
       end
 
       def description
-        %(disp[lay] <expression>
+        prettify <<-EOD
+          disp[lay] <expression>
 
-          Add <expression> into display expression list.)
+          Add <expression> into display expression list.
+        EOD
       end
     end
 
@@ -64,7 +66,9 @@ module Byebug
       end
 
       def description
-        %(disp[lay]        Display expression list.)
+        prettify <<-EOD
+          disp[lay] Display expression list.
+        EOD
       end
     end
 

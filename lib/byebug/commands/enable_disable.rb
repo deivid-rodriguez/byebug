@@ -108,22 +108,24 @@ module Byebug
       end
 
       def description
-        %{(en|dis)[able][[ (breakpoints|display)][ n1[ n2[ ...[ nn]]]]]
+        prettify <<-EOD
+          (en|dis)[able][[ (breakpoints|display)][ n1[ n2[ ...[ nn]]]]]
 
-         Enables or disables breakpoints or displays.
+           Enables or disables breakpoints or displays.
 
-         "enable" by itself enables all breakpoints, just like
-         "enable breakpoints". On the other side, "disable" or
-         "disable breakpoints" disable all breakpoints.
+           "enable" by itself enables all breakpoints, just like
+           "enable breakpoints". On the other side, "disable" or
+           "disable breakpoints" disable all breakpoints.
 
-         You can also specify a space separated list of breakpoint numbers to
-         enable or disable specific breakpoints. You can use either
-         "enable <id1> ... <idn>" or "enable breakpoints <id1> ... <idn>" and
-         the same with "disable".
+           You can also specify a space separated list of breakpoint numbers to
+           enable or disable specific breakpoints. You can use either
+           "enable <id1> ... <idn>" or "enable breakpoints <id1> ... <idn>" and
+           the same with "disable".
 
-         If instead of "breakpoints" you specify "display", the command will
-         work exactly the same way, but displays will get enabled/disabled
-         instead of breakpoints.}
+           If instead of "breakpoints" you specify "display", the command will
+           work exactly the same way, but displays will get enabled/disabled
+           instead of breakpoints.
+         EOD
       end
     end
   end

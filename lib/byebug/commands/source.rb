@@ -34,9 +34,11 @@ module Byebug
       end
 
       def description
-        %(source <file>
+        prettify <<-EOD
+          source <file>
 
-          Executes file <file> containing byebug commands.)
+          Executes file <file> containing byebug commands.
+        EOD
       end
     end
   end

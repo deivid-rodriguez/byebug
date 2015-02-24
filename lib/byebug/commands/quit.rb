@@ -24,11 +24,13 @@ module Byebug
       end
 
       def description
-        %(q[uit]|exit [!|unconditionally]        Exits from byebug.
+        prettify <<-EOD
+          q[uit] [!|unconditionally] Exits from byebug.
 
           Normally we prompt before exiting. However if the parameter
           "unconditionally" is given or command is suffixed with !, we exit
-          without asking further questions.)
+          without asking further questions.
+        EOD
       end
     end
   end

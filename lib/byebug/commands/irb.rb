@@ -24,7 +24,9 @@ module Byebug
       end
 
       def description
-        %{irb        Starts an Interactive Ruby (IRB) session.}
+        prettify <<-EOD
+          irb  Starts an Interactive Ruby (IRB) session.
+        EOD
       end
     end
   end

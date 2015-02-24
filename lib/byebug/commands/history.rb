@@ -26,7 +26,9 @@ module Byebug
       end
 
       def description
-        %(hist[ory] [num_cmds]        Show byebug's command history.)
+        prettify <<-EOD
+          hist[ory] [num_cmds]        Show byebug's command history.
+        EOD
       end
     end
   end

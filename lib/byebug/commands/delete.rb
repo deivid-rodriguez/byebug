@@ -38,10 +38,12 @@ module Byebug
       end
 
       def description
-        %(del[ete][ nnn...]
+        prettify <<-EOD
+          del[ete][ nnn...]
 
           Without and argument, deletes all breakpoints. With integer
-          arguments, it deletes specific breakpoints.)
+          arguments, it deletes specific breakpoints.
+        EOD
       end
     end
   end

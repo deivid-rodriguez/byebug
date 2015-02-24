@@ -51,8 +51,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
-
+        prettify <<-EOD
           set <setting> <value>
 
           Modifies parts of byebug environment.

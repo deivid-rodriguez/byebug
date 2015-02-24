@@ -96,8 +96,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
-
+        prettify <<-EOD
           [v]ar
 
           Show variables and its values.

@@ -27,9 +27,11 @@ module Byebug
       end
 
       def description
-        %(untr[acevar] <variable>
+        prettify <<-EOD
+          untr[acevar] <variable>
 
-          Stop tracing global variable <variable>.)
+          Stop tracing global variable <variable>.
+        EOD
       end
     end
   end

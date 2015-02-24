@@ -29,7 +29,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
+        prettify <<-EOD
           l[ist][[-=]][ nn-mm]
 
           Lists lines of code forward from current line or from the place where

@@ -26,14 +26,12 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
-
+        prettify <<-EOD
           h[elp][ <cmd>[ <subcmd>]]
 
           help                -- prints this help.
           help <cmd>          -- prints help on command <cmd>.
           help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
-
         EOD
       end
     end

@@ -13,27 +13,6 @@ module Byebug
       @value = self.class::DEFAULT
     end
 
-    def self.settings
-      @settings ||= {}
-    end
-
-    def self.[](name)
-      settings[name].value
-    end
-
-    def self.[]=(name, value)
-      settings[name].value = value
-    end
-
-    def self.boolean?(name)
-      key = (name =~ /^no/ ? name[2..-1] : name).to_sym
-      settings[key].boolean?
-    end
-
-    def self.integer?(name)
-      settings[name.to_sym].integer?
-    end
-
     def boolean?
       [true, false].include?(value)
     end
@@ -42,55 +21,6 @@ module Byebug
       Integer(value) ? true : false
     rescue ArgumentError
       false
-    end
-
-    def self.exists?(name)
-      key = (name =~ /^no/ ? name[2..-1] : name).to_sym
-      boolean?(key) ? settings.include?(key) : settings.include?(name.to_sym)
-    end
-
-    def self.load
-      Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
-        require file
-      end
-      Byebug.constants.grep(/[a-z]Setting/).map do |name|
-        setting = Byebug.const_get(name).new
-        settings[setting.to_sym] = setting
-      end
-    end
-
-    def self.find(shortcut)
-      abbr = shortcut =~ /^no/ ? shortcut[2..-1] : shortcut
-      matches = settings.select do |key, value|
-        value.boolean? ? key =~ /#{abbr}/ : key =~ /#{shortcut}/
-      end
-      matches.size == 1 ? matches.keys.first : nil
-    end
-
-    def self.help_all
-      output = "  List of settings supported in byebug:\n  --\n"
-      width = settings.keys.max_by(&:size).size
-      settings.values.each do |sett|
-        output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
-      end
-      output + "\n"
-    end
-
-    def self.help(cmd, subcmd)
-      unless subcmd
-        command = Byebug.const_get("#{cmd.capitalize}Command")
-        return command.description + help_all
-      end
-
-      camelized = StringFunctions.camelize(subcmd)
-      setting = Byebug.const_get("#{camelized}Setting").new
-      <<-EOH.gsub(/^ {8}/, '')
-
-        #{cmd} #{setting.to_sym} <value>
-
-        #{setting.banner}.
-
-      EOH
     end
 
     def help
@@ -104,6 +34,77 @@ module Byebug
 
     def to_s
       "#{to_sym} is #{value ? 'on' : 'off'}\n"
+    end
+
+    class << self
+      include StringFunctions
+
+      def settings
+        @settings ||= {}
+      end
+
+      def [](name)
+        settings[name].value
+      end
+
+      def []=(name, value)
+        settings[name].value = value
+      end
+
+      def boolean?(name)
+        key = (name =~ /^no/ ? name[2..-1] : name).to_sym
+        settings[key].boolean?
+      end
+
+      def integer?(name)
+        settings[name.to_sym].integer?
+      end
+
+      def exists?(name)
+        key = (name =~ /^no/ ? name[2..-1] : name).to_sym
+        boolean?(key) ? settings.include?(key) : settings.include?(name.to_sym)
+      end
+
+      def load
+        Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
+          require file
+        end
+        Byebug.constants.grep(/[a-z]Setting/).map do |name|
+          setting = Byebug.const_get(name).new
+          settings[setting.to_sym] = setting
+        end
+      end
+
+      def find(shortcut)
+        abbr = shortcut =~ /^no/ ? shortcut[2..-1] : shortcut
+        matches = settings.select do |key, value|
+          value.boolean? ? key =~ /#{abbr}/ : key =~ /#{shortcut}/
+        end
+        matches.size == 1 ? matches.keys.first : nil
+      end
+
+      def help_all
+        output = "  List of settings supported in byebug:\n  --\n"
+        width = settings.keys.max_by(&:size).size
+        settings.values.each do |sett|
+          output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
+        end
+        output + "\n"
+      end
+
+      def help(cmd, subcmd)
+        unless subcmd
+          command = Byebug.const_get("#{cmd.capitalize}Command")
+          return command.description + help_all
+        end
+
+        setting = Byebug.const_get("#{camelize(subcmd)}Setting").new
+        prettify <<-EOS
+          #{cmd} #{setting.to_sym} <value>
+
+          #{setting.banner}.
+        EOS
+      end
     end
   end
 

@@ -93,7 +93,9 @@ module Byebug
       end
 
       def description
-        %(th[read] l[ist]        Lists all threads.)
+        prettify <<-EOD
+          th[read] l[ist]  Lists all threads.
+        EOD
       end
     end
   end
@@ -118,7 +120,9 @@ module Byebug
       end
 
       def description
-        %(th[read] [cur[rent]]        Shows current thread.)
+        prettify <<-EOD
+          th[read] [cur[rent]]  Shows current thread.
+        EOD
       end
     end
   end
@@ -150,7 +154,9 @@ module Byebug
       end
 
       def description
-        %(th[read] stop <n>        Stops thread <n>.)
+        prettify <<-EOD
+          th[read] stop <n>  Stops thread <n>.
+        EOD
       end
     end
   end
@@ -183,7 +189,9 @@ module Byebug
       end
 
       def description
-        %(th[read] resume <n>        Resumes thread <n>.)
+        prettify <<-EOD
+          th[read] resume <n>   Resumes thread <n>.
+        EOD
       end
     end
   end
@@ -217,7 +225,9 @@ module Byebug
       end
 
       def description
-        %(th[read] [sw[itch]] <nnn>        Switches thread context to <n>.)
+        prettify <<-EOD
+          th[read] [sw[itch]] <n>  Switches thread context to <n>.
+        EOD
       end
     end
   end

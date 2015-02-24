@@ -50,12 +50,14 @@ module Byebug
       end
 
       def description
-        %(cat[ch][ (off|<exception>[ off])]
+        prettify <<-EOD
+          cat[ch][ (off|<exception>[ off])]
 
           "catch" lists catchpoints.
           "catch off" deletes all catchpoints.
           "catch <exception>" enables handling <exception>.
-          "catch <exception> off" disables handling <exception>.)
+          "catch <exception> off" disables handling <exception>.
+        EOD
       end
     end
   end

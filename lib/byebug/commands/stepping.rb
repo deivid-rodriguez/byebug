@@ -28,9 +28,11 @@ module Byebug
       end
 
       def description
-        %(n[ext][ nnn]
+        prettify <<-EOD
+          n[ext][ nnn]
 
-        Steps over once or nnn times.)
+          Steps over once or nnn times.
+        EOD
       end
     end
   end
@@ -62,9 +64,11 @@ module Byebug
       end
 
       def description
-        %{s[tep][ nnn]
+        prettify <<-EOD
+          s[tep][ nnn]
 
-          Steps (into methods) once or nnn times.}
+          Steps (into methods) once or nnn times.
+        EOD
       end
     end
   end

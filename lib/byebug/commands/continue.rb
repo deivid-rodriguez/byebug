@@ -34,9 +34,11 @@ module Byebug
       end
 
       def description
-        %(c[ont[inue]][ <n>]
+        prettify <<-EOD
+          c[ont[inue]][ <n>]
 
-          Run until program ends, hits a breakpoint or reaches line <n>.)
+          Run until program ends, hits a breakpoint or reaches line <n>.
+        EOD
       end
     end
   end

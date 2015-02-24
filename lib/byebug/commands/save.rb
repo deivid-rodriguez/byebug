@@ -56,13 +56,15 @@ module Byebug
       end
 
       def description
-        %(save[ FILE]
+        prettify <<-EOD
+          save[ FILE]
 
           Saves current byebug state to FILE as a script file. This includes
           breakpoints, catchpoints, display expressions and some settings. If
           no filename is given, we will fabricate one.
 
-          Use the "source" command in another debug session to restore them.)
+          Use the "source" command in another debug session to restore them.
+        EOD
       end
     end
   end

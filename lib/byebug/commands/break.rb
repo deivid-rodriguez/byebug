@@ -30,7 +30,7 @@ module Byebug
       end
 
       def description
-        <<-EOD.gsub(/^ {8}/, '')
+        prettify <<-EOD
           b[reak] [file:]line [if expr]
           b[reak] [module::...]class(.|#)method [if expr]
 

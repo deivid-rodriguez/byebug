@@ -29,7 +29,9 @@ module Byebug
       end
 
       def description
-        %(pry        Starts a Pry session.)
+        prettify <<-EOD
+          pry  Starts a Pry session.
+        EOD
       end
     end
   end

@@ -43,11 +43,13 @@ module Byebug
       end
 
       def description
-        %(edit[ file:lineno]        Edit specified files.
+        prettify <<-EOD
+          edit[ file:lineno] Edit specified files.
 
           With no argument, edits file containing most recent line listed.
           Editing targets can also be specified to start editing at a specific
-          line in a specific file.)
+          line in a specific file.
+        EOD
       end
     end
   end

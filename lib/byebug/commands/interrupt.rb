@@ -23,7 +23,9 @@ module Byebug
       end
 
       def description
-        %(i|nterrupt        Interrupts the program.)
+        prettify <<-EOD
+          i[nterrupt]  Interrupts the program.
+        EOD
       end
     end
   end

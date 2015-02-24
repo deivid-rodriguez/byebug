@@ -82,12 +82,14 @@ module Byebug
       end
 
       def description
-        %(e[val] <expression>
+        prettify <<-EOD
+          e[val] <expression>
 
           Evaluates <expression> and prints its value.
 
           * NOTE - unknown input is automatically evaluated, to turn this off
-          use 'set noautoeval'.)
+          use 'set noautoeval'.
+        EOD
       end
     end
   end
@@ -124,9 +126,11 @@ module Byebug
       end
 
       def description
-        %(pp <expression>
+        prettify <<-EOD
+          pp <expression>
 
-          Evaluates <expression> and pretty-prints its value.)
+          Evaluates <expression> and pretty-prints its value.
+        EOD
       end
     end
   end
@@ -166,9 +170,11 @@ module Byebug
       end
 
       def description
-        %(putl <expression>
+        prettify <<-EOD
+          putl <expression>
 
-          Evaluates <expression>, an array, and columnize its value.)
+          Evaluates <expression>, an array, and columnize its value.
+        EOD
       end
     end
   end
@@ -208,9 +214,11 @@ module Byebug
       end
 
       def description
-        %(ps <expression>
+        prettify <<-EOD
+          ps <expression>
 
-          Evaluates <expression>, an array, sort and columnize its value.)
+          Evaluates <expression>, an array, sort and columnize its value.
+        EOD
       end
     end
   end

@@ -33,10 +33,12 @@ module Byebug
       end
 
       def description
-        %{kill[ SIGNAL]
+        prettify <<-EOD
+          kill[ SIGNAL]
 
           Send [signal] to Process.pid
-          Equivalent of Process.kill(Process.pid)}
+          Equivalent of Process.kill(Process.pid)
+        EOD
       end
     end
   end
