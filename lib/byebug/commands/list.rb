@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # List parts of the source code.

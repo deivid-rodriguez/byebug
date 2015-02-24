@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Show history of byebug commands.

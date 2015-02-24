@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Ask for help from byebug's prompt.

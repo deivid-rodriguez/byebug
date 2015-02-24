@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 # encoding: utf-8
 
 require 'pathname'
@@ -59,20 +61,14 @@ module Byebug
 
       { mark: mark, pos: pos, call: call, file: file, line: line }
     end
-
-    def print_backtrace
-      bt = prc('frame.line', (0...@state.context.stack_size)) do |_, index|
-        get_pr_arguments(index)
-      end
-
-      print(bt)
-    end
   end
 
   #
   # Show current backtrace.
   #
   class WhereCommand < Command
+    include FrameFunctions
+
     def regexp
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
     end
@@ -97,12 +93,24 @@ module Byebug
           navigable.)
       end
     end
+
+    private
+
+    def print_backtrace
+      bt = prc('frame.line', (0...@state.context.stack_size)) do |_, index|
+        get_pr_arguments(index)
+      end
+
+      print(bt)
+    end
   end
 
   #
   # Move the current frame up in the backtrace.
   #
   class UpCommand < Command
+    include FrameFunctions
+
     def regexp
       /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
     end
@@ -129,6 +137,8 @@ module Byebug
   # Move the current frame down in the backtrace.
   #
   class DownCommand < Command
+    include FrameFunctions
+
     def regexp
       /^\s* down (?:\s+(\S+))? \s*$/x
     end
@@ -155,6 +165,8 @@ module Byebug
   # Move to specific frames in the backtrace.
   #
   class FrameCommand < Command
+    include FrameFunctions
+
     def regexp
       /^\s* f(?:rame)? (?:\s+(\S+))? \s*$/x
     end

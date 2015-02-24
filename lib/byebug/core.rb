@@ -4,7 +4,6 @@ require 'byebug/context'
 require 'byebug/breakpoint'
 require 'byebug/interface'
 require 'byebug/processor'
-require 'byebug/setting'
 require 'byebug/remote'
 require 'byebug/printers/plain'
 

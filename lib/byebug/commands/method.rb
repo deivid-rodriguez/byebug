@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Show methods of specific classes/modules/objects.

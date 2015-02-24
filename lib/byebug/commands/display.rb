@@ -1,32 +1,6 @@
+require 'byebug/command'
+
 module Byebug
-  #
-  # Custom display utilities.
-  #
-  module DisplayFunctions
-    def display_expression(exp)
-      print pr('display.result',
-               n: @state.display.size,
-               exp: exp,
-               result: bb_warning_eval(exp).inspect)
-    end
-
-    def active_display_expressions?
-      @state.display.select { |d| d[0] }.size > 0
-    end
-
-    def print_display_expressions
-      result = prc('display.result', @state.display) do |item, index|
-        is_active, expression = item
-        if is_active
-          { n: index + 1,
-            exp: expression,
-            result: bb_warning_eval(expression).inspect }
-        end
-      end
-      print result
-    end
-  end
-
   #
   # Implements the functionality of adding custom expressions to be displayed
   # every time the debugger stops.
@@ -54,6 +28,15 @@ module Byebug
 
           Add <expression> into display expression list.)
       end
+    end
+
+    private
+
+    def display_expression(exp)
+      print pr('display.result',
+               n: @state.display.size,
+               exp: exp,
+               result: bb_warning_eval(exp).inspect)
     end
   end
 
@@ -83,6 +66,20 @@ module Byebug
       def description
         %(disp[lay]        Display expression list.)
       end
+    end
+
+    private
+
+    def print_display_expressions
+      result = prc('display.result', @state.display) do |item, index|
+        is_active, expression = item
+        if is_active
+          { n: index + 1,
+            exp: expression,
+            result: bb_warning_eval(expression).inspect }
+        end
+      end
+      print result
     end
   end
 end

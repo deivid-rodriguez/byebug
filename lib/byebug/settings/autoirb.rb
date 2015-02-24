@@ -1,3 +1,5 @@
+require 'byebug/commands/irb'
+
 module Byebug
   #
   # Setting for automatically invoking IRB on every stop.

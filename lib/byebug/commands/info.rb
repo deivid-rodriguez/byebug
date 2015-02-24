@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Utilities for the info command.
@@ -126,6 +128,8 @@ module Byebug
   #
   class InfoCommand < Command
     include Columnize
+    include InfoFunctions
+
     self.allow_in_control = true
 
     Subcommands = [

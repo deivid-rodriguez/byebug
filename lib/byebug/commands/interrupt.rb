@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Interrupting execution of current thread.

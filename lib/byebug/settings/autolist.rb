@@ -1,3 +1,5 @@
+require 'byebug/commands/list'
+
 module Byebug
   #
   # Setting for automatically listing source code on every stop.

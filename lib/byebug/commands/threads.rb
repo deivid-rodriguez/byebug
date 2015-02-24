@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Utilities to assist commands related to threads.
@@ -64,6 +66,8 @@ module Byebug
   # List current threads.
   #
   class ThreadListCommand < Command
+    include ThreadFunctions
+
     self.allow_in_control = true
 
     def regexp
@@ -98,6 +102,8 @@ module Byebug
   # Show current thread.
   #
   class ThreadCurrentCommand < Command
+    include ThreadFunctions
+
     def regexp
       /^\s* th(?:read)? \s+ (?:cur(?:rent)?)? \s*$/x
     end
@@ -121,6 +127,8 @@ module Byebug
   # Stop execution of a thread.
   #
   class ThreadStopCommand < Command
+    include ThreadFunctions
+
     self.allow_in_control = true
     self.allow_in_post_mortem = false
 
@@ -151,6 +159,8 @@ module Byebug
   # Resume execution of a thread.
   #
   class ThreadResumeCommand < Command
+    include ThreadFunctions
+
     self.allow_in_control = true
     self.allow_in_post_mortem = false
 
@@ -182,6 +192,8 @@ module Byebug
   # Switch execution to a different thread.
   #
   class ThreadSwitchCommand < Command
+    include ThreadFunctions
+
     self.allow_in_control = true
     self.allow_in_post_mortem = false
 

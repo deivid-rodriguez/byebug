@@ -44,6 +44,8 @@ module Byebug
       END
     end
 
+    include FileFunctions
+
     def at_breakpoint(_context, breakpoint)
       n = Byebug.breakpoints.index(breakpoint) + 1
       file = normalize(breakpoint.source)
@@ -60,8 +62,6 @@ module Byebug
       puts "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})"
     end
     protect :at_catchpoint
-
-    include FileFunctions
 
     def at_tracing(context, file, line)
       puts "Tracing: #{normalize(file)}:#{line} #{get_line(file, line)}"

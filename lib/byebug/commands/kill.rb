@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Send custom signals to the debugged program.

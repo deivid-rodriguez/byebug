@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Execute a file containing byebug commands.

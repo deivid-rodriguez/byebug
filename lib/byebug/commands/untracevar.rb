@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Stop tracing a global variable.

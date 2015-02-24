@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Show (and possibily stop) at every line that changes a global variable.

@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Remove expressions from display list.

@@ -36,6 +36,7 @@ module Byebug
       @proceed = true
     end
 
+    include FileFunctions
     #
     # Current (formatted) location
     #

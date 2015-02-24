@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Restart debugged program from within byebug.

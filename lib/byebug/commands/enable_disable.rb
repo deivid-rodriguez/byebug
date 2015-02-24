@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Mixin to assist command parsing
@@ -49,6 +51,8 @@ module Byebug
   # Enabling or disabling custom display expressions or breakpoints.
   #
   class EnableDisableCommand < Command
+    include EnableDisableFunctions
+
     Subcommands = [
       ['breakpoints', 2, 'Enable/disable breakpoints. Give breakpoint '      \
                          'numbers (separated by spaces) as arguments or no ' \

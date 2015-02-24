@@ -16,9 +16,16 @@ module Byebug
     rescue
       nil
     end
+
+    def self.load_commands
+      Dir.glob(File.expand_path('../commands/*.rb', __FILE__)).each do |file|
+        require file
+      end
+    end
   end
+
+  Processor.load_commands
 end
 
-require 'byebug/command'
 require 'byebug/processors/command_processor'
 require 'byebug/processors/control_command_processor'

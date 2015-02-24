@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Implements the finish functionality.

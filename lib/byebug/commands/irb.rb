@@ -1,3 +1,4 @@
+require 'byebug/command'
 require 'irb'
 
 module Byebug

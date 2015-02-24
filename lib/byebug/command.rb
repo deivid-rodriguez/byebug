@@ -11,6 +11,9 @@ module Byebug
   class Command
     extend Forwardable
 
+    include ParseFunctions
+    include FileFunctions
+
     Subcmd = Struct.new(:name, :min, :help)
 
     def initialize(state)
@@ -117,18 +120,6 @@ module Byebug
       def inherited(klass)
         commands << klass
       end
-
-      def load_commands
-        Dir.glob(File.expand_path('../commands/*.rb', __FILE__)).each do |file|
-          require file
-        end
-
-        Byebug.constants.grep(/Functions$/).map do |name|
-          include Byebug.const_get(name)
-        end
-      end
     end
   end
-
-  Command.load_commands
 end

@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 require 'English'
 require 'pp'
 
@@ -50,6 +52,8 @@ module Byebug
   # Evaluation of expressions from byebug's prompt.
   #
   class EvalCommand < Command
+    include EvalFunctions
+
     self.allow_in_control = true
 
     def match(input)
@@ -92,6 +96,8 @@ module Byebug
   # Evaluation and pretty printing from byebug's prompt.
   #
   class PPCommand < Command
+    include EvalFunctions
+
     self.allow_in_control = true
 
     def regexp
@@ -129,7 +135,9 @@ module Byebug
   # Evaluation, pretty printing and columnizing from byebug's prompt.
   #
   class PutLCommand < Command
+    include EvalFunctions
     include Columnize
+
     self.allow_in_control = true
 
     def regexp
@@ -169,7 +177,9 @@ module Byebug
   # Evaluation, pretty printing, columnizing and sorting from byebug's prompt
   #
   class PSCommand < Command
+    include EvalFunctions
     include Columnize
+
     self.allow_in_control = true
 
     def regexp

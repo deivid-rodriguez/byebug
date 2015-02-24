@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Utilities for the var command.
@@ -59,6 +61,8 @@ module Byebug
   # Show variables and its values.
   #
   class VarCommand < Command
+    include VarFunctions
+
     Subcommands = [
       ['constant', 2, 'Show constants of an object'],
       ['global', 1, 'Show global variables'],

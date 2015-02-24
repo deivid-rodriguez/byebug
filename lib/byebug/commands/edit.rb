@@ -1,3 +1,5 @@
+require 'byebug/command'
+
 module Byebug
   #
   # Edit a file from byebug's prompt.
