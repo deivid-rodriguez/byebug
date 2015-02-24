@@ -113,12 +113,16 @@ module Byebug
     # Handle byebug commands.
     #
     def process_commands(context, file, line)
-      preloop(context, file, line)
+      always_run(context, file, line, 1)
+
+      puts 'The program finished.' if program_just_finished?(context)
+      puts(state.location) if Setting[:autolist] == 0
+
+      @interface.autorestore
 
       repl(context)
-
     ensure
-      postloop
+      @interface.autosave
     end
 
     #
@@ -179,19 +183,6 @@ module Byebug
     end
 
     #
-    # Tasks to do before processor loop.
-    #
-    def preloop(context, file, line)
-      always_run(context, file, line, 1)
-
-      puts 'The program finished.' if program_just_finished?(context)
-
-      puts(state.location) if Setting[:autolist] == 0
-
-      @interface.autorestore
-    end
-
-    #
     # Returns true first time control is given to the user after program
     # termination.
     #
@@ -199,13 +190,6 @@ module Byebug
       result = context.dead? && !@context_was_dead
       @context_was_dead = false if result == true
       result
-    end
-
-    #
-    # Tasks to do after processor loop.
-    #
-    def postloop
-      @interface.autosave
     end
   end
 end
