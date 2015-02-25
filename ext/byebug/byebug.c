@@ -249,9 +249,7 @@ line_event(VALUE trace_point, void *data)
     call_at_tracing(context, dc, file, line);
 
   if (!CTX_FL_TEST(dc, CTX_FL_IGNORE_STEPS))
-  {
     dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
-  }
 
   if (dc->calced_stack_size <= dc->dest_frame)
   {
@@ -281,9 +279,7 @@ call_event(VALUE trace_point, void *data)
   EVENT_SETUP;
 
   if (dc->calced_stack_size <= dc->dest_frame)
-  {
     update_frame_dest(dc);
-  }
 
   dc->calced_stack_size++;
 
@@ -327,9 +323,7 @@ return_event(VALUE trace_point, void *data)
   dc->calced_stack_size--;
 
   if (dc->steps_out == 1)
-  {
     dc->steps = 1;
-  }
   else if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
     VALUE file, line;
@@ -628,6 +622,7 @@ Stop(VALUE self)
 
     return Qfalse;
   }
+
   return Qtrue;
 }
 
@@ -677,9 +672,7 @@ Debug_load(int argc, VALUE * argv, VALUE self)
   UNUSED(self);
 
   if (rb_scan_args(argc, argv, "11", &file, &stop) == 1)
-  {
     stop = Qfalse;
-  }
 
   Start(self);
 

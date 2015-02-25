@@ -47,9 +47,7 @@ module Byebug
 
     def test_next_does_not_stop_at_byebug_internal_frames
       enter 'next 2'
-      debug_code(program) do
-        refute_match(/byebug.test.support/, state.file)
-      end
+      debug_code(program) { refute_match(/byebug.test.support/, state.file) }
     end
   end
 
