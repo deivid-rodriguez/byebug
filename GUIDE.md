@@ -698,8 +698,411 @@ The stopping points that Ruby records are the last two lines, lines 5 and 6.
 Inside `byebug` you can get a list of stoppable lines for a file using the `info
 file` command.
 
+
+### Threading support
+
+Byebug supports debugging Ruby programs making use of multiple threads.
+
+Let's consider the following sample program:
+
+```ruby
+class Company
+  def initialize(task)
+    @tasks, @results = Queue.new, Queue.new
+
+    @tasks.push(task)
+  end
+
+  def run
+    manager = Thread.new { manager_routine }
+    employee = Thread.new { employee_routine }
+
+    sleep 6
+
+    go_home(manager)
+    go_home(employee)
+  end
+
+  #
+  # An employee doing his thing
+  #
+  def employee_routine
+    loop do
+      if @tasks.empty?
+        have_a_break(0.1)
+      else
+        work_hard(@tasks.pop)
+      end
+    end
+  end
+
+  #
+  # A manager doing his thing
+  #
+  def manager_routine
+    loop do
+      if @results.empty?
+        have_a_break(1)
+      else
+        enjoy(@results.pop)
+      end
+    end
+  end
+
+  private
+
+  def show_off(result)
+    puts result
+  end
+
+  def work_hard(task)
+    task ** task
+  end
+
+  def have_a_break(amount)
+    sleep amount
+  end
+
+  def go_home(person)
+    person.kill
+  end
+end
+
+Company.new(10).run
+```
+
+The `Company` class simulates a real company. The company has a manager and an
+employee represented by 2 threads: they work concurrently to achieve the
+company's targets.
+
+* The employee looks for tasks to complete. If there are tasks, it works hard to
+complete them. Otherwise he has a quick break.
+
+```ruby
+#
+# An employee doing his thing
+#
+def employee_routine
+  loop do
+    if @tasks.empty?
+      have_a_break(0.1)
+    else
+      work_hard(@tasks.pop)
+    end
+  end
+end
+```
+
+* The manager, on the other hand, sits there all day and sporadically checks
+whether there are any results to show off.
+
+```ruby
+#
+# A manager doing his thing
+#
+def manager_routine
+  loop do
+    if @results.empty?
+      have_a_break(1)
+    else
+      show_off(@results.pop)
+    end
+  end
+end
+```
+
+We do some abstractions easily readable in the code. Our tasks are just a
+`Queue` of numbers, so are our results. What our employer does when he works is
+some calculation with those numbers and what the manager does with the results
+is printing them to the screen.
+
+We instantiate a new company with an initial task and after running that
+company we expect the result to be printed in the screen, but it is not.  Lets
+debug our sample program:
+
+```bash
+[1, 10] in /path/to/company.rb
+=>  1: class Company
+    2:   def initialize(task)
+    3:     @tasks, @results = Queue.new, Queue.new
+    4:
+    5:     @tasks.push(task)
+    6:   end
+    7:
+    8:   #
+    9:   # A CEO running his company
+   10:   #
+(byebug) l
+
+[11, 20] in /path/to/company.rb
+   11:   def run
+   12:     manager = Thread.new { manager_routine }
+   13:     employee = Thread.new { employee_routine }
+   14:
+   15:     sleep 6
+   16:
+   17:     go_home(manager)
+   18:     go_home(employee)
+   19:   end
+   20:
+(byebug) c 15
+Stopped by breakpoint 1 at /path/to/company.rb:15
+
+[10, 19] in /path/to/company.rb
+   10:   #
+   11:   def run
+   12:     manager = Thread.new { manager_routine }
+   13:     employee = Thread.new { employee_routine }
+   14:
+=> 15:     sleep 6
+   16:
+   17:     go_home(manager)
+   18:     go_home(employee)
+   19:   end
+(byebug) th l
++ 1 #<Thread:0x0000000192f328 run> /path/to/company.rb:15
+  2 #<Thread:0x00000001ff9870@/path/to/company.rb:12 sleep>
+  3 #<Thread:0x00000001ff80d8@/path/to/company.rb:13 sleep>
+```
+
+What we have done here is just start our program and advance to the point
+inmediately after our `employee` and `manager` threads have been created. We
+can then check that the threads are there using the `thread list` command. Now
+we want to debug both of this threads to check what's happening and look for the
+bug.
+
+```bash
+(byebug) th switch 3
+
+[8, 17] in /path/to/company.rb
+    8:   #
+    9:   # A CEO running his company
+   10:   #
+   11:   def run
+   12:     manager = Thread.new { manager_routine }
+=> 13:     employee = Thread.new { employee_routine }
+   14:
+   15:     sleep 6
+   16:
+   17:     go_home(manager)
+(byebug) th stop 1; th stop 2
+$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:15
+$ 2 #<Thread:0x000000018bf438@/path/to/company.rb:12 sleep>
+(byebug) th l
+$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:15
+$ 2 #<Thread:0x000000018bf438@/path/to/company.rb:12 sleep>
++ 3 #<Thread:0x000000018bec18@/path/to/company.rb:13 run> /path/to/company.rb:27
+```
+
+We have started by debugging the `employee` thread. To do that, we switch to
+that thread using the `thread switch 3` command. The thread number is the one
+specified by `thread list`, we know this is our worker thread because `thread
+list` specifies where the thread is defined in the file (and its current
+position if the thread is currently running).
+
+After that we stopped the main thread and the worker thread, using the command
+`thread stop`. We do this because we want to focus on the employee thread first
+and don't want the program to finish while we are debugging. Notice that stopped
+threads are marked with the "$" symbol whereas the current thread is marked with
+the "+" symbol.
+
+```bash
+(byebug) s
+
+[20, 29] in /path/to/company.rb
+   20:
+   21:   #
+   22:   # An employee doing his thing
+   23:   #
+   24:   def employee_routine
+=> 25:     loop do
+   26:       if @tasks.empty?
+   27:         have_a_break(0.1)
+   28:       else
+   29:         work_hard(@tasks.pop)
+(byebug) s
+
+[21, 30] in /path/to/company.rb
+   21:   #
+   22:   # An employee doing his thing
+   23:   #
+   24:   def employee_routine
+   25:     loop do
+=> 26:       if @tasks.empty?
+   27:         have_a_break(0.1)
+   28:       else
+   29:         work_hard(@tasks.pop)
+   30:       end
+(byebug) n
+
+[24, 33] in /path/to/company.rb
+   24:   def employee_routine
+   25:     loop do
+   26:       if @tasks.empty?
+   27:         have_a_break(0.1)
+   28:       else
+=> 29:         work_hard(@tasks.pop)
+   30:       end
+   31:     end
+   32:   end
+   33:
+(byebug) s
+
+[49, 58] in /path/to/company.rb
+   49:   def enjoy(result)
+   50:     puts result
+   51:   end
+   52:
+   53:   def work_hard(task)
+=> 54:     task ** task
+   55:   end
+   56:
+   57:   def have_a_break(amount)
+   58:     sleep amount
+(byebug) s
+
+[21, 30] in /path/to/company.rb
+   21:   #
+   22:   # An employee doing his thing
+   23:   #
+   24:   def employee_routine
+   25:     loop do
+=> 26:       if @tasks.empty?
+   27:         have_a_break(0.1)
+   28:       else
+   29:         work_hard(@tasks.pop)
+   30:       end
+(byebug) n
+
+[22, 31] in /path/to/company.rb
+   22:   # An employee doing his thing
+   23:   #
+   24:   def employee_routine
+   25:     loop do
+   26:       if @tasks.empty?
+=> 27:         have_a_break(0.1)
+   28:       else
+   29:         work_hard(@tasks.pop)
+   30:       end
+   31:     end
+(byebug) n
+
+[21, 30] in /path/to/company.rb
+   21:   #
+   22:   # An employee doing his thing
+   23:   #
+   24:   def employee_routine
+   25:     loop do
+=> 26:       if @tasks.empty?
+   27:         have_a_break(0.1)
+   28:       else
+   29:         work_hard(@tasks.pop)
+   30:       end
+   31:     end
+(byebug)
+```
+
+Everything seems fine in this thread. The first iteration the employee will do
+his job, and after that it will just check for new tasks and sleep. Let's debug
+the manager task now:
+
+```bash
+(byebug) th resume 2
+  2 #<Thread:0x000000019892d8@/path/to/company.rb:12 run> /path/to/company.rb:12
+(byebug) th switch 2
+  2 #<Thread:0x000000019892d8@/path/to/company.rb:12 sleep> /path/to/company.rb:12
+
+[7, 16] in /path/to/company.rb
+    7:
+    8:   #
+    9:   # A CEO running his company
+   10:   #
+   11:   def run
+=> 12:     manager = Thread.new { manager_routine }
+   13:     employee = Thread.new { employee_routine }
+   14:
+   15:     sleep 6
+   16:
+(byebug)
+```
+
+We used the command `thread resume` to restart the manager's thread and then
+switch to it using `thread switch`. It's important to resume the thread's
+execution before switching to it, otherwise we'll get a hang because we cannot
+run a sleeping thread.
+
+Now we can investigate the problem in the employer's side:
+
+``bash
+(byebug) s
+[33, 42] in /path/to/company.rb
+   33:
+   34:   #
+   35:   # A manager doing his thing
+   36:   #
+   37:   def manager_routine
+=> 38:     loop do
+   39:       if @results.empty?
+   40:         have_a_break(1)
+   41:       else
+   42:         enjoy(@results.pop)
+(byebug) s
+
+[34, 43] in /path/to/company.rb
+   34:   #
+   35:   # A manager doing his thing
+   36:   #
+   37:   def manager_routine
+   38:     loop do
+=> 39:       if @results.empty?
+   40:         have_a_break(1)
+   41:       else
+   42:         enjoy(@results.pop)
+   43:       end
+(byebug) n
+
+[35, 44] in /path/to/company.rb
+   35:   # A manager doing his thing
+   36:   #
+   37:   def manager_routine
+   38:     loop do
+   39:       if @results.empty?
+=> 40:         have_a_break(1)
+   41:       else
+   42:         enjoy(@results.pop)
+   43:       end
+   44:     end
+(byebug) n
+
+[34, 43] in /path/to/company.rb
+   34:   #
+   35:   # A manager doing his thing
+   36:   #
+   37:   def manager_routine
+   38:     loop do
+=> 39:       if @results.empty?
+   40:         have_a_break(1)
+   41:       else
+   42:         enjoy(@results.pop)
+   43:       end
+(byebug)
+``
+
+Now we can see the problem, the `@results` variable is always empty! The
+employee forgot to leave the results in his manager's deck. We fix it by
+changing the line
+
+```ruby
+work_hard(@tasks.pop)
+```
+
+in the `employee_routine` method with the line
+
+```ruby
+@results << work_hard(@tasks.pop)
+```
+
 To be continued...
-* Threading Support.
 * More complex examples with objects, pretty printing and irb.
 * Line tracing and non-interactive tracing.
 * Post-mortem debugging.
