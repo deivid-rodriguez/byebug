@@ -228,13 +228,6 @@ call_at_line_check(VALUE context_obj, debug_context_t * dc, VALUE breakpoint,
 /* TracePoint API event handlers */
 
 static void
-update_frame_dest(debug_context_t * dc)
-{
-  dc->dest_frame = dc->calced_stack_size;
-  CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
-}
-
-static void
 line_event(VALUE trace_point, void *data)
 {
   VALUE brkpnt, file, line, binding;
@@ -253,7 +246,9 @@ line_event(VALUE trace_point, void *data)
 
   if (dc->calced_stack_size <= dc->dest_frame)
   {
-    update_frame_dest(dc);
+    dc->dest_frame = dc->calced_stack_size;
+    CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
+
     dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
   }
 
@@ -279,7 +274,7 @@ call_event(VALUE trace_point, void *data)
   EVENT_SETUP;
 
   if (dc->calced_stack_size <= dc->dest_frame)
-    update_frame_dest(dc);
+    CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
 
   dc->calced_stack_size++;
 

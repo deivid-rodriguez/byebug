@@ -191,4 +191,51 @@ module Byebug
       debug_code(program) { assert_equal 13, state.line }
     end
   end
+
+  #
+  # Tests next when execution should not stop at the same "stack size level"
+  #
+  class TestNextGoingUpFrames < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test cases where next should not stay in frame
+         4:    #
+         5:    class #{example_class}
+         6:      def finite_loop
+         7:        n = 0
+         8:        loop do
+         9:          n = inc(n)
+        10:          break if n == 2
+        11:          n = inc(n)
+        12:        end
+        13:      end
+        14:
+        15:      def inc(n)
+        16:        if n == 2
+        17:          n
+        18:        else
+        19:          n + 1
+        20:        end
+        21:      end
+        22:    end
+        23:
+        24:    byebug
+        25:
+        26:    #{example_class}.new.finite_loop
+        27:  end
+      EOC
+    end
+
+    def test_next_goes_up_a_frame_if_current_frame_finishes
+      enter 'cont 19', 'next'
+      debug_code(program) { assert_equal 10, state.line }
+    end
+
+    def test_next_does_not_enter_other_frames_of_the_same_size
+      enter 'b 19', 'cont', 'cont', 'next'
+      debug_code(program) { assert_equal 9, state.line }
+    end
+  end
 end
