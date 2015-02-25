@@ -32,6 +32,8 @@ sequentially.
 - Finish command not stopping at the correct line (#101).
 - `break` with namespaced class, like `break A::B#c` should now work (#106).
 - Command history is now persisted before exiting byebug.
+- Setting breakpoint in a method would stop not only at the beginning of the
+method but also at the beginning of every block inside the method.
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up

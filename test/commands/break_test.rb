@@ -62,6 +62,14 @@ module Byebug
       end
     end
 
+    def test_break_with_a_method_does_not_stop_at_blocks_in_the_method
+      enter "break #{example_class}.a", 'cont', 'break 8', 'cont'
+      debug_code(program) do
+        assert_equal 8, state.line
+        assert_equal example_path, state.file
+      end
+    end
+
     def test_setting_breakpoint_to_an_undefined_class_creates_breakpoint
       enter 'break B.a'
       debug_code(program)
