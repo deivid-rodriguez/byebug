@@ -65,7 +65,7 @@ module Byebug
                      'numbers']
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
-    end unless defined?(Subcommands)
+    end
 
     def regexp
       /^\s* (dis|en)(?:able)? (?:\s+(.+))? \s*$/x

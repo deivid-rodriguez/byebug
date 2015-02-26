@@ -147,7 +147,7 @@ module Byebug
       ['program', 2, 'Execution status of the program']
     ].map do |name, min, help|
       Subcmd.new(name, min, help)
-    end unless defined?(Subcommands)
+    end
 
     def info_file(*args)
       file = args[0] || @state.file
