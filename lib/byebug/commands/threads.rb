@@ -124,7 +124,7 @@ module Byebug
 
       def description
         prettify <<-EOD
-          th[read] [cur[rent]]  Shows current thread.
+          th[read] cur[rent]  Shows current thread.
         EOD
       end
     end
@@ -229,7 +229,7 @@ module Byebug
 
       def description
         prettify <<-EOD
-          th[read] [sw[itch]] <n>  Switches thread context to <n>.
+          th[read] sw[itch] <n>  Switches thread context to <n>.
         EOD
       end
     end
