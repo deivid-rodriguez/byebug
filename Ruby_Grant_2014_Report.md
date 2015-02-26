@@ -8,7 +8,9 @@ threads and their statuses, switching execution to specific threads and
 temporarily pausing/resuming threads.
 
 The Byebug's Guide has been updated to include a specific sample usage of the
-feature in a toy application. See [here](link) for details.
+feature in a toy application. See [here](
+https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#threading-support)
+for details.
 
 This is the list of available commands and a short explanation of its usage:
 
@@ -168,7 +170,7 @@ the some people consider Byebug as an `irb` or `pry` alternative.
 The new threading feature would not play nice with the REPL when the command to
 be evaluated included thread stuff. Users would get either a 'No threads alive.
 deadlock?' error or a proper deadlock. For an example of this issues, have a
-look at [#]().
+look at [here](https://github.com/deivid-rodriguez/byebug/issues/115).
 
 This would happen because `byebug`'s global lock wouldn't be released before
 evaluating stuff, so if an evaluated command created new threads or switched to
