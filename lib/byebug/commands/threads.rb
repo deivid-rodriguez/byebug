@@ -1,5 +1,11 @@
 require 'byebug/command'
 
+#
+# TODO: Implement thread commands as a single command with subcommands, just
+# like `info`, `var`, `enable` and `disable`. This allows consistent help
+# format and we can go back to showing help for a single command in the `help`
+# command.
+#
 module Byebug
   #
   # Utilities to assist commands related to threads.

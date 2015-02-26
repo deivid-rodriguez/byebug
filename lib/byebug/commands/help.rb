@@ -14,10 +14,10 @@ module Byebug
     def execute
       return puts(self.class.help) unless @match[1]
 
-      cmd = Command.commands.find { |c| c.names.include?(@match[1]) }
-      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
+      cmd = Command.commands.select { |c| c.names.include?(@match[1]) }
+      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd.any?
 
-      puts cmd.help(@match[2])
+      cmd.each { |c| puts c.help(@match[2]) }
     end
 
     class << self
