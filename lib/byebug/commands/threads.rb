@@ -75,10 +75,7 @@ module Byebug
     end
 
     def execute
-      contexts = Byebug
-                 .contexts
-                 .select { |c| Thread.list.include?(c.thread) }
-                 .sort_by(&:thnum)
+      contexts = Byebug.contexts.sort_by(&:thnum)
 
       thread_list = prc('thread.context', contexts) do |context, _|
         thread_arguments(context)
