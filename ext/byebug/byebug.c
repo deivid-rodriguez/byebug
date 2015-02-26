@@ -355,22 +355,6 @@ raw_return_event(VALUE trace_point, void *data)
 }
 
 static void
-thread_begin_event(VALUE trace_point, void *data)
-{
-  EVENT_SETUP;
-
-  EVENT_TEARDOWN;
-}
-
-static void
-thread_end_event(VALUE trace_point, void *data)
-{
-  EVENT_SETUP;
-
-  EVENT_TEARDOWN;
-}
-
-static void
 raise_event(VALUE trace_point, void *data)
 {
   VALUE expn_class, ancestors;
@@ -455,16 +439,6 @@ register_tracepoints(VALUE self)
     VALUE tpCReturn = rb_tracepoint_new(Qnil, raw_ret_msk, raw_return_event, 0);
     VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
 
-    VALUE tpThreadBegin = rb_tracepoint_new(Qnil,
-                                            RUBY_EVENT_THREAD_BEGIN,
-                                            thread_begin_event,
-                                            0);
-
-    VALUE tpThreadEnd = rb_tracepoint_new(Qnil,
-                                          RUBY_EVENT_THREAD_END,
-                                          thread_end_event,
-                                          0);
-
     traces = rb_ary_new();
     rb_ary_push(traces, tpLine);
     rb_ary_push(traces, tpCall);
@@ -472,8 +446,6 @@ register_tracepoints(VALUE self)
     rb_ary_push(traces, tpCCall);
     rb_ary_push(traces, tpCReturn);
     rb_ary_push(traces, tpRaise);
-    rb_ary_push(traces, tpThreadBegin);
-    rb_ary_push(traces, tpThreadEnd);
 
     tracepoints = traces;
   }
