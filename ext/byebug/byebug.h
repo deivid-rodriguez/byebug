@@ -17,8 +17,8 @@
 #define CTX_FL_IGNORE_STEPS (1<<7) /* doesn't countdown steps to break       */
 
 /* macro functions */
-#define CTX_FL_TEST(c,f)  ((c)->flags & (f))
-#define CTX_FL_SET(c,f)   do { (c)->flags |= (f); } while (0)
+#define CTX_FL_TEST(c,f) ((c)->flags & (f))
+#define CTX_FL_SET(c,f) do { (c)->flags |= (f); } while (0)
 #define CTX_FL_UNSET(c,f) do { (c)->flags &= ~(f); } while (0)
 
 /* types */
@@ -59,6 +59,26 @@ typedef struct {
   st_table *tbl;
 } threads_table_t;
 
+enum bp_type { BP_POS_TYPE, BP_METHOD_TYPE };
+
+enum hit_condition { HIT_COND_NONE, HIT_COND_GE, HIT_COND_EQ, HIT_COND_MOD };
+
+typedef struct {
+  int id;
+  enum bp_type type;
+  VALUE source;
+  union
+  {
+    int line;
+    ID mid;
+  } pos;
+  VALUE expr;
+  VALUE enabled;
+  int hit_count;
+  int hit_value;
+  enum hit_condition hit_condition;
+} breakpoint_t;
+
 /* functions from locker.c */
 extern int is_in_locked(VALUE thread_id);
 extern void add_to_locked(VALUE thread);
@@ -77,7 +97,7 @@ extern void release_lock(void);
 extern VALUE threads;
 extern VALUE next_thread;
 
-/* functions */
+/* functions from context.c */
 extern void Init_context(VALUE mByebug);
 extern VALUE context_create(VALUE thread);
 extern VALUE context_dup(debug_context_t *context);
@@ -86,27 +106,7 @@ extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
 extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
                                    void *data);
 
-/* breakpoints & catchpoints */
-enum bp_type { BP_POS_TYPE, BP_METHOD_TYPE };
-
-enum hit_condition { HIT_COND_NONE, HIT_COND_GE, HIT_COND_EQ, HIT_COND_MOD };
-
-typedef struct {
-  int id;
-  enum bp_type type;
-  VALUE source;
-  union
-  {
-    int line;
-    ID  mid;
-  } pos;
-  VALUE expr;
-  VALUE enabled;
-  int hit_count;
-  int hit_value;
-  enum hit_condition hit_condition;
-} breakpoint_t;
-
+/* functions from breakpoint.c */
 extern void Init_breakpoint(VALUE mByebug);
 extern VALUE catchpoint_hit_count(VALUE catchpoints,
                                   VALUE exception,
