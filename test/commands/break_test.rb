@@ -161,7 +161,7 @@ module Byebug
       end
     end
 
-    def test_breaking_w_byebug_keywork_stops_at_the_next_line
+    def test_breaking_w_byebug_keyword_stops_at_the_next_line
       debug_code(program) { assert_equal 15, state.line }
     end
 
