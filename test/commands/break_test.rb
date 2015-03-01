@@ -91,6 +91,36 @@ module Byebug
     end
   end
 
+  class BreakAtModulesTestCase < TestCase
+    def program
+      strip_line_numbers <<-EOC
+          1:  module Byebug
+          2:    #
+          3:    # Toy module to test breakpoints
+          4:    #
+          5:    module #{example_module}
+          6:      def self.a
+          7:        1
+          8:      end
+          9:    end
+         10:
+         11:    byebug
+         12:
+         13:    #{example_module}.a
+         14:  end
+      EOC
+    end
+
+    def test_break_with_module_method_stops_at_correct_place
+      enter "break #{example_module}.a", 'cont'
+
+      debug_code(program) do
+        assert_equal 6, state.line
+        assert_equal example_path, state.file
+      end
+    end
+  end
+
   #
   # Tests breakpoint functionality.
   #
