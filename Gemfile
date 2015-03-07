@@ -10,6 +10,6 @@ group :development, :test do
   gem 'mocha', '~> 1.1'
   gem 'minitest', '~> 5.5'
   gem 'simplecov', '0.9.2', require: false
-  gem 'codeclimate-test-reporter', '0.4.6', require: false
+  gem 'codeclimate-test-reporter', '0.4.7', require: false
   gem 'pry', '0.10.1', require: false
 end
