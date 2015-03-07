@@ -58,7 +58,7 @@ Windows [![Vey][vey]][vey_url]
 * Recommended:
   - MRI 2.0.0-p576 or higher.
   - MRI 2.1.3 or higher.
-  - MRI 2.2.0 or higher.
+  - MRI 2.2.1 or higher.
 
 
 ## Install

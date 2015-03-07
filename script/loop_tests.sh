@@ -29,7 +29,7 @@ else
 fi
 
 if [ "$#" == "0" ]; then
-  rubies=( 2.0 2.1 2.2-head )
+  rubies=( 2.0 2.1 2.2 )
 else
   rubies=( $@ )
 fi
