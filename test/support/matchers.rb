@@ -26,6 +26,13 @@ module Minitest
       refute _includes_in_order(original, given), msg
     end
 
+    def assert_location(file, line)
+      expected, actual = "#{file}:#{line}", "#{state.file}:#{state.line}"
+      msg = "Expected location to be #{expected}, but was #{actual}"
+
+      assert file == state.file && line == state.line, msg
+    end
+
     private
 
     def _includes_in_order(original_collection, given_collection)

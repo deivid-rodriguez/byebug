@@ -36,63 +36,43 @@ module Byebug
     def test_break_with_instance_method_stops_at_correct_place
       enter "break #{example_class}#b", 'cont'
 
-      debug_code(program) do
-        assert_equal 12, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 12 }
     end
 
     def test_break_with_namespaced_instance_method_stops_at_correct_place
       enter "break Byebug::#{example_class}#b", 'cont'
 
-      debug_code(program) do
-        assert_equal 12, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 12 }
     end
 
     def test_break_with_class_method_stops_at_correct_place
       enter "break #{example_class}.a", 'cont'
 
-      debug_code(program) do
-        assert_equal 6, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 6 }
     end
 
     def test_break_with_namespaced_class_method_stops_at_correct_place
       enter "break Byebug::#{example_class}.a", 'cont'
 
-      debug_code(program) do
-        assert_equal 6, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 6 }
     end
 
     def test_break_with_module_method_stops_at_correct_place
       enter "break #{example_module}.c", 'cont'
 
-      debug_code(program) do
-        assert_equal 18, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location(example_path, 18) }
     end
 
     def test_break_with_namespaced_module_method_stops_at_correct_place
       enter "break Byebug::#{example_module}.c", 'cont'
 
-      debug_code(program) do
-        assert_equal 18, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 18 }
     end
 
     def test_break_with_a_method_does_not_stop_at_blocks_in_the_method
       enter "break #{example_class}.a", 'cont', 'break 8', 'cont'
-      debug_code(program) do
-        assert_equal 8, state.line
-        assert_equal example_path, state.file
-      end
+
+      debug_code(program) { assert_location example_path, 8 }
     end
 
     def test_setting_breakpoint_to_an_undefined_class_creates_breakpoint
@@ -180,10 +160,7 @@ module Byebug
     def test_stops_at_the_correct_place_when_a_breakpoint_is_set
       enter 'break 7', 'cont'
 
-      debug_code(program) do
-        assert_equal 7, state.line
-        assert_equal example_path, state.file
-      end
+      debug_code(program) { assert_location example_path, 7 }
     end
 
     def test_breaking_w_byebug_keyword_stops_at_the_next_line
