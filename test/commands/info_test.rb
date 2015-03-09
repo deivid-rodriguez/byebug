@@ -206,6 +206,10 @@ module Byebug
         "It stopped after stepping, next'ing or initial start."
     end
 
+    def test_info_program_shows_an_error_if_the_program_is_crashed
+      skip('for now')
+    end
+
     def test_info_program_shows_the_step_stop_reason
       enter 'step', 'info program'
       debug_code(program)
@@ -224,10 +228,6 @@ module Byebug
       enter 'catch Exception', 'cont', 'info program'
       debug_code(program)
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
-    end
-
-    def test_shows_an_error_if_the_program_is_crashed
-      skip('for now')
     end
 
     def test_shows_help_when_typing_just_info
