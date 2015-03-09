@@ -18,17 +18,21 @@ module Byebug
 
     settings.each do |set|
       define_method(:"test_show_#{set}_shows_disabled_bool_setting_#{set}") do
-        Setting[set] = false
-        enter "show #{set}"
-        debug_code(program)
-        check_output_includes "#{set} is off"
+        with_setting set, false do
+          enter "show #{set}"
+          debug_code(program)
+
+          check_output_includes "#{set} is off"
+        end
       end
 
       define_method(:"test_show_#{set}_shows_enabled_bool_setting_#{set}") do
-        Setting[set] = true
-        enter "show #{set}"
-        debug_code(program)
-        check_output_includes "#{set} is on"
+        with_setting set, true do
+          enter "show #{set}"
+          debug_code(program)
+
+          check_output_includes "#{set} is on"
+        end
       end
     end
 

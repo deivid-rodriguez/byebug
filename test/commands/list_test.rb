@@ -25,63 +25,83 @@ module Byebug
     end
 
     def test_lists_source_code_lines
-      enter 'set listsize 3', 'list'
-      debug_code(program)
-      check_output_includes "[12, 14] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list'
+        debug_code(program)
+        check_output_includes "[12, 14] in #{example_path}"
+      end
     end
 
     def test_listsize_is_not_set_if_parameter_is_not_an_integer
-      enter 'set listsize 5.0', 'list'
-      debug_code(program)
-      check_output_doesnt_include "[12, 14] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'set listsize 5.0', 'list'
+        debug_code(program)
+        check_output_doesnt_include "[11, 15] in #{example_path}"
+      end
     end
 
     def test_does_not_list_before_the_beginning_of_file
-      enter 'cont 7', 'set listsize 15', 'list'
-      debug_code(program)
-      check_output_includes "[1, 15] in #{example_path}"
+      with_setting :listsize, 15 do
+        enter 'cont 7', 'list'
+        debug_code(program)
+        check_output_includes "[1, 15] in #{example_path}"
+      end
     end
 
     def test_does_not_list_after_the_end_of_file
-      enter 'set listsize 13', 'list'
-      debug_code(program)
-      check_output_includes "[4, 16] in #{example_path}"
+      with_setting :listsize, 13 do
+        enter 'list'
+        debug_code(program)
+        check_output_includes "[4, 16] in #{example_path}"
+      end
     end
 
     def test_lists_the_whole_file_if_number_of_lines_is_smaller_than_listsize
-      enter 'set listsize 17', 'list'
-      debug_code(program)
-      check_output_includes "[1, 16] in #{example_path}"
+      with_setting :listsize, 17 do
+        enter 'list'
+        debug_code(program)
+        check_output_includes "[1, 16] in #{example_path}"
+      end
     end
 
     def test_lists_forwards_after_the_second_call_to_list
-      enter 'set listsize 3', 'cont 7', 'list', 'list'
-      debug_code(program)
-      check_output_includes "[9, 11] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'cont 7', 'list', 'list'
+        debug_code(program)
+        check_output_includes "[9, 11] in #{example_path}"
+      end
     end
 
     def test_lists_surrounding_lines_after_the_first_call_to_list_minus
-      enter 'set listsize 3', 'list-'
-      debug_code(program)
-      check_output_includes "[12, 14] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list-'
+        debug_code(program)
+        check_output_includes "[12, 14] in #{example_path}"
+      end
     end
 
     def test_lists_backwards_after_the_second_call_to_list_minus
-      enter 'set listsize 3', 'list-', 'list-'
-      debug_code(program)
-      check_output_includes "[9, 11] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list-', 'list-'
+        debug_code(program)
+        check_output_includes "[9, 11] in #{example_path}"
+      end
     end
 
     def test_lists_backwards_from_end_of_file
-      enter 'set listsize 3', 'list 14-16', 'list -'
-      debug_code(program)
-      check_output_includes "[11, 13] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list 14-16', 'list -'
+        debug_code(program)
+        check_output_includes "[11, 13] in #{example_path}"
+      end
     end
 
     def test_lists_surrounding_lines_when_list_equals_is_called
-      enter 'set listsize 3', 'list ='
-      debug_code(program)
-      check_output_includes "[12, 14] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list ='
+        debug_code(program)
+        check_output_includes "[12, 14] in #{example_path}"
+      end
     end
 
     def test_lists_specific_range_when_requested_in_hyphen_format
@@ -111,15 +131,19 @@ module Byebug
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_hyphen
-      enter 'set listsize 3', 'list 4-'
-      debug_code(program)
-      check_output_includes "[3, 5] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list 4-'
+        debug_code(program)
+        check_output_includes "[3, 5] in #{example_path}"
+      end
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_comma
-      enter 'set listsize 3', 'list 4,'
-      debug_code(program)
-      check_output_includes "[3, 5] in #{example_path}"
+      with_setting :listsize, 3 do
+        enter 'list 4,'
+        debug_code(program)
+        check_output_includes "[3, 5] in #{example_path}"
+      end
     end
 
     def test_shows_an_error_when_the_file_to_list_does_not_exist
@@ -140,6 +164,7 @@ module Byebug
     end
 
     def test_lists_file_changes
+      skip
       enter -> { replace_build_percentage_string_line_and_list_it }
 
       debug_code(program)

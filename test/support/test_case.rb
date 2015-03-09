@@ -2,6 +2,29 @@ require 'byebug/interfaces/test_interface'
 
 module Byebug
   #
+  # During tests, ignore rc files
+  #
+  def self.run_init_script
+  end
+
+  class Context
+    class << self
+      undef :ignored_files
+
+      #
+      # List of files to be ignored during a test run
+      #
+      def ignored_files
+        return @ignored_files if defined?(@ignored_files)
+
+        @ignored_files = `git ls-files -z *.rb`.split("\x0").map do |f|
+          File.expand_path(f)
+        end
+      end
+    end
+  end
+
+  #
   # Extends Minitest's base test case and provides defaults for all tests.
   #
   class TestCase < Minitest::Test
@@ -10,16 +33,18 @@ module Byebug
     include Byebug::TestUtils
 
     #
+    # Stuff to be run once before the test suite
+    #
+    def self.before_suite
+      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
+    end
+
+    #
     # Reset to default state before each test
     #
     def setup
-      Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
+      interface.clear
       Byebug.breakpoints.clear if Byebug.breakpoints
-      Byebug.catchpoints.clear if Byebug.catchpoints
-      Byebug.stubs(:run_init_script)
-      Byebug::Context.stubs(:ignored_files).returns(ignored_files)
-
-      set_defaults
     end
 
     #
@@ -28,16 +53,6 @@ module Byebug
     def teardown
       cleanup_namespace
       clear_example_file
-    end
-
-    #
-    # List of files to be ignored during a test run
-    #
-    def ignored_files
-      return @ignored_files if defined?(@ignored_files)
-
-      pattern = File.expand_path('../../../{lib,test}/**/*.rb', __FILE__)
-      @ignored_files = Dir.glob(pattern) - [example_path]
     end
 
     #

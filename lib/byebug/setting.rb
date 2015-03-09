@@ -51,26 +51,12 @@ module Byebug
         settings[name].value = value
       end
 
-      def boolean?(name)
-        key = (name =~ /^no/ ? name[2..-1] : name).to_sym
-        settings[key].boolean?
-      end
-
-      def integer?(name)
-        settings[name.to_sym].integer?
-      end
-
-      def exists?(name)
-        key = (name =~ /^no/ ? name[2..-1] : name).to_sym
-        boolean?(key) ? settings.include?(key) : settings.include?(name.to_sym)
-      end
-
       def find(shortcut)
         abbr = shortcut =~ /^no/ ? shortcut[2..-1] : shortcut
         matches = settings.select do |key, value|
           value.boolean? ? key =~ /#{abbr}/ : key =~ /#{shortcut}/
         end
-        matches.size == 1 ? matches.keys.first : nil
+        matches.size == 1 ? matches.values.first : nil
       end
 
       def help_all
@@ -88,7 +74,7 @@ module Byebug
           return command.description + help_all
         end
 
-        setting = Byebug.const_get("#{camelize(subcmd)}Setting").new
+        setting = find(subcmd)
         prettify <<-EOS
           #{cmd} #{setting.to_sym} <value>
 

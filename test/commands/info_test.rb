@@ -31,19 +31,13 @@ module Byebug
         24:        e = '%.2f'
         25:        e
         26:      end
-        27:
-        28:      def d
-        29:        fail 'bang'
-        30:      rescue
-        31:      end
-        32:    end
-        33:
-        34:    byebug
-        35:    i = #{example_class}.new
-        36:    i.b
-        37:    i.c
-        38:    i.d
-        39:  end
+        27:    end
+        28:
+        29:    byebug
+        30:    i = #{example_class}.new
+        31:    i.b
+        32:    i.c
+        33:  end
       EOC
     end
 
@@ -54,18 +48,18 @@ module Byebug
     end
 
     def test_info_about_all_breakpoints
-      enter 'break 37', 'break 38 if y == z', 'info breakpoints'
+      enter 'break 12', 'break 13 if x == w', 'info breakpoints'
       debug_code(program)
       check_output_includes 'Num Enb What',
-                            /\d+ +y   at #{example_path}:37/,
-                            /\d+ +y   at #{example_path}:38 if y == z/
+                            /\d+ +y   at #{example_path}:12/,
+                            /\d+ +y   at #{example_path}:13 if x == w/
     end
 
     def test_info_about_specific_breakpoints
-      enter 'b 37', 'b 38', -> { "info breakpoints #{Breakpoint.first.id}" }
+      enter 'b 12', 'b 13', -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
-      check_output_includes 'Num Enb What', /\d+ +y   at #{example_path}:37/
-      check_output_doesnt_include(/\d+ +y   at #{example_path}:38/)
+      check_output_includes 'Num Enb What', /\d+ +y   at #{example_path}:12/
+      check_output_doesnt_include(/\d+ +y   at #{example_path}:13/)
     end
 
     def test_info_breakpoints_shows_a_message_when_no_breakpoints_found
@@ -75,21 +69,22 @@ module Byebug
     end
 
     def test_info_breakpoints_shows_error_if_specific_breakpoint_do_not_exist
-      enter 'break 37', 'break 38', 'delete 100', 'info breakpoints 100'
+      enter 'break 12', 'break 13', 'delete 100', 'info breakpoints 100'
       debug_code(program)
       check_error_includes 'No breakpoints found among list given'
     end
 
     def test_info_breakpoints_shows_hit_counts
-      enter 'break 38', 'cont', 'info breakpoints'
+      enter 'break 12', 'cont', 'info breakpoints'
       debug_code(program)
-      check_output_includes(/\d+ +y   at #{example_path}:38/,
+      check_output_includes(/\d+ +y   at #{example_path}:12/,
                             'breakpoint already hit 1 time')
     end
 
     def test_info_display_shows_all_display_expressions
       enter 'display 3 + 3', 'display a + b', 'info display'
-      debug_code(program)
+      debug_code(program) { clear_displays }
+
       check_output_includes 'Auto-display expressions now in effect:',
                             'Num Enb Expression',
                             '1: y  3 + 3',
@@ -106,7 +101,7 @@ module Byebug
       enter 'info file'
 
       debug_code(program)
-      check_output_includes "File #{example_path} (39 lines)"
+      check_output_includes "File #{example_path} (33 lines)"
     end
 
     def with_dummy_script
@@ -168,13 +163,10 @@ module Byebug
     def test_info_file_shows_potential_breakpoint_lines_in_current_file
       enter 'info file'
       debug_code(program)
+      expected_lines = [1, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20,
+                        22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33].join('  ')
 
-      potential_lines = [1, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20,
-                         22, 23, 24, 25, 26, 28, 29, 31, 32, 34, 35, 36, 37, 38,
-                         39]
-
-      check_output_includes \
-        'Breakpoint line numbers:', *potential_lines.columnize.split("\n")
+      check_output_includes 'Breakpoint line numbers:', *expected_lines
     end
 
     def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename
@@ -219,14 +211,23 @@ module Byebug
     end
 
     def test_info_program_shows_the_breakpoint_stop_reason
-      enter 'break 37', 'cont', 'info program'
+      enter 'break 12', 'cont', 'info program'
       debug_code(program)
       check_output_includes 'Program stopped.', 'It stopped at a breakpoint.'
     end
 
+    def program_raising
+      strip_line_numbers <<-EOC
+        byebug
+
+        fail 'Bang'
+      EOC
+    end
+
     def test_info_program_shows_the_catchpoint_stop_reason
-      enter 'catch Exception', 'cont', 'info program'
-      debug_code(program)
+      enter 'catch RuntimeError', 'cont', 'info program', 'catch off', 'y'
+
+      assert_raises(RuntimeError) { debug_code(program_raising) }
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
     end
 

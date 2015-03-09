@@ -28,7 +28,8 @@ module Byebug
     end
 
     def test_basename_setting_affects_tracing_output
-      enter 'set basename', 'set linetrace on', 'cont 6', 'set nolinetrace'
+      enter 'set basename', 'set linetrace', 'cont 6',
+            'set nolinetrace', 'set nobasename'
       debug_code(program)
       check_output_includes \
         "Tracing: #{File.basename(example_path)}:5   initial &&= true"

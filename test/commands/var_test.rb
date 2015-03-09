@@ -68,9 +68,11 @@ module Byebug
     end
 
     def test_var_instance_cuts_long_variable_values_according_to_width_setting
-      enter 'set width 40', 'var instance'
-      debug_code(program)
-      check_output_includes '@instance_variable = "111111111111111...'
+      with_setting :width, 40 do
+        enter 'var instance'
+        debug_code(program)
+        check_output_includes '@instance_variable = "111111111111111...'
+      end
     end
 
     def test_v_ins_shows_error_if_value_does_not_have_to_s_or_inspect_methods

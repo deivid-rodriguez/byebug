@@ -159,17 +159,6 @@ module Byebug
     end
 
     #
-    # Set default settings for testing
-    #
-    def set_defaults
-      Byebug::Setting.load
-
-      Byebug::Setting[:autolist] = false
-      Byebug::Setting[:autosave] = false
-      Byebug::Setting[:width] = 80
-    end
-
-    #
     # Shortcut to Byebug's global state
     #
     def state
@@ -188,6 +177,16 @@ module Byebug
     #
     def context
       state.context
+    end
+
+    #
+    # Removes all (both enabled and disabled) displays
+    #
+    def clear_displays
+      loop do
+        break unless state.display.size > 0
+        state.display.pop
+      end
     end
 
     def force_set_const(klass, const, value)
@@ -241,6 +240,21 @@ module Byebug
     ensure
       $PROGRAM_NAME = original_program_name
       $ARGV.replace(original_argv)
+    end
+
+    #
+    # Yields a block using a temporary value for a setting
+    #
+    # @param key [Symbol] Setting key
+    # @param value [Object] Temporary value for the setting
+    #
+    def with_setting(key, value)
+      original_value = Setting[key]
+      Setting[key] = value
+
+      yield
+    ensure
+      Setting[key] = original_value
     end
   end
 end

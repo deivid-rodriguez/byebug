@@ -22,6 +22,11 @@ argv = $ARGV.select do |argument|
 end
 
 #
+# Get ready for the test run
+#
+Byebug::TestCase.before_suite
+
+#
 # Run the tests
 #
 exit Minitest.run(argv)

@@ -74,14 +74,17 @@ module Byebug
       )
     end
 
+    include Byebug::TestUtils
+
     def test_columnize_collection_with_modifier_c
-      Setting[:width] = 30
-      assert_equal(
-        "1 bla  4 bla  7 bla  10 bla\n" \
-          "2 bla  5 bla  8 bla\n" \
-          '3 bla  6 bla  9 bla',
-        printer.print_collection('foo.with_c', (1..10)) { |i, _| { arg: i } }
-      )
+      with_setting :width, 30 do
+        assert_equal(
+          "1 bla  4 bla  7 bla  10 bla\n" \
+            "2 bla  5 bla  8 bla\n" \
+            '3 bla  6 bla  9 bla',
+          printer.print_collection('foo.with_c', (1..10)) { |i, _| { arg: i } }
+        )
+      end
     end
 
     def test_print_variables

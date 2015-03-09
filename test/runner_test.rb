@@ -84,16 +84,24 @@ module Byebug
 
     def test_run_with_post_mortem_mode_flag
       @runner.expects(:debug_program)
-      Setting.expects(:[]=).with(:post_mortem, true)
 
-      with_command_line('bin/byebug', '-m', example_path) { @runner.run }
+      with_setting :post_mortem, false do
+        with_command_line('bin/byebug', '-m', example_path) do
+          @runner.run
+          assert_equal true, Setting[:post_mortem]
+        end
+      end
     end
 
     def test_run_with_linetracing_flag
       @runner.expects(:debug_program)
-      Setting.expects(:[]=).with(:linetrace, true)
 
-      with_command_line('bin/byebug', '-t', example_path) { @runner.run }
+      with_setting :linetrace, false do
+        with_command_line('bin/byebug', '-t', example_path) do
+          @runner.run
+          assert_equal true, Setting[:linetrace]
+        end
+      end
     end
 
     def test_run_with_no_quit_flag

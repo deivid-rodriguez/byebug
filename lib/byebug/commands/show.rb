@@ -15,10 +15,10 @@ module Byebug
       key = @match[:setting]
       return puts(self.class.help) if key.nil?
 
-      full_key = Setting.find(key)
-      return errmsg(pr('show.errors.unknown_setting', key: key)) unless full_key
+      setting = Setting.find(key)
+      return errmsg(pr('show.errors.unknown_setting', key: key)) unless setting
 
-      puts Setting.settings[full_key.to_sym]
+      puts Setting.settings[setting.to_sym]
     end
 
     class << self

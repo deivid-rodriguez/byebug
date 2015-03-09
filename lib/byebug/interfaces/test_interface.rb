@@ -31,6 +31,11 @@ module Byebug
       self.test_block = nil
     end
 
+    def clear
+      @input, @output, @error = [], [], []
+      history.clear
+    end
+
     def inspect
       [
         'Input:', input.join("\n"),

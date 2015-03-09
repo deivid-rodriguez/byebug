@@ -11,37 +11,13 @@ module Byebug
       super(interface)
 
       @display = []
-      @mutex = Mutex.new
       @last_cmd = nil # To allow empty (just <RET>) commands
       @context_was_dead = false # Assume we haven't started.
     end
 
     def interface=(interface)
-      @mutex.synchronize do
-        @interface.close if @interface
-        @interface = interface
-      end
-    end
-
-    def self.protect(mname)
-      alias_method "__#{mname}", mname
-      module_eval <<-END, __FILE__, __LINE__ + 1
-        def #{mname}(*args)
-          @mutex.synchronize do
-            return unless @interface
-            __#{mname}(*args)
-          end
-        rescue IOError, SystemCallError
-          @interface.close
-        rescue SignalException
-          raise
-        rescue
-          without_exceptions do
-            puts "INTERNAL ERROR!!! #\{$!\}"
-            puts $!.backtrace.map{|l| "\t#\{l\}"}.join("\n")
-          end
-        end
-      END
+      @interface.close if @interface
+      @interface = interface
     end
 
     include FileFunctions
@@ -53,7 +29,6 @@ module Byebug
 
       puts "Stopped by breakpoint #{n} at #{file}:#{line}"
     end
-    protect :at_breakpoint
 
     def at_catchpoint(context, excpt)
       file = normalize(context.frame_file(0))
@@ -61,24 +36,20 @@ module Byebug
 
       puts "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})"
     end
-    protect :at_catchpoint
 
     def at_tracing(context, file, line)
       puts "Tracing: #{normalize(file)}:#{line} #{get_line(file, line)}"
 
       always_run(context, file, line, 2)
     end
-    protect :at_tracing
 
     def at_line(context, file, line)
       process_commands(context, file, line)
     end
-    protect :at_line
 
     def at_return(context, file, line)
       process_commands(context, file, line)
     end
-    protect :at_return
 
     private
 

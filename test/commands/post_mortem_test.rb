@@ -24,27 +24,34 @@ module Byebug
     end
 
     def test_rises_before_exit_in_post_mortem_mode
-      enter 'set post_mortem', 'cont', 'set nopost_mortem'
-      assert_raises(RuntimeError) do
-        debug_code(program)
+      with_setting :post_mortem, true do
+        enter 'cont'
+
+        assert_raises(RuntimeError) { debug_code(program) }
       end
     end
 
     def test_post_mortem_mode_sets_post_mortem_flag_to_true
-      enter 'set post_mortem', 'cont', 'set nopost_mortem'
-      begin
-        debug_code(program)
-      rescue
-        assert_equal true, Byebug.post_mortem?
+      with_setting :post_mortem, true do
+        enter 'cont'
+
+        begin
+          debug_code(program)
+        rescue RuntimeError
+          assert_equal true, Byebug.post_mortem?
+        end
       end
     end
 
     def test_execution_is_stopped_at_the_correct_line_after_exception
-      enter 'set post_mortem', 'cont', 'set nopost_mortem'
-      begin
-        debug_code(program)
-      rescue
-        assert_equal 7, Byebug.raised_exception.__bb_line
+      with_setting :post_mortem, true do
+        enter 'cont'
+
+        begin
+          debug_code(program)
+        rescue
+          assert_equal 7, Byebug.raised_exception.__bb_line
+        end
       end
     end
 
@@ -52,12 +59,15 @@ module Byebug
 
     forbidden.each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
-        enter 'set noautoeval', 'set post_mortem', "#{cmd}", 'set no_postmortem'
-        Context.any_instance.stubs(:dead?).returns(:true)
-        begin
-          debug_code(program)
-        rescue RuntimeError
-          check_error_includes 'Command unavailable in post mortem mode.'
+        with_setting :post_mortem, true do
+          enter 'set noautoeval', cmd, 'set autoeval'
+          Context.any_instance.stubs(:dead?).returns(:true)
+
+          begin
+            debug_code(program)
+          rescue RuntimeError
+            check_error_includes 'Command unavailable in post mortem mode.'
+          end
         end
       end
     end
@@ -67,11 +77,13 @@ module Byebug
 
     permitted.each do |cmd|
       define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do
-        enter 'set post_mortem', "#{cmd}", 'set no_postmortem'
-        class_name = cmd.gsub(/(^| )\w/) { |b| b[-1, 1].upcase } + 'Command'
+        with_setting :post_mortem, true do
+          enter cmd
+          class_name = cmd.gsub(/(^| )\w/) { |b| b[-1, 1].upcase } + 'Command'
 
-        Byebug.const_get(class_name).any_instance.stubs(:execute)
-        assert_raises(RuntimeError) { debug_code(program) }
+          Byebug.const_get(class_name).any_instance.stubs(:execute)
+          assert_raises(RuntimeError) { debug_code(program) }
+        end
       end
     end
   end

@@ -14,20 +14,22 @@ module Byebug
     end
 
     def test_help_shows_help_for_help_command_itself
-      enter 'set width 50', 'help'
-      debug_code(program)
+      with_setting :width, 50 do
+        enter 'help'
+        debug_code(program)
 
-      expected_output = split_lines <<-TXT
+        expected_output = split_lines <<-TXT
 
-        h[elp][ <cmd>[ <subcmd>]]
+          h[elp][ <cmd>[ <subcmd>]]
 
-        help                -- prints this help.
-        help <cmd>          -- prints help on command <cmd>.
-        help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
+          help                -- prints this help.
+          help <cmd>          -- prints help on command <cmd>.
+          help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
 
-      TXT
+        TXT
 
-      check_output_includes(*expected_output)
+        check_output_includes(*expected_output)
+      end
     end
 
     def test_help_with_specific_command_shows_help_for_it

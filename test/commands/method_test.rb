@@ -33,8 +33,8 @@ module Byebug
       enter 'cont 7', "method #{example_class}"
       debug_code(program)
 
-      check_output_includes(/bla/)
-      check_output_doesnt_include(/foo/)
+      check_output_includes('bla')
+      check_output_doesnt_include('foo')
     end
 
     def test_m_shows_an_error_if_specified_object_is_not_a_class_or_module
@@ -48,8 +48,8 @@ module Byebug
       enter 'cont 23', 'method instance a'
       debug_code(program)
 
-      check_output_includes(/bla/)
-      check_output_doesnt_include(/foo/)
+      check_output_includes(/bla /)
+      check_output_doesnt_include(/foo /)
     end
   end
 end

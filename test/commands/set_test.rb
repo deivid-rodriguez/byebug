@@ -20,61 +20,71 @@ module Byebug
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
         define_method(:"test_enable_boolean_setting_#{set}_using_#{key}") do
-          Setting[set] = false
-          enter "set #{set} #{key}"
-          debug_code(program)
-          assert_equal true, Setting[set]
+          with_setting set, false do
+            enter "set #{set} #{key}"
+            debug_code(program)
+
+            assert_equal true, Setting[set]
+          end
         end
       end
 
       %w(off 0 false).each do |key|
         define_method(:"test_disable_boolean_setting_#{set}_using_#{key}") do
-          Setting[set] = true
-          enter "set #{set} #{key}"
-          debug_code(program)
-          assert_equal false, Setting[set]
+          with_setting set, true do
+            enter "set #{set} #{key}"
+            debug_code(program)
+
+            assert_equal false, Setting[set]
+          end
         end
       end
 
       define_method(:"test_disable_boolean_setting_#{set}_using_no_prefix") do
-        Setting[set] = true
-        enter "set no#{set}"
-        debug_code(program)
-        assert_equal false, Setting[set]
+        with_setting set, true do
+          enter "set no#{set}"
+          debug_code(program)
+
+          assert_equal false, Setting[set]
+        end
       end
     end
 
     def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
-      Setting[:autoeval] = false
-      Setting[:autolist] = false
-      enter 'set auto'
-      debug_code(program)
-      assert_equal false, Setting[:autoeval]
-      assert_equal false, Setting[:autolist]
+      with_setting :autoeval, false do
+        enter 'set auto'
+        debug_code(program)
+
+        assert_equal false, Setting[:autoeval]
+      end
     end
 
-    def test_set_disables_a_setting_using_shorcut_when_not_ambiguous
-      Setting[:autoeval] = false
-      enter 'set autoe'
-      debug_code(program)
-      assert_equal true, Setting[:autoeval]
+    def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
+      with_setting :autoeval, false do
+        enter 'set autoe'
+        debug_code(program)
+
+        assert_equal true, Setting[:autoeval]
+      end
     end
 
     def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
-      Setting[:autoeval] = true
-      Setting[:autolist] = true
-      enter 'set noauto'
-      debug_code(program)
-      assert_equal true, Setting[:autoeval]
-      assert_equal true, Setting[:autolist]
+      with_setting :autoeval, true do
+        enter 'set noauto'
+        debug_code(program)
+
+        assert_equal true, Setting[:autoeval]
+      end
     end
 
     def test_set_histsize_sets_maximum_history_size
-      Setting[:histsize] = 1
-      enter 'set histsize 250'
-      debug_code(program)
-      assert_equal 250, Setting[:histsize]
-      check_output_includes "Maximum size of byebug's command history is 250"
+      with_setting :histsize, 1 do
+        enter 'set histsize 250'
+        debug_code(program)
+
+        assert_equal 250, Setting[:histsize]
+        check_output_includes "Maximum size of byebug's command history is 250"
+      end
     end
 
     def test_set_histsize_shows_an_error_message_if_no_size_is_provided
@@ -90,6 +100,7 @@ module Byebug
       assert_equal filename, Setting[:histfile]
       check_output_includes "The command history file is #{filename}"
       Setting[:histfile] = HistfileSetting::DEFAULT
+      File.delete(filename)
     end
 
     def test_set_histfile_shows_an_error_message_if_no_filename_is_provided
@@ -100,10 +111,12 @@ module Byebug
 
     [:listsize, :width].each do |set|
       define_method(:"test_set_#{set}_changes_integer_setting_#{set}") do
-        Setting[set] = 80
-        enter "set #{set} 120"
-        debug_code(program)
-        assert_equal 120, Setting[set]
+        with_setting set, 100 do
+          enter "set #{set} 50"
+          debug_code(program)
+
+          assert_equal 50, Setting[set]
+        end
       end
     end
 

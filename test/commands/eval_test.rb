@@ -87,15 +87,21 @@ module Byebug
     end
 
     def test_putl_prints_expression_and_columnize_the_result
-      enter 'set width 20', 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-      debug_code(program)
-      check_output_includes '1  3  5  8  6', '2  4  9  7'
+      with_setting :width, 20 do
+        enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
+        debug_code(program)
+
+        check_output_includes '1  3  5  8  6', '2  4  9  7'
+      end
     end
 
     def test_putl_prints_expression_and_sorts_and_columnize_the_result
-      enter 'set width 20', 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-      debug_code(program)
-      check_output_includes '1  3  5  7  9', '2  4  6  8'
+      with_setting :width, 20 do
+        enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
+        debug_code(program)
+
+        check_output_includes '1  3  5  7  9', '2  4  6  8'
+      end
     end
 
     def program_threads

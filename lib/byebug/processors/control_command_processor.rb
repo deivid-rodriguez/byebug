@@ -9,8 +9,6 @@ module Byebug
 
     def initialize(interface = LocalInterface.new)
       super(interface)
-
-      @context_was_dead = false # Assume we haven't started.
     end
 
     def commands
@@ -18,11 +16,6 @@ module Byebug
     end
 
     def process_commands
-      if @context_was_dead
-        puts 'The program finished.'
-        @context_was_dead = false
-      end
-
       @state = ControlState.new(interface)
 
       while (input = @interface.read_command(prompt(nil)))

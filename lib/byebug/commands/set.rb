@@ -15,21 +15,21 @@ module Byebug
       key, value = @match[:setting], @match[:value]
       return puts(SetCommand.help) if key.nil? && value.nil?
 
-      full_key = Setting.find(key)
-      return errmsg(pr('set.errors.unknown_setting', key: key)) unless full_key
+      setting = Setting.find(key)
+      return errmsg(pr('set.errors.unknown_setting', key: key)) unless setting
 
-      if !Setting.boolean?(full_key) && value.nil?
+      if !setting.boolean? && value.nil?
         value, err = nil, pr('set.errors.must_specify_value', key: key)
-      elsif Setting.boolean?(full_key)
+      elsif setting.boolean?
         value, err = get_onoff(value, key =~ /^no/ ? false : true)
-      elsif Setting.integer?(full_key)
-        value, err = get_int(value, full_key, 1)
+      elsif setting.integer?
+        value, err = get_int(value, setting.to_sym, 1)
       end
       return errmsg(err) if value.nil?
 
-      Setting[full_key.to_sym] = value
+      setting.value = value
 
-      puts Setting.settings[full_key.to_sym].to_s
+      puts setting.to_s
     end
 
     def get_onoff(arg, default)

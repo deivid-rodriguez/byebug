@@ -30,7 +30,7 @@ module Byebug
     def test_autoirb_calls_irb_automatically_after_every_stop
       IrbCommand.any_instance.expects(:execute)
 
-      enter 'set autoirb', 'cont 5'
+      enter 'set autoirb', 'cont 5', 'set noautoirb'
       debug_code(program)
     end
   end

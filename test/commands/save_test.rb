@@ -44,7 +44,7 @@ module Byebug
     end
 
     def test_save_records_catchpoints
-      enter 'catch NoMethodError', 'save'
+      enter 'catch NoMethodError', 'save', 'catch NoMethodError off'
       debug_code(program)
 
       assert_includes file_contents, 'catch NoMethodError'
@@ -52,7 +52,7 @@ module Byebug
 
     def test_save_records_displays
       enter 'display 2 + 3', 'save'
-      debug_code(program)
+      debug_code(program) { clear_displays }
 
       assert_includes file_contents, 'display 2 + 3'
     end
@@ -63,7 +63,7 @@ module Byebug
 
       assert_includes file_contents, 'set autoeval true'
       assert_includes file_contents, 'set basename false'
-      assert_includes file_contents, 'set autolist false'
+      assert_includes file_contents, 'set autolist true'
       assert_includes file_contents, 'set autoirb false'
     end
 
