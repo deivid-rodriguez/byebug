@@ -31,14 +31,6 @@ module Byebug
       EOP
     end
 
-    #
-    # After a single 'bt' command, gives the backtrace size from the output.
-    # It's the number of lines of input except for the prompt.
-    #
-    def backtrace_size
-      (interface.output - ['(byebug) ']).size
-    end
-
     def test_up_moves_up_in_the_callstack
       enter 'up'
       debug_code(program) { assert_equal 11, state.line }
@@ -105,84 +97,6 @@ module Byebug
     def test_frame_minus_one_sets_frame_to_the_last_one
       enter 'frame -1'
       debug_code(program) { assert_equal example_path, state.file }
-    end
-
-    def test_where_displays_current_backtrace_with_fullpaths
-      Setting[:fullpath] = true
-      enter 'where'
-      debug_code(program)
-
-      path = Pathname.new(example_path).realpath
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
-            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
-            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
-            ͱ-- #3  Class.new(*args) at #{path}:20
-            #4  <module:Byebug> at #{path}:20
-            #5  <top (required)> at #{path}:1
-      TXT
-
-      check_output_includes(*expected_output)
-      assert_equal 6, backtrace_size
-    end
-
-    def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
-      Setting[:fullpath] = false
-      path = '.../shortpath/to/example.rb'
-      RegularState.any_instance.stubs(:shortpath).returns(path)
-
-      enter 'where'
-      debug_code(program)
-
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
-            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
-            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
-            ͱ-- #3  Class.new(*args) at #{path}:20
-            #4  <module:Byebug> at #{path}:20
-            #5  <top (required)> at #{path}:1
-      TXT
-
-      check_output_includes(*expected_output)
-      assert_equal 6, backtrace_size
-    end
-
-    def test_where_displays_backtraces_using_long_callstyle
-      Setting[:callstyle] = 'long'
-      enter 'where'
-      debug_code(program)
-
-      path = Pathname.new(example_path).realpath
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  Byebug::#{example_class}.integerize(str#String) at #{path}:16
-            #1  Byebug::#{example_class}.encode(str#String) at #{path}:11
-            #2  Byebug::#{example_class}.initialize(letter#String) at #{path}:7
-            ͱ-- #3  Class.new\(*args) at #{path}:20
-            #4  <module:Byebug> at #{path}:20
-            #5  <top (required)> at #{path}:1
-      TXT
-
-      check_output_includes(*expected_output)
-      assert_equal 6, backtrace_size
-    end
-
-    def test_where_displays_backtraces_using_short_callstyle
-      Setting[:callstyle] = 'short'
-      enter 'where'
-      debug_code(program)
-
-      path = Pathname.new(example_path).realpath
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  integerize(str) at #{path}:16
-            #1  encode(str) at #{path}:11
-            #2  initialize(letter) at #{path}:7
-            ͱ-- #3  new(*args) at #{path}:20
-            #4  <module:Byebug> at #{path}:20
-            #5  <top (required)> at #{path}:1
-      TXT
-
-      check_output_includes(*expected_output)
-      assert_equal 6, backtrace_size
     end
 
     def test_frame_cannot_navigate_to_c_frames
