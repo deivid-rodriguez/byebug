@@ -96,11 +96,5 @@ module Byebug
     def camelized_path
       camelize(File.basename(example_path, '.rb'))
     end
-    #
-    # Name of the temporary test module.
-    #
-    def example_module
-      camelize(File.basename(example_path, '.rb'))
-    end
   end
 end
