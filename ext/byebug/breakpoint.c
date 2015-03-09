@@ -417,7 +417,7 @@ check_breakpoint_by_method(VALUE rb_breakpoint, VALUE klass, ID mid, VALUE self)
     return 0;
 
   if (classname_cmp(breakpoint->source, klass)
-      || ((rb_type(self) == T_CLASS)
+      || ((rb_type(self) == T_CLASS || rb_type(self) == T_MODULE)
           && classname_cmp(breakpoint->source, self)))
     return 1;
 
