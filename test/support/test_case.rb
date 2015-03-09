@@ -23,10 +23,10 @@ module Byebug
     end
 
     #
-    # Cleanup temp file holding the test and (possibly) the test class
+    # Cleanup temp files, and dummy classes/modules.
     #
     def teardown
-      force_remove_const(Byebug, example_class)
+      cleanup_namespace
       clear_example_file
     end
 
@@ -50,6 +50,14 @@ module Byebug
     end
 
     #
+    # Cleanup main Byebug namespace from dummy test classes and modules
+    #
+    def cleanup_namespace
+      force_remove_const(Byebug, example_class)
+      force_remove_const(Byebug, example_module)
+    end
+
+    #
     # Temporary file where code for each test is saved
     #
     def example_file
@@ -67,11 +75,25 @@ module Byebug
       File.realpath(example_file.path)
     end
 
-    include StringFunctions
     #
     # Name of the temporary test class.
     #
     def example_class
+      "#{camelized_path}Class"
+    end
+
+    #
+    # Name of the temporary test module.
+    #
+    def example_module
+      "#{camelized_path}Module"
+    end
+
+    private
+
+    include StringFunctions
+
+    def camelized_path
       camelize(File.basename(example_path, '.rb'))
     end
     #
