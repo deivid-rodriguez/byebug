@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Setting to show verbose output about TracePoint API events.

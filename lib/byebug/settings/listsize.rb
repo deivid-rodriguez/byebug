@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Setting to customize the number of source code lines to be displayed every

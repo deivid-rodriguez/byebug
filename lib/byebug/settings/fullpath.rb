@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Setting to display full paths in backtraces.

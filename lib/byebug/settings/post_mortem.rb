@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Setting to enable/disable post_mortem mode, i.e., a debugger prompt after

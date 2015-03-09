@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Setting to customize the file where byebug's history is saved.

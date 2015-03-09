@@ -1,4 +1,3 @@
-require 'byebug/setting'
 require 'byebug/history'
 require 'byebug/helper'
 

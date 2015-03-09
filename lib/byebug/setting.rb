@@ -65,16 +65,6 @@ module Byebug
         boolean?(key) ? settings.include?(key) : settings.include?(name.to_sym)
       end
 
-      def load
-        Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
-          require file
-        end
-        Byebug.constants.grep(/[a-z]Setting/).map do |name|
-          setting = Byebug.const_get(name).new
-          settings[setting.to_sym] = setting
-        end
-      end
-
       def find(shortcut)
         abbr = shortcut =~ /^no/ ? shortcut[2..-1] : shortcut
         matches = settings.select do |key, value|
@@ -107,6 +97,4 @@ module Byebug
       end
     end
   end
-
-  Setting.load
 end

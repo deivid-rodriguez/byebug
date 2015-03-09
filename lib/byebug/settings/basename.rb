@@ -1,3 +1,5 @@
+require 'byebug/setting'
+
 module Byebug
   #
   # Command to display short paths in file names.

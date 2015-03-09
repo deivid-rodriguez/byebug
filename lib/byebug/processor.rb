@@ -22,9 +22,21 @@ module Byebug
         require file
       end
     end
+
+    def self.load_settings
+      Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
+        require file
+      end
+
+      Byebug.constants.grep(/[a-z]Setting/).map do |name|
+        setting = Byebug.const_get(name).new
+        Byebug::Setting.settings[setting.to_sym] = setting
+      end
+    end
   end
 
   Processor.load_commands
+  Processor.load_settings
 end
 
 require 'byebug/processors/command_processor'

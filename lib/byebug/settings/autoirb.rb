@@ -1,3 +1,4 @@
+require 'byebug/setting'
 require 'byebug/commands/irb'
 
 module Byebug
