@@ -62,15 +62,6 @@ module Byebug
   end
 
   #
-  # Runs a script file
-  #
-  def run_script(file, verbose = false)
-    interface = ScriptInterface.new(file, verbose)
-    processor = ControlCommandProcessor.new(interface)
-    processor.process_commands
-  end
-
-  #
   # Extracts debugged program from command line args
   #
   def setup_cmd_line_args
@@ -91,6 +82,15 @@ module Byebug
   end
 
   private
+
+  #
+  # Runs a script file
+  #
+  def run_script(file, verbose = false)
+    interface = ScriptInterface.new(file, verbose)
+    processor = ControlCommandProcessor.new(interface)
+    processor.process_commands
+  end
 
   #
   # Cross-platform way of finding an executable in the $PATH.
