@@ -169,14 +169,23 @@ module Byebug
       Byebug::Setting[:width] = 80
     end
 
+    #
+    # Shortcut to Byebug's global state
+    #
     def state
       Byebug.handler.state
     end
 
+    #
+    # Shortcut to Byebug's interface
+    #
     def interface
       Byebug.handler.interface
     end
 
+    #
+    # Shortcut to Byebug's context
+    #
     def context
       state.context
     end
