@@ -29,28 +29,27 @@ module Byebug
       EOC
     end
 
-    %w(method m).each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_instance_methods_of_a_class") do
-        enter 'cont 7', "#{cmd_alias} #{example_class}"
-        debug_code(program)
-        check_output_includes(/bla/)
-        check_output_doesnt_include(/foo/)
-      end
+    def test_method_shows_instance_methods_of_a_class
+      enter 'cont 7', "method #{example_class}"
+      debug_code(program)
+
+      check_output_includes(/bla/)
+      check_output_doesnt_include(/foo/)
     end
 
     def test_m_shows_an_error_if_specified_object_is_not_a_class_or_module
       enter 'm a'
       debug_code(program)
+
       check_output_includes 'Should be Class/Module: a'
     end
 
-    ['method instance', 'm i'].each do |cmd_alias|
-      define_method(:"test_#{cmd_alias}_shows_methods_of_object") do
-        enter 'cont 23', "#{cmd_alias} a"
-        debug_code(program)
-        check_output_includes(/bla/)
-        check_output_doesnt_include(/foo/)
-      end
+    def test_method_instance_shows_methods_of_object
+      enter 'cont 23', 'method instance a'
+      debug_code(program)
+
+      check_output_includes(/bla/)
+      check_output_doesnt_include(/foo/)
     end
   end
 end
