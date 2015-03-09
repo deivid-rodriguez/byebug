@@ -76,15 +76,6 @@ wherever you want to start debugging and the execution will stop there. If you
 are debugging rails, start the server and once the execution gets to your
 `byebug` command you will get a debugging prompt.
 
-Former [debugger][] or [ruby-debug][] users, notice:
-
-* Some gems (rails, rspec) implement debugging flags (-d, --debugger) that early
-require and start the debugger. These flags are a performance penalty and byebug
-doesn't need them anymore so my recommendation is not to use them. In any case,
-both rails and rspec have deprecated these flags in their latest versions.  
-* The startup configuration file is now called `.byebugrc` instead of
-`.rdebugrc`.
-
 
 ## Byebug's commands
 
@@ -173,7 +164,6 @@ software, specially:
 
 [debugger]: https://github.com/cldwalker/debugger
 [pry]: https://github.com/pry/pry
-[ruby-debug]: https://github.com/mark-moseley/ruby-debug
 [debase]: https://github.com/denofevil/debase
 [pry-byebug]: https://github.com/deivid-rodriguez/pry-byebug
 [ruby-debug-passenger]: https://github.com/davejamesmiller/ruby-debug-passenger
