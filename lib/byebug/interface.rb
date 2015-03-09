@@ -114,8 +114,8 @@ module Byebug
       end
     end
   end
-
-  require 'byebug/interfaces/local_interface'
-  require 'byebug/interfaces/script_interface'
-  require 'byebug/interfaces/remote_interface'
 end
+
+require 'byebug/interfaces/local_interface'
+require 'byebug/interfaces/script_interface'
+require 'byebug/interfaces/remote_interface'
