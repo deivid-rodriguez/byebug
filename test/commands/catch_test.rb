@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Tests exception catching
+  #
   class CatchTestCase < TestCase
     def program
       strip_line_numbers <<-EOC

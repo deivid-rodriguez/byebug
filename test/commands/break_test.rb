@@ -1,4 +1,7 @@
 module Byebug
+  #
+  # Tests adding breakpoints to methods
+  #
   class BreakAtMethodsTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
@@ -97,7 +100,7 @@ module Byebug
   end
 
   #
-  # Tests breakpoint functionality.
+  # Tests adding breakpoints to lines
   #
   class BreakAtLinesTestCase < TestCase
     def program
