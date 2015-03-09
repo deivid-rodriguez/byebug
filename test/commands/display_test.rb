@@ -22,12 +22,6 @@ module Byebug
       check_output_includes '1: d + 1 = 1'
     end
 
-    def test_works_when_using_a_shortcut
-      enter 'disp d + 1'
-      debug_code(program)
-      check_output_includes '1: d + 1 = 1'
-    end
-
     def test_saves_displayed_expressions
       enter 'display d + 1'
       debug_code(program) { assert_equal [[true, 'd + 1']], state.display }
