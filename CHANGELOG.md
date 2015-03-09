@@ -34,7 +34,7 @@ sequentially.
 - Command history is now persisted before exiting byebug.
 - Setting breakpoint in a method would stop not only at the beginning of the
 method but also at the beginning of every block inside the method.
-- Setting breakpoints on module methods (#122).
+- Setting breakpoints on module methods (#122, @x-yuri).
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up
