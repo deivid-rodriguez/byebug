@@ -15,11 +15,8 @@ module Byebug
       # List of files to be ignored during a test run
       #
       def ignored_files
-        return @ignored_files if defined?(@ignored_files)
-
-        @ignored_files = `git ls-files -z *.rb`.split("\x0").map do |f|
-          File.expand_path(f)
-        end
+        @ignored_files ||=
+          `git ls-files -z`.split("\x0").map { |f| File.expand_path(f) }
       end
     end
   end
