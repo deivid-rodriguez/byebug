@@ -744,7 +744,7 @@ class Company
       if @results.empty?
         have_a_break(1)
       else
-        enjoy(@results.pop)
+        show_off(@results.pop)
       end
     end
   end
@@ -829,40 +829,41 @@ debug our sample program:
     5:     @tasks.push(task)
     6:   end
     7:
-    8:   #
-    9:   # A CEO running his company
-   10:   #
+    8:   def run
+    9:     manager = Thread.new { manager_routine }
+   10:     employee = Thread.new { employee_routine }
 (byebug) l
 
 [11, 20] in /path/to/company.rb
-   11:   def run
-   12:     manager = Thread.new { manager_routine }
-   13:     employee = Thread.new { employee_routine }
-   14:
-   15:     sleep 6
-   16:
-   17:     go_home(manager)
-   18:     go_home(employee)
-   19:   end
-   20:
-(byebug) c 15
-Stopped by breakpoint 1 at /path/to/company.rb:15
+   11:
+   12:     sleep 6
+   13:
+   14:     go_home(manager)
+   15:     go_home(employee)
+   16:   end
+   17:
+   18:   #
+   19:   # An employee doing his thing
+   20:   #
 
-[10, 19] in /path/to/company.rb
-   10:   #
-   11:   def run
-   12:     manager = Thread.new { manager_routine }
-   13:     employee = Thread.new { employee_routine }
-   14:
-=> 15:     sleep 6
-   16:
-   17:     go_home(manager)
-   18:     go_home(employee)
-   19:   end
+(byebug) c 12
+Stopped by breakpoint 1 at /path/to/company.rb:12
+
+[7, 16] in /path/to/company.rb
+    7:
+    8:   def run
+    9:     manager = Thread.new { manager_routine }
+   10:     employee = Thread.new { employee_routine }
+   11:
+=> 12:     sleep 6
+   13:
+   14:     go_home(manager)
+   15:     go_home(employee)
+   16:   end
 (byebug) th l
-+ 1 #<Thread:0x0000000192f328 run> /path/to/company.rb:15
-  2 #<Thread:0x00000001ff9870@/path/to/company.rb:12 sleep>
-  3 #<Thread:0x00000001ff80d8@/path/to/company.rb:13 sleep>
++ 1 #<Thread:0x0000000192f328 run> /path/to/company.rb:12
+  2 #<Thread:0x00000001ff9870@/path/to/company.rb:9 sleep>
+  3 #<Thread:0x00000001ff80d8@/path/to/company.rb:10 sleep>
 ```
 
 What we have done here is just start our program and advance to the point
@@ -874,31 +875,32 @@ bug.
 ```bash
 (byebug) th switch 3
 
-[8, 17] in /path/to/company.rb
-    8:   #
-    9:   # A CEO running his company
-   10:   #
-   11:   def run
-   12:     manager = Thread.new { manager_routine }
-=> 13:     employee = Thread.new { employee_routine }
-   14:
-   15:     sleep 6
-   16:
-   17:     go_home(manager)
+[5, 14] in /path/to/company.rb
+    5:     @tasks.push(task)
+    6:   end
+    7:
+    8:   def run
+    9:     manager = Thread.new { manager_routine }
+=> 10:     employee = Thread.new { employee_routine }
+   11:
+   12:     sleep 6
+   13:
+   14:     go_home(manager)
 (byebug) th stop 1; th stop 2
-$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:15
-$ 2 #<Thread:0x000000018bf438@/path/to/company.rb:12 sleep>
+$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:12
+$ 2 #<Thread:0x000000018bf438 sleep> /path/to/company.rb:9
 (byebug) th l
-$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:15
-$ 2 #<Thread:0x000000018bf438@/path/to/company.rb:12 sleep>
-+ 3 #<Thread:0x000000018bec18@/path/to/company.rb:13 run> /path/to/company.rb:27
+$ 1 #<Thread:0x00000001307310 sleep> /path/to/company.rb:12
+$ 2 #<Thread:0x000000018bf438@/path/to/company.rb:9 sleep> /path/to/company.rb:55
++ 3 #<Thread:0x00000001ff80d8@/path/to/company.rb:10 sleep> /path/to/company.rb:10
 ```
 
 We have started by debugging the `employee` thread. To do that, we switch to
 that thread using the `thread switch 3` command. The thread number is the one
 specified by `thread list`, we know this is our worker thread because `thread
 list` specifies where the thread is defined in the file (and its current
-position if the thread is currently running).
+position if the thread is currently running, although this is only available
+since Ruby 2.2.1).
 
 After that we stopped the main thread and the worker thread, using the command
 `thread stop`. We do this because we want to focus on the employee thread first
@@ -909,47 +911,47 @@ the "+" symbol.
 ```bash
 (byebug) s
 
-[20, 29] in /path/to/company.rb
-   20:
-   21:   #
-   22:   # An employee doing his thing
-   23:   #
-   24:   def employee_routine
-=> 25:     loop do
-   26:       if @tasks.empty?
-   27:         have_a_break(0.1)
-   28:       else
-   29:         work_hard(@tasks.pop)
+[17, 26] in /path/to/company.rb
+   17:
+   18:   #
+   19:   # An employee doing his thing
+   20:   #
+   21:   def employee_routine
+=> 22:     loop do
+   23:       if @tasks.empty?
+   24:         have_a_break(0.1)
+   25:       else
+   26:         work_hard(@tasks.pop)
 (byebug) s
 
-[21, 30] in /path/to/company.rb
-   21:   #
-   22:   # An employee doing his thing
-   23:   #
-   24:   def employee_routine
-   25:     loop do
-=> 26:       if @tasks.empty?
-   27:         have_a_break(0.1)
-   28:       else
-   29:         work_hard(@tasks.pop)
-   30:       end
+[18, 27] in /path/to/company.rb
+   18:   #
+   19:   # An employee doing his thing
+   20:   #
+   21:   def employee_routine
+   22:     loop do
+=> 23:       if @tasks.empty?
+   24:         have_a_break(0.1)
+   25:       else
+   26:         work_hard(@tasks.pop)
+   27:       end
 (byebug) n
 
-[24, 33] in /path/to/company.rb
-   24:   def employee_routine
-   25:     loop do
-   26:       if @tasks.empty?
-   27:         have_a_break(0.1)
-   28:       else
-=> 29:         work_hard(@tasks.pop)
-   30:       end
-   31:     end
-   32:   end
-   33:
+[21, 30] in /path/to/company.rb
+   21:   def employee_routine
+   22:     loop do
+   23:       if @tasks.empty?
+   24:         have_a_break(0.1)
+   25:       else
+=> 26:         work_hard(@tasks.pop)
+   27:       end
+   28:     end
+   29:   end
+   30:
 (byebug) s
 
 [49, 58] in /path/to/company.rb
-   49:   def enjoy(result)
+   49:   def show_off(result)
    50:     puts result
    51:   end
    52:
@@ -1035,56 +1037,56 @@ Now we can investigate the problem in the employer's side:
 
 ``bash
 (byebug) s
-[33, 42] in /path/to/company.rb
-   33:
-   34:   #
-   35:   # A manager doing his thing
-   36:   #
-   37:   def manager_routine
-=> 38:     loop do
-   39:       if @results.empty?
-   40:         have_a_break(1)
-   41:       else
-   42:         enjoy(@results.pop)
+[30, 39] in /path/to/company.rb
+   30:
+   31:   #
+   32:   # A manager doing his thing
+   33:   #
+   34:   def manager_routine
+=> 35:     loop do
+   36:       if @results.empty?
+   37:         have_a_break(1)
+   38:       else
+   39:         show_off(@results.pop)
 (byebug) s
 
-[34, 43] in /path/to/company.rb
-   34:   #
-   35:   # A manager doing his thing
-   36:   #
-   37:   def manager_routine
-   38:     loop do
-=> 39:       if @results.empty?
-   40:         have_a_break(1)
-   41:       else
-   42:         enjoy(@results.pop)
-   43:       end
+[31, 40] in /path/to/company.rb
+   31:   #
+   32:   # A manager doing his thing
+   33:   #
+   34:   def manager_routine
+   35:     loop do
+=> 36:       if @results.empty?
+   37:         have_a_break(1)
+   38:       else
+   39:         show_off(@results.pop)
+   40:       end
 (byebug) n
 
-[35, 44] in /path/to/company.rb
-   35:   # A manager doing his thing
-   36:   #
-   37:   def manager_routine
-   38:     loop do
-   39:       if @results.empty?
-=> 40:         have_a_break(1)
-   41:       else
-   42:         enjoy(@results.pop)
-   43:       end
-   44:     end
+[32, 41] in /path/to/company.rb
+   32:   # A manager doing his thing
+   33:   #
+   34:   def manager_routine
+   35:     loop do
+   36:       if @results.empty?
+=> 37:         have_a_break(1)
+   38:       else
+   39:         show_off(@results.pop)
+   40:       end
+   41:     end
 (byebug) n
 
-[34, 43] in /path/to/company.rb
-   34:   #
-   35:   # A manager doing his thing
-   36:   #
-   37:   def manager_routine
-   38:     loop do
-=> 39:       if @results.empty?
-   40:         have_a_break(1)
-   41:       else
-   42:         enjoy(@results.pop)
-   43:       end
+[31, 40] in /path/to/company.rb
+   31:   #
+   32:   # A manager doing his thing
+   33:   #
+   34:   def manager_routine
+   35:     loop do
+=> 36:       if @results.empty?
+   37:         have_a_break(1)
+   38:       else
+   39:         show_off(@results.pop)
+   40:       end
 (byebug)
 ``
 
