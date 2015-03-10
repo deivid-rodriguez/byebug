@@ -27,5 +27,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'columnize', '0.9.0'
 
-  s.add_development_dependency 'bundler', '~> 1.7'
+  s.add_development_dependency 'bundler', '~> 1.8'
 end
