@@ -49,7 +49,7 @@ module Byebug
       @state.line = @state.context.frame_line(@state.frame)
       @state.prev_line = nil
 
-      ListCommand.new(@state).execute
+      ListCommand.new(@state).execute if Setting[:autolist]
     end
 
     def get_pr_arguments(frame_no)
