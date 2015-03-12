@@ -1,5 +1,57 @@
 # Threading Support for Byebug
 
+## Motivation
+
+Having a fully featured stable debugger is important for most programming
+languages. It makes the language more attractive for beginners and for users
+coming from other languages, because it's a very adequate tool not only for bug
+fixing but also just for playing around with a language's features or studying
+code not written by ourselves. With this in mind, the main purpose of Byebug
+since it was started was to make it an atractive tool for beginners (I was
+actually a Ruby beginner during the initial development phase of Byebug so I
+was making heavy use of my own tool too).
+
+The main features supported by Byebug are:
+
+* Breaking. Pause the program at some event or specified instruction, to examine
+the current state. Related commands: `break`, `catch`, `condition`, `delete`,
+`enable`, `disable`.
+
+* Analyzing. Studying program status at a certain point during its execution
+(including right after termination). Specifically, we can:
+  - Inspect and move around the backtrace (`backtrace`, `up`, `down` and
+    `frame` commands).
+  - Have a basic REPL functionality, evaluating custom code (`eval`, `irb`,
+    `pry`, `method`, `pp`, `ps`, `putl`, `var` commands).
+  - Look and change the program's source code (`edit`, `list`, `info` commands).
+
+* Stepping: Running your program one line or instruction at a time, or until
+specific points in the program are reached. Related commands: `step`, `next`,
+`continue`, `finish`, `kill`, `quit`, `restart`.
+
+* Tracking: Keeping track of the different values of your variables or the
+different lines executed by your program. Related commands: `display`,
+`undisplay`, `tracevar`, `untracevar`, `set linetrace`.
+
+This features have been working very well as long as the debugged program would
+have no multiple Ruby threads, but would just not work when the program would
+use different threads. Notice that this would affect developers making use of
+threads, but was also affecting users not necessarily knowing anything about
+threads, because very well know libraries out there transparently make use of
+them (for example, `capybara-webkit` or Ruby's stdlib `Timeout` module).
+
+So Byebug needed a way to debug multithreaded programs that was both:
+
+* Reliable: no deadlock, no killed threads when they are not related to user's
+code.
+
+* Useful: allow debugging issues with multithreaded programs. To do that, we
+would need to provide the user with the ability to stop/resume specific threads,
+list active threads and switch between threads.
+
+This is what this grant is about.
+
+
 ## The feature
 
 The addition of threading support to Byebug's debugger allows users to properly
