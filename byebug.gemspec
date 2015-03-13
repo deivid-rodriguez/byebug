@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.0.0'
 
-  s.files = Dir['lib/**/*.rb', 'ext/**/*.[ch]', 'LICENSE']
+  s.files = Dir['lib/**/*.rb', 'lib/**/*.yml', 'ext/**/*.[ch]', 'LICENSE']
   s.bindir = 'bin'
   s.executables = ['byebug']
   s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md)
