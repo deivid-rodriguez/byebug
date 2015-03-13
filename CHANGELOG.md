@@ -1,3 +1,7 @@
+## 4.0.1
+### Fixed
+* .yml files needed for printers support were missing from the release... :S
+
 ## 4.0.0
 ### Added
 - `untracevar` command that stops tracing a global variable.
