@@ -1,4 +1,9 @@
 #
+# For the `rake release` task
+#
+require 'bundler/gem_tasks'
+
+#
 # Prepend DevKit into compilation phase
 #
 task compile: :devkit if RUBY_PLATFORM =~ /mingw/
