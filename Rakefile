@@ -33,9 +33,7 @@ end
 require 'rubocop/rake_task'
 
 desc 'Run RuboCop'
-task :rubocop do
-  RuboCop::RakeTask.new
-end
+task(:rubocop) { RuboCop::RakeTask.new }
 
 require_relative 'tasks/ccop.rb'
 require_relative 'tasks/dev_utils.rb'
