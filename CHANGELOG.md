@@ -1,8 +1,9 @@
-## 4.0.1
+## 4.0.1 - 2014-03-13
 ### Fixed
 * .yml files needed for printers support were missing from the release... :S
+* Add `rb-readline` as a dependency (#118)
 
-## 4.0.0
+## 4.0.0 - 2014-03-13
 ### Added
 - `untracevar` command that stops tracing a global variable.
 - Window CI build through AppVeyor.
