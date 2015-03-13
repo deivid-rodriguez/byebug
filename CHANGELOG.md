@@ -1,4 +1,4 @@
-## 4.0.0 (unreleased)
+## 4.0.0
 ### Added
 - `untracevar` command that stops tracing a global variable.
 - Window CI build through AppVeyor.
