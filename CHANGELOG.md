@@ -1,3 +1,8 @@
+## 4.0.2 - 2014-03-16
+### Fixed
+* Removed `rb-readline` as a dependency and show a help message whenever
+requiring readline fails instead (#118)
+
 ## 4.0.1 - 2014-03-13
 ### Fixed
 * .yml files needed for printers support were missing from the release... :S
