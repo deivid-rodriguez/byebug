@@ -1,3 +1,7 @@
+## 4.0.3 - 2015-03-19
+### Fixed
+* Unused variable warning in context.c
+
 ## 4.0.2 - 2014-03-16
 ### Fixed
 * Removed `rb-readline` as a dependency and show a help message whenever
