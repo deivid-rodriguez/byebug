@@ -628,6 +628,8 @@ Context_set_tracing(VALUE self, VALUE value)
 static VALUE
 dt_inherited(VALUE klass)
 {
+  UNUSED(klass);
+
   rb_raise(rb_eRuntimeError, "Can't inherit Byebug::DebugThread class");
 
   return Qnil;
