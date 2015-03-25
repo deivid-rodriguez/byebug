@@ -7,7 +7,6 @@ require 'byebug'
 
 require_relative 'support/utils'
 require_relative 'support/test_case'
-require_relative 'support/printer_helpers'
 
 #
 # Load the test files from the command line.

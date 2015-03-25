@@ -1,6 +1,10 @@
 module Byebug
   class PrintersPlainTestCase < Minitest::Test
-    include Byebug::PrinterHelpers
+    def yaml_file_path(filename)
+      relative_path = "../../../lib/byebug/printers/texts/#{filename}.yml"
+
+      File.expand_path(relative_path, __FILE__)
+    end
 
     def klass
       @klass ||= Printers::Plain
