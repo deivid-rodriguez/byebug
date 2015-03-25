@@ -603,22 +603,16 @@ Stop(VALUE self)
 static VALUE
 Start(VALUE self)
 {
-  VALUE result;
-
-  UNUSED(self);
-
   if (IS_STARTED)
-    result = Qfalse;
-  else
-  {
-    catchpoints = rb_hash_new();
-    threads = create_threads_table();
+    return Qfalse;
 
-    register_tracepoints(self);
-    result = Qtrue;
-  }
+  catchpoints = rb_hash_new();
 
-  return result;
+  threads = create_threads_table();
+
+  register_tracepoints(self);
+
+  return Qtrue;
 }
 
 /*
