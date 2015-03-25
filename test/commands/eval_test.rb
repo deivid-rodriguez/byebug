@@ -111,8 +111,10 @@ module Byebug
           # Toy class to test evaluation in Byebug's prompt
           #
           class #{example_class}
+            attr_accessor :thread
+
             def initialize
-              Thread.new do
+              @thread = Thread.new do
                 loop do
                   sleep 0.01
                   next if numbers.empty?
@@ -144,7 +146,7 @@ module Byebug
 
           byebug
 
-          'Processed: ' + worker.squares.join(' ')
+          worker.thread.kill
         end
       EOC
     end

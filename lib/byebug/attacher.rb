@@ -6,13 +6,15 @@ module Byebug
   # Enters byebug right before (or right after if _before_ is false) return
   # events occur. Before entering byebug the init script is read.
   #
-  def self.attach(steps_out, before)
+  def self.attach
+    return errmsg('Byebug already started. Ignoring `byebug` call.') if started?
+
     setup_cmd_line_args
 
     start
     run_init_script
 
-    current_context.step_out(steps_out, before)
+    current_context.step_out(2, true)
   end
 end
 
@@ -22,8 +24,8 @@ end
 # Dropping a `byebug` call anywhere in your code, you get a debug prompt.
 #
 module Kernel
-  def byebug(steps_out = 1, before = true)
-    Byebug.attach(steps_out + 1, before)
+  def byebug
+    Byebug.attach
   end
 
   alias_method :debugger, :byebug
