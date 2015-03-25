@@ -3,14 +3,25 @@ module Minitest
   # Custom Minitest assertions
   #
   module Assertions
-    # This matcher checks that given collection is included into the original
-    # collection and in correct order. It accepts both strings and regexps.
     #
-    # Examples:
-    #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 3 5})            # => pass
-    #   assert_includes_in_order(%w{1 2 3 4 5}, %w{1 5 3})            # => fail
-    #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\d+/, "5"])     # => pass
-    #   assert_includes_in_order(w{1 2 3 4 5}, ["1", /\[a-z]+/, "5"]) # => fail
+    # Checks that a given collection is included in another collection
+    # and in correct order. It accepts both strings and regexps as elements of
+    # the arrays.
+    #
+    # @param given [Array] Collection to be checked for inclusion.
+    # @param original [Array] Collection +given+ is checked against.
+    #
+    # @example Passing assertion with simple array
+    #   assert_includes_in_order(%w(1 2 3 4 5), %w(1 3 5))
+    #
+    # @example Failing assertion with simple array
+    #   assert_includes_in_order(%w(1 2 3 4 5), %w(1 5 3))
+    #
+    # @example Passing assertion with array and regexp elements
+    #   assert_includes_in_order(w(1 2 3 4 5), ['1', /\d+/, '5'])
+    #
+    # @example Failing assertion with array and regexp elements
+    #   assert_includes_in_order(w(1 2 3 4 5), ['1', /\[a-z]+/, '5'])
     #
     def assert_includes_in_order(given, original, msg = nil)
       msg = message(msg) do
