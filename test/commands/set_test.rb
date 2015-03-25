@@ -9,8 +9,9 @@ module Byebug
         2:    byebug
         3:
         4:    z = 4
-        5:    z + 1
-        6:  end
+        5:    z += 1
+        6:    z + 1
+        7:  end
       EOC
     end
 
@@ -125,6 +126,36 @@ module Byebug
       debug_code(program)
       assert_equal true, Byebug.verbose?
       Byebug.verbose = false
+    end
+
+    def test_set_linetrace_enables_tracing_program_execution
+      with_setting :linetrace, false do
+        enter 'set linetrace', 'cont 5'
+        debug_code(program)
+
+        check_output_includes \
+          'linetrace is on', "Tracing: #{example_path}:5   z += 1"
+      end
+    end
+
+    def test_set_nolinetrace_stops_tracing_program_execution
+      with_setting :linetrace, true do
+        enter 'cont 5', 'set nolinetrace'
+        debug_code(program)
+
+        check_output_includes "Tracing: #{example_path}:5   z += 1"
+        check_output_doesnt_include "Tracing: #{example_path}:6   z + 1"
+      end
+    end
+
+    def test_basename_setting_affects_tracing_output
+      with_setting :basename, true do
+        enter 'set linetrace', 'cont 5', 'set nolinetrace'
+        debug_code(program)
+
+        check_output_includes \
+          "Tracing: #{File.basename(example_path)}:5   z += 1"
+      end
     end
 
     def test_set_without_arguments_shows_help_for_set_command
