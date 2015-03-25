@@ -2,17 +2,17 @@
 ### Fixed
 * Unused variable warning in context.c
 
-## 4.0.2 - 2014-03-16
+## 4.0.2 - 2015-03-16
 ### Fixed
 * Removed `rb-readline` as a dependency and show a help message whenever
 requiring readline fails instead (#118)
 
-## 4.0.1 - 2014-03-13
+## 4.0.1 - 2015-03-13
 ### Fixed
 * .yml files needed for printers support were missing from the release... :S
 * Add `rb-readline` as a dependency (#118)
 
-## 4.0.0 - 2014-03-13
+## 4.0.0 - 2015-03-13
 ### Added
 - `untracevar` command that stops tracing a global variable.
 - Window CI build through AppVeyor.
