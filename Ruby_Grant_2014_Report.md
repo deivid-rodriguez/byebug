@@ -59,10 +59,19 @@ debug programs making use of Ruby's threads. This includes listing active
 threads and their statuses, switching execution to specific threads and
 temporarily pausing/resuming threads.
 
-The Byebug's Guide has been updated to include a specific sample usage of the
-feature in a toy application. See [here](
+To try out the feature, you might want to use a real application (a Rails app
+for example) using threads or just follow the sample session about threads
+included in Byebug's Guide. See [here](
 https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#threading-support)
 for details.
+
+The feature is also fully tested. You can clone _byebug_'s repo and then run
+
+```shell
+    bundle install # Install dependencies
+    rake compile # Compile the C-extension
+    ruby -w -Ilib test/test_helper.rb test/commands/thread_test.rb
+```
 
 This is the list of available commands and a short explanation of its usage:
 
@@ -482,3 +491,14 @@ the C-extension for completeness.
       rb_define_module_function(mByebug, "unlock", Unlock, 0);
       rb_define_module_function(mByebug, "lock", Lock, 0);
     }
+
+
+## Future work
+
+With the tasks performed in this grant, threading support is finished. The next
+tasks will be to make sure the feature is working fine for our users and fix any
+issues that might come up.
+
+Regarding Byebug as a whole, the idea is that the next major release will
+include a full rewrite / review of remote debugging support, and will make sure
+that editor plugins or graphical debuggers can easily use byebug under the hood.
