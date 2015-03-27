@@ -25,6 +25,7 @@ env:
 matrix:
   allow_failures:
   - rvm: ruby-head
+  fast_finish: true
 
 addons:
   code_climate:
