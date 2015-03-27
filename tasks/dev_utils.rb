@@ -26,9 +26,11 @@ task :loop_tests do
   rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
 
   rubies.each do |version|
-    exit($?) unless system("rvm #{version} do #{compile}")
+    exit($CHILD_STATUS) unless system("rvm #{version} do #{compile}")
 
-    iterations.times { exit($?) unless system("rvm #{version} do #{run}") }
+    iterations.times do
+      exit($CHILD_STATUS) unless system("rvm #{version} do #{run}")
+    end
   end
 end
 
@@ -42,7 +44,7 @@ end
 # `watch_loop_tests` task as well.
 #
 def loop_tests_process
-  "ps aux | grep [^_][l]oop_tests"
+  'ps aux | grep [^_][l]oop_tests'
 end
 
 #
