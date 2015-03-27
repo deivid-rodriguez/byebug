@@ -17,4 +17,5 @@
 PreCommit:
   TravisLint:
     enabled: false # https://github.com/causes/overcommit/issues/153
+    command: ['bundle', 'exec', 'travis']
     on_warn: pass
