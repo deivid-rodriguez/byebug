@@ -16,7 +16,6 @@
 #
 #   $ ./loop_tests.sh 3 2.0 2.1
 #
-
 desc 'Runs tests continuously'
 task :loop_tests do
   compile = 'bundle exec rake compile'
