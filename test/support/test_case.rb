@@ -50,6 +50,7 @@ module Byebug
     def teardown
       cleanup_namespace
       clear_example_file
+      Byebug.stop
     end
 
     #

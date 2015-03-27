@@ -32,7 +32,8 @@ module Byebug
 
     def on_change(name, value, stop)
       puts pr('trace.messages.on_change', name: name, value: value)
-      byebug(1, false) if stop
+
+      @state.context.step_out(1, false) if stop
     end
 
     class << self
