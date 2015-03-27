@@ -6,22 +6,22 @@
 #
 # @example Tun tests 8 times for each Ruby in 2.0, 2.1 and 2.2
 #
-#   $ TIMES=8 rake loop_tests
+#   $ rake loop_tests
 #
 # @example Run tests 1 time for each Ruby in 2.0, 2.1 and 2.2
 #
-#   $ TIMES=1 RUBIES=2.0,2.1 loop_tests.sh
+#   $ TIMES=1 rake loop_tests
 #
-# @example Run tests 3 times for each Ruby in 2.0 and 2.1
+# @example Run tests 1 time for each Ruby in 2.0 and 2.1
 #
-#   $ ./loop_tests.sh 3 2.0 2.1
+#   $ TIMES=1 RUBIES=2.0,2.1 rake loop_tests
 #
 desc 'Runs tests continuously'
 task :loop_tests do
   compile = 'bundle exec rake compile'
   run = 'bundle exec rake test'
 
-  iterations = ENV['TIMES'] || 8
+  iterations = (ENV['TIMES'] || 8).to_i
   rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
 
   rubies.each do |version|
