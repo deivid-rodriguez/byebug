@@ -1,3 +1,7 @@
+## 4.0.4 - 2015-03-27
+### Fixed
+* #127
+
 ## 4.0.3 - 2015-03-19
 ### Fixed
 * Unused variable warning in context.c
