@@ -1,8 +1,45 @@
 #
-# Runs tests multiple times until one of them fails. This can help:
+# Runs tests repeatedly against different ruby versions. Aborts when a test
+# fails.
+#
+# Useful for:
 # * Checking for race conditions (that would manifest only sporadically) when
 # tests involve multiple threads.
-# * Watch for memory leaks.
+# * Watching for memory leaks.
+#
+class LoopRunner
+  #
+  # @param iterations [Integer] number of loops of tests to run
+  # @param rubies [Array] target Ruby version
+  # @param manager [Array] Ruby version manager to use ('rvm' or 'chruby')
+  #
+  def initialize(iterations, rubies, manager)
+    @iterations, @rubies, @manager = iterations, rubies, manager
+  end
+
+  def run
+    @rubies.each do |version|
+      run_command(version, 'gem install bundler')
+      run_command(version, 'bundle')
+      run_command(version, 'bundle exec rake compile')
+
+      @iterations.times { run_command(version, 'bundle exec rake test') }
+
+      run_command(version, 'bundle exec rake rubocop')
+    end
+  end
+
+  def run_command(version, cmd)
+    status = if @manager == 'rvm'
+               system("rvm #{version} do #{cmd}")
+             else
+               system("chruby-exec #{version} -- #{cmd}")
+             end
+
+    exit($CHILD_STATUS) unless status
+  end
+end
+
 #
 # @example Tun tests 8 times for each Ruby in 2.0, 2.1 and 2.2
 #
@@ -14,23 +51,19 @@
 #
 # @example Run tests 1 time for each Ruby in 2.0 and 2.1
 #
-#   $ TIMES=1 RUBIES=2.0,2.1 rake loop_tests
+#   $ TIMES=1 RUBIES=2.0.0,2.1.5 rake loop_tests
+#
+# @example Run tests 1 time using Ruby 2.0 and rvm
+#
+#   $ MANAGER=rvm TIMES=1 RUBIES=2.0.0,2.1.5 rake loop_tests
 #
 desc 'Runs tests continuously'
 task :loop_tests do
-  compile = 'bundle exec rake compile'
-  run = 'bundle exec rake test'
+  iterations = (ENV['TIMES'] || '8').to_i
+  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0.0 2.1.5 2.2.1)
+  ruby_manager = ENV['MANAGER'] || 'chruby'
 
-  iterations = (ENV['TIMES'] || 8).to_i
-  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
-
-  rubies.each do |version|
-    exit($CHILD_STATUS) unless system("rvm #{version} do #{compile}")
-
-    iterations.times do
-      exit($CHILD_STATUS) unless system("rvm #{version} do #{run}")
-    end
-  end
+  LoopRunner.new(iterations, rubies, ruby_manager).run
 end
 
 #
