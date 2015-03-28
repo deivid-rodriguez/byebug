@@ -6,7 +6,7 @@ language: ruby
 
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install indent; fi
-- bundle install --jobs=3 --retry=3
+- bundle install --without=development --jobs=3 --retry=3
 
 script:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then bundle exec rake ; fi
