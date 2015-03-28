@@ -223,28 +223,28 @@ the output so that it nicely fits our screen.
 (byebug) set width 80
 Maximum width of byebug's output is 80
 (byebug) ps private_methods
-Array             default_src_encoding  open                        sleep      
-Complex           define_method         p                           spawn      
-Digest            eval                  pp                          sprintf    
-Float             exec                  print                       srand      
-Hash              exit                  printf                      syscall    
-Integer           exit!                 private                     system     
-Pathname          fail                  proc                        test       
-Rational          fork                  public                      throw      
-String            format                putc                        timeout    
-URI               gem_original_require  puts                        trace_var  
-__callee__        gets                  raise                       trap       
+Array             default_src_encoding  open                        sleep
+Complex           define_method         p                           spawn
+Digest            eval                  pp                          sprintf
+Float             exec                  print                       srand
+Hash              exit                  printf                      syscall
+Integer           exit!                 private                     system
+Pathname          fail                  proc                        test
+Rational          fork                  public                      throw
+String            format                putc                        timeout
+URI               gem_original_require  puts                        trace_var
+__callee__        gets                  raise                       trap
 __dir__           global_variables      rand                        untrace_var
-__method__        include               readline                    using      
-`                 initialize            readlines                   warn       
-abort             initialize_clone      require                     y          
-at_exit           initialize_copy       require_relative          
-autoload          initialize_dup        respond_to_missing?       
-autoload?         iterator?             rubygems_require          
-binding           lambda                select                    
-block_given?      load                  set_trace_func            
-caller            local_variables       singleton_method_added    
-caller_locations  loop                  singleton_method_removed  
+__method__        include               readline                    using
+`                 initialize            readlines                   warn
+abort             initialize_clone      require                     y
+at_exit           initialize_copy       require_relative
+autoload          initialize_dup        respond_to_missing?
+autoload?         iterator?             rubygems_require
+binding           lambda                select
+block_given?      load                  set_trace_func
+caller            local_variables       singleton_method_added
+caller_locations  loop                  singleton_method_removed
 catch             method_missing        singleton_method_undefined
 (byebug)
 ```
@@ -500,7 +500,7 @@ Run options: --seed 31679
 
 [2, 11] in test_triangle.rb
     2: require_relative 'triangle.rb'
-    3: 
+    3:
     4: class TestTriangle < Minitest::Test
     5:   def test_basic
     6:     byebug
@@ -1193,14 +1193,14 @@ get a line trace, `tracer` is most likely faster than `byebug`.
 ```bash
 $ time byebug --trace --no-stop hanoi.rb > /dev/null
 
-real	0m0.743s
-user	0m0.668s
-sys	0m0.068s
+real 0m0.743s
+user 0m0.668s
+sys  0m0.068s
 $ time ruby -rtracer hanoi.rb > /dev/null
 
-real	0m0.077s
-user	0m0.072s
-sys	0m0.004s
+real 0m0.077s
+user 0m0.072s
+sys  0m0.004s
 ```
 
 ### Byebug default options
@@ -1620,19 +1620,40 @@ will just call pretty-print.
  :pretty_inspect,
  :byebug]
 (byebug) putl Kernel.instance_methods
-nil?  <=>              tainted?    frozen?            private_methods             remove_instance_variable  public_send    define_singleton_method  byebug
-===   class            untaint     to_s               public_methods              instance_of?              respond_to?    object_id
-=~    singleton_class  untrust     inspect            instance_variables          kind_of?                  extend         to_enum
-!~    clone            untrusted?  methods            instance_variable_get       is_a?                     display        enum_for
-eql?  dup              trust       singleton_methods  instance_variable_set       tap                       method         gem
-hash  taint            freeze      protected_methods  instance_variable_defined?  send                      public_method  pretty_inspect
+nil?             trust                       is_a?
+===              freeze                      tap
+=~               frozen?                     send
+!~               to_s                        public_send
+eql?             inspect                     respond_to?
+hash             methods                     extend
+<=>              singleton_methods           display
+class            protected_methods           method
+singleton_class  private_methods             public_method
+clone            public_methods              singleton_method
+dup              instance_variables          define_singleton_method
+itself           instance_variable_get       object_id
+taint            instance_variable_set       to_enum
+tainted?         instance_variable_defined?  enum_for
+untaint          remove_instance_variable    gem
+untrust          instance_of?                pretty_inspect
+untrusted?       kind_of?
 (byebug) ps Kernel.instance_methods
-!~      clone                    extend   instance_of?                kind_of?        private_methods           respond_to?        tap      untrusted?
-<=>     define_singleton_method  freeze   instance_variable_defined?  method          protected_methods         send               to_enum
-===     display                  frozen?  instance_variable_get       methods         public_method             singleton_class    to_s   
-=~      dup                      gem      instance_variable_set       nil?            public_methods            singleton_methods  trust  
-byebug  enum_for                 hash     instance_variables          object_id       public_send               taint              untaint
-class   eql?                     inspect  is_a?                       pretty_inspect  remove_instance_variable  tainted?           untrust
+!~                       instance_of?                public_send
+<=>                      instance_variable_defined?  remove_instance_variable
+===                      instance_variable_get       respond_to?
+=~                       instance_variable_set       send
+class                    instance_variables          singleton_class
+clone                    is_a?                       singleton_method
+define_singleton_method  itself                      singleton_methods
+display                  kind_of?                    taint
+dup                      method                      tainted?
+enum_for                 methods                     tap
+eql?                     nil?                        to_enum
+extend                   object_id                   to_s
+freeze                   pretty_inspect              trust
+frozen?                  private_methods             untaint
+gem                      protected_methods           untrust
+hash                     public_method               untrusted?
 ```
 
 Finally, if you need more advanced functionality from REPL's, you can enter
