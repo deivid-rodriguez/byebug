@@ -9,7 +9,7 @@ module Byebug
   def self.attach
     return errmsg('Byebug already started. Ignoring `byebug` call.') if started?
 
-    setup_cmd_line_args
+    self.mode = :attached
 
     start
     run_init_script

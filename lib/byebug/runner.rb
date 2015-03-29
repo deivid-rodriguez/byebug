@@ -8,6 +8,16 @@ module Byebug
   #
   class Runner
     #
+    # Error class signaling absence of a script to debug
+    #
+    class NoScript < StandardError; end
+
+    #
+    # Error class signaling a non existent script to debug
+    #
+    class NonExistentScript < StandardError; end
+
+    #
     # Special working modes that don't actually start the debugger.
     #
     attr_accessor :help, :version, :remote
@@ -37,27 +47,6 @@ module Byebug
     end
 
     #
-    # Debugs a script only if syntax checks okay.
-    #
-    def debug_program
-      check_syntax($PROGRAM_NAME)
-
-      status = Byebug.debug_load($PROGRAM_NAME, @stop)
-      Byebug.puts "#{status}\n#{status.backtrace}" if status
-    end
-
-    #
-    # Exits and outputs error message if syntax of the given program is invalid.
-    #
-    def check_syntax(program_name)
-      output = `ruby -c "#{program_name}" 2>&1`
-      return unless $CHILD_STATUS.exitstatus != 0
-
-      Byebug.errmsg(output)
-      exit($CHILD_STATUS.exitstatus)
-    end
-
-    #
     # Starts byebug to debug a program
     #
     def run
@@ -78,7 +67,7 @@ module Byebug
         return
       end
 
-      Byebug.setup_cmd_line_args
+      setup_cmd_line_args
 
       loop do
         debug_program
@@ -90,6 +79,11 @@ module Byebug
       end
     end
 
+    private
+
+    #
+    # Processes options passed from the command line
+    #
     def prepare_options
       OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
@@ -138,6 +132,60 @@ module Byebug
           self.help = opts.help
         end
       end
+    end
+
+    #
+    # Extracts debugged program from command line args
+    #
+    def setup_cmd_line_args
+      Byebug.mode = :standalone
+
+      fail(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
+
+      program = which($ARGV.shift)
+      program = which($ARGV.shift) if program == which('ruby')
+      fail(NonExistentScript, "The script doesn't exist") unless program
+
+      $PROGRAM_NAME = program
+    end
+
+    #
+    # Exits and outputs error message if syntax of the given program is invalid.
+    #
+    def check_syntax(program_name)
+      output = `ruby -c "#{program_name}" 2>&1`
+      return unless $CHILD_STATUS.exitstatus != 0
+
+      Byebug.errmsg(output)
+      exit($CHILD_STATUS.exitstatus)
+    end
+
+    #
+    # Debugs a script only if syntax checks okay.
+    #
+    def debug_program
+      check_syntax($PROGRAM_NAME)
+
+      status = Byebug.debug_load($PROGRAM_NAME, @stop)
+      Byebug.puts "#{status}\n#{status.backtrace}" if status
+    end
+
+    #
+    # Cross-platform way of finding an executable in the $PATH.
+    # Borrowed from: http://stackoverflow.com/questions/2108727
+    #
+    def which(cmd)
+      return File.expand_path(cmd) if File.exist?(cmd)
+
+      exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+        exts.each do |ext|
+          exe = File.join(path, "#{cmd}#{ext}")
+          return exe if File.executable?(exe) && !File.directory?(exe)
+        end
+      end
+
+      nil
     end
   end
 end

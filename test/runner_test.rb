@@ -35,13 +35,13 @@ module Byebug
 
     def test_run_without_a_script_to_debug
       with_command_line('bin/byebug') do
-        assert_raises(NoScript) { @runner.run }
+        assert_raises(Runner::NoScript) { @runner.run }
       end
     end
 
     def test_run_with_an_nonexistent_script
       with_command_line('bin/byebug', 'non_existent_script.rb') do
-        assert_raises(NonExistentScript) { @runner.run }
+        assert_raises(Runner::NonExistentScript) { @runner.run }
       end
     end
 
@@ -155,21 +155,24 @@ module Byebug
       $DEBUG = false
     end
 
-    def test_syntax_check_succeding
-      example_file.write('sleep 0')
-      example_file.close
-
-      @runner.check_syntax(example_path)
-
-      assert_empty interface.output
-    end
-
-    def test_syntax_check_failing
+    def test_run_with_script_with_wrong_syntax
       example_file.write('[1,2,')
       example_file.close
 
-      assert_raises(SystemExit) { @runner.check_syntax(example_path) }
+      with_command_line('bin/byebug', example_path) do
+        assert_raises(SystemExit) { @runner.run }
+      end
+
       check_error_includes(/syntax error, unexpected end-of-input/)
+    end
+
+    def test_run_successfully
+      example_file.write('sleep 0')
+      example_file.close
+
+      with_command_line('bin/byebug', example_path) { @runner.run }
+
+      assert_empty interface.output
     end
   end
 end

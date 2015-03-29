@@ -10,12 +10,6 @@ require 'byebug/printers/plain'
 module Byebug
   extend self
 
-  class NoScript < StandardError
-  end
-
-  class NonExistentScript < StandardError
-  end
-
   #
   # Configuration file used for startup commands. Default value is .byebugrc
   #
@@ -61,26 +55,6 @@ module Byebug
     run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 
-  #
-  # Extracts debugged program from command line args
-  #
-  def setup_cmd_line_args
-    unless $PROGRAM_NAME.include?('bin/byebug')
-      self.mode = :attached
-      return
-    end
-
-    self.mode = :standalone
-
-    fail(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
-
-    program = which($ARGV.shift)
-    program = which($ARGV.shift) if program == which('ruby')
-    fail(NonExistentScript, "The script doesn't exist") unless program
-
-    $PROGRAM_NAME = program
-  end
-
   private
 
   #
@@ -90,24 +64,6 @@ module Byebug
     interface = ScriptInterface.new(file, verbose)
     processor = ControlCommandProcessor.new(interface)
     processor.process_commands
-  end
-
-  #
-  # Cross-platform way of finding an executable in the $PATH.
-  # Borrowed from: http://stackoverflow.com/questions/2108727
-  #
-  def which(cmd)
-    return File.expand_path(cmd) if File.exist?(cmd)
-
-    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-      exts.each do |ext|
-        exe = File.join(path, "#{cmd}#{ext}")
-        return exe if File.executable?(exe) && !File.directory?(exe)
-      end
-    end
-
-    nil
   end
 end
 
