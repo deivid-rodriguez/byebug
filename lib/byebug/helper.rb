@@ -88,12 +88,31 @@ module Byebug
     end
 
     #
-    # Returns true if code is syntactically correct for Ruby.
+    # Returns true if code is syntactically correct for Ruby
     #
     def syntax_valid?(code)
-      eval("BEGIN {return true}\n#{code}", nil, '', 0)
-    rescue SyntaxError
-      false
+      return true unless code
+
+      without_stderr do
+        begin
+          RubyVM::InstructionSequence.compile(code)
+          true
+        rescue SyntaxError
+          false
+        end
+      end
+    end
+
+    #
+    # Temporarily disable output to $stderr
+    #
+    def without_stderr
+      stderr = $stderr
+      $stderr.reopen(IO::NULL)
+
+      yield
+    ensure
+      $stderr.reopen(stderr)
     end
 
     #

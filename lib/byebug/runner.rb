@@ -1,6 +1,7 @@
 require 'optparse'
 require 'English'
 require 'byebug/core'
+require 'byebug/helper'
 
 module Byebug
   #
@@ -16,6 +17,11 @@ module Byebug
     # Error class signaling a non existent script to debug
     #
     class NonExistentScript < StandardError; end
+
+    #
+    # Error class signaling a script with invalid Ruby syntax
+    #
+    class InvalidScript < StandardError; end
 
     #
     # Special working modes that don't actually start the debugger.
@@ -149,25 +155,16 @@ module Byebug
       $PROGRAM_NAME = program
     end
 
-    #
-    # Exits and outputs error message if syntax of the given program is invalid.
-    #
-    def check_syntax(program_name)
-      output = `ruby -c "#{program_name}" 2>&1`
-      return unless $CHILD_STATUS.exitstatus != 0
-
-      Byebug.errmsg(output)
-      exit($CHILD_STATUS.exitstatus)
-    end
-
+    include ParseFunctions
     #
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      check_syntax($PROGRAM_NAME)
+      ok = syntax_valid?(File.read($PROGRAM_NAME))
+      fail(InvalidScript, 'The script has incorrect syntax') unless ok
 
-      status = Byebug.debug_load($PROGRAM_NAME, @stop)
-      Byebug.puts "#{status}\n#{status.backtrace}" if status
+      error = Byebug.debug_load($PROGRAM_NAME, @stop)
+      Byebug.puts "#{status}\n#{status.backtrace}" if error
     end
 
     #

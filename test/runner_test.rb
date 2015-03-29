@@ -50,6 +50,15 @@ module Byebug
       end
     end
 
+    def test_run_with_an_invalid_script
+      example_file.write('[1,2,')
+      example_file.close
+
+      with_command_line('bin/byebug', example_path) do
+        assert_raises(Runner::InvalidScript) { @runner.run }
+      end
+    end
+
     def test_run_with_a_script_to_debug
       write_debugged_program
 
@@ -161,17 +170,6 @@ module Byebug
 
       assert_equal $DEBUG, true
       $DEBUG = false
-    end
-
-    def test_run_with_script_with_wrong_syntax
-      example_file.write('[1,2,')
-      example_file.close
-
-      with_command_line('bin/byebug', example_path) do
-        assert_raises(SystemExit) { @runner.run }
-      end
-
-      check_error_includes(/syntax error, unexpected end-of-input/)
     end
 
     def test_run_successfully
