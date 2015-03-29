@@ -1035,7 +1035,7 @@ run a sleeping thread.
 
 Now we can investigate the problem in the employer's side:
 
-``bash
+```bash
 (byebug) s
 [30, 39] in /path/to/company.rb
    30:
@@ -1088,7 +1088,7 @@ Now we can investigate the problem in the employer's side:
    39:         show_off(@results.pop)
    40:       end
 (byebug)
-``
+```
 
 Now we can see the problem, the `@results` variable is always empty! The
 employee forgot to leave the results in his manager's deck. We fix it by
