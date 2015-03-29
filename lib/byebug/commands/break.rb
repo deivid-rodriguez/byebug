@@ -15,15 +15,14 @@ module Byebug
     def execute
       return puts(self.class.help) unless @match[1]
 
-      brkpt = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
+      b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
+
       if syntax_valid?(@match[2])
-        return puts(
-          pr('break.created', id: brkpt.id, file: brkpt.source, line: brkpt.pos)
-        )
+        return puts(pr('break.created', id: b.id, file: b.source, line: b.pos))
       end
 
       errmsg(pr('break.errors.expression', expr: @match[2]))
-      brkpt.enabled = false
+      b.enabled = false
     rescue => e
       errmsg(e.message)
     end
