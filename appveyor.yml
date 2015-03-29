@@ -8,9 +8,8 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
-  # Taken from https://github.com/XhmikosR/pages-gem/blob/appveyor/appveyor.yml
-  - appveyor DownloadFile https://rubygems.org/downloads/bundler-1.9.1.gem -FileName C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder%\cache\bundler-1.9.1.gem
-  - gem install --local C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder%\cache\bundler-1.9.1.gem --quiet --no-ri --no-rdoc
+  - appveyor DownloadFile %bundler_url% -FileName bundler.gem
+  - gem install --local bundler.gem --quiet --no-ri --no-rdoc
   - bundler --version
   - bundle install
 
@@ -23,13 +22,16 @@ test_script:
 environment:
   matrix:
     - ruby_version: '200'
-    - ruby_version: '200-x64'
+    - ruby_version: 200-x64
     - ruby_version: '21'
-    - ruby_version: '21-x64'
+    - ruby_version: 21-x64
     - ruby_version: '22'
-    - ruby_version: '22-x64'
+    - ruby_version: 22-x64
 
-  codeclimate_repo_token: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
+  bundler_url: https://rubygems.org/downloads/bundler-1.9.1.gem
+
+  codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
+41cab138408'
 
 matrix:
   fast_finish: true
