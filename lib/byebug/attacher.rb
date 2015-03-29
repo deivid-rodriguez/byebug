@@ -7,12 +7,12 @@ module Byebug
   # events occur. Before entering byebug the init script is read.
   #
   def self.attach
-    return errmsg('Byebug already started. Ignoring `byebug` call.') if started?
+    unless started?
+      self.mode = :attached
 
-    self.mode = :attached
-
-    start
-    run_init_script
+      start
+      run_init_script
+    end
 
     current_context.step_out(2, true)
   end
