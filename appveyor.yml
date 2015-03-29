@@ -8,7 +8,9 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
-  - gem install bundler
+  # Taken from https://github.com/XhmikosR/pages-gem/blob/appveyor/appveyor.yml
+  - appveyor DownloadFile https://rubygems.org/downloads/bundler-1.9.1.gem -FileName C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder%\cache\bundler-1.9.1.gem
+  - gem install --local C:\Ruby%ruby_folder_version%\lib\ruby\gems\%ruby_gems_folder%\cache\bundler-1.9.1.gem --quiet --no-ri --no-rdoc
   - bundler --version
   - bundle install
 
