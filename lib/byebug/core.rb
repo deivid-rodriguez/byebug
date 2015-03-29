@@ -21,14 +21,14 @@ module Byebug
   attr_accessor :handler
   self.handler = CommandProcessor.new
 
+  extend Forwardable
+  def_delegators :handler, :errmsg, :puts
+
   #
   # Main debugger's printer
   #
   attr_accessor :printer
   self.printer = Printers::Plain.new
-
-  extend Forwardable
-  def_delegators :handler, :errmsg, :puts
 
   #
   # Running mode of the debugger. Can be either:
