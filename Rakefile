@@ -38,4 +38,7 @@ task(:rubocop) { RuboCop::RakeTask.new }
 require_relative 'tasks/ccop.rb'
 require_relative 'tasks/dev_utils.rb'
 
-task default: [:compile, :test, :rubocop, :ccop]
+default_tasks = %i(compile test rubocop)
+default_tasks << :ccop unless RUBY_PLATFORM =~ /darwin/
+
+task default: default_tasks
