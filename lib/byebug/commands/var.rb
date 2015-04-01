@@ -45,8 +45,9 @@ module Byebug
     end
 
     def var_local(_str = nil)
-      _self = @state.context.frame_self(@state.frame)
+      cur_self = @state.context.frame_self(@state.frame)
       locals = @state.context.frame_locals
+      locals[:self] = cur_self unless cur_self.to_s == 'main'
       puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
     end
 
