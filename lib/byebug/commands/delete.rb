@@ -21,7 +21,7 @@ module Byebug
         return nil
       end
 
-      @match[1].split(/[ \t]+/).each do |number|
+      @match[1].split(/ +/).each do |number|
         pos, err = get_int(number, 'Delete', 1)
 
         return errmsg(err) unless pos

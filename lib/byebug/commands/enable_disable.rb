@@ -76,7 +76,7 @@ module Byebug
 
       return errmsg(pr('toggle.errors.syntax', toggle: cmd)) unless @match[2]
 
-      args = @match[2].split(/[ \t]+/)
+      args = @match[2].split(/ +/)
       param = args.shift
       subcmd = Command.find(Subcommands, param)
       if subcmd

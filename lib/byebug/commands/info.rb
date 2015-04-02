@@ -176,7 +176,7 @@ module Byebug
     def execute
       return puts(self.class.help) unless @match[1]
 
-      args = @match[1].split(/[ \t]+/)
+      args = @match[1].split(/ +/)
       param = args.shift
       subcmd = Command.find(Subcommands, param)
       return errmsg "Unknown info command #{param}\n" unless subcmd
