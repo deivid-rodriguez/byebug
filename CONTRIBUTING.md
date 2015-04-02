@@ -17,6 +17,11 @@ API and a lot of bugs have been recently corrected. Without this fixes,
 `byebug` will fail to work properly, so make sure you have always the last
 patch level releases of Ruby installed.
 
+Also, if you are developing on linux, make sure you have the GNU indent utility
+installed for automatic check of code style in C files. If you're developing in
+MacOSX, just make sure you keep a consistent style if you edit the C-extension
+files. Travis CI will do the automatic check anyways.
+
 
 ## Getting started
 
