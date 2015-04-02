@@ -29,6 +29,9 @@ module Byebug
       self.class.ignored_files.include?(path)
     end
 
+    #
+    # Context's stack size
+    #
     def stack_size
       return 0 unless backtrace
 
