@@ -14,7 +14,7 @@ module Byebug
     def execute
       var = @match[1]
       if global_variables.include?(:"#{var}")
-        eval("untrace_var(:\"#{var}\")")
+        untrace_var(:"#{var}")
         puts pr('trace.messages.undo', var: var)
       else
         errmsg pr('trace.errors.not_global', var: var)
