@@ -1,3 +1,9 @@
+## 4.0.5 - 2015-04-02
+### Fixed
+* #131
+* Thread commands help format should be consistent with the rest of the help
+system now.
+
 ## 4.0.4 - 2015-03-27
 ### Fixed
 * #127
