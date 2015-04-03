@@ -52,7 +52,7 @@ module Byebug
         thread_arguments(context)
       end
 
-      print(thread_list)
+      puts(thread_list)
     end
 
     def thread_current(thnum)
