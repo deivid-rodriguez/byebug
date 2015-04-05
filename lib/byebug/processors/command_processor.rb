@@ -76,9 +76,11 @@ module Byebug
       Setting[:autolist] = false if ['(irb)', '-e'].include?(file)
 
       # Bind commands to the current state.
-      Command.commands.each do |cmd|
-        cmd.new(state).execute if cmd.always_run >= run_level
-      end
+      commands.each { |cmd| cmd.execute if cmd.class.always_run >= run_level }
+    end
+
+    def commands
+      Command.commands.map { |cmd| cmd.new(state) }
     end
 
     #
@@ -146,12 +148,7 @@ module Byebug
     # Finds a matches the command matching the input
     #
     def match_cmd(input)
-      Command.commands.each do |c|
-        cmd = c.new(state)
-        return cmd if cmd.match(input)
-      end
-
-      nil
+      commands.find { |cmd| cmd.match(input) }
     end
 
     #
