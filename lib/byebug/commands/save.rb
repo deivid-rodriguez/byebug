@@ -4,6 +4,8 @@ module Byebug
   #
   # Default file where commands are saved
   #
+  # TODO: Move this into a setting
+  #
   RESTART_FILE = '.byebug-save'
 
   #
