@@ -28,7 +28,7 @@ environment:
     - ruby_version: '22'
     - ruby_version: 22-x64
 
-  bundler_url: https://rubygems.org/downloads/bundler-1.9.1.gem
+  bundler_url: https://rubygems.org/downloads/bundler-1.9.2.gem
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
 41cab138408'
