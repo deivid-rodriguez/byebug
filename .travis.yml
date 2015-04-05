@@ -8,6 +8,9 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install indent; fi
   - bundle install --without=development --jobs=3 --retry=3
 
+script:
+  - bundle exec rake complete
+
 rvm:
   - 2.0.0
   - 2.1

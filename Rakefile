@@ -40,3 +40,5 @@ default_tasks = %i(compile test rubocop)
 default_tasks << :ccop unless RUBY_PLATFORM =~ /darwin/
 
 task default: default_tasks
+
+task complete: [:clobber] + default_tasks
