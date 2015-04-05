@@ -11,9 +11,7 @@ task compile: :devkit if RUBY_PLATFORM =~ /mingw/
 require 'rake/extensiontask'
 
 spec = Gem::Specification.load('byebug.gemspec')
-Rake::ExtensionTask.new('byebug', spec) do |ext|
-  ext.lib_dir = 'lib/byebug'
-end
+Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 
 desc 'Run the test suite'
 task :test do

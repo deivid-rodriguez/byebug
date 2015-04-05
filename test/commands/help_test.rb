@@ -54,7 +54,8 @@ module Byebug
     def test_help_with_command_and_subcommand_shows_subcommands_help
       enter 'help info breakpoints'
       debug_code(program)
-      check_output_includes(/Status of user-settable breakpoints/)
+
+      check_output_includes(/Status of user settable breakpoints/)
     end
 
     def test_help_set_shows_help_for_set_command

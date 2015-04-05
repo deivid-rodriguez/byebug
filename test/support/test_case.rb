@@ -28,7 +28,7 @@ module Byebug
   class TestCase < Minitest::Test
     self.make_my_diffs_pretty!
 
-    include Byebug::TestUtils
+    include TestUtils
     include Helpers::StringHelper
 
     #

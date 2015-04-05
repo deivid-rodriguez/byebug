@@ -188,12 +188,14 @@ module Byebug
     def test_info_line_shows_info_about_the_current_line
       enter 'break 12', 'cont', 'info line'
       debug_code(program)
+
       check_output_includes "Line 12 of \"#{example_path}\""
     end
 
     def test_info_program_shows_the_initial_stop_reason
       enter 'info program'
       debug_code(program)
+
       check_output_includes \
         "It stopped after stepping, next'ing or initial start."
     end
@@ -205,6 +207,7 @@ module Byebug
     def test_info_program_shows_the_step_stop_reason
       enter 'step', 'info program'
       debug_code(program)
+
       check_output_includes \
         'Program stopped.',
         "It stopped after stepping, next'ing or initial start."
@@ -213,6 +216,7 @@ module Byebug
     def test_info_program_shows_the_breakpoint_stop_reason
       enter 'break 12', 'cont', 'info program'
       debug_code(program)
+
       check_output_includes 'Program stopped.', 'It stopped at a breakpoint.'
     end
 

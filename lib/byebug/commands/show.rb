@@ -13,7 +13,7 @@ module Byebug
 
     def execute
       key = @match[:setting]
-      return puts(help) if key.nil?
+      return puts(help) unless key
 
       setting = Setting.find(key)
       return errmsg(pr('show.errors.unknown_setting', key: key)) unless setting
