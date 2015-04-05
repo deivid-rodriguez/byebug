@@ -97,7 +97,7 @@ are debugging rails, start the server and once the execution gets to your
     `frame`     |              |
     `help`      |              |
     `history`   |              |
-    `info`      |              | `args` `breakpoints` `catch` `display` `file` `files` `line` `program`
+    `info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
     `irb`       |              |
     `kill`      |              |
     `list`      |              |
