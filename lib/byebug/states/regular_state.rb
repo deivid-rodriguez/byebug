@@ -1,10 +1,13 @@
 require 'byebug/state'
+require 'byebug/helpers/file'
 
 module Byebug
   #
   # Controls state of Byebug's REPL when in normal mode
   #
   class RegularState < State
+    include Helpers::FileHelper
+
     attr_accessor :context, :frame, :display, :file, :line, :prev_line
     attr_writer :interface
 
@@ -36,7 +39,6 @@ module Byebug
       @proceed = true
     end
 
-    include FileFunctions
     #
     # Current (formatted) location
     #

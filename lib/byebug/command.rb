@@ -1,6 +1,8 @@
 require 'columnize'
 require 'forwardable'
-require 'byebug/helper'
+require 'byebug/helpers/file'
+require 'byebug/helpers/parse'
+require 'byebug/helpers/string'
 
 module Byebug
   #
@@ -11,8 +13,8 @@ module Byebug
   class Command
     extend Forwardable
 
-    include ParseFunctions
-    include FileFunctions
+    include Helpers::ParseHelper
+    include Helpers::FileHelper
 
     Subcmd = Struct.new(:name, :min, :help)
 
@@ -65,7 +67,7 @@ module Byebug
     end
 
     class << self
-      include StringFunctions
+      include Helpers::StringHelper
 
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run

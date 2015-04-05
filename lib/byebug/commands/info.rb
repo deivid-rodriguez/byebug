@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/file'
 
 module Byebug
   #
@@ -69,7 +70,7 @@ module Byebug
       end
     end
 
-    include FileFunctions
+    include Helpers::FileHelper
 
     def info_file_basic(file)
       path = File.expand_path(file)

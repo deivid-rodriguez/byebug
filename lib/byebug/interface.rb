@@ -1,5 +1,5 @@
 require 'byebug/history'
-require 'byebug/helper'
+require 'byebug/helpers/file'
 
 #
 # Namespace for all of byebug's code
@@ -11,6 +11,8 @@ module Byebug
   # Contains common functionality to all implemented interfaces.
   #
   class Interface
+    include Helpers::FileHelper
+
     attr_accessor :command_queue, :history
     attr_reader :input, :output, :error
 
@@ -31,7 +33,6 @@ module Byebug
       command_queue.shift
     end
 
-    include FileFunctions
     #
     # Pushes lines in +filename+ to the command queue.
     #

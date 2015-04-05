@@ -1,10 +1,13 @@
 require 'byebug/states/regular_state'
+require 'byebug/helpers/file'
 
 module Byebug
   #
   # Processes commands in regular mode
   #
   class CommandProcessor < Processor
+    include Helpers::FileHelper
+
     attr_reader :display, :state
 
     def initialize(interface = LocalInterface.new)
@@ -19,8 +22,6 @@ module Byebug
       @interface.close if @interface
       @interface = interface
     end
-
-    include FileFunctions
 
     def at_breakpoint(_context, breakpoint)
       n = Byebug.breakpoints.index(breakpoint) + 1

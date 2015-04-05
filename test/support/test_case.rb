@@ -1,4 +1,5 @@
 require 'byebug/interfaces/test_interface'
+require 'byebug/helpers/string'
 
 module Byebug
   #
@@ -28,6 +29,7 @@ module Byebug
     self.make_my_diffs_pretty!
 
     include Byebug::TestUtils
+    include Helpers::StringHelper
 
     #
     # Stuff to be run once before the test suite
@@ -103,8 +105,6 @@ module Byebug
     end
 
     private
-
-    include StringFunctions
 
     def camelized_path
       camelize(File.basename(example_path, '.rb'))

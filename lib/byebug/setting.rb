@@ -1,4 +1,4 @@
-require 'byebug/helper'
+require 'byebug/helpers/string'
 
 module Byebug
   #
@@ -37,7 +37,7 @@ module Byebug
     end
 
     class << self
-      include StringFunctions
+      include Helpers::StringHelper
 
       def settings
         @settings ||= {}

@@ -1,13 +1,15 @@
 require 'optparse'
 require 'English'
 require 'byebug/core'
-require 'byebug/helper'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Responsible for starting the debugger when started from the command line.
   #
   class Runner
+    include Helpers::ParseHelper
+
     #
     # Error class signaling absence of a script to debug
     #
@@ -155,7 +157,6 @@ module Byebug
       $PROGRAM_NAME = program
     end
 
-    include ParseFunctions
     #
     # Debugs a script only if syntax checks okay.
     #
