@@ -21,10 +21,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(history)
-      end
-
       def description
         prettify <<-EOD
           hist[ory] [num_cmds]        Show byebug's command history.

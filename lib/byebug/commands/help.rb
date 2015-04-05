@@ -14,17 +14,13 @@ module Byebug
     def execute
       return puts(self.class.help) unless @match[1]
 
-      cmd = Command.commands.select { |c| c.names.include?(@match[1]) }
-      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd.any?
+      cmd = Command.commands.find { |c| c.to_name == @match[1] }
+      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
 
-      cmd.each { |c| puts c.help(@match[2]) }
+      puts cmd.help(@match[2])
     end
 
     class << self
-      def names
-        %w(help)
-      end
-
       def description
         prettify <<-EOD
           h[elp][ <cmd>[ <subcmd>]]

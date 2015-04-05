@@ -14,7 +14,7 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) if self.class.names.include?(@match[0])
+      return puts(self.class.help) unless @match[1]
 
       unless @state && @state.interface
         return errmsg(pr('source.errors.not_available'))
@@ -29,10 +29,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(source)
-      end
-
       def description
         prettify <<-EOD
           source <file>

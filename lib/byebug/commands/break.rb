@@ -28,10 +28,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(break)
-      end
-
       def description
         prettify <<-EOD
           b[reak] [file:]line [if expr]

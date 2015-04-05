@@ -92,10 +92,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(var)
-      end
-
       def description
         prettify <<-EOD
           [v]ar

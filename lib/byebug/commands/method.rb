@@ -27,10 +27,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(method)
-      end
-
       def description
         prettify <<-EOD
           m[ethod] (i[nstance][ <obj>]|<class|module>)

@@ -30,10 +30,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(restart)
-      end
-
       def description
         prettify <<-EOD
           restart|R [args]

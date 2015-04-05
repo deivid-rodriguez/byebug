@@ -19,10 +19,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(irb)
-      end
-
       def description
         prettify <<-EOD
           irb  Starts an Interactive Ruby (IRB) session.

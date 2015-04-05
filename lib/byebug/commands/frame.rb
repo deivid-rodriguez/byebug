@@ -80,10 +80,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(where backtrace bt)
-      end
-
       def description
         prettify <<-EOD
           w[here]|bt|backtrace        Display stack frames.
@@ -127,10 +123,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(up)
-      end
-
       def description
         prettify <<-EOD
           up[ count] Move to higher frame.
@@ -157,10 +149,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(down)
-      end
-
       def description
         prettify <<-EOD
           down[ count] Move to lower frame.
@@ -192,10 +180,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(frame)
-      end
-
       def description
         prettify <<-EOD
           f[rame][ frame-number]

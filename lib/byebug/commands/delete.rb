@@ -33,10 +33,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(delete)
-      end
-
       def description
         prettify <<-EOD
           del[ete][ nnn...]

@@ -50,10 +50,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(set)
-      end
-
       def description
         prettify <<-EOD
           set <setting> <value>

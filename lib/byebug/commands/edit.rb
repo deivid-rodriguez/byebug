@@ -38,10 +38,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(edit)
-      end
-
       def description
         prettify <<-EOD
           edit[ file:lineno] Edit specified files.

@@ -22,10 +22,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(untracevar)
-      end
-
       def description
         prettify <<-EOD
           untr[acevar] <variable>

@@ -75,10 +75,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(eval)
-      end
-
       def description
         prettify <<-EOD
           e[val] <expression>
@@ -119,10 +115,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(pp)
-      end
-
       def description
         prettify <<-EOD
           pp <expression>
@@ -163,10 +155,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(putl)
-      end
-
       def description
         prettify <<-EOD
           putl <expression>
@@ -207,10 +195,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(ps)
-      end
-
       def description
         prettify <<-EOD
           ps <expression>

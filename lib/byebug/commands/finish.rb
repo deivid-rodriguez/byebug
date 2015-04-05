@@ -29,10 +29,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(finish)
-      end
-
       def description
         prettify <<-EOD
           fin[ish][ n_frames]  Execute until frame returns.

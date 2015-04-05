@@ -103,10 +103,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w((en|dis)able)
-      end
-
       def description
         prettify <<-EOD
           (en|dis)[able][[ (breakpoints|display)][ n1[ n2[ ...[ nn]]]]]

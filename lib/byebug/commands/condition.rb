@@ -33,10 +33,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(condition)
-      end
-
       def description
         prettify <<-EOD
           cond[ition] <n>[ expr]

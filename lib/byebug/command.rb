@@ -99,6 +99,13 @@ module Byebug
         nil
       end
 
+      #
+      # Name of the command, as executed by the user.
+      #
+      def to_name
+        name.gsub(/^Byebug::/, '').gsub(/Command$/, '').downcase
+      end
+
       def format_subcmd(subcmd_name)
         subcmd = find(self::Subcommands, subcmd_name)
         return "Invalid \"#{names.join('|')}\" " \
@@ -108,11 +115,10 @@ module Byebug
       end
 
       def format_subcmds
-        header = names.join('|')
-        s = "  List of \"#{header}\" subcommands:\n  --\n"
+        s = "  List of \"#{to_name}\" subcommands:\n  --\n"
         w = self::Subcommands.map(&:name).max_by(&:size).size
         self::Subcommands.each do |subcmd|
-          s += format("  %s %-#{w}s -- %s\n", header, subcmd.name, subcmd.help)
+          s += format("  %s %-#{w}s -- %s\n", to_name, subcmd.name, subcmd.help)
         end
         s + "\n"
       end

@@ -51,10 +51,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(save)
-      end
-
       def description
         prettify <<-EOD
           save[ FILE]

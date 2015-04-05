@@ -24,10 +24,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(list)
-      end
-
       def description
         prettify <<-EOD
           l[ist][[-=]][ nn-mm]

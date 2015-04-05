@@ -24,10 +24,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(pry)
-      end
-
       def description
         prettify <<-EOD
           pry  Starts a Pry session.

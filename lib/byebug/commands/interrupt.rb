@@ -18,10 +18,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(interrupt)
-      end
-
       def description
         prettify <<-EOD
           i[nterrupt]  Interrupts the program.

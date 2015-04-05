@@ -19,10 +19,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(display)
-      end
-
       def description
         prettify <<-EOD
           disp[lay] <expression>
@@ -61,10 +57,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(display)
-      end
-
       def description
         prettify <<-EOD
           disp[lay] Display expression list.

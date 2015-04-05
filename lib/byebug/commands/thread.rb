@@ -30,10 +30,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(thread)
-      end
-
       def description
         prettify <<-EOD
           Commands to manipulate threads.

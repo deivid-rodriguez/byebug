@@ -20,10 +20,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(quit)
-      end
-
       def description
         prettify <<-EOD
           q[uit] [!|unconditionally] Exits from byebug.

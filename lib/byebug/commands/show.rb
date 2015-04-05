@@ -26,10 +26,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(show)
-      end
-
       def description
         prettify <<-EOD
           show <setting> <value>

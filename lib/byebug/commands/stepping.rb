@@ -23,10 +23,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(next)
-      end
-
       def description
         prettify <<-EOD
           n[ext][ nnn]

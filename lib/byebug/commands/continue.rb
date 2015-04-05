@@ -29,10 +29,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(continue)
-      end
-
       def description
         prettify <<-EOD
           c[ont[inue]][ <n>]

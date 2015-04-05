@@ -37,10 +37,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(tracevar)
-      end
-
       def description
         prettify <<-EOD
           tr[acevar] <variable> [[no]stop]

@@ -190,10 +190,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(info)
-      end
-
       def description
         prettify <<-EOD
           info[ subcommand]

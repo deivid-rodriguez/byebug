@@ -43,10 +43,6 @@ module Byebug
     end
 
     class << self
-      def names
-        %w(catch)
-      end
-
       def description
         prettify <<-EOD
           cat[ch][ (off|<exception>[ off])]
