@@ -80,7 +80,7 @@ module Byebug
     end
 
     def commands
-      Command.commands.map { |cmd| cmd.new(state) }
+      Byebug.commands.map { |cmd| cmd.new(state) }
     end
 
     #

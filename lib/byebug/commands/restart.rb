@@ -29,15 +29,13 @@ module Byebug
       exec(cmd)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          restart|R [args]
+    def self.description
+      <<-EOD
+        restart|R [args]
 
-          Restart the program. This is a re-exec - all byebug state
-          is lost. If command arguments are passed those are used.
-        EOD
-      end
+        Restart the program. This is a re-exec - all byebug state
+        is lost. If command arguments are passed those are used.
+      EOD
     end
   end
 end

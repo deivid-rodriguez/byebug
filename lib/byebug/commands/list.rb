@@ -1,10 +1,15 @@
 require 'byebug/command'
+require 'byebug/helpers/file'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # List parts of the source code.
   #
   class ListCommand < Command
+    include Helpers::FileHelper
+    include Helpers::ParseHelper
+
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x
     end
@@ -23,18 +28,16 @@ module Byebug
       @state.prev_line = b
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          l[ist][[-=]][ nn-mm]
+    def self.description
+      <<-EOD
+        l[ist][[-=]][ nn-mm]
 
-          Lists lines of code forward from current line or from the place where
-          code was last listed. If "list-" is specified, lists backwards
-          instead. If "list=" is specified, lists from current line regardless
-          of where code was last listed. A line range can also be specified to
-          list specific sections of code.
-        EOD
-      end
+        Lists lines of code forward from current line or from the place where
+        code was last listed. If "list-" is specified, lists backwards instead.
+        If "list=" is specified, lists from current line regardless of where
+        code was last listed. A line range can also be specified to list
+        specific sections of code.
+      EOD
     end
 
     private

@@ -100,11 +100,11 @@ module Byebug
       check_output_doesnt_include(/Tracing: #{example_path}:21/)
     end
 
-    def test_thread_stop_shows_error_when_thread_number_not_specified
+    def test_thread_stop_shows_help_when_no_thread_number_specified
       enter 'cont 13', 'thread stop', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread stop" argument "" needs to be a number'
+      check_output_includes 'Stops the execution of the specified thread'
     end
 
     def test_thread_stop_shows_error_when_trying_to_stop_current_thread
@@ -131,11 +131,11 @@ module Byebug
                             /#{ctx.thnum} #<Thread:0x\h+/)
     end
 
-    def test_thread_resume_shows_error_if_thread_number_not_specified
+    def test_thread_resume_shows_help_if_thread_number_not_specified
       enter 'cont 13', 'thread resume', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread resume" argument "" needs to be a number'
+      check_output_includes 'Resumes execution of the specified thread'
     end
 
     def test_thread_resume_shows_error_when_trying_to_resume_current_thread
@@ -158,11 +158,11 @@ module Byebug
       debug_code(program) { assert_equal 21, state.line }
     end
 
-    def test_thread_switch_shows_error_if_thread_number_not_specified
+    def test_thread_switch_shows_help_if_thread_number_not_specified
       enter 'cont 13', 'thread switch', 'lock << 0'
       debug_code(program)
 
-      check_error_includes '"thread switch" argument "" needs to be a number'
+      check_output_includes 'Switches execution to the specified thread'
     end
 
     def test_thread_switch_shows_error_when_trying_to_switch_current_thread

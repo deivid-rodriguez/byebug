@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Remove expressions from display list.
   #
   class UndisplayCommand < Command
+    include Helpers::ParseHelper
+
     self.allow_in_post_mortem = false
 
     def regexp
@@ -28,18 +31,16 @@ module Byebug
       end
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          undisp[lay][ nnn]
+    def self.description
+      <<-EOD
+        undisp[lay][ nnn]
 
-          Cancel some expressions to be displayed when program stops. Arguments
-          are the code numbers of the expressions to stop displaying. No
-          argument means cancel all automatic-display expressions. "delete
-          display" has the same effect as this command. Do "info display" to see
-          the current list of code numbers.
-        EOD
-      end
+        Cancel some expressions to be displayed when program stops. Arguments
+        are the code numbers of the expressions to stop displaying. No argument
+        means cancel all automatic-display expressions. "delete display" has the
+        same effect as this command. Do "info display" to see the current list
+        of code numbers.
+      EOD
     end
   end
 end

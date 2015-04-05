@@ -75,8 +75,8 @@ module Byebug
       end
     end
 
-    def test_v_ins_shows_error_if_value_does_not_have_to_s_or_inspect_methods
-      enter 'break 22', 'cont', 'v ins v'
+    def test_v_i_shows_error_if_value_does_not_have_to_s_or_inspect_methods
+      enter 'break 22', 'cont', 'v i v'
       debug_code(program)
       check_output_includes '@empty_object = *Error in evaluation*'
     end

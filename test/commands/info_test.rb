@@ -41,13 +41,13 @@ module Byebug
       EOC
     end
 
-    def test_info_about_all_args
+    def test_info_args_show_information_about_current_frame_arguments
       enter 'break 12', 'cont', 'info args'
       debug_code(program)
       check_output_includes 'y = "a"', 'z = "b"'
     end
 
-    def test_info_about_all_breakpoints
+    def test_info_breakpoints_shows_information_about_all_breakpoints
       enter 'break 12', 'break 13 if x == w', 'info breakpoints'
       debug_code(program)
       check_output_includes 'Num Enb What',
@@ -55,7 +55,7 @@ module Byebug
                             /\d+ +y   at #{example_path}:13 if x == w/
     end
 
-    def test_info_about_specific_breakpoints
+    def test_info_breakpoints_with_ids_shows_information_on_specific_breakpoints
       enter 'b 12', 'b 13', -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
       check_output_includes 'Num Enb What', /\d+ +y   at #{example_path}:12/
@@ -231,7 +231,7 @@ module Byebug
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
     end
 
-    def test_shows_help_when_typing_just_info
+    def test_info_alone_shows_help
       enter 'info', 'cont'
       debug_code(program)
       check_output_includes(/List of "info" subcommands:/)

@@ -12,7 +12,7 @@ module Byebug
     end
 
     def commands
-      Command.commands.select(&:allow_in_control).map { |cmd| cmd.new(state) }
+      Byebug.commands.select(&:allow_in_control).map { |cmd| cmd.new(state) }
     end
 
     def process_commands

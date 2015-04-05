@@ -29,7 +29,7 @@ module Byebug
 
     def test_setting_condition_w_wrong_syntax_does_not_enable_breakpoint
       enter 'break 5',
-            -> { "disable #{Breakpoint.first.id}" },
+            -> { "disable b #{Breakpoint.first.id}" },
             -> { "cond #{Breakpoint.first.id} b ==" }
 
       debug_code(program) { assert_equal false, Breakpoint.first.enabled? }

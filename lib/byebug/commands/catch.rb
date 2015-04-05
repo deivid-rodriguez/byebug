@@ -42,17 +42,15 @@ module Byebug
       errmsg pr('catch.errors.off', off: cmd)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          cat[ch][ (off|<exception>[ off])]
+    def self.description
+      <<-EOD
+        cat[ch][ (off|<exception>[ off])]
 
-          "catch" lists catchpoints.
-          "catch off" deletes all catchpoints.
-          "catch <exception>" enables handling <exception>.
-          "catch <exception> off" disables handling <exception>.
-        EOD
-      end
+        "catch" lists catchpoints.
+        "catch off" deletes all catchpoints.
+        "catch <exception>" enables handling <exception>.
+        "catch <exception> off" disables handling <exception>.
+      EOD
     end
   end
 end

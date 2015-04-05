@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Show history of byebug commands.
   #
   class HistoryCommand < Command
+    include Helpers::ParseHelper
+
     def regexp
       /^\s* hist(?:ory)? (?:\s+(?<num_cmds>.+))? \s*$/x
     end
@@ -20,12 +23,12 @@ module Byebug
       puts history.to_s(size)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          hist[ory] [num_cmds]        Show byebug's command history.
-        EOD
-      end
+    def self.description
+      <<-EOD
+        hist[ory] [num_cmds]
+
+        Show byebug's command history.
+      EOD
     end
   end
 end

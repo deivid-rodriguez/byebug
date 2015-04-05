@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
@@ -7,6 +8,8 @@ module Byebug
   # Allows the user to continue execution until certain frames are finished.
   #
   class FinishCommand < Command
+    include Helpers::ParseHelper
+
     self.allow_in_post_mortem = false
 
     def regexp
@@ -28,16 +31,16 @@ module Byebug
       @state.proceed
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          fin[ish][ n_frames]  Execute until frame returns.
+    def self.description
+      <<-EOD
+        fin[ish][ n_frames]
 
-          If no number is given, we run until the current frame returns. If a
-          number of frames `n_frames` is given, then we run until `n_frames`
-          return from the current position.
-        EOD
-      end
+        Execute until frame returns.
+
+        If no number is given, we run until the current frame returns. If a
+        number of frames `n_frames` is given, then we run until `n_frames`
+        return from the current position.
+      EOD
     end
   end
 end

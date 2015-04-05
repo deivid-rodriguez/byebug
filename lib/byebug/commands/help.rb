@@ -12,24 +12,25 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) unless @match[1]
+      return puts(help) unless @match[1]
 
-      cmd = Command.commands.find { |c| c.to_name == @match[1] }
+      cmd = Byebug.commands.find { |c| c.to_name == @match[1] }
       return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
 
-      puts cmd.help(@match[2])
+      cmd = cmd.new(@state)
+      return puts(cmd.help) unless @match[2]
+
+      puts(cmd.subcommands.help(@match[2]))
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          h[elp][ <cmd>[ <subcmd>]]
+    def self.description
+      <<-EOD
+        h[elp][ <cmd>[ <subcmd>]]
 
-          help                -- prints this help.
-          help <cmd>          -- prints help on command <cmd>.
-          help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
-        EOD
-      end
+        help                -- prints this help.
+        help <cmd>          -- prints help on command <cmd>.
+        help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
+      EOD
     end
   end
 end

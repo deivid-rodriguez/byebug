@@ -2,7 +2,7 @@ module Byebug
   #
   # Tests basic stepping behaviour.
   #
-  class BasicSteppingTestCase < TestCase
+  class BasicNextTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -41,16 +41,6 @@ module Byebug
       end
     end
 
-    def test_step_goes_to_the_next_statement
-      enter 'step'
-      debug_code(program) { assert_equal 7, state.line }
-    end
-
-    def test_s_goes_to_the_next_statement
-      enter 's'
-      debug_code(program) { assert_equal 7, state.line }
-    end
-
     def test_next_does_not_stop_at_byebug_internal_frames
       enter 'next 2'
       debug_code(program) { refute_match(/byebug.test.support/, state.file) }
@@ -60,7 +50,7 @@ module Byebug
   #
   # Tests step/next with arguments higher than one.
   #
-  class MoreThanOneStepTestCase < TestCase
+  class MoreThanOneNextTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -95,22 +85,12 @@ module Byebug
       enter 'next 3'
       debug_code(program) { assert_equal 19, state.line }
     end
-
-    def step_steps_into_blocks
-      enter 'step 2'
-      debug_code(program) { assert_equal 9, state.line }
-    end
-
-    def step_steps_out_of_blocks_when_done
-      enter 'step 3'
-      debug_code(program) { assert_equal 12, state.line }
-    end
   end
 
   #
-  # Tests step/next behaviour in rescue clauses.
+  # Tests next behaviour in rescue clauses.
   #
-  class SteppingRescueTestCase < TestCase
+  class NextRescueTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -155,9 +135,9 @@ module Byebug
   end
 
   #
-  # Tests step/next behaviour in combination with backtrace commands.
+  # Tests next behaviour in combination with backtrace commands.
   #
-  class SteppingBacktracesTestCase < TestCase
+  class NextBacktracesTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -190,11 +170,6 @@ module Byebug
     def test_step_then_up_then_next_advances_in_the_upper_frame
       enter 'step', 'up', 'next'
       debug_code(program) { assert_equal 9, state.line }
-    end
-
-    def test_step_then_up_then_steps_in_from_the_upper_frame
-      enter 'step', 'up', 'step'
-      debug_code(program) { assert_equal 13, state.line }
     end
   end
 

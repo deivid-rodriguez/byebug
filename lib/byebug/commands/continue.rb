@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
@@ -8,6 +9,8 @@ module Byebug
   # specific line number or until program termination.
   #
   class ContinueCommand < Command
+    include Helpers::ParseHelper
+
     def regexp
       /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
     end
@@ -28,14 +31,12 @@ module Byebug
       @state.proceed
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          c[ont[inue]][ <n>]
+    def self.description
+      <<-EOD
+        c[ont[inue]][ <n>]
 
-          Run until program ends, hits a breakpoint or reaches line <n>.
-        EOD
-      end
+        Run until program ends, hits a breakpoint or reaches line <n>.
+      EOD
     end
   end
 end

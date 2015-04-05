@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
@@ -7,6 +8,8 @@ module Byebug
   # Adds the ability to stop on breakpoints only under certain conditions.
   #
   class ConditionCommand < Command
+    include Helpers::ParseHelper
+
     self.allow_in_post_mortem = false
 
     def regexp
@@ -14,7 +17,7 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) unless @match[1]
+      return puts(help) unless @match[1]
 
       breakpoints = Byebug.breakpoints.sort_by(&:id)
       return errmsg(pr('condition.errors.no_breakpoints')) if breakpoints.empty?
@@ -32,17 +35,15 @@ module Byebug
       breakpoint.expr = @match[2]
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          cond[ition] <n>[ expr]
+    def self.description
+      <<-EOD
+        cond[ition] <n>[ expr]
 
-          Specify breakpoint number <n> to break only if <expr> is true. <n> is
-          an integer and <expr> is an expression to be evaluated whenever
-          breakpoint <n> is reached. If no expression is specified, the
-          condition is removed.
-        EOD
-      end
+        Specify breakpoint number <n> to break only if <expr> is true. <n> is
+        an integer and <expr> is an expression to be evaluated whenever
+        breakpoint <n> is reached. If no expression is specified, the condition
+        is removed.
+      EOD
     end
   end
 end

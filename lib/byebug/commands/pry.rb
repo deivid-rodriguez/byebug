@@ -23,12 +23,12 @@ module Byebug
       get_binding.pry
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          pry  Starts a Pry session.
-        EOD
-      end
+    def self.description
+      <<-EOD
+        pry
+
+        Starts a Pry session.
+      EOD
     end
   end
 end

@@ -27,15 +27,13 @@ module Byebug
       Process.kill(signame, Process.pid)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          kill[ SIGNAL]
+    def self.description
+      <<-EOD
+        kill[ signal]
 
-          Send [signal] to Process.pid
-          Equivalent of Process.kill(Process.pid)
-        EOD
-      end
+        Send [signal] to Process.pid
+        Equivalent of Process.kill(Process.pid)
+      EOD
     end
   end
 end

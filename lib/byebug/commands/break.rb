@@ -1,10 +1,15 @@
 require 'byebug/command'
+require 'byebug/helpers/file'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Implements breakpoint functionality
   #
   class BreakCommand < Command
+    include Helpers::FileHelper
+    include Helpers::ParseHelper
+
     self.allow_in_post_mortem = false
     self.allow_in_control = true
 
@@ -13,7 +18,7 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) unless @match[1]
+      return puts(help) unless @match[1]
 
       b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
 
@@ -27,15 +32,13 @@ module Byebug
       errmsg(e.message)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          b[reak] [file:]line [if expr]
-          b[reak] [module::...]class(.|#)method [if expr]
+    def self.description
+      <<-EOD
+        b[reak] [file:]line [if expr]
+        b[reak] [module::...]class(.|#)method [if expr]
 
-          Set breakpoint to some position, (optionally) if expr == true
-        EOD
-      end
+        Set breakpoint to some position, (optionally) if expr == true
+      EOD
     end
 
     private

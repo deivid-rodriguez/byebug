@@ -37,16 +37,14 @@ module Byebug
       system(cmd)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          edit[ file:lineno] Edit specified files.
+    def self.description
+      <<-EOD
+        edit[ file:lineno] Edit specified files.
 
-          With no argument, edits file containing most recent line listed.
-          Editing targets can also be specified to start editing at a specific
-          line in a specific file.
-        EOD
-      end
+        With no argument, edits file containing most recent line listed. Editing
+        targets can also be specified to start editing at a specific line in a
+        specific file.
+      EOD
     end
   end
 end

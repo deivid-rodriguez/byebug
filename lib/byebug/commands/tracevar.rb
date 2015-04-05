@@ -36,18 +36,16 @@ module Byebug
       @state.context.step_out(1, false) if stop
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          tr[acevar] <variable> [[no]stop]
+    def self.description
+      <<-EOD
+        tr[acevar] <variable> [[no]stop]
 
-          Start tracing variable <variable>.
+        Start tracing variable <variable>.
 
-          If "stop" is specified, execution will stop every time the variable
-          changes its value. If nothing or "nostop" is specified, execution
-          won't stop, changes will just be logged in byebug's output.
-        EOD
-      end
+        If "stop" is specified, execution will stop every time the variable
+        changes its value. If nothing or "nostop" is specified, execution won't
+        stop, changes will just be logged in byebug's output.
+      EOD
     end
   end
 end

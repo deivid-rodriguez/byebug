@@ -80,30 +80,6 @@ module Byebug
       check_output_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
     end
 
-    def test_pp_pretty_print_the_expressions_result
-      enter "pp { a: '3' * 40, b: '4' * 30 }"
-      debug_code(program)
-      check_output_includes "{:a=>\"#{'3' * 40}\",", ":b=>\"#{'4' * 30}\"}"
-    end
-
-    def test_putl_prints_expression_and_columnize_the_result
-      with_setting :width, 20 do
-        enter 'putl [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-        debug_code(program)
-
-        check_output_includes '1  3  5  8  6', '2  4  9  7'
-      end
-    end
-
-    def test_putl_prints_expression_and_sorts_and_columnize_the_result
-      with_setting :width, 20 do
-        enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-        debug_code(program)
-
-        check_output_includes '1  3  5  7  9', '2  4  6  8'
-      end
-    end
-
     def program_threads
       <<-EOC
         module Byebug

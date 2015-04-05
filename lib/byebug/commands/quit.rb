@@ -19,16 +19,16 @@ module Byebug
       exit! # exit -> exit!: No graceful way to stop...
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          q[uit] [!|unconditionally] Exits from byebug.
+    def self.description
+      <<-EOD
+        q[uit] [!|unconditionally]
 
-          Normally we prompt before exiting. However if the parameter
-          "unconditionally" is given or command is suffixed with !, we exit
-          without asking further questions.
-        EOD
-      end
+        Exits from byebug.
+
+        Normally we prompt before exiting. However if the parameter
+        "unconditionally" is given or command is suffixed with !, we exit
+        without asking further questions.
+      EOD
     end
   end
 end

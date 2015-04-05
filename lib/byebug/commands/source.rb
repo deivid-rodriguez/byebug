@@ -14,7 +14,7 @@ module Byebug
     end
 
     def execute
-      return puts(self.class.help) unless @match[1]
+      return puts(help) unless @match[1]
 
       unless @state && @state.interface
         return errmsg(pr('source.errors.not_available'))
@@ -28,14 +28,12 @@ module Byebug
       @state.interface.read_file(file)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          source <file>
+    def self.description
+      <<-EOD
+        source <file>
 
-          Executes file <file> containing byebug commands.
-        EOD
-      end
+        Executes file <file> containing byebug commands.
+      EOD
     end
   end
 end

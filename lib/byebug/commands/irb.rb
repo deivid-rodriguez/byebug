@@ -18,12 +18,12 @@ module Byebug
       IRB.start(__FILE__)
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          irb  Starts an Interactive Ruby (IRB) session.
-        EOD
-      end
+    def self.description
+      <<-EOD
+        irb
+
+        Starts an Interactive Ruby (IRB) session.
+      EOD
     end
   end
 end

@@ -1,4 +1,14 @@
 ## 5.0.0 - (Unreleased)
+### Added
+* IDE support and a new command/subcommand API for plugins.
+
+### Changed
+* `disable` no longer disable all breakpoints, it just shows command's help
+instead. To disable all breakpoints now you need to do `disable breakpoints`
+(or `dis b`). Similarly, you can't no longer use `dis 1 2 3` but need to do
+`dis b 1 2 3` to disable specific breakpoints. The same applies to the `enable`
+command.
+
 ### Removed
 * `help set <setting>` no longer works. `help set` includes that same output and
 it's not verbose enough so that this is a problem. Same with `help show

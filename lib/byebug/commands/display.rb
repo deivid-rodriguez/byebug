@@ -2,30 +2,33 @@ require 'byebug/command'
 
 module Byebug
   #
-  # Implements the functionality of adding custom expressions to be displayed
-  # every time the debugger stops.
+  # Custom expressions to be displayed every time the debugger stops.
   #
-  class AddDisplayCommand < Command
+  class DisplayCommand < Command
     self.allow_in_post_mortem = false
 
+    def self.always_run
+      2
+    end
+
     def regexp
-      /^\s* disp(?:lay)? \s+ (.+) \s*$/x
+      /^\s* disp(?:lay)? (?:\s+ (.+))? \s*$/x
     end
 
     def execute
-      exp = @match[1]
-      @state.display.push [true, exp]
-      display_expression(exp)
+      return print_display_expressions unless @match && @match[1]
+
+      @state.display.push [true, @match[1]]
+      display_expression(@match[1])
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          disp[lay] <expression>
+    def self.description
+      <<-EOD
+        disp[lay][ <expression>]
 
-          Add <expression> into display expression list.
-        EOD
-      end
+        If <expression> specified, adds <expression> into display expression
+        list. Otherwise, it lists all expressions.
+      EOD
     end
 
     private
@@ -36,35 +39,6 @@ module Byebug
                exp: exp,
                result: bb_warning_eval(exp).inspect)
     end
-  end
-
-  #
-  # Displays the value of enabled expressions.
-  #
-  class DisplayCommand < Command
-    self.allow_in_post_mortem = false
-
-    def self.always_run
-      2
-    end
-
-    def regexp
-      /^\s* disp(?:lay)? \s*$/x
-    end
-
-    def execute
-      print_display_expressions
-    end
-
-    class << self
-      def description
-        prettify <<-EOD
-          disp[lay] Display expression list.
-        EOD
-      end
-    end
-
-    private
 
     def print_display_expressions
       result = prc('display.result', @state.display) do |item, index|
@@ -75,6 +49,7 @@ module Byebug
             result: bb_warning_eval(expression).inspect }
         end
       end
+
       print result
     end
   end

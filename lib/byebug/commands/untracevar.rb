@@ -21,14 +21,12 @@ module Byebug
       end
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          untr[acevar] <variable>
+    def self.description
+      <<-EOD
+        untr[acevar] <variable>
 
-          Stop tracing global variable <variable>.
-        EOD
-      end
+        Stop tracing global variable <variable>.
+      EOD
     end
   end
 end

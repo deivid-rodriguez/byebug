@@ -25,15 +25,13 @@ module Byebug
       self.class.description + Setting.help_all
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          show <setting> <value>
+    def self.description
+      <<-EOD
+        show <setting> <value>
 
-          Generic command for showing byebug settings. You can change them with
-          the "set" command.
-        EOD
-      end
+        Generic command for showing byebug settings. You can change them with
+        the "set" command.
+      EOD
     end
   end
 end

@@ -17,12 +17,12 @@ module Byebug
       context.interrupt
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          i[nterrupt]  Interrupts the program.
-        EOD
-      end
+    def self.description
+      <<-EOD
+        i[nterrupt]
+
+        Interrupts the program.
+      EOD
     end
   end
 end

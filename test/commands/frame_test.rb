@@ -1,6 +1,6 @@
 module Byebug
   #
-  # Tests commands which deal with backtraces.
+  # Tests commands which show frames
   #
   class FrameTestCase < TestCase
     def program
@@ -31,52 +31,6 @@ module Byebug
       EOP
     end
 
-    def test_up_moves_up_in_the_callstack
-      enter 'up'
-      debug_code(program) { assert_equal 11, state.line }
-    end
-
-    def test_up_moves_up_in_the_callstack_a_specific_number_of_frames
-      enter 'up 2'
-      debug_code(program) { assert_equal 7, state.line }
-    end
-
-    def test_up_does_not_move_if_frame_number_to_too_high
-      enter 'up 100'
-      debug_code(program) { assert_equal 16, state.line }
-      check_error_includes "Can't navigate beyond the oldest frame"
-    end
-
-    def test_up_skips_c_frames
-      enter 'up 2', 'frame'
-      debug_code(program)
-      check_output_includes(
-        /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
-    end
-
-    def test_down_moves_down_in_the_callstack
-      enter 'up', 'down'
-      debug_code(program) { assert_equal 16, state.line }
-    end
-
-    def test_down_moves_down_in_the_callstack_a_specific_number_of_frames
-      enter 'up 3', 'down 2'
-      debug_code(program) { assert_equal 11, state.line }
-    end
-
-    def test_down_skips_c_frames
-      enter 'up 3', 'down', 'frame'
-      debug_code(program)
-      check_output_includes(
-        /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
-    end
-
-    def test_down_does_not_move_if_frame_number_to_too_low
-      enter 'down'
-      debug_code(program) { assert_equal 16, state.line }
-      check_error_includes "Can't navigate beyond the newest frame"
-    end
-
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
       debug_code(program) { assert_equal 7, state.line }
@@ -103,12 +57,6 @@ module Byebug
       enter 'frame 3'
       debug_code(program)
       check_error_includes "Can't navigate to c-frame"
-    end
-
-    def test_eval_works_properly_when_moving_through_the_stack
-      enter 'eval str', 'up', 'eval str', 'up'
-      debug_code(program)
-      check_output_includes '"fx"', '"f"'
     end
   end
 end

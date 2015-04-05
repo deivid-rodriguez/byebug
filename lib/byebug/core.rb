@@ -55,6 +55,16 @@ module Byebug
     run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 
+  #
+  # A Byebug command is a class defined right under the Byebug module and
+  # named <something>Command
+  #
+  def commands
+    const_list = constants.map { |const| const_get(const, false) }
+
+    const_list.select { |c| c.is_a?(Class) && c.name =~ /[a-z]Command$/ }
+  end
+
   private
 
   #

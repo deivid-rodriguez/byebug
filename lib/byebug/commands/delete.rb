@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Implements breakpoint deletion.
   #
   class DeleteCommand < Command
+    include Helpers::ParseHelper
+
     self.allow_in_post_mortem = false
     self.allow_in_control = true
 
@@ -32,15 +35,13 @@ module Byebug
       end
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          del[ete][ nnn...]
+    def self.description
+      <<-EOD
+        del[ete][ nnn...]
 
-          Without and argument, deletes all breakpoints. With integer
-          arguments, it deletes specific breakpoints.
-        EOD
-      end
+        Without and argument, deletes all breakpoints. With integer arguments,
+        it deletes specific breakpoints.
+      EOD
     end
   end
 end

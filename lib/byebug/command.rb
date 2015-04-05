@@ -1,7 +1,6 @@
 require 'columnize'
 require 'forwardable'
-require 'byebug/helpers/file'
-require 'byebug/helpers/parse'
+require 'byebug/subcommand_list'
 require 'byebug/helpers/string'
 
 module Byebug
@@ -13,10 +12,7 @@ module Byebug
   class Command
     extend Forwardable
 
-    include Helpers::ParseHelper
-    include Helpers::FileHelper
-
-    Subcmd = Struct.new(:name, :min, :help)
+    include Helpers::StringHelper
 
     def initialize(state)
       @match, @state = nil, state
@@ -24,6 +20,57 @@ module Byebug
 
     def match(input)
       @match = regexp.match(input)
+    end
+
+    #
+    # Delegates to subcommands or prints help if no subcommand specified.
+    #
+    # If you implement a custom command (inheriting from `Byebug::Command`, you
+    # want to either override this method or define subcommands.
+    #
+    def execute
+      return puts(help) unless @match[1]
+
+      subcmd = subcommands.find(@match[1])
+      return errmsg("Unknown subcommand '#{@match[1]}'\n") unless subcmd
+
+      subcmd.execute
+    end
+
+    def_delegators :'self.class', :to_name, :description
+
+    #
+    # Default help text for a command.
+    #
+    def help
+      return help_with_subcommands if subcommands
+
+      prettify(description)
+    end
+
+    #
+    # Default help text for a command with subcommands
+    #
+    def help_with_subcommands
+      prettify <<-EOH
+        #{description}
+
+        List of "#{to_name}" subcommands:
+
+        --
+        #{subcommands}
+      EOH
+    end
+
+    #
+    # Command's subcommands.
+    #
+    def subcommands
+      subcmd_klasses = self.class.subcommands
+      return nil unless subcmd_klasses.any?
+
+      subcmd_list = subcmd_klasses.map { |cmd| cmd.new(@state) }
+      SubcommandList.new(subcmd_list, self.class.name)
     end
 
     def_delegator :"Byebug.printer", :print, :pr
@@ -67,8 +114,6 @@ module Byebug
     end
 
     class << self
-      include Helpers::StringHelper
-
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run
 
@@ -80,25 +125,6 @@ module Byebug
         @always_run ||= 0
       end
 
-      def help(subcmd = nil)
-        return format_subcmd(subcmd) if subcmd
-
-        output = description
-        output += format_subcmds if defined? self::Subcommands
-        output
-      end
-
-      def find(subcmds, str)
-        str.downcase!
-        subcmds.each do |subcmd|
-          if (str.size >= subcmd.min) && (subcmd.name[0..str.size - 1] == str)
-            return subcmd
-          end
-        end
-
-        nil
-      end
-
       #
       # Name of the command, as executed by the user.
       #
@@ -106,29 +132,23 @@ module Byebug
         name.gsub(/^Byebug::/, '').gsub(/Command$/, '').downcase
       end
 
-      def format_subcmd(subcmd_name)
-        subcmd = find(self::Subcommands, subcmd_name)
-        return "Invalid \"#{names.join('|')}\" " \
-               "subcommand \"#{args[1]}\"." unless subcmd
-
-        "\n  #{subcmd.help}.\n\n"
+      #
+      # Description of the command
+      #
+      def description
+        fail(NotImplementedError, 'Your custom command needs to define this')
       end
 
-      def format_subcmds
-        s = "  List of \"#{to_name}\" subcommands:\n  --\n"
-        w = self::Subcommands.map(&:name).max_by(&:size).size
-        self::Subcommands.each do |subcmd|
-          s += format("  %s %-#{w}s -- %s\n", to_name, subcmd.name, subcmd.help)
-        end
-        s + "\n"
-      end
+      #
+      # Available subcommands for the current command
+      #
+      # A subcommand is a class inside the parent's command class named
+      # <something>Subcommand.
+      #
+      def subcommands
+        const_list = constants.map { |const| const_get(const, false) }
 
-      def commands
-        @commands ||= []
-      end
-
-      def inherited(klass)
-        commands << klass
+        const_list.select { |c| c.is_a?(Class) && c.name =~ /[a-z]Subcommand$/ }
       end
     end
   end

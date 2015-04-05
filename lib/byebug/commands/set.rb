@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/parse'
 
 module Byebug
   #
   # Change byebug settings.
   #
   class SetCommand < Command
+    include Helpers::ParseHelper
+
     self.allow_in_control = true
 
     def regexp
@@ -49,20 +52,18 @@ module Byebug
       self.class.description + Setting.help_all
     end
 
-    class << self
-      def description
-        prettify <<-EOD
-          set <setting> <value>
+    def self.description
+      <<-EOD
+        set <setting> <value>
 
-          Modifies parts of byebug environment.
+        Modifies parts of byebug environment.
 
-          Boolean values take "on", "off", "true", "false", "1" or "0". If you
-          don't specify a value, the boolean setting will be enabled.
-          Conversely, you can use "set no<setting> to disable them.
+        Boolean values take "on", "off", "true", "false", "1" or "0". If you
+        don't specify a value, the boolean setting will be enabled. Conversely,
+        you can use "set no<setting>" to disable them.
 
-          You can see these environment settings with the "show" command.
-        EOD
-      end
+        You can see these environment settings with the "show" command.
+      EOD
     end
   end
 end
