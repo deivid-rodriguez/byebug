@@ -63,12 +63,6 @@ module Byebug
       check_output_includes(/Modifies parts of byebug environment/)
     end
 
-    def test_help_set_plus_a_setting_shows_help_for_that_setting
-      enter 'help set width'
-      debug_code(program)
-      check_output_includes(/Number of characters per line in byebug's output/)
-    end
-
     def test_help_show_shows_help_for_show_command
       enter 'help show'
       debug_code(program)

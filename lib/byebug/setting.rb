@@ -1,5 +1,3 @@
-require 'byebug/helpers/string'
-
 module Byebug
   #
   # Parent class for all byebug settings.
@@ -37,8 +35,6 @@ module Byebug
     end
 
     class << self
-      include Helpers::StringHelper
-
       def settings
         @settings ||= {}
       end
@@ -66,20 +62,6 @@ module Byebug
           output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)
         end
         output + "\n"
-      end
-
-      def help(cmd, subcmd)
-        unless subcmd
-          command = Byebug.const_get("#{cmd.capitalize}Command")
-          return command.description + help_all
-        end
-
-        setting = find(subcmd)
-        prettify <<-EOS
-          #{cmd} #{setting.to_sym} <value>
-
-          #{setting.banner}.
-        EOS
       end
     end
   end

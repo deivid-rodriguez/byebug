@@ -1,3 +1,9 @@
+## 5.0.0 - (Unreleased)
+### Removed
+* `help set <setting>` no longer works. `help set` includes that same output and
+it's not verbose enough so that this is a problem. Same with `help show
+<setting>`.
+
 ## 4.0.5 - 2015-04-02
 ### Fixed
 * #131

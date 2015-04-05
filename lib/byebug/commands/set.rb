@@ -13,7 +13,7 @@ module Byebug
 
     def execute
       key, value = @match[:setting], @match[:value]
-      return puts(SetCommand.help) if key.nil? && value.nil?
+      return puts(help) if key.nil? && value.nil?
 
       setting = Setting.find(key)
       return errmsg(pr('set.errors.unknown_setting', key: key)) unless setting
@@ -45,6 +45,10 @@ module Byebug
       end
     end
 
+    def help
+      self.class.description + Setting.help_all
+    end
+
     class << self
       def names
         %w(set)
@@ -62,10 +66,6 @@ module Byebug
 
           You can see these environment settings with the "show" command.
         EOD
-      end
-
-      def help(subcmd = nil)
-        Setting.help('set', subcmd)
       end
     end
   end

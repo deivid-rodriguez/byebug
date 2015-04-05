@@ -13,12 +13,16 @@ module Byebug
 
     def execute
       key = @match[:setting]
-      return puts(self.class.help) if key.nil?
+      return puts(help) if key.nil?
 
       setting = Setting.find(key)
       return errmsg(pr('show.errors.unknown_setting', key: key)) unless setting
 
       puts Setting.settings[setting.to_sym]
+    end
+
+    def help
+      self.class.description + Setting.help_all
     end
 
     class << self
@@ -33,10 +37,6 @@ module Byebug
           Generic command for showing byebug settings. You can change them with
           the "set" command.
         EOD
-      end
-
-      def help(subcmd = nil)
-        Setting.help('show', subcmd)
       end
     end
   end
