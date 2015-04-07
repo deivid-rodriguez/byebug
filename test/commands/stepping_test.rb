@@ -27,12 +27,18 @@ module Byebug
 
     def test_next_goes_to_the_next_line
       enter 'next'
-      debug_code(program) { assert_equal 16, state.line }
+      debug_code(program) do
+        assert_equal 16, state.line,
+                     "Unexpected position: #{state.file}:#{state.line}"
+      end
     end
 
     def test_n_goes_to_the_next_line
       enter 'n'
-      debug_code(program) { assert_equal 16, state.line }
+      debug_code(program) do
+        assert_equal 16, state.line,
+                     "Unexpected position: #{state.file}:#{state.line}"
+      end
     end
 
     def test_step_goes_to_the_next_statement
