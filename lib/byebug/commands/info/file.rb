@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/file'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Information about a particular source file
     #
-    class FileSubcommand < Subcommand
+    class FileSubcommand < Command
       include Helpers::FileHelper
 
       def regexp
@@ -36,11 +35,11 @@ module Byebug
         EOC
       end
 
-      def self.short_description
+      def short_description
         'Information about a particular source file.'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] f[ile]
 

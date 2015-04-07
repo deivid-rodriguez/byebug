@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/var'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Shows local variables in current scope
     #
-    class LocalSubcommand < Subcommand
+    class LocalSubcommand < Command
       include Helpers::VarHelper
 
       def regexp
@@ -20,11 +19,11 @@ module Byebug
         var_local
       end
 
-      def self.short_description
+      def short_description
         'Shows local variables in current scope.'
       end
 
-      def self.description
+      def description
         <<-EOD
           v[ar] l[ocal]
 

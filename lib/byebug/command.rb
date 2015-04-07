@@ -7,7 +7,7 @@ module Byebug
   #
   # Parent class of all byebug commands.
   #
-  # Subclasses need to implement a `regexp` and an `execute` command.
+  # Subclasses need to implement a `regexp` method and an `execute` method.
   #
   class Command
     extend Forwardable
@@ -22,55 +22,13 @@ module Byebug
       @match = regexp.match(input)
     end
 
-    #
-    # Delegates to subcommands or prints help if no subcommand specified.
-    #
-    # If you implement a custom command (inheriting from `Byebug::Command`, you
-    # want to either override this method or define subcommands.
-    #
-    def execute
-      return puts(help) unless @match[1]
-
-      subcmd = subcommands.find(@match[1])
-      return errmsg("Unknown subcommand '#{@match[1]}'\n") unless subcmd
-
-      subcmd.execute
-    end
-
     def_delegators :'self.class', :to_name, :description
 
     #
     # Default help text for a command.
     #
     def help
-      return help_with_subcommands if subcommands
-
       prettify(description)
-    end
-
-    #
-    # Default help text for a command with subcommands
-    #
-    def help_with_subcommands
-      prettify <<-EOH
-        #{description}
-
-        List of "#{to_name}" subcommands:
-
-        --
-        #{subcommands}
-      EOH
-    end
-
-    #
-    # Command's subcommands.
-    #
-    def subcommands
-      subcmd_klasses = self.class.subcommands
-      return nil unless subcmd_klasses.any?
-
-      subcmd_list = subcmd_klasses.map { |cmd| cmd.new(@state) }
-      SubcommandList.new(subcmd_list, self.class.name)
     end
 
     def_delegator :"Byebug.printer", :print, :pr
@@ -130,13 +88,6 @@ module Byebug
       #
       def to_name
         name.gsub(/^Byebug::/, '').gsub(/Command$/, '').downcase
-      end
-
-      #
-      # Description of the command
-      #
-      def description
-        fail(NotImplementedError, 'Your custom command needs to define this')
       end
 
       #

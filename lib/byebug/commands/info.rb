@@ -1,3 +1,5 @@
+require 'byebug/subcommands'
+
 require 'byebug/commands/info/args'
 require 'byebug/commands/info/breakpoints'
 require 'byebug/commands/info/catch'
@@ -11,13 +13,15 @@ module Byebug
   # Shows info about different aspects of the debugger.
   #
   class InfoCommand < Command
+    include Subcommand
+
     self.allow_in_control = true
 
     def regexp
       /^\s* i(?:nfo)? (?:\s+ (.+))? \s*$/x
     end
 
-    def self.description
+    def description
       <<-EOD
         info[ subcommand]
 

@@ -19,7 +19,7 @@ module Byebug
       exit! # exit -> exit!: No graceful way to stop...
     end
 
-    def self.description
+    def description
       <<-EOD
         q[uit] [!|unconditionally]
 

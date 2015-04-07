@@ -37,7 +37,7 @@ module Byebug
       system(cmd)
     end
 
-    def self.description
+    def description
       <<-EOD
         edit[ file:lineno] Edit specified files.
 

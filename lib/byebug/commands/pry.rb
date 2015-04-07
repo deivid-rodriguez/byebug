@@ -23,7 +23,7 @@ module Byebug
       get_binding.pry
     end
 
-    def self.description
+    def description
       <<-EOD
         pry
 

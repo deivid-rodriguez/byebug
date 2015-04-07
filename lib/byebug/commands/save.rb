@@ -30,7 +30,7 @@ module Byebug
       file.close
     end
 
-    def self.description
+    def description
       <<-EOD
         save[ FILE]
 

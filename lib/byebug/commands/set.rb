@@ -49,10 +49,10 @@ module Byebug
     end
 
     def help
-      self.class.description + Setting.help_all
+      description + Setting.help_all
     end
 
-    def self.description
+    def description
       <<-EOD
         set <setting> <value>
 

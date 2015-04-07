@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +info+ command to define the +args+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Information about arguments of the current method/block
     #
-    class ProgramSubcommand < Subcommand
+    class ProgramSubcommand < Command
       def regexp
         /^\s* p(?:rogram)? \s*$/x
       end
@@ -24,11 +22,11 @@ module Byebug
         format_stop_reason @state.context.stop_reason
       end
 
-      def self.short_description
+      def short_description
         'Information about the current status of the debugged program.'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] p[rogram]
 

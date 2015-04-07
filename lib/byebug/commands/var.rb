@@ -9,11 +9,13 @@ module Byebug
   # Shows variables and its values
   #
   class VarCommand < Command
+    include Subcommand
+
     def regexp
       /^\s* v(?:ar)? (?:\s+ (.+))? \s*$/x
     end
 
-    def self.description
+    def description
       <<-EOD
         [v]ar <subcommand>
 

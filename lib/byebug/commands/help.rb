@@ -8,7 +8,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* h(?:elp)? (?: \s+(\S+) (?:\s+(\S+))? )? \s*$/x
+      /^\s* h(?:elp)? (?:\s+(\S+))? (?:\s+(\S+))? \s*$/x
     end
 
     def execute
@@ -20,10 +20,13 @@ module Byebug
       cmd = cmd.new(@state)
       return puts(cmd.help) unless @match[2]
 
-      puts(cmd.subcommands.help(@match[2]))
+      subcmd = cmd.subcommands.find(@match[2])
+      return errmsg(pr('help.errors.undefined', cmd: @match[2])) unless subcmd
+
+      puts(subcmd.help)
     end
 
-    def self.description
+    def description
       <<-EOD
         h[elp][ <cmd>[ <subcmd>]]
 

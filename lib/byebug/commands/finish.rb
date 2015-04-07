@@ -31,7 +31,7 @@ module Byebug
       @state.proceed
     end
 
-    def self.description
+    def description
       <<-EOD
         fin[ish][ n_frames]
 

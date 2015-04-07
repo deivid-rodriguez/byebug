@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +info+ command to define the +args+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Information about arguments of the current method/block
     #
-    class ArgsSubcommand < Subcommand
+    class ArgsSubcommand < Command
       def regexp
         /^\s* a(?:rgs)? \s*$/x
       end
@@ -25,11 +23,11 @@ module Byebug
         end
       end
 
-      def self.short_description
+      def short_description
         'Information about arguments of the current method/block'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] a[args]
 

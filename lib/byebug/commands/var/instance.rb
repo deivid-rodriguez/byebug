@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/var'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Shows instance variables
     #
-    class InstanceSubcommand < Subcommand
+    class InstanceSubcommand < Command
       include Helpers::VarHelper
 
       def regexp
@@ -20,11 +19,11 @@ module Byebug
         var_instance(@match[1])
       end
 
-      def self.short_description
+      def short_description
         'Shows instance variables of self or a specific object.'
       end
 
-      def self.description
+      def description
         <<-EOD
           v[ar] i[nstance][ <object>]
 

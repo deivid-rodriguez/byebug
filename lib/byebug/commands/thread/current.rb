@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/thread'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Information about the current thread
     #
-    class CurrentSubcommand < Subcommand
+    class CurrentSubcommand < Command
       include Helpers::ThreadHelper
 
       def regexp
@@ -20,11 +19,11 @@ module Byebug
         display_context(@state.context)
       end
 
-      def self.short_description
+      def short_description
         'Shows current thread information'
       end
 
-      def self.description
+      def description
         <<-EOD
           th[read] c[urrent]
 

@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +info+ command to define the +breakpoints+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Information about current breakpoints
     #
-    class BreakpointsSubcommand < Subcommand
+    class BreakpointsSubcommand < Command
       def regexp
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end
@@ -30,11 +28,11 @@ module Byebug
         breakpoints.each { |b| info_breakpoint(b) }
       end
 
-      def self.short_description
+      def short_description
         'Status of user settable breakpoints.'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] b[reakpoints]
 

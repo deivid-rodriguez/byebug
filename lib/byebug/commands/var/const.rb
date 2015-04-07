@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +var+ command to define the +const+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Shows constants
     #
-    class ConstSubcommand < Subcommand
+    class ConstSubcommand < Command
       def regexp
         /^\s* c(?:onst)? (?:\s+ (.+))? \s*$/x
       end
@@ -24,11 +22,11 @@ module Byebug
         puts prv(constants.sort.map { |c| [c, obj.const_get(c)] })
       end
 
-      def self.short_description
+      def short_description
         'Shows constants of an object.'
       end
 
-      def self.description
+      def description
         <<-EOD
           v[ar] c[onstant]
 

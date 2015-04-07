@@ -21,7 +21,7 @@ module Byebug
       end
     end
 
-    def self.description
+    def description
       <<-EOD
         untr[acevar] <variable>
 

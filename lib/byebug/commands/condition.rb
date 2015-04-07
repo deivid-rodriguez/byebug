@@ -35,7 +35,7 @@ module Byebug
       breakpoint.expr = @match[2]
     end
 
-    def self.description
+    def description
       <<-EOD
         cond[ition] <n>[ expr]
 

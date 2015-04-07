@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +info+ command to define the +display+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Information about display expressions
     #
-    class DisplaySubcommand < Subcommand
+    class DisplaySubcommand < Command
       def regexp
         /^\s* d(?:isplay)? \s*$/x
       end
@@ -28,11 +26,11 @@ module Byebug
         end
       end
 
-      def self.short_description
+      def short_description
         'List of expressions to display when program stops'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] d[display]
 

@@ -1,5 +1,3 @@
-require 'byebug/subcommand'
-
 module Byebug
   #
   # Reopens the +info+ command to define the +catch+ subcommand
@@ -8,7 +6,7 @@ module Byebug
     #
     # Information on exceptions that can be caught by the debugger
     #
-    class CatchSubcommand < Subcommand
+    class CatchSubcommand < Command
       def regexp
         /^\s* c(?:atch)? (?:\s+ (.+))? \s*$/x
       end
@@ -25,11 +23,11 @@ module Byebug
         end
       end
 
-      def self.short_description
+      def short_description
         'Exceptions that can be caught in the current stack frame'
       end
 
-      def self.description
+      def description
         <<-EOD
           inf[o] c[atch]
 

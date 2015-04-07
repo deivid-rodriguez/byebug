@@ -25,7 +25,7 @@ module Byebug
       @state.proceed
     end
 
-    def self.description
+    def description
       <<-EOD
         n[ext][ nnn]
 

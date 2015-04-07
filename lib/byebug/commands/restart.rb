@@ -29,7 +29,7 @@ module Byebug
       exec(cmd)
     end
 
-    def self.description
+    def description
       <<-EOD
         restart|R [args]
 

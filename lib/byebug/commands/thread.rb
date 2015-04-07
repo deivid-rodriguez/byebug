@@ -1,3 +1,5 @@
+require 'byebug/subcommands'
+
 require 'byebug/commands/thread/current'
 require 'byebug/commands/thread/list'
 require 'byebug/commands/thread/resume'
@@ -9,11 +11,13 @@ module Byebug
   # Manipulation of Ruby threads
   #
   class ThreadCommand < Command
+    include Subcommand
+
     def regexp
       /^\s* th(?:read)? (?:\s+ (.+))? \s*$/x
     end
 
-    def self.description
+    def description
       <<-EOD
         th]read <subcommand>
 

@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/thread'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Stops the specified thread
     #
-    class StopSubcommand < Subcommand
+    class StopSubcommand < Command
       include Helpers::ThreadHelper
 
       def regexp
@@ -26,11 +25,11 @@ module Byebug
         display_context(context)
       end
 
-      def self.short_description
+      def short_description
         'Stops the execution of the specified thread'
       end
 
-      def self.description
+      def description
         <<-EOD
           th[read] st[op] <thnum>
 

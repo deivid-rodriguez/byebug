@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/toggle'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Enables all or specific displays
     #
-    class DisplaySubcommand < Subcommand
+    class DisplaySubcommand < Command
       include Helpers::ToggleHelper
 
       def regexp
@@ -20,11 +19,11 @@ module Byebug
         enable_disable_display('enable', @match[1])
       end
 
-      def self.short_description
+      def short_description
         'Enables expressions to be displayed when program stops.'
       end
 
-      def self.description
+      def description
         <<-EOD
           en[able] d[isplay][ <id1> <id2> .. <idn>]
 

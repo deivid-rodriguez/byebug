@@ -29,7 +29,7 @@ module Byebug
       puts "#{$ERROR_INFO.class} Exception: #{$ERROR_INFO.message}"
     end
 
-    def self.description
+    def description
       <<-EOD
         e[val] <expression>
 

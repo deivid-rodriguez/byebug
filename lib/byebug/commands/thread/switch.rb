@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/thread'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Switches to the specified thread
     #
-    class SwitchSubcommand < Subcommand
+    class SwitchSubcommand < Command
       include Helpers::ThreadHelper
 
       def regexp
@@ -28,11 +27,11 @@ module Byebug
         @state.proceed
       end
 
-      def self.short_description
+      def short_description
         'Switches execution to the specified thread'
       end
 
-      def self.description
+      def description
         <<-EOD
           th[read] sw[itch] <thnum>
 

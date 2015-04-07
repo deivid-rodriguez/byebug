@@ -19,7 +19,7 @@ module Byebug
       print_backtrace
     end
 
-    def self.description
+    def description
       <<-EOD
         w[here]|bt|backtrace
 

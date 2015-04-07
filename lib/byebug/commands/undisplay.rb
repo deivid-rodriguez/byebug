@@ -31,7 +31,7 @@ module Byebug
       end
     end
 
-    def self.description
+    def description
       <<-EOD
         undisp[lay][ nnn]
 

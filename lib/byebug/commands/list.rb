@@ -28,7 +28,7 @@ module Byebug
       @state.prev_line = b
     end
 
-    def self.description
+    def description
       <<-EOD
         l[ist][[-=]][ nn-mm]
 

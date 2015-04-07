@@ -26,7 +26,7 @@ module Byebug
       ListCommand.new(@state).execute if Setting[:autolist]
     end
 
-    def self.description
+    def description
       <<-EOD
         up[ count]
 

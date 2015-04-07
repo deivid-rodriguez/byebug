@@ -17,7 +17,7 @@ module Byebug
       context.interrupt
     end
 
-    def self.description
+    def description
       <<-EOD
         i[nterrupt]
 

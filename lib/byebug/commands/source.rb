@@ -28,7 +28,7 @@ module Byebug
       @state.interface.read_file(file)
     end
 
-    def self.description
+    def description
       <<-EOD
         source <file>
 

@@ -22,7 +22,7 @@ module Byebug
       display_expression(@match[1])
     end
 
-    def self.description
+    def description
       <<-EOD
         disp[lay][ <expression>]
 

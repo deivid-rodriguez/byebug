@@ -23,7 +23,7 @@ module Byebug
       puts history.to_s(size)
     end
 
-    def self.description
+    def description
       <<-EOD
         hist[ory] [num_cmds]
 

@@ -29,7 +29,7 @@ module Byebug
       adjust_frame(pos, true)
     end
 
-    def self.description
+    def description
       <<-EOD
         f[rame][ frame-number]
 

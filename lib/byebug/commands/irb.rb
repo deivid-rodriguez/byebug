@@ -18,7 +18,7 @@ module Byebug
       IRB.start(__FILE__)
     end
 
-    def self.description
+    def description
       <<-EOD
         irb
 

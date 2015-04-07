@@ -27,7 +27,7 @@ module Byebug
       Process.kill(signame, Process.pid)
     end
 
-    def self.description
+    def description
       <<-EOD
         kill[ signal]
 

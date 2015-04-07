@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/toggle'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Disables all or specific breakpoints
     #
-    class BreakpointsSubcommand < Subcommand
+    class BreakpointsSubcommand < Command
       include Helpers::ToggleHelper
 
       def regexp
@@ -20,11 +19,11 @@ module Byebug
         enable_disable_breakpoints('disable', @match[1])
       end
 
-      def self.short_description
+      def short_description
         'Disable all or specific breakpoints.'
       end
 
-      def self.description
+      def description
         <<-EOD
           dis[able] b[reakpoints][ <id1> <id2> .. <idn>]
 

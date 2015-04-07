@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/thread'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Resumes the specified thread
     #
-    class ResumeSubcommand < Subcommand
+    class ResumeSubcommand < Command
       include Helpers::ThreadHelper
 
       def regexp
@@ -30,11 +29,11 @@ module Byebug
         display_context(context)
       end
 
-      def self.short_description
+      def short_description
         'Resumes execution of the specified thread'
       end
 
-      def self.description
+      def description
         <<-EOD
           th[read] r[esume] <thnum>
 

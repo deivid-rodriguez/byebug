@@ -42,7 +42,7 @@ module Byebug
       errmsg pr('catch.errors.off', off: cmd)
     end
 
-    def self.description
+    def description
       <<-EOD
         cat[ch][ (off|<exception>[ off])]
 

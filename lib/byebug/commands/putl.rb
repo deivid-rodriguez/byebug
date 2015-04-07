@@ -32,7 +32,7 @@ module Byebug
       out.puts $ERROR_INFO.message
     end
 
-    def self.description
+    def description
       <<-EOD
         putl <expression>
 

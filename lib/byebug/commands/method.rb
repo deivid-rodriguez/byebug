@@ -26,7 +26,7 @@ module Byebug
       puts result
     end
 
-    def self.description
+    def description
       <<-EOD
         m[ethod] (i[nstance][ <obj>]|<class|module>)
 

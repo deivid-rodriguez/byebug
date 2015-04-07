@@ -1,6 +1,3 @@
-require 'byebug/subcommand'
-require 'byebug/helpers/var'
-
 module Byebug
   #
   # Reopens the +var+ command to define the +global+ subcommand
@@ -9,7 +6,7 @@ module Byebug
     #
     # Shows global variables
     #
-    class GlobalSubcommand < Subcommand
+    class GlobalSubcommand < Command
       include Helpers::VarHelper
 
       def regexp
@@ -20,11 +17,11 @@ module Byebug
         var_global
       end
 
-      def self.short_description
+      def short_description
         'Shows global variables.'
       end
 
-      def self.description
+      def description
         <<-EOD
           v[ar] g[lobal]
 

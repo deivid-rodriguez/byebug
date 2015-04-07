@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/thread'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Information about threads
     #
-    class ListSubcommand < Subcommand
+    class ListSubcommand < Command
       include Helpers::ThreadHelper
 
       def regexp
@@ -26,11 +25,11 @@ module Byebug
         print(thread_list)
       end
 
-      def self.short_description
+      def short_description
         'Lists all threads'
       end
 
-      def self.description
+      def description
         <<-EOD
           th[read] l[ist] <thnum>
 

@@ -1,4 +1,3 @@
-require 'byebug/subcommand'
 require 'byebug/helpers/var'
 
 module Byebug
@@ -9,7 +8,7 @@ module Byebug
     #
     # Shows global, instance and local variables
     #
-    class AllSubcommand < Subcommand
+    class AllSubcommand < Command
       include Helpers::VarHelper
 
       def regexp
@@ -22,11 +21,11 @@ module Byebug
         var_local
       end
 
-      def self.short_description
+      def short_description
         'Shows local, global and instance variables of self.'
       end
 
-      def self.description
+      def description
         <<-EOD
           v[ar] a[ll]
 

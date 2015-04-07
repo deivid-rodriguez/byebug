@@ -32,12 +32,16 @@ module Byebug
       errmsg(e.message)
     end
 
-    def self.description
+    def short_description
+      'Set breakpoint to some position, (optionally) if expr == true'
+    end
+
+    def description
       <<-EOD
         b[reak] [file:]line [if expr]
         b[reak] [module::...]class(.|#)method [if expr]
 
-        Set breakpoint to some position, (optionally) if expr == true
+        #{short_description}
       EOD
     end
 

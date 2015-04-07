@@ -36,7 +36,7 @@ module Byebug
       @state.context.step_out(1, false) if stop
     end
 
-    def self.description
+    def description
       <<-EOD
         tr[acevar] <variable> [[no]stop]
 
