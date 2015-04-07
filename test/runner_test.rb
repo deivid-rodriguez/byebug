@@ -1,6 +1,9 @@
 require 'byebug/runner'
 
 module Byebug
+  #
+  # Tests standalone byebug
+  #
   class RunnerTest < TestCase
     def setup
       super

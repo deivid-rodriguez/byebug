@@ -8,6 +8,9 @@ module Byebug
   def self.run_init_script
   end
 
+  #
+  # Useful monkeypatch for testing
+  #
   class Context
     class << self
       undef :ignored_files
