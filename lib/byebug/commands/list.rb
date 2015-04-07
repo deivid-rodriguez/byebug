@@ -115,7 +115,7 @@ module Byebug
       puts "\n[#{min}, #{max}] in #{@state.file}"
 
       File.foreach(@state.file).with_index do |line, lineno|
-        return if lineno + 1 > max
+        break if lineno + 1 > max
         next unless (min..max).include?(lineno + 1)
 
         mark = lineno + 1 == @state.line ? '=> ' : '   '

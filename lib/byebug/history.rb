@@ -27,7 +27,7 @@ module Byebug
     def restore
       return unless File.exist?(Setting[:histfile])
 
-      File.readlines(Setting[:histfile]).reverse.each { |l| push(l.chomp) }
+      File.readlines(Setting[:histfile]).reverse_each { |l| push(l.chomp) }
     end
 
     #
