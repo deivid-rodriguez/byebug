@@ -256,5 +256,18 @@ module Byebug
     ensure
       Setting[key] = original_value
     end
+
+    #
+    # A minimal program that gives you a byebug's prompt
+    #
+    def minimal_program
+      <<-EOM
+        module Byebug
+          byebug
+
+          puts 'Hello world'
+        end
+      EOM
+    end
   end
 end
