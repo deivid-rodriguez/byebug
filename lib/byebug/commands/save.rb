@@ -2,13 +2,6 @@ require 'byebug/command'
 
 module Byebug
   #
-  # Default file where commands are saved
-  #
-  # TODO: Move this into a setting
-  #
-  RESTART_FILE = '.byebug-save'
-
-  #
   # Save current settings to use them in another debug session.
   #
   class SaveCommand < Command
@@ -19,7 +12,7 @@ module Byebug
     end
 
     def execute
-      file = File.open(@match[1] || RESTART_FILE, 'w')
+      file = File.open(@match[1] || Setting[:savefile], 'w')
 
       save_breakpoints(file)
       save_catchpoints(file)

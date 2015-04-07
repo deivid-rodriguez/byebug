@@ -1,6 +1,8 @@
 ## 5.0.0 - (Unreleased)
 ### Added
 * IDE support and a new command/subcommand API for plugins.
+* Add a "savefile" setting holding the file where "save" command saves current
+debugger's state.
 
 ### Changed
 * `disable` no longer disable all breakpoints, it just shows command's help

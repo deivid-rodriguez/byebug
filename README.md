@@ -110,8 +110,8 @@ are debugging rails, start the server and once the execution gets to your
     `quit`      | `exit`       |
     `restart`   |              |
     `save`      |              |
-    `set`       |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `stack_on_error` `verbose` `width`
-    `show`      |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `stack_on_error` `verbose` `width`
+    `set`       |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
+    `show`      |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
     `source`    |              |
     `step`      |              |
     `thread`    |              | `current` `list` `resume` `stop` `switch`

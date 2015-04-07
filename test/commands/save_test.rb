@@ -13,20 +13,12 @@ module Byebug
       EOC
     end
 
-    def setup
-      super
-
-      @filename = RESTART_FILE
-    end
-
-    def teardown
-      File.delete(@filename)
-
-      super
+    def cleanup(file)
+      File.delete(file)
     end
 
     def file_contents
-      @file_contents ||= File.read(RESTART_FILE)
+      File.read(Setting[:savefile])
     end
 
     def test_save_records_regular_breakpoints
@@ -34,6 +26,7 @@ module Byebug
       debug_code(program)
 
       assert_includes file_contents, "break #{example_path}:3"
+      cleanup(Setting[:savefile])
     end
 
     def test_save_records_conditional_breakpoints
@@ -41,6 +34,7 @@ module Byebug
       debug_code(program)
 
       assert_includes file_contents, "break #{example_path}:4 if true"
+      cleanup(Setting[:savefile])
     end
 
     def test_save_records_catchpoints
@@ -48,6 +42,7 @@ module Byebug
       debug_code(program)
 
       assert_includes file_contents, 'catch NoMethodError'
+      cleanup(Setting[:savefile])
     end
 
     def test_save_records_displays
@@ -55,6 +50,7 @@ module Byebug
       debug_code(program) { clear_displays }
 
       assert_includes file_contents, 'display 2 + 3'
+      cleanup(Setting[:savefile])
     end
 
     def test_save_records_current_state_of_settings
@@ -65,29 +61,31 @@ module Byebug
       assert_includes file_contents, 'set basename false'
       assert_includes file_contents, 'set autolist true'
       assert_includes file_contents, 'set autoirb false'
+      cleanup(Setting[:savefile])
     end
 
     def test_save_shows_a_success_message
       enter 'save'
       debug_code(program)
 
-      check_output_includes "Saved to '#{RESTART_FILE}'"
+      check_output_includes "Saved to '#{Setting[:savefile]}'"
+      cleanup(Setting[:savefile])
     end
 
     def test_save_without_a_filename_uses_a_default_file
-      @filenaname = 'saved_output.txt'
-      enter "save #{@filename}"
+      enter 'save output.txt'
       debug_code(program)
 
-      assert_includes File.read(@filename), 'set autoirb false'
+      assert_includes File.read('output.txt'), 'set autoirb false'
+      cleanup('output.txt')
     end
 
     def test_save_without_a_filename_shows_a_message_with_the_file_used
-      @filenaname = 'saved_output.txt'
-      enter "save #{@filename}"
+      enter 'save output.txt'
       debug_code(program)
 
-      check_output_includes "Saved to '#{@filename}'"
+      check_output_includes "Saved to 'output.txt'"
+      cleanup('output.txt')
     end
   end
 end
