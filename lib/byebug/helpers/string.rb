@@ -17,7 +17,7 @@ module Byebug
       # command prompt.
       #
       def prettify(str)
-        "\n" + str.gsub(/^ {8}/, '') + "\n"
+        "\n" + str.gsub(/^ {6}/, '') + "\n"
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'byebug/helpers/string'
+
 module Byebug
   #
   # Parent class for all byebug settings.
@@ -22,7 +24,7 @@ module Byebug
     end
 
     def help
-      "\n  #{banner}.\n\n"
+      prettify(banner)
     end
 
     def to_sym
