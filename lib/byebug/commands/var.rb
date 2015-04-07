@@ -18,7 +18,7 @@ module Byebug
         end
         [v, s]
       end
-      puts prv(vars)
+      puts prv(vars, 'instance')
     end
 
     def var_global(_str = nil)
@@ -41,13 +41,14 @@ module Byebug
       return errmsg(pr('variable.errors.not_module', object: str)) unless is_mod
 
       constants = bb_eval("#{str}.constants")
-      puts prv(constants.sort.map { |c| [c, obj.const_get(c)] })
+      puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
     end
 
     def var_local(_str = nil)
-      _self = @state.context.frame_self(@state.frame)
+      cur_self = @state.context.frame_self(@state.frame)
       locals = @state.context.frame_locals
-      puts prv(locals.keys.sort.map { |k| [k, locals[k]] })
+      locals[:self] = cur_self unless cur_self.to_s == 'main'
+      puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
     end
 
     def var_all(_str = nil)

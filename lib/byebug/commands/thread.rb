@@ -52,7 +52,7 @@ module Byebug
         thread_arguments(context)
       end
 
-      print(thread_list)
+      puts(thread_list)
     end
 
     def thread_current(thnum)
@@ -114,7 +114,10 @@ module Byebug
         debug_flag: debug_flag,
         id: context.thnum,
         thread: context.thread.inspect,
-        file_line: file_line || ''
+        file_line: file_line || '',
+        pid: Process.pid,
+        status: context.thread.status,
+        current: (context.thread == Thread.current)
       }
     end
 

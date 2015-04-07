@@ -24,7 +24,7 @@ module Byebug
         end
       end
 
-      def print_variables(variables)
+      def print_variables(variables, *_)
         print_collection('variable.variable', variables) do |(key, value), _|
           value = value.nil? ? 'nil' : value.to_s
           if "#{key} = #{value}".size > Setting[:width]
