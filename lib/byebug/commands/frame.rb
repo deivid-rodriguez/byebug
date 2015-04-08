@@ -54,12 +54,14 @@ module Byebug
 
     def get_pr_arguments(frame_no)
       file = @state.frame_file(frame_no)
+      full_path = File.expand_path(file)
       line = @state.frame_line(frame_no)
       call = @state.frame_call(frame_no)
       mark = @state.frame_mark(frame_no)
       pos = @state.frame_pos(frame_no)
 
-      { mark: mark, pos: pos, call: call, file: file, line: line }
+      { mark: mark, pos: pos, call: call, file: file,
+        line: line, full_path: full_path }
     end
   end
 
