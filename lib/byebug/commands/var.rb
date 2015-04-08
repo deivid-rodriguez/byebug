@@ -75,7 +75,7 @@ module Byebug
     end
 
     def regexp
-      /^\s* v(?:ar)? (?: \s+(\S+) (?:\s(\S+))? )? \s*$/x
+      /^\s* v(?:ar)? (?: \s+(\S+))?/x
     end
 
     def execute
@@ -85,7 +85,7 @@ module Byebug
       return errmsg("Unknown var command #{@match[1]}\n") unless subcmd
 
       if @state.context
-        send("var_#{subcmd.name}", @match[2])
+        send("var_#{subcmd.name}", expr)
       else
         errmsg "'var #{subcmd.name}' not available without a context.\n"
       end
@@ -103,6 +103,15 @@ module Byebug
           Show variables and its values.
         EOD
       end
+    end
+
+    private
+
+    def expr
+      return nil unless @match.post_match
+      res = @match.post_match.strip
+      return nil if res.empty?
+      res
     end
   end
 end
