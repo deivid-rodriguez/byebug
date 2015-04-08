@@ -54,8 +54,6 @@ module Byebug
   class EvalCommand < Command
     include EvalFunctions
 
-    self.allow_in_control = true
-
     def match(input)
       @input = input
       super
