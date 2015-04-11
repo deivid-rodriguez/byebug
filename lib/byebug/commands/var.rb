@@ -1,3 +1,5 @@
+require 'byebug/subcommands'
+
 require 'byebug/commands/var/all'
 require 'byebug/commands/var/const'
 require 'byebug/commands/var/instance'
