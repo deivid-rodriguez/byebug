@@ -4,7 +4,7 @@ module Byebug
   #
   # Subcommand additions.
   #
-  module Subcommand
+  module Subcommands
     #
     # Summarized description of a subcommand
     #

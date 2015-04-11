@@ -13,7 +13,7 @@ module Byebug
   # Shows info about different aspects of the debugger.
   #
   class InfoCommand < Command
-    include Subcommand
+    include Subcommands
 
     self.allow_in_control = true
 

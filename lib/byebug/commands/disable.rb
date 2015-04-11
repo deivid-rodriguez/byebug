@@ -8,7 +8,7 @@ module Byebug
   # Disabling custom display expressions or breakpoints.
   #
   class DisableCommand < Command
-    include Subcommand
+    include Subcommands
 
     def regexp
       /^\s* dis(?:able)? (?:\s+ (.+))? \s*$/x

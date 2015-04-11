@@ -8,7 +8,7 @@ module Byebug
   # Enabling custom display expressions or breakpoints.
   #
   class EnableCommand < Command
-    include Subcommand
+    include Subcommands
 
     def regexp
       /^\s* en(?:able)? (?:\s+ (.+))? \s*$/x

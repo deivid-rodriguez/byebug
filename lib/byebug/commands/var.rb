@@ -9,7 +9,7 @@ module Byebug
   # Shows variables and its values
   #
   class VarCommand < Command
-    include Subcommand
+    include Subcommands
 
     def regexp
       /^\s* v(?:ar)? (?:\s+ (.+))? \s*$/x

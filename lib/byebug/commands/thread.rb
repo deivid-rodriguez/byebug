@@ -11,7 +11,7 @@ module Byebug
   # Manipulation of Ruby threads
   #
   class ThreadCommand < Command
-    include Subcommand
+    include Subcommands
 
     def regexp
       /^\s* th(?:read)? (?:\s+ (.+))? \s*$/x
