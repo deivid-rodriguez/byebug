@@ -92,13 +92,12 @@ module Byebug
       #
       # Available subcommands for the current command
       #
-      # A subcommand is a class inside the parent's command class named
-      # <something>Subcommand.
+      # A subcommand is any class defined inside the parent's command class
       #
       def subcommands
-        const_list = constants.map { |const| const_get(const, false) }
+        const_list = constants(false).map { |const| const_get(const, false) }
 
-        const_list.select { |c| c.is_a?(Class) && c.name =~ /[a-z]Subcommand$/ }
+        const_list.select { |c| c.is_a?(Class) }
       end
     end
   end
