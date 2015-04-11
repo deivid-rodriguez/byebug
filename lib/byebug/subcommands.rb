@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/subcommand_list'
 
 module Byebug
   #

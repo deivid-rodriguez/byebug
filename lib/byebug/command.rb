@@ -1,6 +1,5 @@
 require 'columnize'
 require 'forwardable'
-require 'byebug/subcommand_list'
 require 'byebug/helpers/string'
 
 module Byebug
