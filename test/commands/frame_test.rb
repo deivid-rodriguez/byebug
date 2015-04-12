@@ -54,7 +54,7 @@ module Byebug
     def test_frame_minus_one_sets_frame_to_the_last_one
       enter 'frame -1'
 
-      debug_code(program) { assert_equal example_path, state.file }
+      debug_code(program) { assert_location example_path, 1 }
     end
 
     def test_frame_cannot_navigate_to_c_frames
