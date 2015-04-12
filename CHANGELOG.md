@@ -1,4 +1,8 @@
 ## 5.0.0 - (Unreleased)
+### Fixed
+* [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`
+command not working with negative numbers (thanks @ark6).
+
 ### Added
 * IDE support and a new command/subcommand API for plugins.
 * Add a "savefile" setting holding the file where "save" command saves current
