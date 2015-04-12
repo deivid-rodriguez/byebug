@@ -10,7 +10,7 @@ module Byebug
       # If either +min+ or +max+ is nil, that value has no bound.
       #
       def get_int(str, cmd, min = nil, max = nil)
-        if str !~ /\A[0-9]+\z/
+        if str !~ /\A-?[0-9]+\z/
           err = pr('parse.errors.int.not_number', cmd: cmd, str: str)
           return nil, errmsg(err)
         end
