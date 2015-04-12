@@ -57,6 +57,39 @@ module Byebug
   end
 
   #
+  # Test for See [#103](https://github.com/deivid-rodriguez/byebug/issues/103)
+  #
+  class NextWhenReturnInsideLoopInsideInitialize < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  byebug
+         2:
+         3:  module Byebug
+         4:    #
+         5:    # Toy class to test next.
+         6:    #
+         7:    class #{example_class}
+         8:      def initialize
+         9:        loop { return }
+        10:      end
+        11:    end
+        12:
+        13:    #{example_class}.new
+        14:
+        15:    puts 'Bye!'
+        16:  end
+      EOC
+    end
+
+    def test_next_works_return_inside_loop_inside_initialize
+      skip unless RUBY_VERSION == '2.3.0'
+      enter 'cont 13', 'next'
+
+      debug_code(program) { assert_location example_path, 15 }
+    end
+  end
+
+  #
   # Tests next behaviour in rescue clauses.
   #
   class NextRescueTestCase < TestCase
