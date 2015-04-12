@@ -33,29 +33,34 @@ module Byebug
 
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
+
       debug_code(program) { assert_equal 7, state.line }
     end
 
     def test_frame_prints_the_callstack_when_called_without_arguments
       enter 'up', 'frame'
       debug_code(program)
+
       check_output_includes(
         /--> #1  .*encode\(str#String\)\s* at .*#{example_path}:11/)
     end
 
     def test_frame_0_sets_frame_to_the_first_one
       enter 'up', 'frame 0'
+
       debug_code(program) { assert_equal 16, state.line }
     end
 
     def test_frame_minus_one_sets_frame_to_the_last_one
       enter 'frame -1'
+
       debug_code(program) { assert_equal example_path, state.file }
     end
 
     def test_frame_cannot_navigate_to_c_frames
       enter 'frame 3'
       debug_code(program)
+
       check_error_includes "Can't navigate to c-frame"
     end
   end
