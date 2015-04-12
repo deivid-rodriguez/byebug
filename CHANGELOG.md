@@ -18,13 +18,13 @@ it's not verbose enough so that this is a problem. Same with `help show
 
 ## 4.0.5 - 2015-04-02
 ### Fixed
-* #131
+* [#131](https://github.com/deivid-rodriguez/byebug/issues/131)
 * Thread commands help format should be consistent with the rest of the help
 system now.
 
 ## 4.0.4 - 2015-03-27
 ### Fixed
-* #127
+* [#127](https://github.com/deivid-rodriguez/byebug/issues/127)
 
 ## 4.0.3 - 2015-03-19
 ### Fixed
@@ -32,13 +32,15 @@ system now.
 
 ## 4.0.2 - 2015-03-16
 ### Fixed
-* Removed `rb-readline` as a dependency and show a help message whenever
-requiring readline fails instead (#118)
+* [#118](https://github.com/deivid-rodriguez/byebug/issues/118). Remove
+`rb-readline` as a dependency and show a help message whenever requiring
+`readline` fails instead.
 
 ## 4.0.1 - 2015-03-13
 ### Fixed
 * .yml files needed for printers support were missing from the release... :S
-* Add `rb-readline` as a dependency (#118)
+* [#118](https://github.com/deivid-rodriguez/byebug/issues/118). Add `readline`
+as a dependency.
 
 ## 4.0.0 - 2015-03-13
 ### Added
@@ -53,9 +55,10 @@ requiring readline fails instead (#118)
 ### Changed
 - A lot of internal refactoring.
 - `tracevar` now requires the full global variable name (with "$").
-- `catch` command is not allowed in post_mortem mode anymore. It was not
-working anyways (#92).
-- `step` is now more user friendly when used in combination with `up` (see #85).
+- [#92](https://github.com/deivid-rodriguez/byebug/issues/92). The `catch`
+command is not allowed in post_mortem mode anymore. It was not working anyways.
+- [#85](https://github.com/deivid-rodriguez/byebug/issues/85). `step` is now
+more user friendly when used in combination with `up`.
 - `var const` can now be called without an argument and will show constants in
 the current scope.
 - `break` with a class name now creates breakpoints regardless of class not
@@ -66,17 +69,21 @@ created anyways.
 - Code reloading issues.
 - `set fullpath` was not showing fullpaths. Now it is.
 - `up`, `down` and `frame` commands now work in post_mortem mode (#93).
-- Fixes in rc file (.byebugrc): invalid commands are just ignored instead of
+- rc file (`.byebugrc`) loading: invalid commands are just ignored instead of
 aborting, global (home) rc file is now properly loaded before project's file.
-- Backtraces not working in `post_mortem` mode (#93).
+- [#93](https://github.com/deivid-rodriguez/byebug/issues/93). Backtraces not
+working in `post_mortem` mode.
 - 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands
 sequentially.
-- Finish command not stopping at the correct line (#101).
-- `break` with namespaced class, like `break A::B#c` should now work (#106).
+- [#101](https://github.com/deivid-rodriguez/byebug/issues/101). `finish`
+command not stopping at the correct line.
+- [#106](https://github.com/deivid-rodriguez/byebug/issues/106). `break` with
+namespaced class, like `break A::B#c` should now work.
 - Command history is now persisted before exiting byebug.
 - Setting breakpoint in a method would stop not only at the beginning of the
 method but also at the beginning of every block inside the method.
-- Setting breakpoints on module methods (#122, @x-yuri).
+- [#122](https://github.com/deivid-rodriguez/byebug/issues/122). Setting
+breakpoints on module methods (@x-yuri).
 
 ### Removed
 - `autoreload` setting as it's not necessary anymore. Code should always be up
@@ -100,12 +107,14 @@ autoevaluate it.
 
 ## 3.5.1 - 2014-09-29
 ### Fixed
-- Windows installation (#79).
+- [#79](https://github.com/deivid-rodriguez/byebug/issues/79). Windows
+installation.
 - `condition` command not properly detecting invalid breakpoint ids.
 
 ## 3.5.0 - 2014-09-28
 ### Fixed
-- Byebug's history messing other programs using Readline (#81).
+- [#81](https://github.com/deivid-rodriguez/byebug/issues/81). Byebug's history
+messing up other programs using Readline.
 - Readline's history not being properly saved and inmediately available.
 - User not being notified when trying to debug a non existent script.
 
@@ -116,14 +125,14 @@ autoevaluate it.
 
 ## 3.4.2 - 2014-09-26
 ### Fixed
-- Debugging commands invoked by ruby exectuable (#67), as in `byebug --
-ruby -Itest test/controllers/posts_controller_test.rb -n
-test_should_get_index`.
-
+- [#67](https://github.com/deivid-rodriguez/byebug/issues/67). Debugging
+commands invoked by ruby executable, as in `byebug -- ruby -Itest a_test.rb
+-n test_something`.
 
 ## 3.4.1 - 2014-09-25
 ### Fixed
-- Use of threads inside `eval` command (#54).
+- [#54](https://github.com/deivid-rodriguez/byebug/issues/54). Use of threads
+inside `eval` command.
 - `list` command not listing backwards after reaching the end of the file.
 
 ## 3.4.0 - 2014-09-01
@@ -156,16 +165,17 @@ default behaviour though.
 
 ## 3.2.0 - 2014-08-02
 ### Fixed
-- Remote debugging (#71), thanks @shuky19.
-- `source` command (#68), thanks @Olgagr.
-- `ruby-head` support (#71).
+- [#71](https://github.com/deivid-rodriguez/byebug/issues/71). Remote debugging
+(thanks @shuky19).
+- [#69](https://github.com/deivid-rodriguez/byebug/issues/69). `source` command
+(thanks @Olgagr).
 
 ### Removed
 - `post_mortem` activation through `Byebug.post_mortem`. Use `set post_mortem`
 instead.
 - `info stack` command. Use `where` instead.
 - `method iv` command. Use `var instance` instead.
-- Warning reported in #77.
+- [#77](https://github.com/deivid-rodriguez/byebug/issues/77). Warning.
 
 ## 3.1.2 - 2014-04-23
 ### Fixed
@@ -197,8 +207,8 @@ global variable tracing.
 - Plain `byebug` not working when `pry-byebug` installed.
 - `post_mortem` mode.
 - Command history not being saved after regular program termination.
-- (Again) Calling `Byebug.start` with `Timeout.timeout` (#54), thanks
-@zmoazeni!
+- [#54](https://github.com/deivid-rodriguez/byebug/issues/54). (Again) calling
+`Byebug.start` with `Timeout.timeout` (thanks @zmoazeni).
 
 ### Added
 - Allow disabling `post_mortem` mode.
@@ -209,7 +219,7 @@ like shell's `history` command.
 - `show/set history filename` is now `show/set histfile`
 - `show/set history size` is now `show/set histsize`
 - `show/set history save` is now `show/set autosave`
-- `finish` semantic, see
+- `finish` semantics, see
 [61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d).
 - Use `per project` history file by default.
 
@@ -218,8 +228,12 @@ like shell's `history` command.
 command work is always saved now.
 
 ## 2.7.0 - 2014-02-24
-- `IGNORED_FILES` slowing down startup (#52).
-- Calling `Byebug.start` with `Timeout.timeout` (#53, #54).
+### Fixed
+- [#52](https://github.com/deivid-rodriguez/byebug/issues/52). `IGNORED_FILES`
+slowing down startup.
+- [#53](https://github.com/deivid-rodriguez/byebug/issues/53) and
+[#54](https://github.com/deivid-rodriguez/byebug/issues/54). Calling
+`Byebug.start` with `Timeout.timeout`.
 
 ## 2.6.0 - 2014-02-08
 ### Fixed
@@ -231,13 +245,14 @@ command work is always saved now.
 
 ## 2.4.1 - 2013-12-05
 ### Fixed
-- Installation error in Mac OSX (#40), thanks @luislavena.
+- [#40](https://github.com/deivid-rodriguez/byebug/issues/40). Installation
+error in Mac OSX (thanks @luislavena).
 
 ## 2.4.0 - 2013-12-02
 ### Fixed
 - `thread list` showing too many threads.
-- Fix setting post mortem mode with "set post_mortem". Now this is the only
-post mortem functionality available as specifying "Byebug.post_mortem" with a
+- Fix setting post mortem mode with `set post_mortem`. Now this is the only
+post mortem functionality available as specifying `Byebug.post_mortem` with a
 block has been removed in this version.
 
 ### Added
@@ -268,7 +283,8 @@ library (thanks @nobu).
 
 ## 2.2.1 - 2013-09-24
 ### Fixed
-- Compilation issue introduced in 2.2.0 (#26).
+- [#26](https://github.com/deivid-rodriguez/byebug/issues/26). Compilation issue
+introduced in `2.2.0`.
 
 ### Changed
 - `show/set stack_trace_on_error` is now `show/set stack_on_error`.
@@ -307,7 +323,7 @@ library (thanks @nobu).
 - `jump` command. It had never worked.
 
 ### Changed
-- Varoius internal refactorings.
+- Several internal refactorings.
 
 ## 1.8.2 - 2013-08-16
 ### Fixed
