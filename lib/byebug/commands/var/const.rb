@@ -19,7 +19,7 @@ module Byebug
         end
 
         constants = bb_eval("#{str_obj}.constants")
-        puts prv(constants.sort.map { |c| [c, obj.const_get(c)] })
+        puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
       end
 
       def short_description

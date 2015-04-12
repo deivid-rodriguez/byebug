@@ -17,7 +17,7 @@ module Byebug
           end
           [v, s]
         end
-        puts prv(vars)
+        puts prv(vars, 'instance')
       end
 
       def var_global
@@ -36,8 +36,9 @@ module Byebug
 
       def var_local
         locals = @state.context.frame_locals
-
-        puts prv(locals.keys.sort.map { |k| [k, locals[k]] })
+        cur_self = @state.context.frame_self(@state.frame)
+        locals[:self] = cur_self unless cur_self.to_s == 'main'
+        puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
       end
     end
   end
