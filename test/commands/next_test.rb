@@ -11,12 +11,12 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def self.add_four(num)
-         7:        num += 4
-         8:        num
-         9:      end
-        10:    end
-        11:
-        12:    byebug
+         7:        byebug
+         8:        num += 4
+         9:        num += 2
+        10:        num
+        11:      end
+        12:    end
         13:
         14:    res = #{example_class}.add_four(7)
         15:
@@ -27,63 +27,32 @@ module Byebug
 
     def test_next_goes_to_the_next_line
       enter 'next'
-      debug_code(program) do
-        assert_equal 16, state.line,
-                     "Unexpected position: #{state.file}:#{state.line}"
-      end
+
+      debug_code(program) { assert_location example_path, 9 }
     end
 
     def test_n_goes_to_the_next_line
       enter 'n'
-      debug_code(program) do
-        assert_equal 16, state.line,
-                     "Unexpected position: #{state.file}:#{state.line}"
-      end
-    end
 
-    def test_next_does_not_stop_at_byebug_internal_frames
-      enter 'next 2'
-      debug_code(program) { refute_match(/byebug.test.support/, state.file) }
-    end
-  end
-
-  #
-  # Tests step/next with arguments higher than one.
-  #
-  class MoreThanOneNextTestCase < TestCase
-    def program
-      strip_line_numbers <<-EOC
-         1:  module Byebug
-         2:    #
-         3:    # Toy class to test advanced stepping.
-         4:    #
-         5:    class #{example_class}
-         6:      def self.add_three(num)
-         7:        byebug
-         8:        2.times do
-         9:          num += 1
-        10:        end
-        11:
-        12:        num *= 2
-        13:        num
-        14:      end
-        15:    end
-        16:
-        17:    res = #{example_class}.add_three(7)
-        18:
-        19:    res
-        20:  end
-      EOC
+      debug_code(program) { assert_location example_path, 9 }
     end
 
     def test_next_stays_in_current_frame_while_not_finished
       enter 'next 2'
-      debug_code(program) { assert_equal 13, state.line }
+
+      debug_code(program) { assert_location example_path, 10 }
     end
 
     def test_next_goes_up_a_frame_when_current_frame_finishes
       enter 'next 3'
-      debug_code(program) { assert_equal 19, state.line }
+
+      debug_code(program) { assert_equal 16, state.line }
+    end
+
+    def test_next_does_not_stop_at_byebug_internal_frames
+      enter 'next 4'
+
+      debug_code(program) { refute_match(/byebug.test.support/, state.file) }
     end
   end
 
