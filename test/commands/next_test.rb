@@ -59,7 +59,7 @@ module Byebug
   #
   # Test for See [#103](https://github.com/deivid-rodriguez/byebug/issues/103)
   #
-  class NextWhenReturnInsideLoopInsideInitialize < TestCase
+  class NextWhenReturnInsideLoopInsideInitializeTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  byebug
