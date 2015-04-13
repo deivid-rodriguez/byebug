@@ -26,16 +26,19 @@ files. Travis CI will do the automatic check anyways.
 ## Getting started
 
 Once you have a local clone of `byebug`, you can start digging in the source
-code. First run `bundle install` to get development & test dependencies
-installed. Also make sure you compile the C-extension using `bundle exec rake
-compile`, otherwise you won't be able to use your local clone. You can also run
-the test suite as the default rake task (`bundle exec rake`). This task is
-composed of 4 subtasks:
+code.
 
-    bundle exec rake compile # compiles the C-extension
-    bundle exec rake test # Run the test suite
-    bundle exec rake rubocop # Run RuboCop's checks on the Ruby files
-    bundle exec rake ccop # Run `indent`'s checks on the C files
+* First run `bundle install` to get development & test dependencies installed.
+* Then install the [overcommit][] hooks using `bundle exec overcommit
+--install`. They will review your changes before they are committed, checking
+they are consistent with the project's code style.
+* Also make sure you compile the C-extension using `bundle exec rake
+compile`, otherwise you won't be able to use your local clone.
+* You can also run the test suite as the default rake task (`bundle exec rake`).
+This task is composed of 2 subtasks: `bundle exec rake compile` && `bundle exec
+rake test`.
 
 After having done this, just read the code and improve it! Your contribution is
 appreciated a lot!
+
+[overcommit]: https://github.com/brigade/overcommit/

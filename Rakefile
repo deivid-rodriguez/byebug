@@ -28,17 +28,12 @@ task :devkit do
   end
 end
 
-require 'rubocop/rake_task'
-
-desc 'Run RuboCop'
-task(:rubocop) { RuboCop::RakeTask.new }
-
-require_relative 'tasks/ccop.rb'
+#
+# Custom tasks for development
+#
 require_relative 'tasks/dev_utils.rb'
 
-default_tasks = %i(compile test rubocop)
-default_tasks << :ccop unless RUBY_PLATFORM =~ /darwin/
+default_tasks = %i(compile test)
 
 task default: default_tasks
-
 task complete: [:clobber] + default_tasks
