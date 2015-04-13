@@ -15,6 +15,5 @@ end
 
 group :development do
   gem 'overcommit', '0.24.0', require: false
-  gem 'travis', '~> 1.7', require: false
   gem 'wwtd', '0.9.1', require: false
 end
