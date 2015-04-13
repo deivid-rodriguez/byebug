@@ -7,11 +7,12 @@ branches:
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
+  - gem update --system || test true
   - gem --version
   - appveyor DownloadFile %bundler_url% -FileName bundler.gem
-  - gem install --local bundler.gem --quiet --no-ri --no-rdoc
+  - gem install --local bundler.gem --no-document
   - bundler --version
-  - bundle install
+  - bundle install --without development --jobs 3 --retry 3
 
 build_script:
   - bundle exec rake compile
@@ -28,7 +29,7 @@ environment:
     - ruby_version: '22'
     - ruby_version: 22-x64
 
-  bundler_url: https://rubygems.org/downloads/bundler-1.9.2.gem
+  bundler_url: https://rubygems.org/downloads/bundler-1.9.3.gem
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
 41cab138408'
