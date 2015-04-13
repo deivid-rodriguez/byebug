@@ -112,13 +112,15 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', '\s$']
 
+  #
+  # Disabled due to https://github.com/causes/overcommit/issues/153
+  #
   TravisLint:
     description: 'Checking Travis CI configuration'
-    enabled: true
     required_executable: 'travis'
+    enabled: false
     flags: ['lint']
     install_command: 'gem install travis'
-    enabled: false # https://github.com/causes/overcommit/issues/153
     command: ['bundle', 'exec', 'travis']
     on_warn: pass
     include: '.travis.yml'
