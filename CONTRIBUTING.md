@@ -1,3 +1,29 @@
+## Getting started
+
+The following steps should help you getting started:
+
+* `Byebug` depends on the TracePoint API provided by `ruby-core`. This is a
+young API and a lot of bugs have been recently corrected, so make sure you
+always have the lastest patch level release installed.
+* Get a local clone of `byebug`'s source code.
+* Run `bundle install` to get development & test dependencies installed.
+* Install the [overcommit][] hooks using `bundle exec overcommit --install`.
+They will review your changes before they are committed, checking they are
+consistent with the project's code style. If you're changing C files, make sure
+you have the GNU indent utility installed in your system. `sudo apt-get install
+indent` for linux or `brew install gnu-indent --with-default-names` should do
+the job.
+* Make sure you compile the C-extension using `bundle exec rake compile`.
+Otherwise you won't be able to use `byebug`.
+* Run the test suite using the default rake task (`bundle exec rake`). This
+task is composed of 2 subtasks: `bundle exec rake compile` && `bundle exec rake
+test`.
+
+After having done this, just read the code and improve it! Your contribution is
+appreciated a lot!
+
+[overcommit]: https://github.com/brigade/overcommit/
+
 ## Byebug as a C-extension
 
 Byebug is a gem developed as a C-extension. The debugger internal's
@@ -8,37 +34,3 @@ or the feature you are willing to add. You can learn more about C-extensions
 [here](http://tenderlovemaking.com/2009/12/18/writing-ruby-c-extensions-part-1.html)
 or
 [here](http://tenderlovemaking.com/2010/12/11/writing-ruby-c-extensions-part-2.html).
-
-
-## Prerequisites
-
-`Byebug` depends on the TracePoint API provided by `ruby-core`. This is a young
-API and a lot of bugs have been recently corrected. Without this fixes,
-`byebug` will fail to work properly, so make sure you have always the last
-patch level releases of Ruby installed.
-
-Also, if you are developing on linux, make sure you have the GNU indent utility
-installed for automatic check of code style in C files. If you're developing in
-MacOSX, just make sure you keep a consistent style if you edit the C-extension
-files. Travis CI will do the automatic check anyways.
-
-
-## Getting started
-
-Once you have a local clone of `byebug`, you can start digging in the source
-code.
-
-* First run `bundle install` to get development & test dependencies installed.
-* Then install the [overcommit][] hooks using `bundle exec overcommit
---install`. They will review your changes before they are committed, checking
-they are consistent with the project's code style.
-* Also make sure you compile the C-extension using `bundle exec rake
-compile`, otherwise you won't be able to use your local clone.
-* You can also run the test suite as the default rake task (`bundle exec rake`).
-This task is composed of 2 subtasks: `bundle exec rake compile` && `bundle exec
-rake test`.
-
-After having done this, just read the code and improve it! Your contribution is
-appreciated a lot!
-
-[overcommit]: https://github.com/brigade/overcommit/
