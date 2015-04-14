@@ -34,7 +34,7 @@ class LoopRunner
                system("chruby-exec #{version} -- #{cmd}")
              end
 
-    exit($CHILD_STATUS) unless status
+    exit(status) unless status && status != 0
   end
 end
 
