@@ -49,16 +49,16 @@ end
 #
 # @example Run tests 1 time for each Ruby in 2.0 and 2.1
 #
-#   $ TIMES=1 RUBIES=2.0.0,2.1.5 rake loop_tests
+#   $ TIMES=1 RUBIES=2.0,2.1 rake loop_tests
 #
 # @example Run tests 1 time using Ruby 2.0 and rvm
 #
-#   $ MANAGER=rvm TIMES=1 RUBIES=2.0.0,2.1.5 rake loop_tests
+#   $ MANAGER=rvm TIMES=1 RUBIES=2.0,2.1 rake loop_tests
 #
 desc 'Runs tests continuously'
 task :loop_tests do
   iterations = (ENV['TIMES'] || '8').to_i
-  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0.0 2.1.5 2.2.1)
+  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
   ruby_manager = ENV['MANAGER'] || 'chruby'
 
   LoopRunner.new(iterations, rubies, ruby_manager).run
