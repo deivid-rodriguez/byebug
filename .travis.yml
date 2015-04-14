@@ -7,6 +7,10 @@ language: ruby
 install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install indent; fi
 
+before_script:
+  - git config --local user.email 'travis@travis.ci'
+  - git config --local user.name 'Travis CI'
+
 script:
   - gem update --system || test true
   - gem install bundler --no-document || test true
