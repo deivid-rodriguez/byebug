@@ -24,8 +24,6 @@ class LoopRunner
       run_command(version, 'bundle exec rake compile')
 
       @iterations.times { run_command(version, 'bundle exec rake test') }
-
-      run_command(version, 'bundle exec rake rubocop')
     end
   end
 
