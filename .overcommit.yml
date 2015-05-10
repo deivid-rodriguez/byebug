@@ -130,8 +130,8 @@ PreCommit:
     include: '.travis.yml'
 
   YamlSyntax:
-    enabled: true
     description: 'Checking YAML syntax'
+    enabled: true
     include:
       - '**/*.yaml'
       - '**/*.yml'
