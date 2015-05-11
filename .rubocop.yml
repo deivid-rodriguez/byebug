@@ -3,6 +3,8 @@ AllCops:
   Exclude:
     - tmp/**/*
     - pkg/**/*
+  DisplayCopNames: true
+  DisplayStyleGuide: true
 
 TrivialAccessors:
   ExactNameMatch: true
