@@ -11,7 +11,7 @@ group :development, :test do
   gem 'minitest', '~> 5.6'
   gem 'simplecov', '0.10.0', require: false
   gem 'codeclimate-test-reporter', '0.4.7', require: false
-  gem 'overcommit', '0.24.0', require: false
+  gem 'overcommit', '0.25.0', require: false
   gem 'travis', '~> 1.7', require: false
 end
 

@@ -94,7 +94,7 @@ PreCommit:
     required_executable: 'grep'
     flags: ['-IHn', '^<<<<<<<\s']
 
-  Rubocop:
+  RuboCop:
     description: 'Analyzing with Rubocop'
     enabled: true
     required_executable: 'rubocop'
