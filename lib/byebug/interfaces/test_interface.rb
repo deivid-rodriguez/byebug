@@ -7,7 +7,9 @@ module Byebug
 
     def initialize
       super()
-      @input, @output, @error = [], [], []
+      @input = []
+      @output = []
+      @error = []
     end
 
     def errmsg(message)
@@ -32,7 +34,9 @@ module Byebug
     end
 
     def clear
-      @input, @output, @error = [], [], []
+      @input = []
+      @output = []
+      @error = []
       history.clear
     end
 

@@ -15,14 +15,15 @@ module Byebug
     end
 
     def execute
-      key, value = @match[:setting], @match[:value]
+      key = @match[:setting]
+      value = @match[:value]
       return puts(help) if key.nil? && value.nil?
 
       setting = Setting.find(key)
       return errmsg(pr('set.errors.unknown_setting', key: key)) unless setting
 
       if !setting.boolean? && value.nil?
-        value, err = nil, pr('set.errors.must_specify_value', key: key)
+        err = pr('set.errors.must_specify_value', key: key)
       elsif setting.boolean?
         value, err = get_onoff(value, key =~ /^no/ ? false : true)
       elsif setting.integer?

@@ -16,7 +16,7 @@ module Byebug
       history = @state.interface.history
 
       if @match[:num_cmds]
-        size, _ = get_int(@match[:num_cmds], 'history', 1, history.size)
+        size, = get_int(@match[:num_cmds], 'history', 1, history.size)
         return errmsg(err) unless size
       end
 

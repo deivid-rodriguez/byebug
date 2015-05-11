@@ -77,11 +77,11 @@ module Byebug
     end
 
     def parse_range(input, size, max_line)
-      first, err = get_int(input.split(/[-,]/)[0], 'List', 1, max_line)
+      first, err = get_int(lower_bound(input), 'List', 1, max_line)
       return [-1, -1] if err
 
-      if input.split(/[-,]/)[1]
-        last, _ = get_int(input.split(/[-,]/)[1], 'List', 1, max_line)
+      if upper_bound(input)
+        last, = get_int(upper_bound(input), 'List', 1, max_line)
         return [-1, -1] unless last
 
         last = amend(last, max_line)
@@ -121,6 +121,35 @@ module Byebug
         mark = lineno + 1 == @state.line ? '=> ' : '   '
         puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
       end
+    end
+
+    private
+
+    #
+    # @param range [String] A string with an integer range format
+    #
+    # @return [String] The lower bound of the given range
+    #
+    def lower_bound(range)
+      split_range(range)[0]
+    end
+
+    #
+    # @param range [String] A string with an integer range format
+    #
+    # @return [String] The upper bound of the given range
+    #
+    def upper_bound(range)
+      split_range(range)[1]
+    end
+
+    #
+    # @param range [String] A string with an integer range format
+    #
+    # @return [Array] The upper & lower bounds of the given range
+    #
+    def split_range(str)
+      str.split(/[-,]/)
     end
   end
 end

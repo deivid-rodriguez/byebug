@@ -14,7 +14,9 @@ class LoopRunner
   # @param manager [Array] Ruby version manager to use ('rvm' or 'chruby')
   #
   def initialize(iterations, rubies, manager)
-    @iterations, @rubies, @manager = iterations, rubies, manager
+    @iterations = iterations
+    @rubies = rubies
+    @manager = manager
   end
 
   def run

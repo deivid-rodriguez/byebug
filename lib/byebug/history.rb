@@ -85,9 +85,7 @@ module Byebug
     # Array of ids of the last n commands.
     #
     def last_ids(n)
-      from, to = 1 + self.size - n, self.size
-
-      (from..to).to_a
+      (1 + size - n..size).to_a
     end
 
     #

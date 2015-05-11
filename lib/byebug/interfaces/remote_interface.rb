@@ -7,7 +7,9 @@ module Byebug
   class RemoteInterface < Interface
     def initialize(socket)
       super()
-      @input, @output, @error = socket, socket, socket
+      @input = socket
+      @output = socket
+      @error = socket
     end
 
     def read_command(prompt)

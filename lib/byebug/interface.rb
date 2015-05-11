@@ -17,7 +17,8 @@ module Byebug
     attr_reader :input, :output, :error
 
     def initialize
-      @command_queue, @history = [], History.new
+      @command_queue = []
+      @history = History.new
     end
 
     #

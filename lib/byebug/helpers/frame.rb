@@ -10,19 +10,21 @@ module Byebug
 
       def navigate_to_frame(jump_no)
         return if jump_no == 0
-        total_jumps, current_jumps, new_pos = jump_no.abs, 0, @state.frame
-        step = jump_no / total_jumps # +1 (up) or -1 (down)
+
+        current_jumps = 0
+        current_pos = @state.frame
 
         loop do
-          new_pos += step
-          break if new_pos < 0 || new_pos >= @state.context.stack_size
+          current_pos += direction(jump_no)
+          break if current_pos < 0 || current_pos >= @state.context.stack_size
 
-          next if @state.c_frame?(new_pos)
+          next if @state.c_frame?(current_pos)
 
           current_jumps += 1
-          break if current_jumps == total_jumps
+          break if current_jumps == jump_no.abs
         end
-        new_pos
+
+        current_pos
       end
 
       def adjust_frame(frame, absolute)
@@ -57,6 +59,17 @@ module Byebug
 
         { mark: mark, pos: pos, call: call, file: file, line: line,
           full_path: full_path }
+      end
+
+      private
+
+      #
+      # @param [Integer] A positive or negative integer
+      #
+      # @return [Integer] +1 if step is positive / -1 if negative
+      #
+      def direction(step)
+        step / step.abs
       end
     end
   end

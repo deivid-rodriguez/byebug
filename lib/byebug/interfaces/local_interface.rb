@@ -5,7 +5,9 @@ module Byebug
   class LocalInterface < Interface
     def initialize
       super()
-      @input, @output, @error = STDIN, STDOUT, STDERR
+      @input = STDIN
+      @output = STDOUT
+      @error = STDERR
     end
 
     #

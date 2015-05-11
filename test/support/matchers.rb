@@ -38,7 +38,8 @@ module Minitest
     end
 
     def assert_location(file, line)
-      expected, actual = "#{file}:#{line}", "#{state.file}:#{state.line}"
+      expected = "#{file}:#{line}"
+      actual = "#{state.file}:#{state.line}"
       msg = "Expected location to be #{expected}, but was #{actual}"
 
       assert file == state.file && line == state.line, msg

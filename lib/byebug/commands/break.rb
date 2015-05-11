@@ -48,7 +48,8 @@ module Byebug
     private
 
     def line_breakpoint(loc)
-      line, file_line = loc.match(/^(\d+)$/), loc.match(/^([^:]+):(\d+)$/)
+      line = loc.match(/^(\d+)$/)
+      file_line = loc.match(/^([^:]+):(\d+)$/)
       return nil unless line || file_line
 
       f, l = line ? [@state.file, line[1]] : [file_line[1], file_line[2]]
@@ -60,7 +61,8 @@ module Byebug
 
     def method_breakpoint(location)
       location.match(/([^.#]+)[.#](.+)/) do |match|
-        k, m = bb_warning_eval(match[1]), match[2]
+        k = bb_warning_eval(match[1])
+        m = match[2]
 
         klass = k && k.is_a?(Module) ? k.name : match[1]
         method = m.intern
@@ -70,7 +72,8 @@ module Byebug
     end
 
     def check_errors(file, line)
-      path, deco_path = File.expand_path(file), normalize(file)
+      path = File.expand_path(file)
+      deco_path = normalize(file)
 
       fail(pr('break.errors.source', file: deco_path)) unless File.exist?(path)
 

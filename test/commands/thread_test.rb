@@ -66,7 +66,8 @@ module Byebug
     end
 
     def test_thread_list_marks_current_thread_with_a_plus_sign
-      thnum, file = nil, example_path
+      thnum = nil
+      file = example_path
       enter 'cont 13', 'thread list', 'lock << 0'
       debug_code(program) { thnum = curr_thnum }
 

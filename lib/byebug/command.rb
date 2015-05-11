@@ -14,7 +14,8 @@ module Byebug
     include Helpers::StringHelper
 
     def initialize(state)
-      @match, @state = nil, state
+      @match = nil
+      @state = state
     end
 
     def match(input)

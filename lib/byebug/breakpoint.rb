@@ -48,7 +48,8 @@ module Byebug
     # @param filename [String] File name to inspect for possible breakpoints
     #
     def self.potential_lines(filename)
-      name, lines = "#{Time.new.to_i}_#{rand(2**31)}", {}
+      name = "#{Time.new.to_i}_#{rand(2**31)}"
+      lines = {}
       iseq = RubyVM::InstructionSequence.compile(File.read(filename), name)
 
       iseq.disasm.each_line do |line|

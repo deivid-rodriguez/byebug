@@ -38,7 +38,8 @@ module Byebug
     # finishing the program.
     #
     def initialize(stop = true, quit = true)
-      @stop, @quit = stop, quit
+      @stop = stop
+      @quit = quit
     end
 
     #

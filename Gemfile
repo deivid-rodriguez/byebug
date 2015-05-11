@@ -6,7 +6,7 @@ gem 'rake', '~> 10.4'
 
 group :development, :test do
   gem 'rake-compiler', '0.9.5'
-  gem 'rubocop', '0.30.0'
+  gem 'rubocop', '0.31.0'
   gem 'mocha', '~> 1.1'
   gem 'minitest', '~> 5.6'
   gem 'simplecov', '0.10.0', require: false

@@ -232,7 +232,8 @@ module Byebug
     # @param *args [Array] New value for the program arguments
     #
     def with_command_line(program_name, *args)
-      original_program_name, original_argv = $PROGRAM_NAME, $ARGV
+      original_program_name = $PROGRAM_NAME
+      original_argv = $ARGV
       $PROGRAM_NAME = program_name
       $ARGV.replace(args)
 

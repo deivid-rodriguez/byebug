@@ -89,11 +89,7 @@ module Byebug
 
       locals = context.frame_locals(pos) unless Setting[:callstyle] == 'short'
       my_args = args.map do |arg|
-        case arg[0]
-        when :block then prefix, default = '&', 'block'
-        when :rest then prefix, default = '*', 'args'
-        else prefix, default = '', nil
-        end
+        prefix, default = prefix_and_default_from(arg[0])
 
         kls = if Setting[:callstyle] == 'short' || arg[1].nil? || locals.empty?
                 ''
@@ -175,6 +171,17 @@ module Byebug
       return fullpath if components.size <= 2
 
       File.join('...', components[-3..-1])
+    end
+
+    def prefix_and_default_from(arg_type)
+      case arg_type
+      when :block
+        return ['&', 'block']
+      when :rest
+        return ['*', 'args']
+      else
+        return ['', nil]
+      end
     end
   end
 end
