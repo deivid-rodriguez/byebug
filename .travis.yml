@@ -37,6 +37,8 @@ matrix:
   exclude:
     - rvm: 2.2
       os: osx
+    - rvm: ruby-head
+      os: osx
 
   allow_failures:
   - rvm: ruby-head
