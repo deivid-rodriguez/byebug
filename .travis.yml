@@ -25,8 +25,8 @@ script:
 
 rvm:
   - 2.0.0
-  - 2.1.6
-  - 2.2.2
+  - 2.1
+  - 2.2
   - ruby-head
 
 env:
@@ -34,8 +34,13 @@ env:
   - CC=clang
 
 matrix:
+  exclude:
+    - rvm: 2.2
+      os: osx
+
   allow_failures:
   - rvm: ruby-head
+
   fast_finish: true
 
 addons:
