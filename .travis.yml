@@ -35,8 +35,6 @@ env:
 
 matrix:
   exclude:
-    - rvm: 2.2
-      os: osx
     - rvm: ruby-head
       os: osx
 
