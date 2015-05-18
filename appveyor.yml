@@ -3,11 +3,11 @@ version: "{build}"
 branches:
   only:
     - master
+    - appveyor_tests
 
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
-  - gem update --system || test true
   - gem --version
   - appveyor DownloadFile %bundler_url% -FileName bundler.gem
   - gem install --local bundler.gem --no-document
