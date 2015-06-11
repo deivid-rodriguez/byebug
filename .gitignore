@@ -11,8 +11,6 @@ coverage
 .byebugrc
 .byebug_hist
 
-Gemfile.lock
-
 lib/byebug/byebug.so
 lib/byebug/byebug.bundle
 .ruby-version
