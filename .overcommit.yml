@@ -10,101 +10,32 @@
 # Hooks that are run against every commit message after a user has written it.
 #
 CommitMsg:
-  CapitalizedSubject:
-    description: 'Checking subject lines start with a capital letter'
-    enabled: true
-
   HardTabs:
-    description: 'Checking for hard tabs'
     enabled: true
 
   RussianNovel:
-    description: 'Checking length of commit message'
     enabled: true
-    quiet: true
+    quiet: false
 
   SingleLineSubject:
-    description: 'Checking subject line'
     enabled: true
-
-  TextWidth:
-    description: 'Checking text width'
-    enabled: true
-    max_subject_width: 60
-    max_body_width: 72
 
 #
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed.
 #
 PreCommit:
-  AuthorEmail:
-    description: 'Checking author email'
-    enabled: true
-    requires_files: false
-    required: true
-    quiet: true
-    pattern: '^[^@]+@.*$'
-
-  AuthorName:
-    description: 'Checking for author name'
-    enabled: true
-    requires_files: false
-    required: true
-    quiet: true
-
-  BrokenSymlinks:
-    description: 'Checking for broken symlinks'
-    enabled: true
-    quiet: true
-
   BundleCheck:
-    description: 'Checking Gemfile dependencies'
     enabled: true
-    required_executable: 'bundle'
-    flags: ['check']
-    install_command: 'gem install bundler'
-    include:
-      - 'Gemfile'
-      - 'Gemfile.lock'
-      - '*.gemspec'
 
   HardTabs:
-    description: 'Checking for hard tabs'
     enabled: true
-    quiet: true
-    required_executable: 'grep'
-    flags: ['-IHn', "\t"]
-    exclude:
-      - '**/*.go'
-      - '**/Makefile'
-      - '.gitmodules'
 
   LocalPathsInGemfile:
-    description: 'Checking for local paths in Gemfile'
     enabled: true
-    required_executable: 'grep'
-    flags: ['-IHnE', '(\bpath:)|(:path\s*=>)']
-    include: '**/Gemfile'
-
-  MergeConflicts:
-    description: 'Checking for merge conflicts'
-    enabled: true
-    quiet: true
-    required_executable: 'grep'
-    flags: ['-IHn', '^<<<<<<<\s']
 
   RuboCop:
-    description: 'Analyzing with Rubocop'
     enabled: true
-    required_executable: 'rubocop'
-    install_command: 'gem install rubocop'
-    include:
-      - '**/*.gemspec'
-      - '**/*.rake'
-      - '**/*.rb'
-      - '**/Gemfile'
-      - '**/Rakefile'
 
   CCop:
     description: 'Analyzing C files with indent'
@@ -114,24 +45,10 @@ PreCommit:
     include: 'ext/byebug/*.c'
 
   TrailingWhitespace:
-    description: 'Checking for trailing whitespace'
     enabled: true
-    required_executable: 'grep'
-    flags: ['-IHn', '\s$']
 
   TravisLint:
-    description: 'Checking Travis CI configuration'
     enabled: true
-    required_executable: 'travis'
-    flags: ['lint']
-    install_command: 'gem install travis'
-    command: ['bundle', 'exec', 'travis']
-    on_warn: pass
-    include: '.travis.yml'
 
   YamlSyntax:
-    description: 'Checking YAML syntax'
     enabled: true
-    include:
-      - '**/*.yaml'
-      - '**/*.yml'
