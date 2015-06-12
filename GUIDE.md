@@ -216,37 +216,95 @@ even drop it in your `.byebugrc` file if you want that behaviour permanently.
 The output of `private_methods`, thought, is unwieldy for our purpose: check
 whether `hanoi` method is in the list. Fortunately, byebug has nice formatting
 features: we can sort the output and put it into columns list using the print
-command `ps`. It also has a `width` setting that let's us adapt the width of
-the output so that it nicely fits our screen.
+command `ps`.
 
-```bash
-(byebug) set width 80
-Maximum width of byebug's output is 80
-(byebug) ps private_methods
-Array             default_src_encoding  open                        sleep
-Complex           define_method         p                           spawn
-Digest            eval                  pp                          sprintf
-Float             exec                  print                       srand
-Hash              exit                  printf                      syscall
-Integer           exit!                 private                     system
-Pathname          fail                  proc                        test
-Rational          fork                  public                      throw
-String            format                putc                        timeout
-URI               gem_original_require  puts                        trace_var
-__callee__        gets                  raise                       trap
-__dir__           global_variables      rand                        untrace_var
-__method__        include               readline                    using
-`                 initialize            readlines                   warn
-abort             initialize_clone      require                     y
-at_exit           initialize_copy       require_relative
-autoload          initialize_dup        respond_to_missing?
-autoload?         iterator?             rubygems_require
-binding           lambda                select
-block_given?      load                  set_trace_func
-caller            local_variables       singleton_method_added
-caller_locations  loop                  singleton_method_removed
-catch             method_missing        singleton_method_undefined
-(byebug)
+```
+[:Array,
+ :Complex,
+ :DelegateClass,
+ :Digest,
+ :Float,
+ :Hash,
+ :Integer,
+ :Pathname,
+ :Rational,
+ :String,
+ :URI,
+ :__callee__,
+ :__dir__,
+ :__method__,
+ :`,
+ :abort,
+ :at_exit,
+ :autoload,
+ :autoload?,
+ :binding,
+ :block_given?,
+ :caller,
+ :caller_locations,
+ :catch,
+ :default_src_encoding,
+ :define_method,
+ :eval,
+ :exec,
+ :exit,
+ :exit!,
+ :fail,
+ :fork,
+ :format,
+ :gem_original_require,
+ :gets,
+ :global_variables,
+ :include,
+ :initialize,
+ :initialize_clone,
+ :initialize_copy,
+ :initialize_dup,
+ :iterator?,
+ :lambda,
+ :load,
+ :local_variables,
+ :loop,
+ :method_missing,
+ :open,
+ :p,
+ :pp,
+ :print,
+ :printf,
+ :private,
+ :proc,
+ :public,
+ :putc,
+ :puts,
+ :raise,
+ :rand,
+ :readline,
+ :readlines,
+ :require,
+ :require_relative,
+ :respond_to_missing?,
+ :rubygems_require,
+ :select,
+ :set_trace_func,
+ :singleton_method_added,
+ :singleton_method_removed,
+ :singleton_method_undefined,
+ :sleep,
+ :spawn,
+ :sprintf,
+ :srand,
+ :syscall,
+ :system,
+ :test,
+ :throw,
+ :timeout,
+ :trace_var,
+ :trap,
+ :untrace_var,
+ :using,
+ :warn,
+ :y]
+
 ```
 
 Now let's see what happens after stepping:
@@ -1540,15 +1598,9 @@ typing just `n` will execute `byebug`'s command `next`.
 
 A similar command to `eval|p` is `pp` which tries to pretty print the result.
 
-If the value you want to print is an array, sometimes a columnized list looks
-nicer. Use `putl` for that. Notice however that entries are sorted to run down
-first rather than across. If the value is not an array `putl` will just call
-pretty-print.
-
-Sometimes you may want to print the array not only columnized, but sorted as
-well. The list of byebug help commands appears this way, and so does the output
-of the `method` commands. Use `ps` for that. If the value is not an array `ps`
-will just call pretty-print.
+Sometimes you may want to print the array sorted. The list of byebug help
+commands appears this way, and so does the output of the `method` commands. Use
+`ps` for that. If the value is not an array `ps` will just call pretty-print.
 
 ```bash
 (byebug) Kernel.instance_methods
@@ -1619,41 +1671,55 @@ will just call pretty-print.
  :gem,
  :pretty_inspect,
  :byebug]
-(byebug) putl Kernel.instance_methods
-nil?             trust                       is_a?
-===              freeze                      tap
-=~               frozen?                     send
-!~               to_s                        public_send
-eql?             inspect                     respond_to?
-hash             methods                     extend
-<=>              singleton_methods           display
-class            protected_methods           method
-singleton_class  private_methods             public_method
-clone            public_methods              singleton_method
-dup              instance_variables          define_singleton_method
-itself           instance_variable_get       object_id
-taint            instance_variable_set       to_enum
-tainted?         instance_variable_defined?  enum_for
-untaint          remove_instance_variable    gem
-untrust          instance_of?                pretty_inspect
-untrusted?       kind_of?
 (byebug) ps Kernel.instance_methods
-!~                       instance_of?                public_send
-<=>                      instance_variable_defined?  remove_instance_variable
-===                      instance_variable_get       respond_to?
-=~                       instance_variable_set       send
-class                    instance_variables          singleton_class
-clone                    is_a?                       singleton_method
-define_singleton_method  itself                      singleton_methods
-display                  kind_of?                    taint
-dup                      method                      tainted?
-enum_for                 methods                     tap
-eql?                     nil?                        to_enum
-extend                   object_id                   to_s
-freeze                   pretty_inspect              trust
-frozen?                  private_methods             untaint
-gem                      protected_methods           untrust
-hash                     public_method               untrusted?
+!~
+<=>
+===
+=~
+class
+clone
+define_singleton_method
+display
+dup
+enum_for
+eql?
+extend
+freeze
+frozen?
+gem
+hash
+instance_of?
+instance_variable_defined?
+instance_variable_get
+instance_variable_set
+instance_variables
+is_a?
+itself
+kind_of?
+method
+methods
+nil?
+object_id
+pretty_inspect
+private_methods
+protected_methods
+public_method
+public_send
+remove_instance_variable
+respond_to?
+send
+singleton_class
+singleton_method
+singleton_methods
+taint
+tainted?
+tap
+to_enum
+to_s
+trust
+untaint
+untrust
+untrusted?
 ```
 
 Finally, if you need more advanced functionality from REPL's, you can enter

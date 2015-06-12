@@ -5,8 +5,6 @@ module Byebug
   # Show methods of specific classes/modules/objects.
   #
   class MethodCommand < Command
-    include Columnize
-
     def regexp
       /^\s* m(?:ethod)? \s+ (i(:?nstance)?\s+)?/x
     end

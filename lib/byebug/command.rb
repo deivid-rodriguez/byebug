@@ -1,4 +1,3 @@
-require 'columnize'
 require 'forwardable'
 require 'byebug/helpers/string'
 

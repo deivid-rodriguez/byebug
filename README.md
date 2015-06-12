@@ -106,7 +106,6 @@ are debugging rails, start the server and once the execution gets to your
     `pp`        |              |
     `pry`       |              |
     `ps`        |              |
-    `putl`      |              |
     `quit`      | `exit`       |
     `restart`   |              |
     `save`      |              |

@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     byebug (5.0.0)
-      columnize (= 0.9.0)
 
 GEM
   remote: https://rubygems.org/
@@ -17,7 +16,6 @@ GEM
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
-    columnize (0.9.0)
     docile (1.1.5)
     ethon (0.7.3)
       ffi (>= 1.3.0)

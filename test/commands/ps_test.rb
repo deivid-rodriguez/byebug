@@ -3,13 +3,19 @@ module Byebug
   # Tests ps functionality.
   #
   class PsTestCase < TestCase
-    def test_ps_prints_expression_and_sorts_and_columnize_the_result
-      with_setting :width, 20 do
-        enter 'ps [1, 2, 3, 4, 5, 9, 8, 7, 6]'
-        debug_code(minimal_program)
+    def test_properly_evaluates_expressions
+      enter 'ps 3 + 2'
+      debug_code(minimal_program)
 
-        check_output_includes '1  3  5  7  9', '2  4  6  8'
-      end
+      check_output_includes '5'
+    end
+
+    def test_sorts_and_prettyprints_arrays
+      enter 'ps Kernel.instance_methods'
+      debug_code(minimal_program)
+
+      check_output_includes(/"byebug"/)
+      check_output_includes(/"class"/)
     end
   end
 end

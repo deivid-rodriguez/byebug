@@ -5,11 +5,11 @@ require 'byebug/helpers/eval'
 
 module Byebug
   #
-  # Evaluation, pretty printing, columnizing and sorting from byebug's prompt
+  # Enhanced evaluation of expressions from byebug's prompt. Besides
+  # evaluating, it sorts and pretty prints arrays.
   #
   class PsCommand < Command
     include Helpers::EvalHelper
-    include Columnize
 
     self.allow_in_control = true
 
@@ -23,7 +23,7 @@ module Byebug
         res = eval_with_setting(b, @match.post_match, Setting[:stack_on_error])
 
         if res.is_a?(Array)
-          puts "#{columnize(res.map(&:to_s).sort!, Setting[:width])}"
+          puts res.map(&:to_s).sort!
         else
           PP.pp(res, out)
           puts out.string

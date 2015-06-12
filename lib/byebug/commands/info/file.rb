@@ -64,8 +64,7 @@ module Byebug
         breakpoints = Breakpoint.potential_lines(file)
         return unless breakpoints
 
-        breakpoints.to_a.sort.columnize(line_prefix: '  ',
-                                        displaywidth: Setting[:width])
+        breakpoints.to_a.sort.join(' ')
       end
 
       def info_file_mtime(file)

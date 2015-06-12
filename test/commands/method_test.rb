@@ -48,7 +48,7 @@ module Byebug
       enter 'cont 23', 'method instance a'
       debug_code(program)
 
-      check_output_includes(/bla /)
+      check_output_includes('bla')
       check_output_doesnt_include(/foo /)
     end
   end

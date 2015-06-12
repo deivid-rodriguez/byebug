@@ -18,7 +18,6 @@ module Byebug
       @yaml_plain ||= {
         'foo' => {
           'bar' => 'plain {zee}, {uga} gaa',
-          'with_c' => '{arg} bla|c',
           'confirmations' => {
             'okay' => 'Okay?'
           }
@@ -76,19 +75,6 @@ module Byebug
           item.merge(zee: index)
         end
       )
-    end
-
-    include Byebug::TestUtils
-
-    def test_columnize_collection_with_modifier_c
-      with_setting :width, 30 do
-        assert_equal(
-          "1 bla  4 bla  7 bla  10 bla\n" \
-            "2 bla  5 bla  8 bla\n" \
-            '3 bla  6 bla  9 bla',
-          printer.print_collection('foo.with_c', (1..10)) { |i, _| { arg: i } }
-        )
-      end
     end
 
     def test_print_variables

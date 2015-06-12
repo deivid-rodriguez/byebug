@@ -1,3 +1,7 @@
+## 6.0.0
+### Removed
+* `putl` command.
+
 ## 5.0.0
 ### Fixed
 * [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`
