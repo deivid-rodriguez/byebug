@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   class DebuggerAliasTestCase < Minitest::Test
     def test_aliases_debugger_to_byebug

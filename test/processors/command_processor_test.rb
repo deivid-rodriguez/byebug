@@ -1,3 +1,6 @@
+require 'timeout'
+require 'test_helper'
+
 module Byebug
   #
   # Tests generic command functionality.

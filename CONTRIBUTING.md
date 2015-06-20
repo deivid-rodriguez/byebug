@@ -1,30 +1,52 @@
 ## Getting started
 
-The following steps should help you getting started:
+### Development dependencies
 
-* `Byebug` depends on the TracePoint API provided by `ruby-core`. This is a
+* `Byebug` depends on Ruby's TracePoint API provided by `ruby-core`. This is a
 young API and a lot of bugs have been recently corrected, so make sure you
 always have the lastest patch level release installed.
-* Get a local clone of `byebug`'s source code.
-* Run `bundle install` to get development & test dependencies installed.
-* Install the [overcommit][] hooks using `bundle exec overcommit --install`.
-They will review your changes before they are committed, checking they are
-consistent with the project's code style. If you're changing C files, make sure
-you have the GNU indent utility installed in your system. `sudo apt-get install
-indent` for linux or `brew install gnu-indent --with-default-names` should do
-the job.
+
+* The recommended tool to manage development dependencies is `bundler`. Run
+`gem install bundler` to install it.
+
+* Running `bundle install` inside a local clone of `byebug` will get development
+dependencies installed.
+
+
+### Running the test suite
+
 * Make sure you compile the C-extension using `bundle exec rake compile`.
 Otherwise you won't be able to use `byebug`.
+
 * Run the test suite using the default rake task (`bundle exec rake`). This
 task is composed of 2 subtasks: `bundle exec rake compile` && `bundle exec rake
 test`.
 
-After having done this, just read the code and improve it! Your contribution is
-appreciated a lot!
+* If you want to run specific tests, use the provided test runner, like so:
+
+  - Specific test files. For example,
+`script/minitest_runner test/commands/break_test.rb`
+
+  - Specific test classes. For example,
+`script/minitest_runner Byebug::BreakAtLinesTestCase`
+
+  - Specific tests. For example,
+`script/minitest_runner test_catch_removes_specific_catchpoint`
+
+  - You can combine any of them and you will get the union of all filters. For
+example: `script/minitest_runner Byebug::BreakAtLinesTestCase
+test_catch_removes_specific_catchpoint`
+
+
+### Code style
+
+* Byebug uses [overcommit][] to enforce code style. Install the git hooks using
+`bundle exec overcommit --install`. They will review your changes before they
+are committed, checking they are consistent with the project's code style.
 
 [overcommit]: https://github.com/brigade/overcommit/
 
-## Byebug as a C-extension
+### Byebug as a C-extension
 
 Byebug is a gem developed as a C-extension. The debugger internal's
 functionality is implemented in C (the interaction with the TracePoint API).

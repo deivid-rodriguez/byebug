@@ -1,3 +1,6 @@
+require 'mocha/mini_test'
+require 'test_helper'
+
 module Byebug
   #
   # Test signal sending functionality.

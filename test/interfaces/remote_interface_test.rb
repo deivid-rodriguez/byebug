@@ -1,3 +1,4 @@
+require 'test_helper'
 require 'byebug/runner'
 require 'mocha/mini_test'
 

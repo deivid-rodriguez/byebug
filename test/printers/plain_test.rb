@@ -1,3 +1,6 @@
+require 'mocha/mini_test'
+require 'test_helper'
+
 module Byebug
   class PrintersPlainTestCase < Minitest::Test
     def yaml_file_path(filename)

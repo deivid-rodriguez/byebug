@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   class MethodTestCase < TestCase
     def program

@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   #
   # Tests Byebug's command line history.

@@ -13,12 +13,6 @@ require 'rake/extensiontask'
 spec = Gem::Specification.load('byebug.gemspec')
 Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 
-desc 'Run the test suite'
-task :test do
-  files = Dir.glob('test/**/*_test.rb').join(' ')
-  system("ruby -w -Ilib test/test_helper.rb #{files}") || exit(false)
-end
-
 desc 'Activates DevKit'
 task :devkit do
   begin
@@ -32,6 +26,16 @@ end
 # Custom tasks for development
 #
 require_relative 'tasks/dev_utils.rb'
+
+#
+# Test task
+#
+desc 'Runs the test suite'
+task :test do
+  require_relative 'script/minitest_runner'
+
+  MinitestRunner.new.run
+end
 
 default_tasks = %i(compile test)
 

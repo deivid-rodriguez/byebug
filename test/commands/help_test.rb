@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   #
   # Test command line help system.

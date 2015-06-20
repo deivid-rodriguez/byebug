@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   #
   # Tests displaying values of expressions on every stop.

@@ -1,3 +1,5 @@
+require 'test_helper'
+
 module Byebug
   #
   # Tests reading Byebug commands from a file.
