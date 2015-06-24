@@ -119,7 +119,7 @@ module Byebug
       bind.eval('method(__method__).parameters')
     rescue NameError => e
       Byebug.errmsg \
-        "Exception #{e.class} (#{e.message}) while retreving frame params"
+        "Exception #{e.class} (#{e.message}) while retrieving frame params"
       []
     end
   end
