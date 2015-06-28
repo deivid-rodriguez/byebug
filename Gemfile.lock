@@ -89,7 +89,6 @@ GEM
     typhoeus (0.7.2)
       ethon (>= 0.7.4)
     websocket (1.2.2)
-    wwtd (0.9.1)
 
 PLATFORMS
   ruby
@@ -106,7 +105,6 @@ DEPENDENCIES
   rubocop (= 0.32.1)
   simplecov (= 0.10.0)
   travis (~> 1.7)
-  wwtd (= 0.9.1)
 
 BUNDLED WITH
    1.10.4

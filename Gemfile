@@ -14,7 +14,3 @@ group :development, :test do
   gem 'overcommit', '0.26.0', require: false
   gem 'travis', '~> 1.7', require: false
 end
-
-group :development do
-  gem 'wwtd', '0.9.1', require: false
-end
