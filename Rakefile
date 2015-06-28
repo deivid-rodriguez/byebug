@@ -1,18 +1,19 @@
 #
-# For the `rake release` task
+# For the `release` task
 #
 require 'bundler/gem_tasks'
 
 #
-# Prepend DevKit into compilation phase
+# For the `compile` task
 #
-task compile: :devkit if RUBY_PLATFORM =~ /mingw/
-
 require 'rake/extensiontask'
 
 spec = Gem::Specification.load('byebug.gemspec')
 Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 
+#
+# Prepend DevKit into compilation phase
+#
 desc 'Activates DevKit'
 task :devkit do
   begin
@@ -22,10 +23,7 @@ task :devkit do
   end
 end
 
-#
-# Custom tasks for development
-#
-require_relative 'tasks/dev_utils.rb'
+task compile: :devkit if RUBY_PLATFORM =~ /mingw/
 
 #
 # Test task
@@ -41,3 +39,8 @@ default_tasks = %i(compile test)
 
 task default: default_tasks
 task complete: [:clobber] + default_tasks
+
+#
+# Custom tasks for development
+#
+require_relative 'tasks/dev_utils.rb'

@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Byebug
   #
-  # Tests ps functionality.
+  # Tests enhanced evaluation functionality.
   #
   class PsTestCase < TestCase
     def test_properly_evaluates_expressions

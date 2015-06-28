@@ -1,6 +1,9 @@
 require 'test_helper'
 
 module Byebug
+  #
+  # Tests commands for listing available methods.
+  #
   class MethodTestCase < TestCase
     def program
       strip_line_numbers <<-EOC

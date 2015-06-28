@@ -1679,7 +1679,7 @@ example, if you want to print a variable called `n `, type `eval n` because
 typing just `n` will execute `byebug`'s command `next`.
 
 Finally, if you need more advanced functionality from REPL's, you can enter
-`irb` or `pry` using `irb` or `pry` commands. The bindings environment will be
+`irb` or `pry` using `irb` or `pry` commands. The binding's environment will be
 set to the current state in the program.  When you leave the repl and go back to
 `byebug`'s command prompt we show the file, line and text position of the
 program. If you issue a `list` without location information, the default
@@ -1720,7 +1720,7 @@ def triangle(n)
 (byebug)
 ```
 
-### Printing variables
+### Printing variables: var
 
 Byebug can print many different information about variables. Such as
 * `var const <object>`. Show the constants of `<object>`. This is basically
@@ -1734,8 +1734,8 @@ basically listing `<object>.instance_variables`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
 same as running `ps <object>.instance_methods(false)`.
 * `method <class-or-module>`. Show methods of the class or module
-`<class-or-module>`. Basically this is the same as running
-`ps <class-or-module>.methods`.
+`<class-or-module>`. Basically this is the same as running `ps
+<class-or-module>.methods`.
 
 ### Examining Program Source Files: list
 

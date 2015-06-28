@@ -11,17 +11,17 @@ module Byebug
     include Helpers::ParseHelper
 
     #
-    # Error class signaling absence of a script to debug
+    # Error class signaling absence of a script to debug.
     #
     class NoScript < StandardError; end
 
     #
-    # Error class signaling a non existent script to debug
+    # Error class signaling a non existent script to debug.
     #
     class NonExistentScript < StandardError; end
 
     #
-    # Error class signaling a script with invalid Ruby syntax
+    # Error class signaling a script with invalid Ruby syntax.
     #
     class InvalidScript < StandardError; end
 
@@ -56,7 +56,7 @@ module Byebug
     end
 
     #
-    # Starts byebug to debug a program
+    # Starts byebug to debug a program.
     #
     def run
       prepare_options.order!($ARGV)
@@ -91,7 +91,7 @@ module Byebug
     private
 
     #
-    # Processes options passed from the command line
+    # Processes options passed from the command line.
     #
     def prepare_options
       OptionParser.new(banner, 25) do |opts|
@@ -144,7 +144,7 @@ module Byebug
     end
 
     #
-    # Extracts debugged program from command line args
+    # Extracts debugged program from command line args.
     #
     def setup_cmd_line_args
       Byebug.mode = :standalone

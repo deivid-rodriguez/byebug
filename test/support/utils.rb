@@ -13,11 +13,10 @@ module Byebug
     # by Processor. May be handy when you need build a command depending on the
     # current context/state.
     #
-    # Usage:
-    #   enter 'b 12'
+    # @example
+    #
     #   enter 'b 12', 'cont'
-    #   enter ['b 12', 'cont']
-    #   enter 'b 12', ->{"disable #{breakpoint.id}"}, 'cont'
+    #   enter 'b 12', ->{ "disable #{breakpoint.id}" }, 'cont'
     #
     def enter(*messages)
       interface.input.concat(messages)
@@ -48,10 +47,9 @@ module Byebug
     #   prog <<-EOC
     #     byebug
     #     puts 'hello'
-    #     puts 'byebye'
     #   EOC
     #
-    #   debug_code(prog) { assert_equal 3, state.line }
+    #   debug_code(prog) { assert_equal 2, state.line }
     #
     def debug_code(program, &block)
       interface.test_block = block
@@ -107,17 +105,13 @@ module Byebug
     #
     #   strip_line_numbers <<-EOF
     #     1:  puts 'hello'
-    #     2:
-    #     3:  puts 'bye'
+    #     2:  puts 'bye'
     #   EOF
     #
     #   returns
     #
-    #   <<-EOF
     #   puts 'hello'
-    #
     #   puts 'bye'
-    #   EOF
     #
     def strip_line_numbers(str_with_ruby_code)
       str_with_ruby_code.gsub(/  *\d+: ? ?/, '')

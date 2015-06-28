@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Byebug
   #
-  # Tests breakpoint functionality.
+  # Tests undisplay command used to stop periodically displaying expressions.
   #
   class UndisplayTestCase < TestCase
     def program

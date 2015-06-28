@@ -640,7 +640,7 @@ dt_inherited(VALUE klass)
  *
  *   == Summary
  *
- *   Byebug keeps a single instance of this class.
+ *   Byebug keeps a single instance of this class per thread.
  */
 void
 Init_context(VALUE mByebug)

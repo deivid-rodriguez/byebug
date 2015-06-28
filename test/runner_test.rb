@@ -126,7 +126,7 @@ module Byebug
     end
 
     def test_run_with_no_quit_flag
-      skip('TODO')
+      skip
       write_debugged_program
 
       with_command_line('bin/byebug', '--no-quit', example_path) do

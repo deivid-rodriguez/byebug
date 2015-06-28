@@ -12,6 +12,7 @@ module Byebug
         vars = ary.sort.map do |name|
           [name, safe_inspect(silent_eval(name.to_s, binding))]
         end
+
         puts prv(vars, 'instance')
       end
 

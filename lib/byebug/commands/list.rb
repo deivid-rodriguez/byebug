@@ -109,7 +109,10 @@ module Byebug
     end
 
     #
-    # Show lines in @state.file from line number <min> to line number <max>.
+    # Show a range of lines in the current file.
+    #
+    # @param min [Integer] Lower bound
+    # @param max [Integer] Upper bound
     #
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{@state.file}"
