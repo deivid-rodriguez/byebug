@@ -166,7 +166,7 @@ module Byebug
       fail(InvalidScript, 'The script has incorrect syntax') unless ok
 
       error = Byebug.debug_load($PROGRAM_NAME, @stop)
-      Byebug.puts "#{status}\n#{status.backtrace}" if error
+      Byebug.puts "#{error}\n#{error.backtrace}" if error
     end
 
     #
