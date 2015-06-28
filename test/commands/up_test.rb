@@ -56,10 +56,10 @@ module Byebug
         /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
     end
 
-    def test_up_plays_well_with_eval
-      enter 'eval str', 'up', 'eval str', 'up'
+    def test_up_plays_well_with_evaluation
+      enter 'str', 'up', 'str', 'up'
       debug_code(program)
-      check_output_includes '"fx"', '"f"'
+      check_output_includes 'fx', 'f'
     end
   end
 end

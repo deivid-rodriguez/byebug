@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/eval'
 
 module Byebug
   #
@@ -7,6 +8,8 @@ module Byebug
   # Enables the user to catch unhandled assertion when they happen.
   #
   class CatchCommand < Command
+    include Helpers::EvalHelper
+
     def regexp
       /^\s* cat(?:ch)? (?:\s+(\S+))? (?:\s+(off))? \s*$/x
     end
@@ -24,7 +27,7 @@ module Byebug
           return
         end
 
-        is_class = bb_eval("#{ex.is_a?(Class)}")
+        is_class = single_thread_eval("#{ex.is_a?(Class)}")
         puts pr('catch.errors.not_class', class: ex) unless is_class
 
         Byebug.add_catchpoint(ex)

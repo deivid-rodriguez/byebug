@@ -1,16 +1,20 @@
 require 'byebug/command'
+require 'byebug/helpers/eval'
 
 module Byebug
   #
   # Show methods of specific classes/modules/objects.
   #
   class MethodCommand < Command
+    include Helpers::EvalHelper
+
     def regexp
       /^\s* m(?:ethod)? \s+ (i(:?nstance)?\s+)?/x
     end
 
     def execute
-      obj = bb_eval(@match.post_match)
+      obj = single_thread_eval(@match.post_match)
+
       result =
         if @match[1]
           prc('method.methods', obj.methods.sort) { |item, _| { name: item } }

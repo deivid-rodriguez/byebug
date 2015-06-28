@@ -1,11 +1,13 @@
 require 'byebug/states/regular_state'
 require 'byebug/helpers/file'
+require 'byebug/helpers/eval'
 
 module Byebug
   #
   # Processes commands in regular mode
   #
   class CommandProcessor < Processor
+    include Helpers::EvalHelper
     include Helpers::FileHelper
 
     attr_reader :display, :state
@@ -111,31 +113,19 @@ module Byebug
 
         cmd.empty? ? cmd = @last_cmd : @last_cmd = cmd
 
-        one_cmd(context, cmd)
+        run_cmd(context, cmd)
       end
     end
 
     #
-    # Autoevals a single command
+    # Executes the received input
     #
-    def one_unknown_cmd(input)
-      unless Setting[:autoeval]
-        return errmsg("Unknown command: \"#{input}\". Try \"help\"")
-      end
-
-      eval_cmd = EvalCommand.new(state)
-      eval_cmd.match(input)
-      eval_cmd.execute
-    end
-
+    # Instantiates a command matching the input and runs it. If a matching
+    # command is not found, it evaluates the unknown input.
     #
-    #
-    # Executes a single byebug command
-    #
-    def one_cmd(context, input)
+    def run_cmd(context, input)
       cmd = match_cmd(input)
-
-      return one_unknown_cmd(input) unless cmd
+      return puts(thread_safe_eval(input)) unless cmd
 
       if context.dead? && !cmd.class.allow_in_post_mortem
         return errmsg('Command unavailable in post mortem mode.')

@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/eval'
 
 module Byebug
   #
   # Custom expressions to be displayed every time the debugger stops.
   #
   class DisplayCommand < Command
+    include Helpers::EvalHelper
+
     self.allow_in_post_mortem = false
 
     def self.always_run
@@ -37,7 +40,7 @@ module Byebug
       print pr('display.result',
                n: @state.display.size,
                exp: exp,
-               result: bb_warning_eval(exp).inspect)
+               result: warning_eval(exp).inspect)
     end
 
     def print_display_expressions
@@ -46,7 +49,7 @@ module Byebug
         if is_active
           { n: index + 1,
             exp: expression,
-            result: bb_warning_eval(expression).inspect }
+            result: warning_eval(expression).inspect }
         end
       end
 

@@ -38,38 +38,6 @@ module Byebug
 
     def_delegators :@state, :errmsg, :puts, :print, :confirm
 
-    #
-    # Evaluates a string containing Ruby code, using binding +b+. In case of
-    # error full stack trace and error are printed.
-    #
-    def bb_eval(str, b = get_binding)
-      b.eval(str)
-    rescue StandardError, ScriptError => e
-      at = e.backtrace
-      locations = []
-      locations << "#{at.shift}: #{e.class} Exception(#{e.message})"
-      locations += at.map { |path| "\tfrom #{path}" }
-
-      errmsg(pr('eval.exception', text_message: locations.join("\n")))
-      nil
-    end
-
-    #
-    # Evaluates a string containing Ruby code, using binding +b+. In case of
-    # error, an error message with the exception is printed.
-    #
-    def bb_warning_eval(str, b = get_binding)
-      b.eval(str)
-    rescue StandardError, ScriptError => e
-      text_message = "#{e.class} Exception: #{e.message}"
-      errmsg(pr('eval.exception', text_message: text_message))
-      nil
-    end
-
-    def get_binding(pos = @state.frame)
-      @state.context ? @state.context.frame_binding(pos) : TOPLEVEL_BINDING
-    end
-
     class << self
       attr_accessor :allow_in_control
       attr_writer :allow_in_post_mortem, :always_run

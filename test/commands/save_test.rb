@@ -59,7 +59,6 @@ module Byebug
       enter 'save'
       debug_code(program)
 
-      assert_includes file_contents, 'set autoeval true'
       assert_includes file_contents, 'set basename false'
       assert_includes file_contents, 'set autolist true'
       assert_includes file_contents, 'set autoirb false'

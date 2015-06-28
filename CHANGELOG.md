@@ -1,6 +1,10 @@
 ## 6.0.0
 ### Removed
-* `putl` command.
+* `autoeval` setting. I haven't heard of anyone setting it to false.
+* `pp`, `putl`, `eval`. People just want to evaluate Ruby code, so the less
+magic the better. Most of the people probably were not aware that `byebug`
+was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
+"enhanced evaluation" command.
 
 ## 5.0.0
 ### Fixed

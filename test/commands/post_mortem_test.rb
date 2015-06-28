@@ -1,3 +1,4 @@
+require 'mocha/mini_test'
 require 'test_helper'
 
 module Byebug
@@ -62,7 +63,7 @@ module Byebug
     forbidden.each do |cmd|
       define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
         with_setting :post_mortem, true do
-          enter 'set noautoeval', cmd, 'set autoeval'
+          enter cmd
           Context.any_instance.stubs(:dead?).returns(:true)
 
           begin
@@ -75,7 +76,7 @@ module Byebug
     end
 
     permitted = %w(restart frame quit edit info irb source help list method kill
-                   eval set save show up where down)
+                   set save show up where down)
 
     permitted.each do |cmd|
       define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do

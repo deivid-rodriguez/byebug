@@ -1,10 +1,13 @@
 require 'byebug/command'
+require 'byebug/helpers/eval'
 
 module Byebug
   #
   # Enter Pry from byebug's prompt
   #
   class PryCommand < Command
+    include Helpers::EvalHelper
+
     def regexp
       /^\s* pry \s*$/x
     end
@@ -20,7 +23,7 @@ module Byebug
         errmsg(pr('pry.errors.not_installed'))
       end
 
-      get_binding.pry
+      default_binding.pry
     end
 
     def description

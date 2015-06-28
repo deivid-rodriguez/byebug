@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/eval'
 require 'byebug/helpers/file'
 require 'byebug/helpers/parse'
 
@@ -7,6 +8,7 @@ module Byebug
   # Implements breakpoint functionality
   #
   class BreakCommand < Command
+    include Helpers::EvalHelper
     include Helpers::FileHelper
     include Helpers::ParseHelper
 
@@ -61,14 +63,20 @@ module Byebug
 
     def method_breakpoint(location)
       location.match(/([^.#]+)[.#](.+)/) do |match|
-        k = bb_warning_eval(match[1])
-        m = match[2]
-
-        klass = k && k.is_a?(Module) ? k.name : match[1]
-        method = m.intern
+        klass = target_object(match[1])
+        method = match[2].intern
 
         Breakpoint.add(klass, method, @match[2])
       end
+    end
+
+    def target_object(str)
+      k = warning_eval(str)
+
+      k && k.is_a?(Module) ? k.name : str
+    rescue
+      errmsg('Warning: breakpoint source is not yet defined')
+      str
     end
 
     def check_errors(file, line)

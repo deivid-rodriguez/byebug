@@ -1,9 +1,79 @@
 module Byebug
   module Helpers
     #
-    # Utilities used by the eval command
+    # Utilities to assist evaluation of code strings
     #
     module EvalHelper
+      #
+      # Evaluates +expression+ that might manipulate threads
+      #
+      # @param expression [String] Expression to evaluate
+      #
+      def thread_safe_eval(expression)
+        allowing_other_threads { single_thread_eval(expression) }
+      end
+
+      #
+      # Evaluates an +expression+ that doesn't deal with threads
+      #
+      # @param expression [String] Expression to evaluate
+      #
+      def single_thread_eval(expression)
+        return error_eval(expression) if Setting[:stack_on_error]
+
+        warning_eval(expression)
+      end
+
+      #
+      # Evaluates a string containing Ruby code in a specific binding,
+      # returning nil in an error happens.
+      #
+      def silent_eval(str, binding = default_binding)
+        binding.eval(str)
+      rescue StandardError, ScriptError
+        nil
+      end
+
+      #
+      # Evaluates a string containing Ruby code in a specific binding,
+      # handling the errors at an error level.
+      #
+      def error_eval(str, binding = default_binding)
+        safe_eval(str, binding) { |e| error_msg(e) }
+      end
+
+      #
+      # Evaluates a string containing Ruby code in a specific binding,
+      # handling the errors at a warning level.
+      #
+      def warning_eval(str, binding = default_binding)
+        safe_eval(str, binding) { |e| warning_msg(e) }
+      end
+
+      def default_binding
+        @state.context.frame_binding(@state.frame) if @state.context
+      end
+
+      private
+
+      def safe_eval(str, binding)
+        binding.eval(str)
+      rescue StandardError, ScriptError => e
+        yield(e)
+      end
+
+      def error_msg(e)
+        at = e.backtrace
+        locations = ["#{at.shift}: #{e.class} Exception(#{e.message})"]
+        locations += at.map { |path| "\tfrom #{path}" }
+
+        errmsg(locations.join("\n"))
+      end
+
+      def warning_msg(e)
+        errmsg("#{e.class} Exception: #{e.message}")
+      end
+
       #
       # Run block temporarily ignoring all TracePoint events.
       #
@@ -16,31 +86,6 @@ module Byebug
         res = yield
         Byebug.lock
         res
-      end
-
-      #
-      # Get current binding and yield it to the given block
-      #
-      def run_with_binding
-        binding = get_binding
-        yield binding
-      end
-
-      #
-      # Evaluate +expression+ using +binding+
-      #
-      # @param binding [Binding] Context where to evaluate the expression
-      # @param expression [String] Expression to evaluation
-      # @param stack_on_error [Boolean] Whether to show a stack trace on error.
-      #
-      def eval_with_setting(binding, expression, stack_on_error)
-        allowing_other_threads do
-          if stack_on_error
-            bb_eval(expression, binding)
-          else
-            bb_warning_eval(expression, binding)
-          end
-        end
       end
     end
   end

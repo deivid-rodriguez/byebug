@@ -17,8 +17,8 @@ module Byebug
       EOC
     end
 
-    settings = %i(autoeval autolist autosave basename fullpath post_mortem
-                  stack_on_error)
+    settings =
+      %i(autolist autosave basename fullpath post_mortem stack_on_error)
 
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
@@ -54,29 +54,29 @@ module Byebug
     end
 
     def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
-      with_setting :autoeval, false do
+      with_setting :autolist, false do
         enter 'set auto'
         debug_code(program)
 
-        assert_equal false, Setting[:autoeval]
+        assert_equal false, Setting[:autolist]
       end
     end
 
     def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
-      with_setting :autoeval, false do
-        enter 'set autoe'
+      with_setting :autolist, false do
+        enter 'set autol'
         debug_code(program)
 
-        assert_equal true, Setting[:autoeval]
+        assert_equal true, Setting[:autolist]
       end
     end
 
     def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
-      with_setting :autoeval, true do
+      with_setting :autolist, true do
         enter 'set noauto'
         debug_code(program)
 
-        assert_equal true, Setting[:autoeval]
+        assert_equal true, Setting[:autolist]
       end
     end
 

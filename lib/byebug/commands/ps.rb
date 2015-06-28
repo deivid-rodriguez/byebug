@@ -14,23 +14,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* ps \s+/x
-    end
-
-    def execute
-      out = StringIO.new
-      run_with_binding do |b|
-        res = eval_with_setting(b, @match.post_match, Setting[:stack_on_error])
-
-        if res.is_a?(Array)
-          puts res.map(&:to_s).sort!
-        else
-          PP.pp(res, out)
-          puts out.string
-        end
-      end
-    rescue
-      out.puts $ERROR_INFO.message
+      /^\s* ps (\s+ (.+)) \s*$/x
     end
 
     def description
@@ -39,6 +23,16 @@ module Byebug
 
         Evaluates <expression>, an array, sort and columnize its value.
       EOD
+    end
+
+    def execute
+      return puts(help) unless @match[1]
+
+      res = thread_safe_eval(@match[1])
+      res = res.sort if res.respond_to?(:sort)
+
+      out = PP.pp(res, StringIO.new, Setting[:width])
+      print pr('eval.result', expr: @match[1], result: out.string)
     end
   end
 end

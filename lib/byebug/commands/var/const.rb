@@ -1,3 +1,5 @@
+require 'byebug/helpers/eval'
+
 module Byebug
   #
   # Reopens the +var+ command to define the +const+ subcommand
@@ -7,18 +9,19 @@ module Byebug
     # Shows constants
     #
     class ConstSubcommand < Command
+      include Helpers::EvalHelper
+
       def regexp
         /^\s* c(?:onst)? (?:\s+ (.+))? \s*$/x
       end
 
       def execute
-        str_obj = @match[1] || 'self.class'
-        obj = bb_warning_eval(str_obj)
+        obj = warning_eval(str_obj)
         unless obj.is_a?(Module)
           return errmsg(pr('variable.errors.not_module', object: str_obj))
         end
 
-        constants = bb_eval("#{str_obj}.constants")
+        constants = warning_eval("#{str_obj}.constants")
         puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
       end
 
@@ -32,6 +35,12 @@ module Byebug
 
           #{short_description}
         EOD
+      end
+
+      private
+
+      def str_obj
+        @str_obj ||= @match[1] || 'self.class'
       end
     end
   end

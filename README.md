@@ -92,7 +92,6 @@ are debugging rails, start the server and once the execution gets to your
     `down`      |              |
     `edit`      |              |
     `enable`    |              | `breakpoints` `display`
-    `eval`      |              |
     `finish`    |              |
     `frame`     |              |
     `help`      |              |
@@ -103,14 +102,13 @@ are debugging rails, start the server and once the execution gets to your
     `list`      |              |
     `method`    |              | `instance`
     `next`      |              |
-    `pp`        |              |
     `pry`       |              |
     `ps`        |              |
     `quit`      | `exit`       |
     `restart`   |              |
     `save`      |              |
-    `set`       |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
-    `show`      |              | `autoeval` `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
+    `set`       |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
+    `show`      |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
     `source`    |              |
     `step`      |              |
     `thread`    |              | `current` `list` `resume` `stop` `switch`

@@ -16,8 +16,7 @@ module Byebug
       enter 'ps Kernel.instance_methods'
       debug_code(minimal_program)
 
-      check_output_includes(/"byebug"/)
-      check_output_includes(/"class"/)
+      check_output_includes(':byebug,', ':class,')
     end
   end
 end

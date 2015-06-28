@@ -206,17 +206,101 @@ $ byebug path/to/hanoi.rb
     9:   hanoi(n - 1, c, b, a) if n - 1 > 0
    10: end
 (byebug) private_methods
-[:public, :private, :include, :using, :define_method, :default_src_encoding, ...
+public
+private
+include
+using
+define_method
+default_src_encoding
+DelegateClass
+Digest
+timeout
+initialize_copy
+initialize_dup
+initialize_clone
+sprintf
+format
+Integer
+Float
+String
+Array
+Hash
+warn
+raise
+fail
+global_variables
+__method__
+__callee__
+__dir__
+eval
+local_variables
+iterator?
+block_given?
+catch
+throw
+loop
+respond_to_missing?
+trace_var
+untrace_var
+at_exit
+syscall
+open
+printf
+print
+putc
+puts
+gets
+readline
+select
+readlines
+`
+p
+test
+srand
+rand
+trap
+load
+require
+require_relative
+autoload
+autoload?
+proc
+lambda
+binding
+caller
+caller_locations
+exec
+fork
+exit!
+system
+spawn
+sleep
+exit
+abort
+Rational
+Complex
+set_trace_func
+gem_original_require
+Pathname
+pp
+y
+URI
+rubygems_require
+initialize
+singleton_method_added
+singleton_method_removed
+singleton_method_undefined
+method_missing
+(byebug) private_methods.member?(:hanoi)
+false
 ```
 
 `private_methods` is not a byebug command but a Ruby feature. By default, when
 `byebug` doesn't understand a command, it will evaluate it as if it was a Ruby
-command. If you don't want this behaviour, you can use `set noautoeval` or
-even drop it in your `.byebugrc` file if you want that behaviour permanently.
-The output of `private_methods`, thought, is unwieldy for our purpose: check
-whether `hanoi` method is in the list. Fortunately, byebug has nice formatting
-features: we can sort the output and put it into columns list using the print
-command `ps`.
+command. You can use any Ruby to inspect your program's state at the place it
+is stopped. Additional, `byebug` provides a specific evaluation command, `ps`
+that automatically enhances the evaluated results a bit. For example, it
+automatically sorts arrays.
 
 ```
 [:Array,
@@ -310,8 +394,6 @@ command `ps`.
 Now let's see what happens after stepping:
 
 ```bash
-(byebug) private_methods.member?(:hanoi)
-false
 (byebug) step
 
 [5, 14] in /path/to/hanoi.rb
@@ -1393,8 +1475,8 @@ Multiple commands can be put on a line by separating each with a semicolon `;`.
 You can disable the meaning of a semicolon to separate commands by escaping it
 with a backslash.
 
-For example, if you have [autoeval]() set, which is the default, you might want
-to enter the following code to compute the 5th Fibonacci number.
+For example, you might want to enter the following code to compute the 5th
+Fibonacci number.
 
 ```bash
 (byebug) fib1=0; fib2=1; 5.times {|temp| temp=fib1; fib1=fib2; fib2 += temp }
@@ -1587,140 +1669,14 @@ later. To do that, use `disable display` or `enable display` followed by the
 expression number.
 
 
-### Print Commands
+### Evaluation of expressions: display
 
-One way to examine and change data in your script is with the `eval` command
-(abbreviated `p`). `byebug` by default evaluates any input that is not
-recognized as a command, so in most situations `eval` is not necessary and
-`byebug` will work like a REPL. One case where it's necessary could be when
-trying to print a variable called `n`. In this case, you have no choice because
+To examine and change data in your script you can just evaluate any Ruby code
+from `byebug`'s prompt. Any input that is not recognized as a command will be
+evaluated, so `byebug` essentially works as a REPL. If you want to evaluate
+something that conflicts with a `byebug` command, just use Ruby's `eval`. For
+example, if you want to print a variable called `n `, type `eval n` because
 typing just `n` will execute `byebug`'s command `next`.
-
-A similar command to `eval|p` is `pp` which tries to pretty print the result.
-
-Sometimes you may want to print the array sorted. The list of byebug help
-commands appears this way, and so does the output of the `method` commands. Use
-`ps` for that. If the value is not an array `ps` will just call pretty-print.
-
-```bash
-(byebug) Kernel.instance_methods
-[:nil?, :===, :=~, :!~, :eql?, :hash, :<=>, :class, :singleton_class, :clone,
-:dup, :taint, :tainted?, :untaint, :untrust, :untrusted?, :trust, :freeze,
-:frozen?, :to_s, :inspect, :methods, :singleton_methods, :protected_methods,
-:private_methods, :public_methods, :instance_variables, :instance_variable_get,
-:instance_variable_set, :instance_variable_defined?, :remove_instance_variable,
-:instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?,
-:extend, :display, :method, :public_method, :define_singleton_method,
-:object_id, :to_enum, :enum_for, :gem, :pretty_inspect, :byebug]
-(byebug) p Kernel.instance_methods
-[:nil?, :===, :=~, :!~, :eql?, :hash, :<=>, :class, :singleton_class, :clone,
-:dup, :taint, :tainted?, :untaint, :untrust, :untrusted?, :trust, :freeze,
-:frozen?, :to_s, :inspect, :methods, :singleton_methods, :protected_methods,
-:private_methods, :public_methods, :instance_variables, :instance_variable_get,
-:instance_variable_set, :instance_variable_defined?, :remove_instance_variable,
-:instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?,
-:extend, :display, :method, :public_method, :define_singleton_method,
-:object_id, :to_enum, :enum_for, :gem, :pretty_inspect, :byebug]
-(byebug) pp Kernel.instance_methods
-[:nil?,
- :===,
- :=~,
- :!~,
- :eql?,
- :hash,
- :<=>,
- :class,
- :singleton_class,
- :clone,
- :dup,
- :taint,
- :tainted?,
- :untaint,
- :untrust,
- :untrusted?,
- :trust,
- :freeze,
- :frozen?,
- :to_s,
- :inspect,
- :methods,
- :singleton_methods,
- :protected_methods,
- :private_methods,
- :public_methods,
- :instance_variables,
- :instance_variable_get,
- :instance_variable_set,
- :instance_variable_defined?,
- :remove_instance_variable,
- :instance_of?,
- :kind_of?,
- :is_a?,
- :tap,
- :send,
- :public_send,
- :respond_to?,
- :extend,
- :display,
- :method,
- :public_method,
- :define_singleton_method,
- :object_id,
- :to_enum,
- :enum_for,
- :gem,
- :pretty_inspect,
- :byebug]
-(byebug) ps Kernel.instance_methods
-!~
-<=>
-===
-=~
-class
-clone
-define_singleton_method
-display
-dup
-enum_for
-eql?
-extend
-freeze
-frozen?
-gem
-hash
-instance_of?
-instance_variable_defined?
-instance_variable_get
-instance_variable_set
-instance_variables
-is_a?
-itself
-kind_of?
-method
-methods
-nil?
-object_id
-pretty_inspect
-private_methods
-protected_methods
-public_method
-public_send
-remove_instance_variable
-respond_to?
-send
-singleton_class
-singleton_method
-singleton_methods
-taint
-tainted?
-tap
-to_enum
-to_s
-trust
-untaint
-untrust
-untrusted?
-```
 
 Finally, if you need more advanced functionality from REPL's, you can enter
 `irb` or `pry` using `irb` or `pry` commands. The bindings environment will be
