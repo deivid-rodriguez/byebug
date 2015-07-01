@@ -51,7 +51,7 @@ module Byebug
 
       def get_pr_arguments(frame_no)
         file = @state.frame_file(frame_no)
-        full_path = File.expand_path(file)
+        full_path = file ? File.expand_path(file) : "nil"
         line = @state.frame_line(frame_no)
         call = @state.frame_call(frame_no)
         mark = @state.frame_mark(frame_no)
