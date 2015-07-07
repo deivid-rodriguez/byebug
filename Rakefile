@@ -35,7 +35,12 @@ task :test do
   MinitestRunner.new.run
 end
 
-default_tasks = %i(compile test)
+desc 'Run overcommit hooks manually'
+task(:overcommit) do
+  system('bundle exec overcommit --run')
+end
+
+default_tasks = %i(compile test overcommit)
 
 task default: default_tasks
 task complete: [:clobber] + default_tasks
