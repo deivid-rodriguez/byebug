@@ -27,11 +27,7 @@ module Byebug
     def read_command(prompt)
       return command_queue.shift unless command_queue.empty?
 
-      cmds = read_input(prompt)
-      return unless cmds
-
-      command_queue.concat(cmds)
-      command_queue.shift
+      read_input(prompt)
     end
 
     #
@@ -50,7 +46,8 @@ module Byebug
 
       history.push(line) if save_hist
 
-      split_commands(line)
+      command_queue.concat(split_commands(line))
+      command_queue.shift
     end
 
     #
@@ -106,7 +103,7 @@ module Byebug
 
       cmd_line.split(/;/).each_with_object([]) do |v, m|
         if m.empty? || m.last[-1] != '\\'
-          m << v
+          m << v.strip
           next
         end
 
