@@ -16,7 +16,8 @@ module Byebug
 
       @state.interface.autosave
       @state.interface.close
-      exit! # exit -> exit!: No graceful way to stop...
+
+      Process.exit!
     end
 
     def description
