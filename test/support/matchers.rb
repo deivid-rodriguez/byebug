@@ -1,3 +1,34 @@
+module Byebug
+  #
+  # Some custom matches for byebug's output
+  #
+  module TestMatchers
+    def check_output_includes(*args)
+      check_stream(:assert_includes_in_order, interface.output, *args)
+    end
+
+    def check_error_includes(*args)
+      check_stream(:assert_includes_in_order, interface.error, *args)
+    end
+
+    def check_output_doesnt_include(*args)
+      check_stream(:refute_includes_in_order, interface.output, *args)
+    end
+
+    def check_error_doesnt_include(*args)
+      check_stream(:refute_includes_in_order, interface.error, *args)
+    end
+
+    private
+
+    def check_stream(check_method, stream, *args)
+      stream_messages = stream.map(&:strip)
+      messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
+      send(check_method, messages, stream_messages)
+    end
+  end
+end
+
 module Minitest
   #
   # Custom Minitest assertions

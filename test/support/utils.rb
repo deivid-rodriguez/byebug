@@ -5,6 +5,8 @@ module Byebug
   # Misc tools for the test suite
   #
   module TestUtils
+    include TestMatchers
+
     #
     # Adds commands to the input queue, so they will be later retrieved by
     # Processor, i.e., it emulates user's input.
@@ -67,32 +69,6 @@ module Byebug
       example_file.close
 
       load(example_path)
-    end
-
-    #
-    # Checks the confirm/output/error streams.
-    #
-    # Usage:
-    #   enter 'break 4', 'cont'
-    #   debug 'ex1'
-    #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
-    #
-    def check_stream(check_method, stream, *args)
-      stream_messages = stream.map(&:strip)
-      messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
-      send(check_method, messages, stream_messages)
-    end
-
-    %w(output error).each do |stream_name|
-      define_method(:"check_#{stream_name}_includes") do |*args|
-        stream = interface.send(stream_name)
-        send(:check_stream, :assert_includes_in_order, stream, *args)
-      end
-
-      define_method(:"check_#{stream_name}_doesnt_include") do |*args|
-        stream = interface.send(stream_name)
-        send(:check_stream, :refute_includes_in_order, stream, *args)
-      end
     end
 
     #
