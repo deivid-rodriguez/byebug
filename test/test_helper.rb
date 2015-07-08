@@ -7,12 +7,6 @@ Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
 
 module Byebug
   #
-  # During tests, ignore rc files
-  #
-  def self.run_init_script
-  end
-
-  #
   # Useful monkeypatch for testing
   #
   class Context
@@ -42,6 +36,8 @@ module Byebug
     # Reset to default state before each test
     #
     def setup
+      force_set_const(Byebug, 'INIT_FILE', '.byebug_test_rc')
+
       interface.clear
 
       Byebug.breakpoints.clear if Byebug.breakpoints
