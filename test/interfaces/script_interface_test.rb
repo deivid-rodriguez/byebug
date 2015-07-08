@@ -1,55 +1,32 @@
 require 'test_helper'
-require 'byebug/runner'
-require 'mocha/mini_test'
 
 module Byebug
-  class ScriptInterfaceTest < MiniTest::Test
-    class InitializeTest < ScriptInterfaceTest
-      def setup
-        @file = mock
-        File.expects(:open).with('file').returns(@file)
-      end
+  class ScriptInterfaceTest < TestCase
+    def test_initialize_wires_up_dependencies
+      with_new_file('show') do |path|
+        interface = ScriptInterface.new(path)
 
-      def test_initialize_wires_up_dependencies
-        interface = ScriptInterface.new('file')
-        assert_equal @file, interface.input
-        assert interface.output.instance_of?(StringIO)
-        assert interface.error.instance_of?(StringIO)
+        assert_instance_of File, interface.input
+        assert_instance_of StringIO, interface.output
+        assert_instance_of StringIO, interface.error
       end
+    end
 
-      def test_initialize_verbose_writes_to_stdout_and_stderr
-        interface = ScriptInterface.new('file', true)
-        assert_equal @file, interface.input
+    def test_initialize_verbose_writes_to_stdout_and_stderr
+      with_new_file('show') do |path|
+        interface = ScriptInterface.new(path, true)
+
+        assert_instance_of File, interface.input
         assert_equal STDOUT, interface.output
         assert_equal STDERR, interface.error
       end
     end
 
-    class ReadlineTest < ScriptInterfaceTest
-      class FakeFile
-        def gets
-        end
-      end
+    def test_readline_reads_input_until_first_non_comment
+      with_new_file("# Run the show command\nshow\n") do |path|
+        interface = ScriptInterface.new(path)
 
-      def setup
-        @input = FakeFile.new
-        File.expects(:open).with('file').returns(@input)
-
-        @interface = ScriptInterface.new('file', true)
-      end
-
-      def test_readline_reads_input_until_first_non_comment
-        @input.expects(:gets).times(3).returns('  #hello',
-                                               '#hello',
-                                               "test\n")
-
-        output = sequence('output')
-        @interface.output.expects(:puts).with('+   #hello').in_sequence(output)
-        @interface.output.expects(:puts).with('+ #hello').in_sequence(output)
-        @interface.output.expects(:puts).with("+ test\n").in_sequence(output)
-
-        result = @interface.readline
-        assert_equal 'test', result
+        assert_equal 'show', interface.readline
       end
     end
   end

@@ -106,19 +106,8 @@ module Byebug
       check_output_includes "File #{example_path} (33 lines)"
     end
 
-    def with_dummy_script
-      dummy_script = Tempfile.new('dummy_script')
-      dummy_script.write('sleep 0')
-      dummy_script.close
-
-      yield(dummy_script.path)
-    ensure
-      dummy_script.close
-      dummy_script.unlink
-    end
-
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
-      with_dummy_script do |script_name|
+      with_new_file('sleep 0') do |script_name|
         enter "info file #{script_name}"
         debug_code(program)
 
@@ -135,7 +124,7 @@ module Byebug
     end
 
     def test_info_file_w_filename_shows_mtime_of_filename
-      with_dummy_script do |script_name|
+      with_new_file('sleep 0') do |script_name|
         enter "info file #{script_name}"
         debug_code(program)
 
@@ -153,7 +142,7 @@ module Byebug
     end
 
     def test_info_file_w_filename_shows_sha1_signature_of_filename
-      with_dummy_script do |script_name|
+      with_new_file('sleep 0') do |script_name|
         enter "info file #{script_name}"
         debug_code(program)
 
@@ -172,7 +161,7 @@ module Byebug
     end
 
     def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename
-      with_dummy_script do |script_name|
+      with_new_file('sleep 0') do |script_name|
         enter "info file #{script_name}"
         debug_code(program)
 

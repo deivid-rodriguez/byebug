@@ -240,5 +240,19 @@ module Byebug
         end
       EOM
     end
+
+    #
+    # Temporary creates a new file a yields it to the passed block
+    #
+    def with_new_file(content)
+      file = Tempfile.new('foo')
+      file.write(content)
+      file.close
+
+      yield(file.path)
+    ensure
+      file.close
+      file.unlink
+    end
   end
 end
