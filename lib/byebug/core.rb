@@ -13,7 +13,8 @@ module Byebug
   #
   # Configuration file used for startup commands. Default value is .byebugrc
   #
-  INIT_FILE = '.byebugrc' unless defined?(INIT_FILE)
+  attr_accessor :init_file
+  self.init_file = '.byebugrc'
 
   #
   # Main debugger's processor
@@ -48,10 +49,10 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def run_init_script
-    home_rc = File.expand_path(File.join(ENV['HOME'].to_s, INIT_FILE))
+    home_rc = File.expand_path(File.join(ENV['HOME'].to_s, init_file))
     run_script(home_rc) if File.exist?(home_rc)
 
-    cwd_rc = File.expand_path(File.join('.', INIT_FILE))
+    cwd_rc = File.expand_path(File.join('.', init_file))
     run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 

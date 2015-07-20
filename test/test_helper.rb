@@ -14,6 +14,7 @@ module Byebug
     include Helpers::StringHelper
 
     def self.before_suite
+      Byebug.init_file = '.byebug_test_rc'
       Byebug.handler = CommandProcessor.new(TestInterface.new)
 
       Context.ignored_files = Context.all_files
@@ -23,7 +24,6 @@ module Byebug
     # Reset to default state before each test
     #
     def setup
-      force_set_const(Byebug, 'INIT_FILE', '.byebug_test_rc')
       interface.clear
 
       Byebug.breakpoints.clear if Byebug.breakpoints

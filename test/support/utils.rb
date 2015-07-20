@@ -159,11 +159,6 @@ module Byebug
       end
     end
 
-    def force_set_const(klass, const, value)
-      force_remove_const(klass, const)
-      klass.const_set(const, value)
-    end
-
     def force_remove_const(klass, const)
       klass.send(:remove_const, const) if klass.const_defined?(const)
     end
