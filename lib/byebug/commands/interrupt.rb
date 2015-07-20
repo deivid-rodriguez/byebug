@@ -25,8 +25,7 @@ module Byebug
     end
 
     def execute
-      context = Byebug.thread_context(Thread.main)
-      context.interrupt
+      Byebug.thread_context(Thread.main).interrupt
     end
   end
 end

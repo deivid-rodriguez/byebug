@@ -24,16 +24,14 @@ module Byebug
       end
 
       def execute
-        display = @state.display
-
-        unless display.find { |d| d[0] }
+        unless @state.display.find { |d| d[0] }
           return puts('There are no auto-display expressions now.')
         end
 
         puts 'Auto-display expressions now in effect:'
         puts 'Num Enb Expression'
 
-        display.each_with_index do |d, i|
+        @state.display.each_with_index do |d, i|
           puts(format('%3d: %s  %s', i + 1, d[0] ? 'y' : 'n', d[1]))
         end
       end
