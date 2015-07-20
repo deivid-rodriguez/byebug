@@ -33,6 +33,10 @@ module Byebug
       'Modifies byebug settings'
     end
 
+    def help
+      description + Setting.help_all
+    end
+
     def execute
       key = @match[:setting]
       value = @match[:value]
@@ -55,6 +59,8 @@ module Byebug
       puts setting.to_s
     end
 
+    private
+
     def get_onoff(arg, default)
       return default if arg.nil?
 
@@ -66,10 +72,6 @@ module Byebug
       else
         [nil, pr('set.errors.on_off', arg: arg)]
       end
-    end
-
-    def help
-      description + Setting.help_all
     end
   end
 end

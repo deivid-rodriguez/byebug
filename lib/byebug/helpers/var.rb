@@ -48,6 +48,8 @@ module Byebug
         puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
       end
 
+      private
+
       def safe_inspect(var)
         var.inspect
       rescue

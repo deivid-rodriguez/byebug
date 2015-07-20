@@ -47,18 +47,6 @@ module Byebug
       end
 
       #
-      # Temporarily disable output to $stderr
-      #
-      def without_stderr
-        stderr = $stderr
-        $stderr.reopen(IO::NULL)
-
-        yield
-      ensure
-        $stderr.reopen(stderr)
-      end
-
-      #
       # @return +str+ as an integer or 1 if +str+ is empty.
       #
       def parse_steps(str, cmd)
@@ -68,6 +56,20 @@ module Byebug
         return nil, err unless steps
 
         steps
+      end
+
+      private
+
+      #
+      # Temporarily disable output to $stderr
+      #
+      def without_stderr
+        stderr = $stderr
+        $stderr.reopen(IO::NULL)
+
+        yield
+      ensure
+        $stderr.reopen(stderr)
       end
     end
   end

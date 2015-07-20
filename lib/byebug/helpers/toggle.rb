@@ -39,17 +39,22 @@ module Byebug
       end
 
       def enable_disable_display(is_enable, args)
-        display = @state.display
-        return errmsg(pr('toggle.errors.no_display')) if 0 == display.size
+        return errmsg(pr('toggle.errors.no_display')) if 0 == n_displays
 
-        selected_displays = args.nil? ? [1..display.size + 1] : args.split(/ +/)
+        selected_displays = args ? args.split(/ +/) : [1..n_displays + 1]
 
         selected_displays.each do |pos|
-          pos, err = get_int(pos, "#{is_enable} display", 1, display.size)
+          pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
           return errmsg(err) unless err.nil?
 
-          display[pos - 1][0] = ('enable' == is_enable)
+          @state.display[pos - 1][0] = ('enable' == is_enable)
         end
+      end
+
+      private
+
+      def n_displays
+        @state.display.size
       end
     end
   end

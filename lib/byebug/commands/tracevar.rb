@@ -44,6 +44,8 @@ module Byebug
       puts pr('trace.messages.success', var: var)
     end
 
+    private
+
     def on_change(name, value, stop)
       puts pr('trace.messages.on_change', name: name, value: value)
 
