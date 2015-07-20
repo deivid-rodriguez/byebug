@@ -6,6 +6,7 @@ magic the better. Most of the people probably were not aware that `byebug`
 was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 "enhanced evaluation" command.
 * `verbose` setting.
+* `info catch` command. Use `catch` without arguments instead.
 
 # Changed
 * `info args` is now `var args`.
