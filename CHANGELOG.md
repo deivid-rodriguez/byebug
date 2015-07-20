@@ -7,6 +7,7 @@ was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 "enhanced evaluation" command.
 * `verbose` setting.
 * `info catch` command. Use `catch` without arguments instead.
+* `R` command alias for `restart`.
 
 # Changed
 * `info args` is now `var args`.

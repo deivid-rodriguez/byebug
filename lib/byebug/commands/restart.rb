@@ -9,7 +9,7 @@ module Byebug
     self.allow_in_control = true
 
     def regexp
-      /^\s* (?:restart|R) (?:\s+(?<args>.+))? \s*$/x
+      /^\s* restart (?:\s+(?<args>.+))? \s*$/x
     end
 
     def description
