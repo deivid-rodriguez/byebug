@@ -36,7 +36,7 @@ module Byebug
           Byebug.breakpoints.clear
         end
 
-        return nil
+        return
       end
 
       @match[1].split(/ +/).each do |number|

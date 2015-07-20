@@ -44,7 +44,7 @@ module Byebug
     #
     def subcommands
       subcmd_klasses = self.class.subcommands
-      return nil unless subcmd_klasses.any?
+      return unless subcmd_klasses.any?
 
       subcmd_list = subcmd_klasses.map { |cmd| cmd.new(@state) }
       SubcommandList.new(subcmd_list, self.class.name)

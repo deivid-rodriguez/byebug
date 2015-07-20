@@ -55,7 +55,7 @@ module Byebug
     def line_breakpoint(loc)
       line = loc.match(/^(\d+)$/)
       file_line = loc.match(/^([^:]+):(\d+)$/)
-      return nil unless line || file_line
+      return unless line || file_line
 
       f, l = line ? [@state.file, line[1]] : [file_line[1], file_line[2]]
 
