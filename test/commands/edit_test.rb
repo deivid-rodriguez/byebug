@@ -6,44 +6,32 @@ module Byebug
   # Tests file editing from within Byebug.
   #
   class EditTestCase < TestCase
-    def setup
-      super
-
-      @previous_editor = ENV['EDITOR']
-    end
-
-    def teardown
-      ENV['EDITOR'] = @previous_editor
-
-      super
-    end
-
     def test_edit_opens_current_file_in_current_line_in_configured_editor
-      ENV['EDITOR'] = 'edi'
+      with_configured_editor('edi') do
+        EditCommand.any_instance.expects(:system).with("edi +4 #{example_path}")
 
-      EditCommand.any_instance.expects(:system).with("edi +4 #{example_path}")
-
-      enter 'edit'
-      debug_code(minimal_program)
+        enter 'edit'
+        debug_code(minimal_program)
+      end
     end
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
-      ENV['EDITOR'] = nil
+      with_configured_editor(nil) do
+        EditCommand.any_instance.expects(:system).with("vim +4 #{example_path}")
 
-      EditCommand.any_instance.expects(:system).with("vim +4 #{example_path}")
-
-      enter 'edit'
-      debug_code(minimal_program)
+        enter 'edit'
+        debug_code(minimal_program)
+      end
     end
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
-      ENV['EDITOR'] = 'edi'
-      file = File.expand_path('README.md')
+      with_configured_editor('edi') do
+        file = File.expand_path('README.md')
+        EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
 
-      EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
-
-      enter 'edit README.md:3'
-      debug_code(minimal_program)
+        enter 'edit README.md:3'
+        debug_code(minimal_program)
+      end
     end
 
     def test_edit_shows_an_error_if_specified_file_does_not_exist
@@ -64,13 +52,25 @@ module Byebug
     end
 
     def test_edit_accepts_no_line_specification
-      ENV['EDITOR'] = 'edi'
-      file = File.expand_path('README.md')
+      with_configured_editor('edi') do
+        file = File.expand_path('README.md')
 
-      EditCommand.any_instance.expects(:system).with("edi #{file}")
+        EditCommand.any_instance.expects(:system).with("edi #{file}")
 
-      enter 'edit README.md'
-      debug_code(minimal_program)
+        enter 'edit README.md'
+        debug_code(minimal_program)
+      end
+    end
+
+    private
+
+    def with_configured_editor(editor)
+      old_editor = ENV['EDITOR']
+      ENV['EDITOR'] = editor
+
+      yield
+    ensure
+      ENV['EDITOR'] = old_editor
     end
   end
 end
