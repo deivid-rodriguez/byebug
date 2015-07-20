@@ -54,8 +54,7 @@ module Byebug
         enter 'source'
         debug_code(program)
 
-        check_output_includes(
-          /Executes file <file> containing byebug commands./)
+        check_output_includes('Restores a previously saved byebug session')
       end
     end
   end

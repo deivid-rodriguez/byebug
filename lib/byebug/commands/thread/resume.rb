@@ -15,6 +15,18 @@ module Byebug
         /^\s* r(?:esume)? (?: \s* (\d+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          th[read] r[esume] <thnum>
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Resumes execution of the specified thread'
+      end
+
       def execute
         return puts(help) unless @match[1]
 
@@ -27,18 +39,6 @@ module Byebug
 
         context.resume
         display_context(context)
-      end
-
-      def short_description
-        'Resumes execution of the specified thread'
-      end
-
-      def description
-        <<-EOD
-          th[read] r[esume] <thnum>
-
-          #{short_description}
-        EOD
       end
     end
   end

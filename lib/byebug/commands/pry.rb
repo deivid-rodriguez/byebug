@@ -12,6 +12,18 @@ module Byebug
       /^\s* pry \s*$/x
     end
 
+    def description
+      <<-EOD
+        pry
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Starts a Pry session'
+    end
+
     def execute
       unless @state.interface.is_a?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
@@ -24,14 +36,6 @@ module Byebug
       end
 
       default_binding.pry
-    end
-
-    def description
-      <<-EOD
-        pry
-
-        Starts a Pry session.
-      EOD
     end
   end
 end

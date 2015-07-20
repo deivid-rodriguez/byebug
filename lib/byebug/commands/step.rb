@@ -17,20 +17,24 @@ module Byebug
       /^\s* s(?:tep)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        s[tep][ times]
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Steps into blocks or methods one or more times'
+    end
+
     def execute
       steps, err = parse_steps(@match[1], 'Steps')
       return errmsg(err) unless steps
 
       @state.context.step_into(steps, @state.frame)
       @state.proceed
-    end
-
-    def description
-      <<-EOD
-        s[tep][ nnn]
-
-        Steps (into methods) once or nnn times.
-      EOD
     end
   end
 end

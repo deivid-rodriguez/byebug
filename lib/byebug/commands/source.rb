@@ -13,6 +13,18 @@ module Byebug
       /^\s* so(?:urce)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        source <file>
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Restores a previously saved byebug session'
+    end
+
     def execute
       return puts(help) unless @match[1]
 
@@ -26,14 +38,6 @@ module Byebug
       end
 
       @state.interface.read_file(file)
-    end
-
-    def description
-      <<-EOD
-        source <file>
-
-        Executes file <file> containing byebug commands.
-      EOD
     end
   end
 end

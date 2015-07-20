@@ -12,6 +12,24 @@ module Byebug
       /^\s* m(?:ethod)? \s+ (i(:?nstance)?\s+)?/x
     end
 
+    def description
+      <<-EOD
+        m[ethod] (i[nstance][ <obj>]|<class|module>)
+
+        #{short_description}
+
+        When invoked with "instance", shows instance methods of the object
+        specified as argument or of self no object was specified.
+
+        When invoked only with a class or module, shows class methods of the
+        class or module specified as argument.
+      EOD
+    end
+
+    def short_description
+      'Shows methods of an object, class or module'
+    end
+
     def execute
       obj = single_thread_eval(@match.post_match)
 
@@ -26,18 +44,6 @@ module Byebug
           end
         end
       puts result
-    end
-
-    def description
-      <<-EOD
-        m[ethod] (i[nstance][ <obj>]|<class|module>)
-
-        When invoked with "instance", shows instance methods of the object
-        specified as argument or of self no object was specified.
-
-        When invoked only with a class or module, shows class methods of the
-        class or module specified as argument.
-      EOD
     end
   end
 end

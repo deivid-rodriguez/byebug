@@ -11,20 +11,20 @@ module Byebug
         /^\s* l(?:ine)? \s*$/x
       end
 
-      def execute
-        puts "Line #{@state.line} of \"#{@state.file}\""
-      end
-
-      def short_description
-        'Line number and file name of current position in source file.'
-      end
-
       def description
         <<-EOD
           inf[o] l[ine]
 
           #{short_description}
         EOD
+      end
+
+      def short_description
+        'Line number and file name of current position in source file.'
+      end
+
+      def execute
+        puts "Line #{@state.line} of \"#{@state.file}\""
       end
     end
   end

@@ -17,24 +17,14 @@ module Byebug
       /^\s* f(?:rame)? (?:\s+(\S+))? \s*$/x
     end
 
-    def execute
-      unless @match[1]
-        print(pr('frame.line', get_pr_arguments(@state.frame)))
-        return
-      end
-
-      pos, err = get_int(@match[1], 'Frame')
-      return errmsg(err) unless pos
-
-      adjust_frame(pos, true)
-    end
-
     def description
       <<-EOD
         f[rame][ frame-number]
 
-        Move the current frame to the specified frame number, or the 0 if no
-        frame-number has been given.
+        #{short_description}
+
+        If a frame number has been specified, to moves to that frame. Otherwise
+        it moves to the newest frame.
 
         A negative number indicates position from the other end, so "frame -1"
         moves to the oldest frame, and "frame 0" moves to the newest frame.
@@ -45,6 +35,21 @@ module Byebug
 
         Use the "bt" command to find out where you want to go.
       EOD
+    end
+
+    def short_description
+      'Moves to a frame in the call stack'
+    end
+
+    def execute
+      unless @match[1]
+        return print(pr('frame.line', get_pr_arguments(@state.frame)))
+      end
+
+      pos, err = get_int(@match[1], 'Frame')
+      return errmsg(err) unless pos
+
+      adjust_frame(pos, true)
     end
   end
 end

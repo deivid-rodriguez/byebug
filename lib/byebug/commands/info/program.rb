@@ -11,6 +11,18 @@ module Byebug
         /^\s* p(?:rogram)? \s*$/x
       end
 
+      def description
+        <<-EOD
+          inf[o] p[rogram]
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Information about the current status of the debugged program.'
+      end
+
       def execute
         if @state.context.dead?
           puts 'The program crashed.'
@@ -20,18 +32,6 @@ module Byebug
 
         puts 'Program stopped. '
         format_stop_reason @state.context.stop_reason
-      end
-
-      def short_description
-        'Information about the current status of the debugged program.'
-      end
-
-      def description
-        <<-EOD
-          inf[o] p[rogram]
-
-          #{short_description}
-        EOD
       end
 
       private

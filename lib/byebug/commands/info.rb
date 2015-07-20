@@ -23,8 +23,12 @@ module Byebug
       <<-EOD
         info[ subcommand]
 
-        Generic command for showing things about the program being debugged.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Shows several informations about the program being debugged'
     end
   end
 end

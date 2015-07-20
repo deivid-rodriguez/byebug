@@ -12,17 +12,21 @@ module Byebug
       /^\s*i(?:nterrupt)?\s*$/
     end
 
-    def execute
-      context = Byebug.thread_context(Thread.main)
-      context.interrupt
-    end
-
     def description
       <<-EOD
         i[nterrupt]
 
-        Interrupts the program.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Interrupts the program'
+    end
+
+    def execute
+      context = Byebug.thread_context(Thread.main)
+      context.interrupt
     end
   end
 end

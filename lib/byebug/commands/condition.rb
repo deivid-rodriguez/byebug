@@ -16,6 +16,23 @@ module Byebug
       /^\s* cond(?:ition)? (?:\s+(\d+)(?:\s+(.*))?)? \s*$/x
     end
 
+    def description
+      <<-EOD
+        cond[ition] <n>[ expr]
+
+        #{short_description}
+
+        Specify breakpoint number <n> to break only if <expr> is true. <n> is
+        an integer and <expr> is an expression to be evaluated whenever
+        breakpoint <n> is reached. If no expression is specified, the condition
+        is removed.
+      EOD
+    end
+
+    def short_description
+      'Sets conditions on breakpoints'
+    end
+
     def execute
       return puts(help) unless @match[1]
 
@@ -33,17 +50,6 @@ module Byebug
       end
 
       breakpoint.expr = @match[2]
-    end
-
-    def description
-      <<-EOD
-        cond[ition] <n>[ expr]
-
-        Specify breakpoint number <n> to break only if <expr> is true. <n> is
-        an integer and <expr> is an expression to be evaluated whenever
-        breakpoint <n> is reached. If no expression is specified, the condition
-        is removed.
-      EOD
     end
   end
 end

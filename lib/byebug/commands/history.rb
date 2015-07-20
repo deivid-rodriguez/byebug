@@ -12,6 +12,18 @@ module Byebug
       /^\s* hist(?:ory)? (?:\s+(?<num_cmds>.+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        hist[ory] [num_cmds]
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      "Shows byebug's history of commands"
+    end
+
     def execute
       history = @state.interface.history
 
@@ -21,14 +33,6 @@ module Byebug
       end
 
       puts history.to_s(size)
-    end
-
-    def description
-      <<-EOD
-        hist[ory] [num_cmds]
-
-        Show byebug's command history.
-      EOD
     end
   end
 end

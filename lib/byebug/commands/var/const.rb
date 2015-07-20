@@ -15,6 +15,18 @@ module Byebug
         /^\s* c(?:onst)? (?:\s+ (.+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          v[ar] c[onstant]
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Shows constants of an object.'
+      end
+
       def execute
         obj = warning_eval(str_obj)
         unless obj.is_a?(Module)
@@ -23,18 +35,6 @@ module Byebug
 
         constants = warning_eval("#{str_obj}.constants")
         puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
-      end
-
-      def short_description
-        'Shows constants of an object.'
-      end
-
-      def description
-        <<-EOD
-          v[ar] c[onstant]
-
-          #{short_description}
-        EOD
       end
 
       private

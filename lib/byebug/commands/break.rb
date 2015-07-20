@@ -12,11 +12,27 @@ module Byebug
     include Helpers::FileHelper
     include Helpers::ParseHelper
 
-    self.allow_in_post_mortem = false
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* b(?:reak)? (?:\s+ (\S+))? (?:\s+ if \s+(.+))? \s*$/x
+    end
+
+    def description
+      <<-EOD
+        b[reak] [file:]line [if expr]
+        b[reak] [module::...]class(.|#)method [if expr]
+
+        They can be specified by line or method and an expression can be added
+        for conditionally enabled breakpoints.
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Sets breakpoints in the source code'
     end
 
     def execute
@@ -32,19 +48,6 @@ module Byebug
       b.enabled = false
     rescue => e
       errmsg(e.message)
-    end
-
-    def short_description
-      'Set breakpoint to some position, (optionally) if expr == true'
-    end
-
-    def description
-      <<-EOD
-        b[reak] [file:]line [if expr]
-        b[reak] [module::...]class(.|#)method [if expr]
-
-        #{short_description}
-      EOD
     end
 
     private

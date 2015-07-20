@@ -11,6 +11,22 @@ module Byebug
       /^\s* q(?:uit)? \s* (?:(!|\s+unconditionally))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        q[uit] [!|unconditionally]
+
+        #{short_description}
+
+        Normally we prompt before exiting. However if the parameter
+        "unconditionally" is given or command is suffixed with !, we exit
+        without asking further questions.
+      EOD
+    end
+
+    def short_description
+      'Exits byebug'
+    end
+
     def execute
       return unless @match[1] || confirm(pr('quit.confirmations.really'))
 
@@ -18,18 +34,6 @@ module Byebug
       @state.interface.close
 
       Process.exit!
-    end
-
-    def description
-      <<-EOD
-        q[uit] [!|unconditionally]
-
-        Exits from byebug.
-
-        Normally we prompt before exiting. However if the parameter
-        "unconditionally" is given or command is suffixed with !, we exit
-        without asking further questions.
-      EOD
     end
   end
 end

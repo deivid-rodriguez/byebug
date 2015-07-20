@@ -15,15 +15,11 @@ module Byebug
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
     end
 
-    def execute
-      print_backtrace
-    end
-
     def description
       <<-EOD
         w[here]|bt|backtrace
 
-        Display stack frames.
+        #{short_description}
 
         Print the entire stack frame. Each frame is numbered; the most recent
         frame is 0. A frame number can be referred to in the "frame" command.
@@ -32,6 +28,14 @@ module Byebug
         from their most immediate Ruby frame to indicate that they are not
         navigable.
       EOD
+    end
+
+    def short_description
+      'Displays the backtrace'
+    end
+
+    def execute
+      print_backtrace
     end
 
     private

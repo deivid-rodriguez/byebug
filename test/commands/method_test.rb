@@ -54,7 +54,7 @@ module Byebug
       debug_code(program)
 
       check_output_includes('bla')
-      check_output_doesnt_include(/foo /)
+      check_output_doesnt_include('foo')
     end
   end
 end

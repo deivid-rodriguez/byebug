@@ -15,6 +15,18 @@ module Byebug
       /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        c[ont[inue]][ <line_number>]
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Runs until program ends, hits a breakpoint or reaches a line'
+    end
+
     def execute
       if @match[1]
         num, err = get_int(@match[1], 'Continue', 0, nil)
@@ -29,14 +41,6 @@ module Byebug
       end
 
       @state.proceed
-    end
-
-    def description
-      <<-EOD
-        c[ont[inue]][ <n>]
-
-        Run until program ends, hits a breakpoint or reaches line <n>.
-      EOD
     end
   end
 end

@@ -11,6 +11,21 @@ module Byebug
       /^\s* (?:restart|R) (?:\s+(?<args>.+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        restart [args]
+
+        #{short_description}
+
+        This is a re-exec - all byebug state is lost. If command arguments are
+        passed those are used.
+      EOD
+    end
+
+    def short_description
+      'Restarts the debugged program'
+    end
+
     def execute
       if Byebug.mode == :standalone
         cmd = "#{Gem.bin_path('byebug', 'byebug')} #{$PROGRAM_NAME}"
@@ -27,15 +42,6 @@ module Byebug
 
       puts pr('restart.success', cmd: cmd)
       exec(cmd)
-    end
-
-    def description
-      <<-EOD
-        restart|R [args]
-
-        Restart the program. This is a re-exec - all byebug state
-        is lost. If command arguments are passed those are used.
-      EOD
     end
   end
 end

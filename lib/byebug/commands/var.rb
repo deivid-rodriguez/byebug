@@ -22,8 +22,12 @@ module Byebug
       <<-EOD
         [v]ar <subcommand>
 
-        Shows variables and its values.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Shows variables and its values'
     end
   end
 end

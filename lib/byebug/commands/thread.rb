@@ -21,8 +21,12 @@ module Byebug
       <<-EOD
         th]read <subcommand>
 
-        Commands to manipulate threads.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Commands to manipulate threads'
     end
   end
 end

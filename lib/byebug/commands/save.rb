@@ -11,6 +11,25 @@ module Byebug
       /^\s* sa(?:ve)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        save[ FILE]
+
+        #{short_description}
+
+        Byebug state is saved as a script file. This includes breakpoints,
+        catchpoints, display expressions and some settings. If no filename is
+        given, byebug will fabricate one.
+
+        Use the "source" command in another debug session to restore the saved
+        file.
+      EOD
+    end
+
+    def short_description
+      'Saves current byebug session to a file'
+    end
+
     def execute
       file = File.open(@match[1] || Setting[:savefile], 'w')
 
@@ -21,18 +40,6 @@ module Byebug
 
       print pr('save.messages.done', path: file.path)
       file.close
-    end
-
-    def description
-      <<-EOD
-        save[ FILE]
-
-        Saves current byebug state to FILE as a script file. This includes
-        breakpoints, catchpoints, display expressions and some settings. If no
-        filename is given, we will fabricate one.
-
-        Use the "source" command in another debug session to restore them.
-      EOD
     end
 
     private

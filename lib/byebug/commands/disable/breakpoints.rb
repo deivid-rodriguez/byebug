@@ -15,14 +15,6 @@ module Byebug
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end
 
-      def execute
-        enable_disable_breakpoints('disable', @match[1])
-      end
-
-      def short_description
-        'Disable all or specific breakpoints.'
-      end
-
       def description
         <<-EOD
           dis[able] b[reakpoints][ <id1> <id2> .. <idn>]
@@ -32,6 +24,14 @@ module Byebug
           Give breakpoint numbers (separated by spaces) as arguments or no
           argument at all if you want to disable every breakpoint.
         EOD
+      end
+
+      def short_description
+        'Disable all or specific breakpoints.'
+      end
+
+      def execute
+        enable_disable_breakpoints('disable', @match[1])
       end
     end
   end

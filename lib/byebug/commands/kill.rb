@@ -11,6 +11,20 @@ module Byebug
       /^\s* (?:kill) \s* (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        kill[ signal]
+
+        #{short_description}
+
+        Equivalent of Process.kill(Process.pid)
+      EOD
+    end
+
+    def short_description
+      'Sends a signal to the current process'
+    end
+
     def execute
       if @match[1]
         signame = @match[1]
@@ -25,15 +39,6 @@ module Byebug
       end
 
       Process.kill(signame, Process.pid)
-    end
-
-    def description
-      <<-EOD
-        kill[ signal]
-
-        Send [signal] to Process.pid
-        Equivalent of Process.kill(Process.pid)
-      EOD
     end
   end
 end

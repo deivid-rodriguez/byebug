@@ -15,6 +15,21 @@ module Byebug
         /^\s* f(?:ile)? (?:\s+ (\S+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          inf[o] f[ile]
+
+          #{short_description}
+
+          It informs about file name, number of lines, possible breakpoints in
+          the file, last modification time and sha1 digest.
+        EOD
+      end
+
+      def short_description
+        'Information about a particular source file.'
+      end
+
       def execute
         file = @match[1] || @state.file
         unless File.exist?(file)
@@ -33,21 +48,6 @@ module Byebug
           Sha1 Signature: #{info_file_sha1(file)}
 
         EOC
-      end
-
-      def short_description
-        'Information about a particular source file.'
-      end
-
-      def description
-        <<-EOD
-          inf[o] f[ile]
-
-          #{short_description}
-
-          It informs about file name, number of lines, possible breakpoints in
-          the file, last modification time and sha1 digest.
-        EOD
       end
 
       private

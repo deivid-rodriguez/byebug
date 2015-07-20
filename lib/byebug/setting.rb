@@ -58,7 +58,7 @@ module Byebug
       end
 
       def help_all
-        output = "  List of settings supported in byebug:\n  --\n"
+        output = "  List of supported settings:\n  --\n"
         width = settings.keys.max_by(&:size).size
         settings.values.each do |sett|
           output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)

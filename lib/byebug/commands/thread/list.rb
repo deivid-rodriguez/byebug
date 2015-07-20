@@ -15,6 +15,18 @@ module Byebug
         /^\s* l(?:ist)? \s*$/x
       end
 
+      def description
+        <<-EOD
+          th[read] l[ist] <thnum>
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Lists all threads'
+      end
+
       def execute
         contexts = Byebug.contexts.sort_by(&:thnum)
 
@@ -23,18 +35,6 @@ module Byebug
         end
 
         print(thread_list)
-      end
-
-      def short_description
-        'Lists all threads'
-      end
-
-      def description
-        <<-EOD
-          th[read] l[ist] <thnum>
-
-          #{short_description}
-        EOD
       end
     end
   end

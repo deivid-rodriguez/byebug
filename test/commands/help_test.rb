@@ -14,9 +14,9 @@ module Byebug
 
           h[elp][ <cmd>[ <subcmd>]]
 
-          help                -- prints this help.
-          help <cmd>          -- prints help on command <cmd>.
-          help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
+          help                -- prints this help
+          help <cmd>          -- prints help on command <cmd>
+          help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>
 
         TXT
 
@@ -31,7 +31,8 @@ module Byebug
       expected_output = split_lines <<-TXT
         b[reak] [file:]line [if expr]
         b[reak] [module::...]class(.|#)method [if expr]
-        Set breakpoint to some position, (optionally) if expr == true
+
+        Sets breakpoints in the source code
       TXT
 
       check_output_includes(*expected_output)
@@ -47,19 +48,19 @@ module Byebug
       enter 'help info breakpoints'
       debug_code(minimal_program)
 
-      check_output_includes(/Status of user settable breakpoints/)
+      check_output_includes('Status of user settable breakpoints')
     end
 
     def test_help_set_shows_help_for_set_command
       enter 'help set'
       debug_code(minimal_program)
-      check_output_includes(/Modifies parts of byebug environment/)
+      check_output_includes('Modifies byebug settings')
     end
 
     def test_help_show_shows_help_for_show_command
       enter 'help show'
       debug_code(minimal_program)
-      check_output_includes(/Generic command for showing byebug settings/)
+      check_output_includes('Shows byebug settings')
     end
   end
 end

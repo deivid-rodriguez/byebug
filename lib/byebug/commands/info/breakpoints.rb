@@ -11,6 +11,18 @@ module Byebug
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          inf[o] b[reakpoints]
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Status of user settable breakpoints'
+      end
+
       def execute
         return puts('No breakpoints.') if Byebug.breakpoints.empty?
 
@@ -26,18 +38,6 @@ module Byebug
 
         puts 'Num Enb What'
         breakpoints.each { |b| info_breakpoint(b) }
-      end
-
-      def short_description
-        'Status of user settable breakpoints.'
-      end
-
-      def description
-        <<-EOD
-          inf[o] b[reakpoints]
-
-          #{short_description}
-        EOD
       end
 
       private

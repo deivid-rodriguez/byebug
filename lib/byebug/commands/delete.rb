@@ -8,11 +8,26 @@ module Byebug
   class DeleteCommand < Command
     include Helpers::ParseHelper
 
-    self.allow_in_post_mortem = false
     self.allow_in_control = true
+    self.allow_in_post_mortem = false
 
     def regexp
       /^\s* del(?:ete)? (?:\s+(.*))?$/x
+    end
+
+    def description
+      <<-EOD
+        del[ete][ nnn...]
+
+        #{short_description}
+
+        Without and argument, deletes all breakpoints. With integer arguments,
+        it deletes specific breakpoints.
+      EOD
+    end
+
+    def short_description
+      'Deletes breakpoints'
     end
 
     def execute
@@ -33,15 +48,6 @@ module Byebug
           return errmsg(pr('break.errors.no_breakpoint_delete', pos: pos))
         end
       end
-    end
-
-    def description
-      <<-EOD
-        del[ete][ nnn...]
-
-        Without and argument, deletes all breakpoints. With integer arguments,
-        it deletes specific breakpoints.
-      EOD
     end
   end
 end

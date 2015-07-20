@@ -13,6 +13,22 @@ module Byebug
        \s*$/x
     end
 
+    def description
+      <<-EOD
+        tr[acevar] <variable> [[no]stop]
+
+        #{short_description}
+
+        If "stop" is specified, execution will stop every time the variable
+        changes its value. If nothing or "nostop" is specified, execution won't
+        stop, changes will just be logged in byebug's output.
+      EOD
+    end
+
+    def short_description
+      'Enables tracing of a global variable'
+    end
+
     def execute
       var = @match[1]
       return errmsg(pr('trace.errors.needs_global_variable')) unless var
@@ -34,18 +50,6 @@ module Byebug
       puts pr('trace.messages.on_change', name: name, value: value)
 
       @state.context.step_out(1, false) if stop
-    end
-
-    def description
-      <<-EOD
-        tr[acevar] <variable> [[no]stop]
-
-        Start tracing variable <variable>.
-
-        If "stop" is specified, execution will stop every time the variable
-        changes its value. If nothing or "nostop" is specified, execution won't
-        stop, changes will just be logged in byebug's output.
-      EOD
     end
   end
 end

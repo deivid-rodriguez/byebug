@@ -15,6 +15,18 @@ module Byebug
         /^\s* st(?:op)? (?: \s* (\d+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          th[read] st[op] <thnum>
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Stops the execution of the specified thread'
+      end
+
       def execute
         return puts(help) unless @match[1]
 
@@ -23,18 +35,6 @@ module Byebug
 
         context.suspend
         display_context(context)
-      end
-
-      def short_description
-        'Stops the execution of the specified thread'
-      end
-
-      def description
-        <<-EOD
-          th[read] st[op] <thnum>
-
-          #{short_description}
-        EOD
       end
     end
   end

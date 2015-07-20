@@ -14,6 +14,24 @@ module Byebug
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        l[ist][[-=]][ nn-mm]
+
+        #{short_description}
+
+        Lists lines forward from current line or from the place where code was
+        last listed. If "list-" is specified, lists backwards instead. If
+        "list=" is specified, lists from current line regardless of where code
+        was last listed. A line range can also be specified to list specific
+        sections of code.
+      EOD
+    end
+
+    def short_description
+      'Lists lines of source code'
+    end
+
     def execute
       exist = File.exist?(@state.file)
       return errmsg "No sourcefile available for #{@state.file}\n" unless exist
@@ -26,18 +44,6 @@ module Byebug
       display_lines(b, e)
 
       @state.prev_line = b
-    end
-
-    def description
-      <<-EOD
-        l[ist][[-=]][ nn-mm]
-
-        Lists lines of code forward from current line or from the place where
-        code was last listed. If "list-" is specified, lists backwards instead.
-        If "list=" is specified, lists from current line regardless of where
-        code was last listed. A line range can also be specified to list
-        specific sections of code.
-      EOD
     end
 
     private

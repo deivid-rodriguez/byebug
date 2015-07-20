@@ -21,8 +21,12 @@ module Byebug
       <<-EOD
         ps <expression>
 
-        Evaluates <expression>, an array, sort and columnize its value.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Evaluates an expression and prettyprints & sort the result'
     end
 
     def execute

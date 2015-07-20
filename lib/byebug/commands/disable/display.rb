@@ -15,14 +15,6 @@ module Byebug
         /^\s* d(?:isplay)? (?:\s+ (.+))? \s*$/x
       end
 
-      def execute
-        enable_disable_display('disable', @match[1])
-      end
-
-      def short_description
-        'Disables expressions to be displayed when program stops.'
-      end
-
       def description
         <<-EOD
           dis[able] d[isplay][ <id1> <id2> .. <idn>]
@@ -33,6 +25,14 @@ module Byebug
           display" to see the current list of code numbers. If no arguments are
           specified, all displays are disabled.
         EOD
+      end
+
+      def short_description
+        'Disables expressions to be displayed when program stops.'
+      end
+
+      def execute
+        enable_disable_display('disable', @match[1])
       end
     end
   end

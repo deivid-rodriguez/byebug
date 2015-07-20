@@ -8,10 +8,7 @@ module Byebug
     DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_save")
 
     def banner
-      <<-EOB
-        File where save commands saves current settings to. Default:
-        ~/.byebug_save
-      EOB
+      'File where settings are saved to. Default: ~/.byebug_save'
     end
 
     def to_s

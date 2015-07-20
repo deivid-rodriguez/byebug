@@ -15,22 +15,22 @@ module Byebug
         /^\s* a(?:ll)? \s*$/x
       end
 
-      def execute
-        var_global
-        var_instance('self')
-        var_local
-      end
-
-      def short_description
-        'Shows local, global and instance variables of self.'
-      end
-
       def description
         <<-EOD
           v[ar] a[ll]
 
           #{short_description}
         EOD
+      end
+
+      def short_description
+        'Shows local, global and instance variables of self.'
+      end
+
+      def execute
+        var_global
+        var_instance('self')
+        var_local
       end
     end
   end

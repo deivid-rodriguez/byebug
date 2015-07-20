@@ -18,8 +18,12 @@ module Byebug
       <<-EOD
         en[able][[ b[reakpoints]| d[isplay])][ n1[ n2[ ...[ nn]]]]]
 
-        Enables breakpoints or displays.
+        #{short_description}
       EOD
+    end
+
+    def short_description
+      'Enables breakpoints or displays'
     end
   end
 end

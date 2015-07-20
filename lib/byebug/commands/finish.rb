@@ -16,6 +16,22 @@ module Byebug
       /^\s* fin(?:ish)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        fin[ish][ n_frames]
+
+        #{short_description}
+
+        If no number is given, we run until the current frame returns. If a
+        number of frames `n_frames` is given, then we run until `n_frames`
+        return from the current position.
+      EOD
+    end
+
+    def short_description
+      'Runs the program until frame returns'
+    end
+
     def execute
       max_frames = @state.context.stack_size - @state.frame
       if @match[1]
@@ -29,18 +45,6 @@ module Byebug
       @state.context.step_out(@state.frame + n_frames, force)
       @state.frame = 0
       @state.proceed
-    end
-
-    def description
-      <<-EOD
-        fin[ish][ n_frames]
-
-        Execute until frame returns.
-
-        If no number is given, we run until the current frame returns. If a
-        number of frames `n_frames` is given, then we run until `n_frames`
-        return from the current position.
-      EOD
     end
   end
 end

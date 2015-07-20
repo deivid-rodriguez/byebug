@@ -15,20 +15,20 @@ module Byebug
         /^\s* l(?:ocal)? \s*$/x
       end
 
-      def execute
-        var_local
-      end
-
-      def short_description
-        'Shows local variables in current scope.'
-      end
-
       def description
         <<-EOD
           v[ar] l[ocal]
 
           #{short_description}
         EOD
+      end
+
+      def short_description
+        'Shows local variables in current scope.'
+      end
+
+      def execute
+        var_local
       end
     end
   end

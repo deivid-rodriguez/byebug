@@ -87,7 +87,7 @@ module Byebug
       enter 'enable'
       debug_code(program)
 
-      check_output_includes(/Enables breakpoints or displays./)
+      check_output_includes(/Enables breakpoints or displays/)
     end
   end
 end

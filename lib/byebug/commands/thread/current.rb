@@ -15,20 +15,20 @@ module Byebug
         /^\s* c(?:urrent)? \s*$/x
       end
 
-      def execute
-        display_context(@state.context)
-      end
-
-      def short_description
-        'Shows current thread information'
-      end
-
       def description
         <<-EOD
           th[read] c[urrent]
 
           #{short_description}
         EOD
+      end
+
+      def short_description
+        'Shows current thread information'
+      end
+
+      def execute
+        display_context(@state.context)
       end
     end
   end

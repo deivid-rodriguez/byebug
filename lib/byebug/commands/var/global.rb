@@ -13,20 +13,20 @@ module Byebug
         /^\s* g(?:lobal)? \s*$/x
       end
 
-      def execute
-        var_global
-      end
-
-      def short_description
-        'Shows global variables.'
-      end
-
       def description
         <<-EOD
           v[ar] g[lobal]
 
           #{short_description}
         EOD
+      end
+
+      def short_description
+        'Shows global variables.'
+      end
+
+      def execute
+        var_global
       end
     end
   end

@@ -78,7 +78,7 @@ module Byebug
       enter 'disable'
       debug_code(program)
 
-      check_output_includes 'Disables breakpoints or displays.'
+      check_output_includes 'Disables breakpoints or displays'
     end
 
     def test_disable_shows_an_error_if_an_unknown_subcommand_is_provided

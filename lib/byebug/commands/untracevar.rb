@@ -11,6 +11,18 @@ module Byebug
       /^\s* untr(?:acevar)? (?:\s+ (\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        untr[acevar] <variable>
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Stops tracing a global variable'
+    end
+
     def execute
       var = @match[1]
       if global_variables.include?(:"#{var}")
@@ -19,14 +31,6 @@ module Byebug
       else
         errmsg pr('trace.errors.not_global', var: var)
       end
-    end
-
-    def description
-      <<-EOD
-        untr[acevar] <variable>
-
-        Stop tracing global variable <variable>.
-      EOD
     end
   end
 end

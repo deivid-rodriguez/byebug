@@ -15,6 +15,18 @@ module Byebug
         /^\s* sw(?:itch)? (?: \s* (\d+))? \s*$/x
       end
 
+      def description
+        <<-EOD
+          th[read] sw[itch] <thnum>
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'Switches execution to the specified thread'
+      end
+
       def execute
         return puts(help) unless @match[1]
 
@@ -25,18 +37,6 @@ module Byebug
 
         context.switch
         @state.proceed
-      end
-
-      def short_description
-        'Switches execution to the specified thread'
-      end
-
-      def description
-        <<-EOD
-          th[read] sw[itch] <thnum>
-
-          #{short_description}
-        EOD
       end
     end
   end

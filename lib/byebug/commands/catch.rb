@@ -14,6 +14,23 @@ module Byebug
       /^\s* cat(?:ch)? (?:\s+(\S+))? (?:\s+(off))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        cat[ch][ (off|<exception>[ off])]
+
+        #{short_description}
+
+        catch                 -- lists catchpoints
+        catch off             -- deletes all catchpoints
+        catch <exception>     -- enables handling <exception>
+        catch <exception> off -- disables handling <exception>
+      EOD
+    end
+
+    def short_description
+      'Handles exception catchpoints'
+    end
+
     def execute
       return info unless @match[1]
 
@@ -56,17 +73,6 @@ module Byebug
       else
         puts 'No exceptions set to be caught.'
       end
-    end
-
-    def description
-      <<-EOD
-        cat[ch][ (off|<exception>[ off])]
-
-        "catch" lists catchpoints.
-        "catch off" deletes all catchpoints.
-        "catch <exception>" enables handling <exception>.
-        "catch <exception> off" disables handling <exception>.
-      EOD
     end
   end
 end

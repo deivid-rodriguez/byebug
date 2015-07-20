@@ -18,20 +18,26 @@ module Byebug
       /^\s* disp(?:lay)? (?:\s+ (.+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        disp[lay][ <expression>]
+
+        #{short_descripton}
+
+        If <expression> specified, adds <expression> into display expression
+        list. Otherwise, it lists all expressions.
+      EOD
+    end
+
+    def short_description
+      'Evaluates expressions every time the debugger stops'
+    end
+
     def execute
       return print_display_expressions unless @match && @match[1]
 
       @state.display.push [true, @match[1]]
       display_expression(@match[1])
-    end
-
-    def description
-      <<-EOD
-        disp[lay][ <expression>]
-
-        If <expression> specified, adds <expression> into display expression
-        list. Otherwise, it lists all expressions.
-      EOD
     end
 
     private

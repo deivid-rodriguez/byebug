@@ -11,6 +11,22 @@ module Byebug
       /^\s* ed(?:it)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        edit[ file:lineno]
+
+        #{short_description}
+
+        With no argumnt, edits file containing most re line listed. Editing
+        targets can also be specified to start editing at a specific line in a
+        specific file
+      EOD
+    end
+
+    def short_description
+      'Edits source files'
+    end
+
     def execute
       file, line = location(@match[1])
       return edit_error('not_exist', file) unless File.exist?(file)
@@ -19,16 +35,6 @@ module Byebug
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 
       system(cmd)
-    end
-
-    def description
-      <<-EOD
-        edit[ file:lineno] Edit specified files.
-
-        With no argument, edits file containing most recent line listed. Editing
-        targets can also be specified to start editing at a specific line in a
-        specific file.
-      EOD
     end
 
     private

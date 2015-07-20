@@ -14,6 +14,24 @@ module Byebug
       /^\s* set (?:\s+(?<setting>\w+))? (?:\s+(?<value>\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        set <setting> <value>
+
+        #{short_description}
+
+        Boolean values take "on", "off", "true", "false", "1" or "0". If you
+        don't specify a value, the boolean setting will be enabled. Conversely,
+        you can use "set no<setting>" to disable them.
+
+        You can see these environment settings with the "show" command.
+      EOD
+    end
+
+    def short_description
+      'Modifies byebug settings'
+    end
+
     def execute
       key = @match[:setting]
       value = @match[:value]
@@ -51,20 +69,6 @@ module Byebug
 
     def help
       description + Setting.help_all
-    end
-
-    def description
-      <<-EOD
-        set <setting> <value>
-
-        Modifies parts of byebug environment.
-
-        Boolean values take "on", "off", "true", "false", "1" or "0". If you
-        don't specify a value, the boolean setting will be enabled. Conversely,
-        you can use "set no<setting>" to disable them.
-
-        You can see these environment settings with the "show" command.
-      EOD
     end
   end
 end

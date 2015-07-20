@@ -18,15 +18,12 @@ module Byebug
       <<-EOD
         dis[able][[ breakpoints| display)][ n1[ n2[ ...[ nn]]]]]
 
-        Disables breakpoints or displays.
-
-        "disable" by itself shows this help
-        "disable breakpoints" disables all breakpoints.
-        "disable displays" disables all displays.
-
-        You can also specify a space separated list of breakpoint or display
-        numbers to disable only specific breakpoints or displays.
+        #{short_description}
        EOD
+    end
+
+    def short_description
+      'Disables breakpoints or displays'
     end
   end
 end

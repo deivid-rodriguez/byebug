@@ -11,6 +11,22 @@ module Byebug
       /^\s* h(?:elp)? (?:\s+(\S+))? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        h[elp][ <cmd>[ <subcmd>]]
+
+        #{short_description}
+
+        help                -- prints this help
+        help <cmd>          -- prints help on command <cmd>
+        help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>
+      EOD
+    end
+
+    def short_description
+      'Helps you using byebug'
+    end
+
     def execute
       return puts(help) unless @match[1]
 
@@ -24,16 +40,6 @@ module Byebug
       return errmsg(pr('help.errors.undefined', cmd: @match[2])) unless subcmd
 
       puts(subcmd.help)
-    end
-
-    def description
-      <<-EOD
-        h[elp][ <cmd>[ <subcmd>]]
-
-        help                -- prints this help.
-        help <cmd>          -- prints help on command <cmd>.
-        help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>.
-      EOD
     end
   end
 end

@@ -156,8 +156,9 @@ module Byebug
     def test_set_without_arguments_shows_help_for_set_command
       enter 'set'
       debug_code(program)
-      check_output_includes(/Modifies parts of byebug environment./)
-      check_output_includes(/List of settings supported in byebug/)
+
+      check_output_includes('Modifies byebug settings',
+                            'List of supported settings:')
     end
   end
 end

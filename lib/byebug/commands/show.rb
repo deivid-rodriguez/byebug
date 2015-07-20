@@ -11,6 +11,20 @@ module Byebug
       /^\s* show (?:\s+(?<setting>\w+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        show <setting> <value>
+
+        #{short_description}
+
+        You can change them with the "set" command.
+      EOD
+    end
+
+    def short_description
+      'Shows byebug settings'
+    end
+
     def execute
       key = @match[:setting]
       return puts(help) unless key
@@ -23,15 +37,6 @@ module Byebug
 
     def help
       description + Setting.help_all
-    end
-
-    def description
-      <<-EOD
-        show <setting> <value>
-
-        Generic command for showing byebug settings. You can change them with
-        the "set" command.
-      EOD
     end
   end
 end

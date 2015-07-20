@@ -14,6 +14,22 @@ module Byebug
       /^\s* undisp(?:lay)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        undisp[lay][ nnn]
+
+        #{short_description}
+
+        Arguments are the code numbers of the expressions to stop displaying. No
+        argument means cancel all automatic-display expressions. Type "info
+        display" to see the current list of code numbers.
+      EOD
+    end
+
+    def short_description
+      'Stops displaying all or some expressions when program stops'
+    end
+
     def execute
       if @match[1]
         pos, err = get_int(@match[1], 'Undisplay', 1, @state.display.size)
@@ -29,18 +45,6 @@ module Byebug
 
         @state.display.each { |d| d[0] = false }
       end
-    end
-
-    def description
-      <<-EOD
-        undisp[lay][ nnn]
-
-        Cancel some expressions to be displayed when program stops. Arguments
-        are the code numbers of the expressions to stop displaying. No argument
-        means cancel all automatic-display expressions. "delete display" has the
-        same effect as this command. Do "info display" to see the current list
-        of code numbers.
-      EOD
     end
   end
 end

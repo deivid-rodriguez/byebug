@@ -71,8 +71,8 @@ module Byebug
     def test_show_without_arguments_displays_help_for_the_show_command
       enter 'show'
       debug_code(minimal_program)
-      check_output_includes(/Generic command for showing byebug settings./)
-      check_output_includes(/List of settings supported in byebug/)
+      check_output_includes('Shows byebug settings',
+                            'List of supported settings:')
     end
   end
 end

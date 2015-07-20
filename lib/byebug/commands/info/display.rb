@@ -11,6 +11,18 @@ module Byebug
         /^\s* d(?:isplay)? \s*$/x
       end
 
+      def description
+        <<-EOD
+          inf[o] d[display]
+
+          #{short_description}
+        EOD
+      end
+
+      def short_description
+        'List of expressions to display when program stops'
+      end
+
       def execute
         display = @state.display
 
@@ -24,18 +36,6 @@ module Byebug
         display.each_with_index do |d, i|
           puts(format('%3d: %s  %s', i + 1, d[0] ? 'y' : 'n', d[1]))
         end
-      end
-
-      def short_description
-        'List of expressions to display when program stops'
-      end
-
-      def description
-        <<-EOD
-          inf[o] d[display]
-
-          #{short_description}
-        EOD
       end
     end
   end

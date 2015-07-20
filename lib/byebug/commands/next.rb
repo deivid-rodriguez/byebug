@@ -17,20 +17,24 @@ module Byebug
       /^\s* n(?:ext)? (?:\s+(\S+))? \s*$/x
     end
 
+    def description
+      <<-EOD
+        n[ext][ nnn]
+
+        #{short_description}
+      EOD
+    end
+
+    def short_description
+      'Runs one or more lines of code'
+    end
+
     def execute
       steps, err = parse_steps(@match[1], 'Next')
       return errmsg(err) unless steps
 
       @state.context.step_over(steps, @state.frame)
       @state.proceed
-    end
-
-    def description
-      <<-EOD
-        n[ext][ nnn]
-
-        Steps over once or nnn times.
-      EOD
     end
   end
 end
