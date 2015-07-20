@@ -11,6 +11,8 @@ module Byebug
     class DisplaySubcommand < Command
       include Helpers::ToggleHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* d(?:isplay)? (?:\s+ (.+))? \s*$/x
       end

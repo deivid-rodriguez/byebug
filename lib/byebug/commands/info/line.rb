@@ -7,6 +7,8 @@ module Byebug
     # Information about current location
     #
     class LineSubcommand < Command
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* l(?:ine)? \s*$/x
       end

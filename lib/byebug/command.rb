@@ -39,12 +39,12 @@ module Byebug
     def_delegators :@state, :errmsg, :puts, :print, :confirm
 
     class << self
-      attr_accessor :allow_in_control
-      attr_writer :allow_in_post_mortem, :always_run
+      #
+      # Special methods to allow command filtering in processors
+      #
+      attr_accessor :allow_in_control, :allow_in_post_mortem
 
-      def allow_in_post_mortem
-        !defined?(@allow_in_post_mortem) ? true : false
-      end
+      attr_writer :always_run
 
       def always_run
         @always_run ||= 0

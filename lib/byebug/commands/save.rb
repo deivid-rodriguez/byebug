@@ -6,6 +6,7 @@ module Byebug
   #
   class SaveCommand < Command
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* sa(?:ve)? (?:\s+(\S+))? \s*$/x

@@ -6,6 +6,7 @@ module Byebug
   #
   class ShowCommand < Command
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* show (?:\s+(?<setting>\w+))? \s*$/x

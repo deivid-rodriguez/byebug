@@ -11,6 +11,8 @@ module Byebug
     class BreakpointsSubcommand < Command
       include Helpers::ToggleHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end

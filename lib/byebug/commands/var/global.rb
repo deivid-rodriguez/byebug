@@ -9,6 +9,8 @@ module Byebug
     class GlobalSubcommand < Command
       include Helpers::VarHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* g(?:lobal)? \s*$/x
       end

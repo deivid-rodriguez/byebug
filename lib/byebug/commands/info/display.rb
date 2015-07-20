@@ -7,6 +7,8 @@ module Byebug
     # Information about display expressions
     #
     class DisplaySubcommand < Command
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* d(?:isplay)? \s*$/x
       end

@@ -10,6 +10,8 @@ module Byebug
   class DisableCommand < Command
     include Subcommands
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* dis(?:able)? (?:\s+ (.+))? \s*$/x
     end

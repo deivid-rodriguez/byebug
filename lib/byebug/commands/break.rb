@@ -13,7 +13,6 @@ module Byebug
     include Helpers::ParseHelper
 
     self.allow_in_control = true
-    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* b(?:reak)? (?:\s+ (\S+))? (?:\s+ if \s+(.+))? \s*$/x

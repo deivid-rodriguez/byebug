@@ -11,6 +11,8 @@ module Byebug
     class AllSubcommand < Command
       include Helpers::VarHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* a(?:ll)? \s*$/x
       end

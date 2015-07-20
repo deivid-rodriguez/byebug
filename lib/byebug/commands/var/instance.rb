@@ -11,6 +11,8 @@ module Byebug
     class InstanceSubcommand < Command
       include Helpers::VarHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* i(?:nstance)? (?:\s+ (.+))? \s*$/x
       end

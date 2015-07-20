@@ -11,8 +11,6 @@ module Byebug
   class NextCommand < Command
     include Helpers::ParseHelper
 
-    self.allow_in_post_mortem = false
-
     def regexp
       /^\s* n(?:ext)? (?:\s+(\S+))? \s*$/x
     end

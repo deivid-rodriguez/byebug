@@ -7,6 +7,8 @@ module Byebug
     # Information about arguments of the current method/block
     #
     class ProgramSubcommand < Command
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* p(?:rogram)? \s*$/x
       end

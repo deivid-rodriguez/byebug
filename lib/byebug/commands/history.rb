@@ -8,6 +8,8 @@ module Byebug
   class HistoryCommand < Command
     include Helpers::ParseHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* hist(?:ory)? (?:\s+(?<num_cmds>.+))? \s*$/x
     end

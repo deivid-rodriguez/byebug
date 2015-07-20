@@ -10,6 +10,8 @@ module Byebug
     include Helpers::FileHelper
     include Helpers::ParseHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x
     end

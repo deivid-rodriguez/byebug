@@ -5,8 +5,6 @@ module Byebug
   # Stop tracing a global variable.
   #
   class UntracevarCommand < Command
-    self.allow_in_post_mortem = false
-
     def regexp
       /^\s* untr(?:acevar)? (?:\s+ (\S+))? \s*$/x
     end

@@ -11,6 +11,8 @@ module Byebug
     class LocalSubcommand < Command
       include Helpers::VarHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* l(?:ocal)? \s*$/x
       end

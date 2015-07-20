@@ -10,6 +10,8 @@ module Byebug
   class CatchCommand < Command
     include Helpers::EvalHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* cat(?:ch)? (?:\s+(\S+))? (?:\s+(off))? \s*$/x
     end

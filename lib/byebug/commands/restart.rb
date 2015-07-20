@@ -10,6 +10,7 @@ module Byebug
     include Helpers::PathHelper
 
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* restart (?:\s+(?<args>.+))? \s*$/x

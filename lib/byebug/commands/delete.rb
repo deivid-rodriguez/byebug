@@ -9,7 +9,6 @@ module Byebug
     include Helpers::ParseHelper
 
     self.allow_in_control = true
-    self.allow_in_post_mortem = false
 
     def regexp
       /^\s* del(?:ete)? (?:\s+(.*))?$/x

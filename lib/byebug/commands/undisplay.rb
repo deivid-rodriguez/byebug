@@ -8,8 +8,6 @@ module Byebug
   class UndisplayCommand < Command
     include Helpers::ParseHelper
 
-    self.allow_in_post_mortem = false
-
     def regexp
       /^\s* undisp(?:lay)? (?:\s+(\S+))? \s*$/x
     end

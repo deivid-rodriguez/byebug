@@ -11,6 +11,8 @@ module Byebug
     include Helpers::FrameHelper
     include Helpers::ParseHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
     end

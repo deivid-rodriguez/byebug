@@ -11,6 +11,8 @@ module Byebug
     class ConstSubcommand < Command
       include Helpers::EvalHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* c(?:onst)? (?:\s+ (.+))? \s*$/x
       end

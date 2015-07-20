@@ -8,6 +8,8 @@ module Byebug
   class PryCommand < Command
     include Helpers::EvalHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* pry \s*$/x
     end

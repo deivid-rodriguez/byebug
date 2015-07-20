@@ -8,6 +8,8 @@ module Byebug
   class MethodCommand < Command
     include Helpers::EvalHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* m(?:ethod)? \s+ (i(:?nstance)?\s+)?/x
     end

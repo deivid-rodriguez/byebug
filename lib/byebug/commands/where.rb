@@ -9,6 +9,8 @@ module Byebug
   class WhereCommand < Command
     include Helpers::FrameHelper
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
     end

@@ -8,6 +8,7 @@ module Byebug
   #
   class SourceCommand < Command
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* so(?:urce)? (?:\s+(\S+))? \s*$/x

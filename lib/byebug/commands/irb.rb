@@ -6,6 +6,8 @@ module Byebug
   # Enter IRB from byebug's prompt
   #
   class IrbCommand < Command
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* irb \s*$/x
     end

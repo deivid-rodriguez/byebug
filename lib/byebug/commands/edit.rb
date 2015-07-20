@@ -6,6 +6,7 @@ module Byebug
   #
   class EditCommand < Command
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
     def regexp
       /^\s* ed(?:it)? (?:\s+(\S+))? \s*$/x

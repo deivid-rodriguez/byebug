@@ -14,6 +14,8 @@ module Byebug
   class VarCommand < Command
     include Subcommands
 
+    self.allow_in_post_mortem = true
+
     def regexp
       /^\s* v(?:ar)? (?:\s+ (.+))? \s*$/x
     end

@@ -11,6 +11,8 @@ module Byebug
     class FileSubcommand < Command
       include Helpers::FileHelper
 
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* f(?:ile)? (?:\s+ (\S+))? \s*$/x
       end

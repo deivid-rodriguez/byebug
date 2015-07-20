@@ -7,6 +7,8 @@ module Byebug
     # Information about current breakpoints
     #
     class BreakpointsSubcommand < Command
+      self.allow_in_post_mortem = true
+
       def regexp
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end

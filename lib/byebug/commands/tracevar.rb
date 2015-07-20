@@ -5,8 +5,6 @@ module Byebug
   # Show (and possibily stop) at every line that changes a global variable.
   #
   class TracevarCommand < Command
-    self.allow_in_post_mortem = false
-
     def regexp
       /^\s* tr(?:acevar)? (?: \s+ (\S+))?  # (variable-name)?
                           (?: \s+ (stop|nostop))?
