@@ -9,12 +9,12 @@ module Byebug
     self.allow_in_post_mortem = false
 
     def regexp
-      /^\s*i(?:nterrupt)?\s*$/
+      /^\s*int(?:errupt)?\s*$/
     end
 
     def description
       <<-EOD
-        i[nterrupt]
+        int[errupt]
 
         #{short_description}
       EOD

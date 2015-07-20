@@ -11,6 +11,7 @@ was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 
 # Changed
 * `info args` is now `var args`.
+* `interrupt` is now aliased to `int`, not to `i`.
 
 ## 5.0.0
 ### Fixed
