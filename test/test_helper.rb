@@ -3,26 +3,7 @@ require 'byebug'
 require 'byebug/interfaces/test_interface'
 require 'support/utils'
 
-Byebug.handler = Byebug::CommandProcessor.new(Byebug::TestInterface.new)
-
 module Byebug
-  #
-  # Useful monkeypatch for testing
-  #
-  class Context
-    class << self
-      undef :ignored_files
-
-      #
-      # List of files to be ignored during a test run
-      #
-      def ignored_files
-        @ignored_files ||=
-          `git ls-files -z`.split("\x0").map { |f| File.expand_path(f) }
-      end
-    end
-  end
-
   #
   # Extends Minitest's base test case and provides defaults for all tests.
   #
@@ -32,12 +13,17 @@ module Byebug
     include TestUtils
     include Helpers::StringHelper
 
+    def self.before_suite
+      Byebug.handler = CommandProcessor.new(TestInterface.new)
+
+      Context.ignored_files = Context.all_files
+    end
+
     #
     # Reset to default state before each test
     #
     def setup
       force_set_const(Byebug, 'INIT_FILE', '.byebug_test_rc')
-
       interface.clear
 
       Byebug.breakpoints.clear if Byebug.breakpoints
@@ -109,3 +95,5 @@ module Byebug
     end
   end
 end
+
+Byebug::TestCase.before_suite

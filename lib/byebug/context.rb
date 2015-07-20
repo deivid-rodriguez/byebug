@@ -1,3 +1,5 @@
+require 'byebug/helpers/path'
+
 module Byebug
   #
   # Mantains context information for the debugger and it's the main
@@ -5,19 +7,18 @@ module Byebug
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
   class Context
-    #
-    # List of files byebug will ignore while debugging
-    #
-    def self.ignored_files
-      Byebug.mode == :standalone ? lib_files + [bin_file] : lib_files
-    end
+    class << self
+      include Helpers::PathHelper
 
-    def self.bin_file
-      @bin_file ||= Gem.bin_path('byebug', 'byebug')
-    end
+      attr_writer :ignored_files
 
-    def self.lib_files
-      @lib_files ||= Dir.glob(File.expand_path('../../**/*.rb', __FILE__))
+      #
+      # List of files byebug will ignore while debugging
+      #
+      def ignored_files
+        @ignored_files ||=
+          Byebug.mode == :standalone ? lib_files + [bin_file] : lib_files
+      end
     end
 
     #

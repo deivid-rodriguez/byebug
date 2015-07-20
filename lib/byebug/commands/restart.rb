@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/path'
 require 'shellwords'
 
 module Byebug
@@ -6,6 +7,8 @@ module Byebug
   # Restart debugged program from within byebug.
   #
   class RestartCommand < Command
+    include Helpers::PathHelper
+
     self.allow_in_control = true
 
     def regexp
@@ -30,18 +33,12 @@ module Byebug
     def execute
       argv = [$PROGRAM_NAME]
 
-      argv.unshift(byebug_script) if Byebug.mode == :standalone
+      argv.unshift(bin_file) if Byebug.mode == :standalone
 
       argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
 
       puts pr('restart.success', cmd: argv.shelljoin)
       exec(*argv)
-    end
-
-    private
-
-    def byebug_script
-      Gem.bin_path('byebug', 'byebug')
     end
   end
 end
