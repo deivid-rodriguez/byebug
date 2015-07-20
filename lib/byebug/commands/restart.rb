@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'shellwords'
 
 module Byebug
   #
@@ -27,21 +28,20 @@ module Byebug
     end
 
     def execute
-      if Byebug.mode == :standalone
-        cmd = "#{Gem.bin_path('byebug', 'byebug')} #{$PROGRAM_NAME}"
-      else
-        cmd = $PROGRAM_NAME
-      end
+      argv = [$PROGRAM_NAME]
 
-      if @match[:args]
-        cmd += " #{@match[:args]}"
-      else
-        require 'shellwords'
-        cmd += " #{$ARGV.compact.shelljoin}"
-      end
+      argv.unshift(byebug_script) if Byebug.mode == :standalone
 
-      puts pr('restart.success', cmd: cmd)
-      exec(cmd)
+      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
+
+      puts pr('restart.success', cmd: argv.shelljoin)
+      exec(*argv)
+    end
+
+    private
+
+    def byebug_script
+      Gem.bin_path('byebug', 'byebug')
     end
   end
 end
