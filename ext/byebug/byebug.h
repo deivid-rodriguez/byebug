@@ -45,7 +45,12 @@ typedef struct {
   VALUE backtrace;             /* [[loc, self, klass, binding], ...] */
 } debug_context_t;
 
-enum frame_component { LOCATION, SELF, CLASS, BINDING };
+typedef enum {
+  LOCATION,
+  SELF,
+  CLASS,
+  BINDING
+} frame_part;
 
 struct call_with_inspection_data {
   debug_context_t *dc;

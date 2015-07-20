@@ -90,8 +90,7 @@ context_dup(debug_context_t * context)
 
 
 static VALUE
-dc_frame_get(const debug_context_t * context, int frame_index,
-             enum frame_component type)
+dc_frame_get(const debug_context_t * context, int frame_index, frame_part type)
 {
   VALUE frame;
 
