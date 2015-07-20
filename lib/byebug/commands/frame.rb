@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'pathname'
 require 'byebug/command'
 require 'byebug/helpers/frame'
