@@ -74,7 +74,7 @@ module Byebug
       assert_equal true, state.proceed # Obscure assert to check termination
     end
 
-    def test_disable_breakpoints_shows_an_error_in_syntax_is_incorrect
+    def test_disable_breakpoints_shows_an_error_if_syntax_is_incorrect
       enter 'disable'
       debug_code(program)
 

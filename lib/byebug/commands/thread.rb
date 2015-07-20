@@ -19,7 +19,7 @@ module Byebug
 
     def description
       <<-EOD
-        th]read <subcommand>
+        th[read] <subcommand>
 
         #{short_description}
       EOD
