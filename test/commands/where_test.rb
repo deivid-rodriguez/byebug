@@ -1,5 +1,7 @@
-require 'mocha/mini_test'
+# encoding: utf-8
+
 require 'test_helper'
+require 'mocha/mini_test'
 
 module Byebug
   #
@@ -53,7 +55,7 @@ module Byebug
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
       path = '.../shortpath/to/example.rb'
-      RegularState.any_instance.stubs(:shortpath).returns(path)
+      Frame.any_instance.stubs(:shortpath).returns(path)
 
       enter 'set nofullpath', 'where', 'set fullpath'
       debug_code(program)

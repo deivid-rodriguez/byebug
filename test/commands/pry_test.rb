@@ -7,9 +7,9 @@ module Byebug
   #
   class PryTestCase < TestCase
     def setup
-      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
-
       super
+
+      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
     end
 
     def test_pry_command_starts_a_pry_session_if_pry_installed

@@ -8,7 +8,7 @@ module Byebug
     module VarHelper
       include EvalHelper
 
-      def var_list(ary, binding = default_binding)
+      def var_list(ary, binding = context.frame._binding)
         vars = ary.sort.map do |name|
           [name, safe_inspect(silent_eval(name.to_s, binding))]
         end
@@ -31,17 +31,17 @@ module Byebug
       end
 
       def var_local
-        locals = @state.context.frame_locals
-        cur_self = @state.context.frame_self(@state.frame)
+        locals = context.frame.locals
+        cur_self = context.frame._self
         locals[:self] = cur_self unless cur_self.to_s == 'main'
         puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
       end
 
       def var_args
-        args = @state.context.frame_args
+        args = context.frame.args
         return if args == [[:rest]]
 
-        all_locals = @state.context.frame_locals
+        all_locals = context.frame.locals
         arg_values = args.map { |arg| arg[1] }
 
         locals = all_locals.select { |k, _| arg_values.include?(k) }

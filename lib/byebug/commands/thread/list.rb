@@ -8,14 +8,14 @@ module Byebug
     #
     # Information about threads
     #
-    class ListSubcommand < Command
+    class ListCommand < Command
       include Helpers::ThreadHelper
 
-      def regexp
+      def self.regexp
         /^\s* l(?:ist)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           th[read] l[ist] <thnum>
 
@@ -23,7 +23,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Lists all threads'
       end
 

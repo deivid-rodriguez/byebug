@@ -11,11 +11,11 @@ module Byebug
   class NextCommand < Command
     include Helpers::ParseHelper
 
-    def regexp
+    def self.regexp
       /^\s* n(?:ext)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         n[ext][ nnn]
 
@@ -23,7 +23,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Runs one or more lines of code'
     end
 
@@ -31,8 +31,8 @@ module Byebug
       steps, err = parse_steps(@match[1], 'Next')
       return errmsg(err) unless steps
 
-      @state.context.step_over(steps, @state.frame)
-      @state.proceed
+      context.step_over(steps, context.frame.pos)
+      processor.proceed!
     end
   end
 end

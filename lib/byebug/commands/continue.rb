@@ -11,11 +11,11 @@ module Byebug
   class ContinueCommand < Command
     include Helpers::ParseHelper
 
-    def regexp
+    def self.regexp
       /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         c[ont[inue]][ <line_number>]
 
@@ -23,7 +23,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Runs until program ends, hits a breakpoint or reaches a line'
     end
 
@@ -32,7 +32,7 @@ module Byebug
         num, err = get_int(@match[1], 'Continue', 0, nil)
         return errmsg(err) unless num
 
-        filename = File.expand_path(@state.file)
+        filename = File.expand_path(frame.file)
         unless Breakpoint.potential_line?(filename, num)
           return errmsg(pr('continue.errors.unstopped_line', line: num))
         end
@@ -40,7 +40,7 @@ module Byebug
         Breakpoint.add(filename, num)
       end
 
-      @state.proceed
+      processor.proceed!
     end
   end
 end

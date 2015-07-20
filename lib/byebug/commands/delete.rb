@@ -9,12 +9,13 @@ module Byebug
     include Helpers::ParseHelper
 
     self.allow_in_control = true
+    self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* del(?:ete)? (?:\s+(.*))?$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         del[ete][ nnn...]
 
@@ -25,7 +26,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Deletes breakpoints'
     end
 

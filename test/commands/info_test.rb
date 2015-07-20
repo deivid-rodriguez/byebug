@@ -4,7 +4,7 @@ module Byebug
   #
   # Test info command.
   #
-  class InfoTestCase < TestCase
+  class InfoStandardTestCase < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -183,10 +183,6 @@ module Byebug
         "It stopped after stepping, next'ing or initial start."
     end
 
-    def test_info_program_shows_an_error_if_the_program_is_crashed
-      skip('for now')
-    end
-
     def test_info_program_shows_the_step_stop_reason
       enter 'step', 'info program'
       debug_code(program)
@@ -203,6 +199,19 @@ module Byebug
       check_output_includes 'Program stopped.', 'It stopped at a breakpoint.'
     end
 
+    def test_info_alone_shows_help
+      enter 'info', 'cont'
+      debug_code(program)
+
+      check_output_includes(
+        'Shows several informations about the program being debugged')
+    end
+  end
+
+  #
+  # Tests info command on crashed programs
+  #
+  class InfoCrashedTestCase < TestCase
     def program_raising
       strip_line_numbers <<-EOC
         byebug
@@ -211,17 +220,11 @@ module Byebug
       EOC
     end
 
-    def test_info_program_shows_the_catchpoint_stop_reason
+    def test_info_program_shows_the_catchpoint_stop_reason_for_crashed_programs
       enter 'catch RuntimeError', 'cont', 'info program', 'catch off', 'y'
 
       assert_raises(RuntimeError) { debug_code(program_raising) }
       check_output_includes 'Program stopped.', 'It stopped at a catchpoint.'
-    end
-
-    def test_info_alone_shows_help
-      enter 'info', 'cont'
-      debug_code(program)
-      check_output_includes(/List of "info" subcommands:/)
     end
   end
 end

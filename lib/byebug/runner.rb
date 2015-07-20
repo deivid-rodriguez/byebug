@@ -4,6 +4,7 @@ require 'byebug/core'
 require 'byebug/version'
 require 'byebug/helpers/parse'
 require 'byebug/option_setter'
+require 'byebug/processors/control_processor'
 
 module Byebug
   #
@@ -97,7 +98,7 @@ module Byebug
 
         break if quit
 
-        Byebug::ControlCommandProcessor.new.process_commands
+        ControlProcessor.new.process_commands
       end
     end
 

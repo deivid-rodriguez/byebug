@@ -164,13 +164,6 @@ module Byebug
       end
     end
 
-    def test_shows_an_error_when_the_file_to_list_does_not_exist
-      enter -> { (state.file = 'blabla') && 'list 7-7' }
-
-      debug_code(program)
-      check_error_includes 'No sourcefile available for blabla'
-    end
-
     def test_correctly_print_lines_containing_the_percentage_symbol
       enter 'list 7'
       debug_code(program)

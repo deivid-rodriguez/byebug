@@ -8,16 +8,16 @@ module Byebug
     #
     # Enables all or specific breakpoints
     #
-    class BreakpointsSubcommand < Command
+    class BreakpointsCommand < Command
       include Helpers::ToggleHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           en[able] b[reakpoints][ <ids>]
 
@@ -28,7 +28,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Disable all or specific breakpoints'
       end
 

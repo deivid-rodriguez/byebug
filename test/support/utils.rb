@@ -13,7 +13,7 @@ module Byebug
     #
     # If a command is a Proc object, it will be executed before being retrieved
     # by Processor. May be handy when you need build a command depending on the
-    # current context/state.
+    # current context.
     #
     # @example
     #
@@ -51,7 +51,7 @@ module Byebug
     #     puts 'hello'
     #   EOC
     #
-    #   debug_code(prog) { assert_equal 2, state.line }
+    #   debug_code(prog) { assert_equal 3, frame.line }
     #
     def debug_code(program, &block)
       interface.test_block = block
@@ -129,24 +129,24 @@ module Byebug
     end
 
     #
-    # Shortcut to Byebug's global state
-    #
-    def state
-      Byebug.handler.state
-    end
-
-    #
     # Shortcut to Byebug's interface
     #
     def interface
-      Byebug.handler.interface
+      context.processor.interface
     end
 
     #
     # Shortcut to Byebug's context
     #
     def context
-      state.context
+      Byebug.current_context
+    end
+
+    #
+    # Shortcut to current frame
+    #
+    def frame
+      context.frame
     end
 
     #
@@ -154,11 +154,15 @@ module Byebug
     #
     def clear_displays
       loop do
-        break unless state.display.size > 0
-        state.display.pop
+        break unless Byebug.displays.size > 0
+
+        Byebug.displays.pop
       end
     end
 
+    #
+    # Remove +const+ from +klass+ without a warning
+    #
     def force_remove_const(klass, const)
       klass.send(:remove_const, const) if klass.const_defined?(const)
     end
@@ -231,7 +235,7 @@ module Byebug
         module Byebug
           byebug
 
-          puts 'Hello world'
+          'Hello world'
         end
       EOM
     end

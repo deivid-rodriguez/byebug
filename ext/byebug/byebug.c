@@ -357,8 +357,7 @@ raw_return_event(VALUE trace_point, void *data)
 static void
 raise_event(VALUE trace_point, void *data)
 {
-  VALUE expn_class, ancestors;
-  VALUE path, lineno, binding, post_mortem_context;
+  VALUE expn_class, ancestors, path, lineno, pm_context;
   int i;
   debug_context_t *new_dc;
 
@@ -366,19 +365,14 @@ raise_event(VALUE trace_point, void *data)
 
   path = rb_tracearg_path(trace_arg);
   lineno = rb_tracearg_lineno(trace_arg);
-  binding = rb_tracearg_binding(trace_arg);
   raised_exception = rb_tracearg_raised_exception(trace_arg);
 
   if (post_mortem == Qtrue)
   {
-    post_mortem_context = context_dup(dc);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_file"), path);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_line"), lineno);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_binding"), binding);
-    rb_ivar_set(raised_exception, rb_intern("@__bb_context"),
-                post_mortem_context);
+    pm_context = context_dup(dc);
+    rb_ivar_set(raised_exception, rb_intern("@__bb_context"), pm_context);
 
-    Data_Get_Struct(post_mortem_context, debug_context_t, new_dc);
+    Data_Get_Struct(pm_context, debug_context_t, new_dc);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 

@@ -12,11 +12,11 @@ module Byebug
 
     self.allow_in_post_mortem = false
 
-    def regexp
+    def self.regexp
       /^\s* fin(?:ish)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         fin[ish][ n_frames]
 
@@ -28,7 +28,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Runs the program until frame returns'
     end
 
@@ -41,15 +41,15 @@ module Byebug
       end
 
       force = n_frames == 0 ? true : false
-      @state.context.step_out(@state.frame + n_frames, force)
-      @state.frame = 0
-      @state.proceed
+      context.step_out(context.frame.pos + n_frames, force)
+      context.frame = 0
+      processor.proceed!
     end
 
     private
 
     def max_frames
-      @state.context.stack_size - @state.frame
+      context.stack_size - context.frame.pos
     end
   end
 end

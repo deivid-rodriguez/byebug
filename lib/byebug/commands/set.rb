@@ -11,11 +11,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* set (?:\s+(?<setting>\w+))? (?:\s+(?<value>\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         set <setting> <value>
 
@@ -29,12 +29,12 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Modifies byebug settings'
     end
 
-    def help
-      description + Setting.help_all
+    def self.help
+      super + Setting.help_all
     end
 
     def execute

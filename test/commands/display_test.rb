@@ -29,7 +29,7 @@ module Byebug
       enter 'display d + 1'
 
       debug_code(program) do
-        assert_equal [[true, 'd + 1']], state.display
+        assert_equal [[true, 'd + 1']], Byebug.displays
         clear_displays
       end
     end

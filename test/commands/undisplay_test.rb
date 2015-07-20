@@ -29,7 +29,7 @@ module Byebug
       enter 'display d', 'display d + 1', 'undisplay', 'y', 'next'
 
       debug_code(program) do
-        assert_equal [[false, 'd'], [false, 'd + 1']], state.display
+        assert_equal [[false, 'd'], [false, 'd + 1']], Byebug.displays
         clear_displays
       end
 
@@ -40,7 +40,7 @@ module Byebug
       enter 'display d', 'display d + 1', 'undisplay', 'n', 'display'
 
       debug_code(program) do
-        assert_equal [[true, 'd'], [true, 'd + 1']], state.display
+        assert_equal [[true, 'd'], [true, 'd + 1']], Byebug.displays
         clear_displays
       end
 
@@ -51,7 +51,7 @@ module Byebug
       enter 'display d', 'display d + 1', 'undisplay 1'
 
       debug_code(program) do
-        assert_equal [[nil, 'd'], [true, 'd + 1']], state.display
+        assert_equal [[nil, 'd'], [true, 'd + 1']], Byebug.displays
         clear_displays
       end
     end
@@ -68,7 +68,7 @@ module Byebug
       enter 'display d', 'disable display 1'
 
       debug_code(program) do
-        assert_equal [[false, 'd']], state.display
+        assert_equal [[false, 'd']], Byebug.displays
         clear_displays
       end
     end
@@ -92,7 +92,7 @@ module Byebug
       enter 'display d', 'disable display 1', 'enable display 1'
 
       debug_code(program) do
-        assert_equal [[true, 'd']], state.display
+        assert_equal [[true, 'd']], Byebug.displays
         clear_displays
       end
     end

@@ -25,7 +25,7 @@ module Byebug
     def start_server(host = nil, port = PORT)
       return if @thread
 
-      handler.interface = nil
+      Context.interface = nil
       start
 
       start_control(host, port == 0 ? 0 : port + 1)
@@ -40,7 +40,7 @@ module Byebug
 
       @thread = DebugThread.new do
         while (session = server.accept)
-          handler.interface = RemoteInterface.new(session)
+          Context.interface = RemoteInterface.new(session)
           mutex.synchronize { proceed.signal } if wait_connection
         end
       end
@@ -56,7 +56,8 @@ module Byebug
       @control_thread = DebugThread.new do
         while (session = server.accept)
           interface = RemoteInterface.new(session)
-          ControlCommandProcessor.new(interface).process_commands
+          context = Byebug.current_context
+          ControlCommandProcessor.new(context, interface).process_commands
         end
       end
 
@@ -67,7 +68,7 @@ module Byebug
     # Connects to the remote byebug
     #
     def start_client(host = 'localhost', port = PORT)
-      handler.interface = LocalInterface.new
+      Context.interface = LocalInterface.new
       puts 'Connecting to byebug server...'
       socket = TCPSocket.new(host, port)
       puts 'Connected.'
@@ -76,11 +77,11 @@ module Byebug
         while (line = socket.gets)
           case line
           when /^PROMPT (.*)$/
-            input = handler.interface.read_command(Regexp.last_match[1])
+            input = Context.interface.read_command(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           when /^CONFIRM (.*)$/
-            input = handler.interface.confirm(Regexp.last_match[1])
+            input = Context.interface.confirm(Regexp.last_match[1])
             throw :exit unless input
             socket.puts input
           else

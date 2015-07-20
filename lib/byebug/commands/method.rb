@@ -10,11 +10,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* m(?:ethod)? \s+ (i(:?nstance)?\s+)?/x
     end
 
-    def description
+    def self.description
       <<-EOD
         m[ethod] (i[nstance][ <obj>]|<class|module>)
 
@@ -28,7 +28,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Shows methods of an object, class or module'
     end
 

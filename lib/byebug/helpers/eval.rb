@@ -28,7 +28,7 @@ module Byebug
       # Evaluates a string containing Ruby code in a specific binding,
       # returning nil in an error happens.
       #
-      def silent_eval(str, binding = default_binding)
+      def silent_eval(str, binding = frame._binding)
         binding.eval(str)
       rescue StandardError, ScriptError
         nil
@@ -38,7 +38,7 @@ module Byebug
       # Evaluates a string containing Ruby code in a specific binding,
       # handling the errors at an error level.
       #
-      def error_eval(str, binding = default_binding)
+      def error_eval(str, binding = frame._binding)
         safe_eval(str, binding) { |e| error_msg(e) }
       end
 
@@ -46,12 +46,8 @@ module Byebug
       # Evaluates a string containing Ruby code in a specific binding,
       # handling the errors at a warning level.
       #
-      def warning_eval(str, binding = default_binding)
+      def warning_eval(str, binding = frame._binding)
         safe_eval(str, binding) { |e| warning_msg(e) }
-      end
-
-      def default_binding
-        @state.context.frame_binding(@state.frame) if @state.context
       end
 
       private
@@ -59,7 +55,7 @@ module Byebug
       def safe_eval(str, binding)
         binding.eval(str)
       rescue StandardError, ScriptError => e
-        yield(e)
+        raise(e, yield(e))
       end
 
       def error_msg(e)
@@ -67,11 +63,11 @@ module Byebug
         locations = ["#{at.shift}: #{e.class} Exception(#{e.message})"]
         locations += at.map { |path| "\tfrom #{path}" }
 
-        errmsg(locations.join("\n"))
+        pr('eval.exception', text_message: locations.join("\n"))
       end
 
       def warning_msg(e)
-        errmsg("#{e.class} Exception: #{e.message}")
+        pr('eval.exception', text_message: "#{e.class} Exception: #{e.message}")
       end
 
       #

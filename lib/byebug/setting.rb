@@ -57,8 +57,11 @@ module Byebug
         matches.size == 1 ? matches.values.first : nil
       end
 
+      #
+      # TODO: DRY this up. Very similar code exists in the CommandList class
+      #
       def help_all
-        output = "  List of supported settings:\n  --\n"
+        output = "  List of supported settings:\n\n"
         width = settings.keys.max_by(&:size).size
         settings.values.each do |sett|
           output << format("  %-#{width}s -- %s\n", sett.to_sym, sett.banner)

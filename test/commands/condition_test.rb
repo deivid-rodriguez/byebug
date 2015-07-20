@@ -50,19 +50,19 @@ module Byebug
     def test_execution_stops_when_condition_is_true
       enter 'break 5', -> { "cond #{Breakpoint.first.id} b == 5" }, 'cont'
 
-      debug_code(program) { assert_equal 5, state.line }
+      debug_code(program) { assert_equal 5, frame.line }
     end
 
     def test_execution_does_not_stop_when_condition_is_false
       enter 'b 5', 'b 6', -> { "cond #{Breakpoint.first.id} b == 3" }, 'cont'
 
-      debug_code(program) { assert_equal 6, state.line }
+      debug_code(program) { assert_equal 6, frame.line }
     end
 
     def test_conditions_with_wrong_syntax_are_ignored
       enter 'b 5', 'b 6', -> { "cond #{Breakpoint.first.id} b ==" }, 'cont'
 
-      debug_code(program) { assert_equal 5, state.line }
+      debug_code(program) { assert_equal 5, frame.line }
     end
 
     def test_empty_condition_means_removing_any_conditions
@@ -70,7 +70,7 @@ module Byebug
 
       debug_code(program) do
         assert_nil Breakpoint.first.expr
-        assert_equal 5, state.line
+        assert_equal 5, frame.line
       end
     end
 

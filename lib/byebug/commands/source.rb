@@ -10,11 +10,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* so(?:urce)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         source <file>
 
@@ -22,23 +22,19 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Restores a previously saved byebug session'
     end
 
     def execute
       return puts(help) unless @match[1]
 
-      unless @state && @state.interface
-        return errmsg(pr('source.errors.not_available'))
-      end
-
       file = File.expand_path(@match[1]).strip
       unless File.exist?(file)
         return errmsg(pr('source.errors.not_found', file: file))
       end
 
-      @state.interface.read_file(file)
+      processor.interface.read_file(file)
     end
   end
 end

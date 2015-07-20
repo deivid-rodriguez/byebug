@@ -11,11 +11,11 @@ module Byebug
     self.allow_in_post_mortem = false
     self.always_run = 2
 
-    def regexp
+    def self.regexp
       /^\s* disp(?:lay)? (?:\s+ (.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         disp[lay][ <expression>]
 
@@ -26,14 +26,14 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Evaluates expressions every time the debugger stops'
     end
 
     def execute
       return print_display_expressions unless @match && @match[1]
 
-      @state.display.push [true, @match[1]]
+      Byebug.displays.push [true, @match[1]]
       display_expression(@match[1])
     end
 
@@ -41,13 +41,13 @@ module Byebug
 
     def display_expression(exp)
       print pr('display.result',
-               n: @state.display.size,
+               n: Byebug.displays.size,
                exp: exp,
                result: thread_safe_eval(exp).inspect)
     end
 
     def print_display_expressions
-      result = prc('display.result', @state.display) do |item, index|
+      result = prc('display.result', Byebug.displays) do |item, index|
         is_active, expression = item
         if is_active
           { n: index + 1,

@@ -16,11 +16,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* i(?:nfo)? (?:\s+ (.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         info[ subcommand]
 
@@ -28,7 +28,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Shows several informations about the program being debugged'
     end
   end

@@ -12,11 +12,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         l[ist][[-=]][ nn-mm]
 
@@ -30,22 +30,21 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Lists lines of source code'
     end
 
     def execute
-      exist = File.exist?(@state.file)
-      return errmsg "No sourcefile available for #{@state.file}\n" unless exist
+      msg = "No sourcefile available for #{frame.file}"
+      return errmsg(msg) unless File.exist?(frame.file)
 
-      @match ||= match('list')
-      max_lines = n_lines(@state.file)
+      max_lines = n_lines(frame.file)
       b, e = range(@match[2], max_lines)
       return errmsg('Invalid line range') unless valid_range?(b, e, max_lines)
 
       display_lines(b, e)
 
-      @state.prev_line = b
+      processor.prev_line = b
     end
 
     private
@@ -107,9 +106,10 @@ module Byebug
     end
 
     def lower(size, direction = '+')
-      return @state.line - size / 2 if direction == '=' || !@state.prev_line
+      prev_line = processor.prev_line
+      return frame.line - size / 2 if direction == '=' || prev_line.nil?
 
-      move(@state.prev_line, size, direction)
+      move(prev_line, size, direction)
     end
 
     def move(line, size, direction = '+')
@@ -123,13 +123,13 @@ module Byebug
     # @param max [Integer] Upper bound
     #
     def display_lines(min, max)
-      puts "\n[#{min}, #{max}] in #{@state.file}"
+      puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      File.foreach(@state.file).with_index do |line, lineno|
+      File.foreach(frame.file).with_index do |line, lineno|
         break if lineno + 1 > max
         next unless (min..max).include?(lineno + 1)
 
-        mark = lineno + 1 == @state.line ? '=> ' : '   '
+        mark = lineno + 1 == frame.line ? '=> ' : '   '
         puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
       end
     end

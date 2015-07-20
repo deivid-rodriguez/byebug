@@ -11,11 +11,11 @@ module Byebug
   class StepCommand < Command
     include Helpers::ParseHelper
 
-    def regexp
+    def self.regexp
       /^\s* s(?:tep)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         s[tep][ times]
 
@@ -23,7 +23,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Steps into blocks or methods one or more times'
     end
 
@@ -31,8 +31,8 @@ module Byebug
       steps, err = parse_steps(@match[1], 'Steps')
       return errmsg(err) unless steps
 
-      @state.context.step_into(steps, @state.frame)
-      @state.proceed
+      context.step_into(steps, context.frame.pos)
+      processor.proceed!
     end
   end
 end

@@ -8,11 +8,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* q(?:uit)? \s* (?:(!|\s+unconditionally))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         q[uit] [!|unconditionally]
 
@@ -24,15 +24,15 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Exits byebug'
     end
 
     def execute
       return unless @match[1] || confirm(pr('quit.confirmations.really'))
 
-      @state.interface.autosave
-      @state.interface.close
+      processor.interface.autosave
+      processor.interface.close
 
       Process.exit!
     end

@@ -9,9 +9,17 @@ was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 * `info catch` command. Use `catch` without arguments instead.
 * `R` command alias for `restart`.
 
-# Changed
+### Changed
 * `info args` is now `var args`.
 * `interrupt` is now aliased to `int`, not to `i`.
+* API to define custom commands and subcommands (see the Command class).
+
+### Fixed
+* [#140](https://github.com/deivid-rodriguez/byebug/issues/140). `help` command
+not showing the list of available commands and their descriptions.
+
+### Added
+* API to define custom command processors (see the CommandProcessor class).
 
 ## 5.0.0
 ### Fixed

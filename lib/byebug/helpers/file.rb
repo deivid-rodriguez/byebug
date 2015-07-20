@@ -33,13 +33,30 @@ module Byebug
       # Regularize file name.
       #
       def normalize(filename)
-        return filename if ['(irb)', '-e'].include?(filename)
+        return filename if virtual_file?(filename)
 
         return File.basename(filename) if Setting[:basename]
 
         path = File.expand_path(filename)
 
         File.exist?(path) ? File.realpath(path) : filename
+      end
+
+      #
+      # A short version of a long path
+      #
+      def shortpath(fullpath)
+        components = Pathname(fullpath).each_filename.to_a
+        return fullpath if components.size <= 2
+
+        File.join('...', components[-3..-1])
+      end
+
+      #
+      # True for special files like -e, false otherwise
+      #
+      def virtual_file?(name)
+        ['(irb)', '-e'].include?(name)
       end
     end
   end

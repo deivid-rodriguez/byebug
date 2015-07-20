@@ -10,11 +10,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* hist(?:ory)? (?:\s+(?<num_cmds>.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         hist[ory] [num_cmds]
 
@@ -22,12 +22,12 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       "Shows byebug's history of commands"
     end
 
     def execute
-      history = @state.interface.history
+      history = processor.interface.history
 
       if @match[:num_cmds]
         size, = get_int(@match[:num_cmds], 'history', 1, history.size)

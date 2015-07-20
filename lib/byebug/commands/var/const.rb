@@ -8,16 +8,16 @@ module Byebug
     #
     # Shows constants
     #
-    class ConstSubcommand < Command
+    class ConstCommand < Command
       include Helpers::EvalHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* c(?:onst)? (?:\s+ (.+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] c[onstant]
 
@@ -25,7 +25,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows constants of an object.'
       end
 

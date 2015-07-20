@@ -8,16 +8,16 @@ module Byebug
     #
     # Shows global, instance and local variables
     #
-    class AllSubcommand < Command
+    class AllCommand < Command
       include Helpers::VarHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* a(?:ll)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] a[ll]
 
@@ -25,7 +25,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows local, global and instance variables of self.'
       end
 

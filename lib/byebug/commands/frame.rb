@@ -13,11 +13,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* f(?:rame)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         f[rame][ frame-number]
 
@@ -37,14 +37,12 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Moves to a frame in the call stack'
     end
 
     def execute
-      unless @match[1]
-        return print(pr('frame.line', get_pr_arguments(@state.frame)))
-      end
+      return print(pr('frame.line', context.frame.to_hash)) unless @match[1]
 
       pos, err = get_int(@match[1], 'Frame')
       return errmsg(err) unless pos

@@ -5,11 +5,11 @@ module Byebug
   # Stop tracing a global variable.
   #
   class UntracevarCommand < Command
-    def regexp
+    def self.regexp
       /^\s* untr(?:acevar)? (?:\s+ (\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         untr[acevar] <variable>
 
@@ -17,7 +17,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Stops tracing a global variable'
     end
 

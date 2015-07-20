@@ -5,13 +5,13 @@ module Byebug
   # Show (and possibily stop) at every line that changes a global variable.
   #
   class TracevarCommand < Command
-    def regexp
+    def self.regexp
       /^\s* tr(?:acevar)? (?: \s+ (\S+))?  # (variable-name)?
                           (?: \s+ (stop|nostop))?
        \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         tr[acevar] <variable> [[no]stop]
 
@@ -23,7 +23,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Enables tracing of a global variable'
     end
 
@@ -49,7 +49,7 @@ module Byebug
     def on_change(name, value, stop)
       puts pr('trace.messages.on_change', name: name, value: value)
 
-      @state.context.step_out(1, false) if stop
+      context.step_out(1, false) if stop
     end
   end
 end

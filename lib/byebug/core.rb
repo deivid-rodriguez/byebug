@@ -1,13 +1,17 @@
+require 'byebug/helpers/reflection'
 require 'byebug/byebug'
-require 'byebug/version'
 require 'byebug/context'
 require 'byebug/breakpoint'
 require 'byebug/interface'
-require 'byebug/processor'
+require 'byebug/processors/script_processor'
+require 'byebug/processors/post_mortem_processor'
+require 'byebug/commands'
 require 'byebug/remote'
 require 'byebug/printers/plain'
 
 module Byebug
+  include Helpers::ReflectionHelper
+
   extend self
 
   #
@@ -17,19 +21,10 @@ module Byebug
   self.init_file = '.byebugrc'
 
   #
-  # Main debugger's processor
+  # Debugger's display expressions
   #
-  attr_accessor :handler
-  self.handler = CommandProcessor.new
-
-  extend Forwardable
-  def_delegators :handler, :errmsg, :puts
-
-  #
-  # Main debugger's printer
-  #
-  attr_accessor :printer
-  self.printer = Printers::Plain.new
+  attr_accessor :displays
+  self.displays = []
 
   #
   # Running mode of the debugger. Can be either:
@@ -56,15 +51,30 @@ module Byebug
     run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
   end
 
-  #
-  # A Byebug command is a class defined right under the Byebug module and
-  # named <something>Command
-  #
-  def commands
-    const_list = constants.map { |const| const_get(const, false) }
+  def self.load_settings
+    Dir.glob(File.expand_path('../settings/*.rb', __FILE__)).each do |file|
+      require file
+    end
 
-    const_list.select { |c| c.is_a?(Class) && c.name =~ /[a-z]Command$/ }
+    constants.grep(/[a-z]Setting/).map do |name|
+      setting = const_get(name).new
+      Byebug::Setting.settings[setting.to_sym] = setting
+    end
   end
+
+  #
+  # Saves information about the unhandled exception and gives a byebug
+  # prompt back to the user before program termination.
+  #
+  def self.handle_post_mortem
+    return unless raised_exception
+
+    context = raised_exception.__bb_context
+
+    PostMortemProcessor.new(context).at_line
+  end
+
+  at_exit { Byebug.handle_post_mortem if Byebug.post_mortem? }
 
   private
 
@@ -73,15 +83,17 @@ module Byebug
   #
   def run_script(file, verbose = false)
     interface = ScriptInterface.new(file, verbose)
-    processor = ControlCommandProcessor.new(interface)
-    processor.process_commands
+
+    ScriptProcessor.new(interface).process_commands
   end
 end
+
+Byebug.load_settings
 
 #
 # Extends the extension class to be able to pass information about the
 # debugging environment from the c-extension to the user.
 #
 class Exception
-  attr_reader :__bb_file, :__bb_line, :__bb_binding, :__bb_context
+  attr_reader :__bb_context
 end

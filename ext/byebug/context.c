@@ -256,7 +256,7 @@ Context_frame_file(int argc, VALUE * argv, VALUE self)
  *  call-seq:
  *    context.frame_line(frame_position = 0) -> int
  *
- *  Returns the line number in the file.
+ *  Returns the line number in the file in the frame.
  */
 static VALUE
 Context_frame_line(int argc, VALUE * argv, VALUE self)
@@ -274,7 +274,7 @@ Context_frame_line(int argc, VALUE * argv, VALUE self)
  *  call-seq:
  *    context.frame_method(frame_position = 0) -> sym
  *
- *  Returns the sym of the called method.
+ *  Returns the sym of the method in the frame.
  */
 static VALUE
 Context_frame_method(int argc, VALUE * argv, VALUE self)

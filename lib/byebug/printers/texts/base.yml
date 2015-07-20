@@ -87,7 +87,6 @@ show:
 source:
   errors:
     not_found: "File \"{file}\" not found"
-    not_available: "Source commmand not available at this time"
 
 thread:
   errors:

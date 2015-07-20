@@ -13,11 +13,11 @@ module Byebug
   class ThreadCommand < Command
     include Subcommands
 
-    def regexp
+    def self.regexp
       /^\s* th(?:read)? (?:\s+ (.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         th[read] <subcommand>
 
@@ -25,7 +25,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Commands to manipulate threads'
     end
   end

@@ -12,11 +12,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* restart (?:\s+(?<args>.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         restart [args]
 
@@ -27,7 +27,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Restarts the debugged program'
     end
 

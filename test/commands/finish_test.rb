@@ -41,37 +41,37 @@ module Byebug
     def test_finish_stops_after_current_single_line_frame_is_finished
       enter 'break 21', 'cont', 'finish'
 
-      debug_code(program) { assert_equal 17, state.line }
+      debug_code(program) { assert_equal 17, frame.line }
     end
 
     def test_finish_stops_after_current_multiline_frame_is_finished
       enter 'break 16', 'cont', 'finish'
 
-      debug_code(program) { assert_equal 12, state.line }
+      debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_0_stops_before_current_frame_finishes
       enter 'break 21', 'cont', 'finish 0'
 
-      debug_code(program) { assert_equal 22, state.line }
+      debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_finish_1_stops_after_current_frame_is_finished
       enter 'break 21', 'cont', 'finish 1'
 
-      debug_code(program) { assert_equal 17, state.line }
+      debug_code(program) { assert_equal 17, frame.line }
     end
 
     def test_finish_works_for_frame_numbers_higher_than_one
       enter 'break 21', 'cont', 'finish 2'
 
-      debug_code(program) { assert_equal 12, state.line }
+      debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_behaves_consistenly_even_if_current_frame_has_been_changed
       enter 'break 21', 'cont', 'up', 'finish'
 
-      debug_code(program) { assert_equal 12, state.line }
+      debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_shows_an_error_if_incorrect_frame_number_specified
@@ -84,13 +84,13 @@ module Byebug
     def test_finish_stays_at_the_same_line_if_incorrect_frame_number_specified
       enter 'break 21', 'cont', 'finish foo'
 
-      debug_code(program) { assert_equal 21, state.line }
+      debug_code(program) { assert_equal 21, frame.line }
     end
 
     def test_finish_does_not_stop_in_byebug_internal_frames
       enter 'break 21', 'cont', 'finish 4'
 
-      debug_code(program) { refute_match(/byebug.test.support/, state.file) }
+      debug_code(program) { assert_program_finished }
     end
   end
 end

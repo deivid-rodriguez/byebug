@@ -8,14 +8,14 @@ module Byebug
     #
     # Resumes the specified thread
     #
-    class ResumeSubcommand < Command
+    class ResumeCommand < Command
       include Helpers::ThreadHelper
 
-      def regexp
+      def self.regexp
         /^\s* r(?:esume)? (?: \s* (\d+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           th[read] r[esume] <thnum>
 
@@ -23,7 +23,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Resumes execution of the specified thread'
       end
 

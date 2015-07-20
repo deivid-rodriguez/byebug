@@ -43,13 +43,13 @@ module Byebug
     def test_tracevar_stop_makes_program_stop_when_global_var_changes
       enter 'tracevar $VERBOSE stop', 'cont 19', 'untracevar $VERBOSE'
 
-      debug_code(program) { assert_equal 18, state.line }
+      debug_code(program) { assert_equal 18, frame.line }
     end
 
     def test_tracevar_nostop_does_not_stop_when_global_var_changes
       enter 'tracevar $VERBOSE nostop', 'cont 19', 'untracevar $VERBOSE'
 
-      debug_code(program) { assert_equal 19, state.line }
+      debug_code(program) { assert_equal 19, frame.line }
     end
 
     def test_tracevar_shows_an_error_message_if_no_global_variable_is_specified

@@ -8,14 +8,14 @@ module Byebug
     #
     # Stops the specified thread
     #
-    class StopSubcommand < Command
+    class StopCommand < Command
       include Helpers::ThreadHelper
 
-      def regexp
+      def self.regexp
         /^\s* st(?:op)? (?: \s* (\d+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           th[read] st[op] <thnum>
 
@@ -23,7 +23,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Stops the execution of the specified thread'
       end
 

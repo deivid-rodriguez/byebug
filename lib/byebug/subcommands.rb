@@ -1,17 +1,19 @@
-require 'byebug/command'
-require 'byebug/subcommand_list'
+require 'forwardable'
+
+require 'byebug/helpers/reflection'
+require 'byebug/command_list'
 
 module Byebug
   #
   # Subcommand additions.
   #
   module Subcommands
-    #
-    # Summarized description of a subcommand
-    #
-    def short_description
-      fail(NotImplementedError, 'Your custom subcommand needs to define this')
+    def self.included(command)
+      command.extend(ClassMethods)
     end
+
+    extend Forwardable
+    def_delegators :'self.class', :subcommand_list
 
     #
     # Delegates to subcommands or prints help if no subcommand specified.
@@ -19,35 +21,31 @@ module Byebug
     def execute
       return puts(help) unless @match[1]
 
-      subcmd = subcommands.find(@match[1])
-      return errmsg("Unknown subcommand '#{@match[1]}'\n") unless subcmd
+      subcmd = subcommand_list.match(@match[1])
+      fail CommandNotFound.new(@match[1], self.class) unless subcmd
 
-      subcmd.execute
+      subcmd.new(processor, arguments).execute
     end
 
     #
-    # Default help text for a command with subcommands
+    # Class methods added to subcommands
     #
-    def help
-      prettify <<-EOH
-        #{description}
+    module ClassMethods
+      include Helpers::ReflectionHelper
 
-        List of "#{to_name}" subcommands:
+      #
+      # Default help text for a command with subcommands
+      #
+      def help
+        super + subcommand_list.to_s
+      end
 
-        --
-        #{subcommands}
-      EOH
-    end
-
-    #
-    # Command's subcommands.
-    #
-    def subcommands
-      subcmd_klasses = self.class.subcommands
-      return unless subcmd_klasses.any?
-
-      subcmd_list = subcmd_klasses.map { |cmd| cmd.new(@state) }
-      SubcommandList.new(subcmd_list, self.class.name)
+      #
+      # Command's subcommands.
+      #
+      def subcommand_list
+        @subcommand_list ||= CommandList.new(commands)
+      end
     end
   end
 end

@@ -4,22 +4,24 @@ module Byebug
     # Utilities for thread subcommands
     #
     module ThreadHelper
-      def display_context(context)
-        puts pr('thread.context', thread_arguments(context))
+      def display_context(ctx)
+        puts pr('thread.context', thread_arguments(ctx))
       end
 
-      def thread_arguments(context)
-        status_flag = if context.suspended?
+      def thread_arguments(ctx)
+        status_flag = if ctx.suspended?
                         '$'
                       else
-                        context.thread == Thread.current ? '+' : ' '
+                        current_thread?(ctx) ? '+' : ' '
                       end
-        debug_flag = context.ignored? ? '!' : ' '
 
-        if context == Byebug.current_context
-          file_line = "#{@state.file}:#{@state.line}"
+        debug_flag = ctx.ignored? ? '!' : ' '
+
+        # Check whether it is Byebug.current_context or context
+        if ctx == Byebug.current_context
+          file_line = context.location
         else
-          backtrace = context.thread.backtrace_locations
+          backtrace = ctx.thread.backtrace_locations
           if backtrace && backtrace[0]
             file_line = "#{backtrace[0].path}:#{backtrace[0].lineno}"
           end
@@ -28,13 +30,17 @@ module Byebug
         {
           status_flag: status_flag,
           debug_flag: debug_flag,
-          id: context.thnum,
-          thread: context.thread.inspect,
+          id: ctx.thnum,
+          thread: ctx.thread.inspect,
           file_line: file_line || '',
           pid: Process.pid,
-          status: context.thread.status,
-          current: (context.thread == Thread.current)
+          status: ctx.thread.status,
+          current: current_thread?(ctx)
         }
+      end
+
+      def current_thread?(ctx)
+        ctx.thread == Thread.current
       end
 
       def context_from_thread(thnum)
@@ -42,7 +48,7 @@ module Byebug
 
         err = case
               when ctx.nil? then pr('thread.errors.no_thread')
-              when ctx == @state.context then pr('thread.errors.current_thread')
+              when ctx == context then pr('thread.errors.current_thread')
               when ctx.ignored? then pr('thread.errors.ignored', arg: thnum)
               end
 

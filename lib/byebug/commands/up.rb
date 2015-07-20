@@ -13,11 +13,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         up[ count]
 
@@ -27,7 +27,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Moves to a higher frame in the stack trace'
     end
 
@@ -37,7 +37,7 @@ module Byebug
 
       adjust_frame(pos, false)
 
-      ListCommand.new(@state).execute if Setting[:autolist]
+      ListCommand.new(processor).execute if Setting[:autolist]
     end
   end
 end

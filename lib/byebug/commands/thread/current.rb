@@ -8,14 +8,14 @@ module Byebug
     #
     # Information about the current thread
     #
-    class CurrentSubcommand < Command
+    class CurrentCommand < Command
       include Helpers::ThreadHelper
 
-      def regexp
+      def self.regexp
         /^\s* c(?:urrent)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           th[read] c[urrent]
 
@@ -23,12 +23,12 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows current thread information'
       end
 
       def execute
-        display_context(@state.context)
+        display_context(context)
       end
     end
   end

@@ -14,11 +14,11 @@ module Byebug
 
     self.allow_in_control = true
 
-    def regexp
+    def self.regexp
       /^\s* b(?:reak)? (?:\s+ (\S+))? (?:\s+ if \s+(.+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         b[reak] [file:]line [if expr]
         b[reak] [module::...]class(.|#)method [if expr]
@@ -30,7 +30,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Sets breakpoints in the source code'
     end
 
@@ -45,8 +45,6 @@ module Byebug
 
       errmsg(pr('break.errors.expression', expr: @match[2]))
       b.enabled = false
-    rescue => e
-      errmsg(e.message)
     end
 
     private
@@ -56,7 +54,7 @@ module Byebug
       file_line = loc.match(/^([^:]+):(\d+)$/)
       return unless line || file_line
 
-      f, l = line ? [@state.file, line[1]] : [file_line[1], file_line[2]]
+      f, l = line ? [frame.file, line[1]] : [file_line[1], file_line[2]]
 
       check_errors(f, l.to_i)
 

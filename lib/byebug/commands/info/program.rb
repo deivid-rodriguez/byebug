@@ -6,14 +6,14 @@ module Byebug
     #
     # Information about arguments of the current method/block
     #
-    class ProgramSubcommand < Command
+    class ProgramCommand < Command
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* p(?:rogram)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           inf[o] p[rogram]
 
@@ -21,19 +21,13 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Information about the current status of the debugged program.'
       end
 
       def execute
-        if @state.context.dead?
-          puts 'The program crashed.'
-          excpt = Byebug.raised_exception
-          return puts("Exception: #{excpt.inspect}") if excpt
-        end
-
         puts 'Program stopped. '
-        format_stop_reason @state.context.stop_reason
+        format_stop_reason context.stop_reason
       end
 
       private

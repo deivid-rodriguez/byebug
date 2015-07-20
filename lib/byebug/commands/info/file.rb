@@ -8,16 +8,16 @@ module Byebug
     #
     # Information about a particular source file
     #
-    class FileSubcommand < Command
+    class FileCommand < Command
       include Helpers::FileHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* f(?:ile)? (?:\s+ (\S+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           inf[o] f[ile]
 
@@ -28,12 +28,12 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Information about a particular source file.'
       end
 
       def execute
-        file = @match[1] || @state.file
+        file = @match[1] || frame.file
         unless File.exist?(file)
           return errmsg(pr('info.errors.undefined_file', file: file))
         end

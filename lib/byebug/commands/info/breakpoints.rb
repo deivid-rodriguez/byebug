@@ -6,14 +6,14 @@ module Byebug
     #
     # Information about current breakpoints
     #
-    class BreakpointsSubcommand < Command
+    class BreakpointsCommand < Command
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* b(?:reakpoints)? (?:\s+ (.+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           inf[o] b[reakpoints]
 
@@ -21,7 +21,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Status of user settable breakpoints'
       end
 

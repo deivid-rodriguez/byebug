@@ -36,7 +36,7 @@ module Byebug
     def test_frame_moves_to_a_specific_frame
       enter 'frame 2'
 
-      debug_code(program) { assert_equal 7, state.line }
+      debug_code(program) { assert_equal 7, frame.line }
     end
 
     def test_frame_prints_the_callstack_when_called_without_arguments
@@ -50,7 +50,7 @@ module Byebug
     def test_frame_0_sets_frame_to_the_first_one
       enter 'up', 'frame 0'
 
-      debug_code(program) { assert_equal 16, state.line }
+      debug_code(program) { assert_equal 16, frame.line }
     end
 
     def test_frame_minus_one_sets_frame_to_the_last_one

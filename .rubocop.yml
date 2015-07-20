@@ -16,6 +16,10 @@ Style/ModuleFunction:
 Style/AsciiComments:
   Enabled: false
 
+# Don't see why storing context information in the exception is a bad thing
+Style/RaiseArgs:
+  Enabled: false
+
 Style/ExtraSpacing:
   Enabled: true
 

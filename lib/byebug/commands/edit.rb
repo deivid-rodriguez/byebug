@@ -8,11 +8,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* ed(?:it)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         edit[ file:lineno]
 
@@ -24,7 +24,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Edits source files'
     end
 
@@ -42,9 +42,9 @@ module Byebug
 
     def location(matched)
       if matched.nil?
-        file = @state.file
+        file = frame.file
         return errmsg(pr('edit.errors.state')) unless file
-        line = @state.line
+        line = frame.line
       elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(matched))
         file, line = @pos_match.captures
       else

@@ -1529,26 +1529,61 @@ short list of named classes of commands
 
 ```bash
 (byebug) help
-Type "help <command-name>" for help on a specific command
 
-Available commands:
-backtrace  delete   enable  help  method  ps        save       step       where
-break      disable  eval    info  next    putl      set        trace      catch
-display    exit     irb     p     quit    show      undisplay  condition  down
-finish     kill     pp      skip  up      continue  edit       frame      list
-pry        restart  source  var
+  break      -- Sets breakpoints in the source code
+  catch      -- Handles exception catchpoints
+  condition  -- Sets conditions on breakpoints
+  continue   -- Runs until program ends, hits a breakpoint or reaches a line
+  delete     -- Deletes breakpoints
+  disable    -- Disables breakpoints or displays
+  display    -- Evaluates expressions every time the debugger stops
+  down       -- Moves to a lower frame in the stack trace
+  edit       -- Edits source files
+  enable     -- Enables breakpoints or displays
+  finish     -- Runs the program until frame returns
+  frame      -- Moves to a frame in the call stack
+  help       -- Helps you using byebug
+  history    -- Shows byebug's history of commands
+  info       -- Shows several informations about the program being debugged
+  interrupt  -- Interrupts the program
+  irb        -- Starts an IRB session
+  kill       -- Sends a signal to the current process
+  list       -- Lists lines of source code
+  method     -- Shows methods of an object, class or module
+  next       -- Runs one or more lines of code
+  pry        -- Starts a Pry session
+  ps         -- Evaluates an expression and prettyprints & sort the result
+  quit       -- Exits byebug
+  restart    -- Restarts the debugged program
+  save       -- Saves current byebug session to a file
+  set        -- Modifies byebug settings
+  show       -- Shows byebug settings
+  source     -- Restores a previously saved byebug session
+  step       -- Steps into blocks or methods one or more times
+  thread     -- Commands to manipulate threads
+  tracevar   -- Enables tracing of a global variable
+  undisplay  -- Stops displaying all or some expressions when program stops
+  untracevar -- Stops tracing a global variable
+  up         -- Moves to a higher frame in the stack trace
+  var        -- Shows variables and its values
+  where      -- Displays the backtrace
+
 ```
 
-With a command name as `help` argument, `byebug` displays short information on how to
-use that command.
+With a command name, `help` displays information on how to use the command.
 
 ```bash
 (byebug) help list
-l[ist]    list forward
-l[ist] -  list backward
-l[ist] =  list current line
-l[ist] nn-mm  list given lines
-* NOTE - to turn on autolist, use 'set autolist'
+
+  l[ist][[-=]][ nn-mm]
+
+  Lists lines of source code
+
+  Lists lines forward from current line or from the place where code was
+  last listed. If "list-" is specified, lists backwards instead. If
+  "list=" is specified, lists from current line regardless of where code
+  was last listed. A line range can also be specified to list specific
+  sections of code.
 (byebug)
 ```
 

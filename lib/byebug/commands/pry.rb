@@ -6,15 +6,13 @@ module Byebug
   # Enter Pry from byebug's prompt
   #
   class PryCommand < Command
-    include Helpers::EvalHelper
-
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* pry \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         pry
 
@@ -22,12 +20,12 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Starts a Pry session'
     end
 
     def execute
-      unless @state.interface.is_a?(LocalInterface)
+      unless processor.interface.is_a?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
       end
 
@@ -37,7 +35,7 @@ module Byebug
         errmsg(pr('pry.errors.not_installed'))
       end
 
-      default_binding.pry
+      context.binding.pry
     end
   end
 end

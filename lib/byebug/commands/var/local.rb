@@ -8,16 +8,16 @@ module Byebug
     #
     # Shows local variables in current scope
     #
-    class LocalSubcommand < Command
+    class LocalCommand < Command
       include Helpers::VarHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* l(?:ocal)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] l[ocal]
 
@@ -25,7 +25,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows local variables in current scope.'
       end
 

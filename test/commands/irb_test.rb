@@ -18,9 +18,9 @@ module Byebug
     end
 
     def setup
-      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
-
       super
+
+      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
     end
 
     def test_irb_command_starts_an_irb_session

@@ -8,14 +8,14 @@ module Byebug
     #
     # Switches to the specified thread
     #
-    class SwitchSubcommand < Command
+    class SwitchCommand < Command
       include Helpers::ThreadHelper
 
-      def regexp
+      def self.regexp
         /^\s* sw(?:itch)? (?: \s* (\d+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           th[read] sw[itch] <thnum>
 
@@ -23,7 +23,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Switches execution to the specified thread'
       end
 
@@ -36,7 +36,8 @@ module Byebug
         display_context(context)
 
         context.switch
-        @state.proceed
+
+        processor.proceed!
       end
     end
   end

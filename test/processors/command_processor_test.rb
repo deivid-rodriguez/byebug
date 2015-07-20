@@ -21,26 +21,27 @@ module Byebug
     def test_empty_command_repeats_last_command
       enter 'n', ''
 
-      debug_code(program) { assert_equal 6, state.line }
+      debug_code(program) { assert_equal 6, frame.line }
     end
 
     def test_multiple_commands_are_executed_sequentially
       enter 'n ; n'
 
-      debug_code(program) { assert_equal 6, state.line }
+      debug_code(program) { assert_equal 6, frame.line }
     end
 
     def test_semicolon_can_be_escaped_to_prevent_multiple_command_behaviour
       enter 'n \; n'
 
-      debug_code(program) { assert_equal 4, state.line }
+      debug_code(program) { assert_equal 4, frame.line }
     end
 
     def test_shows_an_error_for_unknown_subcommands_by_default
       enter 'info unknown_subcmd'
       debug_code(minimal_program)
 
-      check_error_includes("Unknown subcommand 'unknown_subcmd'")
+      check_error_includes(
+        "Unknown command 'info unknown_subcmd'. Try 'help info'")
     end
 
     def test_properly_evaluates_expressions

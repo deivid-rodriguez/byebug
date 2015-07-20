@@ -7,11 +7,11 @@ module Byebug
   class InterruptCommand < Command
     self.allow_in_control = true
 
-    def regexp
+    def self.regexp
       /^\s*int(?:errupt)?\s*$/
     end
 
-    def description
+    def self.description
       <<-EOD
         int[errupt]
 
@@ -19,7 +19,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Interrupts the program'
     end
 

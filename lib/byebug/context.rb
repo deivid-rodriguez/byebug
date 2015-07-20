@@ -1,4 +1,7 @@
+require 'byebug/frame'
 require 'byebug/helpers/path'
+require 'byebug/helpers/file'
+require 'byebug/processors/command_processor'
 
 module Byebug
   #
@@ -7,6 +10,8 @@ module Byebug
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
   class Context
+    include Helpers::FileHelper
+
     class << self
       include Helpers::PathHelper
 
@@ -19,6 +24,12 @@ module Byebug
         @ignored_files ||=
           Byebug.mode == :standalone ? lib_files + [bin_file] : lib_files
       end
+
+      attr_writer :interface
+
+      def interface
+        @interface ||= LocalInterface.new
+      end
     end
 
     #
@@ -28,6 +39,42 @@ module Byebug
     #
     def ignored_file?(path)
       self.class.ignored_files.include?(path)
+    end
+
+    attr_writer :processor
+
+    #
+    # The processor of commands for the current context. A new process is
+    # instantiated every time a new debugging context is given to the user.
+    #
+    def processor
+      @processor ||= CommandProcessor.new(self, self.class.interface)
+    end
+
+    def frame
+      @frame ||= Frame.new(self, 0)
+    end
+
+    def frame=(pos)
+      @frame = Frame.new(self, pos)
+    end
+
+    def file
+      frame.file
+    end
+
+    def line
+      frame.line
+    end
+
+    def location
+      "#{normalize(file)}:#{line}"
+    end
+
+    def full_location
+      return location if virtual_file?(file)
+
+      "#{location} #{get_line(file, line)}"
     end
 
     #
@@ -45,83 +92,31 @@ module Byebug
       step_into 1
     end
 
-    #
-    # Gets local variables for a frame.
-    #
-    # @param frame_no Frame index in the backtrace. Defaults to 0.
-    #
-    # TODO: Use brand new local_variable_{get,set,defined?} for rubies >= 2.1
-    #
-    def frame_locals(frame_no = 0)
-      bind = frame_binding(frame_no)
-      return [] unless bind
-
-      bind.eval('local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}')
+    def at_breakpoint(breakpoint)
+      processor.at_breakpoint(breakpoint)
     end
 
-    #
-    # Gets current method arguments for a frame.
-    #
-    # @param frame_no Frame index in the backtrace. Defaults to 0.
-    #
-    def frame_args(frame_no = 0)
-      bind = frame_binding(frame_no)
-      return c_frame_args(frame_no) unless bind
-
-      ruby_frame_args(bind)
+    def at_catchpoint(exception)
+      processor.at_catchpoint(exception)
     end
 
-    def handler
-      Byebug.handler || fail('No interface loaded')
+    def at_tracing(file, _line)
+      return if ignored_file?(file)
+
+      processor.at_tracing
     end
 
-    def at_breakpoint(brkpnt)
-      handler.at_breakpoint(self, brkpnt)
+    def at_line(file, _l)
+      self.frame = 0
+      return if ignored_file?(file)
+
+      processor.at_line
     end
 
-    def at_catchpoint(excpt)
-      handler.at_catchpoint(self, excpt)
-    end
+    def at_return(file, _line)
+      return if ignored_file?(file)
 
-    def at_tracing(file, line)
-      handler.at_tracing(self, file, line) unless ignored_file?(file)
-    end
-
-    def at_line(file, line)
-      handler.at_line(self, file, line) unless ignored_file?(file)
-    end
-
-    def at_return(file, line)
-      handler.at_return(self, file, line) unless ignored_file?(file)
-    end
-
-    private
-
-    #
-    # Gets method arguments for a c-frame.
-    #
-    # @param frame_no Frame index in the backtrace.
-    #
-    def c_frame_args(frame_no)
-      myself = frame_self(frame_no)
-      return [] unless myself.to_s != 'main'
-
-      myself.method(frame_method(frame_no)).parameters
-    end
-
-    #
-    # Gets method arguments for a ruby-frame.
-    #
-    # @param bind Binding for the ruby-frame.
-    #
-    def ruby_frame_args(bind)
-      return [] unless bind.eval('__method__')
-
-      bind.eval('method(__method__).parameters')
-    rescue NameError => e
-      Byebug.errmsg \
-        "Exception #{e.class} (#{e.message}) while retrieving frame params"
-      []
+      processor.at_return
     end
   end
 end

@@ -30,13 +30,13 @@ module Byebug
     def test_step_goes_to_the_next_statement
       enter 'step'
 
-      debug_code(program) { assert_equal 7, state.line }
+      debug_code(program) { assert_equal 7, frame.line }
     end
 
     def test_s_goes_to_the_next_statement
       enter 's'
 
-      debug_code(program) { assert_equal 7, state.line }
+      debug_code(program) { assert_equal 7, frame.line }
     end
   end
 
@@ -72,13 +72,13 @@ module Byebug
     def step_steps_into_blocks
       enter 'step 2'
 
-      debug_code(program) { assert_equal 9, state.line }
+      debug_code(program) { assert_equal 9, frame.line }
     end
 
     def step_steps_out_of_blocks_when_done
       enter 'step 3'
 
-      debug_code(program) { assert_equal 12, state.line }
+      debug_code(program) { assert_equal 12, frame.line }
     end
   end
 
@@ -118,7 +118,7 @@ module Byebug
     def test_step_then_up_then_steps_in_from_the_upper_frame
       enter 'step', 'up', 'step'
 
-      debug_code(program) { assert_equal 13, state.line }
+      debug_code(program) { assert_equal 13, frame.line }
     end
   end
 end

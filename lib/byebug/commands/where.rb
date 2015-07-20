@@ -11,11 +11,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         w[here]|bt|backtrace
 
@@ -30,7 +30,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Displays the backtrace'
     end
 
@@ -41,8 +41,8 @@ module Byebug
     private
 
     def print_backtrace
-      bt = prc('frame.line', (0...@state.context.stack_size)) do |_, index|
-        get_pr_arguments(index)
+      bt = prc('frame.line', (0...context.stack_size)) do |_, index|
+        Frame.new(context, index).to_hash
       end
 
       print(bt)

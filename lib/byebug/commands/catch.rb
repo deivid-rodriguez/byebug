@@ -12,11 +12,11 @@ module Byebug
 
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* cat(?:ch)? (?:\s+(\S+))? (?:\s+(off))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         cat[ch][ (off|<exception>[ off])]
 
@@ -29,7 +29,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Handles exception catchpoints'
     end
 

@@ -42,7 +42,7 @@ module Byebug
     def test_disable_breakpoints_with_short_syntax_properly_ignores_them
       enter 'b 21', 'b 22', -> { "disable b #{Breakpoint.first.id}" }, 'cont'
 
-      debug_code(program) { assert_equal 22, state.line }
+      debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_disable_breakpoints_with_full_syntax_sets_enabled_to_false
@@ -55,7 +55,7 @@ module Byebug
       enter 'break 21', 'break 22',
             -> { "disable breakpoints #{Breakpoint.first.id}" }, 'cont'
 
-      debug_code(program) { assert_equal 22, state.line }
+      debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_disable_all_breakpoints_sets_all_enabled_flags_to_false
@@ -71,21 +71,14 @@ module Byebug
       enter 'break 21', 'break 22', 'disable breakpoints', 'cont'
       debug_code(program)
 
-      assert_equal true, state.proceed # Obscure assert to check termination
+      check_output_doesnt_include 'Stopped by breakpoint'
     end
 
-    def test_disable_breakpoints_shows_an_error_if_syntax_is_incorrect
+    def test_disable_without_an_argument_shows_help
       enter 'disable'
       debug_code(program)
 
       check_output_includes 'Disables breakpoints or displays'
-    end
-
-    def test_disable_shows_an_error_if_an_unknown_subcommand_is_provided
-      enter 'disable foo'
-      debug_code(program)
-
-      check_error_includes "Unknown subcommand 'foo'"
     end
   end
 end

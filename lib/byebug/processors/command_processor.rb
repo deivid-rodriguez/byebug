@@ -1,119 +1,147 @@
-require 'byebug/states/regular_state'
-require 'byebug/helpers/file'
+require 'forwardable'
+
 require 'byebug/helpers/eval'
+require 'byebug/errors'
 
 module Byebug
   #
-  # Processes commands in regular mode
+  # Processes commands in regular mode.
   #
-  class CommandProcessor < Processor
+  # You can override this class to create your own command processor that, for
+  # example, whitelists only certain commands to be executed.
+  #
+  # @see PostMortemProcessor for a example
+  #
+  class CommandProcessor
     include Helpers::EvalHelper
-    include Helpers::FileHelper
 
-    attr_reader :display, :state
+    attr_accessor :prev_line
+    attr_reader :context, :interface
 
-    def initialize(interface = LocalInterface.new)
-      super(interface)
-
-      @display = []
-      @last_cmd = nil # To allow empty (just <RET>) commands
-      @context_was_dead = false # Assume we haven't started.
-    end
-
-    def interface=(interface)
-      @interface.close if @interface
+    def initialize(context, interface = LocalInterface.new)
+      @context = context
       @interface = interface
+
+      @proceed = false
+      @prev_line = nil
+      @last_cmd = nil
     end
 
-    def at_breakpoint(_context, breakpoint)
-      n = Byebug.breakpoints.index(breakpoint) + 1
-      file = normalize(breakpoint.source)
-      line = breakpoint.pos
-
-      puts "Stopped by breakpoint #{n} at #{file}:#{line}"
+    def printer
+      @printer ||= Printers::Plain.new
     end
 
-    def at_catchpoint(context, excpt)
-      file = normalize(context.frame_file(0))
-      line = context.frame_line(0)
-
-      puts "Catchpoint at #{file}:#{line}: `#{excpt}' (#{excpt.class})"
+    def frame
+      @context.frame
     end
 
-    def at_tracing(context, file, line)
-      puts "Tracing: #{normalize(file)}:#{line} #{get_line(file, line)}"
+    extend Forwardable
+    def_delegator :printer, :print, :pr
+    def_delegator :printer, :print_collection, :prc
+    def_delegator :printer, :print_variables, :prv
 
-      always_run(context, file, line, 2)
-    end
-
-    def at_line(context, file, line)
-      process_commands(context, file, line)
-    end
-
-    def at_return(context, file, line)
-      process_commands(context, file, line)
-    end
-
-    private
+    def_delegators :interface, :errmsg, :puts, :confirm
 
     #
-    # Prompt shown before reading a command.
+    # Available commands
     #
-    def prompt(context)
-      "(byebug#{context.dead? ? ':post-mortem' : ''}) "
-    end
-
-    #
-    # Run commands everytime.
-    #
-    # For example display commands or possibly the list or irb in an "autolist"
-    # or "autoirb".
-    #
-    # @return List of commands acceptable to run bound to the current state
-    #
-    def always_run(context, file, line, run_level)
-      @state = RegularState.new(context, @display, file, @interface, line)
-
-      # Change default when in irb or code included in command line
-      Setting[:autolist] = false if ['(irb)', '-e'].include?(file)
-
-      # Bind commands to the current state.
-      commands.each { |cmd| cmd.execute if cmd.class.always_run >= run_level }
+    def command_list
+      @command_list ||= CommandList.new(commands)
     end
 
     def commands
-      Byebug.commands.map { |cmd| cmd.new(state) }
+      Byebug.commands
+    end
+
+    def at_breakpoint(brkpt)
+      number = Byebug.breakpoints.index(brkpt) + 1
+
+      puts "Stopped by breakpoint #{number} at #{frame.file}:#{frame.line}"
+    end
+
+    def at_catchpoint(exception)
+      puts "Catchpoint at #{context.location}: `#{exception}'"
+    end
+
+    def at_tracing
+      puts "Tracing: #{context.full_location}"
+
+      run_auto_commands(2)
+    end
+
+    def at_line
+      process_commands
+    end
+
+    def at_return
+      process_commands
+    end
+
+    #
+    # Let the execution continue
+    #
+    def proceed!
+      @proceed = true
     end
 
     #
     # Handle byebug commands.
     #
-    def process_commands(context, file, line)
-      always_run(context, file, line, 1)
+    def process_commands
+      before_repl
 
-      puts 'The program finished.' if program_just_finished?(context)
-      puts(state.location) if Setting[:autolist] == 0
-
-      @interface.autorestore
-
-      repl(context)
+      repl
     ensure
-      @interface.autosave
+      after_repl
+    end
+
+    protected
+
+    #
+    # Prompt shown before reading a command.
+    #
+    def prompt
+      '(byebug) '
+    end
+
+    private
+
+    def auto_commands_for(run_level)
+      command_list.select { |cmd| cmd.always_run >= run_level }
+    end
+
+    #
+    # Run permanent commands.
+    #
+    def run_auto_commands(run_level)
+      auto_commands_for(run_level).each { |cmd| cmd.new(self).execute }
+    end
+
+    def before_repl
+      @proceed = false
+      @prev_line = nil
+
+      run_auto_commands(1)
+      interface.autorestore
+    end
+
+    def after_repl
+      interface.autosave
     end
 
     #
     # Main byebug's REPL
     #
-    def repl(context)
-      until state.proceed?
-        cmd = @interface.read_command(prompt(context))
+    def repl
+      until @proceed
+        cmd = interface.read_command(prompt)
         return unless cmd
 
         next if cmd == '' && @last_cmd.nil?
 
         cmd.empty? ? cmd = @last_cmd : @last_cmd = cmd
 
-        run_cmd(context, cmd)
+        run_cmd(cmd)
       end
     end
 
@@ -123,32 +151,13 @@ module Byebug
     # Instantiates a command matching the input and runs it. If a matching
     # command is not found, it evaluates the unknown input.
     #
-    def run_cmd(context, input)
-      cmd = match_cmd(input)
-      return puts(thread_safe_eval(input)) unless cmd
+    def run_cmd(input)
+      command = command_list.match(input)
+      return command.new(self, input).execute if command
 
-      if context.dead? && !cmd.class.allow_in_post_mortem
-        return errmsg('Command unavailable in post mortem mode.')
-      end
-
-      cmd.execute
-    end
-
-    #
-    # Finds a matches the command matching the input
-    #
-    def match_cmd(input)
-      commands.find { |cmd| cmd.match(input) }
-    end
-
-    #
-    # Returns true first time control is given to the user after program
-    # termination.
-    #
-    def program_just_finished?(context)
-      result = context.dead? && !@context_was_dead
-      @context_was_dead = false if result == true
-      result
+      puts thread_safe_eval(input)
+    rescue => e
+      errmsg(e)
     end
   end
 end

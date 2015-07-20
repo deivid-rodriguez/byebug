@@ -8,16 +8,16 @@ module Byebug
     #
     # Information about arguments of the current method/block
     #
-    class ArgsSubcommand < Command
+    class ArgsCommand < Command
       include Helpers::VarHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* a(?:rgs)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] a[args]
 
@@ -25,7 +25,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Information about arguments of the current scope'
       end
 

@@ -5,40 +5,62 @@ module Byebug
   #
   # Parent class of all byebug commands.
   #
-  # Subclasses need to implement a `regexp` method and an `execute` method.
+  # Subclass it and name the subclass ending with the word Command to implement
+  # your own custom command.
+  #
+  # @example
+  #
+  # class MyCustomCommand < Command
+  #   def self.regexp
+  #     /custom_regexp/
+  #   end
+  #
+  #   def self.description
+  #     'Custom long desc'
+  #   end
+  #
+  #   def.short_description
+  #     'Custom short desc'
+  #   end
+  #
+  #   def execute
+  #     # My command's implementation
+  #   end
+  # end
   #
   class Command
     extend Forwardable
 
-    include Helpers::StringHelper
+    attr_reader :processor
 
-    def initialize(state)
-      @match = nil
-      @state = state
+    def initialize(processor, input = self.class.to_s)
+      @processor = processor
+      @match = match(input)
     end
 
-    def match(input)
-      @match = regexp.match(input)
+    def context
+      @context ||= processor.context
     end
 
-    def_delegators :'self.class', :to_name, :description
-
-    #
-    # Default help text for a command.
-    #
-    def help
-      prettify(description)
+    def frame
+      @frame ||= context.frame
     end
 
-    def_delegator :"Byebug.printer", :print, :pr
-    def_delegator :"Byebug.printer", :print_collection, :prc
-    def_delegator :"Byebug.printer", :print_variables, :prv
+    def arguments
+      @match[0].split(' ').drop(1).join(' ')
+    end
 
-    protected
+    def_delegators :'self.class', :description, :help, :match
 
-    def_delegators :@state, :errmsg, :puts, :print, :confirm
+    def_delegator :'processor.printer', :print, :pr
+    def_delegator :'processor.printer', :print_collection, :prc
+    def_delegator :'processor.printer', :print_variables, :prv
+
+    def_delegators :'processor.interface', :errmsg, :puts, :print, :confirm
 
     class << self
+      include Helpers::StringHelper
+
       #
       # Special methods to allow command filtering in processors
       #
@@ -53,19 +75,30 @@ module Byebug
       #
       # Name of the command, as executed by the user.
       #
-      def to_name
-        name.gsub(/^Byebug::/, '').gsub(/Command$/, '').downcase
+      def to_s
+        name
+          .split('::')
+          .map { |n| n.gsub(/Command$/, '').downcase if n =~ /Command$/ }
+          .compact
+          .join(' ')
+      end
+
+      def columnize(width)
+        format("  %-#{width}s -- %s\n", to_s, short_description)
       end
 
       #
-      # Available subcommands for the current command
+      # Default help text for a command.
       #
-      # A subcommand is any class defined inside the parent's command class
-      #
-      def subcommands
-        const_list = constants(false).map { |const| const_get(const, false) }
+      def help
+        prettify(description)
+      end
 
-        const_list.select { |c| c.is_a?(Class) }
+      #
+      # Command's regexp match against an input
+      #
+      def match(input)
+        regexp.match(input)
       end
     end
   end

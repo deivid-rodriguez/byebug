@@ -7,11 +7,11 @@ module Byebug
   class KillCommand < Command
     self.allow_in_control = true
 
-    def regexp
+    def self.regexp
       /^\s* (?:kill) \s* (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         kill[ signal]
 
@@ -21,23 +21,24 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Sends a signal to the current process'
     end
 
     def execute
       if @match[1]
         signame = @match[1]
+
         unless Signal.list.member?(signame)
-          errmsg("signal name #{signame} is not a signal I know about\n")
-          return false
+          return errmsg("signal name #{signame} is not a signal I know about\n")
         end
-        @state.interface.close if 'KILL' == signame
       else
         return unless confirm('Really kill? (y/n) ')
+
         signame = 'KILL'
       end
 
+      processor.interface.close if 'KILL' == signame
       Process.kill(signame, Process.pid)
     end
   end

@@ -8,11 +8,11 @@ module Byebug
   class IrbCommand < Command
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* irb \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         irb
 
@@ -20,12 +20,12 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Starts an IRB session'
     end
 
     def execute
-      unless @state.interface.is_a?(LocalInterface)
+      unless processor.interface.is_a?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
       end
 

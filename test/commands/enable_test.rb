@@ -44,7 +44,7 @@ module Byebug
       enter 'break 21', 'break 22', 'disable breakpoints',
             -> { "enable b #{Breakpoint.first.id}" }, 'cont'
 
-      debug_code(program) { assert_equal 21, state.line }
+      debug_code(program) { assert_equal 21, frame.line }
     end
 
     def test_enable_all_breakpoints_sets_all_enabled_flags_to_true
@@ -59,14 +59,14 @@ module Byebug
     def test_enable_all_breakpoints_stops_at_first_breakpoint
       enter 'b 21', 'b 22', 'disable breakpoints', 'enable breakpoints', 'cont'
 
-      debug_code(program) { assert_equal 21, state.line }
+      debug_code(program) { assert_equal 21, frame.line }
     end
 
     def test_enable_all_breakpoints_stops_at_last_breakpoint
       enter 'break 21', 'break 22', 'disable breakpoints',
             'enable breakpoints', 'cont', 'cont'
 
-      debug_code(program) { assert_equal 22, state.line }
+      debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_enable_breakpoints_with_full_syntax_sets_enabled_to_false
@@ -80,7 +80,7 @@ module Byebug
       enter 'break 21', 'break 22', 'disable breakpoints',
             -> { "enable breakpoints #{Breakpoint.last.id}" }, 'cont'
 
-      debug_code(program) { assert_equal 22, state.line }
+      debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_enable_by_itself_shows_help

@@ -8,16 +8,16 @@ module Byebug
     #
     # Enables all or specific displays
     #
-    class DisplaySubcommand < Command
+    class DisplayCommand < Command
       include Helpers::ToggleHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* d(?:isplay)? (?:\s+ (.+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           dis[able] d[isplay][ <id1> <id2> .. <idn>]
 
@@ -29,7 +29,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Disables expressions to be displayed when program stops.'
       end
 

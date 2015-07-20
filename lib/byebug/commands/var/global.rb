@@ -6,16 +6,16 @@ module Byebug
     #
     # Shows global variables
     #
-    class GlobalSubcommand < Command
+    class GlobalCommand < Command
       include Helpers::VarHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* g(?:lobal)? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] g[lobal]
 
@@ -23,7 +23,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows global variables.'
       end
 

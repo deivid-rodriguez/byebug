@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/errors'
 
 module Byebug
   #
@@ -8,39 +9,54 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* h(?:elp)? (?:\s+(\S+))? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         h[elp][ <cmd>[ <subcmd>]]
 
         #{short_description}
 
-        help                -- prints this help
+        help                -- prints a summary of all commands
         help <cmd>          -- prints help on command <cmd>
         help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Helps you using byebug'
     end
 
     def execute
-      return puts(help) unless @match[1]
+      return help_for_all unless @match[1]
 
-      cmd = Byebug.commands.find { |c| c.to_name == @match[1] }
-      return errmsg(pr('help.errors.undefined', cmd: @match[1])) unless cmd
+      return help_for(@match[1], command) unless @match[2]
 
-      cmd = cmd.new(@state)
-      return puts(cmd.help) unless @match[2]
+      help_for(@match[2], subcommand)
+    end
 
-      subcmd = cmd.subcommands.find(@match[2])
-      return errmsg(pr('help.errors.undefined', cmd: @match[2])) unless subcmd
+    private
 
-      puts(subcmd.help)
+    def help_for_all
+      puts(processor.command_list.to_s)
+    end
+
+    def help_for(input, cmd)
+      fail CommandNotFound.new(input, command) unless cmd
+
+      puts(cmd.help)
+    end
+
+    def command
+      @command ||= processor.command_list.match(@match[1])
+    end
+
+    def subcommand
+      return unless command
+
+      @subcommand ||= command.subcommand_list.match(@match[2])
     end
   end
 end

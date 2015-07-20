@@ -34,7 +34,7 @@ module Byebug
     def test_does_not_stop_at_the_deleted_breakpoint
       enter 'b 9', 'b 10', -> { "delete #{Breakpoint.first.id}" }, 'cont'
 
-      debug_code(program) { assert_equal 10, state.line }
+      debug_code(program) { assert_equal 10, frame.line }
     end
 
     def test_delete_by_itself_deletes_all_breakpoints_if_confirmed

@@ -8,11 +8,13 @@ module Byebug
   class UndisplayCommand < Command
     include Helpers::ParseHelper
 
-    def regexp
+    self.allow_in_post_mortem = true
+
+    def self.regexp
       /^\s* undisp(?:lay)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         undisp[lay][ nnn]
 
@@ -24,24 +26,24 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Stops displaying all or some expressions when program stops'
     end
 
     def execute
       if @match[1]
-        pos, err = get_int(@match[1], 'Undisplay', 1, @state.display.size)
+        pos, err = get_int(@match[1], 'Undisplay', 1, Byebug.displays.size)
         return errmsg(err) unless err.nil?
 
-        unless @state.display[pos - 1]
+        unless Byebug.displays[pos - 1]
           return errmsg(pr('display.errors.undefined', expr: pos))
         end
 
-        @state.display[pos - 1][0] = nil
+        Byebug.displays[pos - 1][0] = nil
       else
         return unless confirm(pr('display.confirmations.clear_all'))
 
-        @state.display.each { |d| d[0] = false }
+        Byebug.displays.each { |d| d[0] = false }
       end
     end
   end

@@ -8,16 +8,16 @@ module Byebug
     #
     # Shows instance variables
     #
-    class InstanceSubcommand < Command
+    class InstanceCommand < Command
       include Helpers::VarHelper
 
       self.allow_in_post_mortem = true
 
-      def regexp
+      def self.regexp
         /^\s* i(?:nstance)? (?:\s+ (.+))? \s*$/x
       end
 
-      def description
+      def self.description
         <<-EOD
           v[ar] i[nstance][ <object>]
 
@@ -25,7 +25,7 @@ module Byebug
         EOD
       end
 
-      def short_description
+      def self.short_description
         'Shows instance variables of self or a specific object.'
       end
 

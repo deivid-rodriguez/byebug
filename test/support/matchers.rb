@@ -70,10 +70,14 @@ module Minitest
 
     def assert_location(file, line)
       expected = "#{file}:#{line}"
-      actual = "#{state.file}:#{state.line}"
+      actual = "#{frame.file}:#{frame.line}"
       msg = "Expected location to be #{expected}, but was #{actual}"
 
-      assert file == state.file && line == state.line, msg
+      assert file == frame.file && line == frame.line, msg
+    end
+
+    def assert_program_finished
+      assert_nil context.backtrace, 'Expected program to have finished'
     end
 
     private

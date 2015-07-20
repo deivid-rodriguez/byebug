@@ -8,11 +8,11 @@ module Byebug
     self.allow_in_control = true
     self.allow_in_post_mortem = true
 
-    def regexp
+    def self.regexp
       /^\s* sa(?:ve)? (?:\s+(\S+))? \s*$/x
     end
 
-    def description
+    def self.description
       <<-EOD
         save[ FILE]
 
@@ -27,7 +27,7 @@ module Byebug
       EOD
     end
 
-    def short_description
+    def self.short_description
       'Saves current byebug session to a file'
     end
 
@@ -58,7 +58,7 @@ module Byebug
     end
 
     def save_displays(file)
-      @state.display.each { |d| file.puts "display #{d[1]}" if d[0] }
+      Byebug.displays.each { |d| file.puts "display #{d[1]}" if d[0] }
     end
 
     def save_settings(file)

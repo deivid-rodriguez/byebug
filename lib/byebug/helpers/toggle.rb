@@ -47,14 +47,14 @@ module Byebug
           pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
           return errmsg(err) unless err.nil?
 
-          @state.display[pos - 1][0] = ('enable' == is_enable)
+          Byebug.displays[pos - 1][0] = ('enable' == is_enable)
         end
       end
 
       private
 
       def n_displays
-        @state.display.size
+        Byebug.displays.size
       end
     end
   end

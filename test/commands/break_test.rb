@@ -91,7 +91,7 @@ module Byebug
       enter 'break ::B.a'
       debug_code(program)
 
-      check_error_includes 'NameError Exception: uninitialized constant B'
+      check_error_includes 'Warning: breakpoint source is not yet defined'
     end
 
     def test_setting_breakpoint_to_invalid_location_does_not_create_breakpoint
@@ -169,25 +169,25 @@ module Byebug
     end
 
     def test_breaking_w_byebug_keyword_stops_at_the_next_line
-      debug_code(program) { assert_equal 15, state.line }
+      debug_code(program) { assert_equal 15, frame.line }
     end
 
     def test_conditional_breakpoint_stops_if_condition_is_true
-      enter 'break 8 if  y == 1', 'break 9', 'cont'
+      enter 'break 8 if y == 1', 'break 9', 'cont'
 
-      debug_code(program) { assert_equal 8, state.line }
+      debug_code(program) { assert_equal 8, frame.line }
     end
 
     def test_conditional_breakpoint_is_ignored_if_condition_is_false
       enter 'break 8 if y == 2', 'break 9', 'cont'
 
-      debug_code(program) { assert_equal 9, state.line }
+      debug_code(program) { assert_equal 9, frame.line }
     end
 
     def test_setting_conditional_breakpoint_using_wrong_expression_ignores_it
       enter 'break 8 if y -=) 1', 'break 9', 'cont'
 
-      debug_code(program) { assert_equal 9, state.line }
+      debug_code(program) { assert_equal 9, frame.line }
     end
 
     def test_setting_conditional_breakpoint_using_wrong_expression_shows_error
@@ -253,7 +253,7 @@ module Byebug
         12:  end
       EOC
 
-      debug_code(program) { assert_equal 8, state.line }
+      debug_code(program) { assert_equal 8, frame.line }
     end
 
     def test_stops_at_block_end_when_last_instruction_of_block
@@ -276,7 +276,7 @@ module Byebug
         16:  end
       EOC
 
-      debug_code(program) { assert_equal 14, state.line }
+      debug_code(program) { assert_equal 14, frame.line }
     end
 
     def test_stops_at_class_end_when_last_instruction_of_class
@@ -295,7 +295,7 @@ module Byebug
         12:  end
       EOC
 
-      debug_code(program) { assert_equal 11, state.line }
+      debug_code(program) { assert_equal 11, frame.line }
     end
   end
 end

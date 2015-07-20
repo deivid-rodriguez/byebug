@@ -1,4 +1,3 @@
-require 'mocha/mini_test'
 require 'test_helper'
 
 module Byebug
@@ -53,39 +52,35 @@ module Byebug
         begin
           debug_code(program)
         rescue
-          assert_equal 7, Byebug.raised_exception.__bb_line
+          assert_equal 7, Byebug.raised_exception.__bb_context.frame.line
         end
       end
     end
 
-    forbidden = %w(step next finish break condition display tracevar untracevar)
+    def test_command_forbidden_in_post_mortem_mode
+      context.processor = PostMortemProcessor.new(context, interface)
 
-    forbidden.each do |cmd|
-      define_method "test_#{cmd}_is_forbidden_in_post_mortem_mode" do
-        with_setting :post_mortem, true do
-          enter cmd
-          Context.any_instance.stubs(:dead?).returns(:true)
+      with_setting :post_mortem, true do
+        enter 'help next'
 
-          begin
-            debug_code(program)
-          rescue RuntimeError
-            check_error_includes 'Command unavailable in post mortem mode.'
-          end
+        begin
+          debug_code(program)
+        rescue RuntimeError
+          check_error_includes "Unknown command 'next'. Try 'help'"
         end
       end
     end
 
-    permitted = %w(restart frame quit edit info irb source help list method kill
-                   set save show up where down)
+    def test_command_permitted_in_post_mortem_mode
+      context.processor = PostMortemProcessor.new(context, interface)
 
-    permitted.each do |cmd|
-      define_method "test_#{cmd}_is_permitted_in_post_mortem_mode" do
-        with_setting :post_mortem, true do
-          enter cmd
-          class_name = cmd.gsub(/(^| )\w/) { |b| b[-1, 1].upcase } + 'Command'
+      with_setting :post_mortem, true do
+        enter 'help where'
 
-          Byebug.const_get(class_name).any_instance.stubs(:execute)
-          assert_raises(RuntimeError) { debug_code(program) }
+        begin
+          debug_code(program)
+        rescue RuntimeError
+          check_output_includes 'Displays the backtrace'
         end
       end
     end
