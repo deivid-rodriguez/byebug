@@ -129,11 +129,13 @@ module Byebug
 
     def test_next_steps_over_rescue_when_raising_from_c_method
       enter "break Byebug::#{example_class}.raise_from_c", 'cont', 'next 2'
+
       debug_code(program) { assert_equal 9, state.line }
     end
 
     def test_next_steps_over_rescue_when_raising_from_ruby_method
       enter "break Byebug::#{example_class}.raise_from_ruby", 'cont', 'next 2'
+
       debug_code(program) { assert_equal 15, state.line }
     end
   end
@@ -173,6 +175,7 @@ module Byebug
 
     def test_step_then_up_then_next_advances_in_the_upper_frame
       enter 'step', 'up', 'next'
+
       debug_code(program) { assert_equal 9, state.line }
     end
   end
@@ -215,11 +218,13 @@ module Byebug
 
     def test_next_goes_up_a_frame_if_current_frame_finishes
       enter 'cont 19', 'next'
+
       debug_code(program) { assert_equal 10, state.line }
     end
 
     def test_next_does_not_enter_other_frames_of_the_same_size
       enter 'b 19', 'cont', 'cont', 'next'
+
       debug_code(program) { assert_equal 9, state.line }
     end
   end

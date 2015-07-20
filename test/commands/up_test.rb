@@ -35,16 +35,19 @@ module Byebug
 
     def test_up_moves_up_in_the_callstack
       enter 'up'
+
       debug_code(program) { assert_equal 11, state.line }
     end
 
     def test_up_moves_up_in_the_callstack_a_specific_number_of_frames
       enter 'up 2'
+
       debug_code(program) { assert_equal 7, state.line }
     end
 
     def test_up_does_not_move_if_frame_number_to_too_high
       enter 'up 100'
+
       debug_code(program) { assert_equal 16, state.line }
       check_error_includes "Can't navigate beyond the oldest frame"
     end
@@ -52,6 +55,7 @@ module Byebug
     def test_up_skips_c_frames
       enter 'up 2', 'frame'
       debug_code(program)
+
       check_output_includes(
         /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
     end
@@ -59,6 +63,7 @@ module Byebug
     def test_up_plays_well_with_evaluation
       enter 'str', 'up', 'str', 'up'
       debug_code(program)
+
       check_output_includes 'fx', 'f'
     end
   end

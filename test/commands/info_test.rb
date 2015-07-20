@@ -46,6 +46,7 @@ module Byebug
     def test_info_breakpoints_shows_information_about_all_breakpoints
       enter 'break 12', 'break 13 if x == w', 'info breakpoints'
       debug_code(program)
+
       check_output_includes 'Num Enb What',
                             /\d+ +y   at #{example_path}:12/,
                             /\d+ +y   at #{example_path}:13 if x == w/
@@ -54,6 +55,7 @@ module Byebug
     def test_info_breakpoints_with_ids_shows_information_on_specific_breakpoints
       enter 'b 12', 'b 13', -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
+
       check_output_includes 'Num Enb What', /\d+ +y   at #{example_path}:12/
       check_output_doesnt_include(/\d+ +y   at #{example_path}:13/)
     end
@@ -61,18 +63,21 @@ module Byebug
     def test_info_breakpoints_shows_a_message_when_no_breakpoints_found
       enter 'info breakpoints'
       debug_code(program)
+
       check_output_includes 'No breakpoints.'
     end
 
     def test_info_breakpoints_shows_error_if_specific_breakpoint_do_not_exist
       enter 'break 12', 'break 13', 'delete 100', 'info breakpoints 100'
       debug_code(program)
+
       check_error_includes 'No breakpoints found among list given'
     end
 
     def test_info_breakpoints_shows_hit_counts
       enter 'break 12', 'cont', 'info breakpoints'
       debug_code(program)
+
       check_output_includes(/\d+ +y   at #{example_path}:12/,
                             'breakpoint already hit 1 time')
     end
@@ -90,12 +95,12 @@ module Byebug
     def test_info_display_shows_a_message_when_no_display_expressions_found
       enter 'info display'
       debug_code(program)
+
       check_output_includes 'There are no auto-display expressions now.'
     end
 
     def test_info_file_shows_basic_info_about_current_file
       enter 'info file'
-
       debug_code(program)
       check_output_includes "File #{example_path} (33 lines)"
     end

@@ -21,11 +21,13 @@ module Byebug
 
     def test_interrupt_stops_at_the_next_statement
       enter 'interrupt', 'continue'
+
       debug_code(program) { assert_equal 6, state.line }
     end
 
     def test_interrupt_steps_into_blocks
       enter 'next', 'interrupt', 'continue'
+
       debug_code(program) { assert_equal 7, state.line }
     end
   end

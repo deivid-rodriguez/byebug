@@ -31,12 +31,14 @@ module Byebug
     def test_show_callstyle
       enter 'show callstyle'
       debug_code(minimal_program)
+
       check_output_includes "Frame display callstyle is 'long'"
     end
 
     def test_show_listsize
       enter 'show listsize'
       debug_code(minimal_program)
+
       check_output_includes 'Number of source lines to list is 10'
     end
 
@@ -44,12 +46,14 @@ module Byebug
       width = Setting[:width]
       enter 'show width'
       debug_code(minimal_program)
+
       check_output_includes "Maximum width of byebug's output is #{width}"
     end
 
     def test_show_unknown_setting
       enter 'show bla'
       debug_code(minimal_program)
+
       check_error_includes 'Unknown setting :bla'
     end
 
@@ -57,6 +61,7 @@ module Byebug
       filename = Setting[:histfile]
       enter 'show histfile'
       debug_code(minimal_program)
+
       check_output_includes "The command history file is #{filename}"
     end
 
@@ -64,6 +69,7 @@ module Byebug
       max_size = Setting[:histsize]
       enter 'show histsize'
       debug_code(minimal_program)
+
       check_output_includes \
         "Maximum size of byebug's command history is #{max_size}"
     end
@@ -71,6 +77,7 @@ module Byebug
     def test_show_without_arguments_displays_help_for_the_show_command
       enter 'show'
       debug_code(minimal_program)
+
       check_output_includes('Shows byebug settings',
                             'List of supported settings:')
     end

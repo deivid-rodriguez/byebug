@@ -41,6 +41,7 @@ module Byebug
     def test_help_with_undefined_command_shows_an_error
       enter 'help foobar'
       debug_code(minimal_program)
+
       check_error_includes 'Undefined command: foobar. Try: help'
     end
 
@@ -54,12 +55,14 @@ module Byebug
     def test_help_set_shows_help_for_set_command
       enter 'help set'
       debug_code(minimal_program)
+
       check_output_includes('Modifies byebug settings')
     end
 
     def test_help_show_shows_help_for_show_command
       enter 'help show'
       debug_code(minimal_program)
+
       check_output_includes('Shows byebug settings')
     end
   end
