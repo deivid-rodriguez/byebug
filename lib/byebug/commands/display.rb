@@ -9,10 +9,7 @@ module Byebug
     include Helpers::EvalHelper
 
     self.allow_in_post_mortem = false
-
-    def self.always_run
-      2
-    end
+    self.always_run = 2
 
     def regexp
       /^\s* disp(?:lay)? (?:\s+ (.+))? \s*$/x
