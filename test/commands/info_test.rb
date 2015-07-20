@@ -43,12 +43,6 @@ module Byebug
       EOC
     end
 
-    def test_info_args_show_information_about_current_frame_arguments
-      enter 'break 12', 'cont', 'info args'
-      debug_code(program)
-      check_output_includes 'y = "a"', 'z = "b"'
-    end
-
     def test_info_breakpoints_shows_information_about_all_breakpoints
       enter 'break 12', 'break 13 if x == w', 'info breakpoints'
       debug_code(program)

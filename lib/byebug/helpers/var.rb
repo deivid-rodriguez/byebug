@@ -37,6 +37,17 @@ module Byebug
         puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
       end
 
+      def var_args
+        args = @state.context.frame_args
+        return if args == [[:rest]]
+
+        all_locals = @state.context.frame_locals
+        arg_values = args.map { |arg| arg[1] }
+
+        locals = all_locals.select { |k, _| arg_values.include?(k) }
+        puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
+      end
+
       def safe_inspect(var)
         var.inspect
       rescue

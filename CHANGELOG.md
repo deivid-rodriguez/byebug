@@ -7,6 +7,9 @@ was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 "enhanced evaluation" command.
 * `verbose` setting.
 
+# Changed
+* `info args` is now `var args`.
+
 ## 5.0.0
 ### Fixed
 * [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`

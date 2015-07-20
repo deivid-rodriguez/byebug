@@ -1,6 +1,5 @@
 require 'byebug/subcommands'
 
-require 'byebug/commands/info/args'
 require 'byebug/commands/info/breakpoints'
 require 'byebug/commands/info/catch'
 require 'byebug/commands/info/display'
