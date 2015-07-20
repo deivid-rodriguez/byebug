@@ -5,6 +5,7 @@
 # For a complete list of options that you can use to customize hooks, see:
 # https://github.com/causes/overcommit#configuration
 #
+gemfile: Gemfile
 
 #
 # Hooks that are run against every commit message after a user has written it.
