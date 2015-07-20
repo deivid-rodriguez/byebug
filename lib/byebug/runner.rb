@@ -1,7 +1,9 @@
 require 'optparse'
 require 'English'
 require 'byebug/core'
+require 'byebug/version'
 require 'byebug/helpers/parse'
+require 'byebug/option_setter'
 
 module Byebug
   #
@@ -28,7 +30,12 @@ module Byebug
     #
     # Special working modes that don't actually start the debugger.
     #
-    attr_accessor :help, :version, :remote
+    attr_reader :help, :version, :remote
+
+    #
+    # Signals that we should exit after the debugged program is finished.
+    #
+    attr_accessor :quit
 
     #
     # @param stop [Boolean] Whether the runner should stop right before
@@ -40,6 +47,22 @@ module Byebug
     def initialize(stop = true, quit = true)
       @stop = stop
       @quit = quit
+    end
+
+    def help=(text)
+      @help ||= text
+
+      interface.puts("\n#{text}\n")
+    end
+
+    def version=(number)
+      @version ||= number
+
+      interface.puts("\n  Running byebug #{number}\n")
+    end
+
+    def remote=(host_and_port)
+      @remote ||= Byebug.parse_host_and_port(host_and_port)
     end
 
     #
@@ -60,16 +83,7 @@ module Byebug
     #
     def run
       prepare_options.order!($ARGV)
-
-      if version
-        Byebug.puts("\n  Running byebug #{version}\n")
-        return
-      end
-
-      if help
-        Byebug.puts("#{help}\n")
-        return
-      end
+      return if version || help
 
       if remote
         Byebug.start_client(*remote)
@@ -81,14 +95,15 @@ module Byebug
       loop do
         debug_program
 
-        break if @quit
+        break if quit
 
-        processor = Byebug::ControlCommandProcessor.new
-        processor.process_commands
+        Byebug::ControlCommandProcessor.new.process_commands
       end
     end
 
-    private
+    def interface
+      @interface ||= LocalInterface.new
+    end
 
     #
     # Processes options passed from the command line.
@@ -97,49 +112,7 @@ module Byebug
       OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
 
-        opts.on '-d', '--debug', 'Set $DEBUG=true' do
-          $DEBUG = true
-        end
-
-        opts.on('-I', '--include list', 'Add to paths to $LOAD_PATH') do |list|
-          $LOAD_PATH.push(list.split(':')).flatten!
-        end
-
-        opts.on '-m', '--[no-]post-mortem', 'Use post-mortem mode' do |v|
-          Setting[:post_mortem] = v
-        end
-
-        opts.on '-q', '--[no-]quit', 'Quit when script finishes' do |v|
-          @quit = v
-        end
-
-        opts.on '-x', '--[no-]rc', 'Run byebug initialization file' do |v|
-          Byebug.run_init_script if v
-        end
-
-        opts.on '-s', '--[no-]stop', 'Stop when script is loaded' do |v|
-          @stop = v
-        end
-
-        opts.on '-r', '--require file', 'Require library before script' do |lib|
-          require lib
-        end
-
-        opts.on '-R', '--remote [host:]port', 'Remote debug [host:]port' do |p|
-          self.remote = Byebug.parse_host_and_port(p)
-        end
-
-        opts.on '-t', '--[no-]trace', 'Turn on line tracing' do |v|
-          Setting[:linetrace] = v
-        end
-
-        opts.on '-v', '--version', 'Print program version' do
-          self.version = VERSION
-        end
-
-        opts.on('-h', '--help', 'Display this message') do
-          self.help = opts.help
-        end
+        OptionSetter.new(self, opts).setup
       end
     end
 
@@ -166,7 +139,7 @@ module Byebug
       fail(InvalidScript, 'The script has incorrect syntax') unless ok
 
       error = Byebug.debug_load($PROGRAM_NAME, @stop)
-      Byebug.puts "#{error}\n#{error.backtrace}" if error
+      puts "#{error}\n#{error.backtrace}" if error
     end
 
     #

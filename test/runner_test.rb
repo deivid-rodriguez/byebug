@@ -11,6 +11,14 @@ module Byebug
       super
 
       @runner = Byebug::Runner.new(false)
+      @runner.stubs(:interface).returns(interface)
+      @previous_mode = Byebug.mode
+    end
+
+    def teardown
+      Byebug.mode = @previous_mode
+
+      super
     end
 
     def write_debugged_program
