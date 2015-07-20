@@ -26,7 +26,7 @@ module Byebug
       def execute
         if @state.context.dead?
           puts 'The program crashed.'
-          excpt = Byebug.last_exception
+          excpt = Byebug.raised_exception
           return puts("Exception: #{excpt.inspect}") if excpt
         end
 
