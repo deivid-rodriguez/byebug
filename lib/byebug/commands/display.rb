@@ -43,7 +43,7 @@ module Byebug
       print pr('display.result',
                n: @state.display.size,
                exp: exp,
-               result: warning_eval(exp).inspect)
+               result: thread_safe_eval(exp).inspect)
     end
 
     def print_display_expressions
@@ -52,7 +52,7 @@ module Byebug
         if is_active
           { n: index + 1,
             exp: expression,
-            result: warning_eval(expression).inspect }
+            result: thread_safe_eval(expression).inspect }
         end
       end
 
