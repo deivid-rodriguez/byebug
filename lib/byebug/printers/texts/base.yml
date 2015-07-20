@@ -18,11 +18,11 @@ break:
     delete_all: "Delete all breakpoints?"
 
 catch:
-  catching: "Catching exception {exception}."
+  added: "Catching exception {exception}."
+  removed: "Catch for exception {exception} removed"
   errors:
     off: "Off expected. Got {off}"
     not_class: "Warning {class} is not known to be a Class"
-    removed: "Catch for exception {exception} removed"
     not_found: "Catch for exception {exception} not found"
   confirmations:
     delete_all: "Delete all catchpoints? (y or n) "

@@ -15,34 +15,47 @@ module Byebug
     end
 
     def execute
-      ex = @match[1]
-      return info_catch unless ex
+      return info unless @match[1]
 
-      cmd = @match[2]
-      unless cmd
-        if 'off' == ex
-          Byebug.catchpoints.clear if
-            confirm(pr('catch.confirmations.delete_all'))
+      return 'off' == @match[1] ? clear : add(@match[1]) unless @match[2]
 
-          return
+      return errmsg pr('catch.errors.off', off: cmd) unless @match[2] == 'off'
+
+      remove(@match[1])
+    end
+
+    private
+
+    def remove(exception)
+      unless Byebug.catchpoints.member?(exception)
+        return errmsg pr('catch.errors.not_found', exception: exception)
+      end
+
+      puts pr('catch.removed', exception: exception)
+      Byebug.catchpoints.delete(exception)
+    end
+
+    def add(exception)
+      if single_thread_eval("#{exception.is_a?(Class)}")
+        errmsg pr('catch.errors.not_class', class: exception)
+      end
+
+      puts pr('catch.added', exception: exception)
+      Byebug.add_catchpoint(exception)
+    end
+
+    def clear
+      Byebug.catchpoints.clear if confirm(pr('catch.confirmations.delete_all'))
+    end
+
+    def info
+      if Byebug.catchpoints && !Byebug.catchpoints.empty?
+        Byebug.catchpoints.each do |exception, _hits|
+          puts("#{exception}: #{exception.is_a?(Class)}")
         end
-
-        is_class = single_thread_eval("#{ex.is_a?(Class)}")
-        puts pr('catch.errors.not_class', class: ex) unless is_class
-
-        Byebug.add_catchpoint(ex)
-        return puts pr('catch.catching', exception: ex)
+      else
+        puts 'No exceptions set to be caught.'
       end
-
-      if cmd == 'off'
-        exists = Byebug.catchpoints.member?(ex)
-        return errmsg pr('catch.errors.not_found', exception: ex) unless exists
-
-        Byebug.catchpoints.delete(ex)
-        return errmsg pr('catch.errors.removed', exception: ex)
-      end
-
-      errmsg pr('catch.errors.off', off: cmd)
     end
 
     def description
