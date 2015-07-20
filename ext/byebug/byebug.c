@@ -657,36 +657,6 @@ Debug_load(int argc, VALUE * argv, VALUE self)
 
 /*
  *  call-seq:
- *    Byebug.verbose? -> bool
- *
- *  Returns +true+ if verbose output of TracePoint API events is enabled.
- */
-static VALUE
-Verbose(VALUE self)
-{
-  UNUSED(self);
-
-  return verbose;
-}
-
-/*
- *  call-seq:
- *    Byebug.verbose = bool
- *
- *  Enable verbose output of every TracePoint API events, useful for debugging
- *  byebug.
- */
-static VALUE
-Set_verbose(VALUE self, VALUE value)
-{
-  UNUSED(self);
-
-  verbose = RTEST(value) ? Qtrue : Qfalse;
-  return value;
-}
-
-/*
- *  call-seq:
  *    Byebug.tracing? -> bool
  *
  *  Returns +true+ if global tracing is enabled.
@@ -789,8 +759,6 @@ Init_byebug()
   rb_define_module_function(mByebug, "thread_context", Thread_context, 1);
   rb_define_module_function(mByebug, "tracing?", Tracing, 0);
   rb_define_module_function(mByebug, "tracing=", Set_tracing, 1);
-  rb_define_module_function(mByebug, "verbose?", Verbose, 0);
-  rb_define_module_function(mByebug, "verbose=", Set_verbose, 1);
 
   Init_threads_table(mByebug);
   Init_context(mByebug);

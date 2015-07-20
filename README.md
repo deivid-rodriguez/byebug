@@ -107,8 +107,8 @@ are debugging rails, start the server and once the execution gets to your
     `quit`      | `exit`       |
     `restart`   |              |
     `save`      |              |
-    `set`       |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
-    `show`      |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `verbose` `width`
+    `set`       |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+    `show`      |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
     `source`    |              |
     `step`      |              |
     `thread`    |              | `current` `list` `resume` `stop` `switch`

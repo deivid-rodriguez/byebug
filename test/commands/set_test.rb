@@ -123,13 +123,6 @@ module Byebug
       end
     end
 
-    def test_verbose_prints_tracepoint_api_event_information
-      enter 'set verbose'
-      debug_code(program)
-      assert_equal true, Byebug.verbose?
-      Byebug.verbose = false
-    end
-
     def test_set_linetrace_enables_tracing_program_execution
       with_setting :linetrace, false do
         enter 'set linetrace', 'cont 5'
