@@ -40,8 +40,7 @@ module Byebug
 
           File #{info_file_basic(file)}
 
-          Breakpoint line numbers:
-          #{info_file_breakpoints(file)}
+          Breakpoint line numbers: #{info_file_breakpoints(file)}
 
           Modification time: #{info_file_mtime(file)}
 

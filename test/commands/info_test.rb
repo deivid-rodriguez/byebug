@@ -23,23 +23,17 @@ module Byebug
         14:        w + x.to_s + y + z + @foo
         15:      end
         16:
-        17:      def c
-        18:        a = BasicObject.new
-        19:        a
-        20:      end
-        21:
-        22:      def b
-        23:        a('a', 'b')
-        24:        e = '%.2f'
-        25:        e
-        26:      end
-        27:    end
-        28:
-        29:    byebug
-        30:    i = #{example_class}.new
-        31:    i.b
-        32:    i.c
-        33:  end
+        17:      def b
+        18:        a('a', 'b')
+        19:        e = '%.2f'
+        20:        e
+        21:      end
+        22:    end
+        23:
+        24:    byebug
+        25:    i = #{example_class}.new
+        26:    i.b
+        27:  end
       EOC
     end
 
@@ -102,7 +96,8 @@ module Byebug
     def test_info_file_shows_basic_info_about_current_file
       enter 'info file'
       debug_code(program)
-      check_output_includes "File #{example_path} (33 lines)"
+
+      check_output_includes "File #{example_path} (27 lines)"
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
@@ -152,11 +147,9 @@ module Byebug
 
     def test_info_file_shows_potential_breakpoint_lines_in_current_file
       enter 'info file'
-      debug_code(program)
-      expected_lines = [1, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20,
-                        22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33].join(' ')
+      debug_code(minimal_program)
 
-      check_output_includes 'Breakpoint line numbers:', *expected_lines
+      check_output_includes 'Breakpoint line numbers: 1 2 4 5'
     end
 
     def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename
@@ -164,7 +157,7 @@ module Byebug
         enter "info file #{script_name}"
         debug_code(program)
 
-        check_output_includes 'Breakpoint line numbers:', '1'
+        check_output_includes 'Breakpoint line numbers: 1'
       end
     end
 
