@@ -12,25 +12,9 @@ module Byebug
     end
 
     def execute
-      if !@match[1]
-        return errmsg(pr('edit.errors.state')) unless @state.file
-        file = @state.file
-        line = @state.line if @state.line
-      elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(@match[1]))
-        file, line = @pos_match.captures
-      else
-        file = @match[1]
-      end
-
-      editor = ENV['EDITOR'] || 'vim'
-      file = File.expand_path(file)
-
-      unless File.exist?(file)
-        return errmsg(pr('edit.errors.not_exist', file: file))
-      end
-      unless File.readable?(file)
-        return errmsg(pr('edit.errors.not_readable', file: file))
-      end
+      file, line = location(@match[1])
+      return edit_error('not_exist', file) unless File.exist?(file)
+      return edit_error('not_readable', file) unless File.readable?(file)
 
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 
@@ -45,6 +29,31 @@ module Byebug
         targets can also be specified to start editing at a specific line in a
         specific file.
       EOD
+    end
+
+    private
+
+    def location(matched)
+      if matched.nil?
+        file = @state.file
+        return errmsg(pr('edit.errors.state')) unless file
+        line = @state.line
+      elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(matched))
+        file, line = @pos_match.captures
+      else
+        file = matched
+        line = nil
+      end
+
+      [File.expand_path(file), line]
+    end
+
+    def editor
+      ENV['EDITOR'] || 'vim'
+    end
+
+    def edit_error(type, file)
+      errmsg(pr("edit.errors.#{type}", file: file))
     end
   end
 end
