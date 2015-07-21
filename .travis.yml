@@ -14,7 +14,7 @@ before_script:
   - git config --local user.name 'Travis CI'
 
 script:
-  - gem update --system || test true
+  - gem update --system --no-document || test true
   - gem install bundler --no-document || test true
   - bundle install --jobs 3 --retry 3
   - bundle exec rake complete

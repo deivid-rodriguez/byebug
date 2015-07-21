@@ -21,7 +21,7 @@ class LoopRunner
 
   def run
     @rubies.each do |version|
-      run_command(version, 'gem install bundler')
+      run_command(version, 'gem install bundler --no-document')
       run_command(version, 'bundle')
       run_command(version, 'bundle exec rake compile')
 

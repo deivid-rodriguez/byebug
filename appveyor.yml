@@ -12,7 +12,7 @@ install:
   - ruby --version
   - where ruby
 
-  - gem update --system --no-ri --no-rdoc
+  - gem update --system --no-document
   - gem --version
   - where gem
 
