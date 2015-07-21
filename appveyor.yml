@@ -8,6 +8,7 @@ branches:
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
+  - gem update --system --no-ri --no-rdoc
   - gem --version
   - bundler --version
   - bundle install --without development --jobs 3 --retry 3
