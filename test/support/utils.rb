@@ -132,7 +132,7 @@ module Byebug
     # Shortcut to Byebug's interface
     #
     def interface
-      context.processor.interface
+      Context.interface
     end
 
     #

@@ -82,9 +82,12 @@ module Byebug
   # Runs a script file
   #
   def run_script(file, verbose = false)
-    interface = ScriptInterface.new(file, verbose)
+    old_interface = Context.interface
+    Context.interface = ScriptInterface.new(file, verbose)
 
-    ScriptProcessor.new(interface).process_commands
+    ScriptProcessor.new(nil).process_commands
+  ensure
+    Context.interface = old_interface
   end
 end
 

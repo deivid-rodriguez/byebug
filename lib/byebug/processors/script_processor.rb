@@ -3,10 +3,6 @@ module Byebug
   # Processes commands from a file
   #
   class ScriptProcessor < CommandProcessor
-    def initialize(interface)
-      super(nil, interface)
-    end
-
     #
     # Available commands
     #

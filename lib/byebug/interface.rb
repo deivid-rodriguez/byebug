@@ -19,6 +19,11 @@ module Byebug
     def initialize
       @command_queue = []
       @history = History.new
+      @last_line = ''
+    end
+
+    def last_if_empty(input)
+      @last_line = input.empty? ? @last_line : input
     end
 
     #
@@ -38,16 +43,32 @@ module Byebug
     end
 
     #
-    # Reads a new line from the interface's input stream.
+    # Reads a new line from the interface's input stream, parses it into
+    # commands and saves it to history.
+    #
+    # @return [String] Representing something to be run by the debugger.
     #
     def read_input(prompt, save_hist = true)
-      line = readline(prompt)
+      line = prepare_input(prompt)
       return unless line
 
       history.push(line) if save_hist
 
       command_queue.concat(split_commands(line))
       command_queue.shift
+    end
+
+    #
+    # Reads a new line from the interface's input stream.
+    #
+    # @return [String] New string read or the previous string if the string
+    # read now was empty.
+    #
+    def prepare_input(prompt)
+      line = readline(prompt)
+      return unless line
+
+      last_if_empty(line)
     end
 
     #

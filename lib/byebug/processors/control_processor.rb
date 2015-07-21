@@ -3,10 +3,6 @@ module Byebug
   # Processes commands when there's not program running
   #
   class ControlProcessor < CommandProcessor
-    def initialize(interface = LocalInterface.new)
-      super(nil, interface)
-    end
-
     #
     # Available commands
     #

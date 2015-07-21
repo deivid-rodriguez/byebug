@@ -30,6 +30,12 @@ module Byebug
       def interface
         @interface ||= LocalInterface.new
       end
+
+      attr_writer :processor
+
+      def processor
+        @processor ||= CommandProcessor
+      end
     end
 
     #
@@ -39,16 +45,6 @@ module Byebug
     #
     def ignored_file?(path)
       self.class.ignored_files.include?(path)
-    end
-
-    attr_writer :processor
-
-    #
-    # The processor of commands for the current context. A new process is
-    # instantiated every time a new debugging context is given to the user.
-    #
-    def processor
-      @processor ||= CommandProcessor.new(self, self.class.interface)
     end
 
     def frame
@@ -93,30 +89,36 @@ module Byebug
     end
 
     def at_breakpoint(breakpoint)
-      processor.at_breakpoint(breakpoint)
+      new_processor.at_breakpoint(breakpoint)
     end
 
     def at_catchpoint(exception)
-      processor.at_catchpoint(exception)
+      new_processor.at_catchpoint(exception)
     end
 
     def at_tracing(file, _line)
       return if ignored_file?(file)
 
-      processor.at_tracing
+      new_processor.at_tracing
     end
 
     def at_line(file, _l)
       self.frame = 0
       return if ignored_file?(file)
 
-      processor.at_line
+      new_processor.at_line
     end
 
     def at_return(file, _line)
       return if ignored_file?(file)
 
-      processor.at_return
+      new_processor.at_return
+    end
+
+    private
+
+    def new_processor
+      @processor ||= self.class.processor.new(self)
     end
   end
 end

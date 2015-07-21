@@ -58,31 +58,42 @@ module Byebug
     end
 
     def test_command_forbidden_in_post_mortem_mode
-      context.processor = PostMortemProcessor.new(context, interface)
+      with_post_mortem_processor do
+        with_setting :post_mortem, true do
+          enter 'help next'
 
-      with_setting :post_mortem, true do
-        enter 'help next'
-
-        begin
-          debug_code(program)
-        rescue RuntimeError
-          check_error_includes "Unknown command 'next'. Try 'help'"
+          begin
+            debug_code(program)
+          rescue RuntimeError
+            check_error_includes "Unknown command 'next'. Try 'help'"
+          end
         end
       end
     end
 
     def test_command_permitted_in_post_mortem_mode
-      context.processor = PostMortemProcessor.new(context, interface)
+      with_post_mortem_processor do
+        with_setting :post_mortem, true do
+          enter 'help where'
 
-      with_setting :post_mortem, true do
-        enter 'help where'
-
-        begin
-          debug_code(program)
-        rescue RuntimeError
-          check_output_includes 'Displays the backtrace'
+          begin
+            debug_code(program)
+          rescue RuntimeError
+            check_output_includes 'Displays the backtrace'
+          end
         end
       end
+    end
+
+    private
+
+    def with_post_mortem_processor
+      old_processor = Context.processor
+      Context.processor = PostMortemProcessor
+
+      yield
+    ensure
+      Context.processor = old_processor
     end
   end
 end

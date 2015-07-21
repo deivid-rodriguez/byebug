@@ -16,15 +16,17 @@ module Byebug
     include Helpers::EvalHelper
 
     attr_accessor :prev_line
-    attr_reader :context, :interface
+    attr_reader :context
 
-    def initialize(context, interface = LocalInterface.new)
+    def initialize(context)
       @context = context
-      @interface = interface
 
       @proceed = false
       @prev_line = nil
-      @last_cmd = nil
+    end
+
+    def interface
+      @interface ||= context.class.interface
     end
 
     def printer
@@ -135,11 +137,9 @@ module Byebug
     def repl
       until @proceed
         cmd = interface.read_command(prompt)
-        return unless cmd
+        return if cmd.nil?
 
-        next if cmd == '' && @last_cmd.nil?
-
-        cmd.empty? ? cmd = @last_cmd : @last_cmd = cmd
+        next if cmd == ''
 
         run_cmd(cmd)
       end
