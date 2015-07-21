@@ -22,6 +22,7 @@ install:
   - bundle install --without development --jobs 3 --retry 3
 
 build_script:
+  - bundle exec rake clobber
   - bundle exec rake compile
 
 test_script:
