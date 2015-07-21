@@ -6,7 +6,7 @@ branches:
     - appveyor_tests
 
 install:
-  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem update --system --no-ri --no-rdoc
   - gem --version
