@@ -19,7 +19,7 @@ script:
   - bundle install --jobs 3 --retry 3
   - bundle exec rake clobber compile test
   - if [ $TRAVIS_OS_NAME = linux ]; then
-      bundle exec rake sign_hooks overcommit
+      bundle exec rake sign_hooks overcommit;
     fi
 
 rvm:
