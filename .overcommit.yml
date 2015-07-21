@@ -50,6 +50,8 @@ PreCommit:
 
   TravisLint:
     enabled: true
+    required_files: true
 
   YamlSyntax:
     enabled: true
+    required_files: true
