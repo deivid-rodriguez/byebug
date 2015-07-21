@@ -38,7 +38,7 @@ task :test do
 end
 
 desc 'Run overcommit hooks manually'
-task(:overcommit) do
+task :overcommit do
   system('bundle exec overcommit --run')
 end
 
