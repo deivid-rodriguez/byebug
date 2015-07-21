@@ -4,14 +4,6 @@
 require 'bundler/gem_tasks'
 
 #
-# For the `compile` task
-#
-require 'rake/extensiontask'
-
-spec = Gem::Specification.load('byebug.gemspec')
-Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
-
-#
 # Prepend DevKit into compilation phase
 #
 if Gem.win_platform?
@@ -26,6 +18,14 @@ if Gem.win_platform?
 
   task compile: :devkit
 end
+
+#
+# For the `compile` task
+#
+require 'rake/extensiontask'
+
+spec = Gem::Specification.load('byebug.gemspec')
+Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 
 #
 # Test task
