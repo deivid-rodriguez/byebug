@@ -14,16 +14,18 @@ Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 #
 # Prepend DevKit into compilation phase
 #
-desc 'Activates DevKit'
-task :devkit do
-  begin
-    require 'devkit'
-  rescue LoadError
-    abort "Failed to activate RubyInstaller's DevKit required for compilation."
+if Gem.win_platform?
+  desc 'Activates DevKit'
+  task :devkit do
+    begin
+      require 'devkit'
+    rescue LoadError
+      abort 'Failed to load DevKit required for compilation'
+    end
   end
-end
 
-task compile: :devkit if RUBY_PLATFORM =~ /mingw/
+  task compile: :devkit
+end
 
 #
 # Test task
