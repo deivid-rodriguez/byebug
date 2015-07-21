@@ -42,10 +42,12 @@ task(:overcommit) do
   system('bundle exec overcommit --run')
 end
 
-default_tasks = %i(compile test overcommit)
+desc 'Sign overcommit hooks'
+task :sign_hooks do
+  system('bundle exec overcommit --sign pre-commit')
+end
 
-task default: default_tasks
-task complete: [:clobber] + default_tasks
+task default: %i(compile test overcommit)
 
 #
 # Custom tasks for development
