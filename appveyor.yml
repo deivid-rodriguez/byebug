@@ -9,8 +9,6 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
-  - appveyor DownloadFile %bundler_url% -FileName bundler.gem
-  - gem install --local bundler.gem --no-document
   - bundler --version
   - bundle install --without development --jobs 3 --retry 3
 
@@ -28,8 +26,6 @@ environment:
     - ruby_version: 21-x64
     - ruby_version: '22'
     - ruby_version: 22-x64
-
-  bundler_url: https://rubygems.org/downloads/bundler-1.10.5.gem
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
 41cab138408'
