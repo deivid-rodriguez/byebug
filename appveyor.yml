@@ -3,7 +3,6 @@ version: "{build}"
 branches:
   only:
     - master
-    - appveyor_tests
 
 install:
   - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
