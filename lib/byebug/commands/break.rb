@@ -58,7 +58,7 @@ module Byebug
 
       check_errors(f, l.to_i)
 
-      Breakpoint.add(File.expand_path(f), l.to_i, @match[2])
+      Breakpoint.add(File.realpath(f), l.to_i, @match[2])
     end
 
     def method_breakpoint(location)
