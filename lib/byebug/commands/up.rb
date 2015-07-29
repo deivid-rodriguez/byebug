@@ -35,7 +35,7 @@ module Byebug
       pos, err = parse_steps(@match[1], 'Up')
       return errmsg(err) unless pos
 
-      adjust_frame(pos, false)
+      jump_frames(pos)
 
       ListCommand.new(processor).execute if Setting[:autolist]
     end

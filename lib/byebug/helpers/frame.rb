@@ -4,15 +4,20 @@ module Byebug
     # Utilities to assist frame navigation
     #
     module FrameHelper
-      def adjust_frame(frame, absolute)
-        if absolute
-          new_frame = index_from_start(frame)
+      def switch_to_frame(frame)
+        new_frame = index_from_start(frame)
+        return frame_err('c_frame') if Frame.new(context, new_frame).c_frame?
 
-          return frame_err('c_frame') if Frame.new(context, new_frame).c_frame?
-        else
-          new_frame = navigate_to_frame(frame)
-        end
+        adjust_frame(new_frame)
+      end
 
+      def jump_frames(steps)
+        adjust_frame(navigate_to_frame(steps))
+      end
+
+      private
+
+      def adjust_frame(new_frame)
         return frame_err('too_low') if new_frame >= context.stack_size
         return frame_err('too_high') if new_frame < 0
 
@@ -20,17 +25,13 @@ module Byebug
         processor.prev_line = nil
       end
 
-      private
-
       def navigate_to_frame(jump_no)
-        return if jump_no == 0
-
         current_jumps = 0
         current_pos = context.frame.pos
 
         loop do
           current_pos += direction(jump_no)
-          break if current_pos < 0 || current_pos >= context.stack_size
+          break if out_of_bounds?(current_pos)
 
           next if Frame.new(context, current_pos).c_frame?
 
@@ -39,6 +40,10 @@ module Byebug
         end
 
         current_pos
+      end
+
+      def out_of_bounds?(pos)
+        !(0...context.stack_size).include?(pos)
       end
 
       def frame_err(msg)

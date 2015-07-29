@@ -47,7 +47,7 @@ module Byebug
       pos, err = get_int(@match[1], 'Frame')
       return errmsg(err) unless pos
 
-      adjust_frame(pos, true)
+      switch_to_frame(pos)
     end
   end
 end
