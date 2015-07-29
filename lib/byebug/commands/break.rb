@@ -50,15 +50,14 @@ module Byebug
     private
 
     def line_breakpoint(location)
-      line = location.match(/^(\d+)$/)
-      file_line = location.match(/^([^:]+):(\d+)$/)
-      return unless line || file_line
+      line_match = location.match(/^(\d+)$/)
+      file_line_match = location.match(/^([^:]+):(\d+)$/)
+      return unless line_match || file_line_match
 
-      f, l = line ? [frame.file, line[1]] : [file_line[1], file_line[2]]
+      file = line_match ? frame.file : file_line_match[1]
+      line = line_match ? line_match[1].to_i : file_line_match[2].to_i
 
-      check_errors(f, l.to_i)
-
-      Breakpoint.add(File.realpath(f), l.to_i, @match[2])
+      add_line_breakpoint(file, line)
     end
 
     def method_breakpoint(location)
@@ -79,19 +78,20 @@ module Byebug
       str
     end
 
-    def check_errors(file, line)
-      path = File.expand_path(file)
-      deco_path = normalize(file)
+    def add_line_breakpoint(file, line)
+      fail(pr('break.errors.source', file: file)) unless File.exist?(file)
 
-      fail(pr('break.errors.source', file: deco_path)) unless File.exist?(path)
+      fullpath = File.realpath(file)
 
       if line > n_lines(file)
-        fail(pr('break.errors.far_line', lines: n_lines(file), file: deco_path))
+        fail(pr('break.errors.far_line', lines: n_lines(file), file: fullpath))
       end
 
-      return if Breakpoint.potential_line?(path, line)
+      unless Breakpoint.potential_line?(fullpath, line)
+        fail(pr('break.errors.line', file: fullpath, line: line))
+      end
 
-      fail(pr('break.errors.line', file: deco_path, line: line))
+      Breakpoint.add(fullpath, line, @match[2])
     end
   end
 end
