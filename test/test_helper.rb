@@ -77,6 +77,13 @@ module Byebug
     end
 
     #
+    # Fully namespaced example class
+    #
+    def example_full_class
+      "Byebug::#{example_class}"
+    end
+
+    #
     # Name of the temporary test class.
     #
     def example_class
