@@ -37,9 +37,7 @@ module Byebug
 
         return File.basename(filename) if Setting[:basename]
 
-        path = File.expand_path(filename)
-
-        File.exist?(path) ? File.realpath(path) : filename
+        File.exist?(filename) ? File.realpath(filename) : filename
       end
 
       #
