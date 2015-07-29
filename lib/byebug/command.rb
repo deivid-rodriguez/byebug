@@ -50,7 +50,7 @@ module Byebug
       @match[0].split(' ').drop(1).join(' ')
     end
 
-    def_delegators :'self.class', :description, :help, :match
+    def_delegators :'self.class', :help, :match
 
     def_delegator :'processor.printer', :print, :pr
     def_delegator :'processor.printer', :print_collection, :prc
