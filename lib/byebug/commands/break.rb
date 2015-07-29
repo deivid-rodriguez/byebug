@@ -49,9 +49,9 @@ module Byebug
 
     private
 
-    def line_breakpoint(loc)
-      line = loc.match(/^(\d+)$/)
-      file_line = loc.match(/^([^:]+):(\d+)$/)
+    def line_breakpoint(location)
+      line = location.match(/^(\d+)$/)
+      file_line = location.match(/^([^:]+):(\d+)$/)
       return unless line || file_line
 
       f, l = line ? [frame.file, line[1]] : [file_line[1], file_line[2]]
