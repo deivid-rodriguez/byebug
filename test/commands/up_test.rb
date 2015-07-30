@@ -53,11 +53,10 @@ module Byebug
     end
 
     def test_up_skips_c_frames
-      enter 'up 2', 'frame'
+      enter 'up 3', 'frame'
       debug_code(program)
 
-      check_output_includes(
-        /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
+      check_output_includes(/--> #4  <module:Byebug> at #{example_path}:20/)
     end
 
     def test_up_plays_well_with_evaluation
