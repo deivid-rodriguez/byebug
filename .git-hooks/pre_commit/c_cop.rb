@@ -28,8 +28,8 @@ module Overcommit
 
           return :pass if offenses == 0
 
-          msg = "#{offenses} errors found. Run `indent ext/byebug/*.c`"
-          [:fail, msg]
+          file_list = applicable_files.join(' ')
+          [:fail, "#{offenses} errors found. Run `indent #{file_list}`"]
         end
       end
     end
