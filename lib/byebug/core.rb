@@ -9,6 +9,9 @@ require 'byebug/commands'
 require 'byebug/remote'
 require 'byebug/printers/plain'
 
+#
+# Main debugger's container module. Everything is defined under this module
+#
 module Byebug
   include Helpers::ReflectionHelper
 

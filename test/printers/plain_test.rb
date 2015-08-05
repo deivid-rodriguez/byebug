@@ -2,6 +2,9 @@ require 'mocha/mini_test'
 require 'test_helper'
 
 module Byebug
+  #
+  # Tests the plain text printer
+  #
   class PrintersPlainTestCase < Minitest::Test
     def yaml_file_path(filename)
       relative_path = "../../../lib/byebug/printers/texts/#{filename}.yml"

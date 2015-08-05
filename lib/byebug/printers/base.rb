@@ -2,6 +2,9 @@ require 'yaml'
 
 module Byebug
   module Printers
+    #
+    # Base printer
+    #
     class Base
       class MissedPath < StandardError; end
       class MissedArgument < StandardError; end

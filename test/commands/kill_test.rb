@@ -5,7 +5,6 @@ module Byebug
   #
   # Test signal sending functionality.
   #
-
   class KillTestCase < TestCase
     def program
       strip_line_numbers <<-EOC

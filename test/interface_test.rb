@@ -1,6 +1,9 @@
 require 'test_helper'
 
 module Byebug
+  #
+  # A subclass of Interface to test the base class functionality
+  #
   class SpecificInterface < Interface
     attr_accessor :fake_input_queue
 
@@ -9,6 +12,9 @@ module Byebug
     end
   end
 
+  #
+  # Tests the Interface class
+  #
   class InterfaceTest < Minitest::Test
     def setup
       @interface = SpecificInterface.new

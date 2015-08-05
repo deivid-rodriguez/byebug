@@ -2,6 +2,9 @@ require 'byebug/printers/base'
 
 module Byebug
   module Printers
+    #
+    # Plain text printer
+    #
     class Plain < Base
       def print(path, args = {})
         message = translate(locate(path), args)

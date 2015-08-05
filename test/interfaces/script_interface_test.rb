@@ -1,6 +1,9 @@
 require 'test_helper'
 
 module Byebug
+  #
+  # Tests the script interface (batch execution of byebug commands from a file)
+  #
   class ScriptInterfaceTest < TestCase
     def test_initialize_wires_up_dependencies
       with_new_file('show') do |path|

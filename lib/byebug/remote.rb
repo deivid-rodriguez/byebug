@@ -1,5 +1,10 @@
 require 'socket'
 
+#
+# Remote debugging functionality.
+#
+# TODO: Refactor & add tests
+#
 module Byebug
   # Port number used for remote debugging
   PORT = 8989 unless defined?(PORT)
