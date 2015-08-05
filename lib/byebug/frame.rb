@@ -162,11 +162,9 @@ module Byebug
 
     def ruby_args
       return [] unless _binding.eval('__method__')
+      return [] unless _binding.eval('method(__method__)')
 
       _binding.eval('method(__method__).parameters')
-    rescue NameError => e
-      errmsg "#{e.class} (#{e.message}) when retrieving frame params"
-      []
     end
 
     def use_short_style?(arg)
