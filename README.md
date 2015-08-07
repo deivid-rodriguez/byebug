@@ -2,19 +2,16 @@
 
 [![Ver][gem]][gem_url]
 [![Gpa][gpa]][gpa_url]
-[![Dep][dep]][dep_url]
 [![Cov][cov]][cov_url]
 [![Git][tip]][tip_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
-[dep]: https://img.shields.io/gemnasium/deivid-rodriguez/byebug.svg
 [cov]: https://img.shields.io/codeclimate/coverage/github/deivid-rodriguez/byebug.svg
 [tip]: https://img.shields.io/gittip/deivid-rodriguez.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
 [gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[dep_url]: https://gemnasium.com/deivid-rodriguez/byebug
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [tip_url]: https://www.gittip.com/deivid-rodriguez
 
