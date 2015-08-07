@@ -25,6 +25,13 @@ module Byebug
       check_output_includes '1: d + 1 = 1'
     end
 
+    def test_shows_undefined_expressions
+      enter 'display e'
+      debug_code(program) { clear_displays }
+
+      check_output_includes '1: e = (undefined)'
+    end
+
     def test_saves_displayed_expressions
       enter 'display d + 1'
 

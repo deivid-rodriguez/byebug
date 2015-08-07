@@ -40,23 +40,25 @@ module Byebug
     private
 
     def display_expression(exp)
-      print pr('display.result',
-               n: Byebug.displays.size,
-               exp: exp,
-               result: thread_safe_eval(exp).inspect)
+      print pr('display.result', n: Byebug.displays.size,
+                                 exp: exp,
+                                 result: eval_expr(exp))
     end
 
     def print_display_expressions
       result = prc('display.result', Byebug.displays) do |item, index|
-        is_active, expression = item
-        if is_active
-          { n: index + 1,
-            exp: expression,
-            result: thread_safe_eval(expression).inspect }
-        end
+        active, exp = item
+
+        { n: index + 1, exp: exp, result: eval_expr(exp) } if active
       end
 
       print result
+    end
+
+    def eval_expr(expression)
+      thread_safe_eval(expression).inspect
+    rescue
+      '(undefined)'
     end
   end
 end
