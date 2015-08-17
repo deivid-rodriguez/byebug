@@ -148,10 +148,10 @@ See [Getting Started with Development](CONTRIBUTING.md).
 ## Credits
 
 Everybody who has ever contributed to this forked and reforked piece of
-software, specially:
+software, especially:
 
 * @ko1, author of the awesome TracePoint API for Ruby.
-* @cldwalker, [debugger][]'s mantainer.
+* @cldwalker, [debugger][]'s maintainer.
 * @denofevil, author of [debase][], the starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 * @FooBarWidget for working and helping with remote debugging.
