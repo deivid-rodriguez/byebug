@@ -101,7 +101,7 @@ are debugging rails, start the server and once the execution gets to your
     `next`      |              |
     `pry`       |              |
     `ps`        |              |
-    `quit`      | `exit`       |
+    `quit`      |              |
     `restart`   |              |
     `save`      |              |
     `set`       |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
