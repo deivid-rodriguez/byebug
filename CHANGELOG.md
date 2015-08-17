@@ -1,4 +1,4 @@
-## 6.0.0
+## 6.0.0 - 2015-08-17
 ### Removed
 * `autoeval` setting. I haven't heard of anyone setting it to false.
 * `pp`, `putl`, `eval`. People just want to evaluate Ruby code, so the less
