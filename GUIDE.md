@@ -157,10 +157,9 @@ Really quit? (y/n)
 y
 ```
 
-So far, so good. As you can see from the above to get out of `byebug`, one
-can issue a `quit` command (`q` and `exit` are just as good). If you want to
-quit without being prompted, suffix the command with an exclamation mark, e.g.,
-`q!`.
+So far, so good. As you can see from the above, to get out of `byebug`, one
+can issue a `quit` command (or the abbreviation `q`). If you want to quit
+without being prompted, suffix the command with an exclamation mark, e.g., `q!`.
 
 
 ### Second Sample Session: Delving Deeper
@@ -1286,7 +1285,7 @@ letter option name, such as `-h`. The list of options is detailed below:
 
 #### -h | --help
 
-It causes `byebug` to print some basic help and exit
+It causes `byebug` to print some basic help and exit.
 
 
 #### -v | --version
@@ -1373,12 +1372,14 @@ You can also request the execution of a command file with the `source` command
 
 ### Quitting byebug
 
-To exit `byebug`, use the `quit` command (abbreviated `q` and aliased `exit`).
-Normally if you are in an interactive session, this command will prompt to ask
-if you really want to quit. If you don't want any questions asked, enter
-`quit unconditionally` (abbreviated `q!`). Another way to terminate byebug is to
-use the `kill` command. This does the more forceful `kill -9`. It can be used in
-cases where `quit` doesn't work (I haven't seen those yet).
+To exit `byebug`, use the `quit` command (abbreviated to `q`). Normally, if you
+are in an interactive session, this command will prompt to ask if you really
+want to quit. If you want to quit without being prompted, enter `quit
+unconditionally` (abbreviated to `q!`).
+
+Another way to terminate byebug is to use the `kill` command. This does the
+more forceful `kill -9`. It can be used in cases where `quit` doesn't work (I
+haven't seen those yet).
 
 
 ### Calling byebug from inside your program
@@ -1636,10 +1637,10 @@ With an integer argument, list info on that breakpoint.
 
 #### Quit
 
-To exit `byebug`, type `quit` (abbreviated `q` and aliased `exit`). Normally if
-you are in an interactive session, this command will prompt you to confirm you
-really want to quit. If you don't want any questions asked, enter
-`quit unconditionally` (abbreviated `q!`).
+To exit `byebug`, type `quit` (abbreviated to `q`). Normally, if you are in an
+interactive session, this command will prompt you to confirm you really want to
+quit. If you want to quit without being prompted, enter `quit unconditionally`
+(abbreviated to `q!`).
 
 #### Restart
 
