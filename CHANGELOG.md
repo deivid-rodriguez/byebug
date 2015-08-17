@@ -21,7 +21,7 @@ not showing the list of available commands and their descriptions.
 ### Added
 * API to define custom command processors (see the CommandProcessor class).
 
-## 5.0.0
+## 5.0.0 - 2015-05-18
 ### Fixed
 * [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`
 command not working with negative numbers (thanks @ark6).
