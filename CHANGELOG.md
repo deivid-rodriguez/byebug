@@ -17,6 +17,8 @@ was overriding stuff like `pp` or `eval`. Only keeping `ps` as the single
 ### Fixed
 * [#140](https://github.com/deivid-rodriguez/byebug/issues/140). `help` command
 not showing the list of available commands and their descriptions.
+* [#147](https://github.com/deivid-rodriguez/byebug/issues/147). Setting
+breakpoints at symlinked files.
 
 ### Added
 * API to define custom command processors (see the CommandProcessor class).
