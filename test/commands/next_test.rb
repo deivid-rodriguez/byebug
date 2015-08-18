@@ -78,7 +78,7 @@ module Byebug
         12:
         13:    #{example_class}.new
         14:
-        15:    puts 'Bye!'
+        15:    'Bye!'
         16:  end
       EOC
     end
