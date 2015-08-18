@@ -14,7 +14,7 @@ module Byebug
     self.allow_in_post_mortem = true
 
     def self.regexp
-      /^\s* u(?:p)? (?:\s+(\S+))? \s*$/x
+      /^\s* up (?:\s+(\S+))? \s*$/x
     end
 
     def self.description
