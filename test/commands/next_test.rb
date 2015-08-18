@@ -84,7 +84,6 @@ module Byebug
     end
 
     def test_next_works_return_inside_loop_inside_initialize
-      skip unless RUBY_VERSION == '2.3.0'
       enter 'cont 13', 'next'
 
       debug_code(program) { assert_location example_path, 15 }

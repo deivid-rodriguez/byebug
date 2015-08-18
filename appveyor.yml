@@ -41,6 +41,9 @@ environment:
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - ruby_version: '200'
+    - ruby_version: 200-x64
 
 notifications:
   - provider: Email
