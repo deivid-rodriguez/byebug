@@ -1,3 +1,8 @@
+## 6.0.1 - 2015-08-19
+### Fixed
+* Bug in evaluation where the user would lose the command prompt when entering
+an expression with a syntax error.
+
 ## 6.0.0 - 2015-08-17
 ### Removed
 * `autoeval` setting. I haven't heard of anyone setting it to false.
