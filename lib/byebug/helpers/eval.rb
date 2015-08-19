@@ -29,9 +29,7 @@ module Byebug
       # returning nil in an error happens.
       #
       def silent_eval(str, binding = frame._binding)
-        binding.eval(str)
-      rescue StandardError, ScriptError
-        nil
+        safe_eval(str, binding) { |_e| nil }
       end
 
       #
@@ -39,7 +37,7 @@ module Byebug
       # handling the errors at an error level.
       #
       def error_eval(str, binding = frame._binding)
-        safe_eval(str, binding) { |e| error_msg(e) }
+        safe_eval(str, binding) { |e| fail(e, error_msg(e)) }
       end
 
       #
@@ -47,7 +45,7 @@ module Byebug
       # handling the errors at a warning level.
       #
       def warning_eval(str, binding = frame._binding)
-        safe_eval(str, binding) { |e| warning_msg(e) }
+        safe_eval(str, binding) { |e| fail(e, warning_msg(e)) }
       end
 
       private
@@ -55,7 +53,7 @@ module Byebug
       def safe_eval(str, binding)
         binding.eval(str)
       rescue StandardError, ScriptError => e
-        raise(e, yield(e))
+        yield(e)
       end
 
       def error_msg(e)
