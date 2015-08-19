@@ -9,30 +9,12 @@ module Byebug
       end
 
       def thread_arguments(ctx)
-        status_flag = if ctx.suspended?
-                        '$'
-                      else
-                        current_thread?(ctx) ? '+' : ' '
-                      end
-
-        debug_flag = ctx.ignored? ? '!' : ' '
-
-        # Check whether it is Byebug.current_context or context
-        if ctx == Byebug.current_context
-          file_line = context.location
-        else
-          backtrace = ctx.thread.backtrace_locations
-          if backtrace && backtrace[0]
-            file_line = "#{backtrace[0].path}:#{backtrace[0].lineno}"
-          end
-        end
-
         {
-          status_flag: status_flag,
-          debug_flag: debug_flag,
+          status_flag: status_flag(ctx),
+          debug_flag: debug_flag(ctx),
           id: ctx.thnum,
           thread: ctx.thread.inspect,
-          file_line: file_line || '',
+          file_line: location(ctx),
           pid: Process.pid,
           status: ctx.thread.status,
           current: current_thread?(ctx)
@@ -53,6 +35,28 @@ module Byebug
               end
 
         [ctx, err]
+      end
+
+      private
+
+      # TODO: Check whether it is Byebug.current_context or context
+      def location(ctx)
+        return context.location if ctx == Byebug.current_context
+
+        backtrace = ctx.thread.backtrace_locations
+        return '' unless backtrace && backtrace[0]
+
+        "#{backtrace[0].path}:#{backtrace[0].lineno}"
+      end
+
+      def status_flag(ctx)
+        return '$' if ctx.suspended?
+
+        current_thread?(ctx) ? '+' : ' '
+      end
+
+      def debug_flag(ctx)
+        ctx.ignored? ? '!' : ' '
       end
     end
   end
