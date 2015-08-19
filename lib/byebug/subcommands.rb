@@ -19,10 +19,11 @@ module Byebug
     # Delegates to subcommands or prints help if no subcommand specified.
     #
     def execute
-      return puts(help) unless @match[1]
+      subcmd_name = @match[1]
+      return puts(help) unless subcmd_name
 
-      subcmd = subcommand_list.match(@match[1])
-      fail CommandNotFound.new(@match[1], self.class) unless subcmd
+      subcmd = subcommand_list.match(subcmd_name)
+      fail CommandNotFound.new(subcmd_name, self.class) unless subcmd
 
       subcmd.new(processor, arguments).execute
     rescue => e
