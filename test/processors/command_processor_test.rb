@@ -18,6 +18,12 @@ module Byebug
       EOC
     end
 
+    def test_syntax_error_gives_a_prompt_back
+      enter 'd.'
+
+      debug_code(program) { assert_equal 4, frame.line }
+    end
+
     def test_empty_command_repeats_last_command
       enter 'n', ''
 

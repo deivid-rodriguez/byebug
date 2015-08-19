@@ -35,6 +35,8 @@ module Byebug
       return help_for(@match[1], command) unless @match[2]
 
       help_for(@match[2], subcommand)
+    rescue => e
+      errmsg(e.message)
     end
 
     private

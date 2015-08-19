@@ -45,6 +45,8 @@ module Byebug
 
       errmsg(pr('break.errors.expression', expr: @match[2]))
       b.enabled = false
+    rescue => e
+      errmsg(e.message)
     end
 
     private
@@ -70,7 +72,7 @@ module Byebug
     end
 
     def target_object(str)
-      k = warning_eval(str)
+      k = error_eval(str)
 
       k && k.is_a?(Module) ? k.name : str
     rescue

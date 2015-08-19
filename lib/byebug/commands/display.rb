@@ -56,7 +56,7 @@ module Byebug
     end
 
     def eval_expr(expression)
-      thread_safe_eval(expression).inspect
+      error_eval(expression).inspect
     rescue
       '(undefined)'
     end

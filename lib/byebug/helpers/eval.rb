@@ -19,8 +19,6 @@ module Byebug
       # @param expression [String] Expression to evaluate
       #
       def single_thread_eval(expression)
-        return error_eval(expression) if Setting[:stack_on_error]
-
         warning_eval(expression)
       end
 
@@ -37,7 +35,7 @@ module Byebug
       # handling the errors at an error level.
       #
       def error_eval(str, binding = frame._binding)
-        safe_eval(str, binding) { |e| fail(e, error_msg(e)) }
+        safe_eval(str, binding) { |e| fail(e, msg(e)) }
       end
 
       #
@@ -45,7 +43,7 @@ module Byebug
       # handling the errors at a warning level.
       #
       def warning_eval(str, binding = frame._binding)
-        safe_eval(str, binding) { |e| fail(e, warning_msg(e)) }
+        safe_eval(str, binding) { |e| errmsg(msg(e)) }
       end
 
       private
@@ -56,16 +54,22 @@ module Byebug
         yield(e)
       end
 
+      def msg(e)
+        msg = Setting[:stack_on_error] ? error_msg(e) : warning_msg(e)
+
+        pr('eval.exception', text_message: msg)
+      end
+
       def error_msg(e)
         at = e.backtrace
-        locations = ["#{at.shift}: #{e.class} Exception(#{e.message})"]
-        locations += at.map { |path| "\tfrom #{path}" }
 
-        pr('eval.exception', text_message: locations.join("\n"))
+        locations = ["#{at.shift}: #{warning_msg(e)}"]
+        locations += at.map { |path| "\tfrom #{path}" }
+        locations.join("\n")
       end
 
       def warning_msg(e)
-        pr('eval.exception', text_message: "#{e.class} Exception: #{e.message}")
+        "#{e.class} Exception: #{e.message}"
       end
 
       #
