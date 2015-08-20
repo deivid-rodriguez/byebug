@@ -134,7 +134,7 @@ module Byebug
       enter 'list 20,25'
       debug_code(program)
 
-      check_error_includes 'Invalid line range'
+      check_error_includes '"List" argument "20" needs to be at most 16'
       check_output_doesnt_include "[20, 25] in #{example_path}"
     end
 
@@ -169,6 +169,19 @@ module Byebug
       debug_code(program)
 
       check_output_includes(/7:\s+'%1'/)
+    end
+
+    def test_shows_error_when_invoked_with_invalid_syntax
+      enter 'list rdfe87'
+
+      debug_code(program)
+      check_error_includes(/needs to be a number/)
+    end
+
+    def test_gives_back_a_prompt_when_invoked_with_invalid_syntax
+      enter 'list rdfe87'
+
+      debug_code(program) { assert_equal 13, frame.line }
     end
 
     def replace_build_percentage_string_line_and_list_it

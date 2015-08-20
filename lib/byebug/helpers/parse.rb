@@ -14,17 +14,16 @@ module Byebug
       #
       def get_int(str, cmd, min = nil, max = nil)
         if str !~ /\A-?[0-9]+\z/
-          err = pr('parse.errors.int.not_number', cmd: cmd, str: str)
-          return nil, errmsg(err)
+          return nil, pr('parse.errors.int.not_number', cmd: cmd, str: str)
         end
 
         int = str.to_i
         if min && int < min
           err = pr('parse.errors.int.too_low', cmd: cmd, str: str, min: min)
-          return min, errmsg(err)
+          return nil, err
         elsif max && int > max
           err = pr('parse.errors.int.too_high', cmd: cmd, str: str, max: max)
-          return max, errmsg(err)
+          return nil, err
         end
 
         int

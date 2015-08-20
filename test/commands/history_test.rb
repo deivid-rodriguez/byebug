@@ -62,10 +62,10 @@ module Byebug
 
     def test_cmds_from_previous_repls_are_not_remembered_if_autosave_disabled
       with_setting :autosave, false do
-        enter 'set noautosave', 'next', 'history 2'
+        enter 'set noautosave', 'next', 'history'
         debug_code(program)
 
-        check_output_includes(/\d+  history 2$/)
+        check_output_includes(/\d+  history$/)
         check_output_doesnt_include(/\d+  next$/)
       end
     end
