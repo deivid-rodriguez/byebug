@@ -45,8 +45,6 @@ module Byebug
       display_lines(b, e)
 
       processor.prev_line = b
-    rescue => e
-      errmsg(e.message)
     end
 
     private

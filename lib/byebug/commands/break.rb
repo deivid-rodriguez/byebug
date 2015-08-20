@@ -45,8 +45,6 @@ module Byebug
 
       errmsg(pr('break.errors.expression', expr: @match[2]))
       b.enabled = false
-    rescue => e
-      errmsg(e.message)
     end
 
     private

@@ -26,8 +26,6 @@ module Byebug
       fail CommandNotFound.new(subcmd_name, self.class) unless subcmd
 
       subcmd.new(processor, arguments).execute
-    rescue => e
-      errmsg(e.message)
     end
 
     #

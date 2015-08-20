@@ -156,6 +156,8 @@ module Byebug
       return command.new(self, input).execute if command
 
       puts thread_safe_eval(input)
+    rescue => e
+      errmsg(e.message)
     end
   end
 end
