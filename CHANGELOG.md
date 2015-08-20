@@ -1,3 +1,8 @@
+## 6.0.2 - 2015-08-20
+### Fixed
+* The user should always be given back a prompt unless (s)he explicitly states
+the opposite. This provides a more general fix to the bug resolved in 6.0.1.
+
 ## 6.0.1 - 2015-08-19
 ### Fixed
 * Bug in evaluation where the user would lose the command prompt when entering
