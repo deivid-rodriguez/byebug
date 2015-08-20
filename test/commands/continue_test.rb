@@ -26,6 +26,12 @@ module Byebug
       EOC
     end
 
+    def test_continues_until_the_end_if_no_line_specified_and_no_breakpoints
+      enter 'continue'
+
+      debug_code(program) { assert_program_finished }
+    end
+
     def test_continues_up_to_breakpoint_if_no_line_specified
       enter 'break 14', 'continue'
 
