@@ -29,6 +29,12 @@ PreCommit:
   BundleCheck:
     enabled: true
 
+  ExecutePermissions:
+    enabled: true
+    exclude:
+      - bin/byebug
+      - script/minitest_runner.rb
+
   HardTabs:
     enabled: true
 
