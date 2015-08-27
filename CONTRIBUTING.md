@@ -25,16 +25,16 @@ test`.
 * If you want to run specific tests, use the provided test runner, like so:
 
   - Specific test files. For example,
-`script/minitest_runner test/commands/break_test.rb`
+`script/minitest_runner.rb test/commands/break_test.rb`
 
   - Specific test classes. For example,
-`script/minitest_runner Byebug::BreakAtLinesTestCase`
+`script/minitest_runner.rb Byebug::BreakAtLinesTestCase`
 
   - Specific tests. For example,
-`script/minitest_runner test_catch_removes_specific_catchpoint`
+`script/minitest_runner.rb test_catch_removes_specific_catchpoint`
 
   - You can combine any of them and you will get the union of all filters. For
-example: `script/minitest_runner Byebug::BreakAtLinesTestCase
+example: `script/minitest_runner.rb Byebug::BreakAtLinesTestCase
 test_catch_removes_specific_catchpoint`
 
 
