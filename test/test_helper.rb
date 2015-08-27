@@ -1,6 +1,7 @@
 require 'support/coverage'
 require 'minitest'
 require 'byebug'
+require 'byebug/core'
 require 'byebug/interfaces/test_interface'
 require 'support/utils'
 
