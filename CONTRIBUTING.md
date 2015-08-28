@@ -33,6 +33,10 @@ test`.
   - Specific tests. For example,
 `script/minitest_runner.rb test_catch_removes_specific_catchpoint`
 
+  - Specific fully qualified tests. For example,
+`script/minitest_runner.rb
+BreakAtLinesTest#test_setting_breakpoint_sets_correct_fields`
+
   - You can combine any of them and you will get the union of all filters. For
 example: `script/minitest_runner.rb Byebug::BreakAtLinesTestCase
 test_catch_removes_specific_catchpoint`

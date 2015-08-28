@@ -16,7 +16,7 @@ class MinitestRunner
   def run
     test_suites.each { |f| require File.expand_path(f) }
 
-    flags = ["--name=/#{tests.join('|')}/"]
+    flags = ["--name=/#{filtered_methods.join('|')}/"]
 
     Minitest.run(flags + ARGV)
   end
@@ -25,10 +25,6 @@ class MinitestRunner
 
   def runnables
     Minitest::Runnable.runnables
-  end
-
-  def runnable_classes
-    @runnable_classes ||= runnables.map(&:to_s)
   end
 
   def test_suite?(str)
@@ -41,54 +37,32 @@ class MinitestRunner
     @test_suites
   end
 
-  def test_class?(str)
-    runnable_classes.include?(str)
-  end
-
-  def test_classes
-    @test_classes ||= extract_from_argv { |cmd_arg| test_class?(cmd_arg) }
-  end
-
-  def test_method?(str)
-    return false unless str =~ /^test_/
-
-    runnables.each do |runnable|
-      return true if runnable.runnable_methods.include?(str)
+  def test_methods(str)
+    case
+    when str.match(/test_.*/) then normalize(str)
+    when str.match(/.*#test_.*/) then [str]
+    else return expand(str)
     end
-
-    false
   end
 
-  def test_methods
-    @test_methods ||= extract_from_argv { |cmd_arg| test_method?(cmd_arg) }
+  def normalize(str)
+    runnables.each do |runnable|
+      return "#{runnable}##{str}" if runnable.runnable_methods.include?(str)
+    end
+  end
+
+  def expand(str)
+    runnables.each do |runnable|
+      return runnable.runnable_methods if "Byebug::#{runnable}" == str
+    end
+  end
+
+  def filtered_methods
+    @filtered_methods ||= extract_from_argv { |cmd_arg| test_methods(cmd_arg) }
   end
 
   def all_test_suites
     Dir.glob('test/**/*_test.rb')
-  end
-
-  def tests
-    runnables.flat_map { |runnable| filter(runnable) }
-  end
-
-  def filter(test_class)
-    return test_class if globally_filtered?(test_class)
-
-    filtered_methods(test_class).map do |test_method|
-      "#{test_class}##{test_method}"
-    end
-  end
-
-  def globally_filtered?(test_class)
-    test_classes.include?(test_class.to_s) && !filtered_methods?(test_class)
-  end
-
-  def filtered_methods?(test_class)
-    filtered_methods(test_class).any?
-  end
-
-  def filtered_methods(test_class)
-    test_class.runnable_methods & test_methods
   end
 
   def extract_from_argv
