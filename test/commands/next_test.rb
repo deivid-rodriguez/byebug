@@ -59,7 +59,7 @@ module Byebug
   end
 
   #
-  # Test for See [#103](https://github.com/deivid-rodriguez/byebug/issues/103)
+  # Test for [#103](https://github.com/deivid-rodriguez/byebug/issues/103)
   #
   class NextWhenReturnInsideLoopInsideInitializeTestCase < TestCase
     def program
