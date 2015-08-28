@@ -41,11 +41,11 @@ class LoopRunner
 end
 
 #
-# @example Tun tests 8 times for each Ruby in 2.0, 2.1 and 2.2
+# @example Tun tests 8 times for each Ruby in 2.1 and 2.2
 #
 #   $ rake loop_tests
 #
-# @example Run tests 1 time for each Ruby in 2.0, 2.1 and 2.2
+# @example Run tests 1 time for each Ruby in 2.1 and 2.2
 #
 #   $ TIMES=1 rake loop_tests
 #
@@ -60,7 +60,7 @@ end
 desc 'Runs tests continuously'
 task :loop_tests do
   iterations = (ENV['TIMES'] || '8').to_i
-  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
+  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.1 2.2)
   ruby_manager = ENV['MANAGER'] || 'chruby'
 
   LoopRunner.new(iterations, rubies, ruby_manager).run
