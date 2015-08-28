@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests undisplay command used to stop periodically displaying expressions.
   #
-  class UndisplayTestCase < TestCase
+  class UndisplayTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

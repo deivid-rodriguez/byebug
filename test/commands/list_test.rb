@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests for listing source files.
   #
-  class ListTestCase < TestCase
+  class ListTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

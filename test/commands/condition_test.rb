@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests adding conditions to breakpoints.
   #
-  class ConditionTestCase < TestCase
+  class ConditionTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests entering IRB from within Byebug.
   #
-  class IrbTestCase < TestCase
+  class IrbTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

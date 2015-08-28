@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests commands for listing available methods.
   #
-  class MethodTestCase < TestCase
+  class MethodTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

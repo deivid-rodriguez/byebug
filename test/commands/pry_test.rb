@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests entering Pry from within Byebug.
   #
-  class PryTestCase < TestCase
+  class PryTest < TestCase
     def setup
       super
 

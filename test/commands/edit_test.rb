@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests file editing from within Byebug.
   #
-  class EditTestCase < TestCase
+  class EditTest < TestCase
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       with_configured_editor('edi') do
         EditCommand.any_instance.expects(:system).with("edi +4 #{example_path}")

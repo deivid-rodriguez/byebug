@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests interrupt command.
   #
-  class InterruptTestCase < TestCase
+  class InterruptTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

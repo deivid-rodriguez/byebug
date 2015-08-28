@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests disabling breakpoints.
   #
-  class DisableTestCase < TestCase
+  class DisableTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

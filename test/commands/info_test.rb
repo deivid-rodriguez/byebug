@@ -4,7 +4,7 @@ module Byebug
   #
   # Test info command.
   #
-  class InfoStandardTestCase < TestCase
+  class InfoStandardTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -211,7 +211,7 @@ module Byebug
   #
   # Tests info command on crashed programs
   #
-  class InfoCrashedTestCase < TestCase
+  class InfoCrashedTest < TestCase
     def program_raising
       strip_line_numbers <<-EOC
         byebug

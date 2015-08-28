@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests +finish+ command functionality.
   #
-  class FinishTestCase < TestCase
+  class FinishTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

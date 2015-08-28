@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests the +up+ command.
   #
-  class UpTestCase < TestCase
+  class UpTest < TestCase
     def program
       strip_line_numbers <<-EOP
          1:  module Byebug

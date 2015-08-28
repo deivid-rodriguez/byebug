@@ -84,7 +84,7 @@ module Byebug
   #
   # Tests evaluation in threaded programs.
   #
-  class ProcessorEvaluationAndThreadsTestCase < TestCase
+  class ProcessorEvaluationAndThreadsTest < TestCase
     def program
       <<-EOC
         module Byebug

@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests commands which deal with backtraces.
   #
-  class DownTestCase < TestCase
+  class DownTest < TestCase
     def program
       strip_line_numbers <<-EOP
          1:  module Byebug

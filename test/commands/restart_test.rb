@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests restarting functionality.
   #
-  class RestartTestCase < TestCase
+  class RestartTest < TestCase
     def test_restart_without_arguments_uses_original_arguments
       with_command_line(example_path, '1') do
         RestartCommand.any_instance.expects(:exec).with(example_path, '1')

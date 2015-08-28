@@ -4,7 +4,7 @@ module Byebug
   #
   # Test settings functionality.
   #
-  class SetTestCase < TestCase
+  class SetTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

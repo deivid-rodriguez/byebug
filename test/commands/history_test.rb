@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests Byebug's command line history.
   #
-  class HistoryTestCase < TestCase
+  class HistoryTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

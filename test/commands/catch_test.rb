@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests exception catching
   #
-  class CatchTestCase < TestCase
+  class CatchTest < TestCase
     def test_catch_adds_catchpoints
       enter 'catch NoMethodError'
       debug_code(minimal_program)

@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests for continue command
   #
-  class ContinueTestCase < TestCase
+  class ContinueTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

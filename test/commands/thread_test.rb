@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests threading functionality.
   #
-  class ThreadTestCase < TestCase
+  class ThreadTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

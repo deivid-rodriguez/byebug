@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests saving Byebug commands to a file.
   #
-  class SaveTestCase < TestCase
+  class SaveTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

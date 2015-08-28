@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests exiting Byebug functionality.
   #
-  class QuitTestCase < TestCase
+  class QuitTest < TestCase
     def faking_exit!
       Process.stub(:exit!, nil) { yield }
     end

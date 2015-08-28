@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests displaying values of expressions on every stop.
   #
-  class DisplayTestCase < TestCase
+  class DisplayTest < TestCase
     def program
       strip_line_numbers <<-EOC
         1:  module Byebug

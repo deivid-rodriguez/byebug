@@ -5,7 +5,7 @@ module Byebug
   #
   # Tests the plain text printer
   #
-  class PrintersPlainTestCase < Minitest::Test
+  class PrintersPlainTest < Minitest::Test
     def yaml_file_path(filename)
       relative_path = "../../../lib/byebug/printers/texts/#{filename}.yml"
 

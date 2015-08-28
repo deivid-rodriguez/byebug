@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests basic stepping behaviour.
   #
-  class BasicNextTestCase < TestCase
+  class BasicNextTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -61,7 +61,7 @@ module Byebug
   #
   # Test for [#103](https://github.com/deivid-rodriguez/byebug/issues/103)
   #
-  class NextWhenReturnInsideLoopInsideInitializeTestCase < TestCase
+  class NextWhenReturnInsideLoopInsideInitializeTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  byebug
@@ -93,7 +93,7 @@ module Byebug
   #
   # Tests next behaviour in rescue clauses.
   #
-  class NextRescueTestCase < TestCase
+  class NextRescueTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -142,7 +142,7 @@ module Byebug
   #
   # Tests next behaviour in combination with backtrace commands.
   #
-  class NextBacktracesTestCase < TestCase
+  class NextBacktracesTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -182,7 +182,7 @@ module Byebug
   #
   # Tests next when execution should not stop at the same "stack size level"
   #
-  class TestNextGoingUpFrames < TestCase
+  class NextGoingUpFrames < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

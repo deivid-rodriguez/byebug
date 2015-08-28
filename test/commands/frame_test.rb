@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests commands which show frames
   #
-  class FrameTestCase < TestCase
+  class FrameTest < TestCase
     def program
       strip_line_numbers <<-EOP
          1:  module Byebug

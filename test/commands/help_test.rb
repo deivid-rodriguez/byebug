@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests help command without arguments
   #
-  class HelpAloneTestCase < TestCase
+  class HelpAloneTest < TestCase
     def setup
       super
 
@@ -169,7 +169,7 @@ module Byebug
   #
   # Tests help command with arguments
   #
-  class HelpWithArgsTestCase < TestCase
+  class HelpWithArgsTest < TestCase
     def test_help_help_shows_help_for_help_command_itself
       with_setting :width, 50 do
         enter 'help help'

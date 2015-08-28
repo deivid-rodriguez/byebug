@@ -4,7 +4,7 @@ module Byebug
   #
   # Test settings display functionality.
   #
-  class ShowTestCase < TestCase
+  class ShowTest < TestCase
     settings =
       %i(autolist autosave basename fullpath post_mortem stack_on_error)
 

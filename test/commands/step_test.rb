@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests basic stepping behaviour.
   #
-  class BasicSteppingTestCase < TestCase
+  class BasicSteppingTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -43,7 +43,7 @@ module Byebug
   #
   # Tests step/next with arguments higher than one.
   #
-  class MoreThanOneStepTestCase < TestCase
+  class MoreThanOneStepTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -85,7 +85,7 @@ module Byebug
   #
   # Tests step/next behaviour in combination with backtrace commands.
   #
-  class SteppingBacktracesTestCase < TestCase
+  class SteppingBacktracesTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

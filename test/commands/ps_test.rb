@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests enhanced evaluation functionality.
   #
-  class PsTestCase < TestCase
+  class PsTest < TestCase
     def test_properly_evaluates_expressions
       enter 'ps 3 + 2'
       debug_code(minimal_program)

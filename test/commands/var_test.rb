@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests variable evaluation.
   #
-  class VarTestCase < TestCase
+  class VarTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

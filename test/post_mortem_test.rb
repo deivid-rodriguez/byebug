@@ -4,7 +4,7 @@ module Byebug
   #
   # Tests post mortem functionality.
   #
-  class PostMortemTestCase < TestCase
+  class PostMortemTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
