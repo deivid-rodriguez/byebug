@@ -14,10 +14,6 @@ CommitMsg:
   HardTabs:
     enabled: true
 
-  RussianNovel:
-    enabled: true
-    quiet: false
-
   SingleLineSubject:
     enabled: true
 
