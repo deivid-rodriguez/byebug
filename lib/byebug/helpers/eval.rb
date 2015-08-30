@@ -80,8 +80,11 @@ module Byebug
       # will get blocked by byebug's main thread.
       #
       def allowing_other_threads
+        res = nil
         Byebug.unlock
-        res = yield
+
+        Thread.new { res = yield }.join
+
         Byebug.lock
         res
       end

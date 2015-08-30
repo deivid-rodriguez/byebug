@@ -68,12 +68,11 @@ module Byebug
     end
 
     def test_thread_list_marks_current_thread_with_a_plus_sign
-      thnum = nil
       file = example_path
       enter 'cont 13', 'thread list', 'lock << 0'
-      debug_code(program) { thnum = curr_thnum }
+      debug_code(program)
 
-      check_output_includes(/\+ #{thnum} #<Thread:0x\h+ run> #{file}:13/)
+      check_output_includes(/\+ \d+ #<Thread:0x\h+ run> #{file}:13/)
     end
 
     def test_thread_list_shows_all_available_threads
@@ -86,11 +85,10 @@ module Byebug
     end
 
     def test_thread_stop_marks_thread_as_suspended
-      thnum = nil
       enter 'cont 24', -> { "thread stop #{t2_thnum}" }, 'lock << 0'
-      debug_code(program) { thnum = t2_thnum }
+      debug_code(program)
 
-      check_output_includes(/\$ #{thnum} #<Thread:/)
+      check_output_includes(/\$ \d+ #<Thread:/)
     end
 
     def test_thread_stop_actually_suspends_thread_execution
