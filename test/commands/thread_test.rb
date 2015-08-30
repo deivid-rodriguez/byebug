@@ -64,7 +64,7 @@ module Byebug
     end
 
     def curr_thnum
-      Byebug.contexts.find { |ctx| ctx.thread == Thread.current }.thnum
+      Byebug.current_context.thnum
     end
 
     def test_thread_list_marks_current_thread_with_a_plus_sign
