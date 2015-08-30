@@ -1,3 +1,11 @@
+## 6.1.0 (Unreleased)
+### Fixed
+* [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
+the entire library on require, but only when a `byebug` call is issued. Thanks
+@bquorning.
+* [#121](https://github.com/deivid-rodriguez/byebug/issues/121). `byebug`
+commands inside code evaluated from debugger's prompt are now properly working.
+
 ## 6.0.2 - 2015-08-20
 ### Fixed
 * The user should always be given back a prompt unless (s)he explicitly states
