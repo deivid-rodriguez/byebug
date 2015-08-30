@@ -23,7 +23,7 @@ class LoopRunner
     @rubies.each do |version|
       run_command(version, 'gem install bundler --no-document')
       run_command(version, 'bundle')
-      run_command(version, 'bundle exec rake compile')
+      run_command(version, 'bundle exec rake clobber compile')
 
       @iterations.times { run_command(version, 'bundle exec rake test') }
     end
