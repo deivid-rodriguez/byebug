@@ -68,7 +68,7 @@ module Byebug
     def at_tracing
       puts "Tracing: #{context.full_location}"
 
-      run_auto_commands(2)
+      run_auto_cmds(2)
     end
 
     def at_line
@@ -108,22 +108,22 @@ module Byebug
 
     private
 
-    def auto_commands_for(run_level)
+    def auto_cmds_for(run_level)
       command_list.select { |cmd| cmd.always_run >= run_level }
     end
 
     #
     # Run permanent commands.
     #
-    def run_auto_commands(run_level)
-      auto_commands_for(run_level).each { |cmd| cmd.new(self).execute }
+    def run_auto_cmds(run_level)
+      auto_cmds_for(run_level).each { |cmd| cmd.new(self).execute }
     end
 
     def before_repl
       @proceed = false
       @prev_line = nil
 
-      run_auto_commands(1)
+      run_auto_cmds(1)
       interface.autorestore
     end
 
