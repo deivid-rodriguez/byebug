@@ -35,8 +35,14 @@ module Byebug
     end
 
     def execute
-      msg = "No sourcefile available for #{frame.file}"
-      fail(msg) unless File.exist?(frame.file)
+      if !File.exist?(frame.file)
+        context.step_into 1
+        processor.proceed!
+        return
+      end
+
+      # msg = "No sourcefile available for #{frame.file}"
+      # fail(msg) unless File.exist?(frame.file)
 
       max_lines = n_lines(frame.file)
       b, e = range(@match[2], max_lines)
