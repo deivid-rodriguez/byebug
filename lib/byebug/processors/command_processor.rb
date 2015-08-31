@@ -116,7 +116,9 @@ module Byebug
     # Run permanent commands.
     #
     def run_auto_cmds(run_level)
-      auto_cmds_for(run_level).each { |cmd| cmd.new(self).execute }
+      safely do
+        auto_cmds_for(run_level).each { |cmd| cmd.new(self).execute }
+      end
     end
 
     def before_repl
@@ -152,10 +154,16 @@ module Byebug
     # command is not found, it evaluates the unknown input.
     #
     def run_cmd(input)
-      command = command_list.match(input)
-      return command.new(self, input).execute if command
+      safely do
+        command = command_list.match(input)
+        return command.new(self, input).execute if command
 
-      puts thread_safe_eval(input)
+        puts thread_safe_eval(input)
+      end
+    end
+
+    def safely
+      yield
     rescue => e
       errmsg(e.message)
     end

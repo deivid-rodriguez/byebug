@@ -5,6 +5,7 @@ the entire library on require, but only when a `byebug` call is issued. Thanks
 @bquorning.
 * [#121](https://github.com/deivid-rodriguez/byebug/issues/121). `byebug`
 commands inside code evaluated from debugger's prompt are now properly working.
+* Another evaluation bug in autocommands.
 
 ## 6.0.2 - 2015-08-20
 ### Fixed

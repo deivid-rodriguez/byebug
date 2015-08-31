@@ -82,6 +82,43 @@ module Byebug
   end
 
   #
+  # Tests commands automatically run when control is returned back to user
+  #
+  class ProcessorAutocommandsTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:   #
+         3:   # Toy class to test subdebuggers inside evaluation prompt
+         4:   #
+         5:   class #{example_class}
+         6:     class_eval 'def self.a; 1 end'
+         7:   end
+         8:
+         9:   byebug
+        10:
+        11:   #{example_class}.a
+        12:
+        13:   'Bye!'
+        14:  end
+      EOC
+    end
+
+    def test_autolists_lists_source_before_stopping
+      debug_code(program)
+
+      check_output_includes "[5, 14] in #{example_path}"
+    end
+
+    def test_shows_error_when_current_source_location_is_unknown
+      enter 'step'
+
+      debug_code(program) { assert_equal '(eval)', frame.file }
+      check_error_includes 'No sourcefile available for (eval)'
+    end
+  end
+
+  #
   # Tests launching new debuggers from byebug's prompt
   #
   class DebuggingEvaluationAndSubdebuggersTest < TestCase
