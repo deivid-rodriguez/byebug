@@ -579,7 +579,6 @@ Stop(VALUE self)
 
     breakpoints = Qnil;
     catchpoints = Qnil;
-    threads = Qnil;
 
     return Qfalse;
   }
