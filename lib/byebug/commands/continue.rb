@@ -41,6 +41,8 @@ module Byebug
       end
 
       processor.proceed!
+
+      Byebug.stop if Byebug.stoppable?
     end
   end
 end
