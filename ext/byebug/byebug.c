@@ -540,8 +540,6 @@ Current_context(VALUE self)
 
   UNUSED(self);
 
-  check_started();
-
   thread_context_lookup(rb_thread_current(), &context);
 
   return context;
