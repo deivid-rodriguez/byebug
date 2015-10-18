@@ -1,9 +1,9 @@
 # Byebug
 
-[![Ver][gem]][gem_url]
-[![Gpa][gpa]][gpa_url]
-[![Cov][cov]][cov_url]
-[![Git][tip]][tip_url]
+[![Version][gem]][gem_url]
+[![Quality][gpa]][gpa_url]
+[![Coverage][cov]][cov_url]
+[![Gratipay][tip]][tip_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
