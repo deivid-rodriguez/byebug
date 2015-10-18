@@ -34,7 +34,7 @@ desc 'Runs the test suite'
 task :test do
   require_relative 'script/minitest_runner'
 
-  exit(MinitestRunner.new.run)
+  exit 1 unless MinitestRunner.new.run
 end
 
 desc 'Run overcommit hooks manually'
