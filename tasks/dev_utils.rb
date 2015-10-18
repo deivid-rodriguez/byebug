@@ -36,7 +36,7 @@ class LoopRunner
                 "chruby-exec #{version} -- #{cmd}"
               end
 
-    system(command)
+    Bundler.with_clean_env { system(command) }
   end
 end
 
