@@ -30,13 +30,13 @@ class LoopRunner
   end
 
   def run_command(version, cmd)
-    status = if @manager == 'rvm'
-               system("rvm #{version} do #{cmd}")
-             else
-               system("chruby-exec #{version} -- #{cmd}")
-             end
+    command = if @manager == 'rvm'
+                "rvm #{version} do #{cmd}"
+              else
+                "chruby-exec #{version} -- #{cmd}"
+              end
 
-    exit(status) unless status && status != 0
+    system(command)
   end
 end
 
