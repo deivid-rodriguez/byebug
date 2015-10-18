@@ -89,35 +89,35 @@ module Byebug
     end
 
     def at_breakpoint(breakpoint)
-      new_processor.at_breakpoint(breakpoint)
+      processor.at_breakpoint(breakpoint)
     end
 
     def at_catchpoint(exception)
-      new_processor.at_catchpoint(exception)
+      processor.at_catchpoint(exception)
     end
 
     def at_tracing(file, _line)
       return if ignored_file?(file)
 
-      new_processor.at_tracing
+      processor.at_tracing
     end
 
     def at_line(file, _l)
       self.frame = 0
       return if ignored_file?(file)
 
-      new_processor.at_line
+      processor.at_line
     end
 
     def at_return(file, _line)
       return if ignored_file?(file)
 
-      new_processor.at_return
+      processor.at_return
     end
 
     private
 
-    def new_processor
+    def processor
       @processor ||= self.class.processor.new(self)
     end
   end
