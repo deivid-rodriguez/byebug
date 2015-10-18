@@ -41,11 +41,11 @@ PreCommit:
     enabled: true
 
   CCop:
-    description: 'Analyzing C files with indent'
+    description: Analyzing C files with indent
     enabled: true
-    required_executable: 'indent'
-    install_command: 'sudo apt-get install indent'
-    include: 'ext/byebug/*.c'
+    required_executable: indent
+    install_command: sudo apt-get install indent
+    include: ext/byebug/*.c
 
   TrailingWhitespace:
     enabled: true
