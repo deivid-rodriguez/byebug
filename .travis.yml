@@ -46,3 +46,4 @@ addons:
   apt:
     packages:
       - indent
+      - shellcheck

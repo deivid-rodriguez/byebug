@@ -29,7 +29,7 @@ PreCommit:
     enabled: true
     exclude:
       - bin/byebug
-      - script/minitest_runner.rb
+      - script/*
 
   HardTabs:
     enabled: true
@@ -46,6 +46,9 @@ PreCommit:
     required_executable: indent
     install_command: sudo apt-get install indent
     include: ext/byebug/*.c
+
+  ShellCheck:
+    enabled: true
 
   TrailingWhitespace:
     enabled: true
