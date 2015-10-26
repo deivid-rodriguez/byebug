@@ -1,4 +1,4 @@
-## Getting started
+## Contributing to Byebug
 
 ### Development dependencies
 
