@@ -63,7 +63,7 @@ module Byebug
       enter 'str', 'up', 'str', 'up'
       debug_code(program)
 
-      check_output_includes 'fx', 'f'
+      check_output_includes '"fx"', '"f"'
     end
   end
 end

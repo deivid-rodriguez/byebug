@@ -47,20 +47,6 @@ module Byebug
         locals = all_locals.select { |k, _| arg_values.include?(k) }
         puts prv(locals.keys.sort.map { |k| [k, locals[k]] }, 'instance')
       end
-
-      private
-
-      def safe_inspect(var)
-        var.inspect
-      rescue
-        safe_to_s(var)
-      end
-
-      def safe_to_s(var)
-        var.to_s
-      rescue
-        '*Error in evaluation*'
-      end
     end
   end
 end

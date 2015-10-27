@@ -49,6 +49,35 @@ module Byebug
       check_error_includes(
         "Unknown command 'info unknown_subcmd'. Try 'help info'")
     end
+  end
+
+  #
+  # Test evaluation of unknown input introduced by the user. Basically, the
+  # REPL behavior.
+  #
+  class ProcessorUnknownInputTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test evaluation of unknown input
+         4:    #
+         5:    class #{example_class}
+         6:      def inspect
+         7:        'A very cool string representation'
+         8:      end
+         9:
+        10:      def to_s
+        11:        'A not so cool string representation'
+        12:      end
+        13:    end
+        14:
+        15:    byebug
+        16:
+        17:    'Bye!'
+        18:  end
+      EOC
+    end
 
     def test_arithmetic_expressions_are_evaluated_on_unknown_input
       enter '3 + 2'
@@ -69,6 +98,13 @@ module Byebug
       debug_code(minimal_program)
 
       check_output_includes '[1, 2, 3]'
+    end
+
+    def test_evaluation_results_on_unknown_input_prefer_inspect_over_to_s
+      enter "#{example_class}.new"
+      debug_code(program)
+
+      check_output_includes 'A very cool string representation'
     end
 
     def test_shows_backtrace_on_error_if_stack_on_error_enabled

@@ -88,6 +88,18 @@ module Byebug
         Byebug.lock
         res
       end
+
+      def safe_inspect(var)
+        var.inspect
+      rescue
+        safe_to_s(var)
+      end
+
+      def safe_to_s(var)
+        var.to_s
+      rescue
+        '*Error in evaluation*'
+      end
     end
   end
 end

@@ -1,5 +1,7 @@
 ## 6.1.0 (Unreleased)
 ### Fixed
+* [#177](https://github.com/deivid-rodriguez/byebug/issues/177). Some issues
+with formatting results of evaluations.
 * [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
 the entire library on require, but only when a `byebug` call is issued. Thanks
 @bquorning.
