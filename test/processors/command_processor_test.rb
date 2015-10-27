@@ -50,14 +50,14 @@ module Byebug
         "Unknown command 'info unknown_subcmd'. Try 'help info'")
     end
 
-    def test_properly_evaluates_expressions
+    def test_arithmetic_expressions_are_evaluated_on_unknown_input
       enter '3 + 2'
       debug_code(minimal_program)
 
       check_output_includes '5'
     end
 
-    def test_is_invoked_on_unknown_input
+    def test_ruby_code_is_evaluated_on_unknown_input
       enter '[5, 6, 7].inject(&:+)'
       debug_code(minimal_program)
 
