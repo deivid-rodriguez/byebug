@@ -6,6 +6,9 @@ with formatting results of evaluations.
 commands inside code evaluated from debugger's prompt are now properly working.
 * Another evaluation bug in autocommands.
 
+### Removed
+* `ps` command.
+
 ### Changed
 * [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
 the entire library on require, but only when a `byebug` call is issued. Thanks

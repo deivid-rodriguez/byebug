@@ -297,98 +297,7 @@ false
 `private_methods` is not a byebug command but a Ruby feature. By default, when
 `byebug` doesn't understand a command, it will evaluate it as if it was a Ruby
 command. You can use any Ruby to inspect your program's state at the place it
-is stopped. Additional, `byebug` provides a specific evaluation command, `ps`
-that automatically enhances the evaluated results a bit. For example, it
-automatically sorts arrays.
-
-```
-[:Array,
- :Complex,
- :DelegateClass,
- :Digest,
- :Float,
- :Hash,
- :Integer,
- :Pathname,
- :Rational,
- :String,
- :URI,
- :__callee__,
- :__dir__,
- :__method__,
- :`,
- :abort,
- :at_exit,
- :autoload,
- :autoload?,
- :binding,
- :block_given?,
- :caller,
- :caller_locations,
- :catch,
- :default_src_encoding,
- :define_method,
- :eval,
- :exec,
- :exit,
- :exit!,
- :fail,
- :fork,
- :format,
- :gem_original_require,
- :gets,
- :global_variables,
- :include,
- :initialize,
- :initialize_clone,
- :initialize_copy,
- :initialize_dup,
- :iterator?,
- :lambda,
- :load,
- :local_variables,
- :loop,
- :method_missing,
- :open,
- :p,
- :pp,
- :print,
- :printf,
- :private,
- :proc,
- :public,
- :putc,
- :puts,
- :raise,
- :rand,
- :readline,
- :readlines,
- :require,
- :require_relative,
- :respond_to_missing?,
- :rubygems_require,
- :select,
- :set_trace_func,
- :singleton_method_added,
- :singleton_method_removed,
- :singleton_method_undefined,
- :sleep,
- :spawn,
- :sprintf,
- :srand,
- :syscall,
- :system,
- :test,
- :throw,
- :timeout,
- :trace_var,
- :trap,
- :untrace_var,
- :using,
- :warn,
- :y]
-
-```
+is stopped.
 
 Now let's see what happens after stepping:
 
@@ -1553,7 +1462,6 @@ short list of named classes of commands
   method     -- Shows methods of an object, class or module
   next       -- Runs one or more lines of code
   pry        -- Starts a Pry session
-  ps         -- Evaluates an expression and prettyprints & sort the result
   quit       -- Exits byebug
   restart    -- Restarts the debugged program
   save       -- Saves current byebug session to a file
@@ -1768,10 +1676,10 @@ basically listing `<object>.instance_variables`.
 * `var global`. Show global variables.
 * `var all`. Show local, global and instance and class variables of `self`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
-same as running `ps <object>.instance_methods(false)`.
+same as running `<object>.instance_methods(false)`.
 * `method <class-or-module>`. Show methods of the class or module
-`<class-or-module>`. Basically this is the same as running `ps
-<class-or-module>.methods`.
+`<class-or-module>`. Basically this is the same as running
+`<class-or-module>.methods`.
 
 ### Examining Program Source Files: list
 

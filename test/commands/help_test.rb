@@ -54,11 +54,6 @@ module Byebug
       check_output_includes(/Enables breakpoints or displays/)
     end
 
-    def test_shows_summary_for_ps_command
-      check_output_includes(
-        /Evaluates an expression and prettyprints & sort the result/)
-    end
-
     def test_shows_summary_for_finish_command
       check_output_includes(/Runs the program until frame returns/)
     end
