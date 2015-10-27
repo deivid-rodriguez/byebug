@@ -173,8 +173,8 @@ module Byebug
 
     def test_shows_error_when_invoked_with_invalid_syntax
       enter 'list rdfe87'
-
       debug_code(program)
+
       check_error_includes(/needs to be a number/)
     end
 
