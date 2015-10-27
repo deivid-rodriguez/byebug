@@ -1,13 +1,15 @@
-## 6.1.0 (Unreleased)
+## 7.0.0 (Unreleased)
 ### Fixed
 * [#177](https://github.com/deivid-rodriguez/byebug/issues/177). Some issues
 with formatting results of evaluations.
-* [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
-the entire library on require, but only when a `byebug` call is issued. Thanks
-@bquorning.
 * [#121](https://github.com/deivid-rodriguez/byebug/issues/121). `byebug`
 commands inside code evaluated from debugger's prompt are now properly working.
 * Another evaluation bug in autocommands.
+
+### Changed
+* [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
+the entire library on require, but only when a `byebug` call is issued. Thanks
+@bquorning.
 
 ## 6.0.2 - 2015-08-20
 ### Fixed
