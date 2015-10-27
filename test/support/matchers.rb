@@ -22,9 +22,7 @@ module Byebug
     private
 
     def check_stream(check_method, stream, *args)
-      stream_messages = stream.map(&:strip)
-      messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
-      send(check_method, messages, stream_messages)
+      send(check_method, Array(args), stream.map(&:strip))
     end
   end
 end
