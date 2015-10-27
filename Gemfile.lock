@@ -54,7 +54,7 @@ GEM
       addressable (~> 2.3)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.8.1)
+    minitest (5.8.2)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.11.2)
