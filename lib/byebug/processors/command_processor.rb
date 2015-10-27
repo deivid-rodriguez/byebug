@@ -158,7 +158,7 @@ module Byebug
         command = command_list.match(input)
         return command.new(self, input).execute if command
 
-        puts thread_safe_eval(input)
+        puts thread_safe_eval(input).to_s
       end
     end
 

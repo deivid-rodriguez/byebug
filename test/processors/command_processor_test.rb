@@ -64,6 +64,13 @@ module Byebug
       check_output_includes '18'
     end
 
+    def test_arrays_are_properly_printed_after_evaluation_of_unknown_input
+      enter '(1..3).to_a'
+      debug_code(minimal_program)
+
+      check_output_includes '[1, 2, 3]'
+    end
+
     def test_shows_backtrace_on_error_if_stack_on_error_enabled
       enter 'set stack_on_error', '2 / 0'
       debug_code(minimal_program)

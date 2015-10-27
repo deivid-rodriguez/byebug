@@ -13,15 +13,15 @@ module Byebug
     end
 
     def errmsg(message)
-      error.concat(message.to_s.split("\n"))
+      error.concat(prepare(message))
     end
 
     def print(message)
-      output.concat(message.to_s.split("\n"))
+      output.concat(prepare(message))
     end
 
     def puts(message)
-      output.concat(message.to_s.split("\n"))
+      output.concat(prepare(message))
     end
 
     def read_command(prompt)
@@ -53,6 +53,14 @@ module Byebug
 
       cmd = input.shift
       cmd.is_a?(Proc) ? cmd.call : cmd
+    end
+
+    private
+
+    def prepare(message)
+      return message.map(&:to_s) if message.respond_to?(:map)
+
+      message.to_s.split("\n")
     end
   end
 end
