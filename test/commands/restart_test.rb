@@ -12,7 +12,7 @@ module Byebug
 
         enter 'restart'
         debug_code(minimal_program)
-        check_output_includes "Re exec'ing:", "\t#{example_path} 1"
+        check_output_includes "Re exec'ing:", "#{example_path} 1"
       end
     end
 
@@ -22,7 +22,7 @@ module Byebug
 
         enter 'restart 2'
         debug_code(minimal_program)
-        check_output_includes "Re exec'ing:", "\t#{example_path} 2"
+        check_output_includes "Re exec'ing:", "#{example_path} 2"
       end
     end
   end

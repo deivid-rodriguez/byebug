@@ -64,7 +64,7 @@ module Byebug
         at = e.backtrace
 
         locations = ["#{at.shift}: #{warning_msg(e)}"]
-        locations += at.map { |path| "\tfrom #{path}" }
+        locations += at.map { |path| "  from #{path}" }
         locations.join("\n")
       end
 

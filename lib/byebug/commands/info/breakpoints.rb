@@ -54,7 +54,7 @@ module Byebug
         return unless hits > 0
 
         s = (hits > 1) ? 's' : ''
-        puts "\tbreakpoint already hit #{hits} time#{s}"
+        puts "  breakpoint already hit #{hits} time#{s}"
       end
     end
   end

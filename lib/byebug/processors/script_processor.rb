@@ -27,7 +27,7 @@ module Byebug
     rescue
       without_exceptions do
         puts "INTERNAL ERROR!!! #{$ERROR_INFO}"
-        puts $ERROR_INFO.backtrace.map { |l| "\t#{l}" }.join("\n")
+        puts $ERROR_INFO.backtrace.map { |l| "  #{l}" }.join("\n")
       end
     end
 

@@ -15,7 +15,7 @@ method:
   methods: "{name}|c"
 
 restart:
-  success: "Re exec'ing:\n\t{cmd}"
+  success: "Re exec'ing:\n  {cmd}"
 
 thread:
   context: "{status_flag}{debug_flag}{id} {thread} {file_line}"
