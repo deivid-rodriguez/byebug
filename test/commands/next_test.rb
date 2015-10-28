@@ -91,6 +91,44 @@ module Byebug
   end
 
   #
+  # Test for: https://bugs.ruby-lang.org/issues/11492
+  #
+  class NextAndDefineMethod < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test cases where next should not stay in frame
+         4:    #
+         5:    class #{example_class}
+         6:      define_method 'method1' do
+         7:        return 1
+         8:      end
+         9:
+        10:      def foo
+        11:        method1
+        12:        'bye foo!'
+        13:      end
+        14:    end
+        15:
+        16:    byebug
+        17:
+        18:    #{example_class}.new.foo
+        19:
+        20:    'bye!'
+        21:  end
+      EOC
+    end
+
+    def test_next_works_as_expected_with_define_method
+      skip unless RUBY_VERSION == '2.3.0'
+      enter 'next'
+
+      debug_code(program) { assert_equal 20, frame.line }
+    end
+  end
+
+  #
   # Tests next behaviour in rescue clauses.
   #
   class NextRescueTest < TestCase
