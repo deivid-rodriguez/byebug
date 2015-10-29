@@ -63,6 +63,7 @@ Raised_exception(VALUE self)
 }
 
 #define IS_STARTED  (catchpoints != Qnil)
+
 static void
 check_started()
 {
