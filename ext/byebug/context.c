@@ -344,7 +344,7 @@ Context_resume(VALUE self)
 
 /*
  *  call-seq:
- *    context.backtrace-> int
+ *    context.backtrace-> Array
  *
  *  Returns the frame stack of a context.
  */
