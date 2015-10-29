@@ -3,11 +3,13 @@
 # report results to them.
 #
 def start_coverage_tracking
+  require 'simplecov'
+  SimpleCov.add_filter 'test'
+
   if ENV['CI']
     require 'codeclimate-test-reporter'
     CodeClimate::TestReporter.start
   else
-    require 'simplecov'
     SimpleCov.start
   end
 end
