@@ -27,7 +27,7 @@ module Byebug
       IrbCommand.any_instance.expects(:execute)
 
       enter 'irb'
-      debug_code(program)
+      debug_code(minimal_program)
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
