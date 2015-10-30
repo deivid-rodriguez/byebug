@@ -29,10 +29,7 @@ module Byebug
     def execute
       history = processor.interface.history
 
-      if @match[:num_cmds]
-        size, err = get_int(@match[:num_cmds], 'history', 1, history.size)
-        return errmsg(err) unless size
-      end
+      size, = get_int(@match[:num_cmds], 'history', 1) if @match[:num_cmds]
 
       puts history.to_s(size)
     end
