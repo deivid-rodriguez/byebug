@@ -16,7 +16,7 @@ module Byebug
 
     def self.description
       <<-EOD
-        hist[ory] [num_cmds]
+        hist[ory][ num_cmds]
 
         #{short_description}
       EOD
