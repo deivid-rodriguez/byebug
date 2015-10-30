@@ -102,7 +102,6 @@ are debugging rails, start the server and once the execution gets to your
     `method`    |              | `instance`
     `next`      |              |
     `pry`       |              |
-    `ps`        |              |
     `quit`      |              |
     `restart`   |              |
     `save`      |              |
