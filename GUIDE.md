@@ -675,7 +675,7 @@ $ byebug primes.rb
     8:
     9:   def self.next_prime(&block)
    10:    candidate = 2
-(byebug) set tracing
+(byebug) set linetrace
 line tracing is on.
 (byebug) set basename
 basename in on.
