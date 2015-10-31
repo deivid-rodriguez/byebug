@@ -32,6 +32,12 @@ module Byebug
       debug_code(program) { assert_program_finished }
     end
 
+    def test_stops_byebug_after_continue
+      enter 'continue'
+
+      debug_code(program) { assert_equal false, Byebug.started? }
+    end
+
     def test_continues_up_to_breakpoint_if_no_line_specified
       enter 'break 14', 'continue'
 

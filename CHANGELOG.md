@@ -2,6 +2,8 @@
 ### Fixed
 * [#177](https://github.com/deivid-rodriguez/byebug/issues/177). Some issues
 with formatting results of evaluations.
+* [#144](https://github.com/deivid-rodriguez/byebug/issues/144). Ruby process
+after using byebug does no longer get slow.
 * [#121](https://github.com/deivid-rodriguez/byebug/issues/121). `byebug`
 commands inside code evaluated from debugger's prompt are now properly working.
 * Another evaluation bug in autocommands.
