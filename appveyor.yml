@@ -43,15 +43,18 @@ environment:
 41cab138408'
 
 matrix:
-  fast_finish: true
   allow_failures:
     - ruby_version: '200'
     - ruby_version: 200-x64
 
+  fast_finish: true
+
 notifications:
   - provider: Email
-    to:
-      - deivid.rodriguez@gmail.com
+
     on_build_success: false
     on_build_failure: false
     on_build_status_changed: true
+
+    to:
+      - deivid.rodriguez@gmail.com
