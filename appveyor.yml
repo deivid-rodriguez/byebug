@@ -17,6 +17,7 @@ install:
   - gem --version
   - where gem
 
+  - gem install bundler --no-document
   - bundler --version
   - where bundler
 
