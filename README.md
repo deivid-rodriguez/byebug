@@ -105,8 +105,8 @@ are debugging rails, start the server and once the execution gets to your
     `quit`      |              |
     `restart`   |              |
     `save`      |              |
-    `set`       |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-    `show`      |              | `autoirb` `autolist` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+    `set`       |              | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+    `show`      |              | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
     `source`    |              |
     `step`      |              |
     `thread`    |              | `current` `list` `resume` `stop` `switch`
