@@ -102,7 +102,7 @@ module Byebug
       processor.at_tracing
     end
 
-    def at_line(file, _l)
+    def at_line(file, _line)
       self.frame = 0
       return if ignored_file?(file)
 
