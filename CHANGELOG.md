@@ -9,6 +9,7 @@ commands inside code evaluated from debugger's prompt are now properly working.
 * Another evaluation bug in autocommands.
 * `finish 0` command would sometimes fail to stop right before exiting the
 current frame.
+* Runner's `--[no-]stop` option now works (thanks @windwiny).
 
 ### Removed
 * `ps` command.
