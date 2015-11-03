@@ -6,12 +6,11 @@ module Byebug
   #
   # Tests standalone byebug
   #
-  class RunnerTest < TestCase
+  class NonStopRunnerTest < TestCase
     def setup
       super
 
-      @runner = Byebug::Runner.new(false)
-      @runner.stubs(:interface).returns(interface)
+      non_stop_runner.interface = Context.interface
       @previous_mode = Byebug.mode
     end
 
@@ -27,13 +26,13 @@ module Byebug
     end
 
     def test_run_with_version_flag
-      with_command_line('bin/byebug', '--version') { @runner.run }
+      with_command_line('bin/byebug', '--version') { non_stop_runner.run }
 
       check_output_includes(/#{Byebug::VERSION}/)
     end
 
     def test_run_with_help_flag
-      with_command_line('bin/byebug', '--help') { @runner.run }
+      with_command_line('bin/byebug', '--help') { non_stop_runner.run }
 
       check_output_includes(
         /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/)
@@ -42,24 +41,28 @@ module Byebug
     def test_run_with_remote_option_only_with_a_port_number
       Byebug.expects(:start_client)
 
-      with_command_line('bin/byebug', '--remote', '9999') { @runner.run }
+      with_command_line('bin/byebug', '--remote', '9999') do
+        non_stop_runner.run
+      end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
       Byebug.expects(:start_client)
 
-      with_command_line('bin/byebug', '--remote', 'myhost:9999') { @runner.run }
+      with_command_line('bin/byebug', '--remote', 'myhost:9999') do
+        non_stop_runner.run
+      end
     end
 
     def test_run_without_a_script_to_debug
       with_command_line('bin/byebug') do
-        assert_raises(Runner::NoScript) { @runner.run }
+        assert_raises(Runner::NoScript) { non_stop_runner.run }
       end
     end
 
     def test_run_with_an_nonexistent_script
       with_command_line('bin/byebug', 'non_existent_script.rb') do
-        assert_raises(Runner::NonExistentScript) { @runner.run }
+        assert_raises(Runner::NonExistentScript) { non_stop_runner.run }
       end
     end
 
@@ -68,7 +71,7 @@ module Byebug
       example_file.close
 
       with_command_line('bin/byebug', example_path) do
-        assert_raises(Runner::InvalidScript) { @runner.run }
+        assert_raises(Runner::InvalidScript) { non_stop_runner.run }
       end
     end
 
@@ -76,7 +79,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', example_path) do
-        @runner.run
+        non_stop_runner.run
 
         assert_equal $PROGRAM_NAME, example_path
       end
@@ -86,7 +89,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', '--', example_path, '-opt', 'value') do
-        @runner.run
+        non_stop_runner.run
 
         assert_equal ['-opt', 'value'], $ARGV
       end
@@ -96,7 +99,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', '--', 'ruby', example_path) do
-        @runner.run
+        non_stop_runner.run
 
         assert_equal example_path, $PROGRAM_NAME
       end
@@ -106,7 +109,9 @@ module Byebug
       write_debugged_program
       Byebug.expects(:run_init_script).never
 
-      with_command_line('bin/byebug', '--no-rc', example_path) { @runner.run }
+      with_command_line('bin/byebug', '--no-rc', example_path) do
+        non_stop_runner.run
+      end
     end
 
     def test_run_with_post_mortem_mode_flag
@@ -114,7 +119,7 @@ module Byebug
 
       with_setting :post_mortem, false do
         with_command_line('bin/byebug', '-m', example_path) do
-          @runner.run
+          non_stop_runner.run
 
           assert_equal true, Setting[:post_mortem]
         end
@@ -126,7 +131,7 @@ module Byebug
 
       with_setting :linetrace, false do
         with_command_line('bin/byebug', '-t', example_path) do
-          @runner.run
+          non_stop_runner.run
 
           assert_equal true, Setting[:linetrace]
         end
@@ -135,10 +140,11 @@ module Byebug
 
     def test_run_with_no_quit_flag
       skip
+
       write_debugged_program
 
       with_command_line('bin/byebug', '--no-quit', example_path) do
-        @runner.run
+        non_stop_runner.run
 
         check_output_includes('(byebug:ctrl)')
       end
@@ -148,7 +154,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', '-r', 'abbrev', example_path) do
-        @runner.run
+        non_stop_runner.run
       end
 
       hsh = { 'can' => 'can', 'cat' => 'cat' }
@@ -159,7 +165,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', '-I', 'dir1', example_path) do
-        @runner.run
+        non_stop_runner.run
       end
 
       assert_includes $LOAD_PATH, 'dir1'
@@ -169,7 +175,7 @@ module Byebug
       write_debugged_program
 
       with_command_line('bin/byebug', '-I', 'dir1:dir2', example_path) do
-        @runner.run
+        non_stop_runner.run
       end
 
       assert_includes $LOAD_PATH, 'dir1'
@@ -179,18 +185,44 @@ module Byebug
     def test_run_with_debug_flag
       write_debugged_program
 
-      with_command_line('bin/byebug', '-d', example_path) { @runner.run }
+      with_command_line('bin/byebug', '-d', example_path) do
+        non_stop_runner.run
+      end
 
       assert_equal $DEBUG, true
       $DEBUG = false
     end
 
-    def test_run_successfully
+    def test_run_successfully_without_stopping
       write_debugged_program
 
-      with_command_line('bin/byebug', example_path) { @runner.run }
+      with_command_line('bin/byebug --no-stop', example_path) do
+        non_stop_runner.run
+      end
 
-      assert_empty interface.output
+      assert_empty non_stop_runner.interface.output
+    end
+
+    def test_run_successfully_stopping_at_the_first_line
+      enter 'cont'
+
+      write_debugged_program
+
+      with_command_line('bin/byebug --stop', example_path) do
+        stop_first_runner.run
+      end
+
+      check_output_includes '=> 1: sleep 0'
+    end
+
+    private
+
+    def non_stop_runner
+      @non_stop_runner ||= Byebug::Runner.new(false)
+    end
+
+    def stop_first_runner
+      @stop_first_runner ||= Byebug::Runner.new(true)
     end
   end
 end

@@ -107,6 +107,8 @@ module Byebug
       end
     end
 
+    attr_writer :interface
+
     def interface
       @interface ||= LocalInterface.new
     end
