@@ -20,7 +20,7 @@ cd "$(dirname "$0")/.." || exit
 
 # Test Byebug against new Ruby
 chruby-exec "$ruby_version_name" -- gem install bundler --no-document
-chruby-exec "$ruby_version_name" -- bundle
+chruby-exec "$ruby_version_name" -- bundle install --force
 chruby-exec "$ruby_version_name" -- bundle exec rake clobber compile
 
 if [[ "$1" = '--fixer' ]]
