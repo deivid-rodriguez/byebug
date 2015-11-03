@@ -74,4 +74,4 @@ class MinitestRunner
   end
 end
 
-MinitestRunner.new.run if $PROGRAM_NAME == __FILE__
+exit(MinitestRunner.new.run) if $PROGRAM_NAME == __FILE__
