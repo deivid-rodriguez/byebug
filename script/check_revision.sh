@@ -22,4 +22,15 @@ cd "$(dirname "$0")/.." || exit
 chruby-exec "$ruby_version_name" -- gem install bundler --no-document
 chruby-exec "$ruby_version_name" -- bundle
 chruby-exec "$ruby_version_name" -- bundle exec rake clobber compile
-chruby-exec "$ruby_version_name" -- script/minitest_runner.rb "$1" || exit 1
+
+if [[ "$1" = '--fixer' ]]
+then
+  if ! chruby-exec "$ruby_version_name" -- script/minitest_runner.rb "$2"
+  then
+    exit 0
+  else
+    exit 1
+  fi
+else
+  chruby-exec "$ruby_version_name" -- script/minitest_runner.rb "$2" || exit 1
+fi
