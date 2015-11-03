@@ -23,6 +23,9 @@ chruby-exec "$ruby_version_name" -- gem install bundler --no-document
 chruby-exec "$ruby_version_name" -- bundle install --force
 chruby-exec "$ruby_version_name" -- bundle exec rake clobber compile
 
+# Set environment var to signal bisection
+export BISECT=true
+
 if [[ "$1" = '--fixer' ]]
 then
   if ! chruby-exec "$ruby_version_name" -- script/minitest_runner.rb "$2"
