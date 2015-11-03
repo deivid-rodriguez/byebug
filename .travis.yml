@@ -38,10 +38,6 @@ env:
   - CC=clang
 
 matrix:
-  exclude:
-    - rvm: ruby-head
-      os: osx
-
   allow_failures:
     - rvm: ruby-head
     - rvm: 2.0.0
