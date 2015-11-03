@@ -22,7 +22,7 @@ HELP
 # Clones Ruby repo and switches to it
 #
 function clone_ruby() {
-  local ruby_src_dir=$byebug_dir/tmp/ruby_src
+  local ruby_src_dir=~/src/ruby-head
 
   git clone git@github.com:ruby/ruby.git "$ruby_src_dir"
 
