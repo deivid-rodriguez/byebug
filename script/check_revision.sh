@@ -21,4 +21,5 @@ cd "$(dirname "$0")/.." || exit
 # Test Byebug against new Ruby
 chruby-exec "$ruby_version_name" -- gem install bundler --no-document
 chruby-exec "$ruby_version_name" -- bundle
-chruby-exec "$ruby_version_name" -- bundle exec rake || exit 1
+chruby-exec "$ruby_version_name" -- bundle exec rake compile
+chruby-exec "$ruby_version_name" -- script/minitest_runner.rb "$1" || exit 1
