@@ -121,7 +121,7 @@ module Byebug
     end
 
     def test_next_works_as_expected_with_define_method
-      unless RUBY_VERSION == '2.3.0'
+      if RUBY_VERSION >= '2.1.0' && RUBY_VERSION < '2.3.0'
         skip('Needs backport: https://github.com/ruby/ruby/commit/868c98dccfb4')
       end
 
