@@ -62,7 +62,7 @@ module Byebug
         while (session = server.accept)
           Context.interface = RemoteInterface.new(session)
 
-          ControlCommandProcessor.new(Byebug.current_context).process_commands
+          ControlProcessor.new(Byebug.current_context).process_commands
         end
       end
 

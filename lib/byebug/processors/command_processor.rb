@@ -26,7 +26,7 @@ module Byebug
     end
 
     def interface
-      @interface ||= context.class.interface
+      @interface ||= Context.interface
     end
 
     def printer
