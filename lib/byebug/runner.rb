@@ -36,7 +36,12 @@ module Byebug
     #
     # Signals that we should exit after the debugged program is finished.
     #
-    attr_accessor :quit, :stop
+    attr_accessor :quit
+
+    #
+    # Signals that we should stop before program starts
+    #
+    attr_accessor :stop
 
     #
     # @param stop [Boolean] Whether the runner should stop right before
