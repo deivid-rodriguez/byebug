@@ -126,7 +126,10 @@ module Byebug
     end
 
     def test_finish_0_works_in_complicated_setups
-      skip if RUBY_VERSION >= '2.1.0' && RUBY_VERSION <= '2.1.7'
+      if RUBY_VERSION >= '2.1.0' && RUBY_VERSION <= '2.1.7'
+        skip('Needs backport: https://github.com/ruby/ruby/commit/ea290804891b')
+      end
+
       enter 'b 11', 'cont', 'finish 0'
 
       debug_code(program) { assert_equal 14, frame.line }
