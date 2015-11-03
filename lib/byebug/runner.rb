@@ -144,7 +144,7 @@ module Byebug
       ok = syntax_valid?(File.read($PROGRAM_NAME))
       fail(InvalidScript, 'The script has incorrect syntax') unless ok
 
-      error = Byebug.debug_load($PROGRAM_NAME, @stop)
+      error = Byebug.debug_load($PROGRAM_NAME, stop)
       puts "#{error}\n#{error.backtrace}" if error
     end
 
