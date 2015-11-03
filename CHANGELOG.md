@@ -7,6 +7,8 @@ after using byebug does no longer get slow.
 * [#121](https://github.com/deivid-rodriguez/byebug/issues/121). `byebug`
 commands inside code evaluated from debugger's prompt are now properly working.
 * Another evaluation bug in autocommands.
+* `finish 0` command would sometimes fail to stop right before exiting the
+current frame.
 
 ### Removed
 * `ps` command.
@@ -15,6 +17,10 @@ commands inside code evaluated from debugger's prompt are now properly working.
 * [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
 the entire library on require, but only when a `byebug` call is issued. Thanks
 @bquorning.
+* The above fix to the `finish 0` command cause `byebug`'s entrypoint to
+require 3 steps out instead of 2. In general, plugins using
+`Byebug::Context.step_out` will need to be changed to consider "c return events"
+as well.
 
 ### Added
 * `autopry` setting that calls `pry` on every stop.

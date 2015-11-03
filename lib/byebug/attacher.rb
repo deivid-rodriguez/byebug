@@ -16,7 +16,7 @@ module Byebug
       run_init_script
     end
 
-    current_context.step_out(2, true)
+    current_context.step_out(3, true)
   end
 end
 

@@ -159,6 +159,20 @@ cleanup(debug_context_t * dc)
     trace_print(trace_arg, dc, 0, 0);                   \
 
 
+#define CALL_EVENT_SETUP                                      \
+  dc->calced_stack_size++;                                    \
+  dc->steps_out = dc->steps_out < 0 ? -1 : dc->steps_out + 1;
+
+#define RETURN_EVENT_SETUP \
+  dc->calced_stack_size--; \
+                           \
+  if (dc->steps_out == 1)  \
+    dc->steps = 1;
+
+#define RETURN_EVENT_TEARDOWN \
+  dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out - 1;
+
+
 /* Functions that return control to byebug after the different events */
 
 static VALUE
@@ -278,9 +292,7 @@ call_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size <= dc->dest_frame)
     CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
 
-  dc->calced_stack_size++;
-
-  dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out + 1;
+  CALL_EVENT_SETUP;
 
   /* nil method_id means we are at top level so there can't be a method
    * breakpoint here. Just leave then. */
@@ -317,11 +329,9 @@ return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  dc->calced_stack_size--;
+  RETURN_EVENT_SETUP;
 
-  if (dc->steps_out == 1)
-    dc->steps = 1;
-  else if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
+  if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
     VALUE file, line;
 
@@ -331,7 +341,7 @@ return_event(VALUE trace_point, void *data)
     call_at_return(context, dc, file, line);
   }
 
-  dc->steps_out = dc->steps_out <= 0 ? -1 : dc->steps_out - 1;
+  RETURN_EVENT_TEARDOWN;
 
   EVENT_TEARDOWN;
 }
@@ -341,7 +351,7 @@ raw_call_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  dc->calced_stack_size++;
+  CALL_EVENT_SETUP;
 
   EVENT_TEARDOWN;
 }
@@ -351,7 +361,9 @@ raw_return_event(VALUE trace_point, void *data)
 {
   EVENT_SETUP;
 
-  dc->calced_stack_size--;
+  RETURN_EVENT_SETUP;
+
+  RETURN_EVENT_TEARDOWN;
 
   EVENT_TEARDOWN;
 }

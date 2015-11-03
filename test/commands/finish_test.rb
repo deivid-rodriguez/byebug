@@ -2,9 +2,10 @@ require 'test_helper'
 
 module Byebug
   #
-  # Tests +finish+ command functionality.
+  # Tests +finish+ functionality when it needs to stop after method return
+  # events.
   #
-  class FinishTest < TestCase
+  class FinishAfterReturnTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -50,12 +51,6 @@ module Byebug
       debug_code(program) { assert_equal 12, frame.line }
     end
 
-    def test_finish_0_stops_before_current_frame_finishes
-      enter 'break 21', 'cont', 'finish 0'
-
-      debug_code(program) { assert_equal 22, frame.line }
-    end
-
     def test_finish_1_stops_after_current_frame_is_finished
       enter 'break 21', 'cont', 'finish 1'
 
@@ -91,6 +86,49 @@ module Byebug
       enter 'break 21', 'cont', 'finish 4'
 
       debug_code(program) { assert_program_finished }
+    end
+  end
+
+  #
+  # Tests +finish+ functionality when it needs to stop before method return
+  # events.
+  #
+  class FinishBeforeReturn < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test the +finish+ command
+         4:    #
+         5:    class #{example_class}
+         6:      def a
+         7:        b
+         8:      end
+         9:
+        10:      def b
+        11:        (1..10).map do |i|
+        12:          i**2
+        13:        end
+        14:      end
+        15:    end
+        16:
+        17:    byebug
+        18:
+        19:    #{example_class}.new.a
+        20:  end
+      EOC
+    end
+
+    def test_finish_0_works_in_simple_setups
+      enter 'b 7', 'cont', 'finish 0'
+
+      debug_code(program) { assert_equal 8, frame.line }
+    end
+
+    def test_finish_0_works_in_complicated_setups
+      enter 'b 11', 'cont', 'finish 0'
+
+      debug_code(program) { assert_equal 14, frame.line }
     end
   end
 end
