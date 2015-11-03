@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Construct names
-ruby_version_name=2.3.0-$(git show -s --pretty=format:'%h')
+ruby_version_name=ruby-$(git show -s --pretty=format:'%h')
 ruby_install_dir=~/.rubies/$ruby_version_name
 
 # Generate configure script if needed
