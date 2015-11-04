@@ -176,8 +176,7 @@ cleanup(debug_context_t * dc)
 /* Functions that return control to byebug after the different events */
 
 static VALUE
-call_at(VALUE context_obj, debug_context_t * dc, ID mid, int argc, VALUE a0,
-        VALUE a1)
+call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE a0, VALUE a1)
 {
   struct call_with_inspection_data cwi;
   VALUE argv[2];
@@ -186,7 +185,7 @@ call_at(VALUE context_obj, debug_context_t * dc, ID mid, int argc, VALUE a0,
   argv[1] = a1;
 
   cwi.dc = dc;
-  cwi.context_obj = context_obj;
+  cwi.ctx = ctx;
   cwi.id = mid;
   cwi.argc = argc;
   cwi.argv = &argv[0];
@@ -195,49 +194,49 @@ call_at(VALUE context_obj, debug_context_t * dc, ID mid, int argc, VALUE a0,
 }
 
 static VALUE
-call_at_line(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
+call_at_line(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
 {
-  return call_at(context_obj, dc, rb_intern("at_line"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_line"), 2, file, line);
 }
 
 static VALUE
-call_at_tracing(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
+call_at_tracing(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
 {
-  return call_at(context_obj, dc, rb_intern("at_tracing"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_tracing"), 2, file, line);
 }
 
 static VALUE
-call_at_breakpoint(VALUE context_obj, debug_context_t * dc, VALUE breakpoint)
+call_at_breakpoint(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
-  return call_at(context_obj, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
+  return call_at(ctx, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
 }
 
 static VALUE
-call_at_catchpoint(VALUE context_obj, debug_context_t * dc, VALUE exp)
+call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
 {
   dc->stop_reason = CTX_STOP_CATCHPOINT;
-  return call_at(context_obj, dc, rb_intern("at_catchpoint"), 1, exp, 0);
+  return call_at(ctx, dc, rb_intern("at_catchpoint"), 1, exp, 0);
 }
 
 static VALUE
-call_at_return(VALUE context_obj, debug_context_t * dc, VALUE file, VALUE line)
+call_at_return(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
-  return call_at(context_obj, dc, rb_intern("at_return"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_return"), 2, file, line);
 }
 
 static void
-call_at_line_check(VALUE context_obj, debug_context_t * dc, VALUE breakpoint,
+call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint,
                    VALUE file, VALUE line)
 {
   dc->stop_reason = CTX_STOP_STEP;
 
   if (breakpoint != Qnil)
-    call_at_breakpoint(context_obj, dc, breakpoint);
+    call_at_breakpoint(ctx, dc, breakpoint);
 
   reset_stepping_stop_points(dc);
-  call_at_line(context_obj, dc, file, line);
+  call_at_line(ctx, dc, file, line);
 }
 
 

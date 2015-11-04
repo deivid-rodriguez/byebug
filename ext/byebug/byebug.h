@@ -54,7 +54,7 @@ typedef enum {
 
 struct call_with_inspection_data {
   debug_context_t *dc;
-  VALUE context_obj;
+  VALUE ctx;
   ID id;
   int argc;
   VALUE *argv;

@@ -168,7 +168,7 @@ open_debug_inspector_i(const rb_debug_inspector_t * inspector, void *data)
 
   cwi->dc->backtrace = load_backtrace(inspector);
 
-  return rb_funcall2(cwi->context_obj, cwi->id, cwi->argc, cwi->argv);
+  return rb_funcall2(cwi->ctx, cwi->id, cwi->argc, cwi->argv);
 }
 
 static VALUE
