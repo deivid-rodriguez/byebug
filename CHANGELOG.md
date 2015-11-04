@@ -1,4 +1,4 @@
-## 7.0.0 (Unreleased)
+## 7.0.0 - 2015-11-04
 ### Fixed
 * [#177](https://github.com/deivid-rodriguez/byebug/issues/177). Some issues
 with formatting results of evaluations.
