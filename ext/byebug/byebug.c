@@ -209,6 +209,7 @@ static VALUE
 call_at_breakpoint(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
+
   return call_at(ctx, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
 }
 
@@ -216,6 +217,7 @@ static VALUE
 call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
 {
   dc->stop_reason = CTX_STOP_CATCHPOINT;
+
   return call_at(ctx, dc, rb_intern("at_catchpoint"), 1, exp, 0);
 }
 
@@ -223,6 +225,7 @@ static VALUE
 call_at_return(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
+
   return call_at(ctx, dc, rb_intern("at_return"), 2, file, line);
 }
 
@@ -236,6 +239,7 @@ call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint,
     call_at_breakpoint(ctx, dc, breakpoint);
 
   reset_stepping_stop_points(dc);
+
   call_at_line(ctx, dc, file, line);
 }
 
@@ -337,6 +341,7 @@ return_event(VALUE trace_point, void *data)
     reset_stepping_stop_points(dc);
     file = rb_tracearg_path(trace_arg);
     line = rb_tracearg_lineno(trace_arg);
+
     call_at_return(context, dc, file, line);
   }
 
@@ -410,8 +415,10 @@ raise_event(VALUE trace_point, void *data)
     if (hit_count != Qnil)
     {
       rb_hash_aset(catchpoints, module_name, INT2FIX(FIX2INT(hit_count) + 1));
+
       call_at_catchpoint(context, dc, raised_exception);
       call_at_line(context, dc, path, lineno);
+
       break;
     }
   }
