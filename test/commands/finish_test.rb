@@ -119,7 +119,7 @@ module Byebug
       EOC
     end
 
-    def test_finish_0_works_in_simple_setups
+    def test_finish_0_stops_right_before_frame_returns__simple_case
       enter 'b 7', 'cont', 'finish 0'
 
       debug_code(program) { assert_equal 8, frame.line }
@@ -132,7 +132,7 @@ module Byebug
       check_output_includes 'Return value is: [1, 4, 9, 16, 25]'
     end
 
-    def test_finish_0_works_in_complicated_setups
+    def test_finish_0_stops_right_before_frame_returns__convoluted_case
       if RUBY_VERSION >= '2.1.0' && RUBY_VERSION <= '2.1.7'
         skip('Needs backport: https://github.com/ruby/ruby/commit/ea290804891b')
       end
