@@ -176,13 +176,12 @@ cleanup(debug_context_t * dc)
 /* Functions that return control to byebug after the different events */
 
 static VALUE
-call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE a0, VALUE a1)
+call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE arg)
 {
   struct call_with_inspection_data cwi;
-  VALUE argv[2];
+  VALUE argv[1];
 
-  argv[0] = a0;
-  argv[1] = a1;
+  argv[0] = arg;
 
   cwi.dc = dc;
   cwi.ctx = ctx;
@@ -194,15 +193,15 @@ call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE a0, VALUE a1)
 }
 
 static VALUE
-call_at_line(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
+call_at_line(VALUE ctx, debug_context_t * dc)
 {
-  return call_at(ctx, dc, rb_intern("at_line"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_line"), 0, Qnil);
 }
 
 static VALUE
-call_at_tracing(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
+call_at_tracing(VALUE ctx, debug_context_t * dc)
 {
-  return call_at(ctx, dc, rb_intern("at_tracing"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_tracing"), 0, Qnil);
 }
 
 static VALUE
@@ -210,7 +209,7 @@ call_at_breakpoint(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
-  return call_at(ctx, dc, rb_intern("at_breakpoint"), 1, breakpoint, 0);
+  return call_at(ctx, dc, rb_intern("at_breakpoint"), 1, breakpoint);
 }
 
 static VALUE
@@ -218,20 +217,19 @@ call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
 {
   dc->stop_reason = CTX_STOP_CATCHPOINT;
 
-  return call_at(ctx, dc, rb_intern("at_catchpoint"), 1, exp, 0);
+  return call_at(ctx, dc, rb_intern("at_catchpoint"), 1, exp);
 }
 
 static VALUE
-call_at_return(VALUE ctx, debug_context_t * dc, VALUE file, VALUE line)
+call_at_return(VALUE ctx, debug_context_t * dc)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
-  return call_at(ctx, dc, rb_intern("at_return"), 2, file, line);
+  return call_at(ctx, dc, rb_intern("at_return"), 0, Qnil);
 }
 
 static void
-call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint,
-                   VALUE file, VALUE line)
+call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_STEP;
 
@@ -240,7 +238,7 @@ call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint,
 
   reset_stepping_stop_points(dc);
 
-  call_at_line(ctx, dc, file, line);
+  call_at_line(ctx, dc);
 }
 
 
@@ -258,7 +256,7 @@ line_event(VALUE trace_point, void *data)
   binding = rb_tracearg_binding(trace_arg);
 
   if (RTEST(tracing))
-    call_at_tracing(context, dc, file, line);
+    call_at_tracing(context, dc);
 
   if (!CTX_FL_TEST(dc, CTX_FL_IGNORE_STEPS))
     dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
@@ -272,7 +270,7 @@ line_event(VALUE trace_point, void *data)
   }
 
   if (dc->steps == 0 || dc->lines == 0)
-    call_at_line_check(context, dc, Qnil, file, line);
+    call_at_line_check(context, dc, Qnil);
 
   brkpnt = Qnil;
 
@@ -280,7 +278,7 @@ line_event(VALUE trace_point, void *data)
     brkpnt = find_breakpoint_by_pos(breakpoints, file, line, binding);
 
   if (!NIL_P(brkpnt))
-    call_at_line_check(context, dc, brkpnt, file, line);
+    call_at_line_check(context, dc, brkpnt);
 
   EVENT_TEARDOWN;
 }
@@ -288,7 +286,7 @@ line_event(VALUE trace_point, void *data)
 static void
 call_event(VALUE trace_point, void *data)
 {
-  VALUE brkpnt, klass, msym, mid, binding, self, file, line;
+  VALUE brkpnt, klass, msym, mid, binding, self;
 
   EVENT_SETUP;
 
@@ -310,8 +308,6 @@ call_event(VALUE trace_point, void *data)
   klass = rb_tracearg_defined_class(trace_arg);
   binding = rb_tracearg_binding(trace_arg);
   self = rb_tracearg_self(trace_arg);
-  file = rb_tracearg_path(trace_arg);
-  line = rb_tracearg_lineno(trace_arg);
 
   brkpnt = Qnil;
 
@@ -321,7 +317,7 @@ call_event(VALUE trace_point, void *data)
   if (!NIL_P(brkpnt))
   {
     call_at_breakpoint(context, dc, brkpnt);
-    call_at_line(context, dc, file, line);
+    call_at_line(context, dc);
   }
 
   EVENT_TEARDOWN;
@@ -336,13 +332,9 @@ return_event(VALUE trace_point, void *data)
 
   if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
-    VALUE file, line;
-
     reset_stepping_stop_points(dc);
-    file = rb_tracearg_path(trace_arg);
-    line = rb_tracearg_lineno(trace_arg);
 
-    call_at_return(context, dc, file, line);
+    call_at_return(context, dc);
   }
 
   RETURN_EVENT_TEARDOWN;
@@ -375,14 +367,12 @@ raw_return_event(VALUE trace_point, void *data)
 static void
 raise_event(VALUE trace_point, void *data)
 {
-  VALUE expn_class, ancestors, path, lineno, pm_context;
+  VALUE expn_class, ancestors, pm_context;
   int i;
   debug_context_t *new_dc;
 
   EVENT_SETUP;
 
-  path = rb_tracearg_path(trace_arg);
-  lineno = rb_tracearg_lineno(trace_arg);
   raised_exception = rb_tracearg_raised_exception(trace_arg);
 
   if (post_mortem == Qtrue)
@@ -417,7 +407,7 @@ raise_event(VALUE trace_point, void *data)
       rb_hash_aset(catchpoints, module_name, INT2FIX(FIX2INT(hit_count) + 1));
 
       call_at_catchpoint(context, dc, raised_exception);
-      call_at_line(context, dc, path, lineno);
+      call_at_line(context, dc);
 
       break;
     }

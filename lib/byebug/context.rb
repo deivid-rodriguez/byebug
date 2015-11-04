@@ -96,20 +96,20 @@ module Byebug
       processor.at_catchpoint(exception)
     end
 
-    def at_tracing(file, _line)
+    def at_tracing
       return if ignored_file?(file)
 
       processor.at_tracing
     end
 
-    def at_line(file, _line)
+    def at_line
       self.frame = 0
       return if ignored_file?(file)
 
       processor.at_line
     end
 
-    def at_return(file, _line)
+    def at_return
       return if ignored_file?(file)
 
       processor.at_return
