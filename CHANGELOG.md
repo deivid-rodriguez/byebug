@@ -26,6 +26,7 @@ as well.
 
 ### Added
 * `autopry` setting that calls `pry` on every stop.
+* Return value information to debugger's output when `finish 0` is used.
 
 ## 6.0.2 - 2015-08-20
 ### Fixed

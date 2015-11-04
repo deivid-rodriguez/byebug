@@ -75,7 +75,9 @@ module Byebug
       process_commands
     end
 
-    def at_return
+    def at_return(return_value)
+      puts "Return value is: #{return_value}"
+
       process_commands
     end
 

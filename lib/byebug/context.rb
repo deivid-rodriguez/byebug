@@ -109,10 +109,10 @@ module Byebug
       processor.at_line
     end
 
-    def at_return
+    def at_return(return_value)
       return if ignored_file?(file)
 
-      processor.at_return
+      processor.at_return(return_value)
     end
 
     private

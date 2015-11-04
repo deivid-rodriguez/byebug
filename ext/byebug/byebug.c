@@ -221,11 +221,11 @@ call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
 }
 
 static VALUE
-call_at_return(VALUE ctx, debug_context_t * dc)
+call_at_return(VALUE ctx, debug_context_t * dc, VALUE return_value)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
-  return call_at(ctx, dc, rb_intern("at_return"), 0, Qnil);
+  return call_at(ctx, dc, rb_intern("at_return"), 1, return_value);
 }
 
 static void
@@ -326,6 +326,8 @@ call_event(VALUE trace_point, void *data)
 static void
 return_event(VALUE trace_point, void *data)
 {
+  VALUE return_value;
+
   EVENT_SETUP;
 
   RETURN_EVENT_SETUP;
@@ -334,7 +336,13 @@ return_event(VALUE trace_point, void *data)
   {
     reset_stepping_stop_points(dc);
 
-    call_at_return(context, dc);
+    if (rb_tracearg_event_flag(trace_arg) &
+        (RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN))
+      return_value = rb_tracearg_return_value(trace_arg);
+    else
+      return_value = Qnil;
+
+    call_at_return(context, dc, return_value);
   }
 
   RETURN_EVENT_TEARDOWN;

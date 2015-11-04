@@ -106,7 +106,7 @@ module Byebug
          8:      end
          9:
         10:      def b
-        11:        (1..10).map do |i|
+        11:        (1..5).map do |i|
         12:          i**2
         13:        end
         14:      end
@@ -123,6 +123,13 @@ module Byebug
       enter 'b 7', 'cont', 'finish 0'
 
       debug_code(program) { assert_equal 8, frame.line }
+    end
+
+    def test_finish_0_shows_information_about_the_return_value
+      enter 'b 7', 'cont', 'finish 0'
+      debug_code(program)
+
+      check_output_includes 'Return value is: [1, 4, 9, 16, 25]'
     end
 
     def test_finish_0_works_in_complicated_setups
