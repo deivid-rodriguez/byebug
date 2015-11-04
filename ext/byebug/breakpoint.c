@@ -38,17 +38,17 @@ brkpt_enabled(VALUE self)
 
 /*
  *  call-seq:
- *    breakpoint.enabled = bool
+ *    breakpoint.enabled = true | false
  *
  *  Enables or disables breakpoint.
  */
 static VALUE
-brkpt_set_enabled(VALUE self, VALUE bool)
+brkpt_set_enabled(VALUE self, VALUE enabled)
 {
   breakpoint_t *breakpoint;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
-  return breakpoint->enabled = bool;
+  return breakpoint->enabled = enabled;
 }
 
 /*

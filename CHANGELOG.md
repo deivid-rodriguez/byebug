@@ -10,6 +10,7 @@ commands inside code evaluated from debugger's prompt are now properly working.
 * `finish 0` command would sometimes fail to stop right before exiting the
 current frame.
 * Runner's `--[no-]stop` option now works (thanks @windwiny).
+* Change variable name `bool`, avoid conflict clang's predefined macro
 
 ### Removed
 * `ps` command.
