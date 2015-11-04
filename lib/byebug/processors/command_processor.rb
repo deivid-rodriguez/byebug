@@ -76,7 +76,7 @@ module Byebug
     end
 
     def at_return(return_value)
-      puts "Return value is: #{return_value}"
+      puts "Return value is: #{safe_inspect(return_value)}"
 
       process_commands
     end
