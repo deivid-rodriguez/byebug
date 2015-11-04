@@ -6,7 +6,7 @@ ruby_install_dir=~/.rubies/$ruby_version_name
 
 # Generate configure script if needed
 if [[ ! -s configure || configure.in -nt configure ]]; then
-  autoreconf || return $?
+  autoreconf || exit $?
 fi
 
 # Configure Ruby
