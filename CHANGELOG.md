@@ -1,4 +1,4 @@
-## 8.0.0 (Unreleased)
+## 8.0.0 - 2015-11-05
 ### Fixed
 * [#183]((https://github.com/deivid-rodriguez/byebug/issues/183). Compilation
 in Ruby 2.0. Regression introduced in 7.0.0
