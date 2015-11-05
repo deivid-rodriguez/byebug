@@ -38,15 +38,6 @@ module Byebug
       end
     end
 
-    #
-    # Tells whether a file is ignored by the debugger.
-    #
-    # @param path [String] filename to be checked.
-    #
-    def ignored_file?(path)
-      self.class.ignored_files.include?(path)
-    end
-
     def frame
       @frame ||= Frame.new(self, 0)
     end
@@ -120,6 +111,15 @@ module Byebug
 
     def processor
       @processor ||= self.class.processor.new(self)
+    end
+
+    #
+    # Tells whether a file is ignored by the debugger.
+    #
+    # @param path [String] filename to be checked.
+    #
+    def ignored_file?(path)
+      self.class.ignored_files.include?(path)
     end
   end
 end
