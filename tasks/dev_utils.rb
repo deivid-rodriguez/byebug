@@ -60,7 +60,7 @@ end
 desc 'Runs tests continuously'
 task :loop_tests do
   iterations = (ENV['TIMES'] || '8').to_i
-  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.1 2.2)
+  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w(2.0 2.1 2.2)
   ruby_manager = ENV['MANAGER'] || 'chruby'
 
   LoopRunner.new(iterations, rubies, ruby_manager).run
