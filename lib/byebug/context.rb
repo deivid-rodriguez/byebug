@@ -38,10 +38,16 @@ module Byebug
       end
     end
 
+    #
+    # Reader for the current frame
+    #
     def frame
       @frame ||= Frame.new(self, 0)
     end
 
+    #
+    # Writer for the current frame
+    #
     def frame=(pos)
       @frame = Frame.new(self, pos)
     end
@@ -49,10 +55,16 @@ module Byebug
     extend Forwardable
     def_delegators :frame, :file, :line
 
+    #
+    # Current file & line information
+    #
     def location
       "#{normalize(file)}:#{line}"
     end
 
+    #
+    # Current file, line and source code information
+    #
     def full_location
       return location if virtual_file?(file)
 
@@ -74,6 +86,9 @@ module Byebug
       step_into 1
     end
 
+    #
+    # Line handler
+    #
     def at_line
       self.frame = 0
       return if ignored_file?(file)
@@ -81,26 +96,41 @@ module Byebug
       processor.at_line
     end
 
+    #
+    # Tracing handler
+    #
     def at_tracing
       return if ignored_file?(file)
 
       processor.at_tracing
     end
 
+    #
+    # Breakpoint handler
+    #
     def at_breakpoint(breakpoint)
       processor.at_breakpoint(breakpoint)
     end
 
+    #
+    # Catchpoint handler
+    #
     def at_catchpoint(exception)
       processor.at_catchpoint(exception)
     end
 
+    #
+    # Return handler
+    #
     def at_return(return_value)
       return if ignored_file?(file)
 
       processor.at_return(return_value)
     end
 
+    #
+    # End of class definition handler
+    #
     def at_end
       return if ignored_file?(file)
 
