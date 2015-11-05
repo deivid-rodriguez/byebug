@@ -81,6 +81,10 @@ module Byebug
       process_commands
     end
 
+    def at_end
+      process_commands
+    end
+
     #
     # Let the execution continue
     #

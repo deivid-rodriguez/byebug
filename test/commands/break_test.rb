@@ -234,11 +234,11 @@ module Byebug
   end
 
   #
-  # Tests using the byebug keyword at special places
+  # Tests using the byebug keyword at the end of a method
   #
-  class BreakWithByebugKeyword < TestCase
-    def test_stops_at_method_end_when_last_instruction_of_method
-      program = strip_line_numbers <<-EOC
+  class BreakWithByebugKeywordAtMethodEnd < TestCase
+    def program
+      strip_line_numbers <<-EOC
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a method
@@ -252,12 +252,25 @@ module Byebug
         11:    end
         12:  end
       EOC
+    end
 
+    def test_stops_right_before_method_returns
       debug_code(program) { assert_equal 8, frame.line }
     end
 
-    def test_stops_at_block_end_when_last_instruction_of_block
-      program = strip_line_numbers <<-EOC
+    def test_shows_nil_return_value
+      debug_code(program)
+
+      check_output_includes 'Return value is: nil'
+    end
+  end
+
+  #
+  # Tests using the byebug keyword at the end of a block
+  #
+  class BreakWithByebugKeywordAtBlockEnd < TestCase
+    def program
+      strip_line_numbers <<-EOC
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a block
@@ -275,12 +288,25 @@ module Byebug
         15:    end
         16:  end
       EOC
+    end
 
+    def test_stops_right_before_block_returns
       debug_code(program) { assert_equal 14, frame.line }
     end
 
-    def test_stops_at_class_end_when_last_instruction_of_class
-      program = strip_line_numbers <<-EOC
+    def test_shows_nil_return_value
+      debug_code(program)
+
+      check_output_includes 'Return value is: nil'
+    end
+  end
+
+  #
+  # Tests using the byebug keyword at the end of a class definition
+  #
+  class BreakWithByebugKeywordAtClassDefinitionEnd < TestCase
+    def program
+      strip_line_numbers <<-EOC
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a class
@@ -294,8 +320,16 @@ module Byebug
         11:    end
         12:  end
       EOC
+    end
 
+    def test_stops_right_before_class_definition_ends
       debug_code(program) { assert_equal 11, frame.line }
+    end
+
+    def test_does_not_show_return_value_information
+      debug_code(program)
+
+      check_output_doesnt_include 'Return value is: nil'
     end
   end
 end

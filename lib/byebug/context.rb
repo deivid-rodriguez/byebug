@@ -115,6 +115,12 @@ module Byebug
       processor.at_return(return_value)
     end
 
+    def at_end
+      return if ignored_file?(file)
+
+      processor.at_end
+    end
+
     private
 
     def processor

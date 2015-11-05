@@ -228,6 +228,14 @@ call_at_return(VALUE ctx, debug_context_t * dc, VALUE return_value)
   return call_at(ctx, dc, rb_intern("at_return"), 1, return_value);
 }
 
+static VALUE
+call_at_end(VALUE ctx, debug_context_t * dc)
+{
+  dc->stop_reason = CTX_STOP_BREAKPOINT;
+
+  return call_at(ctx, dc, rb_intern("at_end"), 0, Qnil);
+}
+
 static void
 call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
@@ -326,8 +334,6 @@ call_event(VALUE trace_point, void *data)
 static void
 return_event(VALUE trace_point, void *data)
 {
-  VALUE return_value;
-
   EVENT_SETUP;
 
   RETURN_EVENT_SETUP;
@@ -336,13 +342,26 @@ return_event(VALUE trace_point, void *data)
   {
     reset_stepping_stop_points(dc);
 
-    if (rb_tracearg_event_flag(trace_arg) &
-        (RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN))
-      return_value = rb_tracearg_return_value(trace_arg);
-    else
-      return_value = Qnil;
+    call_at_return(context, dc, rb_tracearg_return_value(trace_arg));
+  }
 
-    call_at_return(context, dc, return_value);
+  RETURN_EVENT_TEARDOWN;
+
+  EVENT_TEARDOWN;
+}
+
+static void
+end_event(VALUE trace_point, void *data)
+{
+  EVENT_SETUP;
+
+  RETURN_EVENT_SETUP;
+
+  if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
+  {
+    reset_stepping_stop_points(dc);
+
+    call_at_end(context, dc);
   }
 
   RETURN_EVENT_TEARDOWN;
@@ -439,7 +458,8 @@ register_tracepoints(VALUE self)
   {
     int line_msk = RUBY_EVENT_LINE;
     int call_msk = RUBY_EVENT_CALL;
-    int ret_msk = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN | RUBY_EVENT_END;
+    int ret_msk = RUBY_EVENT_RETURN | RUBY_EVENT_B_RETURN;
+    int end_msk = RUBY_EVENT_END;
     int raw_call_msk = RUBY_EVENT_C_CALL | RUBY_EVENT_B_CALL | RUBY_EVENT_CLASS;
     int raw_ret_msk = RUBY_EVENT_C_RETURN;
     int raise_msk = RUBY_EVENT_RAISE;
@@ -447,6 +467,7 @@ register_tracepoints(VALUE self)
     VALUE tpLine = rb_tracepoint_new(Qnil, line_msk, line_event, 0);
     VALUE tpCall = rb_tracepoint_new(Qnil, call_msk, call_event, 0);
     VALUE tpReturn = rb_tracepoint_new(Qnil, ret_msk, return_event, 0);
+    VALUE tpEnd = rb_tracepoint_new(Qnil, end_msk, end_event, 0);
     VALUE tpCCall = rb_tracepoint_new(Qnil, raw_call_msk, raw_call_event, 0);
     VALUE tpCReturn = rb_tracepoint_new(Qnil, raw_ret_msk, raw_return_event, 0);
     VALUE tpRaise = rb_tracepoint_new(Qnil, raise_msk, raise_event, 0);
@@ -455,6 +476,7 @@ register_tracepoints(VALUE self)
     rb_ary_push(traces, tpLine);
     rb_ary_push(traces, tpCall);
     rb_ary_push(traces, tpReturn);
+    rb_ary_push(traces, tpEnd);
     rb_ary_push(traces, tpCCall);
     rb_ary_push(traces, tpCReturn);
     rb_ary_push(traces, tpRaise);

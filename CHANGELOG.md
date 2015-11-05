@@ -1,3 +1,14 @@
+## 8.0.0 (Unreleased)
+### Fixed
+* [#183]((https://github.com/deivid-rodriguez/byebug/issues/183). Compilation
+in Ruby 2.0. Regression introduced in 7.0.0
+* "Return value is: nil" would be displayed when stopping right before the end
+of a class definition. We want to avoid showing anything instead.
+
+## Changed
+* Plugins now need to implement an `at_end` method (separate from `at_return`)
+in their custom processors.
+
 ## 7.0.0 - 2015-11-04
 ### Fixed
 * [#177](https://github.com/deivid-rodriguez/byebug/issues/177). Some issues
