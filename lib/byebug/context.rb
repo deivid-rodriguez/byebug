@@ -55,13 +55,8 @@ module Byebug
       @frame = Frame.new(self, pos)
     end
 
-    def file
-      frame.file
-    end
-
-    def line
-      frame.line
-    end
+    extend Forwardable
+    def_delegators :frame, :file, :line
 
     def location
       "#{normalize(file)}:#{line}"

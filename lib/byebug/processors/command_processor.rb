@@ -33,26 +33,23 @@ module Byebug
       @printer ||= Printers::Plain.new
     end
 
-    def frame
-      @context.frame
-    end
-
     extend Forwardable
+
+    def_delegators :@context, :frame
+
     def_delegator :printer, :print, :pr
     def_delegator :printer, :print_collection, :prc
     def_delegator :printer, :print_variables, :prv
 
     def_delegators :interface, :errmsg, :puts, :confirm
 
+    def_delegators Byebug, :commands
+
     #
     # Available commands
     #
     def command_list
       @command_list ||= CommandList.new(commands)
-    end
-
-    def commands
-      Byebug.commands
     end
 
     def at_breakpoint(brkpt)
