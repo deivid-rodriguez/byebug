@@ -74,12 +74,11 @@ module Byebug
       step_into 1
     end
 
-    def at_breakpoint(breakpoint)
-      processor.at_breakpoint(breakpoint)
-    end
+    def at_line
+      self.frame = 0
+      return if ignored_file?(file)
 
-    def at_catchpoint(exception)
-      processor.at_catchpoint(exception)
+      processor.at_line
     end
 
     def at_tracing
@@ -88,11 +87,12 @@ module Byebug
       processor.at_tracing
     end
 
-    def at_line
-      self.frame = 0
-      return if ignored_file?(file)
+    def at_breakpoint(breakpoint)
+      processor.at_breakpoint(breakpoint)
+    end
 
-      processor.at_line
+    def at_catchpoint(exception)
+      processor.at_catchpoint(exception)
     end
 
     def at_return(return_value)

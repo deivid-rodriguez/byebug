@@ -52,14 +52,8 @@ module Byebug
       @command_list ||= CommandList.new(commands)
     end
 
-    def at_breakpoint(brkpt)
-      number = Byebug.breakpoints.index(brkpt) + 1
-
-      puts "Stopped by breakpoint #{number} at #{frame.file}:#{frame.line}"
-    end
-
-    def at_catchpoint(exception)
-      puts "Catchpoint at #{context.location}: `#{exception}'"
+    def at_line
+      process_commands
     end
 
     def at_tracing
@@ -68,8 +62,14 @@ module Byebug
       run_auto_cmds(2)
     end
 
-    def at_line
-      process_commands
+    def at_breakpoint(brkpt)
+      number = Byebug.breakpoints.index(brkpt) + 1
+
+      puts "Stopped by breakpoint #{number} at #{frame.file}:#{frame.line}"
+    end
+
+    def at_catchpoint(exception)
+      puts "Catchpoint at #{context.location}: `#{exception}'"
     end
 
     def at_return(return_value)
