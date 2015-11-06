@@ -1,6 +1,6 @@
 ## 8.0.0 - 2015-11-05
 ### Fixed
-* [#183]((https://github.com/deivid-rodriguez/byebug/issues/183). Compilation
+* [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation
 in Ruby 2.0. Regression introduced in 7.0.0
 * "Return value is: nil" would be displayed when stopping right before the end
 of a class definition. We want to avoid showing anything instead.
