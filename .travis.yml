@@ -9,8 +9,10 @@ os:
 language: ruby
 
 before_install:
-  - rvm reinstall $TRAVIS_RUBY_VERSION --patch
-      https://github.com/ruby/ruby/commit/2d4bc584eef5dcd11dbae4c92fe8b.patch
+  - if [ ! $TRAVIS_RUBY_VERSION = '2.3.0' ]; then
+      rvm reinstall $TRAVIS_RUBY_VERSION --patch
+        https://github.com/ruby/ruby/commit/2d4bc584eef5dcd11dbae4c92fe8b.patch;
+    fi
 
 install:
   - gem update --system --no-document || test true
