@@ -1,3 +1,8 @@
+## 8.0.1 - 2015-11-07
+### Fixed
+* Error stream wouldn't be properly reset when using standalone `byebug`.
+* Confusing error message for invalid breakpoint locations.
+
 ## 8.0.0 - 2015-11-05
 ### Fixed
 * [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation
