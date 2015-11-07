@@ -63,12 +63,12 @@ module Byebug
       # Temporarily disable output to $stderr
       #
       def without_stderr
-        stderr = $stderr
-        $stderr.reopen(IO::NULL)
+        old_stderr = $stderr
+        $stderr = StringIO.new
 
         yield
       ensure
-        $stderr.reopen(stderr)
+        $stderr = old_stderr
       end
     end
   end
