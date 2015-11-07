@@ -186,17 +186,14 @@ module Byebug
       $DEBUG = false
     end
 
-    def test_run_successfully_stopping_at_the_first_line
+    def test_run_stops_at_the_first_line_by_default
       enter 'cont'
-
-      with_command_line('bin/byebug --stop', example_path) do
-        stop_first_runner.run
-      end
+      with_command_line('bin/byebug', example_path) { stop_first_runner.run }
 
       check_output_includes '=> 1: sleep 0'
     end
 
-    def test_run_with_no_stop_arg_does_not_stop
+    def test_run_with_no_stop_flag_does_not_stop_at_the_first_line
       non_stop_runner.interface = Context.interface
 
       with_command_line('bin/byebug --no-stop', example_path) do
@@ -204,6 +201,16 @@ module Byebug
       end
 
       assert_empty non_stop_runner.interface.output
+    end
+
+    def test_run_with_stop_flag_stops_at_the_first_line
+      enter 'cont'
+
+      with_command_line('bin/byebug --stop', example_path) do
+        stop_first_runner.run
+      end
+
+      check_output_includes '=> 1: sleep 0'
     end
 
     private
