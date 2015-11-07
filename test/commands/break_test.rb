@@ -153,6 +153,12 @@ module Byebug
       enter 'break asf:324'
 
       debug_code(program) { assert_empty Byebug.breakpoints }
+    end
+
+    def test_setting_breakpoint_to_nonexistent_file_shows_an_error
+      enter 'break asf:234'
+      debug_code(program)
+
       check_error_includes 'No file named asf'
     end
 
