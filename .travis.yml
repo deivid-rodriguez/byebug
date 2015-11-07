@@ -10,7 +10,7 @@ language: ruby
 
 before_install:
   - rvm reinstall $TRAVIS_RUBY_VERSION --patch
-      https://github.com/k0kubun/ruby/commit/6747055326e634899f0efb0ba7cf46.patch
+      https://github.com/ruby/ruby/commit/2d4bc584eef5dcd11dbae4c92fe8b.patch
 
 install:
   - gem update --system --no-document || test true
