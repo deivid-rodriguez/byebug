@@ -38,6 +38,7 @@ module Byebug
       return puts(help) unless @match[1]
 
       b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
+      return errmsg(pr('break.errors.location')) unless b
 
       if syntax_valid?(@match[2])
         return puts(pr('break.created', id: b.id, file: b.source, line: b.pos))

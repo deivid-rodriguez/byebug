@@ -99,6 +99,13 @@ module Byebug
 
       debug_code(program) { assert_empty Byebug.breakpoints }
     end
+
+    def test_setting_breakpoint_to_invalid_location_shows_an_error
+      enter 'break foo'
+      debug_code(program)
+
+      check_error_includes 'Invalid breakpoint location'
+    end
   end
 
   #
