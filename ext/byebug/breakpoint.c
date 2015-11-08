@@ -342,7 +342,7 @@ classname_cmp(VALUE name, VALUE klass)
     return 0;
 
   mod_name = rb_mod_name(klass);
-  return (mod_name != Qnil && rb_str_cmp(class_name, mod_name) == 0);
+  return (!NIL_P(mod_name) && rb_str_cmp(class_name, mod_name) == 0);
 }
 
 static int

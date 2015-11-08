@@ -63,7 +63,7 @@ Raised_exception(VALUE self)
   return raised_exception;
 }
 
-#define IS_STARTED  (catchpoints != Qnil)
+#define IS_STARTED (!NIL_P(catchpoints))
 
 static void
 check_started()
@@ -241,7 +241,7 @@ call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_STEP;
 
-  if (breakpoint != Qnil)
+  if (!NIL_P(breakpoint))
     call_at_breakpoint(ctx, dc, breakpoint);
 
   reset_stepping_stop_points(dc);
@@ -411,7 +411,7 @@ raise_event(VALUE trace_point, void *data)
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
-  if (catchpoints == Qnil || dc->calced_stack_size == 0
+  if (NIL_P(catchpoints) || dc->calced_stack_size == 0
       || RHASH_TBL(catchpoints)->num_entries == 0)
   {
     EVENT_TEARDOWN;
@@ -429,7 +429,7 @@ raise_event(VALUE trace_point, void *data)
     hit_count = rb_hash_aref(catchpoints, module_name);
 
     /* increment exception */
-    if (hit_count != Qnil)
+    if (!NIL_P(hit_count))
     {
       rb_hash_aset(catchpoints, module_name, INT2FIX(FIX2INT(hit_count) + 1));
 
@@ -633,17 +633,17 @@ Stoppable(VALUE self)
   if (!IS_STARTED)
     return Qfalse;
 
-  if (breakpoints != Qnil && rb_funcall(breakpoints, idEmpty, 0) == Qfalse)
+  if (!NIL_P(breakpoints) && rb_funcall(breakpoints, idEmpty, 0) == Qfalse)
     return Qfalse;
 
-  if (catchpoints != Qnil && rb_funcall(catchpoints, idEmpty, 0) == Qfalse)
+  if (!NIL_P(catchpoints) && rb_funcall(catchpoints, idEmpty, 0) == Qfalse)
     return Qfalse;
 
   if (post_mortem == Qtrue)
     return Qfalse;
 
   context = Current_context(self);
-  if (context != Qnil)
+  if (!NIL_P(context))
   {
     Data_Get_Struct(context, debug_context_t, dc);
 
