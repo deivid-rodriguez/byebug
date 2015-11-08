@@ -9,7 +9,7 @@ coverage
 .gdb_history
 .bundle
 .byebugrc
-.byebug_hist
+.byebug_history
 
 lib/byebug/byebug.so
 lib/byebug/byebug.bundle
