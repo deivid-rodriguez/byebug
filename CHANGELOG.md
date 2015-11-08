@@ -1,3 +1,7 @@
+## Master (Unreleased)
+### Fixed
+* Command history should be specific per project.
+
 ## 8.0.1 - 2015-11-07
 ### Fixed
 * Error stream wouldn't be properly reset when using standalone `byebug`.
