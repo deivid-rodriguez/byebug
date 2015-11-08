@@ -24,7 +24,7 @@ chruby-exec "$ruby_version_name" -- bundle install --force
 chruby-exec "$ruby_version_name" -- bundle exec rake clobber compile
 
 # Set environment var to signal bisection
-export BISECT=true
+export NOCOV=true
 
 if [[ "$1" = '--fixer' ]]
 then
