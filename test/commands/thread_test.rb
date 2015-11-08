@@ -155,8 +155,9 @@ module Byebug
 
     def test_thread_switch_changes_execution_to_another_thread
       enter 'cont 24', -> { "thread switch #{t2_thnum}" }, 'lock << 0'
+      debug_code(program)
 
-      debug_code(program) { assert_equal 21, frame.line }
+      check_output_includes '=> 21:         loop { sleep 0.01 }'
     end
 
     def test_thread_switch_shows_help_if_thread_number_not_specified
