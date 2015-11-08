@@ -164,10 +164,8 @@ release_lock(void)
   {
     remove_from_locked(next_thread);
     thread = next_thread;
-  }
-
-  if (thread == next_thread)
     next_thread = Qnil;
+  }
 
   if (!NIL_P(thread) && is_living_thread(thread))
     rb_thread_run(thread);
