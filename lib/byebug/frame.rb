@@ -161,10 +161,13 @@ module Byebug
     end
 
     def ruby_args
-      return [] unless _binding.eval('__method__')
-      return [] unless _binding.eval('method(__method__)')
+      meth_name = _binding.eval('__method__')
+      return [] unless meth_name
 
-      _binding.eval('method(__method__).parameters')
+      meth_obj = _self.method(meth_name)
+      return [] unless meth_obj
+
+      meth_obj.parameters
     end
 
     def use_short_style?(arg)
