@@ -39,6 +39,24 @@ module Byebug
       debug_code(program) { assert_equal 16, frame.line }
     end
 
+    def test_down_autolists_new_source_location_when_autolist_enabled
+      with_setting :autolist, true do
+        enter 'up 2', 'down'
+        debug_code(program)
+
+        check_output_includes "=> 11:       integerize(str + 'x') + 5"
+      end
+    end
+
+    def test_down_does_not_autolist_new_source_location_when_autolist_disabled
+      with_setting :autolist, false do
+        enter 'up 2', 'down'
+        debug_code(program)
+
+        check_output_doesnt_include "=> 11:       integerize(str + 'x') + 5"
+      end
+    end
+
     def test_down_moves_down_in_the_callstack_a_specific_number_of_frames
       enter 'up 3', 'down 2'
 
