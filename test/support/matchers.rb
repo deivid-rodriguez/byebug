@@ -80,13 +80,13 @@ module Minitest
 
     private
 
-    def _includes_in_order(given_collection, original_collection)
-      given_collection.each_with_index do |given_item, i|
-        index = case given_item
+    def _includes_in_order(collection, original_collection)
+      collection.each_with_index do |item, i|
+        index = case item
                 when String
-                  original_collection[i..-1].index(given_item)
+                  original_collection[i..-1].index(item)
                 when Regexp
-                  original_collection[i..-1].index { |it| it =~ given_item }
+                  original_collection[i..-1].index { |it| it =~ item }
                 end
 
         return false unless index
