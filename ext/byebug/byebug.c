@@ -149,15 +149,15 @@ cleanup(debug_context_t * dc)
   thread_context_lookup(rb_thread_current(), &context); \
   Data_Get_Struct(context, debug_context_t, dc);        \
                                                         \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
+  if (verbose == Qtrue)                                 \
+    trace_print(trace_arg, dc, 0, 0);                   \
+                                                        \
   if (CTX_FL_TEST(dc, CTX_FL_IGNORE))                   \
     return;                                             \
                                                         \
   acquire_lock(dc);                                     \
                                                         \
-  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
-  if (verbose == Qtrue)                                 \
-    trace_print(trace_arg, dc, 0, 0);                   \
-
 
 #define CALL_EVENT_SETUP                                      \
   dc->calced_stack_size++;                                    \
