@@ -334,6 +334,8 @@ call_event(VALUE trace_point, void *data)
 static void
 return_event(VALUE trace_point, void *data)
 {
+  VALUE brkpnt, file, line, binding;
+
   EVENT_SETUP;
 
   RETURN_EVENT_SETUP;
@@ -343,6 +345,36 @@ return_event(VALUE trace_point, void *data)
     reset_stepping_stop_points(dc);
 
     call_at_return(context, dc, rb_tracearg_return_value(trace_arg));
+  }
+  else if (!NIL_P(breakpoints))
+  {
+    file = rb_tracearg_path(trace_arg);
+    /*
+     * TODO: Sometimes the TracePoint API gives some return events without
+     * file:line information, so we need to guard for nil until we know what's
+     * going on. This happens, for example, with active_support core extensions:
+     *
+     * [#7] call@.../core_ext/numeric/conversions.rb:124 Fixnum#to_s
+     *  [#7] b_call@.../core_ext/numeric/conversions.rb:124 BigDecimal#to_s
+     *   [#7] line@.../core_ext/numeric/conversions.rb:125 BigDecimal#to_s
+     *   [#7] c_call@.../core_ext/numeric/conversions.rb:125 Kernel#is_a?
+     *    [#7] c_return@.../core_ext/numeric/conversions.rb:125 Kernel#is_a?
+     *   [#7] line@.../core_ext/numeric/conversions.rb:131 BigDecimal#to_s
+     *   [#7] c_call@.../core_ext/numeric/conversions.rb:131 Fixnum#to_default_s
+     *    [#7] c_return@.../core_ext/numeric/conversions.rb:131 Fixnum#to_default_s
+     *   [#7] b_return@/hort/core_ext/numeric/conversions.rb:133 BigDecimal#to_s
+     *  [#7] return@:0 Fixnum#to_s # => This guy...
+     */
+    if (!NIL_P(file))
+    {
+      line = rb_tracearg_lineno(trace_arg);
+      binding = rb_tracearg_binding(trace_arg);
+
+      brkpnt = find_breakpoint_by_pos(breakpoints, file, line, binding);
+
+      if (!NIL_P(brkpnt))
+        call_at_return(context, dc, rb_tracearg_return_value(trace_arg));
+    }
   }
 
   RETURN_EVENT_TEARDOWN;

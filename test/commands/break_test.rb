@@ -175,10 +175,23 @@ module Byebug
       debug_code(program) { assert_empty Byebug.breakpoints }
     end
 
-    def test_stops_at_the_correct_place_when_a_breakpoint_is_set
+    def test_stops_at_correct_place_when_breakpoint_set_in_a_regular_line
       enter 'break 7', 'cont'
 
       debug_code(program) { assert_location example_path, 7 }
+    end
+
+    def test_stops_at_correct_place_when_breakpoint_set_at_method_return
+      enter 'break 10', 'cont'
+
+      debug_code(program) { assert_location example_path, 10 }
+    end
+
+    def test_shows_return_value_information_when_breakpoint_set_at_method_return
+      enter 'break 10', 'cont'
+      debug_code(program)
+
+      check_output_includes 'Return value is: 3'
     end
 
     def test_breaking_w_byebug_keyword_stops_at_the_next_line

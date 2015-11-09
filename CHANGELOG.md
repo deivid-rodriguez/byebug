@@ -5,6 +5,7 @@
 
 ### Added
 * Ability to autolist source code after `frame` command.
+* Ability to stop at lines where methods return.
 
 ## 8.0.1 - 2015-11-07
 ### Fixed
