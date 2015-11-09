@@ -58,24 +58,24 @@ module Byebug
   class ProcessorUnknownInputTest < TestCase
     def program
       strip_line_numbers <<-EOC
-         1:  module Byebug
-         2:    #
-         3:    # Toy class to test evaluation of unknown input
-         4:    #
-         5:    class #{example_class}
-         6:      def inspect
-         7:        'A very cool string representation'
-         8:      end
+         1: module Byebug
+         2:   #
+         3:   # Toy class to test evaluation of unknown input
+         4:   #
+         5:   class #{example_class}
+         6:     def inspect
+         7:       'A very cool string representation'
+         8:     end
          9:
-        10:      def to_s
-        11:        'A not so cool string representation'
-        12:      end
-        13:    end
+        10:     def to_s
+        11:       'A not so cool string representation'
+        12:     end
+        13:   end
         14:
-        15:    byebug
+        15:   byebug
         16:
-        17:    'Bye!'
-        18:  end
+        17:   'Bye!'
+        18: end
       EOC
     end
 
@@ -130,7 +130,7 @@ module Byebug
   class ProcessorAutocommandsTest < TestCase
     def program
       strip_line_numbers <<-EOC
-         1:  module Byebug
+         1: module Byebug
          2:   #
          3:   # Toy class to test subdebuggers inside evaluation prompt
          4:   #
@@ -143,7 +143,7 @@ module Byebug
         11:   #{example_class}.a
         12:
         13:   'Bye!'
-        14:  end
+        14: end
       EOC
     end
 
@@ -167,7 +167,7 @@ module Byebug
   class DebuggingEvaluationAndSubdebuggersTest < TestCase
     def program
       strip_line_numbers <<-EOC
-         1:  module Byebug
+         1: module Byebug
          2:   #
          3:   # Toy class to test subdebuggers inside evaluation prompt
          4:   #
@@ -180,7 +180,7 @@ module Byebug
         11:   byebug
         12:
         13:   'Bye!'
-        14:  end
+        14: end
       EOC
     end
 
