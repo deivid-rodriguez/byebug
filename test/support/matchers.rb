@@ -82,11 +82,10 @@ module Minitest
 
     def _includes_in_order(collection, original_collection)
       collection.each_with_index do |item, i|
+        current_collection = original_collection[i..-1]
         index = case item
-                when String
-                  original_collection[i..-1].index(item)
-                when Regexp
-                  original_collection[i..-1].index { |it| it =~ item }
+                when String then current_collection.index(item)
+                when Regexp then current_collection.index { |it| it =~ item }
                 end
 
         return false unless index
