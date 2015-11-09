@@ -279,14 +279,16 @@ line_event(VALUE trace_point, void *data)
 
   if (dc->steps == 0 || dc->lines == 0)
     call_at_line_check(context, dc, Qnil);
+  else
+  {
+    brkpnt = Qnil;
 
-  brkpnt = Qnil;
+    if (!NIL_P(breakpoints))
+      brkpnt = find_breakpoint_by_pos(breakpoints, file, line, binding);
 
-  if (!NIL_P(breakpoints))
-    brkpnt = find_breakpoint_by_pos(breakpoints, file, line, binding);
-
-  if (!NIL_P(brkpnt))
-    call_at_line_check(context, dc, brkpnt);
+    if (!NIL_P(brkpnt))
+      call_at_line_check(context, dc, brkpnt);
+  }
 
   EVENT_TEARDOWN;
 }
