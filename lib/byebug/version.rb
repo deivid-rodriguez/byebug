@@ -2,5 +2,5 @@
 # Reopen main module to define the library version
 #
 module Byebug
-  VERSION = '8.0.1'
+  VERSION = '8.1.0'
 end

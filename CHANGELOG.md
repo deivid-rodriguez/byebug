@@ -1,4 +1,6 @@
 ## Master (Unreleased)
+
+## 8.1.0 - 2015-11-09
 ### Fixed
 * Command history should be specific per project.
 * Better error message in certain edge cases when printing the backtrace.
