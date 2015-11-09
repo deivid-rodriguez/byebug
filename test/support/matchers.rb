@@ -56,14 +56,14 @@ module Minitest
       msg = message(msg) do
         "Expected #{mu_pp(original)} to include #{mu_pp(given)} in order"
       end
-      assert _includes_in_order(original, given), msg
+      assert _includes_in_order(given, original), msg
     end
 
     def refute_includes_in_order(given, original, msg = nil)
       msg = message(msg) do
         "Expected #{mu_pp(original)} to not include #{mu_pp(given)} in order"
       end
-      refute _includes_in_order(original, given), msg
+      refute _includes_in_order(given, original), msg
     end
 
     def assert_location(file, line)
@@ -80,7 +80,7 @@ module Minitest
 
     private
 
-    def _includes_in_order(original_collection, given_collection)
+    def _includes_in_order(given_collection, original_collection)
       given_collection.each_with_index do |given_item, i|
         index = case given_item
                 when String
