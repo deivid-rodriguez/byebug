@@ -3,6 +3,9 @@
 * Command history should be specific per project.
 * Better error message in certain edge cases when printing the backtrace.
 
+### Added
+* Ability to autolist source code after `frame` command.
+
 ## 8.0.1 - 2015-11-07
 ### Fixed
 * Error stream wouldn't be properly reset when using standalone `byebug`.

@@ -39,6 +39,24 @@ module Byebug
       debug_code(program) { assert_equal 7, frame.line }
     end
 
+    def test_frame_autolists_new_source_location_when_autolist_enabled
+      with_setting :autolist, true do
+        enter 'frame 2'
+        debug_code(program)
+
+        check_output_includes '=>  7:       @letter = encode(letter)'
+      end
+    end
+
+    def test_frame_does_not_autolist_new_source_location_when_autolist_disabled
+      with_setting :autolist, false do
+        enter 'frame 2'
+        debug_code(program)
+
+        check_output_doesnt_include '=>  7:       @letter = encode(letter)'
+      end
+    end
+
     def test_frame_prints_the_callstack_when_called_without_arguments
       enter 'up', 'frame'
       debug_code(program)

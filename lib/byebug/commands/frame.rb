@@ -48,6 +48,8 @@ module Byebug
       return errmsg(err) unless pos
 
       switch_to_frame(pos)
+
+      ListCommand.new(processor).execute if Setting[:autolist]
     end
   end
 end
