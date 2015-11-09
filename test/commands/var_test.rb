@@ -94,7 +94,7 @@ module Byebug
       enter 'break 15', 'cont', 'var local'
       debug_code(program)
 
-      check_output_includes 'level = 2', 'i = 1'
+      check_output_includes 'i = 1', 'level = 2'
     end
 
     def test_var_all_shows_all_variables

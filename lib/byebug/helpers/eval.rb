@@ -49,7 +49,7 @@ module Byebug
       private
 
       def safe_eval(str, binding)
-        binding.eval(str)
+        binding.eval(str, '(byebug)', 1)
       rescue StandardError, ScriptError => e
         yield(e)
       end

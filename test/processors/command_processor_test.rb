@@ -125,6 +125,48 @@ module Byebug
   end
 
   #
+  # Tests processor evaluation and breakpoints working together
+  #
+  class ProcessorEvaluationAndBreakpoints < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1: module Byebug
+         2:   #
+         3:   # Toy class to test subdebuggers inside evaluation prompt
+         4:   #
+         5:   class #{example_class}
+         6:     def self.m1
+         7:       m2
+         8:     end
+         9:
+        10:     def self.m2
+        11:       'm2'
+        12:     end
+        13:   end
+        14:
+        15:   byebug
+        16:
+        17:   #{example_class}.m1
+        18:
+        19:   'Bye!'
+        20: end
+      EOC
+    end
+
+    def test_does_not_show_incorrect_info_about_having_stopped_at_breakpoint
+      enter 'b 7', 'cont', 'm2'
+      debug_code(program)
+
+      # Regular breakpoint: OK
+      check_output_includes(/Stopped by breakpoint \d/)
+
+      # Incorrect info when evaluating something from command prompt
+      check_output_doesnt_include(/Stopped by breakpoint \d/,
+                                  /Stopped by breakpoint \d/)
+    end
+  end
+
+  #
   # Tests commands automatically run when control is returned back to user
   #
   class ProcessorAutocommandsTest < TestCase

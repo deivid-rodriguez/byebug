@@ -79,9 +79,9 @@ module Byebug
       enter 'cont 24', 'thread list', 'lock << 0'
       debug_code(program)
 
-      check_output_includes(/(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/,
-                            /(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/,
-                            /(\+)?\d+ #<Thread:0x\h+ (sleep|run)>/)
+      check_output_includes(/(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|run)>/,
+                            /(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|run)>/,
+                            /(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|run)>/)
     end
 
     def test_thread_stop_marks_thread_as_suspended

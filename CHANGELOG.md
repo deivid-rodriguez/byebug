@@ -2,6 +2,8 @@
 ### Fixed
 * Command history should be specific per project.
 * Better error message in certain edge cases when printing the backtrace.
+* Bug in evaluator which would show information about having stopped at a
+breakpoint in some cases.
 
 ### Added
 * Ability to autolist source code after `frame` command.
