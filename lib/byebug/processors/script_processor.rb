@@ -1,3 +1,5 @@
+require 'byebug/processors/command_processor'
+
 module Byebug
   #
   # Processes commands from a file
