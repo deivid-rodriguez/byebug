@@ -5,6 +5,17 @@ module Byebug
     #
     module EvalHelper
       #
+      # Evaluates an +expression+ in a separate thread.
+      #
+      # @param expression [String] Expression to evaluate
+      #
+      def separate_thread_eval(expression)
+        allowing_other_threads do
+          in_new_thread { warning_eval(expression) }
+        end
+      end
+
+      #
       # Evaluates an +expression+ that might use or defer execution to threads
       # other than the current one.
       #
@@ -76,12 +87,24 @@ module Byebug
       # will get blocked by byebug's main thread.
       #
       def allowing_other_threads
-        res = nil
         Byebug.unlock
+
+        res = yield
+
+        Byebug.lock
+
+        res
+      end
+
+      #
+      # Runs the given block in a new thread, waits for it to finish and
+      # returns the new thred's result.
+      #
+      def in_new_thread
+        res = nil
 
         Thread.new { res = yield }.join
 
-        Byebug.lock
         res
       end
 

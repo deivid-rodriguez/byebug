@@ -204,48 +204,6 @@ module Byebug
   end
 
   #
-  # Tests launching new debuggers from byebug's prompt
-  #
-  class DebuggingEvaluationAndSubdebuggersTest < TestCase
-    def program
-      strip_line_numbers <<-EOC
-         1: module Byebug
-         2:   #
-         3:   # Toy class to test subdebuggers inside evaluation prompt
-         4:   #
-         5:   class #{example_class}
-         6:     def self.a
-         7:       byebug
-         8:     end
-         9:   end
-        10:
-        11:   byebug
-        12:
-        13:   'Bye!'
-        14: end
-      EOC
-    end
-
-    def test_subdebugger_stops_at_correct_point_when_invoked_through_byebug_call
-      enter "#{example_class}.a"
-
-      debug_code(program) { assert_equal 8, frame.line }
-    end
-
-    def test_subdebugger_stops_at_correct_point_when_invoked_from_breakpoint
-      enter "break #{example_class}.a", "#{example_class}.a"
-
-      debug_code(program) { assert_equal 6, frame.line }
-    end
-
-    def test_subdebugger_goes_back_to_previous_debugger_after_continue
-      enter "#{example_class}.a", 'continue'
-
-      debug_code(program) { assert_equal 13, frame.line }
-    end
-  end
-
-  #
   # Tests evaluation in threaded programs.
   #
   class ProcessorEvaluationAndThreadsTest < TestCase
@@ -315,6 +273,14 @@ module Byebug
       debug_code(program)
 
       check_output_includes '100'
+    end
+
+    def test_thread_context_is_kept
+      enter 'Thread.current[:greeting] = "hi!"', 'Thread.current[:greeting]'
+      debug_code(minimal_program)
+
+      check_output_includes '"hi!"', # After set
+                            '"hi!"' # After set
     end
   end
 end

@@ -86,6 +86,7 @@ are debugging rails, start the server and once the execution gets to your
     `condition` |              |
     `continue`  |              |
     `delete`    |              |
+    `debug`     |              |
     `disable`   |              | `breakpoints` `display`
     `display`   |              |
     `down`      |              |
