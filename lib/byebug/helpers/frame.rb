@@ -51,7 +51,7 @@ module Byebug
       end
 
       #
-      # @param [Integer] A positive or negative integer
+      # @param step [Integer] A positive or negative integer
       #
       # @return [Integer] +1 if step is positive / -1 if negative
       #
@@ -63,7 +63,7 @@ module Byebug
       # Convert a possibly negative index to a positive index from the start
       # of the callstack. -1 is the last position in the stack and so on.
       #
-      # @param [Integer] Integer to be converted in a proper positive index.
+      # @param i [Integer] Integer to be converted in a proper positive index.
       #
       def index_from_start(i)
         i >= 0 ? i : context.stack_size + i

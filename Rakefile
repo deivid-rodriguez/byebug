@@ -53,3 +53,9 @@ task default: %i(compile test overcommit)
 # Custom tasks for development
 #
 require_relative 'tasks/dev_utils.rb'
+
+#
+# Generate docs
+#
+require 'yard'
+YARD::Rake::YardocTask.new

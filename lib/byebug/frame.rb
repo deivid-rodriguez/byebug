@@ -47,7 +47,8 @@ module Byebug
     #
     # Gets local variables for the frame.
     #
-    # TODO: Use brand new local_variable_{get,set,defined?} for rubies >= 2.1
+    # TODO: Use brand new local_variable_get, local_variable_set and
+    # local_variable defined for rubies >= 2.1
     #
     def locals
       return [] unless _binding

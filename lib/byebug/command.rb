@@ -8,7 +8,7 @@ module Byebug
   # Subclass it and name the subclass ending with the word Command to implement
   # your own custom command.
   #
-  # @example
+  # @example Define a custom command
   #
   # class MyCustomCommand < Command
   #   def self.regexp

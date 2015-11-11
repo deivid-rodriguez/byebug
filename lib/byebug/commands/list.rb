@@ -155,7 +155,7 @@ module Byebug
     end
 
     #
-    # @param range [String] A string with an integer range format
+    # @param str [String] A string with an integer range format
     #
     # @return [Array] The upper & lower bounds of the given range
     #

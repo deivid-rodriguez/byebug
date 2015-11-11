@@ -4,6 +4,7 @@
 tmp
 pkg
 doc
+.yardoc
 coverage
 
 .gdb_history

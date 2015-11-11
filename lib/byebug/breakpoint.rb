@@ -33,7 +33,7 @@ module Byebug
     #
     # Removes a breakpoint
     #
-    # @param [integer] breakpoint number
+    # @param id [integer] breakpoint number
     #
     def self.remove(id)
       Byebug.breakpoints.reject! { |b| b.id == id }
