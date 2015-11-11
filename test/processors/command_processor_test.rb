@@ -280,7 +280,7 @@ module Byebug
       debug_code(minimal_program)
 
       check_output_includes '"hi!"', # After set
-                            '"hi!"' # After set
+                            '"hi!"' # After get
     end
   end
 end
