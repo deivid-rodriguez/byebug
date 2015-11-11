@@ -10,16 +10,7 @@ module Byebug
       # @param expression [String] Expression to evaluate
       #
       def thread_safe_eval(expression)
-        allowing_other_threads { single_thread_eval(expression) }
-      end
-
-      #
-      # Evaluates an +expression+ that doesn't deal with threads
-      #
-      # @param expression [String] Expression to evaluate
-      #
-      def single_thread_eval(expression)
-        warning_eval(expression)
+        allowing_other_threads { warning_eval(expression) }
       end
 
       #

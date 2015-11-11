@@ -25,7 +25,7 @@ module Byebug
       end
 
       def var_instance(str)
-        obj = single_thread_eval(str || 'self')
+        obj = warning_eval(str || 'self')
 
         var_list(obj.instance_variables, obj.instance_eval { binding })
       end

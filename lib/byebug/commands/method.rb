@@ -33,7 +33,7 @@ module Byebug
     end
 
     def execute
-      obj = single_thread_eval(@match.post_match)
+      obj = warning_eval(@match.post_match)
 
       result =
         if @match[1]

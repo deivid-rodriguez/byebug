@@ -55,7 +55,7 @@ module Byebug
     end
 
     def add(exception)
-      if single_thread_eval("#{exception.is_a?(Class)}")
+      if warning_eval("#{exception.is_a?(Class)}")
         errmsg pr('catch.errors.not_class', class: exception)
       end
 

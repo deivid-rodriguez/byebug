@@ -30,12 +30,12 @@ module Byebug
       end
 
       def execute
-        obj = single_thread_eval(str_obj)
+        obj = warning_eval(str_obj)
         unless obj.is_a?(Module)
           return errmsg(pr('variable.errors.not_module', object: str_obj))
         end
 
-        constants = single_thread_eval("#{str_obj}.constants")
+        constants = warning_eval("#{str_obj}.constants")
         puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
       end
 
