@@ -161,7 +161,7 @@ module Byebug
         command = command_list.match(input)
         return command.new(self, input).execute if command
 
-        puts safe_inspect(thread_safe_eval(input))
+        puts safe_inspect(multiple_thread_eval(input))
       end
     end
 

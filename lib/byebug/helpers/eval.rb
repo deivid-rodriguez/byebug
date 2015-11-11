@@ -5,11 +5,16 @@ module Byebug
     #
     module EvalHelper
       #
-      # Evaluates +expression+ that might manipulate threads
+      # Evaluates an +expression+ that might use or defer execution to threads
+      # other than the current one.
+      #
+      # @note This is necessary because when in byebug's prompt, every thread is
+      # "frozen" so that nothing gets run. So we need to unlock threads prior
+      # to evaluation or we will run into a deadlock.
       #
       # @param expression [String] Expression to evaluate
       #
-      def thread_safe_eval(expression)
+      def multiple_thread_eval(expression)
         allowing_other_threads { warning_eval(expression) }
       end
 
