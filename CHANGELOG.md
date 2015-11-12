@@ -1,5 +1,15 @@
 ## Master (Unreleased)
 
+## 8.2.0 - 2015-11-12
+### Fixed
+* [#184](https://github.com/deivid-rodriguez/byebug/issues/184) &
+[#188](https://github.com/deivid-rodriguez/byebug/issues/188), both due
+to the way of running evaluations in a separate thread.
+
+### Added
+* `debug` command to evaluate things in a separate thread, since this behavior
+was removed from default `eval` to fix the above issues.
+
 ## 8.1.0 - 2015-11-09
 ### Fixed
 * Command history should be specific per project.
