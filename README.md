@@ -31,7 +31,7 @@ and offers many of the traditional debugging features such as:
 * Stepping: Running your program one line at a time.
 * Breaking: Pausing the program at some event or specified instruction, to
 examine the current state.
-* Evaluating: Basic REPL functionality, although [pry][] does a better job at
+* Evaluating: Basic REPL functionality, although [pry] does a better job at
 that.
 * Tracking: Keeping track of the different values of your variables or the
 different lines executed by your program.
@@ -53,7 +53,7 @@ Windows [![Vey][vey]][vey_url]
 ## Requirements
 
 * Required: MRI 2.0.0 or higher. For debugging ruby 1.9.3 or older, use
-[debugger][].
+[debugger].
 
 * Recommended:
   - MRI 2.1.7 or higher.
@@ -121,7 +121,7 @@ are debugging rails, start the server and once the execution gets to your
 
 Byebug tries to follow [semantic versioning](http://semver.org) and tries to
 bump major version only when backwards incompatible changes are released.
-Backwards compatibility is targeted to [pry-byebug][] and any other plugins
+Backwards compatibility is targeted to [pry-byebug] and any other plugins
 relying on `byebug`.
 
 
@@ -134,12 +134,12 @@ started. Proper documentation will be eventually written.
 
 ## Related projects
 
-* [pry-byebug][] adds `next`, `step`, `finish`, `continue` and `break` commands
+* [pry-byebug] adds `next`, `step`, `finish`, `continue` and `break` commands
 to `pry` using `byebug`.
-* [ruby-debug-passenger][] adds a rake task that restarts Passenger with Byebug
+* [ruby-debug-passenger] adds a rake task that restarts Passenger with Byebug
 connected.
-* [minitest-byebug][] starts a byebug session on minitest failures.
-* [sublime_debugger][] provides a plugin for ruby debugging on Sublime Text.
+* [minitest-byebug] starts a byebug session on minitest failures.
+* [sublime_debugger] provides a plugin for ruby debugging on Sublime Text.
 
 
 ## Contribute
@@ -153,8 +153,8 @@ Everybody who has ever contributed to this forked and reforked piece of
 software, especially:
 
 * @ko1, author of the awesome TracePoint API for Ruby.
-* @cldwalker, [debugger][]'s maintainer.
-* @denofevil, author of [debase][], the starting point of this.
+* @cldwalker, [debugger]'s maintainer.
+* @denofevil, author of [debase], the starting point of this.
 * @kevjames3 for testing, bug reports and the interest in the project.
 * @FooBarWidget for working and helping with remote debugging.
 
