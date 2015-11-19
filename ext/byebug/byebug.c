@@ -630,7 +630,7 @@ Started(VALUE self)
 {
   UNUSED(self);
 
-  return IS_STARTED;
+  return IS_STARTED ? Qtrue : Qfalse;
 }
 
 /*
