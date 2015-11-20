@@ -1418,7 +1418,7 @@ command.
 Byebug uses readline, which handles line editing and retrieval of previous commands.
 Up arrow, for example, moves to the previous byebug command; down arrow moves to the
 next more recent command (provided you are not already at the last command). Command
-history is saved in file `.byebug_hist`. A limit is put on the history size. You
+history is saved in file `.byebug_history`. A limit is put on the history size. You
 can see this with the `show history size` command. See [history]() for history
 parameters.
 
