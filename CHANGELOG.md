@@ -1,4 +1,6 @@
 ## Master (Unreleased)
+
+## 8.2.1 - 2015-11-26
 ### Fixed
 * Bug in evaluations using "eval.
 
