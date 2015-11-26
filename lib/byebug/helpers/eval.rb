@@ -56,7 +56,7 @@ module Byebug
       private
 
       def safe_eval(str, binding)
-        binding.eval(str, '(byebug)', 1)
+        binding.eval(str.gsub(/\Aeval /, ''), '(byebug)', 1)
       rescue StandardError, ScriptError => e
         yield(e)
       end

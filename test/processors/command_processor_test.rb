@@ -100,6 +100,13 @@ module Byebug
       check_output_includes '[1, 2, 3]'
     end
 
+    def test_eval_evaluates_just_like_without_it
+      enter 's = "something"', 'eval "s is #{s}"'
+      debug_code(minimal_program)
+
+      check_output_includes '"s is something"'
+    end
+
     def test_evaluation_results_on_unknown_input_prefer_inspect_over_to_s
       enter "#{example_class}.new"
       debug_code(program)
