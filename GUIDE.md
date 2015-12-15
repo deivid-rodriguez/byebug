@@ -1354,7 +1354,7 @@ program that you want to debug (In Rails, the
 `config/environments/development.rb` could be a good candidate).
 
 ```ruby
-  require 'byebug'
+  require 'byebug/core'
   Byebug.wait_connection = true
   Byebug.start_server('localhost', <port>)
 ```
