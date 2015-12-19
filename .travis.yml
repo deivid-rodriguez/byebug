@@ -8,13 +8,6 @@ os:
 
 language: ruby
 
-before_install:
-  - rvm get head
-  - if [ ! $TRAVIS_RUBY_VERSION = '2.3.0' ]; then
-      rvm reinstall $TRAVIS_RUBY_VERSION --patch
-        https://github.com/ruby/ruby/commit/2d4bc584eef5dcd11dbae4c92fe8b.patch;
-    fi
-
 install:
   - gem update --system --no-document || test true
   - gem install bundler --no-document || test true
@@ -32,8 +25,8 @@ script:
 
 rvm:
   - 2.0.0
-  - 2.1.7
-  - 2.2.3
+  - 2.1.8
+  - 2.2.4
   - ruby-head
 
 env:
