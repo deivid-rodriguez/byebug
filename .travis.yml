@@ -37,6 +37,10 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: 2.0.0
+    - os: osx
+      rvm: 2.1.8
+    - os: osx
+      rvm: 2.2.4
 
   fast_finish: true
 
