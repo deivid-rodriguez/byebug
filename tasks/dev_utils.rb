@@ -41,11 +41,11 @@ class LoopRunner
 end
 
 #
-# @example Tun tests 8 times for each Ruby in 2.1 and 2.2
+# @example Tun tests 8 times for each supported Ruby
 #
 #   $ rake loop_tests
 #
-# @example Run tests 1 time for each Ruby in 2.1 and 2.2
+# @example Run tests 1 time for each supported Ruby
 #
 #   $ TIMES=1 rake loop_tests
 #
@@ -55,7 +55,7 @@ end
 #
 # @example Run tests 1 time using Ruby 2.0 and rvm
 #
-#   $ MANAGER=rvm TIMES=1 RUBIES=2.0,2.1 rake loop_tests
+#   $ MANAGER=rvm TIMES=1 RUBIES=2.0 rake loop_tests
 #
 desc 'Runs tests continuously'
 task :loop_tests do
