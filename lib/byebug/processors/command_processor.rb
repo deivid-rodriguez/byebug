@@ -43,7 +43,7 @@ module Byebug
 
     def_delegators :interface, :errmsg, :puts, :confirm
 
-    def_delegators Byebug, :commands
+    def_delegators :Byebug, :commands
 
     #
     # Available commands
