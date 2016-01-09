@@ -14,7 +14,7 @@ before_script:
   - git config --local user.name 'Travis CI'
 
 script:
-  - bundle exec rake clobber compile test sign_hooks overcommit
+  - SKIP=ShellCheck bundle exec rake clobber compile test sign_hooks overcommit
 
 rvm:
   - 2.0.0
