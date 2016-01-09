@@ -42,6 +42,8 @@ matrix:
       rvm: 2.1.8
     - os: osx
       rvm: 2.2.4
+    - os: osx
+      rvm: 2.3.0
 
   fast_finish: true
 
