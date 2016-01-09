@@ -15,7 +15,7 @@
 [gem_url]: https://rubygems.org/gems/byebug
 [gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[tip_url]: https://www.gittip.com/deivid-rodriguez
+[tip_url]: https://gratipay.com/~deivid-rodriguez
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
 _Debugging in Ruby 2_
