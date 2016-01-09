@@ -52,7 +52,7 @@ module Byebug
       def find(shortcut)
         abbr = shortcut =~ /^no/ ? shortcut[2..-1] : shortcut
         matches = settings.select do |key, value|
-          value.boolean? ? key =~ /#{abbr}/ : key =~ /#{shortcut}/
+          key =~ (value.boolean? ? /#{abbr}/ : /#{shortcut}/)
         end
         matches.size == 1 ? matches.values.first : nil
       end
