@@ -2,7 +2,7 @@
 
 ## 8.2.1 - 2015-11-26
 ### Fixed
-* Bug in evaluations using "eval.
+* Bug in evaluations using "eval".
 
 ## 8.2.0 - 2015-11-12
 ### Fixed
