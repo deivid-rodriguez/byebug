@@ -65,7 +65,7 @@ module Byebug
     end
 
     def valid_range?(first, last, max)
-      first <= last && (1..max).include?(first) && (1..max).include?(last)
+      first <= last && (1..max).cover?(first) && (1..max).cover?(last)
     end
 
     #
@@ -127,14 +127,12 @@ module Byebug
 
       File.foreach(frame.file).with_index do |line, lineno|
         break if lineno + 1 > max
-        next unless (min..max).include?(lineno + 1)
+        next unless (min..max).cover?(lineno + 1)
 
         mark = lineno + 1 == frame.line ? '=> ' : '   '
         puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
       end
     end
-
-    private
 
     #
     # @param range [String] A string with an integer range format

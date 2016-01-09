@@ -43,7 +43,7 @@ module Byebug
       end
 
       def out_of_bounds?(pos)
-        !(0...context.stack_size).include?(pos)
+        !(0...context.stack_size).cover?(pos)
       end
 
       def frame_err(msg)

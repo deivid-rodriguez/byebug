@@ -30,5 +30,5 @@ module Kernel
     Byebug.attach
   end
 
-  alias_method :debugger, :byebug
+  alias debugger byebug
 end

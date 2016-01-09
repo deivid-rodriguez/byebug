@@ -51,10 +51,10 @@ module Byebug
         end
       end
 
-      def array_of_args(collection, &block)
+      def array_of_args(collection, &_block)
         collection_with_index = collection.each.with_index
         collection_with_index.each_with_object([]) do |(item, index), array|
-          args = block.call(item, index)
+          args = yield item, index
           array << args if args
         end
       end
