@@ -2,10 +2,6 @@
 
 sudo: false
 
-os:
-  - linux
-  - osx
-
 language: ruby
 
 install:
@@ -18,10 +14,7 @@ before_script:
   - git config --local user.name 'Travis CI'
 
 script:
-  - bundle exec rake clobber compile test
-  - if [ $TRAVIS_OS_NAME = linux ]; then
-      bundle exec rake sign_hooks overcommit;
-    fi
+  - bundle exec rake clobber compile test sign_hooks overcommit
 
 rvm:
   - 2.0.0
@@ -38,12 +31,6 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: 2.0.0
-    - os: osx
-      rvm: 2.1.8
-    - os: osx
-      rvm: 2.2.4
-    - os: osx
-      rvm: 2.3.0
 
   fast_finish: true
 
