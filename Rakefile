@@ -45,6 +45,7 @@ end
 desc 'Sign overcommit hooks'
 task :sign_hooks do
   system('bundle exec overcommit --sign')
+  system('bundle exec overcommit --sign pre-commit')
 end
 
 task default: %i(compile test overcommit)
