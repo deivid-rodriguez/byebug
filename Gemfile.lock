@@ -1,10 +1,8 @@
 GIT
   remote: git://github.com/travis-ci/travis.rb.git
-  revision: 67ceb99d045be341090c971ecb54fa7aa3e1cf1b
-  ref: 67ceb99d045b
+  revision: 998b0d67917f65fbcfca8bb52ebf2f9ca074d3dc
   specs:
-    travis (1.8.0)
-      addressable (~> 2.3)
+    travis (1.8.1)
       backports
       faraday (~> 0.9)
       faraday_middleware (~> 0.9, >= 0.9.1)
