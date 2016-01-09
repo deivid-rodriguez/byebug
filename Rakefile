@@ -39,7 +39,7 @@ end
 
 desc 'Run overcommit hooks manually'
 task :overcommit do
-  system('bundle exec overcommit --run')
+  exit 1 unless system('bundle exec overcommit --run')
 end
 
 desc 'Sign overcommit hooks'
