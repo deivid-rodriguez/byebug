@@ -26,6 +26,8 @@ class LoopRunner
       run_command(version, 'bundle exec rake clobber compile')
 
       @iterations.times { run_command(version, 'bundle exec rake test') }
+
+      run_command(version, 'bundle exec rake sign_hooks overcommit')
     end
   end
 
