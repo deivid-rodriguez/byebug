@@ -2,6 +2,10 @@
 
 sudo: false
 
+cache:
+  directories:
+    - vendor/bundle
+
 language: ruby
 
 install:
