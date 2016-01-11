@@ -409,7 +409,7 @@ Context_step_into(int argc, VALUE * argv, VALUE self)
   n_args = rb_scan_args(argc, argv, "11", &steps, &v_frame);
 
   if (FIX2INT(steps) <= 0)
-    rb_raise(rb_eRuntimeError, "Steps argument can't be negative.");
+    rb_raise(rb_eRuntimeError, "Steps argument must be positive.");
 
   from_frame = n_args == 1 ? 0 : FIX2INT(v_frame);
 
