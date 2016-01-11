@@ -18,7 +18,7 @@ before_script:
   - git config --local user.name 'Travis CI'
 
 script:
-  - SKIP=ShellCheck bundle exec rake clobber compile test sign_hooks overcommit
+  - bundle exec rake clobber compile test sign_hooks overcommit
 
 rvm:
   - 2.0.0
@@ -42,8 +42,6 @@ addons:
   code_climate:
     repo_token: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
   apt:
-    sources:
-      - debian-sid
     packages:
       - indent
       - shellcheck
