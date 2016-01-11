@@ -9,7 +9,7 @@ module Byebug
       class MissedPath < StandardError; end
       class MissedArgument < StandardError; end
 
-      SEPARATOR = '.'
+      SEPARATOR = '.'.freeze
 
       def type
         self.class.name.split('::').last.downcase

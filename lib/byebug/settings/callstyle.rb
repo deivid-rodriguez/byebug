@@ -5,7 +5,7 @@ module Byebug
   # Setting to customize the verbosity level for stack frames.
   #
   class CallstyleSetting < Setting
-    DEFAULT = 'long'
+    DEFAULT = 'long'.freeze
 
     def banner
       'Set how you want method call parameters to be displayed'
