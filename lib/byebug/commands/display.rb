@@ -19,7 +19,7 @@ module Byebug
       <<-EOD
         disp[lay][ <expression>]
 
-        #{short_descripton}
+        #{short_description}
 
         If <expression> specified, adds <expression> into display expression
         list. Otherwise, it lists all expressions.
