@@ -61,7 +61,7 @@ GEM
       json
       websocket (~> 1.0)
     rainbow (2.0.0)
-    rake (10.4.2)
+    rake (10.5.0)
     rake-compiler (0.9.5)
       rake
     rubocop (0.36.0)
