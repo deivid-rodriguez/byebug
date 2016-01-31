@@ -1,4 +1,4 @@
-# Byebug. _Debugging in Ruby 2_
+# Byebug
 
 [![Version][gem]][gem_url]
 [![Quality][gpa]][gpa_url]
