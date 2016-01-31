@@ -14,24 +14,24 @@ was making heavy use of my own tool too).
 The main features supported by Byebug are:
 
 * Breaking. Pause the program at some event or specified instruction, to examine
-the current state. Related commands: `break`, `catch`, `condition`, `delete`,
-`enable`, `disable`.
+  the current state. Related commands: `break`, `catch`, `condition`, `delete`,
+  `enable`, `disable`.
 
 * Analyzing. Studying program status at a certain point during its execution
-(including right after termination). Specifically, we can:
-  - Inspect and move around the backtrace (`backtrace`, `up`, `down` and
+  (including right after termination). Specifically, we can:
+  * Inspect and move around the backtrace (`backtrace`, `up`, `down` and
     `frame` commands).
-  - Have a basic REPL functionality, evaluating custom code (`eval`, `irb`,
+  * Have a basic REPL functionality, evaluating custom code (`eval`, `irb`,
     `pry`, `method`, `pp`, `ps`, `putl`, `var` commands).
-  - Look and change the program's source code (`edit`, `list`, `info` commands).
+  * Look and change the program's source code (`edit`, `list`, `info` commands).
 
 * Stepping: Running your program one line or instruction at a time, or until
-specific points in the program are reached. Related commands: `step`, `next`,
-`continue`, `finish`, `kill`, `quit`, `restart`.
+  specific points in the program are reached. Related commands: `step`, `next`,
+  `continue`, `finish`, `kill`, `quit`, `restart`.
 
 * Tracking: Keeping track of the different values of your variables or the
-different lines executed by your program. Related commands: `display`,
-`undisplay`, `tracevar`, `untracevar`, `set linetrace`.
+  different lines executed by your program. Related commands: `display`,
+  `undisplay`, `tracevar`, `untracevar`, `set linetrace`.
 
 This features have been working very well as long as the debugged program would
 have no multiple Ruby threads, but would just not work when the program would
@@ -43,14 +43,13 @@ them (for example, `capybara-webkit` or Ruby's stdlib `Timeout` module).
 So Byebug needed a way to debug multithreaded programs that was both:
 
 * Reliable: no deadlock, no killed threads when they are not related to user's
-code.
+  code.
 
 * Useful: allow debugging issues with multithreaded programs. To do that, we
-would need to provide the user with the ability to stop/resume specific threads,
-list active threads and switch between threads.
+  would need to provide the user with the ability to stop/resume specific threads,
+  list active threads and switch between threads.
 
 This is what this grant is about.
-
 
 ## The feature
 
@@ -68,45 +67,44 @@ for details.
 The feature is also fully tested. You can clone _byebug_'s repo and then run
 
 ```shell
-    bundle install # Install dependencies
-    rake compile # Compile the C-extension
-    ruby -w -Ilib test/test_helper.rb test/commands/thread_test.rb
+bundle install # Install dependencies
+rake compile # Compile the C-extension
+ruby -w -Ilib test/test_helper.rb test/commands/thread_test.rb
 ```
 
 This is the list of available commands and a short explanation of its usage:
 
 * _thread list_: Lists threads. This is equivalent to Ruby's `Thread.list`, but
-it has the following format:
-  - A mark '+' for the current thread.
-  - A mark '$' for a stopped thread.
-  - An internal `id` for the thread, specific to Byebug.
-  - Ruby's id and status for the thread, in the format
+  it has the following format:
+  * A mark '+' for the current thread.
+  * A mark '$' for a stopped thread.
+  * An internal `id` for the thread, specific to Byebug.
+  * Ruby's id and status for the thread, in the format
     `#<Thread:0x0123456789ABCD (run|sleep)>`. In Ruby 2.2.x, also the file and
     line number where the thread is defined are included. This feature is very
     useful to correctly identify threads, because otherwise the only way to tell
     which thread is which is from the order they are defined.
-  - Current file and line number location of the thread's execution, in the
+  * Current file and line number location of the thread's execution, in the
     format `file:line`.
 
 * _thread current_: Shows the `thread list` entry for the current thread, just
-like the `frame` command shows the current frame whereas the `backtrace`
-command shows the whole backtrace.
+  like the `frame` command shows the current frame whereas the `backtrace`
+  command shows the whole backtrace.
 
 * _thread stop_: Allows the user to temporarily stop the execution of a thread.
-This is useful when we want to focus on debugging specific threads and want to
-make sure some other thread stays unchanged, or if we want our main thread to
-"wait for us" and don't finish until we tell it to.
+  This is useful when we want to focus on debugging specific threads and want to
+  make sure some other thread stays unchanged, or if we want our main thread to
+  "wait for us" and don't finish until we tell it to.
 
 * _thread resume_: Allows resuming threads previously stopped with `thread
-stop`. It can be used to resume normal program execution, once we've introduced
-a change that could fix our issue, for example.
+  stop`. It can be used to resume normal program execution, once we've
+  introduced a change that could fix our issue, for example.
 
 * _thread switch_: Switches current thread and context to another thread. After
-issuing this command, execution will be stopped in a different place in the
-source code and we'll get a different backtrace. The target thread can't be in
-the sleeping state so we might have to issue the `thread resume` command before
-running this command.
-
+  issuing this command, execution will be stopped in a different place in the
+  source code and we'll get a different backtrace. The target thread can't be in
+  the sleeping state so we might have to issue the `thread resume` command before
+  running this command.
 
 ## The implementation
 
@@ -138,7 +136,6 @@ Byebug such as not cleaning the threads table for every event but only every
 bottleneck anymore. Nevertheless, I've tried latest byebug with some Rails apps
 and haven't noticed any performance issues.
 
-
 ### Thread syncronization
 
 The biggest challenge of implementing threading in Byebug has been this one.
@@ -153,14 +150,14 @@ At the beginning of the processing of every event, we call the `acquire_lock`
 method that will either:
 
 * Obtain the global lock if it's free (or the current thread already has
-it because the previous event was also from the same thread). In this case, the
-event is processed normally.
+  it because the previous event was also from the same thread). In this case, the
+  event is processed normally.
 * Go to sleep and pass execution on to another thread if the lock is currently
-being hold by another thread. Notice that we need to specifically call
-`rb_thread_stop` here because C-extensions are not preemptive in the sense that
-the scheduler won't automatically switch thread execution while in a
-C-extension just like it does when running "regular Ruby code". So if we don't
-call `rb_thread_stop`, the execution will just deadlock here.
+  being hold by another thread. Notice that we need to specifically call
+  `rb_thread_stop` here because C-extensions are not preemptive in the sense that
+  the scheduler won't automatically switch thread execution while in a
+  C-extension just like it does when running "regular Ruby code". So if we don't
+  call `rb_thread_stop`, the execution will just deadlock here.
 
 At the end of the processing of every event, we call the `release_lock` method
 that will release the lock and pass on the execution to another thread (that

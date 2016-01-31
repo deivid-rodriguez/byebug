@@ -44,6 +44,10 @@ PreCommit:
   LocalPathsInGemfile:
     enabled: true
 
+  Mdl:
+    enabled: true
+    flags: ['-c', '.mdlrc']
+
   RuboCop:
     enabled: true
 

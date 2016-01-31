@@ -161,7 +161,6 @@ So far, so good. As you can see from the above, to get out of `byebug`, one
 can issue a `quit` command (or the abbreviation `q`). If you want to quit
 without being prompted, suffix the command with an exclamation mark, e.g., `q!`.
 
-
 ### Second Sample Session: Delving Deeper
 
 In this section we'll introduce breakpoints, the call stack and restarting.
@@ -186,10 +185,9 @@ n_args = $ARGV.length
 fail('*** Need number of disks or no parameter') if n_args > 1
 ```
 
-Recall in the first section it was stated that before the `def` is run, the method it
-names is undefined. Let's check that out. First let's see what private methods
-we can call before running `def hanoi`.
-
+Recall in the first section it was stated that before the `def` is run, the
+method it names is undefined. Let's check that out. First let's see what
+private methods we can call before running `def hanoi`.
 
 ```bash
 $ byebug path/to/hanoi.rb
@@ -475,7 +473,6 @@ I can change to the top-most frame by using the `frame 2` command. Notice that
 inside frame #2, the value of `n_args` can be shown. Also note that the value of
 variable `n` is different.
 
-
 ### Attaching to a running program with `byebug`
 
 In the previous sessions we've been calling byebug right at the outset, but
@@ -545,7 +542,6 @@ Run options: --seed 31679
 
 # Running:
 
-
 [2, 11] in test_triangle.rb
     2: require_relative 'triangle.rb'
     3:
@@ -595,7 +591,6 @@ Displaying frame's full file names is off.
 ```
 
 We get the same result as if we had run byebug from the outset.
-
 
 ### Debugging Oddities: How debugging Ruby may be different from other languages
 
@@ -709,7 +704,6 @@ Tracing: primes.rb:12     not_prime = false
 The loop between lines 31-34 gets interleaved between those of
 `SievePrime#next_prime`, lines 9-28 above.
 
-
 #### No Parameter Values in a Call Stack
 
 In traditional debuggers, in a call stack you can generally see the names of the
@@ -726,7 +720,6 @@ object can change.
 So at present, the name of the parameter is shown. The call-style setting
 ([callstyle]()) can be used to set whether the name is shown or the name and the
 _current_ class of the object.
-
 
 #### Lines You Can Stop At
 
@@ -745,7 +738,6 @@ The stopping points that Ruby records are the last two lines, lines 5 and 6.
 
 Inside `byebug` you can get a list of stoppable lines for a file using the `info
 file` command.
-
 
 ### Threading support
 
@@ -824,7 +816,7 @@ employee represented by 2 threads: they work concurrently to achieve the
 company's targets.
 
 * The employee looks for tasks to complete. If there are tasks, it works hard to
-complete them. Otherwise he has a quick break.
+  complete them. Otherwise he has a quick break.
 
 ```ruby
 #
@@ -842,7 +834,7 @@ end
 ```
 
 * The manager, on the other hand, sits there all day and sporadically checks
-whether there are any results to show off.
+  whether there are any results to show off.
 
 ```ruby
 #
@@ -1153,10 +1145,10 @@ in the `employee_routine` method with the line
 ```
 
 To be continued...
+
 * More complex examples with objects, pretty printing and irb.
 * Line tracing and non-interactive tracing.
 * Post-mortem debugging.
-
 
 ## Getting in & out
 
@@ -1196,17 +1188,15 @@ letter option name, such as `-h`. The list of options is detailed below:
 
 It causes `byebug` to print some basic help and exit.
 
-
 #### -v | --version
 
 It causes `byebug` to print its version number and exit.
-
 
 #### -d | --debug
 
 Sets `$DEBUG` to `true`. Compatible with Ruby's flag.
 
-#### -I | --include <path>
+#### -I | --include path
 
 Adds `path` to load path. `path` can be a single path or a colon separated path
 list.
@@ -1227,7 +1217,7 @@ Normally `byebug` stops before executing the first statement. If instead you
 want it to start running initially and perhaps break it later in the execution,
 use this option.
 
-#### -r | --require <lib>
+#### -r | --require lib
 
 Requires the library before executing the script.  This option is compatible
 with Ruby's.
@@ -1269,15 +1259,14 @@ When you start `byebug`, it automatically executes commands from its
 _init file_, called `.byebugrc`. During startup, `byebug` does the following:
 
 * __Processes command line options and operands.__ Reads the init file in your
-current directory, if any, and then checks your home directory. The home
-directory is the directory named in the `$HOME` or `$HOMEPATH` environment
-variable. Thus, you can have more than one init file, one generic in your home
-directory, and another, specific to the program you are debugging, in the
-directory where you invoke `byebug`.
+  current directory, if any, and then checks your home directory. The home
+  directory is the directory named in the `$HOME` or `$HOMEPATH` environment
+  variable. Thus, you can have more than one init file, one generic in your home
+  directory, and another, specific to the program you are debugging, in the
+  directory where you invoke `byebug`.
 
 You can also request the execution of a command file with the `source` command
 (see [Source]()).
-
 
 ### Quitting byebug
 
@@ -1289,7 +1278,6 @@ unconditionally` (abbreviated to `q!`).
 Another way to terminate byebug is to use the `kill` command. This does the
 more forceful `kill -9`. It can be used in cases where `quit` doesn't work (I
 haven't seen those yet).
-
 
 ### Calling byebug from inside your program
 
@@ -1342,7 +1330,6 @@ inside your program or invoked as a result of post-mortem handling.
 Also, since this relies on the OS `exec` call, this command is available only if
 your OS supports `exec`.
 
-
 ## Debugging remote programs
 
 It is possible to set up debugging so that you can issue byebug commands from
@@ -1371,10 +1358,10 @@ want to debug, add a call to `byebug` as was done without remote execution:
    some ruby code  # byebug will stop before this line is run
 ```
 
-
 ## Byebug Command Reference
 
 ### Command Syntax
+
 Usually a command is put on a single line. There is no limit on how long it can
 be. It starts with a command name, which is followed by arguments whose meaning
 depends on the command name. For example, the command `step` accepts an
@@ -1415,27 +1402,28 @@ won't have to escape semicolons.
 A blank line as input (typing just `<RET>`) means to repeat the previous
 command.
 
-Byebug uses readline, which handles line editing and retrieval of previous commands.
-Up arrow, for example, moves to the previous byebug command; down arrow moves to the
-next more recent command (provided you are not already at the last command). Command
-history is saved in file `.byebug_history`. A limit is put on the history size. You
-can see this with the `show history size` command. See [history]() for history
-parameters.
+Byebug uses readline, which handles line editing and retrieval of previous
+commands. Up arrow, for example, moves to the previous byebug command; down
+arrow moves to the next more recent command (provided you are not already at
+the last command). Command history is saved in file `.byebug_history`. A limit
+is put on the history size. You can see this with the `show history size`
+command. See [history]() for history parameters.
 
 ### Command Output
+
 In the command-line interface, when `byebug` is waiting for input it presents a
-prompt of the form `(byebug)`. If the program has terminated normally the prompt will
-be `(byebug:ctrl)` and in post-mortem debugging it will be
+prompt of the form `(byebug)`. If the program has terminated normally the prompt
+will be `(byebug:ctrl)` and in post-mortem debugging it will be
 `(byebug:post-mortem)`.
 
-Whenever `byebug` gives an error message such as for an invalid command or an invalid
-location position, it will generally preface the message with `***`.
+Whenever `byebug` gives an error message such as for an invalid command or an
+invalid location position, it will generally preface the message with `***`.
 
 ### Command Help
 
-Once inside `byebug` you can always ask it for information on its commands using the
-`help` command. You can use `help` (abbreviated `h`) with no arguments to display a
-short list of named classes of commands
+Once inside `byebug` you can always ask it for information on its commands using
+the `help` command. You can use `help` (abbreviated `h`) with no arguments to
+display a short list of named classes of commands
 
 ```bash
 (byebug) help
@@ -1496,15 +1484,16 @@ With a command name, `help` displays information on how to use the command.
 (byebug)
 ```
 
-A number of commands, namely `info`, `set`, `show`, `enable` and `disable`, have many
-sub-parameters or _subcommands_. When you ask for help for one of these commands, you
-will get help for all of the subcommands that command offers. Sometimes you may want
-help only on a subcommand and to do this just follow the command with its subcommand
-name. For example, `help info breakpoints`will just give help about the `info
-breakpoints` command. Furthermore it will give longer help than the summary
-information that appears when you ask for help. You don't need to list the full
-subcommand name, just enough of the letters to make that subcommand distinct from
-others will do. For example, `help info b` is the same as `help info breakpoints`.
+A number of commands, namely `info`, `set`, `show`, `enable` and `disable`, have
+many sub-parameters or _subcommands_. When you ask for help for one of these
+commands, you will get help for all of the subcommands that command offers.
+Sometimes you may want help only on a subcommand and to do this just follow the
+command with its subcommand name. For example, `help info breakpoints`will just
+give help about the `info breakpoints` command. Furthermore it will give longer
+help than the summary information that appears when you ask for help. You don't
+need to list the full subcommand name, just enough of the letters to make that
+subcommand distinct from others will do. For example, `help info b` is the same
+as `help info breakpoints`.
 
 Some examples follow.
 
@@ -1568,7 +1557,6 @@ they are executed. If there is an error, execution proceeds to the next command
 in the file. For information about command files that get run automatically on
 startup see [Command Files]().
 
-
 ### Display Commands: display, undisplay
 
 #### Display
@@ -1612,14 +1600,13 @@ not be printed but they won't be forgotten either, so you can toggle them again
 later. To do that, use `disable display` or `enable display` followed by the
 expression number.
 
-
 ### Evaluation of expressions: display
 
 To examine and change data in your script you can just evaluate any Ruby code
 from `byebug`'s prompt. Any input that is not recognized as a command will be
 evaluated, so `byebug` essentially works as a REPL. If you want to evaluate
 something that conflicts with a `byebug` command, just use Ruby's `eval`. For
-example, if you want to print a variable called `n `, type `eval n` because
+example, if you want to print a variable called `n`, type `eval n` because
 typing just `n` will execute `byebug`'s command `next`.
 
 Finally, if you need more advanced functionality from REPL's, you can enter
@@ -1667,19 +1654,20 @@ def triangle(n)
 ### Printing variables: var
 
 Byebug can print many different information about variables. Such as
+
 * `var const <object>`. Show the constants of `<object>`. This is basically
-listing variables and their values in `<object>.constant`.
+  listing variables and their values in `<object>.constant`.
 * `var instance <object>`. Show the instance variables of `<object>`. This is
-basically listing `<object>.instance_variables`.
+  basically listing `<object>.instance_variables`.
 * `var instance`. Show instance_variables of `self`.
 * `var local`. Show local variables.
 * `var global`. Show global variables.
 * `var all`. Show local, global and instance and class variables of `self`.
 * `method instance <object>`. Show methods of `<object>`. Basically this is the
-same as running `<object>.instance_methods(false)`.
+  same as running `<object>.instance_methods(false)`.
 * `method <class-or-module>`. Show methods of the class or module
-`<class-or-module>`. Basically this is the same as running
-`<class-or-module>.methods`.
+  `<class-or-module>`. Basically this is the same as running
+  `<class-or-module>.methods`.
 
 ### Examining Program Source Files: list
 
@@ -1723,6 +1711,7 @@ give a line specification to specify what part of the file you want to edit.
 You can customize `byebug` to use any editor you want by using the `EDITOR`
 environment variable. The only restriction is that your editor (say `ex`) recognizes
 the following command-line syntax:
+
 ```
 ex +nnn file
 ```
@@ -1738,6 +1727,7 @@ byebug ...
 ```
 
 or in the `csh` shell,
+
 ```bash
 setenv EDITOR /usr/bin/vi
 byebug ...
@@ -1803,14 +1793,14 @@ source code in Ruby, so we can not debug them using Byebug.
 ### Selecting a frame: `up`, `down` and `frame` commands
 
 * `up <n>`: Move `n` frames up the stack, towards the outermost frame (higher
-frame numbers, frames that have existed longer). `n` defaults to one.
+  frame numbers, frames that have existed longer). `n` defaults to one.
 
 * `down <n>`: Move `n` frames down the stack, towards the _innermost frame_
-(lower frame numbers, frames that were created more recently). `n` defaults to
-one.
+  (lower frame numbers, frames that were created more recently). `n` defaults to
+  one.
 
 * `frame <n>`: Allows you to move to an arbitrary frame. `n` is the stack frame
-number or 0 if no frame number is given. `frame 0` will show the current and
-most recent stack frame. If a negative number is given, counting is from the
-other end of the stack frame, so `frame -1` shows the least-recent, outermost
-stack frame. Without an argument, `frame` prints the current stack frame.
+  number or 0 if no frame number is given. `frame 0` will show the current and
+  most recent stack frame. If a negative number is given, counting is from the
+  other end of the stack frame, so `frame -1` shows the least-recent, outermost
+  stack frame. Without an argument, `frame` prints the current stack frame.

@@ -1,4 +1,4 @@
-# Byebug
+# Byebug. _Debugging in Ruby 2_
 
 [![Version][gem]][gem_url]
 [![Quality][gpa]][gpa_url]
@@ -18,8 +18,6 @@
 [tip_url]: https://gratipay.com/~deivid-rodriguez
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
-_Debugging in Ruby 2_
-
 Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
 TracePoint API for execution control and the new Debug Inspector API for call
 stack navigation, so it doesn't depend on internal core sources. It's developed
@@ -30,12 +28,11 @@ and offers many of the traditional debugging features such as:
 
 * Stepping: Running your program one line at a time.
 * Breaking: Pausing the program at some event or specified instruction, to
-examine the current state.
+  examine the current state.
 * Evaluating: Basic REPL functionality, although [pry] does a better job at
-that.
+  that.
 * Tracking: Keeping track of the different values of your variables or the
-different lines executed by your program.
-
+  different lines executed by your program.
 
 ## Build Status
 
@@ -49,22 +46,20 @@ Windows [![Vey][vey]][vey_url]
 [tra_url]: https://travis-ci.org/deivid-rodriguez/byebug
 [vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
 
-
 ## Requirements
 
 * Required: MRI 2.0.0 or higher. For debugging ruby 1.9.3 or older, use
-[debugger].
-
+  [debugger].
 * Recommended:
-  - MRI 2.1.8 or higher.
-  - MRI 2.2.4 or higher.
-  - MRI 2.3.0 or higher.
-
+  * MRI 2.1.8 or higher.
+  * MRI 2.2.4 or higher.
+  * MRI 2.3.0 or higher.
 
 ## Install
 
-    $ gem install byebug
-
+```shell
+gem install byebug
+```
 
 ## Usage
 
@@ -75,7 +70,6 @@ Simply drop
 wherever you want to start debugging and the execution will stop there. If you
 are debugging rails, start the server and once the execution gets to your
 `byebug` command you will get a debugging prompt.
-
 
 ## Byebug's commands
 
@@ -117,7 +111,6 @@ are debugging rails, start the server and once the execution gets to your
     `up`        |              |
     `var`       |              | `all` `constant` `global` `instance` `local`
 
-
 ## Semantic Versioning
 
 Byebug tries to follow [semantic versioning](http://semver.org) and tries to
@@ -125,28 +118,24 @@ bump major version only when backwards incompatible changes are released.
 Backwards compatibility is targeted to [pry-byebug] and any other plugins
 relying on `byebug`.
 
-
 ## Getting Started
 
 Read [byebug's markdown
 guide](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md) to get
 started. Proper documentation will be eventually written.
 
-
 ## Related projects
 
 * [pry-byebug] adds `next`, `step`, `finish`, `continue` and `break` commands
-to `pry` using `byebug`.
+  to `pry` using `byebug`.
 * [ruby-debug-passenger] adds a rake task that restarts Passenger with Byebug
-connected.
+  connected.
 * [minitest-byebug] starts a byebug session on minitest failures.
 * [sublime_debugger] provides a plugin for ruby debugging on Sublime Text.
-
 
 ## Contribute
 
 See [Getting Started with Development](CONTRIBUTING.md).
-
 
 ## Credits
 
