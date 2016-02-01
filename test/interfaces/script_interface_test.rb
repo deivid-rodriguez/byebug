@@ -6,7 +6,7 @@ module Byebug
   #
   class ScriptInterfaceTest < TestCase
     def test_initialize_wires_up_dependencies
-      with_new_file('show') do |path|
+      with_new_tempfile('show') do |path|
         interface = ScriptInterface.new(path)
 
         assert_instance_of File, interface.input
@@ -16,7 +16,7 @@ module Byebug
     end
 
     def test_initialize_verbose_writes_to_stdout_and_stderr
-      with_new_file('show') do |path|
+      with_new_tempfile('show') do |path|
         interface = ScriptInterface.new(path, true)
 
         assert_instance_of File, interface.input
@@ -26,7 +26,7 @@ module Byebug
     end
 
     def test_readline_reads_input_until_first_non_comment
-      with_new_file("# Run the show command\nshow\n") do |path|
+      with_new_tempfile("# Run the show command\nshow\n") do |path|
         interface = ScriptInterface.new(path)
 
         assert_equal 'show', interface.readline

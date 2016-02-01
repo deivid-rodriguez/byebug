@@ -243,7 +243,7 @@ module Byebug
     #
     # Temporary creates a new file a yields it to the passed block
     #
-    def with_new_file(content)
+    def with_new_tempfile(content)
       file = Tempfile.new('foo')
       file.write(content)
       file.close
