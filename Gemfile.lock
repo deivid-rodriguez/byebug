@@ -67,7 +67,7 @@ GEM
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
-    rainbow (2.0.0)
+    rainbow (2.1.0)
     rake (10.5.0)
     rake-compiler (0.9.5)
       rake
