@@ -7,9 +7,8 @@ module Byebug
 
     def initialize
       super()
-      @input = []
-      @output = []
-      @error = []
+
+      clear
     end
 
     def errmsg(message)
