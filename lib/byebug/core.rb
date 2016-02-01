@@ -83,10 +83,11 @@ module Byebug
   # Runs a initialization script file
   #
   def run_rc_file(base_path)
+    old_interface = Context.interface
+
     rc_file = File.expand_path(File.join(base_path, init_file))
     return unless File.exist?(rc_file)
 
-    old_interface = Context.interface
     Context.interface = ScriptInterface.new(rc_file)
 
     ScriptProcessor.new(nil).process_commands
