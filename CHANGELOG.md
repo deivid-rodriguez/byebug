@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Bug in rc file loading where most initialization commands would not be run.
+
 ## 8.2.1 - 2015-11-26
 
 ### Fixed

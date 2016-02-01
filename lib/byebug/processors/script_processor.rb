@@ -17,7 +17,7 @@ module Byebug
         command = command_list.match(input)
 
         if command
-          command.new(self).execute
+          command.new(self, input).execute
         else
           errmsg('Unknown command')
         end

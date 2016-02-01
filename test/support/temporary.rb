@@ -50,5 +50,32 @@ module Byebug
       file.close
       file.unlink
     end
+
+    #
+    # Changes global rc file to point to the specified file, runs the block and
+    # restores the old config afterwards.
+    #
+    def with_init_file(name)
+      old_init_file = Byebug.init_file
+      Byebug.init_file = name
+
+      yield
+    ensure
+      Byebug.init_file = old_init_file
+    end
+
+    #
+    # Creates a file, yields the block and deletes the file afterwards
+    #
+    # @param name [String] Name for the file
+    # @param content [String] Content for the file
+    #
+    def with_new_file(name, content)
+      File.open(name, 'w') { |f| f.write(content) }
+
+      yield
+    ensure
+      File.delete(name)
+    end
   end
 end
