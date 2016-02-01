@@ -47,11 +47,9 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def run_init_script
-    home_rc = File.expand_path(File.join(ENV['HOME'].to_s, init_file))
-    run_script(home_rc) if File.exist?(home_rc)
+    run_rc_file(ENV['HOME'])
 
-    cwd_rc = File.expand_path(File.join('.', init_file))
-    run_script(cwd_rc) if File.exist?(cwd_rc) && cwd_rc != home_rc
+    run_rc_file(Dir.pwd) unless Dir.pwd == ENV['HOME']
   end
 
   def self.load_settings
@@ -82,11 +80,14 @@ module Byebug
   private
 
   #
-  # Runs a script file
+  # Runs a initialization script file
   #
-  def run_script(file, verbose = false)
+  def run_rc_file(base_path)
+    rc_file = File.expand_path(File.join(base_path, init_file))
+    return unless File.exist?(rc_file)
+
     old_interface = Context.interface
-    Context.interface = ScriptInterface.new(file, verbose)
+    Context.interface = ScriptInterface.new(rc_file)
 
     ScriptProcessor.new(nil).process_commands
   ensure
