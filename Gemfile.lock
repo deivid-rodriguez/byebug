@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    byebug (8.2.1)
+    byebug (8.2.2)
 
 GEM
   remote: https://rubygems.org/
