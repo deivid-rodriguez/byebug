@@ -1,4 +1,5 @@
 require_relative 'matchers'
+require_relative 'temporary'
 
 module Byebug
   #
@@ -6,6 +7,7 @@ module Byebug
   #
   module TestUtils
     include TestMatchers
+    include TestTemporary
 
     #
     # Adds commands to the input queue, so they will be later retrieved by
@@ -194,40 +196,6 @@ module Byebug
     end
 
     #
-    # Yields a block using temporary values for command line program name and
-    # command line arguments.
-    #
-    # @param program_name [String] New value for the program name
-    # @param *args [Array] New value for the program arguments
-    #
-    def with_command_line(program_name, *args)
-      original_program_name = $PROGRAM_NAME
-      original_argv = $ARGV
-      $PROGRAM_NAME = program_name
-      $ARGV.replace(args)
-
-      yield
-    ensure
-      $PROGRAM_NAME = original_program_name
-      $ARGV.replace(original_argv)
-    end
-
-    #
-    # Yields a block using a temporary value for a setting
-    #
-    # @param key [Symbol] Setting key
-    # @param value [Object] Temporary value for the setting
-    #
-    def with_setting(key, value)
-      original_value = Setting[key]
-      Setting[key] = value
-
-      yield
-    ensure
-      Setting[key] = original_value
-    end
-
-    #
     # A minimal program that gives you a byebug's prompt
     #
     def minimal_program
@@ -238,20 +206,6 @@ module Byebug
           'Hello world'
         end
       EOM
-    end
-
-    #
-    # Temporary creates a new file a yields it to the passed block
-    #
-    def with_new_tempfile(content)
-      file = Tempfile.new('foo')
-      file.write(content)
-      file.close
-
-      yield(file.path)
-    ensure
-      file.close
-      file.unlink
     end
   end
 end
