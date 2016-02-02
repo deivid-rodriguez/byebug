@@ -67,9 +67,22 @@ Simply drop
 
     byebug
 
-wherever you want to start debugging and the execution will stop there. If you
-are debugging rails, start the server and once the execution gets to your
-`byebug` command you will get a debugging prompt.
+wherever you want to start debugging and the execution will stop there.
+If you were debugging Rails, for example, you would add `byebug` to your code.
+
+```ruby
+def index
+  byebug
+  @articles = Article.find_recent
+```
+
+And then start a Rails server.
+
+```shell
+bin/rails s
+```
+
+Once the execution gets to your `byebug` command you will get a debugging prompt.
 
 ## Byebug's commands
 
