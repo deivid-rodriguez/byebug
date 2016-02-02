@@ -156,7 +156,7 @@ module Byebug
     #
     def clear_displays
       loop do
-        break unless Byebug.displays.size > 0
+        break if Byebug.displays.empty?
 
         Byebug.displays.pop
       end

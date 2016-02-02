@@ -44,7 +44,7 @@ module Byebug
     end
 
     def help_for(input, cmd)
-      fail CommandNotFound.new(input, command) unless cmd
+      raise CommandNotFound.new(input, command) unless cmd
 
       puts(cmd.help)
     end

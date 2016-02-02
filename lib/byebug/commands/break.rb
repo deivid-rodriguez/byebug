@@ -80,16 +80,16 @@ module Byebug
     end
 
     def add_line_breakpoint(file, line)
-      fail(pr('break.errors.source', file: file)) unless File.exist?(file)
+      raise(pr('break.errors.source', file: file)) unless File.exist?(file)
 
       fullpath = File.realpath(file)
 
       if line > n_lines(file)
-        fail(pr('break.errors.far_line', lines: n_lines(file), file: fullpath))
+        raise(pr('break.errors.far_line', lines: n_lines(file), file: fullpath))
       end
 
       unless Breakpoint.potential_line?(fullpath, line)
-        fail(pr('break.errors.line', file: fullpath, line: line))
+        raise(pr('break.errors.line', file: fullpath, line: line))
       end
 
       Breakpoint.add(fullpath, line, @match[2])

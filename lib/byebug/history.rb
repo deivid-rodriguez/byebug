@@ -113,7 +113,7 @@ module Byebug
     #
     def ignore?(buf)
       return true if /^\s*$/ =~ buf
-      return false if Readline::HISTORY.length == 0
+      return false if Readline::HISTORY.empty?
 
       Readline::HISTORY[Readline::HISTORY.length - 1] == buf
     end

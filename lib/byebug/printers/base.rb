@@ -26,7 +26,7 @@ module Byebug
           end
           break if result
         end
-        fail MissedPath, "Can't find part path '#{path}'" unless result
+        raise MissedPath, "Can't find part path '#{path}'" unless result
         result
       end
 
@@ -35,7 +35,7 @@ module Byebug
         string.gsub(/\|\w+$/, '').gsub(/([^#]?){([^}]*)}/) do
           key = Regexp.last_match[2].to_s
           unless args.key?(key.to_sym)
-            fail MissedArgument, "Missed argument #{key} for '#{string}'"
+            raise MissedArgument, "Missed argument #{key} for '#{string}'"
           end
 
           "#{Regexp.last_match[1]}#{args[key.to_sym]}"

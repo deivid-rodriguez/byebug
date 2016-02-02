@@ -130,11 +130,11 @@ module Byebug
     def setup_cmd_line_args
       Byebug.mode = :standalone
 
-      fail(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
+      raise(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
 
       program = which($ARGV.shift)
       program = which($ARGV.shift) if program == which('ruby')
-      fail(NonExistentScript, "The script doesn't exist") unless program
+      raise(NonExistentScript, "The script doesn't exist") unless program
 
       $PROGRAM_NAME = program
     end
@@ -144,7 +144,7 @@ module Byebug
     #
     def debug_program
       ok = syntax_valid?(File.read($PROGRAM_NAME))
-      fail(InvalidScript, 'The script has incorrect syntax') unless ok
+      raise(InvalidScript, 'The script has incorrect syntax') unless ok
 
       error = Byebug.debug_load($PROGRAM_NAME, stop)
       puts "#{error}\n#{error.backtrace}" if error

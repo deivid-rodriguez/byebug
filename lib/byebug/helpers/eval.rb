@@ -42,7 +42,7 @@ module Byebug
       # handling the errors at an error level.
       #
       def error_eval(str, binding = frame._binding)
-        safe_eval(str, binding) { |e| fail(e, msg(e)) }
+        safe_eval(str, binding) { |e| raise(e, msg(e)) }
       end
 
       #

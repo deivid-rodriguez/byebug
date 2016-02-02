@@ -23,7 +23,7 @@ module Byebug
       return puts(help) unless subcmd_name
 
       subcmd = subcommand_list.match(subcmd_name)
-      fail CommandNotFound.new(subcmd_name, self.class) unless subcmd
+      raise CommandNotFound.new(subcmd_name, self.class) unless subcmd
 
       subcmd.new(processor, arguments).execute
     end

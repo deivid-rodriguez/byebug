@@ -36,11 +36,11 @@ module Byebug
 
     def execute
       msg = "No sourcefile available for #{frame.file}"
-      fail(msg) unless File.exist?(frame.file)
+      raise(msg) unless File.exist?(frame.file)
 
       max_lines = n_lines(frame.file)
       b, e = range(@match[2], max_lines)
-      fail('Invalid line range') unless valid_range?(b, e, max_lines)
+      raise('Invalid line range') unless valid_range?(b, e, max_lines)
 
       display_lines(b, e)
 
@@ -85,11 +85,11 @@ module Byebug
 
     def parse_range(input, size, max_line)
       first, err = get_int(lower_bound(input), 'List', 1, max_line)
-      fail(err) unless first
+      raise(err) unless first
 
       if upper_bound(input)
         last, err = get_int(upper_bound(input), 'List', 1, max_line)
-        fail(err) unless last
+        raise(err) unless last
 
         last = amend(last, max_line)
       else

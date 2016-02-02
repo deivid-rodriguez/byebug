@@ -30,7 +30,7 @@ module Byebug
       output.puts(prompt)
 
       result = input.gets
-      fail IOError unless result
+      raise IOError unless result
 
       result.chomp
     end
