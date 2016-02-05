@@ -15,7 +15,7 @@ module Byebug
     self.allow_in_control = true
 
     def self.regexp
-      /^\s* b(?:reak)? (?:\s+ (\S+))? (?:\s+ if \s+(.+))? \s*$/x
+      /^\s* b(?:reak)? (?:\s+ (.+))? (?:\s+ if \s+(.+))? \s*$/x
     end
 
     def self.description
@@ -52,7 +52,7 @@ module Byebug
 
     def line_breakpoint(location)
       line_match = location.match(/^(\d+)$/)
-      file_line_match = location.match(/^([^:]+):(\d+)$/)
+      file_line_match = location.match(/^(.+):(\d+)$/)
       return unless line_match || file_line_match
 
       file = line_match ? frame.file : file_line_match[1]
@@ -62,7 +62,7 @@ module Byebug
     end
 
     def method_breakpoint(location)
-      location.match(/([^.#]+)[.#](.+)/) do |match|
+      location.match(/^([^.#]+)[.#](.+)/) do |match|
         klass = target_object(match[1])
         method = match[2].intern
 
