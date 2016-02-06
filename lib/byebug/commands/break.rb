@@ -15,7 +15,7 @@ module Byebug
     self.allow_in_control = true
 
     def self.regexp
-      /^\s* b(?:reak)? (?:\s+ (.+))? (?:\s+ if \s+(.+))? \s*$/x
+      /^\s* b(?:reak)? (?:\s+ (.+?))? (?:\s+ if \s+(.+))? \s*$/x
     end
 
     def self.description
