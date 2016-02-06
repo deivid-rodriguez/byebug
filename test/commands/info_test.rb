@@ -100,6 +100,13 @@ module Byebug
       check_output_includes "File #{example_path} (27 lines)"
     end
 
+    def test_info_file_reads_relative_path
+      enter 'info file ./test/commands/info_test.rb'
+      debug_code(program)
+
+      check_output_includes(/File .*\/test\/commands\/info_test.rb \(\d* lines\)/)
+    end
+
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
       with_new_tempfile('sleep 0') do |script_name|
         enter "info file #{script_name}"
