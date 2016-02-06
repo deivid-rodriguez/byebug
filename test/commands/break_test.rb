@@ -385,17 +385,17 @@ module Byebug
     end
 
     def example_class
-      "TestFolder"
+      'TestFolder'
     end
 
     def example_module
-      "TestFolder"
+      'TestFolder'
     end
 
     #
     # Temporary file where code for each test is saved
     # Overloaded for space in name
-    # 
+    #
     def example_file
       @example_file ||= Tempfile.new(['byebug space test', '.rb'])
 
@@ -413,18 +413,18 @@ module Byebug
       enter 'break ../relative/path space.rb:8'
       debug_code(program)
 
-      check_error_includes "No file named ../relative/path space.rb"
+      check_error_includes 'No file named ../relative/path space.rb'
     end
 
     def test_setting_breakpoint_with_relative_path
-      enter "break ./test/commands/break_test.rb:8"
+      enter 'break ./test/commands/break_test.rb:8'
       debug_code(program)
 
       check_output_includes(/Successfully created breakpoint with id/)
     end
 
     def test_setting_conditional_breakpoint_with_relative_path
-      enter "break ./test/commands/break_test.rb:8 if y == 1"
+      enter 'break ./test/commands/break_test.rb:8 if y == 1'
       debug_code(program)
 
       check_output_includes(/Successfully created breakpoint with id/)
