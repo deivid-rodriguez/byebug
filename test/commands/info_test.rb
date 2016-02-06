@@ -267,7 +267,7 @@ module Byebug
     def test_info_file_reads_relative_path
       enter 'info file ./test/commands/info_test.rb'
       debug_code(program)
-      check_output_includes(%r{/test/commands/info_test.rb (\d* lines)})
+      check_output_includes(%r{File .*/test/commands/info_test.rb })
     end
   end
 end
