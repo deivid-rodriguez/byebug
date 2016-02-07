@@ -169,6 +169,20 @@ module Byebug
       check_error_includes 'No file named asf'
     end
 
+    def test_setting_breakpoint_with_bad_relative_path_doesnt_crash
+      enter 'break ../relative/path.rb:8'
+      debug_code(program)
+
+      check_error_includes 'No file named ../relative/path.rb'
+    end
+
+    def test_setting_breakpoint_with_relative_path_adds_the_breakpoint
+      enter 'break ./test/commands/break_test.rb:8'
+      debug_code(program)
+
+      check_output_includes(/Successfully created breakpoint with id/)
+    end
+
     def test_setting_breakpoint_to_invalid_line_does_not_create_breakpoint
       enter 'break 14'
 
