@@ -29,7 +29,20 @@ module Byebug
         return errmsg(pr('base.errors.only_local'))
       end
 
-      IRB.start(__FILE__)
+      # IRB tries to parse ARGV so we must clear it.  See issue 197
+      with_clean_argv { IRB.start(__FILE__) }
+    end
+
+    private
+
+    def with_clean_argv
+      saved_argv = ARGV.dup
+      ARGV.clear
+      begin
+        yield
+      ensure
+        ARGV.concat(saved_argv)
+      end
     end
   end
 end
