@@ -109,6 +109,74 @@ module Byebug
   end
 
   #
+  # Tests adding breakpoints to file with space in filename
+  #
+  class BreakWithSpaceInFilenameTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test breakpoints
+         4:    #
+         5:    class TestClass
+         6:      def self.a
+         7:        y = 1
+         8:        z = 2
+         9:        y + z
+        10:      end
+        11:    end
+        12:
+        13:    byebug
+        14:
+        15:    TestClass.a
+        16:  end
+      EOC
+    end
+
+    #
+    # Fully namespaced example class
+    #
+    def example_full_class
+      'Byebug::TestClass'
+    end
+
+    #
+    # Name of the temporary test class.
+    #
+    def example_class
+      'TestClass'
+    end
+
+    #
+    # Name of the temporary test module.
+    #
+    def example_module
+      'TestModule'
+    end
+
+    def example_file
+      @example_file ||= Tempfile.new(['byebug space test', '.rb'])
+
+      @example_file.open if @example_file.closed?
+
+      @example_file
+    end
+
+    def test_setting_breakpoint_with_space_in_path_adds_the_breakpoint
+      enter "break #{example_path}:8"
+      debug_code(program)
+
+      check_output_includes(/Successfully created breakpoint with id/)
+    end
+
+    def test_setting_breakpoint_to_nonexistent_file_with_space_shows_an_error
+      enter 'break /this path/isnt there/abc xyz:8'
+      debug_code(program)
+
+      check_error_includes 'No file named /this path/isnt there/abc xyz'
+    end
+  end
+  #
   # Tests adding breakpoints to lines
   #
   class BreakAtLinesTest < TestCase
