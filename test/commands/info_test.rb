@@ -209,6 +209,50 @@ module Byebug
   end
 
   #
+  # Test info command with space in filename.
+  #
+  class InfoFileWithSpaceTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test information about files.
+         4:    #
+         5:    class #{example_class}
+         6:      def initialize
+         7:        @foo = 'bar'
+         8:        @bla = 'blabla'
+         9:      end
+        10:
+        11:      def a(y, z)
+        12:        w = '1' * 45
+        13:        x = 2
+        14:        w + x.to_s + y + z + @foo
+        15:      end
+        16:
+        17:      def b
+        18:        a('a', 'b')
+        19:        e = '%.2f'
+        20:        e
+        21:      end
+        22:    end
+        23:
+        24:    byebug
+        25:    i = #{example_class}.new
+        26:    i.b
+        27:  end
+      EOC
+    end
+
+    def test_info_file_with_a_file_name_with_space_doesnt_fail
+      enter 'info file /file name/with space/file'
+      debug_code(program)
+
+      check_error_includes ' is not a valid source file'
+    end
+  end
+
+  #
   # Tests info command on crashed programs
   #
   class InfoCrashedTest < TestCase
