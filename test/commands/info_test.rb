@@ -245,10 +245,11 @@ module Byebug
     end
 
     def test_info_file_with_a_file_name_with_space_doesnt_fail
-      enter 'info file /file name/with space/file'
+      name_with_spaces = '/file name/with space/file'
+      enter "info file #{name_with_spaces}"
       debug_code(program)
 
-      check_error_includes ' is not a valid source file'
+      check_error_includes "#{name_with_spaces} is not a valid source file"
     end
   end
 
