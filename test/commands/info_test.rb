@@ -220,6 +220,13 @@ module Byebug
 
       check_error_includes 'blabla is not a valid source file'
     end
+
+    def test_info_file_with_a_file_name_with_space_doesnt_fail
+      enter 'info file /filename/with space'
+      debug_code(program)
+
+      check_error_includes '/filename/with space is not a valid source file'
+    end
   end
 
   #
