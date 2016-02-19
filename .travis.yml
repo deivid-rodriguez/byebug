@@ -36,8 +36,6 @@ matrix:
     - rvm: ruby-head
     - rvm: 2.0.0
 
-  fast_finish: true
-
 notifications:
   email:
     on_success: change
