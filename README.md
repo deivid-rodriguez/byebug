@@ -9,13 +9,13 @@
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
 [cov]: https://img.shields.io/codeclimate/coverage/github/deivid-rodriguez/byebug.svg
-[tip]: https://img.shields.io/gittip/deivid-rodriguez.svg
+[tip]: https://img.shields.io/gittip/byebug.svg
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
 [gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[tip_url]: https://gratipay.com/~deivid-rodriguez
+[tip_url]: https://gratipay.com/byebug
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
 Byebug is a simple to use, feature rich debugger for Ruby 2. It uses the new
