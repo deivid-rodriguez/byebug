@@ -36,6 +36,10 @@ matrix:
     - rvm: ruby-head
     - rvm: 2.0.0
 
+branches:
+  only:
+    - master
+
 notifications:
   email:
     on_success: change
