@@ -45,6 +45,10 @@ matrix:
 
   fast_finish: true
 
+branches:
+  only:
+    - master
+
 notifications:
   - provider: Email
 
