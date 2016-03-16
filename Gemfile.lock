@@ -19,7 +19,7 @@ GEM
     backports (3.6.8)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    codeclimate-test-reporter (0.4.8)
+    codeclimate-test-reporter (0.5.0)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     docile (1.1.5)
@@ -104,7 +104,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.7)
   byebug!
-  codeclimate-test-reporter (= 0.4.8)
+  codeclimate-test-reporter (= 0.5.0)
   mdl (= 0.2.1)
   minitest (~> 5.7)
   mocha (~> 1.1)
