@@ -68,7 +68,7 @@ GEM
       json
       websocket (~> 1.0)
     rainbow (2.1.0)
-    rake (10.5.0)
+    rake (11.1.1)
     rake-compiler (0.9.5)
       rake
     rubocop (0.37.0)
@@ -110,7 +110,7 @@ DEPENDENCIES
   mocha (~> 1.1)
   overcommit (= 0.32.0)
   pry!
-  rake (~> 10.4)
+  rake (~> 11.1)
   rake-compiler (= 0.9.5)
   rubocop (= 0.37.0)
   simplecov (= 0.11.2)

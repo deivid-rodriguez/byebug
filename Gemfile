@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rake', '~> 10.4'
+gem 'rake', '~> 11.1'
 
 gem 'rake-compiler', '0.9.5'
 gem 'rubocop', '0.37.0'
