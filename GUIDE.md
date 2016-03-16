@@ -84,7 +84,7 @@ Now let us step through the program.
     8:
     9:   tri
    10: end
-(byebug) p tri
+(byebug) eval tri
 nil
 (byebug) step
 
@@ -99,7 +99,7 @@ nil
     9:   tri
    10: end
    11:
-(byebug) p tri
+(byebug) eval tri
 0
 ```
 
@@ -107,7 +107,7 @@ The first `step` command runs the script one executable unit. The second command
 we entered was just hitting the return key: `byebug` remembers the last command
 you entered was `step` and runs it again.
 
-One way to print the values of variables is `p` (there are other ways). When we
+One way to print the values of variables is `eval` (there are other ways). When we
 look at the value of `tri` the first time, we see it is `nil`. Again we are
 stopped _before_ the assignment on line 5, and this variable hadn't been set
 previously. However after issuing another `step` command we see that the value
@@ -447,7 +447,7 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
 => 28: hanoi(n, :a, :b, :c)
 (byebug) n_args
 0
-(byebug) p n
+(byebug) eval n
 3
 (byebug) down 2
 
@@ -462,12 +462,12 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
     8:
     9:   hanoi(n - 1, c, b, a) if n - 1 > 0
    10: end
-(byebug) p n
+(byebug) eval n
 2
 ```
 
 Notice in the above to get the value of variable `n` we had to use a print
-command like `p n`. If we entered just `n`, that would be taken to mean byebug
+command like `eval n`. If we entered just `n`, that would be taken to mean byebug
 command `next`. In the current scope, variable `n_args` is not defined.  However
 I can change to the top-most frame by using the `frame 2` command. Notice that
 inside frame #2, the value of `n_args` can be shown. Also note that the value of
