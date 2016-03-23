@@ -135,7 +135,7 @@ module Byebug
       with_setting :callstyle, 'short' do
         with_new_file(File.expand_path('.foorc'), 'set callstyle long') do
           with_init_file('.foorc') do
-            with_command_line('bin/byebug', '--rc', example_path) do
+            with_command_line('bin/byebug', example_path) do
               non_stop_runner.run
 
               assert_equal 'long', Setting[:callstyle]
