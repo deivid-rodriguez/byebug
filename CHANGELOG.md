@@ -2,6 +2,13 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Better interaction with utilities like RSpec when hitting Ctrl-C.
+* `irb` command when original program modified ARGV (thanks @josephks).
+* Unusable debugger when stdin redirected (thanks @sethk).
+* RC file loading when no explicit flag included.
+
 ## 8.2.2 - 2016-02-01
 
 ### Fixed

@@ -44,6 +44,11 @@ module Byebug
     attr_accessor :stop
 
     #
+    # Signals that we should run rc scripts before program starts
+    #
+    attr_writer :init_script
+
+    #
     # @param stop [Boolean] Whether the runner should stop right before
     # starting the program.
     #
@@ -71,6 +76,10 @@ module Byebug
       @remote ||= Byebug.parse_host_and_port(host_and_port)
     end
 
+    def init_script
+      defined?(@init_script) ? @init_script : true
+    end
+
     #
     # Usage banner.
     #
@@ -95,6 +104,8 @@ module Byebug
         Byebug.start_client(*remote)
         return
       end
+
+      Byebug.run_init_script if init_script
 
       setup_cmd_line_args
 

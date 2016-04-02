@@ -131,18 +131,12 @@ module Byebug
       end
     end
 
-    def test_rc_file_commands_are_properly_run
-      with_setting :callstyle, 'short' do
-        with_new_file(File.expand_path('.foorc'), 'set callstyle long') do
-          with_init_file('.foorc') do
-            with_command_line('bin/byebug', '--rc', example_path) do
-              non_stop_runner.run
+    def test_rc_file_commands_are_properly_run_by_default
+      rc_positive_test(nil)
+    end
 
-              assert_equal 'long', Setting[:callstyle]
-            end
-          end
-        end
-      end
+    def test_rc_file_commands_are_properly_run_by_explicit_option
+      rc_positive_test('--rc')
     end
 
     def test_run_with_linetracing_flag
@@ -228,6 +222,22 @@ module Byebug
     end
 
     private
+
+    def rc_positive_test(flag)
+      args = [flag, example_path].compact
+
+      with_setting :callstyle, 'short' do
+        with_new_file(File.expand_path('.foorc'), 'set callstyle long') do
+          with_init_file('.foorc') do
+            with_command_line('bin/byebug', *args) do
+              non_stop_runner.run
+
+              assert_equal 'long', Setting[:callstyle]
+            end
+          end
+        end
+      end
+    end
 
     def non_stop_runner
       @non_stop_runner ||= Byebug::Runner.new(false)

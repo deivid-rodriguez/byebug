@@ -50,7 +50,7 @@ module Byebug
 
     def rc
       @opts.on '-x', '--[no-]rc', 'Run byebug initialization file' do |v|
-        Byebug.run_init_script if v
+        @runner.init_script = v
       end
     end
 
