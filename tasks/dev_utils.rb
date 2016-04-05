@@ -43,7 +43,7 @@ class LoopRunner
 end
 
 #
-# @example Tun tests 8 times for each supported Ruby
+# @example Run tests 8 times for each supported Ruby
 #
 #   $ rake loop_tests
 #
