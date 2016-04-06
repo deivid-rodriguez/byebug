@@ -1,4 +1,4 @@
-#include <byebug.h>
+#include "byebug.h"
 
 static VALUE mByebug;   /* Ruby Byebug Module object */
 

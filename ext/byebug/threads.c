@@ -1,4 +1,4 @@
-#include <byebug.h>
+#include "byebug.h"
 
 /* Threads table class */
 static VALUE cThreadsTable;
