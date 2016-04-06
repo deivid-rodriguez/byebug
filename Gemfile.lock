@@ -95,7 +95,7 @@ GEM
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
     unicode-display_width (1.0.3)
-    websocket (1.2.2)
+    websocket (1.2.3)
     yard (0.8.7.6)
 
 PLATFORMS
