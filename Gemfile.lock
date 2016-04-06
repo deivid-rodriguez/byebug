@@ -58,7 +58,7 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    overcommit (0.32.0)
+    overcommit (0.33.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
     parser (2.3.0.7)
@@ -108,7 +108,7 @@ DEPENDENCIES
   mdl (= 0.2.1)
   minitest (~> 5.7)
   mocha (~> 1.1)
-  overcommit (= 0.32.0)
+  overcommit (= 0.33.0)
   pry!
   rake (~> 11.1)
   rake-compiler (= 0.9.7)
