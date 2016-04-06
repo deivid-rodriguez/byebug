@@ -10,18 +10,18 @@ module Byebug
         interface = ScriptInterface.new(path)
 
         assert_instance_of File, interface.input
-        assert_instance_of StringIO, interface.output
-        assert_instance_of StringIO, interface.error
+        assert_instance_of File, interface.output
+        assert_instance_of File, interface.error
       end
     end
 
-    def test_initialize_verbose_writes_to_stdout_and_stderr
+    def test_initialize_verbose_writes_to_terminal
       with_new_tempfile('show') do |path|
         interface = ScriptInterface.new(path, true)
 
         assert_instance_of File, interface.input
-        assert_equal STDOUT, interface.output
-        assert_equal STDERR, interface.error
+        assert interface.output.tty?
+        assert interface.error.tty?
       end
     end
 
