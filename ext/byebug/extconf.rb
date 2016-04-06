@@ -1,8 +1,3 @@
-if RUBY_VERSION < '2.0'
-  STDERR.print("Ruby version is too old\n")
-  exit(1)
-end
-
 require 'mkmf'
 
 makefile_config = RbConfig::MAKEFILE_CONFIG
