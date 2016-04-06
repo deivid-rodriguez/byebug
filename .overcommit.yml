@@ -27,7 +27,7 @@ PreCommit:
     enabled: true
     required_executable: indent
     install_command: sudo apt-get install indent
-    include: ext/byebug/*.c
+    include: ext/byebug/*.[ch]
 
   BundleCheck:
     enabled: true
