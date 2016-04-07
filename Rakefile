@@ -4,6 +4,16 @@
 require 'bundler/gem_tasks'
 
 #
+# For automatic creation of github releases
+#
+require 'chandler/tasks'
+
+#
+# Add chandler as a prerequisite for `rake release`
+#
+task 'release:rubygem_push' => 'chandler:push'
+
+#
 # Prepend DevKit into compilation phase
 #
 if Gem.win_platform?

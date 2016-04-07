@@ -3,5 +3,5 @@
 # Reopen main module to define the library version
 #
 module Byebug
-  VERSION = '8.2.2'.freeze
+  VERSION = '8.2.3'.freeze
 end
