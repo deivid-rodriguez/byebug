@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/mivok/markdownlint.git
+  revision: dfa943cbfd7472172461cf11d2b7f60af7e3abe3
+  specs:
+    mdl (0.3.1)
+      kramdown (~> 1.8, >= 1.8.0)
+      mixlib-cli (~> 1.5, >= 1.5.0)
+      mixlib-config (~> 2.1, >= 2.1.0)
+
+GIT
   remote: git://github.com/pry/pry.git
   revision: 689fbc419c3d8e5870a7f7186f9ac9c50aaba7eb
   specs:
@@ -43,10 +52,6 @@ GEM
     kramdown (1.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    mdl (0.2.1)
-      kramdown (~> 1.5, >= 1.5.0)
-      mixlib-cli (~> 1.5, >= 1.5.0)
-      mixlib-config (~> 2.1, >= 2.1.0)
     metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.8.4)
@@ -105,7 +110,7 @@ DEPENDENCIES
   bundler (~> 1.7)
   byebug!
   codeclimate-test-reporter (= 0.5.0)
-  mdl (= 0.2.1)
+  mdl!
   minitest (~> 5.7)
   mocha (~> 1.1)
   overcommit (= 0.33.0)
