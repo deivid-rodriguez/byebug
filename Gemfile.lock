@@ -26,6 +26,9 @@ GEM
     addressable (2.4.0)
     ast (2.2.0)
     backports (3.6.8)
+    chandler (0.3.0)
+      netrc
+      octokit (>= 2.2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
     codeclimate-test-reporter (0.5.0)
@@ -63,6 +66,9 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
+    netrc (0.11.0)
+    octokit (4.3.0)
+      sawyer (~> 0.7.0, >= 0.5.3)
     overcommit (0.33.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
@@ -83,6 +89,9 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.7.5)
+    sawyer (0.7.0)
+      addressable (>= 2.3.5, < 2.5)
+      faraday (~> 0.8, < 0.10)
     simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -109,6 +118,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.7)
   byebug!
+  chandler (= 0.3.0)
   codeclimate-test-reporter (= 0.5.0)
   mdl!
   minitest (~> 5.7)
