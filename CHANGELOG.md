@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 8.2.3 - 2016-04-07
+
 ### Fixed
 
 * Better interaction with utilities like RSpec when hitting Ctrl-C.
