@@ -12,11 +12,7 @@ Style/ModuleFunction:
 Style/AsciiComments:
   Enabled: false
 
-# Don't see why storing context information in the exception is a bad thing
-Style/RaiseArgs:
-  Enabled: false
-
 Style/ExtraSpacing:
-  Enabled: true
+  AllowForAlignment: false
 
 inherit_from: .rubocop_todo.yml
