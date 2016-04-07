@@ -13,6 +13,6 @@ Style/AsciiComments:
   Enabled: false
 
 Style/ExtraSpacing:
-  Enabled: true
+  AllowForAlignment: false
 
 inherit_from: .rubocop_todo.yml
