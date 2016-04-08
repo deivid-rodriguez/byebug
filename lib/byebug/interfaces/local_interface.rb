@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'io/console'
-
 module Byebug
   #
   # Interface class for standard byebug use.
@@ -10,9 +8,9 @@ module Byebug
 
     def initialize
       super()
-      @input = @output = @error = IO.console
-      Readline.input = @input
-      Readline.output = @output
+      @input = STDIN
+      @output = STDOUT
+      @error = STDERR
     end
 
     #
