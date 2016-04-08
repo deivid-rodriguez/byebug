@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 8.2.4 - 2016-04-08
+
 ### Fixed
 
 * Reverts #211 which leads to an unusable debugger.
