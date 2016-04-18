@@ -1,4 +1,5 @@
 require 'socket'
+require 'byebug/processors/control_processor'
 
 #
 # Remote debugging functionality.
