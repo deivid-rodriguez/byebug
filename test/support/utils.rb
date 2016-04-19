@@ -1,5 +1,5 @@
-require_relative 'matchers'
-require_relative 'temporary'
+require 'support/matchers'
+require 'support/temporary'
 
 module Byebug
   #
