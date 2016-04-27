@@ -52,7 +52,7 @@ module Byebug
 
     def line_breakpoint(location)
       line_match = location.match(/^(\d+)$/)
-      file_line_match = location.match(/^([^:]+):(\d+)$/)
+      file_line_match = location.match(/^(.+):(\d+)$/)
       return unless line_match || file_line_match
 
       file = line_match ? frame.file : file_line_match[1]

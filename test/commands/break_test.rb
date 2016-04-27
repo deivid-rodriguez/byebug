@@ -199,6 +199,13 @@ module Byebug
       check_error_includes 'No file named /this path/isnt there/abc xyz'
     end
 
+    def test_setting_breakpoint_to_path_with_colons_does_not_crash
+      enter 'break C:/bb.rb:1'
+      debug_code(program)
+
+      check_error_includes 'No file named C:/bb.rb'
+    end
+
     def test_setting_breakpoint_to_invalid_line_does_not_create_breakpoint
       enter 'break 14'
 
