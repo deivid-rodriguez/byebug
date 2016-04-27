@@ -54,3 +54,4 @@ addons:
     packages:
       - indent
       - shellcheck
+      - libgmp-dev # workaround for travis-rubies 2.1.10
