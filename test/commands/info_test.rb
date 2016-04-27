@@ -4,7 +4,7 @@ module Byebug
   #
   # Test info command.
   #
-  class InfoStandardTest < TestCase
+  class InfoTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -93,11 +93,64 @@ module Byebug
       check_output_includes 'There are no auto-display expressions now.'
     end
 
+    def test_info_line_shows_info_about_the_current_line
+      enter 'break 12', 'cont', 'info line'
+      debug_code(program)
+
+      check_output_includes "Line 12 of \"#{example_path}\""
+    end
+
+    def test_info_program_shows_the_initial_stop_reason
+      enter 'info program'
+      debug_code(program)
+
+      check_output_includes \
+        "It stopped after stepping, next'ing or initial start."
+    end
+
+    def test_info_program_shows_the_step_stop_reason
+      enter 'step', 'info program'
+      debug_code(program)
+
+      check_output_includes \
+        'Program stopped.',
+        "It stopped after stepping, next'ing or initial start."
+    end
+
+    def test_info_program_shows_the_breakpoint_stop_reason
+      enter 'break 12', 'cont', 'info program'
+      debug_code(program)
+
+      check_output_includes 'Program stopped.', 'It stopped at a breakpoint.'
+    end
+
+    def test_info_alone_shows_help
+      enter 'info', 'cont'
+      debug_code(program)
+
+      check_output_includes(
+        'Shows several informations about the program being debugged')
+    end
+  end
+
+  #
+  # Tests "info file" command
+  #
+  class InfoFileTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+        1:  module Byebug
+        2:    byebug
+        3:    3
+        4:  end
+      EOC
+    end
+
     def test_info_file_shows_basic_info_about_current_file
       enter 'info file'
       debug_code(program)
 
-      check_output_includes "File #{example_path} (27 lines)"
+      check_output_includes "File #{example_path} (4 lines)"
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
@@ -168,43 +221,11 @@ module Byebug
       check_error_includes 'blabla is not a valid source file'
     end
 
-    def test_info_line_shows_info_about_the_current_line
-      enter 'break 12', 'cont', 'info line'
+    def test_info_file_with_a_file_name_with_space_doesnt_fail
+      enter 'info file /filename/with space'
       debug_code(program)
 
-      check_output_includes "Line 12 of \"#{example_path}\""
-    end
-
-    def test_info_program_shows_the_initial_stop_reason
-      enter 'info program'
-      debug_code(program)
-
-      check_output_includes \
-        "It stopped after stepping, next'ing or initial start."
-    end
-
-    def test_info_program_shows_the_step_stop_reason
-      enter 'step', 'info program'
-      debug_code(program)
-
-      check_output_includes \
-        'Program stopped.',
-        "It stopped after stepping, next'ing or initial start."
-    end
-
-    def test_info_program_shows_the_breakpoint_stop_reason
-      enter 'break 12', 'cont', 'info program'
-      debug_code(program)
-
-      check_output_includes 'Program stopped.', 'It stopped at a breakpoint.'
-    end
-
-    def test_info_alone_shows_help
-      enter 'info', 'cont'
-      debug_code(program)
-
-      check_output_includes(
-        'Shows several informations about the program being debugged')
+      check_error_includes '/filename/with space is not a valid source file'
     end
   end
 

@@ -183,6 +183,29 @@ module Byebug
       check_output_includes(/Successfully created breakpoint with id/)
     end
 
+    def test_setting_breakpoint_with_space_in_path_adds_the_breakpoint
+      with_new_file('hello world.rb', 'puts "Hello World!"') do
+        enter 'break hello world.rb:1'
+        debug_code(program)
+
+        check_output_includes(/Successfully created breakpoint with id/)
+      end
+    end
+
+    def test_setting_breakpoint_to_nonexistent_file_with_space_shows_an_error
+      enter 'break /this path/isnt there/abc xyz:8'
+      debug_code(program)
+
+      check_error_includes 'No file named /this path/isnt there/abc xyz'
+    end
+
+    def test_setting_breakpoint_to_path_with_colons_does_not_crash
+      enter 'break C:/bb.rb:1'
+      debug_code(program)
+
+      check_error_includes 'No file named C:/bb.rb'
+    end
+
     def test_setting_breakpoint_to_invalid_line_does_not_create_breakpoint
       enter 'break 14'
 
