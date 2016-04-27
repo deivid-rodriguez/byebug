@@ -2,6 +2,13 @@
 
 ## Master (Unreleased)
 
+## 8.2.5 - 2016-04-27
+
+### Fixed
+
+* Allows paths with spaces (#244, thanks @HookyQR).
+* Allows paths with colons (#244, thanks @HookyQR).
+
 ## 8.2.4 - 2016-04-08
 
 ### Fixed
