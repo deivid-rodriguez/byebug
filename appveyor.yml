@@ -13,7 +13,7 @@ install:
   - gem --version
   - where gem
 
-  - gem install bundler --no-document
+  - gem install bundler -v 1.11.2 --no-document
   - bundler --version
   - where bundler
 
