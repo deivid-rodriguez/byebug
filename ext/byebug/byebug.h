@@ -121,9 +121,6 @@ extern VALUE context_backtrace_set(const rb_debug_inspector_t * inspector,
 
 /* functions from breakpoint.c */
 extern void Init_breakpoint(VALUE mByebug);
-extern VALUE catchpoint_hit_count(VALUE catchpoints, VALUE exception,
-                                  VALUE * exception_name);
-
 extern VALUE find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
                                     VALUE bind);
 
