@@ -37,9 +37,9 @@ Breakpoints(VALUE self)
 
 /*
  *  call-seq:
- *    Byebug.catchpoints -> array
+ *    Byebug.catchpoints -> hash
  *
- *  Returns an array of catchpoints.
+ *  Returns the catchpoints hash.
  */
 static VALUE
 Catchpoints(VALUE self)
@@ -841,7 +841,7 @@ Set_post_mortem(VALUE self, VALUE value)
  *  call-seq:
  *    Byebug.add_catchpoint(exception) -> exception
  *
- *  Adds a new exception to the catchpoints array.
+ *  Adds a new exception to the catchpoints hash.
  */
 static VALUE
 Add_catchpoint(VALUE self, VALUE value)
