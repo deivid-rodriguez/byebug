@@ -80,7 +80,7 @@ GEM
       websocket (~> 1.0)
     rainbow (2.1.0)
     rake (11.1.2)
-    rake-compiler (0.9.7)
+    rake-compiler (0.9.8)
       rake
     rubocop (0.39.0)
       parser (>= 2.3.0.7, < 3.0)
@@ -126,7 +126,7 @@ DEPENDENCIES
   overcommit (= 0.33.0)
   pry!
   rake (~> 11.1)
-  rake-compiler (= 0.9.7)
+  rake-compiler (= 0.9.8)
   rubocop (= 0.39.0)
   simplecov (= 0.11.2)
   travis (~> 1.8)
