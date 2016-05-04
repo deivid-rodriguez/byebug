@@ -108,7 +108,7 @@ GEM
       typhoeus (~> 0.6, >= 0.6.8)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
-    unicode-display_width (1.0.3)
+    unicode-display_width (1.0.5)
     websocket (1.2.3)
     yard (0.8.7.6)
 
