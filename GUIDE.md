@@ -1600,7 +1600,7 @@ not be printed but they won't be forgotten either, so you can toggle them again
 later. To do that, use `disable display` or `enable display` followed by the
 expression number.
 
-### Evaluation of expressions: display
+### Evaluation of expressions: irb, pry
 
 To examine and change data in your script you can just evaluate any Ruby code
 from `byebug`'s prompt. Any input that is not recognized as a command will be
