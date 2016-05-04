@@ -62,7 +62,7 @@ GEM
     mixlib-config (2.2.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    multi_json (1.11.3)
+    multi_json (1.12.0)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
