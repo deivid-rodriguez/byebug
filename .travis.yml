@@ -21,10 +21,9 @@ script:
   - bundle exec rake clobber compile test sign_hooks overcommit
 
 rvm:
-  - 2.0.0
   - 2.1.10
-  - 2.2.4
-  - 2.3.0
+  - 2.2.5
+  - 2.3.1
   - ruby-head
 
 env:
@@ -34,7 +33,6 @@ env:
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - rvm: 2.0.0
 
 branches:
   only:

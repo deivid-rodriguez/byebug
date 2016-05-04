@@ -1600,7 +1600,7 @@ not be printed but they won't be forgotten either, so you can toggle them again
 later. To do that, use `disable display` or `enable display` followed by the
 expression number.
 
-### Evaluation of expressions: display
+### Evaluation of expressions: irb, pry
 
 To examine and change data in your script you can just evaluate any Ruby code
 from `byebug`'s prompt. Any input that is not recognized as a command will be
@@ -1631,23 +1631,9 @@ $ byebug triangle.rb
     9:
    10: if __FILE__ == $0
 (byebug) irb
-2.0.0-p247 :001 > (0..6).inject{|sum, i| sum +=i}
+irb(main):001:0> (0..6).inject { |sum, i| sum += i }
  => 21
-2.0.0-p247 :002 > exit
-/home/davidr/Proyectos/byebug/old_doc/triangle.rb @ 2
-def triangle(n)
-(byebug) list # same line range as before going into irb
-[1, 10] in /path/to/triangle.rb
-    1: # Compute the n'th triangle number, the hard way: triangle(n) == (n*(n+1))/2
-=>  2: def triangle(n)
-    3:   tri = 0
-    4:   0.upto(n) do |i|
-    5:     tri += i
-    6:   end
-    7:   tri
-    8: end
-    9:
-   10: if __FILE__ == $0
+irb(main):002:0> exit
 (byebug)
 ```
 

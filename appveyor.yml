@@ -13,7 +13,7 @@ install:
   - gem --version
   - where gem
 
-  - gem install bundler -v 1.11.2 --no-document
+  - gem install bundler --no-document
   - bundler --version
   - where bundler
 
@@ -28,8 +28,6 @@ test_script:
 
 environment:
   matrix:
-    - ruby_version: '200'
-    - ruby_version: 200-x64
     - ruby_version: '21'
     - ruby_version: 21-x64
     - ruby_version: '22'
@@ -41,10 +39,6 @@ environment:
 41cab138408'
 
 matrix:
-  allow_failures:
-    - ruby_version: '200'
-    - ruby_version: 200-x64
-
   fast_finish: true
 
 branches:
