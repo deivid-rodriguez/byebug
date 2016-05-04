@@ -1631,9 +1631,9 @@ $ byebug triangle.rb
     9:
    10: if __FILE__ == $0
 (byebug) irb
-2.0.0-p247 :001 > (0..6).inject { |sum, i| sum += i }
+irb(main):001:0> (0..6).inject { |sum, i| sum += i }
  => 21
-2.0.0-p247 :002 > exit
+irb(main):002:0> exit
 /home/davidr/Proyectos/byebug/old_doc/triangle.rb @ 2
 def triangle(n)
 (byebug) list # same line range as before going into irb
