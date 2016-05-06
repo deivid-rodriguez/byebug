@@ -53,7 +53,10 @@ module Byebug
     def locals
       return [] unless _binding
 
-      _binding.eval('local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}')
+      _binding.eval('local_variables').each_with_object({}) do |e, a|
+        a[e] = _binding.eval(e.to_s)
+        a
+      end
     end
 
     #
