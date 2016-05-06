@@ -47,6 +47,9 @@ module Byebug
     #
     # Gets local variables for the frame.
     #
+    # @todo Use `Binding#local_variables` directly once we drop 2.1 support
+    #   since it's a public method since ruby 2.2
+    #
     def locals
       return [] unless _binding
 
