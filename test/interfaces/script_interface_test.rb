@@ -20,8 +20,8 @@ module Byebug
         interface = ScriptInterface.new(path, true)
 
         assert_instance_of File, interface.input
-        assert_equal STDOUT, interface.output
-        assert_equal STDERR, interface.error
+        assert_equal $stdout, interface.output
+        assert_equal $stderr, interface.error
       end
     end
 

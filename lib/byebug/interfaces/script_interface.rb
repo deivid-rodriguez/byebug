@@ -6,8 +6,8 @@ module Byebug
     def initialize(file, verbose = false)
       super()
       @input = File.open(file)
-      @output = verbose ? STDOUT : StringIO.new
-      @error = verbose ? STDERR : StringIO.new
+      @output = verbose ? $stdout : StringIO.new
+      @error = verbose ? $stderr : StringIO.new
     end
 
     def read_command(prompt)
