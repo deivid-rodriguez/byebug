@@ -4,7 +4,7 @@ require 'byebug/processors/control_processor'
 #
 # Remote debugging functionality.
 #
-# TODO: Refactor & add tests
+# @todo Refactor & add tests
 #
 module Byebug
   # Port number used for remote debugging

@@ -39,7 +39,7 @@ module Byebug
 
       private
 
-      # TODO: Check whether it is Byebug.current_context or context
+      # @todo Check whether it is Byebug.current_context or context
       def location(ctx)
         return context.location if ctx == Byebug.current_context
 

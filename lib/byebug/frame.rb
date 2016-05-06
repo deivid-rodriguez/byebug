@@ -47,13 +47,16 @@ module Byebug
     #
     # Gets local variables for the frame.
     #
-    # TODO: Use brand new local_variable_get, local_variable_set and
-    # local_variable defined for rubies >= 2.1
+    # @todo Use `Binding#local_variables` directly once we drop 2.1 support
+    #   since it's a public method since ruby 2.2
     #
     def locals
       return [] unless _binding
 
-      _binding.eval('local_variables.inject({}){|h, v| h[v] = eval(v.to_s); h}')
+      _binding.eval('local_variables').each_with_object({}) do |e, a|
+        a[e] = _binding.local_variable_get(e)
+        a
+      end
     end
 
     #
