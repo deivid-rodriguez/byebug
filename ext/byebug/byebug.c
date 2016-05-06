@@ -352,7 +352,7 @@ return_event(VALUE trace_point, void *data)
   {
     file = rb_tracearg_path(trace_arg);
     /*
-     * TODO: Sometimes the TracePoint API gives some return events without
+     * @todo Sometimes the TracePoint API gives some return events without
      * file:line information, so we need to guard for nil until we know what's
      * going on. This happens, for example, with active_support core extensions:
      *

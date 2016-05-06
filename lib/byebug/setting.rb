@@ -58,7 +58,7 @@ module Byebug
       end
 
       #
-      # TODO: DRY this up. Very similar code exists in the CommandList class
+      # @todo DRY this up. Very similar code exists in the CommandList class
       #
       def help_all
         output = "  List of supported settings:\n\n"

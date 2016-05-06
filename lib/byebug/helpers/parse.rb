@@ -9,7 +9,7 @@ module Byebug
       #
       # If either +min+ or +max+ is nil, that value has no bound.
       #
-      # TODO: Remove the `cmd` parameter. It has nothing to do with the method's
+      # @todo Remove the `cmd` parameter. It has nothing to do with the method's
       # purpose.
       #
       def get_int(str, cmd, min = nil, max = nil)
