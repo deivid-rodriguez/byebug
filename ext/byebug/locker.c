@@ -13,7 +13,7 @@ typedef struct locked_thread_t
 static locked_thread_t *locked_head = NULL;
 static locked_thread_t *locked_tail = NULL;
 
-extern int
+static int
 is_in_locked(VALUE thread)
 {
   locked_thread_t *node;
