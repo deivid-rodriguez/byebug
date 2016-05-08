@@ -277,7 +277,7 @@ brkpt_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
   return Qnil;
 }
 
-int
+static int
 filename_cmp_impl(VALUE source, char *file)
 {
   char *source_ptr, *file_ptr;
@@ -309,7 +309,7 @@ filename_cmp_impl(VALUE source, char *file)
   return 1;
 }
 
-int
+static int
 filename_cmp(VALUE source, char *file)
 {
 #ifdef _WIN32
@@ -332,7 +332,7 @@ filename_cmp(VALUE source, char *file)
 #endif
 }
 
-int
+static int
 classname_cmp(VALUE name, VALUE klass)
 {
   VALUE mod_name;
