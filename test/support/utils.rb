@@ -125,7 +125,7 @@ module Byebug
     # @param output_str [String]
     #
     def prepare_for_regexp(output_str)
-      split_lines(output_str).each do |str|
+      split_lines(output_str).map do |str|
         Regexp.new(Regexp.escape(str), Regexp::EXTENDED)
       end
     end
