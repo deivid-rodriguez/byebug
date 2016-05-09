@@ -1,4 +1,7 @@
 AllCops:
+  Exclude:
+    - tmp/**/*
+
   DisplayCopNames: true
   DisplayStyleGuide: true
 
