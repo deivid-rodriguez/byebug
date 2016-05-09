@@ -20,7 +20,7 @@ module Byebug
     def setup
       super
 
-      interface.stubs(:kind_of?).with(LocalInterface).returns(true)
+      interface.stubs(:instance_of?).with(LocalInterface).returns(true)
     end
 
     def test_pry_command_starts_a_pry_session_if_pry_installed

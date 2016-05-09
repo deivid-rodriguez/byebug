@@ -25,7 +25,7 @@ module Byebug
     end
 
     def execute
-      unless processor.interface.is_a?(LocalInterface)
+      unless processor.interface.instance_of?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
       end
 
