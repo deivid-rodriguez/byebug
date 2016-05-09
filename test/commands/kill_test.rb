@@ -42,6 +42,7 @@ module Byebug
       Process.expects(:kill).with('KILL', Process.pid)
       enter 'kill', 'y'
       debug_code(program)
+
       check_output_includes 'Really kill? (y/n)'
     end
 
@@ -54,6 +55,7 @@ module Byebug
     def test_kill_shows_an_error_when_the_signal_is_unknown
       enter 'kill BLA'
       debug_code(program)
+
       check_error_includes 'signal name BLA is not a signal I know about'
     end
   end
