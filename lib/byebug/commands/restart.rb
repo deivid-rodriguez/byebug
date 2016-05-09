@@ -39,7 +39,7 @@ module Byebug
       argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
 
       puts pr('restart.success', cmd: argv.shelljoin)
-      exec(*argv)
+      Kernel.exec(*argv)
     end
   end
 end

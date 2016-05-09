@@ -35,7 +35,7 @@ module Byebug
 
       cmd = line ? "#{editor} +#{line} #{file}" : "#{editor} #{file}"
 
-      system(cmd)
+      Kernel.system(cmd)
     end
 
     private

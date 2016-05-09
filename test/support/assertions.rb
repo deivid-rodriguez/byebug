@@ -49,7 +49,30 @@ module Minitest
       assert_nil context.backtrace, 'Expected program to have finished'
     end
 
+    def assert_calls(object, method, *expected_args, &block)
+      check_calls(:includes, object, method, *expected_args, &block)
+    end
+
+    def refute_calls(object, method, *expected_args, &block)
+      check_calls(:doesnt_include, object, method, *expected_args, &block)
+    end
+
     private
+
+    def check_calls(check_method, object, method, *expected_args)
+      object.public_send(:stub, method, printer_stub(method)) do
+        yield
+
+        expected = Regexp.new(Regexp.escape(signature(method, *expected_args)))
+        send(:"check_output_#{check_method}", expected)
+      end
+    end
+
+    def signature(method, *args)
+      return method.to_s unless args.any?
+
+      [method, *args].join(' ')
+    end
 
     def includes_in_order(collection, original_collection)
       collection.reduce(0) do |index, item|
@@ -65,6 +88,12 @@ module Minitest
       end
 
       true
+    end
+
+    def printer_stub(method_name)
+      lambda do |*actual_args|
+        Byebug::Context.interface.puts signature(method_name, *actual_args)
+      end
     end
   end
 end

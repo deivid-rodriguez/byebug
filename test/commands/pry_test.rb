@@ -1,4 +1,4 @@
-require 'mocha/mini_test'
+require 'pry'
 require 'test_helper'
 require 'minitest/mock'
 
@@ -19,20 +19,20 @@ module Byebug
     end
 
     def test_pry_command_starts_a_pry_session_if_pry_installed
-      PryCommand.any_instance.expects(:execute)
-
       interface.stub(:instance_of?, true) do
-        enter 'pry'
-        debug_code(minimal_program)
+        assert_calls(Pry, :start) do
+          enter 'pry'
+          debug_code(minimal_program)
+        end
       end
     end
 
     def test_autopry_calls_pry_automatically_after_every_stop
-      PryCommand.any_instance.expects(:execute)
-
       interface.stub(:instance_of?, true) do
-        enter 'set autopry', 'cont 5', 'set noautopry'
-        debug_code(program)
+        assert_calls(Pry, :start) do
+          enter 'set autopry', 'cont 5', 'set noautopry'
+          debug_code(program)
+        end
       end
     end
   end
