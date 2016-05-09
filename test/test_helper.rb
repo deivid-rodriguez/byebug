@@ -85,14 +85,14 @@ module Byebug
     end
 
     #
-    # Name of the temporary test class.
+    # Name of the temporary test class
     #
     def example_class
       "#{camelized_path}Class"
     end
 
     #
-    # Name of the temporary test module.
+    # Name of the temporary test module
     #
     def example_module
       "#{camelized_path}Module"
