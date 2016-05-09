@@ -51,7 +51,7 @@ module Byebug
       debug_code(program)
     end
 
-    def test_kill_shows_an_error_when_the_signal_in_unknown
+    def test_kill_shows_an_error_when_the_signal_is_unknown
       enter 'kill BLA'
       debug_code(program)
       check_error_includes 'signal name BLA is not a signal I know about'
