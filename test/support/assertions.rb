@@ -27,14 +27,14 @@ module Minitest
       msg = message(msg) do
         "Expected #{mu_pp(original)} to include #{mu_pp(given)} in order"
       end
-      assert _includes_in_order(given, original), msg
+      assert includes_in_order(given, original), msg
     end
 
     def refute_includes_in_order(given, original, msg = nil)
       msg = message(msg) do
         "Expected #{mu_pp(original)} to not include #{mu_pp(given)} in order"
       end
-      refute _includes_in_order(given, original), msg
+      refute includes_in_order(given, original), msg
     end
 
     def assert_location(file, line)
@@ -51,7 +51,7 @@ module Minitest
 
     private
 
-    def _includes_in_order(collection, original_collection)
+    def includes_in_order(collection, original_collection)
       collection.reduce(0) do |index, item|
         current_collection = original_collection[index..-1]
 
