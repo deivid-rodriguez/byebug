@@ -29,7 +29,8 @@ module Byebug
         return errmsg(pr('base.errors.only_local'))
       end
 
-      # IRB tries to parse ARGV so we must clear it.  See issue 197
+      # @todo IRB tries to parse ARGV so we must clear it (see #197). Add a
+      #   test case for it so we can remove this comment.
       with_clean_argv { IRB.start(__FILE__) }
     end
 
