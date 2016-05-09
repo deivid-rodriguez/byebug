@@ -32,7 +32,7 @@ module Byebug
       begin
         require 'pry'
       rescue LoadError
-        errmsg(pr('pry.errors.not_installed'))
+        return errmsg(pr('pry.errors.not_installed'))
       end
 
       context.binding.pry

@@ -5,6 +5,7 @@
 ## Fixed
 
 * `irb` command unintentionally changing $PROGRAM_NAME.
+* Unrelated error message when using `pry` command and Pry not installed.
 
 ## 8.2.5 - 2016-04-27
 
