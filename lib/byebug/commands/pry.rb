@@ -35,7 +35,7 @@ module Byebug
         return errmsg(pr('pry.errors.not_installed'))
       end
 
-      context.binding.pry
+      Pry.start(context.frame._binding)
     end
   end
 end
