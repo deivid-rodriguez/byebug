@@ -63,7 +63,7 @@ module Byebug
     # Temporary file where code for each test is saved
     #
     def example_file
-      @example_file ||= Tempfile.new(['byebug_test', '.rb'])
+      @example_file ||= Tempfile.new(['byebug_test', '.rb'], example_folder)
 
       @example_file.open if @example_file.closed?
 
@@ -96,6 +96,13 @@ module Byebug
     #
     def example_module
       "#{camelized_path}Module"
+    end
+
+    #
+    # Temporary folder where the test file lives
+    #
+    def example_folder
+      @example_folder ||= Dir.tmpdir
     end
 
     private

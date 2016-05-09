@@ -1,13 +1,12 @@
 # encoding: utf-8
 
 require 'test_helper'
-require 'mocha/mini_test'
 
 module Byebug
   #
   # Tests commands which deal with backtraces.
   #
-  class WhereTest < TestCase
+  class WhereStandardTest < TestCase
     def program
       strip_line_numbers <<-EOP
          1:  module Byebug
@@ -52,24 +51,6 @@ module Byebug
       check_output_includes(*expected_output)
     end
 
-    def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
-      Frame.any_instance.stubs(:shortpath).returns('.../short/ex.rb')
-
-      enter 'set nofullpath', 'where', 'set fullpath'
-      debug_code(program)
-
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at .../short/ex.rb:16
-            #1  #{example_full_class}.encode(str#String) at .../short/ex.rb:11
-            #2  #{example_full_class}.initialize(l#String) at .../short/ex.rb:7
-            ͱ-- #3  Class.new(*args) at .../short/ex.rb:20
-            #4  <module:Byebug> at .../short/ex.rb:20
-            #5  <top (required)> at .../short/ex.rb:1
-      TXT
-
-      check_output_includes(*expected_output)
-    end
-
     def test_where_displays_backtraces_using_long_callstyle_by_default
       enter 'where'
       debug_code(program)
@@ -97,6 +78,65 @@ module Byebug
             ͱ-- #3  new(*args) at #{example_path}:20
             #4  <module:Byebug> at #{example_path}:20
             #5  <top (required)> at #{example_path}:1
+      TXT
+
+      check_output_includes(*expected_output)
+    end
+  end
+
+  #
+  # Tests dealing with backtraces when the path being debugged is not deeply
+  # nested.
+  #
+  # @note We skip this tests in Windows since the paths in this CI environment
+  #   are usually very deeply nested.
+  #
+  class WhereWithNotDeeplyNestedPathsTest < WhereStandardTest
+    def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
+      enter 'set nofullpath', 'where', 'set fullpath'
+      debug_code(program)
+
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+            ͱ-- #3  Class.new(*args) at #{example_path}:20
+            #4  <module:Byebug> at #{example_path}:20
+            #5  <top (required)> at #{example_path}:1
+      TXT
+
+      check_output_includes(*expected_output)
+    end
+  end unless /cygwin|mswin|mingw/ =~ RUBY_PLATFORM
+
+  #
+  # Tests dealing with backtraces when the path being debugged is deeply nested.
+  #
+  class WhereWithDeeplyNestedPathsTest < WhereStandardTest
+    def setup
+      @example_parent_folder = Dir.mktmpdir(nil)
+      @example_folder = Dir.mktmpdir(nil, @example_parent_folder)
+
+      super
+    end
+
+    def teardown
+      super
+
+      FileUtils.remove_dir(@example_parent_folder, true)
+    end
+
+    def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
+      enter 'set nofullpath', 'where', 'set fullpath'
+      debug_code(program)
+
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  #{example_full_class}.to_int(str#String) at ...
+            #1  #{example_full_class}.encode(str#String) at ...
+            #2  #{example_full_class}.initialize(l#String) at ...
+            ͱ-- #3  Class.new(*args) at ...
+            #4  <module:Byebug> at ...
+            #5  <top (required)> at ...
       TXT
 
       check_output_includes(*expected_output)
