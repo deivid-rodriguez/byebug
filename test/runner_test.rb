@@ -73,7 +73,7 @@ module Byebug
     end
   end
 
-  class RunnerAgainstValidProgram < TestCase
+  class RunnerAgainstValidProgramTest < TestCase
     def setup
       super
 

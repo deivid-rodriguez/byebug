@@ -299,7 +299,7 @@ module Byebug
   #
   # Tests using the byebug keyword at the end of a method
   #
-  class BreakWithByebugKeywordAtMethodEnd < TestCase
+  class BreakWithByebugKeywordAtMethodEndTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -331,7 +331,7 @@ module Byebug
   #
   # Tests using the byebug keyword at the end of a block
   #
-  class BreakWithByebugKeywordAtBlockEnd < TestCase
+  class BreakWithByebugKeywordAtBlockEndTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -367,7 +367,7 @@ module Byebug
   #
   # Tests using the byebug keyword at the end of a class definition
   #
-  class BreakWithByebugKeywordAtClassDefinitionEnd < TestCase
+  class BreakWithByebugKeywordAtClassDefinitionEndTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

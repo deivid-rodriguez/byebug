@@ -93,7 +93,7 @@ module Byebug
   # Tests +finish+ functionality when it needs to stop before method return
   # events.
   #
-  class FinishBeforeReturn < TestCase
+  class FinishBeforeReturnTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
