@@ -1,5 +1,5 @@
-require 'mocha/mini_test'
 require 'test_helper'
+require 'mocha/mini_test'
 
 module Byebug
   #

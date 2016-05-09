@@ -1,5 +1,5 @@
-require 'timeout'
 require 'test_helper'
+require 'timeout'
 
 module Byebug
   #
