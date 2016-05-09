@@ -1,5 +1,6 @@
 require 'mocha/mini_test'
 require 'test_helper'
+require 'minitest/mock'
 
 module Byebug
   #
@@ -17,24 +18,22 @@ module Byebug
       EOC
     end
 
-    def setup
-      super
-
-      interface.stubs(:instance_of?).with(LocalInterface).returns(true)
-    end
-
     def test_irb_command_starts_an_irb_session
       IrbCommand.any_instance.expects(:execute)
 
-      enter 'irb'
-      debug_code(minimal_program)
+      interface.stub(:instance_of?, true) do
+        enter 'irb'
+        debug_code(minimal_program)
+      end
     end
 
     def test_autoirb_calls_irb_automatically_after_every_stop
       IrbCommand.any_instance.expects(:execute)
 
-      enter 'set autoirb', 'cont 5', 'set noautoirb'
-      debug_code(program)
+      interface.stub(:instance_of?, true) do
+        enter 'set autoirb', 'cont 5', 'set noautoirb'
+        debug_code(program)
+      end
     end
   end
 end

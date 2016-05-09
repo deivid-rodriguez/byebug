@@ -1,5 +1,6 @@
 require 'mocha/mini_test'
 require 'test_helper'
+require 'minitest/mock'
 
 module Byebug
   #
@@ -17,24 +18,22 @@ module Byebug
       EOC
     end
 
-    def setup
-      super
-
-      interface.stubs(:instance_of?).with(LocalInterface).returns(true)
-    end
-
     def test_pry_command_starts_a_pry_session_if_pry_installed
       PryCommand.any_instance.expects(:execute)
 
-      enter 'pry'
-      debug_code(minimal_program)
+      interface.stub(:instance_of?, true) do
+        enter 'pry'
+        debug_code(minimal_program)
+      end
     end
 
     def test_autopry_calls_pry_automatically_after_every_stop
       PryCommand.any_instance.expects(:execute)
 
-      enter 'set autopry', 'cont 5', 'set noautopry'
-      debug_code(program)
+      interface.stub(:instance_of?, true) do
+        enter 'set autopry', 'cont 5', 'set noautopry'
+        debug_code(program)
+      end
     end
   end
 end
