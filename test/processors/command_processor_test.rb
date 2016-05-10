@@ -1,5 +1,5 @@
-require 'timeout'
 require 'test_helper'
+require 'timeout'
 
 module Byebug
   #
@@ -134,7 +134,7 @@ module Byebug
   #
   # Tests processor evaluation and breakpoints working together
   #
-  class ProcessorEvaluationAndBreakpoints < TestCase
+  class ProcessorEvaluationAndBreakpointsTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1: module Byebug

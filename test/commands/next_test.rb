@@ -93,7 +93,7 @@ module Byebug
   #
   # Test for: https://bugs.ruby-lang.org/issues/11492
   #
-  class NextAndDefineMethod < TestCase
+  class NextAndDefineMethodTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug
@@ -219,7 +219,7 @@ module Byebug
   #
   # Tests next when execution should not stop at the same "stack size level"
   #
-  class NextGoingUpFrames < TestCase
+  class NextGoingUpFramesTest < TestCase
     def program
       strip_line_numbers <<-EOC
          1:  module Byebug

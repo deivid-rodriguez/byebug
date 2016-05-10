@@ -25,17 +25,17 @@ module Byebug
     end
 
     def execute
-      unless processor.interface.is_a?(LocalInterface)
+      unless processor.interface.instance_of?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
       end
 
       begin
         require 'pry'
       rescue LoadError
-        errmsg(pr('pry.errors.not_installed'))
+        return errmsg(pr('pry.errors.not_installed'))
       end
 
-      context.binding.pry
+      Pry.start(context.frame._binding)
     end
   end
 end

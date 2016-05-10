@@ -25,12 +25,13 @@ module Byebug
     end
 
     def execute
-      unless processor.interface.is_a?(LocalInterface)
+      unless processor.interface.instance_of?(LocalInterface)
         return errmsg(pr('base.errors.only_local'))
       end
 
-      # IRB tries to parse ARGV so we must clear it.  See issue 197
-      with_clean_argv { IRB.start(__FILE__) }
+      # @todo IRB tries to parse ARGV so we must clear it (see #197). Add a
+      #   test case for it so we can remove this comment.
+      with_clean_argv { IRB.start }
     end
 
     private

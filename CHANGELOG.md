@@ -2,6 +2,12 @@
 
 ## Master (Unreleased)
 
+## Fixed
+
+* `irb` command unintentionally changing $PROGRAM_NAME.
+* `pry` command failing.
+* Unrelated error message when using `pry` command and Pry not installed.
+
 ## 8.2.5 - 2016-04-27
 
 ### Fixed

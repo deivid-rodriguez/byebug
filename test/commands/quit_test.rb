@@ -1,5 +1,5 @@
-require 'minitest/mock'
 require 'test_helper'
+require 'minitest/mock'
 
 module Byebug
   #

@@ -55,13 +55,10 @@ GEM
     kramdown (1.11.1)
     launchy (2.4.3)
       addressable (~> 2.3)
-    metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.8.4)
-    mixlib-cli (1.5.0)
+    mixlib-cli (1.6.0)
     mixlib-config (2.2.1)
-    mocha (1.1.0)
-      metaclass (~> 0.0.1)
     multi_json (1.12.0)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
@@ -122,7 +119,6 @@ DEPENDENCIES
   codeclimate-test-reporter (= 0.5.0)
   mdl!
   minitest (~> 5.7)
-  mocha (~> 1.1)
   overcommit (= 0.33.0)
   pry!
   rake (~> 11.1)
@@ -133,4 +129,4 @@ DEPENDENCIES
   yard (= 0.8.7.6)
 
 BUNDLED WITH
-   1.12.1
+   1.12.3

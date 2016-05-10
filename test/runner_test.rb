@@ -1,4 +1,3 @@
-require 'mocha/mini_test'
 require 'test_helper'
 require 'byebug/runner'
 
@@ -34,15 +33,15 @@ module Byebug
     end
 
     def test_run_with_remote_option_only_with_a_port_number
-      Byebug.expects(:start_client)
-
-      with_command_line('bin/byebug', '--remote', '9999') { runner.run }
+      with_command_line('bin/byebug', '--remote', '9999') do
+        assert_calls(Byebug, :start_client, 'localhost 9999') { runner.run }
+      end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
-      Byebug.expects(:start_client)
-
-      with_command_line('bin/byebug', '--remote', 'myhost:9999') { runner.run }
+      with_command_line('bin/byebug', '--remote', 'myhost:9999') do
+        assert_calls(Byebug, :start_client, 'myhost 9999') { runner.run }
+      end
     end
 
     def test_run_without_a_script_to_debug
@@ -73,7 +72,7 @@ module Byebug
     end
   end
 
-  class RunnerAgainstValidProgram < TestCase
+  class RunnerAgainstValidProgramTest < TestCase
     def setup
       super
 
@@ -114,10 +113,8 @@ module Byebug
     end
 
     def test_run_with_no_rc_option
-      Byebug.expects(:run_init_script).never
-
       with_command_line('bin/byebug', '--no-rc', example_path) do
-        non_stop_runner.run
+        refute_calls(Byebug, :run_init_script) { non_stop_runner.run }
       end
     end
 

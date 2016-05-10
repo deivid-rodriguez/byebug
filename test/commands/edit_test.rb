@@ -1,4 +1,3 @@
-require 'mocha/mini_test'
 require 'test_helper'
 
 module Byebug
@@ -8,29 +7,28 @@ module Byebug
   class EditTest < TestCase
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       with_configured_editor('edi') do
-        EditCommand.any_instance.expects(:system).with("edi +4 #{example_path}")
-
-        enter 'edit'
-        debug_code(minimal_program)
+        assert_calls(Kernel, :system, "edi +4 #{example_path}") do
+          enter 'edit'
+          debug_code(minimal_program)
+        end
       end
     end
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
       with_configured_editor(nil) do
-        EditCommand.any_instance.expects(:system).with("vim +4 #{example_path}")
-
-        enter 'edit'
-        debug_code(minimal_program)
+        assert_calls(Kernel, :system, "vim +4 #{example_path}") do
+          enter 'edit'
+          debug_code(minimal_program)
+        end
       end
     end
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
       with_configured_editor('edi') do
-        file = File.expand_path('README.md')
-        EditCommand.any_instance.expects(:system).with("edi +3 #{file}")
-
-        enter 'edit README.md:3'
-        debug_code(minimal_program)
+        assert_calls(Kernel, :system, "edi +3 #{readme_path}") do
+          enter 'edit README.md:3'
+          debug_code(minimal_program)
+        end
       end
     end
 
@@ -43,26 +41,28 @@ module Byebug
     end
 
     def test_edit_shows_an_error_if_the_specified_file_is_not_readable
-      file = File.expand_path('README.md')
-      File.stubs(:readable?).returns(false)
-      enter 'edit README.md:6'
-      debug_code(minimal_program)
+      File.stub(:readable?, false) do
+        enter 'edit README.md:6'
+        debug_code(minimal_program)
 
-      check_error_includes "File #{file} is not readable."
+        check_error_includes "File #{readme_path} is not readable."
+      end
     end
 
     def test_edit_accepts_no_line_specification
       with_configured_editor('edi') do
-        file = File.expand_path('README.md')
-
-        EditCommand.any_instance.expects(:system).with("edi #{file}")
-
-        enter 'edit README.md'
-        debug_code(minimal_program)
+        assert_calls(Kernel, :system, "edi #{readme_path}") do
+          enter 'edit README.md'
+          debug_code(minimal_program)
+        end
       end
     end
 
     private
+
+    def readme_path
+      File.expand_path('README.md')
+    end
 
     def with_configured_editor(editor)
       old_editor = ENV['EDITOR']
