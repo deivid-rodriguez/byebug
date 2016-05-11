@@ -4,7 +4,7 @@
 
 ## 9.0.0 - 2016-05-11
 
-## Fixed
+### Fixed
 
 * `irb` command unintentionally changing $PROGRAM_NAME.
 * `pry` command failing.
