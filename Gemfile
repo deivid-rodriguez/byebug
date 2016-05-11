@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rake', '~> 11.1'
-gem 'rake-compiler', '0.9.8'
+gem 'rake-compiler', '0.9.9'
 gem 'rubocop', '0.39.0'
 gem 'minitest', '~> 5.7'
 gem 'simplecov', '0.11.2'
