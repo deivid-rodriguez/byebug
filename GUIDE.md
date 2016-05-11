@@ -1,3 +1,7 @@
+# GUIDE
+
+## Introduction
+
 ### First Steps
 
 A handful of commands are enough to get started using `byebug`. The following
