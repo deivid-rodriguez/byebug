@@ -62,7 +62,8 @@ module Byebug
       debug_code(program)
 
       check_output_includes(
-        /--> #1  .*encode\(str#String\)\s* at .*#{example_path}:11/)
+        /--> #1  .*encode\(str#String\)\s* at .*#{example_path}:11/
+      )
     end
 
     def test_frame_0_sets_frame_to_the_first_one

@@ -28,10 +28,12 @@ module Byebug
       def context_from_thread(thnum)
         ctx = Byebug.contexts.find { |c| c.thnum.to_s == thnum }
 
-        err = case
-              when ctx.nil? then pr('thread.errors.no_thread')
-              when ctx == context then pr('thread.errors.current_thread')
-              when ctx.ignored? then pr('thread.errors.ignored', arg: thnum)
+        err = if ctx.nil?
+                pr('thread.errors.no_thread')
+              elsif ctx == context
+                pr('thread.errors.current_thread')
+              elsif ctx.ignored?
+                pr('thread.errors.ignored', arg: thnum)
               end
 
         [ctx, err]

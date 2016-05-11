@@ -26,7 +26,8 @@ module Byebug
 
     def test_shows_summary_for_continue_command
       check_output_includes(
-        /Runs until program ends, hits a breakpoint or reaches a line/)
+        /Runs until program ends, hits a breakpoint or reaches a line/
+      )
     end
 
     def test_shows_summary_for_delete_command
@@ -39,7 +40,8 @@ module Byebug
 
     def test_shows_summary_for_display_command
       check_output_includes(
-        /Evaluates expressions every time the debugger stops/)
+        /Evaluates expressions every time the debugger stops/
+      )
     end
 
     def test_shows_summary_for_down_command
@@ -72,7 +74,8 @@ module Byebug
 
     def test_shows_summary_for_info_command
       check_output_includes(
-        /Shows several informations about the program being debugged/)
+        /Shows several informations about the program being debugged/
+      )
     end
 
     def test_shows_summary_for_interrupt_command
@@ -141,7 +144,8 @@ module Byebug
 
     def test_shows_summary_for_undisplay_command
       check_output_includes(
-        /Stops displaying all or some expressions when program stops/)
+        /Stops displaying all or some expressions when program stops/
+      )
     end
 
     def test_shows_summary_for_untrace_command

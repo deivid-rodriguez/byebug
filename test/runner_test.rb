@@ -29,7 +29,8 @@ module Byebug
       with_command_line('bin/byebug', '--help') { runner.run }
 
       check_output_includes(
-        /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/)
+        /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/
+      )
     end
 
     def test_run_with_remote_option_only_with_a_port_number
