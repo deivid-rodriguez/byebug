@@ -128,8 +128,8 @@ module Byebug
       enter 'info', 'cont'
       debug_code(program)
 
-      check_output_includes(
-        'Shows several informations about the program being debugged')
+      check_output_includes \
+        'Shows several informations about the program being debugged'
     end
   end
 

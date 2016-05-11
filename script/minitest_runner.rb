@@ -38,10 +38,12 @@ class MinitestRunner
   end
 
   def test_methods(str)
-    case
-    when str.match(/test_.*/) then normalize(str)
-    when str.match(/.*#test_.*/) then [str]
-    else return expand(str)
+    if str =~ /test_.*/
+      normalize(str)
+    elsif str =~ /.*#test_.*/
+      [str]
+    else
+      expand(str)
     end
   end
 

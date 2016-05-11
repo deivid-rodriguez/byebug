@@ -46,8 +46,8 @@ module Byebug
       enter 'info unknown_subcmd'
       debug_code(minimal_program)
 
-      check_error_includes(
-        "Unknown command 'info unknown_subcmd'. Try 'help info'")
+      check_error_includes \
+        "Unknown command 'info unknown_subcmd'. Try 'help info'"
     end
   end
 

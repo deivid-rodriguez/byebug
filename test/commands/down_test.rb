@@ -68,7 +68,8 @@ module Byebug
       debug_code(program)
 
       check_output_includes(
-        /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/)
+        /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/
+      )
     end
 
     def test_down_does_not_move_if_frame_number_to_too_low
