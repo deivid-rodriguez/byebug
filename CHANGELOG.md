@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.0.0 - 2016-05-11
+
 ## Fixed
 
 * `irb` command unintentionally changing $PROGRAM_NAME.
