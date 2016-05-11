@@ -1,3 +1,7 @@
+# GUIDE
+
+## Introduction
+
 ### First Steps
 
 A handful of commands are enough to get started using `byebug`. The following
@@ -609,10 +613,6 @@ statements. In other compiled languages this would not happen because that's
 already been done when you compile the program (or in Perl when it scans in the
 program). In this section we'll consider some other things that might throw off
 new users to Ruby who are familiar with other languages and debugging in them.
-
-* Bouncing Around in Blocks (iterators)
-* No Parameter Values in a Call Stack
-* Lines You Can Stop At
 
 #### Bouncing Around in Blocks (iterators)
 

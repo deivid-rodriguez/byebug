@@ -1,10 +1,10 @@
-## Contributing to Byebug
+# CONTRIBUTING
 
 Please note that this project is released with a [Contributor Code of
 Conduct](code_of_conduct.md). By participating in this project you agree to
 abide by its terms.
 
-### Bug Reports
+## Bug Reports
 
 * Try to reproduce the issue against the latest revision. There might be
   unrealeased work that fixes your problem!
@@ -14,7 +14,7 @@ abide by its terms.
 * Include the behavior you observed along with the behavior you expected,
   and why you expected it.
 
-### Development dependencies
+## Development dependencies
 
 * `Byebug` depends on Ruby's TracePoint API provided by `ruby-core`. This is a
   young API and a lot of bugs have been recently corrected, so make sure you
@@ -24,7 +24,7 @@ abide by its terms.
 * Running `bundle install` inside a local clone of `byebug` will get development
   dependencies installed.
 
-### Running the test suite
+## Running the test suite
 
 * Make sure you compile the C-extension using `bundle exec rake compile`.
   Otherwise you won't be able to use `byebug`.
@@ -45,7 +45,7 @@ abide by its terms.
     example: `script/minitest_runner.rb Byebug::BreakAtLinesTestCase
     test_catch_removes_specific_catchpoint`
 
-### Code style
+## Code style
 
 * Byebug uses [overcommit][] to enforce code style. Install the git hooks using
   `bundle exec overcommit --install`. They will review your changes before they
@@ -53,7 +53,7 @@ abide by its terms.
 
 [overcommit]: https://github.com/brigade/overcommit/
 
-### Byebug as a C-extension
+## Byebug as a C-extension
 
 Byebug is a gem developed as a C-extension. The debugger internal's
 functionality is implemented in C (the interaction with the TracePoint API).
