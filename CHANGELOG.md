@@ -7,6 +7,15 @@
 * `irb` command unintentionally changing $PROGRAM_NAME.
 * `pry` command failing.
 * Unrelated error message when using `pry` command and Pry not installed.
+* Interrupting program execution from remote control interface (#239, thanks
+  @izaera).
+
+### Removed
+
+* Official Ruby 2.0.0 support. `var local` no longer works in Ruby 2.0. The
+  rest of the commands should still work as before, but `byebug` is no longer
+  tested against this version so they might start breaking in the
+  future.
 
 ## 8.2.5 - 2016-04-27
 
