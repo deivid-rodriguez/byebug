@@ -64,6 +64,8 @@ module Byebug
 
     def remote=(host_and_port)
       @remote ||= Byebug.parse_host_and_port(host_and_port)
+
+      Byebug.start_client(*@remote)
     end
 
     def init_script
@@ -88,14 +90,7 @@ module Byebug
     #
     def run
       option_parser.order!($ARGV)
-      return if version || help
-
-      if remote
-        Byebug.start_client(*remote)
-        return
-      end
-
-      return if no_script? || non_existing_script?
+      return if non_script_option? || error_in_script?
 
       Byebug.run_init_script if init_script
 
@@ -123,6 +118,20 @@ module Byebug
 
         OptionSetter.new(self, opts).setup
       end
+    end
+
+    #
+    # An option that doesn't need a script specified was given
+    #
+    def non_script_option?
+      version || help || remote
+    end
+
+    #
+    # There is an error with the specified script
+    #
+    def error_in_script?
+      no_script? || non_existing_script?
     end
 
     #
