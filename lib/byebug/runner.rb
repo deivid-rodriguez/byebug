@@ -14,11 +14,6 @@ module Byebug
     include Helpers::ParseHelper
 
     #
-    # Error class signaling a non existent script to debug.
-    #
-    class NonExistentScript < StandardError; end
-
-    #
     # Error class signaling a script with invalid Ruby syntax.
     #
     class InvalidScript < StandardError; end
@@ -100,11 +95,9 @@ module Byebug
         return
       end
 
-      return if no_script?
+      return if no_script? || non_existing_script?
 
       Byebug.run_init_script if init_script
-
-      setup_cmd_line_args
 
       loop do
         debug_program
@@ -145,14 +138,19 @@ module Byebug
     #
     # Extracts debugged program from command line args.
     #
-    def setup_cmd_line_args
+    def non_existing_script?
       Byebug.mode = :standalone
 
       program = which($ARGV.shift)
       program = which($ARGV.shift) if program == which('ruby')
-      raise(NonExistentScript, "The script doesn't exist") unless program
 
-      $PROGRAM_NAME = program
+      if program
+        $PROGRAM_NAME = program
+        false
+      else
+        print_error("The script doesn't exist")
+        true
+      end
     end
 
     #

@@ -5,6 +5,7 @@
 ### Fixed
 
 * Unfriendly output in byebug's executable when no script specified (#256).
+* Unfriendly output in byebug's executable when script doesn't exist.
 
 ## 9.0.2 - 2016-05-15
 
