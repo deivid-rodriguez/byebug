@@ -63,7 +63,7 @@ module Byebug
     def help=(text)
       @help ||= text
 
-      interface.puts("\n#{text}\n")
+      interface.puts("#{text}\n")
     end
 
     def version=(number)
