@@ -14,11 +14,6 @@ module Byebug
     include Helpers::ParseHelper
 
     #
-    # Error class signaling absence of a script to debug.
-    #
-    class NoScript < StandardError; end
-
-    #
     # Error class signaling a non existent script to debug.
     #
     class NonExistentScript < StandardError; end
@@ -105,6 +100,8 @@ module Byebug
         return
       end
 
+      return if no_script?
+
       Byebug.run_init_script if init_script
 
       setup_cmd_line_args
@@ -136,12 +133,21 @@ module Byebug
     end
 
     #
+    # No script to debug specified
+    #
+    def no_script?
+      return false unless $ARGV.empty?
+
+      interface.errmsg('You must specify a program to debug')
+      interface.puts(option_parser.help)
+      true
+    end
+
+    #
     # Extracts debugged program from command line args.
     #
     def setup_cmd_line_args
       Byebug.mode = :standalone
-
-      raise(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
 
       program = which($ARGV.shift)
       program = which($ARGV.shift) if program == which('ruby')

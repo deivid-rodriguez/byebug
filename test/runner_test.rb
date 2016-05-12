@@ -47,7 +47,9 @@ module Byebug
 
     def test_run_without_a_script_to_debug
       with_command_line('bin/byebug') do
-        assert_raises(Runner::NoScript) { runner.run }
+        runner.run
+
+        check_error_includes 'You must specify a program to debug'
       end
     end
 

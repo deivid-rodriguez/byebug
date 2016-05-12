@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Unfriendly output in byebug's executable when no script specified (#256).
+
 ## 9.0.2 - 2016-05-15
 
 ### Fixed
