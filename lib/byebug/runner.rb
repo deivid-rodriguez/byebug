@@ -14,11 +14,6 @@ module Byebug
     include Helpers::ParseHelper
 
     #
-    # Error class signaling a script with invalid Ruby syntax.
-    #
-    class InvalidScript < StandardError; end
-
-    #
     # Special working modes that don't actually start the debugger.
     #
     attr_reader :help, :version, :remote
@@ -131,7 +126,7 @@ module Byebug
     # There is an error with the specified script
     #
     def error_in_script?
-      no_script? || non_existing_script?
+      no_script? || non_existing_script? || invalid_script?
     end
 
     #
@@ -163,12 +158,19 @@ module Byebug
     end
 
     #
+    # Checks the debugged script has correct syntax
+    #
+    def invalid_script?
+      return false if syntax_valid?(File.read($PROGRAM_NAME))
+
+      print_error('The script has incorrect syntax')
+      true
+    end
+
+    #
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      ok = syntax_valid?(File.read($PROGRAM_NAME))
-      raise(InvalidScript, 'The script has incorrect syntax') unless ok
-
       error = Byebug.debug_load($PROGRAM_NAME, stop)
       puts "#{error}\n#{error.backtrace}" if error
     end

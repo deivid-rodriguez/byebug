@@ -66,7 +66,9 @@ module Byebug
       example_file.close
 
       with_command_line('bin/byebug', example_path) do
-        assert_raises(Runner::InvalidScript) { runner.run }
+        runner.run
+
+        check_error_includes 'The script has incorrect syntax'
       end
     end
 
