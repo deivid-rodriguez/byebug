@@ -138,8 +138,7 @@ module Byebug
     def no_script?
       return false unless $ARGV.empty?
 
-      interface.errmsg('You must specify a program to debug')
-      interface.puts(option_parser.help)
+      print_error('You must specify a program to debug')
       true
     end
 
@@ -183,6 +182,14 @@ module Byebug
       end
 
       nil
+    end
+
+    #
+    # Prints an error message and a help string
+    #
+    def print_error(msg)
+      interface.errmsg(msg)
+      interface.puts(option_parser.help)
     end
   end
 end
