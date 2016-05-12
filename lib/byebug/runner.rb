@@ -128,7 +128,7 @@ module Byebug
     # Processes options passed from the command line.
     #
     def option_parser
-      OptionParser.new(banner, 25) do |opts|
+      @option_parser ||= OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
 
         OptionSetter.new(self, opts).setup
