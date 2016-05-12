@@ -97,7 +97,7 @@ module Byebug
     # Starts byebug to debug a program.
     #
     def run
-      prepare_options.order!($ARGV)
+      option_parser.order!($ARGV)
       return if version || help
 
       if remote
@@ -127,7 +127,7 @@ module Byebug
     #
     # Processes options passed from the command line.
     #
-    def prepare_options
+    def option_parser
       OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
 
