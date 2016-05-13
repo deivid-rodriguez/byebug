@@ -74,7 +74,7 @@ module Byebug
     # Connects to the remote byebug
     #
     def start_client(host = 'localhost', port = PORT)
-      Context.interface = LocalInterface.new
+      interface = LocalInterface.new
       puts 'Connecting to byebug server...'
       socket = TCPSocket.new(host, port)
       puts 'Connected.'
@@ -82,11 +82,11 @@ module Byebug
       while (line = socket.gets)
         case line
         when /^PROMPT (.*)$/
-          input = Context.interface.read_command(Regexp.last_match[1])
+          input = interface.read_command(Regexp.last_match[1])
           break unless input
           socket.puts input
         when /^CONFIRM (.*)$/
-          input = Context.interface.readline(Regexp.last_match[1])
+          input = interface.readline(Regexp.last_match[1])
           break unless input
           socket.puts input
         else
