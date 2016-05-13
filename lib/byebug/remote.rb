@@ -93,6 +93,7 @@ module Byebug
           puts line
         end
       end
+
       socket.close
     end
 
