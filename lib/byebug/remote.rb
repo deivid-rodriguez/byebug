@@ -86,7 +86,7 @@ module Byebug
           break unless input
           socket.puts input
         when /^CONFIRM (.*)$/
-          input = Context.interface.confirm(Regexp.last_match[1])
+          input = Context.interface.readline(Regexp.last_match[1])
           break unless input
           socket.puts input
         else
