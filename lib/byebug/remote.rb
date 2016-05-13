@@ -79,20 +79,18 @@ module Byebug
       socket = TCPSocket.new(host, port)
       puts 'Connected.'
 
-      catch(:exit) do
-        while (line = socket.gets)
-          case line
-          when /^PROMPT (.*)$/
-            input = Context.interface.read_command(Regexp.last_match[1])
-            throw :exit unless input
-            socket.puts input
-          when /^CONFIRM (.*)$/
-            input = Context.interface.confirm(Regexp.last_match[1])
-            throw :exit unless input
-            socket.puts input
-          else
-            puts line
-          end
+      while (line = socket.gets)
+        case line
+        when /^PROMPT (.*)$/
+          input = Context.interface.read_command(Regexp.last_match[1])
+          break unless input
+          socket.puts input
+        when /^CONFIRM (.*)$/
+          input = Context.interface.confirm(Regexp.last_match[1])
+          break unless input
+          socket.puts input
+        else
+          puts line
         end
       end
       socket.close
