@@ -93,7 +93,6 @@ typedef struct
 } breakpoint_t;
 
 /* functions from locker.c */
-extern int is_in_locked(VALUE thread_id);
 extern void add_to_locked(VALUE thread);
 extern VALUE pop_from_locked();
 extern void remove_from_locked(VALUE thread);

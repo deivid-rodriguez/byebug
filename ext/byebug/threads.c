@@ -7,7 +7,7 @@ static VALUE cThreadsTable;
 VALUE next_thread = Qnil;
 
 /* To allow thread syncronization, we must stop threads when debugging */
-VALUE locker = Qnil;
+static VALUE locker = Qnil;
 
 static int
 t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
@@ -97,7 +97,7 @@ is_living_thread(VALUE thread)
 /*
  *  Checks threads table for dead/finished threads.
  */
-void
+static void
 cleanup_dead_threads(void)
 {
   threads_table_t *t_tbl;
