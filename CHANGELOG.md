@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Skip to get a line in eval context (#263).
+
 ## 9.0.1 - 2016-05-14
 
 * `quit` never exiting when remote debugging (#201).

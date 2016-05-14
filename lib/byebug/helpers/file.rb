@@ -54,7 +54,7 @@ module Byebug
       # True for special files like -e, false otherwise
       #
       def virtual_file?(name)
-        ['(irb)', '-e', '(byebug)'].include?(name)
+        ['(irb)', '-e', '(byebug)', '(eval)'].include?(name)
       end
     end
   end

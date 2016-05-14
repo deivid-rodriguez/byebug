@@ -22,7 +22,8 @@ module Byebug
         13:    b = 5
         14:    c = b + 5
         15:    #{example_class}.new.add_four(c)
-        16:  end
+        16:    eval('c')
+        17:  end
       EOC
     end
 
@@ -75,6 +76,15 @@ module Byebug
         debug_code(program)
 
         check_output_includes "Tracing: #{example_path}:14   c = b + 5"
+      end
+    end
+
+    def test_linetrace_does_not_show_a_line_in_eval_context
+      with_setting :linetrace, true do
+        enter 'cont'
+        debug_code(program)
+
+        check_output_includes 'Tracing: (eval):1'
       end
     end
   end
