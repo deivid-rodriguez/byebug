@@ -676,6 +676,9 @@ Stoppable(VALUE self)
   if (post_mortem == Qtrue)
     return Qfalse;
 
+  if (RTEST(tracing))
+    return Qfalse;
+
   context = Current_context(self);
   if (!NIL_P(context))
   {

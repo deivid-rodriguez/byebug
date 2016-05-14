@@ -68,5 +68,14 @@ module Byebug
 
       check_error_includes 'Line 100 is not a valid stopping point in file'
     end
+
+    def test_tracing_after_set_linetrace_and_continue
+      with_setting :linetrace, false do
+        enter 'set linetrace', 'cont'
+        debug_code(program)
+
+        check_output_includes "Tracing: #{example_path}:14   c = b + 5"
+      end
+    end
   end
 end
