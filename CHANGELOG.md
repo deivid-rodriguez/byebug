@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* `quit` never exiting when remote debugging (#201).
+
 ## 9.0.0 - 2016-05-11
 
 ### Fixed
