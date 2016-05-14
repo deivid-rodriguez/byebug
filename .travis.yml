@@ -22,17 +22,18 @@ script:
 
 rvm:
   - 2.1.10
+  - 2.1.10-clang
   - 2.2.5
+  - 2.2.5-clang
   - 2.3.1
+  - 2.3.1-clang
   - ruby-head
-
-env:
-  - CC=gcc
-  - CC=clang
+  - ruby-head-clang
 
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - rvm: ruby-head-clang
 
 branches:
   only:
