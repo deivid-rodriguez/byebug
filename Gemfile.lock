@@ -26,7 +26,7 @@ GEM
     addressable (2.4.0)
     ast (2.2.0)
     backports (3.6.8)
-    chandler (0.3.0)
+    chandler (0.3.1)
       netrc
       octokit (>= 2.2.0)
     childprocess (0.5.9)
@@ -115,7 +115,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.7)
   byebug!
-  chandler (= 0.3.0)
+  chandler (= 0.3.1)
   codeclimate-test-reporter (= 0.5.0)
   mdl!
   minitest (~> 5.7)
