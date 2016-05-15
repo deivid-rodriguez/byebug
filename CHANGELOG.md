@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.0.2 - 2016-05-15
+
 ### Fixed
 
 * Skip to get a line in eval context (#263, thanks @k0kubun).
