@@ -4,7 +4,9 @@
 
 ### Fixed
 
-* Skip to get a line in eval context (#263).
+* Skip to get a line in eval context (#263, thanks @k0kubun).
+* Debugger getting disabled after `continue` even when linetrace is enabled
+  (#264, thanks @k0kubun).
 
 ## 9.0.1 - 2016-05-14
 
