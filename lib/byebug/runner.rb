@@ -14,21 +14,6 @@ module Byebug
     include Helpers::ParseHelper
 
     #
-    # Error class signaling absence of a script to debug.
-    #
-    class NoScript < StandardError; end
-
-    #
-    # Error class signaling a non existent script to debug.
-    #
-    class NonExistentScript < StandardError; end
-
-    #
-    # Error class signaling a script with invalid Ruby syntax.
-    #
-    class InvalidScript < StandardError; end
-
-    #
     # Special working modes that don't actually start the debugger.
     #
     attr_reader :help, :version, :remote
@@ -63,7 +48,7 @@ module Byebug
     def help=(text)
       @help ||= text
 
-      interface.puts("\n#{text}\n")
+      interface.puts("#{text}\n")
     end
 
     def version=(number)
@@ -74,6 +59,8 @@ module Byebug
 
     def remote=(host_and_port)
       @remote ||= Byebug.parse_host_and_port(host_and_port)
+
+      Byebug.start_client(*@remote)
     end
 
     def init_script
@@ -97,17 +84,10 @@ module Byebug
     # Starts byebug to debug a program.
     #
     def run
-      prepare_options.order!($ARGV)
-      return if version || help
-
-      if remote
-        Byebug.start_client(*remote)
-        return
-      end
+      option_parser.order!($ARGV)
+      return if non_script_option? || error_in_script?
 
       Byebug.run_init_script if init_script
-
-      setup_cmd_line_args
 
       loop do
         debug_program
@@ -127,8 +107,8 @@ module Byebug
     #
     # Processes options passed from the command line.
     #
-    def prepare_options
-      OptionParser.new(banner, 25) do |opts|
+    def option_parser
+      @option_parser ||= OptionParser.new(banner, 25) do |opts|
         opts.banner = banner
 
         OptionSetter.new(self, opts).setup
@@ -136,27 +116,61 @@ module Byebug
     end
 
     #
+    # An option that doesn't need a script specified was given
+    #
+    def non_script_option?
+      version || help || remote
+    end
+
+    #
+    # There is an error with the specified script
+    #
+    def error_in_script?
+      no_script? || non_existing_script? || invalid_script?
+    end
+
+    #
+    # No script to debug specified
+    #
+    def no_script?
+      return false unless $ARGV.empty?
+
+      print_error('You must specify a program to debug')
+      true
+    end
+
+    #
     # Extracts debugged program from command line args.
     #
-    def setup_cmd_line_args
+    def non_existing_script?
       Byebug.mode = :standalone
-
-      raise(NoScript, 'You must specify a program to debug...') if $ARGV.empty?
 
       program = which($ARGV.shift)
       program = which($ARGV.shift) if program == which('ruby')
-      raise(NonExistentScript, "The script doesn't exist") unless program
 
-      $PROGRAM_NAME = program
+      if program
+        $PROGRAM_NAME = program
+        false
+      else
+        print_error("The script doesn't exist")
+        true
+      end
+    end
+
+    #
+    # Checks the debugged script has correct syntax
+    #
+    def invalid_script?
+      return false if syntax_valid?(File.read($PROGRAM_NAME))
+
+      print_error('The script has incorrect syntax')
+      true
     end
 
     #
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      ok = syntax_valid?(File.read($PROGRAM_NAME))
-      raise(InvalidScript, 'The script has incorrect syntax') unless ok
-
       error = Byebug.debug_load($PROGRAM_NAME, stop)
       puts "#{error}\n#{error.backtrace}" if error
     end
@@ -177,6 +191,14 @@ module Byebug
       end
 
       nil
+    end
+
+    #
+    # Prints an error message and a help string
+    #
+    def print_error(msg)
+      interface.errmsg(msg)
+      interface.puts(option_parser.help)
     end
   end
 end

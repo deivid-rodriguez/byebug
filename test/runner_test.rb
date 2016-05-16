@@ -47,13 +47,17 @@ module Byebug
 
     def test_run_without_a_script_to_debug
       with_command_line('bin/byebug') do
-        assert_raises(Runner::NoScript) { runner.run }
+        runner.run
+
+        check_error_includes 'You must specify a program to debug'
       end
     end
 
     def test_run_with_an_nonexistent_script
       with_command_line('bin/byebug', 'non_existent_script.rb') do
-        assert_raises(Runner::NonExistentScript) { runner.run }
+        runner.run
+
+        check_error_includes "The script doesn't exist"
       end
     end
 
@@ -62,7 +66,9 @@ module Byebug
       example_file.close
 
       with_command_line('bin/byebug', example_path) do
-        assert_raises(Runner::InvalidScript) { runner.run }
+        runner.run
+
+        check_error_includes 'The script has incorrect syntax'
       end
     end
 
