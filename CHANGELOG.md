@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.0.3 - 2016-05-16
+
 ### Fixed
 
 * Unfriendly output in byebug's executable when no script specified (#256).
@@ -17,6 +19,8 @@
   (#264, thanks @k0kubun).
 
 ## 9.0.1 - 2016-05-14
+
+### Fixed
 
 * `quit` never exiting when remote debugging (#201).
 
