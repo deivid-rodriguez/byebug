@@ -64,14 +64,17 @@ module Byebug
     end
 
     #
-    # Changes global rc file to point to the specified file, runs the block and
+    # Changes global rc file to have specific contents, runs the block and
     # restores the old config afterwards.
     #
-    def with_init_file(name)
+    def with_init_file(content)
       old_init_file = Byebug.init_file
-      Byebug.init_file = name
+      Byebug.init_file = '.byebug_test_rc'
 
-      yield
+      with_new_file(File.expand_path('.byebug_test_rc'), content) do
+        yield
+      end
+
     ensure
       Byebug.init_file = old_init_file
     end

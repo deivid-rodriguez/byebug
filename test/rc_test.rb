@@ -30,13 +30,11 @@ module Byebug
       args = [flag, example_path].compact
 
       with_setting :callstyle, 'short' do
-        with_new_file(File.expand_path('.foorc'), 'set callstyle long') do
-          with_init_file('.foorc') do
-            with_command_line('bin/byebug', *args) do
-              non_stop_runner.run
+        with_init_file('set callstyle long') do
+          with_command_line('bin/byebug', *args) do
+            non_stop_runner.run
 
-              assert_equal 'long', Setting[:callstyle]
-            end
+            assert_equal 'long', Setting[:callstyle]
           end
         end
       end
