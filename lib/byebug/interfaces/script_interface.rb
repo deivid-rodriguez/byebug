@@ -8,7 +8,7 @@ module Byebug
       @verbose = verbose
       @input = File.open(file)
       @output = verbose ? $stdout : StringIO.new
-      @error = verbose ? $stderr : StringIO.new
+      @error = $stderr
     end
 
     def read_command(prompt)
