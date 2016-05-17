@@ -10,13 +10,6 @@ module Byebug
       super
 
       runner.interface = Context.interface
-      @previous_mode = Byebug.mode
-    end
-
-    def teardown
-      Byebug.mode = @previous_mode
-
-      super
     end
 
     def test_run_with_version_flag
@@ -88,14 +81,6 @@ module Byebug
 
       example_file.write('sleep 0')
       example_file.close
-
-      @previous_mode = Byebug.mode
-    end
-
-    def teardown
-      Byebug.mode = @previous_mode
-
-      super
     end
 
     def test_run_with_a_script_to_debug
