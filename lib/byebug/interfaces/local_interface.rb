@@ -8,9 +8,9 @@ module Byebug
 
     def initialize
       super()
-      @input = STDIN
-      @output = STDOUT
-      @error = STDERR
+      @input = $stdin
+      @output = $stdout
+      @error = $stderr
     end
 
     #
