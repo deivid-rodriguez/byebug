@@ -24,6 +24,16 @@ module Byebug
       rc_positive_test('--rc')
     end
 
+    def test_rc_file_with_invalid_commands
+      with_init_file('seta callstyle long') do
+        with_command_line('bin/byebug', '--rc', example_path) do
+          assert_output(nil, /Unknown command 'seta callstyle long'/) do
+            non_stop_runner.run
+          end
+        end
+      end
+    end
+
     private
 
     def rc_positive_test(flag)
