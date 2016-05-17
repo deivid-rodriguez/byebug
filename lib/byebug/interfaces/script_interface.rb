@@ -5,6 +5,7 @@ module Byebug
   class ScriptInterface < Interface
     def initialize(file, verbose = false)
       super()
+      @verbose = verbose
       @input = File.open(file)
       @output = verbose ? $stdout : StringIO.new
       @error = verbose ? $stderr : StringIO.new
@@ -20,7 +21,7 @@ module Byebug
 
     def readline(*)
       while (result = input.gets)
-        output.puts "+ #{result}"
+        output.puts "+ #{result}" if @verbose
         next if result =~ /^\s*#/
         return result.chomp
       end
