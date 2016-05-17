@@ -12,25 +12,19 @@ module Byebug
       super.select(&:allow_in_control)
     end
 
-    def process_commands
+    def repl
       while (input = interface.read_command(prompt))
-        command = command_list.match(input)
+        safely do
+          command = command_list.match(input)
+          raise CommandNotFound.new(input) unless command
 
-        if command
           command.new(self, input).execute
-        else
-          errmsg('Unknown command')
         end
       end
+    end
 
+    def after_repl
       interface.close
-    rescue IOError, SystemCallError
-      interface.close
-    rescue
-      without_exceptions do
-        puts "INTERNAL ERROR!!! #{$ERROR_INFO}"
-        puts $ERROR_INFO.backtrace.map { |l| "  #{l}" }.join("\n")
-      end
     end
 
     #

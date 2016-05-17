@@ -109,21 +109,6 @@ module Byebug
       '(byebug) '
     end
 
-    private
-
-    def auto_cmds_for(run_level)
-      command_list.select { |cmd| cmd.always_run >= run_level }
-    end
-
-    #
-    # Run permanent commands.
-    #
-    def run_auto_cmds(run_level)
-      safely do
-        auto_cmds_for(run_level).each { |cmd| cmd.new(self).execute }
-      end
-    end
-
     def before_repl
       @proceed = false
       @prev_line = nil
@@ -147,6 +132,21 @@ module Byebug
         next if cmd == ''
 
         run_cmd(cmd)
+      end
+    end
+
+    private
+
+    def auto_cmds_for(run_level)
+      command_list.select { |cmd| cmd.always_run >= run_level }
+    end
+
+    #
+    # Run permanent commands.
+    #
+    def run_auto_cmds(run_level)
+      safely do
+        auto_cmds_for(run_level).each { |cmd| cmd.new(self).execute }
       end
     end
 
