@@ -1,3 +1,5 @@
+require 'io/console'
+
 module Byebug
   #
   # Interface class for command execution from script files.
@@ -6,8 +8,9 @@ module Byebug
     def initialize(file, verbose = false)
       super()
       @input = File.open(file)
-      @output = verbose ? STDOUT : StringIO.new
-      @error = verbose ? STDERR : StringIO.new
+      @verbose = verbose
+      @error = IO.console
+      @output = verbose ? @error : File.open(File::NULL, File::WRONLY)
     end
 
     def read_command(prompt)
@@ -16,11 +19,12 @@ module Byebug
 
     def close
       input.close
+      @output.close
     end
 
     def readline(*)
       while (result = input.gets)
-        output.puts "+ #{result}"
+        output.puts "+ #{result}" if @verbose
         next if result =~ /^\s*#/
         return result.chomp
       end
