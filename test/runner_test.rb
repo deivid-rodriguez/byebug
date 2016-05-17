@@ -3,7 +3,7 @@ require 'byebug/runner'
 
 module Byebug
   #
-  # Tests standalone byebug
+  # Tests standalone byebug when flags that require no target program are used
   #
   class RunnerWithoutTargetProgramTest < TestCase
     def setup
@@ -79,6 +79,9 @@ module Byebug
     end
   end
 
+  #
+  # Tests standalone byebug when debugging a target program
+  #
   class RunnerAgainstValidProgramTest < TestCase
     def setup
       super
