@@ -11,7 +11,7 @@ module Byebug
 
         assert_instance_of File, interface.input
         assert_instance_of StringIO, interface.output
-        assert_instance_of StringIO, interface.error
+        assert_equal $stderr, interface.error
       end
     end
 

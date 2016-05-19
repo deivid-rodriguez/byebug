@@ -86,6 +86,9 @@ module Byebug
       output.puts(message)
     end
 
+    #
+    # Prints an output message to the output stream without a final "\n".
+    #
     def print(message)
       output.print(message)
     end

@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Errors in rc file not being displayed to the user.
+
 ## 9.0.3 - 2016-05-16
 
 ### Fixed
