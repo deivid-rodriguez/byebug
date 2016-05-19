@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.0.4 - 2015-05-19
+
 ### Fixed
 
 * Errors in rc file not being displayed to the user.
