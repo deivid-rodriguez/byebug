@@ -56,7 +56,7 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     method_source (0.8.2)
-    minitest (5.8.4)
+    minitest (5.9.0)
     mixlib-cli (1.6.0)
     mixlib-config (2.2.1)
     multi_json (1.12.0)
