@@ -22,6 +22,13 @@ module Byebug
     end
 
     #
+    # Array holding the list of commands in history
+    #
+    def buffer
+      Readline::HISTORY.to_a
+    end
+
+    #
     # Restores history from disk.
     #
     def restore
@@ -74,7 +81,7 @@ module Byebug
     def to_s(n_cmds)
       show_size = n_cmds ? specific_max_size(n_cmds) : default_max_size
 
-      commands = Readline::HISTORY.to_a.last(show_size)
+      commands = buffer.last(show_size)
 
       last_ids(show_size).zip(commands).map do |l|
         format('%5d  %s', l[0], l[1])
@@ -115,7 +122,7 @@ module Byebug
       return true if /^\s*$/ =~ buf
       return false if Readline::HISTORY.empty?
 
-      Readline::HISTORY.to_a[Readline::HISTORY.length - 1] == buf
+      buffer[Readline::HISTORY.length - 1] == buf
     end
   end
 end
