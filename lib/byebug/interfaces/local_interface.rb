@@ -20,9 +20,7 @@ module Byebug
     # @param prompt Prompt to be displayed.
     #
     def readline(prompt)
-      with_repl_like_sigint do
-        Readline.readline(prompt) || EOF_ALIAS
-      end
+      with_repl_like_sigint { Readline.readline(prompt) || EOF_ALIAS }
     end
 
     #
