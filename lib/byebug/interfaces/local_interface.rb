@@ -21,7 +21,7 @@ module Byebug
     #
     def readline(prompt)
       with_repl_like_sigint do
-        Readline.readline(prompt, false) || EOF_ALIAS
+        Readline.readline(prompt) || EOF_ALIAS
       end
     end
 
