@@ -47,9 +47,7 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def run_init_script
-    run_rc_file(ENV['HOME'])
-
-    run_rc_file(Dir.pwd) unless Dir.pwd == ENV['HOME']
+    rc_dirs.each { |dir| run_rc_file(dir) }
   end
 
   def self.load_settings
@@ -93,6 +91,15 @@ module Byebug
     ScriptProcessor.new(nil).process_commands
   ensure
     Context.interface = old_interface
+  end
+
+  #
+  # List of folders to load rc files from
+  #
+  # @note Files will be loaded in the order specified here.
+  #
+  def rc_dirs
+    [ENV['HOME'], Dir.pwd].compact.uniq
   end
 end
 

@@ -24,6 +24,10 @@ module Byebug
       rc_positive_test('--rc')
     end
 
+    def test_rc_file_commands_are_properly_run_when_home_folder_not_known
+      with_env('HOME', nil) { rc_positive_test(nil) }
+    end
+
     def test_rc_file_with_invalid_commands
       with_init_file('seta callstyle long') do
         with_command_line('bin/byebug', '--rc', example_path) do
