@@ -47,7 +47,7 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def run_init_script
-    run_rc_file(ENV['HOME'])
+    run_rc_file(ENV['HOME']) if ENV.key?('HOME')
 
     run_rc_file(Dir.pwd) unless Dir.pwd == ENV['HOME']
   end
