@@ -71,11 +71,11 @@ module Byebug
     # Usage banner.
     #
     def banner
-      <<-EOB.gsub(/^ {8}/, '')
+      <<-EOB.gsub(/^ {6}/, '')
 
-          byebug #{Byebug::VERSION}
+        byebug #{Byebug::VERSION}
 
-          Usage: byebug [options] <script.rb> -- <script.rb parameters>
+        Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
       EOB
     end
