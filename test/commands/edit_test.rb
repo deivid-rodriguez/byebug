@@ -6,7 +6,7 @@ module Byebug
   #
   class EditTest < TestCase
     def test_edit_opens_current_file_in_current_line_in_configured_editor
-      with_configured_editor('edi') do
+      with_env('EDITOR', 'edi') do
         assert_calls(Kernel, :system, "edi +4 #{example_path}") do
           enter 'edit'
           debug_code(minimal_program)
@@ -15,7 +15,7 @@ module Byebug
     end
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
-      with_configured_editor(nil) do
+      with_env('EDITOR', nil) do
         assert_calls(Kernel, :system, "vim +4 #{example_path}") do
           enter 'edit'
           debug_code(minimal_program)
@@ -24,7 +24,7 @@ module Byebug
     end
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
-      with_configured_editor('edi') do
+      with_env('EDITOR', 'edi') do
         assert_calls(Kernel, :system, "edi +3 #{readme_path}") do
           enter 'edit README.md:3'
           debug_code(minimal_program)
@@ -50,7 +50,7 @@ module Byebug
     end
 
     def test_edit_accepts_no_line_specification
-      with_configured_editor('edi') do
+      with_env('EDITOR', 'edi') do
         assert_calls(Kernel, :system, "edi #{readme_path}") do
           enter 'edit README.md'
           debug_code(minimal_program)
@@ -62,15 +62,6 @@ module Byebug
 
     def readme_path
       File.expand_path('README.md')
-    end
-
-    def with_configured_editor(editor)
-      old_editor = ENV['EDITOR']
-      ENV['EDITOR'] = editor
-
-      yield
-    ensure
-      ENV['EDITOR'] = old_editor
     end
   end
 end
