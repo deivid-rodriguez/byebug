@@ -2,11 +2,13 @@
 
 ## Master (Unreleased)
 
+## 9.0.5 - 2016-05-28
+
 ### Fixed
 
 * Error loading rc file when `ENV['HOME']` is unset.
 
-## 9.0.4 - 2015-05-19
+## 9.0.4 - 2016-05-19
 
 ### Fixed
 
