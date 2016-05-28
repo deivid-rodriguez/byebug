@@ -92,5 +92,20 @@ module Byebug
     ensure
       File.delete(name)
     end
+
+    #
+    # Runs the block with a temporary value for an ENV variable
+    #
+    # @param key [String] Name for the key in the ENV hash
+    # @param vlaue [String] Value of the key in the ENV hash
+    #
+    def with_env(key, value)
+      old_value = ENV[key]
+      ENV[key] = value
+
+      yield
+    ensure
+      ENV[key] = old_value
+    end
   end
 end
