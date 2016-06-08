@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version = Byebug::VERSION
   s.authors = ['David Rodriguez', 'Kent Sibilev', 'Mark Moseley']
   s.email = 'deivid.rodriguez@mail.com'
-  s.license = 'BSD'
+  s.license = 'BSD-2-Clause'
   s.homepage = 'http://github.com/deivid-rodriguez/byebug'
   s.summary = 'Ruby 2.0 fast debugger - base + CLI'
   s.description = "Byebug is a Ruby 2 debugger. It's implemented using the
