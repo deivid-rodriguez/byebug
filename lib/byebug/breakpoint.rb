@@ -31,12 +31,13 @@ module Byebug
     end
 
     #
-    # Removes a breakpoint
+    # Removes a breakpoint and returns the breakpoint information
     #
     # @param id [integer] breakpoint number
     #
     def self.remove(id)
-      Byebug.breakpoints.reject! { |b| b.id == id }
+      bi = Byebug.breakpoints.find_index { |b| b.id == id }
+      bi ? Byebug.breakpoints.delete_at(bi) : nil
     end
 
     #
