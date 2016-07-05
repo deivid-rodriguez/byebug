@@ -34,6 +34,7 @@ module Byebug
             return errmsg(pr('toggle.errors.expression', expr: b.expr))
           end
 
+          puts format("Breakpoint #{b.id} %sabled", (enabled ? 'en' : 'dis'))
           b.enabled = enabled
         end
       end
