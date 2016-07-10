@@ -26,7 +26,7 @@ module Overcommit
             FileUtils.rm_f("#{file}_")
           end
 
-          return :pass if offenses == 0
+          return :pass if offenses.zero?
 
           file_list = applicable_files.join(' ')
           [:fail, "#{offenses} errors found. Run `indent #{file_list}`"]

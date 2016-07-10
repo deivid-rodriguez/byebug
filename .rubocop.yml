@@ -5,6 +5,8 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
 
+  TargetRubyVersion: 2.1
+
 TrivialAccessors:
   ExactNameMatch: true
 

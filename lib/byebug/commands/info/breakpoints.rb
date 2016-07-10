@@ -53,7 +53,7 @@ module Byebug
         hits = brkpt.hit_count
         return unless hits > 0
 
-        s = (hits > 1) ? 's' : ''
+        s = hits > 1 ? 's' : ''
         puts "  breakpoint already hit #{hits} time#{s}"
       end
     end
