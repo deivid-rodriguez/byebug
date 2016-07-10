@@ -82,9 +82,7 @@ module Byebug
     #
     def inspect
       meths = %w(id pos source expr hit_condition hit_count hit_value enabled?)
-      values = meths.map do |field|
-        "#{field}: #{send(field)}"
-      end.join(', ')
+      values = meths.map { |field| "#{field}: #{send(field)}" }.join(', ')
       "#<Byebug::Breakpoint #{values}>"
     end
   end
