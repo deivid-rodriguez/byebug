@@ -71,8 +71,8 @@ GEM
       json
       websocket (~> 1.0)
     rainbow (2.1.0)
-    rake (11.1.2)
-    rake-compiler (0.9.9)
+    rake (11.3.0)
+    rake-compiler (1.0.1)
       rake
     rubocop (0.40.0)
       parser (>= 2.3.1.0, < 3.0)
@@ -117,7 +117,7 @@ DEPENDENCIES
   overcommit (= 0.36.0)
   pry!
   rake (~> 11.1)
-  rake-compiler (= 0.9.9)
+  rake-compiler (~> 1.0)
   rubocop (= 0.40.0)
   simplecov (= 0.11.2)
   travis (~> 1.8)
