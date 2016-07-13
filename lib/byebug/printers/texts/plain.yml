@@ -1,5 +1,5 @@
 break:
-  created: "Successfully created breakpoint with id {id}"
+  created: "Created breakpoint {id} at {file}:{line}"
 
 display:
   result: "{n}: {exp} = {result}"
