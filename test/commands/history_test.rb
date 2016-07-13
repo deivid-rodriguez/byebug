@@ -69,5 +69,5 @@ module Byebug
         check_output_doesnt_include(/\d+  next$/)
       end
     end
-  end
+  end unless ENV['LIBEDIT']
 end
