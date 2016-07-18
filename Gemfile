@@ -14,3 +14,8 @@ gem 'pry', github: 'pry'
 gem 'travis', '~> 1.8'
 gem 'yard', '0.8.7.6'
 gem 'chandler', '0.3.1'
+
+# For source-line colorization
+# and caching
+gem 'term-ansicolor', '~> 1.3'
+gem 'linecache2', github: 'rocky/rb-linecache2'

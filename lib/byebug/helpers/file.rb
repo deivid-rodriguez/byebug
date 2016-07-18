@@ -1,3 +1,4 @@
+require 'linecache2'
 module Byebug
   module Helpers
     #
@@ -7,18 +8,15 @@ module Byebug
       #
       # Reads lines of source file +filename+ into an array
       #
-      def get_lines(filename)
-        File.foreach(filename).reduce([]) { |a, e| a << e.chomp }
+      def get_lines(filename, opts = {})
+        LineCache.getlines(filename, opts)
       end
 
       #
       # Reads line number +lineno+ from file named +filename+
       #
-      def get_line(filename, lineno)
-        File.open(filename) do |f|
-          f.gets until f.lineno == lineno - 1
-          f.gets
-        end
+      def get_line(filename, lineno, opts = {})
+        LineCache.getline(filename, lineno, opts)
       end
 
       #
@@ -26,7 +24,7 @@ module Byebug
       # one-line-at-a-time way.
       #
       def n_lines(filename)
-        File.foreach(filename).reduce(0) { |a, _e| a + 1 }
+        LineCache.size(filename)
       end
 
       #

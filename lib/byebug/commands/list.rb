@@ -125,10 +125,9 @@ module Byebug
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      File.foreach(frame.file).with_index do |line, lineno|
-        break if lineno + 1 > max
-        next unless (min..max).cover?(lineno + 1)
-
+      opts = { output: Setting[:highlight] ? :term : :plain }
+      min.upto(max).each do |lineno|
+        line = get_line(frame.file, lineno + 1, opts)
         mark = lineno + 1 == frame.line ? '=> ' : '   '
         puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
       end
