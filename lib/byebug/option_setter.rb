@@ -13,6 +13,7 @@ module Byebug
       include_flag
       post_mortem
       quit
+      highlight
       rc
       stop
       require_flag
@@ -27,6 +28,12 @@ module Byebug
     def debug
       @opts.on '-d', '--debug', 'Set $DEBUG=true' do
         $DEBUG = true
+      end
+    end
+
+    def highlight
+      @opts.on '--highlight {dark,plain,light}', 'Syntax highlight style' do |v|
+        Setting[:highlight] = (v || 'plain').to_sym
       end
     end
 

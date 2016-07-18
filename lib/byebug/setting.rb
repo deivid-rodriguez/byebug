@@ -18,7 +18,7 @@ module Byebug
     end
 
     def integer?
-      Integer(value) ? true : false
+      !value.is_a?(Symbol) && Integer(value) ? true : false
     rescue ArgumentError
       false
     end
