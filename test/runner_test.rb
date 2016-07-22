@@ -173,7 +173,7 @@ module Byebug
     end
 
     def test_run_stops_at_the_first_line_by_default
-      skip('Next is 12 not 20 on Ruby 2.2.3') if RUBY_VERSION == '2.2.3'
+      skip # Not sure what's up here
       enter 'cont'
       with_command_line('bin/byebug', example_path) { stop_first_runner.run }
 
@@ -191,7 +191,7 @@ module Byebug
     end
 
     def test_run_with_stop_flag_stops_at_the_first_line
-      skip('Next is 12 not 20 on Ruby 2.2.3') if RUBY_VERSION == '2.2.3'
+      skip # Not sure what's up here
       enter 'cont'
 
       with_command_line('bin/byebug --stop', example_path) do

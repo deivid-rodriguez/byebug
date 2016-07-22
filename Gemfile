@@ -18,4 +18,4 @@ gem 'chandler', '0.3.1'
 # For source-line colorization
 # and caching
 gem 'term-ansicolor', '~> 1.3'
-gem 'linecache2', github: 'rocky/rb-linecache2'
+gem 'linecache2', '~> 1.4.0'

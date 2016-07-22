@@ -15,12 +15,6 @@ GIT
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
 
-GIT
-  remote: git://github.com/rocky/rb-linecache2.git
-  revision: ea2284d515f3977a1b4faa2e54444bce9a69a38e
-  specs:
-    linecache2 (1.4.0)
-
 PATH
   remote: .
   specs:
@@ -61,6 +55,7 @@ GEM
     kramdown (1.11.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    linecache2 (1.4.0)
     method_source (0.8.2)
     minitest (5.9.0)
     mixlib-cli (1.6.0)
@@ -126,7 +121,7 @@ DEPENDENCIES
   byebug!
   chandler (= 0.3.1)
   codeclimate-test-reporter (= 0.5.0)
-  linecache2!
+  linecache2 (~> 1.4.0)
   mdl!
   minitest (~> 5.7)
   overcommit (= 0.33.0)
