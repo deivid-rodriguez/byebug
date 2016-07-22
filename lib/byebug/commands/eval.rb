@@ -1,5 +1,6 @@
 require 'byebug/command'
 require 'byebug/helpers/eval'
+require 'byebug/helpers/file'
 
 module Byebug
   #
@@ -7,6 +8,7 @@ module Byebug
   #
   class EvalCommand < Command
     include Helpers::EvalHelper
+    include Helpers::FileHelper
 
     self.allow_in_control = false
     self.allow_in_post_mortem = true
@@ -39,9 +41,7 @@ module Byebug
     end
 
     def execute
-      file = File.open frame.file
-      frame.line.times { file.gets }
-      input = $LAST_READ_LINE
+      input = get_line(frame.file, frame.line)
       input = extract_expression(input) if @match[0] =~ /eval[?]/
       puts input
       puts safe_inspect(multiple_thread_eval(input))
