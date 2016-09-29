@@ -34,7 +34,7 @@ module Byebug
       Context.interface = nil
       start
 
-      start_control(host, port == 0 ? 0 : port + 1)
+      start_control(host, port.zero? ? 0 : port + 1)
 
       mutex = Mutex.new
       proceed = ConditionVariable.new
