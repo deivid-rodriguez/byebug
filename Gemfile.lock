@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/pry/pry.git
+  remote: https://github.com/pry/pry
   revision: 67c0b7fcd7ee81dede7d50d028afbb592ab83cbe
   specs:
     pry (0.10.3)
@@ -124,4 +124,4 @@ DEPENDENCIES
   yard (= 0.8.7.6)
 
 BUNDLED WITH
-   1.12.5
+   1.13.1
