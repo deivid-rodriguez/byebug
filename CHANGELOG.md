@@ -2,6 +2,13 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Error when using `byebug` with a ruby compiled against libedit (#241).
+* Allow `Byebug.start_server` to yield the block passed to it when the actual
+  port is already known (#277, thanks @cben).
+* Use a standard license name so it can be more reliably used by tools (#275).
+
 ## 9.0.5 - 2016-05-28
 
 ### Fixed
