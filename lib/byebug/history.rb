@@ -115,7 +115,7 @@ module Byebug
       return true if /^\s*$/ =~ buf
       return false if Readline::HISTORY.empty?
 
-      Readline::HISTORY[Readline::HISTORY.length - 1] == buf
+      Readline::HISTORY.to_a[Readline::HISTORY.length - 1] == buf
     end
   end
 end
