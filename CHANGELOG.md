@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.0.6 - 2016-09-29
+
 ### Fixed
 
 * Error when using `byebug` with a ruby compiled against libedit (#241).
