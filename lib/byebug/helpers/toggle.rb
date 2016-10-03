@@ -8,9 +8,7 @@ module Byebug
     module ToggleHelper
       include ParseHelper
 
-      def enable_disable_breakpoints(is_enable, args)
-        return errmsg(pr('toggle.errors.no_breakpoints')) if Breakpoint.none?
-
+      def select_breakpoints(args, is_enable)
         all_breakpoints = Byebug.breakpoints.sort_by(&:id)
         if args.nil?
           selected_breakpoints = all_breakpoints
@@ -26,7 +24,14 @@ module Byebug
           selected_breakpoints = all_breakpoints.select do |b|
             selected_ids.include?(b.id)
           end
+          return selected_breakpoints
         end
+      end
+
+      def enable_disable_breakpoints(is_enable, args)
+        return errmsg(pr('toggle.errors.no_breakpoints')) if Breakpoint.none?
+
+        selected_breakpoints = select_breakpoints(args, is_enable)
 
         selected_breakpoints.each do |b|
           enabled = ('enable' == is_enable)
@@ -34,6 +39,7 @@ module Byebug
             return errmsg(pr('toggle.errors.expression', expr: b.expr))
           end
 
+          puts pr('toggle.brkpts', bpnum: b.id, endis: enabled ? 'en' : 'dis')
           b.enabled = enabled
         end
       end
