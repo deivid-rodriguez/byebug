@@ -45,7 +45,7 @@ module Byebug
       end
 
       def enable_disable_display(is_enable, args)
-        return errmsg(pr('toggle.errors.no_display')) if 0 == n_displays
+        return errmsg(pr('toggle.errors.no_display')) if n_displays.zero?
 
         selected_displays = args ? args.split(/ +/) : [1..n_displays + 1]
 

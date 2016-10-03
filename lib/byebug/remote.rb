@@ -34,15 +34,15 @@ module Byebug
       Context.interface = nil
       start
 
-      start_control(host, port == 0 ? 0 : port + 1)
-
-      yield if block_given?
+      start_control(host, port.zero? ? 0 : port + 1)
 
       mutex = Mutex.new
       proceed = ConditionVariable.new
 
       server = TCPServer.new(host, port)
       self.actual_port = server.addr[1]
+
+      yield if block_given?
 
       @thread = DebugThread.new do
         while (session = server.accept)

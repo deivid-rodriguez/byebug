@@ -1,6 +1,8 @@
 ---
 
-sudo: false
+sudo: required
+
+dist: trusty
 
 cache:
   directories:
@@ -8,7 +10,16 @@ cache:
 
 language: ruby
 
+before_install:
+  - sudo apt-get install indent shellcheck
+  - if [ "$LIBEDIT" == "true" ]; then
+      sudo apt-get install libedit-dev;
+    fi
+
 install:
+  - if [ "$LIBEDIT" == "true" ]; then
+      rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
+    fi
   - gem update --system --no-document || test true
   - gem install bundler --no-document || test true
   - bundle install --jobs 3 --retry 3
@@ -35,6 +46,11 @@ matrix:
     - rvm: ruby-head
     - rvm: ruby-head-clang
 
+env:
+  matrix:
+    - "LIBEDIT=true"
+    - "LIBEDIT=false"
+
 branches:
   only:
     - master
@@ -47,9 +63,3 @@ notifications:
 addons:
   code_climate:
     repo_token: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
-  apt:
-    sources:
-      - debian-sid
-    packages:
-      - indent
-      - shellcheck

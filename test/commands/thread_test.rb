@@ -117,13 +117,13 @@ module Byebug
 
     def test_thread_resume_removes_threads_from_the_suspended_state
       ctx = nil
-      save_t2_ctx_and_stop = lambda do
+      save_second_ctx_and_stop = lambda do
         ctx = t2_context
         "thread stop #{t2_thnum}"
       end
 
       enter 'cont 24',
-            save_t2_ctx_and_stop,
+            save_second_ctx_and_stop,
             -> { "thread resume #{t2_thnum}" },
             'lock << 0'
 

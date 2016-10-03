@@ -1,15 +1,6 @@
 GIT
-  remote: git://github.com/mivok/markdownlint.git
-  revision: dfa943cbfd7472172461cf11d2b7f60af7e3abe3
-  specs:
-    mdl (0.3.1)
-      kramdown (~> 1.8, >= 1.8.0)
-      mixlib-cli (~> 1.5, >= 1.5.0)
-      mixlib-config (~> 2.1, >= 2.1.0)
-
-GIT
-  remote: git://github.com/pry/pry.git
-  revision: f5c97cac103a9f04b854ed5b117a8cc27c7e8dd6
+  remote: https://github.com/pry/pry
+  revision: 67c0b7fcd7ee81dede7d50d028afbb592ab83cbe
   specs:
     pry (0.10.3)
       coderay (~> 1.1.0)
@@ -18,20 +9,20 @@ GIT
 PATH
   remote: .
   specs:
-    byebug (9.0.5)
+    byebug (9.0.6)
 
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
-    ast (2.2.0)
+    ast (2.3.0)
     backports (3.6.8)
     chandler (0.3.1)
       netrc
       octokit (>= 2.2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    codeclimate-test-reporter (0.5.0)
+    codeclimate-test-reporter (0.6.0)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.1)
     docile (1.1.5)
@@ -41,7 +32,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
-    ffi (1.9.10)
+    ffi (1.9.14)
     gh (0.14.0)
       addressable
       backports
@@ -51,14 +42,18 @@ GEM
       net-http-pipeline
     highline (1.7.8)
     iniparse (1.4.2)
-    json (1.8.3)
-    kramdown (1.11.1)
+    json (2.0.2)
+    kramdown (1.12.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    mdl (0.4.0)
+      kramdown (~> 1.12, >= 1.12.0)
+      mixlib-cli (~> 1.7, >= 1.7.0)
+      mixlib-config (~> 2.2, >= 2.2.1)
     method_source (0.8.2)
     minitest (5.9.0)
-    mixlib-cli (1.6.0)
-    mixlib-config (2.2.1)
+    mixlib-cli (1.7.0)
+    mixlib-config (2.2.4)
     multi_json (1.12.1)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
@@ -66,21 +61,21 @@ GEM
     netrc (0.11.0)
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
-    overcommit (0.33.0)
+    overcommit (0.36.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
-    parser (2.3.1.0)
+    parser (2.3.1.4)
       ast (~> 2.2)
     powerpack (0.1.1)
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
     rainbow (2.1.0)
-    rake (11.1.2)
-    rake-compiler (0.9.9)
+    rake (11.3.0)
+    rake-compiler (1.0.1)
       rake
-    rubocop (0.40.0)
-      parser (>= 2.3.1.0, < 3.0)
+    rubocop (0.43.0)
+      parser (>= 2.3.1.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
@@ -89,9 +84,9 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    simplecov (0.11.2)
+    simplecov (0.12.0)
       docile (~> 1.1.0)
-      json (~> 1.8)
+      json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
     travis (1.8.2)
@@ -105,9 +100,9 @@ GEM
       typhoeus (~> 0.6, >= 0.6.8)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
-    unicode-display_width (1.0.5)
+    unicode-display_width (1.1.1)
     websocket (1.2.3)
-    yard (0.8.7.6)
+    yard (0.9.5)
 
 PLATFORMS
   ruby
@@ -116,17 +111,17 @@ DEPENDENCIES
   bundler (~> 1.7)
   byebug!
   chandler (= 0.3.1)
-  codeclimate-test-reporter (= 0.5.0)
-  mdl!
+  codeclimate-test-reporter (= 0.6.0)
+  mdl (= 0.4.0)
   minitest (~> 5.7)
-  overcommit (= 0.33.0)
+  overcommit (= 0.36.0)
   pry!
   rake (~> 11.1)
-  rake-compiler (= 0.9.9)
-  rubocop (= 0.40.0)
-  simplecov (= 0.11.2)
+  rake-compiler (~> 1.0)
+  rubocop (= 0.43.0)
+  simplecov (= 0.12.0)
   travis (~> 1.8)
-  yard (= 0.8.7.6)
+  yard (= 0.9.5)
 
 BUNDLED WITH
-   1.12.5
+   1.13.1
