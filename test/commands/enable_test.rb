@@ -55,11 +55,11 @@ module Byebug
       debug_code(program) { assert_equal 22, frame.line }
     end
 
-    def test_enable_specific_breakpoints_sets_enabled_to_false
+    def test_enable_specific_breakpoints_sets_enabled_to_true
       enter 'break 21', 'break 22', 'disable breakpoints',
             -> { "enable breakpoints #{Breakpoint.last.id}" }
 
-      debug_code(program) { assert_equal false, Breakpoint.first.enabled? }
+      debug_code(program) { assert_equal true, Breakpoint.last.enabled? }
     end
 
     def test_enable_specific_breakpoints_stops_at_enabled_breakpoint
