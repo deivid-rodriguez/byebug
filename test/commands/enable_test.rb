@@ -33,20 +33,6 @@ module Byebug
       EOC
     end
 
-    def test_enable_breakpoints_with_short_syntax_sets_enabled_to_true
-      enter 'b 21', 'b 22', 'disable breakpoints',
-            -> { "enable b #{Breakpoint.first.id}" }
-
-      debug_code(program) { assert_equal true, Breakpoint.first.enabled? }
-    end
-
-    def test_enable_breakpoints_with_short_syntax_stops_at_enabled_breakpoint
-      enter 'break 21', 'break 22', 'disable breakpoints',
-            -> { "enable b #{Breakpoint.first.id}" }, 'cont'
-
-      debug_code(program) { assert_equal 21, frame.line }
-    end
-
     def test_enable_all_breakpoints_sets_all_enabled_flags_to_true
       enter 'break 21', 'break 22', 'disable breakpoints', 'enable breakpoints'
 
@@ -69,14 +55,14 @@ module Byebug
       debug_code(program) { assert_equal 22, frame.line }
     end
 
-    def test_enable_breakpoints_with_full_syntax_sets_enabled_to_false
+    def test_enable_specific_breakpoints_sets_enabled_to_false
       enter 'break 21', 'break 22', 'disable breakpoints',
             -> { "enable breakpoints #{Breakpoint.last.id}" }
 
       debug_code(program) { assert_equal false, Breakpoint.first.enabled? }
     end
 
-    def test_enable_breakpoints_with_full_syntax_stops_at_enabled_breakpoint
+    def test_enable_specific_breakpoints_stops_at_enabled_breakpoint
       enter 'break 21', 'break 22', 'disable breakpoints',
             -> { "enable breakpoints #{Breakpoint.last.id}" }, 'cont'
 
