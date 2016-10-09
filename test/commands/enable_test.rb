@@ -69,6 +69,15 @@ module Byebug
       debug_code(program) { assert_equal 22, frame.line }
     end
 
+    def test_enable_with_an_incorrect_breakpoint_number_shows_error
+      enter 'break 21', 'break 22', 'disable breakpoints',
+            -> { "enable breakpoints #{Breakpoint.last.id + 1}" }
+      debug_code(program)
+
+      assert_equal 1, interface.error.size
+      check_error_includes(/"enable breakpoints" argument/)
+    end
+
     def test_enable_by_itself_shows_help
       enter 'enable'
       debug_code(program)
