@@ -16,6 +16,8 @@ break:
     not_changed: "Incorrect expression \"{expr}\", breakpoint not changed"
   confirmations:
     delete_all: "Delete all breakpoints?"
+  messages:
+    breakpoint_deleted: "Deleted breakpoint {pos}"
 
 catch:
   added: "Catching exception {exception}."
