@@ -11,24 +11,7 @@ module Byebug
       def enable_disable_breakpoints(is_enable, args)
         raise pr('toggle.errors.no_breakpoints') if Breakpoint.none?
 
-        all_breakpoints = Byebug.breakpoints.sort_by(&:id)
-        if args.nil?
-          selected_breakpoints = all_breakpoints
-        else
-          selected_ids = []
-          args.split(/ +/).each do |pos|
-            last_id = all_breakpoints.last.id
-            pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
-            raise(ArgumentError, err) unless pos
-
-            selected_ids << pos
-          end
-          selected_breakpoints = all_breakpoints.select do |b|
-            selected_ids.include?(b.id)
-          end
-        end
-
-        selected_breakpoints.each do |b|
+        select_breakpoints(is_enable, args).each do |b|
           enabled = ('enable' == is_enable)
           if enabled && !syntax_valid?(b.expr)
             raise pr('toggle.errors.expression', expr: b.expr)
@@ -52,6 +35,25 @@ module Byebug
       end
 
       private
+
+      def select_breakpoints(is_enable, args)
+        all_breakpoints = Byebug.breakpoints.sort_by(&:id)
+        if args.nil?
+          all_breakpoints
+        else
+          selected_ids = []
+          args.split(/ +/).each do |pos|
+            last_id = all_breakpoints.last.id
+            pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
+            raise(ArgumentError, err) unless pos
+
+            selected_ids << pos
+          end
+          all_breakpoints.select do |b|
+            selected_ids.include?(b.id)
+          end
+        end
+      end
 
       def n_displays
         Byebug.displays.size
