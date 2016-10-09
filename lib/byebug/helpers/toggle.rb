@@ -38,20 +38,18 @@ module Byebug
 
       def select_breakpoints(is_enable, args)
         all_breakpoints = Byebug.breakpoints.sort_by(&:id)
-        if args.nil?
-          all_breakpoints
-        else
-          selected_ids = []
-          args.split(/ +/).each do |pos|
-            last_id = all_breakpoints.last.id
-            pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
-            raise(ArgumentError, err) unless pos
+        return all_breakpoints if args.nil?
 
-            selected_ids << pos
-          end
-          all_breakpoints.select do |b|
-            selected_ids.include?(b.id)
-          end
+        selected_ids = []
+        args.split(/ +/).each do |pos|
+          last_id = all_breakpoints.last.id
+          pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
+          raise(ArgumentError, err) unless pos
+
+          selected_ids << pos
+        end
+        all_breakpoints.select do |b|
+          selected_ids.include?(b.id)
         end
       end
 
