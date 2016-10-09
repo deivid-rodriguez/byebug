@@ -33,6 +33,30 @@ module Byebug
       EOC
     end
 
+    def test_disable_all_breakpoints_sets_all_enabled_flags_to_false
+      enter 'break 21', 'break 22', 'disable breakpoints'
+
+      debug_code(program) do
+        assert_equal false, Breakpoint.first.enabled?
+        assert_equal false, Breakpoint.last.enabled?
+      end
+    end
+
+    def test_disable_all_breakpoints_shows_success_messages_for_all_breakpoints
+      enter 'break 21', 'break 22', 'disable breakpoints'
+      debug_code(program)
+
+      check_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/,
+                            /Breakpoint #{Breakpoint.last.id} disabled/)
+    end
+
+    def test_disable_all_breakpoints_ignores_all_breakpoints
+      enter 'break 21', 'break 22', 'disable breakpoints', 'cont'
+      debug_code(program)
+
+      check_output_doesnt_include 'Stopped by breakpoint'
+    end
+
     def test_disable_specific_breakpoints_sets_enabled_to_false
       enter 'b 21', 'b 22', -> { "disable breakpoints #{Breakpoint.first.id}" }
 
@@ -61,30 +85,6 @@ module Byebug
 
       assert_equal 1, interface.error.size
       check_error_includes(/"disable breakpoints" argument/)
-    end
-
-    def test_disable_all_breakpoints_sets_all_enabled_flags_to_false
-      enter 'break 21', 'break 22', 'disable breakpoints'
-
-      debug_code(program) do
-        assert_equal false, Breakpoint.first.enabled?
-        assert_equal false, Breakpoint.last.enabled?
-      end
-    end
-
-    def test_disable_all_breakpoints_shows_success_messages_for_all_breakpoints
-      enter 'break 21', 'break 22', 'disable breakpoints'
-      debug_code(program)
-
-      check_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/,
-                            /Breakpoint #{Breakpoint.last.id} disabled/)
-    end
-
-    def test_disable_all_breakpoints_ignores_all_breakpoints
-      enter 'break 21', 'break 22', 'disable breakpoints', 'cont'
-      debug_code(program)
-
-      check_output_doesnt_include 'Stopped by breakpoint'
     end
 
     def test_disable_without_an_argument_shows_help
