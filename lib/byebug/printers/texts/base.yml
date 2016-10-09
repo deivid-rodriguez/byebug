@@ -99,6 +99,8 @@ toggle:
     no_display: "No display expressions have been set"
     syntax: "\"{toggle}\" must be followed by \"display\", \"breakpoints\" or breakpoint ids"
     expression: "Expression \"{expr}\" syntactically incorrect; breakpoint remains disabled."
+  messages:
+    toggled: "Breakpoint {bpnum} {endis}abled"
 
 parse:
   errors:

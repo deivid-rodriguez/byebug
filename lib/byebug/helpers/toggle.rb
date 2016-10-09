@@ -17,6 +17,8 @@ module Byebug
             raise pr('toggle.errors.expression', expr: b.expr)
           end
 
+          puts pr('toggle.messages.toggled', bpnum: b.id,
+                                             endis: enabled ? 'en' : 'dis')
           b.enabled = enabled
         end
       end

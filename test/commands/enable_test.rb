@@ -42,6 +42,14 @@ module Byebug
       end
     end
 
+    def test_enable_all_breakpoints_shows_success_messages_for_all_breakpoints
+      enter 'break 21', 'break 22', 'disable breakpoints', 'enable breakpoints'
+      debug_code(program)
+
+      check_output_includes(/Breakpoint #{Breakpoint.first.id} enabled/,
+                            /Breakpoint #{Breakpoint.last.id} enabled/)
+    end
+
     def test_enable_all_breakpoints_stops_at_first_breakpoint
       enter 'b 21', 'b 22', 'disable breakpoints', 'enable breakpoints', 'cont'
 
@@ -60,6 +68,14 @@ module Byebug
             -> { "enable breakpoints #{Breakpoint.last.id}" }
 
       debug_code(program) { assert_equal true, Breakpoint.last.enabled? }
+    end
+
+    def test_enable_specific_breakpoints_shows_success_message
+      enter 'break 21', 'break 22', 'disable breakpoints',
+            -> { "enable breakpoints #{Breakpoint.last.id}" }
+      debug_code(program)
+
+      check_output_includes(/Breakpoint #{Breakpoint.last.id} enabled/)
     end
 
     def test_enable_specific_breakpoints_stops_at_enabled_breakpoint
