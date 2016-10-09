@@ -48,9 +48,8 @@ module Byebug
 
           selected_ids << pos
         end
-        all_breakpoints.select do |b|
-          selected_ids.include?(b.id)
-        end
+
+        all_breakpoints.select { |b| selected_ids.include?(b.id) }
       end
 
       def n_displays
