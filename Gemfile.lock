@@ -61,7 +61,7 @@ GEM
     netrc (0.11.0)
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
-    overcommit (0.36.0)
+    overcommit (0.37.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
     parser (2.3.1.4)
@@ -114,7 +114,7 @@ DEPENDENCIES
   codeclimate-test-reporter (= 0.6.0)
   mdl (= 0.4.0)
   minitest (~> 5.7)
-  overcommit (= 0.36.0)
+  overcommit (= 0.37.0)
   pry!
   rake (~> 11.1)
   rake-compiler (~> 1.0)
