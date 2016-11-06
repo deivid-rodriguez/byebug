@@ -8,7 +8,7 @@ module Byebug
       # Reads lines of source file +filename+ into an array
       #
       def get_lines(filename)
-        File.foreach(filename).reduce([]) { |a, e| a << e.chomp }
+        File.foreach(filename).reduce([]) { |acc, elem| acc << elem.chomp }
       end
 
       #
@@ -26,7 +26,7 @@ module Byebug
       # one-line-at-a-time way.
       #
       def n_lines(filename)
-        File.foreach(filename).reduce(0) { |a, _e| a + 1 }
+        File.foreach(filename).reduce(0) { |acc, _elem| acc + 1 }
       end
 
       #

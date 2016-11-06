@@ -74,7 +74,7 @@ GEM
     rake (11.3.0)
     rake-compiler (1.0.1)
       rake
-    rubocop (0.43.0)
+    rubocop (0.45.0)
       parser (>= 2.3.1.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
@@ -118,7 +118,7 @@ DEPENDENCIES
   pry!
   rake (~> 11.1)
   rake-compiler (~> 1.0)
-  rubocop (= 0.43.0)
+  rubocop (= 0.45.0)
   simplecov (= 0.12.0)
   travis (~> 1.8)
   yard (= 0.9.5)
