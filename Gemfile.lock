@@ -22,8 +22,7 @@ GEM
       octokit (>= 2.2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    codeclimate-test-reporter (0.6.0)
-      simplecov (>= 0.7.1, < 1.0.0)
+    codeclimate-test-reporter (1.0.0)
     coderay (1.1.1)
     connection_pool (2.2.0)
     docile (1.1.5)
@@ -113,7 +112,7 @@ DEPENDENCIES
   bundler (~> 1.7)
   byebug!
   chandler (= 0.3.1)
-  codeclimate-test-reporter (= 0.6.0)
+  codeclimate-test-reporter (~> 1.0)
   mdl (= 0.4.0)
   minitest (~> 5.7)
   overcommit (= 0.37.0)
