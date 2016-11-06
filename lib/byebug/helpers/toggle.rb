@@ -9,49 +9,50 @@ module Byebug
       include ParseHelper
 
       def enable_disable_breakpoints(is_enable, args)
-        return errmsg(pr('toggle.errors.no_breakpoints')) if Breakpoint.none?
+        raise pr('toggle.errors.no_breakpoints') if Breakpoint.none?
 
-        all_breakpoints = Byebug.breakpoints.sort_by(&:id)
-        if args.nil?
-          selected_breakpoints = all_breakpoints
-        else
-          selected_ids = []
-          args.split(/ +/).each do |pos|
-            last_id = all_breakpoints.last.id
-            pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
-            return errmsg(err) unless pos
-
-            selected_ids << pos
-          end
-          selected_breakpoints = all_breakpoints.select do |b|
-            selected_ids.include?(b.id)
-          end
-        end
-
-        selected_breakpoints.each do |b|
+        select_breakpoints(is_enable, args).each do |b|
           enabled = ('enable' == is_enable)
           if enabled && !syntax_valid?(b.expr)
-            return errmsg(pr('toggle.errors.expression', expr: b.expr))
+            raise pr('toggle.errors.expression', expr: b.expr)
           end
 
+          puts pr('toggle.messages.toggled', bpnum: b.id,
+                                             endis: enabled ? 'en' : 'dis')
           b.enabled = enabled
         end
       end
 
       def enable_disable_display(is_enable, args)
-        return errmsg(pr('toggle.errors.no_display')) if n_displays.zero?
+        raise pr('toggle.errors.no_display') if n_displays.zero?
 
         selected_displays = args ? args.split(/ +/) : [1..n_displays + 1]
 
         selected_displays.each do |pos|
           pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
-          return errmsg(err) unless err.nil?
+          raise err unless err.nil?
 
           Byebug.displays[pos - 1][0] = ('enable' == is_enable)
         end
       end
 
       private
+
+      def select_breakpoints(is_enable, args)
+        all_breakpoints = Byebug.breakpoints.sort_by(&:id)
+        return all_breakpoints if args.nil?
+
+        selected_ids = []
+        args.split(/ +/).each do |pos|
+          last_id = all_breakpoints.last.id
+          pos, err = get_int(pos, "#{is_enable} breakpoints", 1, last_id)
+          raise(ArgumentError, err) unless pos
+
+          selected_ids << pos
+        end
+
+        all_breakpoints.select { |b| selected_ids.include?(b.id) }
+      end
 
       def n_displays
         Byebug.displays.size

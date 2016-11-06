@@ -17,13 +17,7 @@ module Byebug
       EOC
     end
 
-    def test_setting_condition_w_short_syntax_assigns_expression_to_breakpoint
-      enter 'break 5', -> { "cond #{Breakpoint.first.id} b == 5" }
-
-      debug_code(program) { assert_equal 'b == 5', Breakpoint.first.expr }
-    end
-
-    def test_setting_condition_w_full_syntax_assigns_expression_to_breakpoint
+    def test_setting_condition_assigns_expression_to_breakpoint
       enter 'break 5', -> { "condition #{Breakpoint.first.id} b == 5" }
 
       debug_code(program) { assert_equal 'b == 5', Breakpoint.first.expr }

@@ -44,8 +44,10 @@ module Byebug
 
         return errmsg(err) unless pos
 
-        unless Breakpoint.remove(pos)
-          return errmsg(pr('break.errors.no_breakpoint_delete', pos: pos))
+        if Breakpoint.remove(pos)
+          puts(pr('break.messages.breakpoint_deleted', pos: pos))
+        else
+          errmsg(pr('break.errors.no_breakpoint_delete', pos: pos))
         end
       end
     end

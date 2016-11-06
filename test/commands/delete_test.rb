@@ -31,6 +31,13 @@ module Byebug
       debug_code(program) { assert_empty Byebug.breakpoints }
     end
 
+    def test_deleting_a_breakpoint_shows_a_success_message
+      enter 'break 9', -> { "delete #{Breakpoint.first.id}" }
+      debug_code(program)
+
+      check_output_includes(/Deleted breakpoint/)
+    end
+
     def test_does_not_stop_at_the_deleted_breakpoint
       enter 'b 9', 'b 10', -> { "delete #{Breakpoint.first.id}" }, 'cont'
 

@@ -84,7 +84,7 @@ module Byebug
       enter 'break B.a'
       debug_code(program)
 
-      check_output_includes(/Successfully created breakpoint with id/)
+      check_output_includes(/Created breakpoint/)
     end
 
     def test_setting_breakpoint_to_an_undefined_class_shows_error_message
@@ -180,7 +180,7 @@ module Byebug
       enter 'break ./test/commands/break_test.rb:8'
       debug_code(program)
 
-      check_output_includes(/Successfully created breakpoint with id/)
+      check_output_includes(/Created breakpoint/)
     end
 
     def test_setting_breakpoint_with_space_in_path_adds_the_breakpoint
@@ -188,7 +188,7 @@ module Byebug
         enter 'break hello world.rb:1'
         debug_code(program)
 
-        check_output_includes(/Successfully created breakpoint with id/)
+        check_output_includes(/Created breakpoint/)
       end
     end
 
@@ -277,7 +277,7 @@ module Byebug
       enter 'break 7'
       debug_code(program) { @id = Breakpoint.first.id }
 
-      check_output_includes("Successfully created breakpoint with id #{@id}")
+      check_output_includes(/Created breakpoint #{@id}/)
     end
 
     def test_setting_breakpoint_to_nonexistent_line_shows_an_error
