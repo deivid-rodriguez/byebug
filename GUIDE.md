@@ -1,5 +1,12 @@
 # GUIDE
 
+## Table of Contents
+
+* [Introduction](#introduction)
+* [Getting in and out](#getting-in-and-out)
+* [Debugging remote programs](#debugging-remote-programs)
+* [Byebug command reference](#byebug-command-reference)
+
 ## Introduction
 
 ### First Steps
@@ -1150,7 +1157,7 @@ To be continued...
 * Line tracing and non-interactive tracing.
 * Post-mortem debugging.
 
-## Getting in & out
+## Getting in and out
 
 ### Starting byebug
 
