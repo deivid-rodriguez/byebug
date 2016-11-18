@@ -48,7 +48,7 @@ RUN gpg --keyserver hkp://keys.gnupg.net \
 
 RUN /bin/bash -l -c "curl -L https://get.rvm.io | bash -s stable"
 RUN /bin/bash -l -c "source /home/app/.rvm/scripts/rvm"
-RUN /bin/bash -l -c "rvm install 2.3.1 --configure --enable-libedit --autolibs=read-fail"
-RUN /bin/bash -l -c "rvm alias create ruby-with-libedit 2.3.1"
+RUN /bin/bash -l -c "rvm install 2.3.2 --configure --enable-libedit --autolibs=read-fail"
+RUN /bin/bash -l -c "rvm alias create ruby-with-libedit 2.3.2"
 RUN /bin/bash -l -c "rvm use ruby-with-libedit && gem install bundler && bundle install"
 RUN /bin/bash -l -c "bundle exec overcommit --sign"

@@ -35,10 +35,10 @@ script:
 rvm:
   - 2.1.10
   - 2.1.10-clang
-  - 2.2.5
-  - 2.2.5-clang
-  - 2.3.1
-  - 2.3.1-clang
+  - 2.2.6
+  - 2.2.6-clang
+  - 2.3.2
+  - 2.3.2-clang
   - ruby-head
   - ruby-head-clang
 
