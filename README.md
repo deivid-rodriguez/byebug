@@ -86,7 +86,7 @@ Once the execution gets to your `byebug` command you will get a debugging prompt
 
 ## Byebug's commands
 
-    Command     | Aliases      | Description / Subcommands
+    Command     | Aliases      | Subcommands
     ----------- |:------------ |:-----------
     `backtrace` | `bt` `where` |
     `break`     |              |
@@ -106,8 +106,8 @@ Once the execution gets to your `byebug` command you will get a debugging prompt
     `history`   |              |
     `info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
     `irb`       |              |
-    [`kill`]    |              | forceful `kill -9`
-    [`list`]    | `l`          | prints more lines, following the last lines printed; `l=` - print surrounding code near executing line
+    [`kill`]    |              | 
+    [`list`]    | `l`          | 
     `method`    |              | `instance`
     `next`      |              |
     `pry`       |              |
