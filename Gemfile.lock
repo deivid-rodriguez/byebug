@@ -43,7 +43,7 @@ GEM
     highline (1.7.8)
     iniparse (1.4.2)
     json (2.0.2)
-    kramdown (1.12.0)
+    kramdown (1.13.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     mdl (0.4.0)
