@@ -72,7 +72,7 @@ GEM
       websocket (~> 1.0)
     rainbow (2.1.0)
     rake (11.3.0)
-    rake-compiler (1.0.1)
+    rake-compiler (1.0.2)
       rake
     rubocop (0.45.0)
       parser (>= 2.3.1.1, < 3.0)
