@@ -64,7 +64,7 @@ GEM
     overcommit (0.37.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
-    parser (2.3.1.4)
+    parser (2.3.2.0)
       ast (~> 2.2)
     powerpack (0.1.1)
     pusher-client (0.6.2)
