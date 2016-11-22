@@ -145,6 +145,7 @@ started. Proper documentation will be eventually written.
   connected.
 * [minitest-byebug] starts a byebug session on minitest failures.
 * [sublime_debugger] provides a plugin for ruby debugging on Sublime Text.
+* [atom-byebug] provides integration with the Atom editor [EXPERIMENTAL].
 
 ## Contribute
 
@@ -168,3 +169,4 @@ software, especially:
 [ruby-debug-passenger]: https://github.com/davejamesmiller/ruby-debug-passenger
 [minitest-byebug]: https://github.com/kaspth/minitest-byebug
 [sublime_debugger]: https://github.com/shuky19/sublime_debugger
+[atom-byebug]: https://github.com/izaera/atom-byebug
