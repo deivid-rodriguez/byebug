@@ -30,7 +30,7 @@ before_script:
 
 script:
   - bundle exec rake clobber compile test sign_hooks overcommit
-  - bundle exec codeclimate-test-reporter
+  - bundle exec codeclimate-test-reporter || test true
 
 rvm:
   - 2.1.10
