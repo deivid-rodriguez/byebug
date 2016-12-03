@@ -21,6 +21,9 @@ Style/AsciiComments:
 Style/RaiseArgs:
   Enabled: false
 
+EmptyMethod:
+  EnforcedStyle: expanded
+
 Style/ExtraSpacing:
   AllowForAlignment: false
 
