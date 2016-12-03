@@ -5,11 +5,11 @@ module Byebug
     #
     module PathHelper
       def bin_file
-        @bin_file ||= Gem.bin_path('byebug', 'byebug')
+        @bin_file ||= File.join(root_path, 'bin', 'byebug')
       end
 
       def root_path
-        @root_path ||= File.expand_path('../..', bin_file)
+        @root_path ||= File.expand_path('../../..', __dir__)
       end
 
       def lib_files
