@@ -13,11 +13,7 @@ module Byebug
       end
 
       def lib_files
-        @lib_files ||= expand_from_root('lib/**/*.{rb,yml}')
-      end
-
-      def ext_files
-        @ext_files ||= expand_from_root('ext/**/*.{c,h,rb}')
+        @lib_files ||= expand_from_root('lib/**/*.rb')
       end
 
       def test_files
@@ -25,7 +21,7 @@ module Byebug
       end
 
       def gem_files
-        @gem_files ||= [bin_file] + lib_files + ext_files
+        @gem_files ||= [bin_file] + lib_files
       end
 
       def all_files
