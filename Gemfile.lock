@@ -51,7 +51,7 @@ GEM
       mixlib-cli (~> 1.7, >= 1.7.0)
       mixlib-config (~> 2.2, >= 2.2.1)
     method_source (0.8.2)
-    minitest (5.9.1)
+    minitest (5.10.1)
     mixlib-cli (1.7.0)
     mixlib-config (2.2.4)
     multi_json (1.12.1)
