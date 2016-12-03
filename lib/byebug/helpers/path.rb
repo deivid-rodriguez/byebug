@@ -13,11 +13,11 @@ module Byebug
       end
 
       def lib_files
-        @lib_files ||= expand_from_root('lib/**/*.rb')
+        @lib_files ||= glob_for('lib')
       end
 
       def test_files
-        @test_files ||= expand_from_root('test/**/*.rb')
+        @test_files ||= glob_for('test')
       end
 
       def gem_files
@@ -30,8 +30,8 @@ module Byebug
 
       private
 
-      def expand_from_root(glob)
-        Dir.glob(File.expand_path(glob, root_path))
+      def glob_for(dir)
+        Dir.glob(File.expand_path("#{dir}/**/*.rb", root_path))
       end
     end
   end
