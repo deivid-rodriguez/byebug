@@ -51,7 +51,7 @@ module Byebug
   end
 
   def self.load_settings
-    Dir.glob(File.join(__dir__, 'settings/*.rb')).each do |file|
+    Dir.glob(File.join(__dir__, 'settings', '*.rb')).each do |file|
       require file
     end
 

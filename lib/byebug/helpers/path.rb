@@ -9,7 +9,7 @@ module Byebug
       end
 
       def root_path
-        @root_path ||= File.expand_path('../../..', __dir__)
+        @root_path ||= File.expand_path(File.join('..', '..', '..'), __dir__)
       end
 
       def lib_files
@@ -31,7 +31,7 @@ module Byebug
       private
 
       def glob_for(dir)
-        Dir.glob(File.join(root_path, "#{dir}/**/*.rb"))
+        Dir.glob(File.join(root_path, dir, '**', '*.rb'))
       end
     end
   end

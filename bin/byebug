@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift(File.dirname(File.realpath(__FILE__)) + '/../lib')
+$LOAD_PATH.unshift(
+  File.join(File.dirname(File.realpath(__FILE__)), '..', 'lib')
+)
 
 require 'byebug/runner'
 

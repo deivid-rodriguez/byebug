@@ -1,4 +1,4 @@
-require __dir__ + '/lib/byebug/version'
+require File.join(__dir__, 'lib', 'byebug', 'version')
 
 Gem::Specification.new do |s|
   s.name = 'byebug'
