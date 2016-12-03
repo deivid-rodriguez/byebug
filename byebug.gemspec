@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/lib/byebug/version'
+require __dir__ + '/lib/byebug/version'
 
 Gem::Specification.new do |s|
   s.name = 'byebug'

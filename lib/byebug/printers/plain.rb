@@ -35,8 +35,7 @@ module Byebug
       private
 
       def contents_files
-        [File.expand_path(File.join('..', 'texts', 'plain.yml'), __FILE__)] +
-          super
+        [File.expand_path(File.join('texts', 'plain.yml'), __dir__)] + super
       end
     end
   end
