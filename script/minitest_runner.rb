@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH << File.expand_path('../../lib', __FILE__)
-$LOAD_PATH << File.expand_path('../../test', __FILE__)
+$LOAD_PATH << File.expand_path(File.join('..', 'lib'), __dir__)
+$LOAD_PATH << File.expand_path(File.join('..', 'test'), __dir__)
 
 require 'minitest'
 
