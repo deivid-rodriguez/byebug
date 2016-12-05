@@ -31,7 +31,7 @@ module Byebug
       private
 
       def glob_for(dir)
-        Dir.glob(File.expand_path("#{dir}/**/*.rb", root_path))
+        Dir.glob(File.join(root_path, "#{dir}/**/*.rb"))
       end
     end
   end
