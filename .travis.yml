@@ -20,16 +20,13 @@ install:
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
-  - gem update --system --no-document || test true
-  - gem install bundler --no-document || test true
-  - bundle install --jobs 3 --retry 3
 
 before_script:
   - git config --local user.email 'travis@travis.ci'
   - git config --local user.name 'Travis CI'
 
 script:
-  - bundle exec rake clobber compile test sign_hooks overcommit
+  - script/ci.sh
   - bundle exec codeclimate-test-reporter || test true
 
 rvm:
