@@ -8,6 +8,7 @@ doc
 coverage
 
 .gdb_history
+.bundle
 .byebugrc
 .byebug_history
 
