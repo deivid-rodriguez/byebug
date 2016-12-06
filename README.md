@@ -63,6 +63,8 @@ gem install byebug
 
 ## Usage
 
+### From within the Ruby code
+
 Simply drop
 
     byebug
@@ -83,6 +85,14 @@ bin/rails s
 ```
 
 Once the execution gets to your `byebug` command you will get a debugging prompt.
+
+### From the command line
+
+If you want to debug a Ruby script without editing it, you can invoke byebug from the command line.
+
+```shell
+byebug myscript.rb
+```
 
 ## Byebug's commands
 
