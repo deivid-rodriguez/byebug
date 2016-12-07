@@ -18,7 +18,8 @@ before_install:
 
 install:
   - if [ "$LIBEDIT" == "true" ]; then
-      rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
+      rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit
+                                           --rubygems ignore;
     fi
 
 before_script:
