@@ -16,7 +16,7 @@ class MinitestRunner
   def run
     test_suites.each { |f| require File.expand_path(f) }
 
-    flags = ["--name=/#{filtered_methods.join('|')}/", ENV['TEST_OPTS']]
+    flags = ["--name=/#{filtered_methods.join('|')}/", ENV['TESTOPTS']]
 
     Minitest.run(flags + ARGV)
   end
