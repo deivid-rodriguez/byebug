@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rouge"
+
 module Byebug
   #
   # Interface class for standard byebug use.
@@ -39,6 +41,13 @@ module Byebug
       retry
     ensure
       trap("INT", orig_handler)
+    end
+
+    def highlight(str)
+      formatter = Rouge::Formatters::Terminal256.new(Rouge::Themes::Github)
+      lexer = Rouge::Lexers::Ruby.new
+
+      formatter.format(lexer.lex(str))
     end
   end
 end

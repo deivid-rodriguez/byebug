@@ -82,14 +82,15 @@ module Byebug
     end
 
     #
-    # Prints an output message to the output stream.
+    # Prints an output message to the output stream with new line in the end.
     #
     def puts(message)
       output.puts(message)
     end
 
     #
-    # Prints an output message to the output stream without a final "\n".
+    # Prints an output message to the output stream without new line in the
+    # end.
     #
     def print(message)
       output.print(message)
@@ -117,6 +118,10 @@ module Byebug
     #
     def autorestore
       history.restore if Setting[:autosave]
+    end
+
+    def highlight(str)
+      str
     end
 
     private
