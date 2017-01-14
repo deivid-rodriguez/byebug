@@ -187,6 +187,20 @@ end
 n_args = $ARGV.length
 
 raise('*** Need number of disks or no parameter') if n_args > 1
+
+n = 3
+
+if n_args > 0
+  begin
+    n = $ARGV[0].to_i
+  rescue ValueError
+    raise("*** Expecting an integer, got: #{$ARGV[0]}")
+  end
+end
+
+raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+
+hanoi(n, :a, :b, :c)
 ```
 
 Recall in the first section it was stated that before the `def` is run, the
