@@ -186,7 +186,7 @@ end
 
 n_args = $ARGV.length
 
-fail('*** Need number of disks or no parameter') if n_args > 1
+raise('*** Need number of disks or no parameter') if n_args > 1
 ```
 
 Recall in the first section it was stated that before the `def` is run, the
@@ -316,7 +316,7 @@ Now let's see what happens after stepping:
    11:
 => 12: n_args = $ARGV.length
    13:
-   14: fail('*** Need number of disks or no parameter') if n_args > 1
+   14: raise('*** Need number of disks or no parameter') if n_args > 1
 (byebug) private_methods.member?(:hanoi)
 true
 (byebug)
@@ -446,7 +446,7 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
    23:   end
    24: end
    25:
-   26: fail('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+   26: raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
    27:
 => 28: hanoi(n, :a, :b, :c)
 (byebug) n_args
