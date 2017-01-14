@@ -442,7 +442,7 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
    19:   begin
    20:     n = $ARGV[0].to_i
    21:   rescue ValueError
-   22:     raise("** Expecting an integer, got: #{$ARGV[0]}")
+   22:     raise("*** Expecting an integer, got: #{$ARGV[0]}")
    23:   end
    24: end
    25:
