@@ -464,7 +464,7 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
    27:
 => 28: hanoi(n, :a, :b, :c)
 (byebug) n_args
-0
+1
 (byebug) eval n
 3
 (byebug) down 2
