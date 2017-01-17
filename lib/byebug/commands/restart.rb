@@ -41,13 +41,12 @@ module Byebug
 
       puts pr('restart.success', cmd: argv.shelljoin)
 
+      # It's only work on Windows.
       rp = RUBY_PLATFORM
       is_windows = rp.include?('mswin') || rp.include?('mingw32')
-      if is_windows
-        Kernel.exec(RbConfig.ruby, *argv)
-      else
-        Kernel.exec(*argv)
-      end
+      argv.unshift(RbConfig.ruby) if is_windows
+
+      Kernel.exec(*argv)
     end
   end
 end
