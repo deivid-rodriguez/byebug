@@ -186,7 +186,21 @@ end
 
 n_args = $ARGV.length
 
-fail('*** Need number of disks or no parameter') if n_args > 1
+raise('*** Need number of disks or no parameter') if n_args > 1
+
+n = 3
+
+if n_args > 0
+  begin
+    n = $ARGV[0].to_i
+  rescue ValueError
+    raise("*** Expecting an integer, got: #{$ARGV[0]}")
+  end
+end
+
+raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+
+hanoi(n, :a, :b, :c)
 ```
 
 Recall in the first section it was stated that before the `def` is run, the
@@ -316,7 +330,7 @@ Now let's see what happens after stepping:
    11:
 => 12: n_args = $ARGV.length
    13:
-   14: fail('*** Need number of disks or no parameter') if n_args > 1
+   14: raise('*** Need number of disks or no parameter') if n_args > 1
 (byebug) private_methods.member?(:hanoi)
 true
 (byebug)
@@ -442,15 +456,15 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
    19:   begin
    20:     n = $ARGV[0].to_i
    21:   rescue ValueError
-   22:     raise("** Expecting an integer, got: #{$ARGV[0]}")
+   22:     raise("*** Expecting an integer, got: #{$ARGV[0]}")
    23:   end
    24: end
    25:
-   26: fail('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+   26: raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
    27:
 => 28: hanoi(n, :a, :b, :c)
 (byebug) n_args
-0
+1
 (byebug) eval n
 3
 (byebug) down 2
