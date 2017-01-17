@@ -17,7 +17,8 @@ module Byebug
     def test_restart_without_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts(nil, expect_output("#{Context.bin_file} #{example_path} 1"))
+          expected = expect_output("#{Context.bin_file} #{example_path} 1")
+          assert_restarts(nil, expected)
         end
       end
     end
@@ -25,7 +26,8 @@ module Byebug
     def test_restart_with_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts('2', expect_output("#{Context.bin_file} #{example_path} 2"))
+          expected = expect_output("#{Context.bin_file} #{example_path} 2")
+          assert_restarts('2', expected)
         end
       end
     end
