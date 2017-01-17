@@ -1,6 +1,7 @@
 require 'byebug/command'
 require 'byebug/helpers/path'
 require 'shellwords'
+require 'rbconfig'
 
 module Byebug
   #
@@ -43,7 +44,7 @@ module Byebug
       # It's only work on Windows.
       rp = RUBY_PLATFORM
       is_windows = rp.include?('mswin') || rp.include?('mingw32')
-      argv.unshift('ruby') if is_windows
+      argv.unshift(RbConfig.ruby) if is_windows
 
       Kernel.exec(*argv)
     end
