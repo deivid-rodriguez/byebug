@@ -9,6 +9,7 @@
 ### Fixed
 
 * `where` command failing on instance_exec block stack frames
+* `restart` command crashing in certain cases because of a missing `require 'English'` (#321, @akaneko3).
 
 ## 9.0.6 - 2016-09-29
 

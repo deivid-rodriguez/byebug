@@ -1,6 +1,7 @@
 require 'byebug/command'
 require 'byebug/helpers/path'
 require 'shellwords'
+require 'English'
 
 module Byebug
   #
