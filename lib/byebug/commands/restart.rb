@@ -1,6 +1,7 @@
 require 'byebug/command'
 require 'byebug/helpers/path'
 require 'shellwords'
+require 'rbconfig'
 
 module Byebug
   #
@@ -36,9 +37,15 @@ module Byebug
 
       argv.unshift(bin_file) if Byebug.mode == :standalone
 
-      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
+      argv += (@match[:args] ? @match[:args].shellsplit : ARGV.compact)
 
       puts pr('restart.success', cmd: argv.shelljoin)
+
+      # It's only work on Windows.
+      rp = RUBY_PLATFORM
+      is_windows = rp.include?('mswin') || rp.include?('mingw32')
+      argv.unshift(RbConfig.ruby) if is_windows
+
       Kernel.exec(*argv)
     end
   end
