@@ -6,6 +6,10 @@
 
 * Better UI messages for breakpoint management.
 
+### Fixed
+
+* `where` command failing on instance_exec block stack frames
+
 ## 9.0.6 - 2016-09-29
 
 ### Fixed

@@ -161,14 +161,14 @@ module Byebug
     def c_args
       return [] unless _self.to_s != 'main'
 
-      _self.method(_method).parameters
+      _class.instance_method(_method).parameters
     end
 
     def ruby_args
       meth_name = _binding.eval('__method__')
       return [] unless meth_name
 
-      meth_obj = _self.method(meth_name)
+      meth_obj = _class.instance_method(meth_name)
       return [] unless meth_obj
 
       meth_obj.parameters
