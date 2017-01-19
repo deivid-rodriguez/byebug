@@ -82,6 +82,34 @@ module Byebug
 
       check_output_includes(*expected_output)
     end
+
+    def test_where_displays_instance_exec_block_frames
+      enter 'where'
+      program = strip_line_numbers <<-EOP
+         1:  module Byebug
+         2:    class #{example_full_class}
+         3:      def foo
+         4:        Object.new.instance_exec do
+         5:          byebug
+         6:        end
+         7:      end
+         8:     end
+         9:
+        10:    #{example_full_class}.new.foo
+        11:  end
+      EOP
+      debug_code(program)
+
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  block in #{example_full_class}.block in foo at #{example_path}:6
+            #1  BasicObject.instance_exec(*args) at #{example_path}:4
+            #2  #{example_full_class}.foo at #{example_path}:4
+            #3  <module:Byebug> at #{example_path}:10
+            #4  <top (required)> at #{example_path}:1
+      TXT
+
+      check_output_includes(*expected_output)
+    end
   end
 
   #
