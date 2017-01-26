@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'rbconfig'
 
 module Byebug
   #
@@ -8,7 +9,10 @@ module Byebug
     def test_restart_without_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts(nil, "#{Context.bin_file} #{example_path} 1")
+          assert_restarts(
+            nil,
+            "#{RbConfig.ruby} #{Context.bin_file} #{example_path} 1"
+          )
         end
       end
     end
@@ -16,7 +20,10 @@ module Byebug
     def test_restart_with_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts('2', "#{Context.bin_file} #{example_path} 2")
+          assert_restarts(
+            '2',
+            "#{RbConfig.ruby} #{Context.bin_file} #{example_path} 2"
+          )
         end
       end
     end
@@ -24,7 +31,7 @@ module Byebug
     def test_restart_without_arguments_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
-          assert_restarts(nil, "#{example_path} 1")
+          assert_restarts(nil, "#{RbConfig.ruby} #{example_path} 1")
         end
       end
     end
@@ -32,7 +39,7 @@ module Byebug
     def test_restart_with_arguments_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
-          assert_restarts(2, "#{example_path} 2")
+          assert_restarts(2, "#{RbConfig.ruby} #{example_path} 2")
         end
       end
     end

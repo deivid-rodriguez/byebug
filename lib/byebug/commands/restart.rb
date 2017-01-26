@@ -1,6 +1,8 @@
 require 'byebug/command'
 require 'byebug/helpers/path'
 require 'shellwords'
+require 'English'
+require 'rbconfig'
 
 module Byebug
   #
@@ -35,6 +37,7 @@ module Byebug
       argv = [$PROGRAM_NAME]
 
       argv.unshift(bin_file) if Byebug.mode == :standalone
+      argv.unshift(RbConfig.ruby)
 
       argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
 
