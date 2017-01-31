@@ -70,12 +70,12 @@ GEM
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
-    rainbow (2.1.0)
+    rainbow (2.2.1)
     rake (12.0.0)
     rake-compiler (1.0.3)
       rake
-    rubocop (0.46.0)
-      parser (>= 2.3.1.1, < 3.0)
+    rubocop (0.47.1)
+      parser (>= 2.3.3.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
@@ -101,7 +101,7 @@ GEM
       typhoeus (~> 0.6, >= 0.6.8)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
-    unicode-display_width (1.1.1)
+    unicode-display_width (1.1.3)
     websocket (1.2.3)
     yard (0.9.5)
 
@@ -119,7 +119,7 @@ DEPENDENCIES
   pry!
   rake (~> 12.0)
   rake-compiler (~> 1.0)
-  rubocop (= 0.46.0)
+  rubocop (= 0.47.1)
   simplecov (= 0.12.0)
   travis (~> 1.8)
   yard (= 0.9.5)
