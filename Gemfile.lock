@@ -32,7 +32,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.1)
       faraday (>= 0.7.4, < 1.0)
-    ffi (1.9.14)
+    ffi (1.9.17)
     gh (0.15.0)
       addressable (~> 2.4.0)
       backports
@@ -61,7 +61,7 @@ GEM
     netrc (0.11.0)
     octokit (4.6.2)
       sawyer (~> 0.8.0, >= 0.5.3)
-    overcommit (0.37.0)
+    overcommit (0.38.0)
       childprocess (~> 0.5.8)
       iniparse (~> 1.4)
     parser (2.3.3.1)
@@ -115,7 +115,7 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 1.0)
   mdl (= 0.4.0)
   minitest (~> 5.7)
-  overcommit (= 0.37.0)
+  overcommit (= 0.38.0)
   pry!
   rake (~> 12.0)
   rake-compiler (~> 1.0)
