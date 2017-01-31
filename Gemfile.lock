@@ -22,7 +22,7 @@ GEM
       octokit (>= 2.2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    codeclimate-test-reporter (1.0.3)
+    codeclimate-test-reporter (1.0.5)
       simplecov
     coderay (1.1.1)
     docile (1.1.5)
@@ -42,7 +42,7 @@ GEM
       net-http-pipeline
     highline (1.7.8)
     iniparse (1.4.2)
-    json (2.0.2)
+    json (2.0.3)
     kramdown (1.13.1)
     launchy (2.4.3)
       addressable (~> 2.3)
