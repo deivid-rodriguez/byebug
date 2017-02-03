@@ -23,4 +23,4 @@ You might also be asked to:
 * [ ] Add a Changelog entry if the new code introduces user-observable changes.
 
 [autoclose]: https://github.com/blog/1506-closing-issues-via-pull-requests
-[commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+[commits]: http://chris.beams.io/posts/git-commit
