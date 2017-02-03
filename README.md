@@ -76,6 +76,7 @@ If you were debugging Rails, for example, you would add `byebug` to your code.
 def index
   byebug
   @articles = Article.find_recent
+end
 ```
 
 And then start a Rails server.
