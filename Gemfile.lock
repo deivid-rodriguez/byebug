@@ -22,8 +22,8 @@ GEM
       octokit (>= 2.2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    codeclimate-test-reporter (1.0.5)
-      simplecov
+    codeclimate-test-reporter (1.0.8)
+      simplecov (<= 0.13)
     coderay (1.1.1)
     docile (1.1.5)
     ethon (0.10.1)
