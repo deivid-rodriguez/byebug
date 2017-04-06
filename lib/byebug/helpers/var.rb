@@ -18,7 +18,7 @@ module Byebug
 
       def var_global
         globals = global_variables.reject do |v|
-          [:$IGNORECASE, :$=, :$KCODE, :$-K, :$binding].include?(v)
+          %i[$IGNORECASE $= $KCODE $-K $binding].include?(v)
         end
 
         var_list(globals)

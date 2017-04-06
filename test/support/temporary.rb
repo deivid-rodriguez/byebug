@@ -74,7 +74,6 @@ module Byebug
       with_new_file(File.expand_path('.byebug_test_rc'), content) do
         yield
       end
-
     ensure
       Byebug.init_file = old_init_file
     end

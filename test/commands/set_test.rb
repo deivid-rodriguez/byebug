@@ -18,7 +18,7 @@ module Byebug
     end
 
     settings =
-      %i(autolist autosave basename fullpath post_mortem stack_on_error)
+      %i[autolist autosave basename fullpath post_mortem stack_on_error]
 
     settings.each do |set|
       ['on', '1', 'true', ''].each do |key|
@@ -32,7 +32,7 @@ module Byebug
         end
       end
 
-      %w(off 0 false).each do |key|
+      %w[off 0 false].each do |key|
         define_method(:"test_disable_boolean_setting_#{set}_using_#{key}") do
           with_setting set, true do
             enter "set #{set} #{key}"
@@ -116,7 +116,7 @@ module Byebug
       check_error_includes 'You must specify a value for setting :histfile'
     end
 
-    [:listsize, :width].each do |set|
+    %i[listsize width].each do |set|
       define_method(:"test_set_#{set}_changes_integer_setting_#{set}") do
         with_setting set, 100 do
           enter "set #{set} 50"

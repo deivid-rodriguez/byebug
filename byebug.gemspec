@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*.rb', 'lib/**/*.yml', 'ext/**/*.[ch]', 'LICENSE']
   s.bindir = 'bin'
   s.executables = ['byebug']
-  s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md)
+  s.extra_rdoc_files = %w[CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md]
   s.extensions = ['ext/byebug/extconf.rb']
   s.require_path = 'lib'
 

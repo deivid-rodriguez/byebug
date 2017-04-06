@@ -6,7 +6,7 @@ module Byebug
   #
   class ShowTest < TestCase
     settings =
-      %i(autolist autosave basename fullpath post_mortem stack_on_error)
+      %i[autolist autosave basename fullpath post_mortem stack_on_error]
 
     settings.each do |set|
       define_method(:"test_show_#{set}_shows_disabled_bool_setting_#{set}") do
