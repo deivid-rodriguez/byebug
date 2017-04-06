@@ -37,6 +37,8 @@ rvm:
   - 2.2.6-clang
   - 2.3.3
   - 2.3.3-clang
+  - 2.4.1
+  - 2.4.1-clang
   - ruby-head
   - ruby-head-clang
 
