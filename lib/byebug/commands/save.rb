@@ -62,7 +62,7 @@ module Byebug
     end
 
     def save_settings(file)
-      %w(autoirb autolist basename).each do |setting|
+      %w[autoirb autolist basename].each do |setting|
         file.puts "set #{setting} #{Setting[setting.to_sym]}"
       end
     end

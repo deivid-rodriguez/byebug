@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Byebug
   #
   # Interface class for standard byebug use.

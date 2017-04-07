@@ -58,7 +58,7 @@ task :sign_hooks do
   system('bundle exec overcommit --sign pre-commit')
 end
 
-task default: %i(compile test overcommit)
+task default: %i[compile test overcommit]
 
 #
 # Custom tasks for development

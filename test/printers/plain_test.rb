@@ -89,7 +89,7 @@ module Byebug
       with_dummy_yaml do
         assert_equal \
           "a: b\nc: d\n",
-          printer.print_variables([%w(a b), %w(c d)])
+          printer.print_variables([%w[a b], %w[c d]])
       end
     end
 

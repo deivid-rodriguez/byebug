@@ -143,7 +143,7 @@ module Byebug
       end
 
       hsh = { 'can' => 'can', 'cat' => 'cat' }
-      assert_equal hsh, %w(can cat).abbrev
+      assert_equal hsh, %w[can cat].abbrev
     end
 
     def test_run_with_a_single_include_flag

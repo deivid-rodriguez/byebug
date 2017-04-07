@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Reopen main module to define the library version
 #
