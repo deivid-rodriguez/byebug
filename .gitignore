@@ -14,4 +14,3 @@ coverage
 
 lib/byebug/byebug.so
 lib/byebug/byebug.bundle
-.ruby-version
