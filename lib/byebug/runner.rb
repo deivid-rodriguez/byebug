@@ -2,6 +2,7 @@ require 'optparse'
 require 'English'
 require 'byebug/core'
 require 'byebug/version'
+require 'byebug/helpers/bin'
 require 'byebug/helpers/parse'
 require 'byebug/option_setter'
 require 'byebug/processors/control_processor'
@@ -11,6 +12,7 @@ module Byebug
   # Responsible for starting the debugger when started from the command line.
   #
   class Runner
+    include Helpers::BinHelper
     include Helpers::ParseHelper
 
     #
@@ -176,24 +178,6 @@ module Byebug
     def debug_program
       error = Byebug.debug_load(program, stop)
       puts "#{error}\n#{error.backtrace}" if error
-    end
-
-    #
-    # Cross-platform way of finding an executable in the $PATH.
-    # Borrowed from: http://stackoverflow.com/questions/2108727
-    #
-    def which(cmd)
-      return File.expand_path(cmd) if File.exist?(cmd)
-
-      exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-        exts.each do |ext|
-          exe = File.join(path, "#{cmd}#{ext}")
-          return exe if File.executable?(exe) && !File.directory?(exe)
-        end
-      end
-
-      nil
     end
 
     #

@@ -6,7 +6,31 @@ module Byebug
   # Tests restarting functionality.
   #
   class RestartTest < TestCase
-    def test_restart_without_arguments_in_standalone_mode
+    def test_restart_with_no_args_original_script_with_no_args_standalone_mode
+      with_mode(:standalone) do
+        with_command_line(example_path) do
+          assert_restarts(nil, "#{ruby_bin} #{byebug_bin} #{example_path}")
+        end
+      end
+    end
+
+    def test_restart_with_no_args_original_script_with_no_args_attached_mode
+      with_mode(:attached) do
+        with_command_line(example_path) do
+          assert_restarts(nil, "#{ruby_bin} #{example_path}")
+        end
+      end
+    end
+
+    def test_restart_with_no_args_original_script_through_ruby_attached_mode
+      with_mode(:attached) do
+        with_command_line('ruby', example_path) do
+          assert_restarts(nil, "ruby #{example_path}")
+        end
+      end
+    end
+
+    def test_restart_with_no_args_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
           assert_restarts(nil, "#{ruby_bin} #{byebug_bin} #{example_path} 1")
@@ -14,7 +38,7 @@ module Byebug
       end
     end
 
-    def test_restart_with_arguments_in_standalone_mode
+    def test_restart_with_args_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
           assert_restarts('2', "#{ruby_bin} #{byebug_bin} #{example_path} 2")
@@ -22,7 +46,7 @@ module Byebug
       end
     end
 
-    def test_restart_without_arguments_in_attached_mode
+    def test_restart_with_no_args_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
           assert_restarts(nil, "#{ruby_bin} #{example_path} 1")
@@ -30,7 +54,7 @@ module Byebug
       end
     end
 
-    def test_restart_with_arguments_in_attached_mode
+    def test_restart_with_args_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
           assert_restarts(2, "#{ruby_bin} #{example_path} 2")

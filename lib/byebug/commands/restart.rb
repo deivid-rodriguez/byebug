@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/bin'
 require 'byebug/helpers/path'
 require 'shellwords'
 require 'English'
@@ -9,6 +10,7 @@ module Byebug
   # Restart debugged program from within byebug.
   #
   class RestartCommand < Command
+    include Helpers::BinHelper
     include Helpers::PathHelper
 
     self.allow_in_control = true
@@ -53,7 +55,7 @@ module Byebug
     end
 
     def prepend_ruby_bin(argv)
-      argv.unshift(RbConfig.ruby)
+      argv.unshift(RbConfig.ruby) if which('ruby') != which(argv.first)
       argv
     end
   end
