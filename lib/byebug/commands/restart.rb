@@ -41,7 +41,7 @@ module Byebug
       argv = prepend_byebug_bin(argv)
       argv = prepend_ruby_bin(argv)
 
-      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
+      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV)
 
       puts pr('restart.success', cmd: argv.shelljoin)
       Kernel.exec(*argv)
