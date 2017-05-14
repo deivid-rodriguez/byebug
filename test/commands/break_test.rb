@@ -134,7 +134,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_sets_correct_fields
-      enter 'break 7'
+      enter "break #{example_path}:7"
 
       debug_code(program) do
         b = Breakpoint.first
@@ -393,6 +393,78 @@ module Byebug
       debug_code(program)
 
       check_output_doesnt_include 'Return value is: nil'
+    end
+  end
+
+  #
+  # Tests breakpoints with path containing space and relative path
+  #
+  class BreakAtLinesFileNameTest < TestCase
+    def program
+      strip_line_numbers <<-EOC
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test breakpoints
+         4:    #
+         5:    class TestFolder
+         6:      def self.a
+         7:        y = 1
+         8:        z = 2
+         9:        y + z
+        10:      end
+        11:    end
+        12:
+        13:    byebug
+        14:
+        15:    TestFolder.a
+        16:  end
+      EOC
+    end
+
+    def example_class
+      'TestFolder'
+    end
+
+    def example_module
+      'TestFolder'
+    end
+
+    #
+    # Temporary file where code for each test is saved
+    # Overloaded for space in name
+    #
+    def example_file
+      @example_file ||= Tempfile.new(['byebug space test', '.rb'])
+
+      @example_file.open if @example_file.closed?
+
+      @example_file
+    end
+
+    def test_setting_breakpoint_with_full_path_adds_the_breakpoint
+      enter "break #{example_path}:7"
+      debug_code(program) { assert_equal 1, Byebug.breakpoints.size }
+    end
+
+    def test_setting_breakpoint_with_bad_relative_path_doesnt_crash
+      enter 'break ../relative/path space.rb:8'
+      debug_code(program)
+
+      check_error_includes 'No file named ../relative/path space.rb'
+    end
+
+    def test_setting_breakpoint_with_relative_path
+      enter 'break ./test/commands/break_test.rb:8'
+      debug_code(program)
+
+      check_output_includes(/Successfully created breakpoint with id/)
+    end
+
+    def test_setting_conditional_breakpoint_with_relative_path
+      enter 'break ./test/commands/break_test.rb:8 if y == 1'
+      debug_code(program)
+
+      check_output_includes(/Successfully created breakpoint with id/)
     end
   end
 end

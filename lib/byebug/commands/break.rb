@@ -62,7 +62,7 @@ module Byebug
     end
 
     def method_breakpoint(location)
-      location.match(/([^.#]+)[.#](.+)/) do |match|
+      location.match(/^([^.#]+)[.#](.+)/) do |match|
         klass = target_object(match[1])
         method = match[2].intern
 
