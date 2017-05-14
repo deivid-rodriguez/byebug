@@ -74,7 +74,7 @@ module Byebug
     # Path to file where test code is saved
     #
     def example_path
-      File.join(example_folder, "byebug_test.rb")
+      File.join(example_folder, "byebug_example.rb")
     end
 
     #
