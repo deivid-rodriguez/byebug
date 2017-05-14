@@ -375,7 +375,7 @@ module Byebug
         "12:",
         "[B] 13:   byebug",
         "14:",
-        "[B] 15:   ByebugTestClass.a",
+        "[B] 15:   #{example_class}.a",
         "[B] 16: end"
     end
   end
