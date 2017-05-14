@@ -199,13 +199,13 @@ module Byebug
     # A minimal program that gives you a byebug's prompt
     #
     def minimal_program
-      <<-EOM
+      <<-RUBY
         module Byebug
           byebug
 
           'Hello world'
         end
-      EOM
+      RUBY
     end
   end
 end
