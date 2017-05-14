@@ -9,10 +9,7 @@ module Byebug
     def test_restart_without_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts(
-            nil,
-            "#{RbConfig.ruby} #{Context.bin_file} #{example_path} 1"
-          )
+          assert_restarts(nil, "#{ruby_bin} #{byebug_bin} #{example_path} 1")
         end
       end
     end
@@ -20,10 +17,7 @@ module Byebug
     def test_restart_with_arguments_in_standalone_mode
       with_mode(:standalone) do
         with_command_line(example_path, '1') do
-          assert_restarts(
-            '2',
-            "#{RbConfig.ruby} #{Context.bin_file} #{example_path} 2"
-          )
+          assert_restarts('2', "#{ruby_bin} #{byebug_bin} #{example_path} 2")
         end
       end
     end
@@ -31,7 +25,7 @@ module Byebug
     def test_restart_without_arguments_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
-          assert_restarts(nil, "#{RbConfig.ruby} #{example_path} 1")
+          assert_restarts(nil, "#{ruby_bin} #{example_path} 1")
         end
       end
     end
@@ -39,7 +33,7 @@ module Byebug
     def test_restart_with_arguments_in_attached_mode
       with_mode(:attached) do
         with_command_line(example_path, '1') do
-          assert_restarts(2, "#{RbConfig.ruby} #{example_path} 2")
+          assert_restarts(2, "#{ruby_bin} #{example_path} 2")
         end
       end
     end
@@ -53,6 +47,14 @@ module Byebug
 
         check_output_includes "Re exec'ing:"
       end
+    end
+
+    def ruby_bin
+      RbConfig.ruby
+    end
+
+    def byebug_bin
+      Context.bin_file
     end
   end
 end

@@ -36,13 +36,25 @@ module Byebug
     def execute
       argv = [$PROGRAM_NAME]
 
-      argv.unshift(bin_file) if Byebug.mode == :standalone
-      argv.unshift(RbConfig.ruby)
+      argv = prepend_byebug_bin(argv)
+      argv = prepend_ruby_bin(argv)
 
       argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
 
       puts pr('restart.success', cmd: argv.shelljoin)
       Kernel.exec(*argv)
+    end
+
+    private
+
+    def prepend_byebug_bin(argv)
+      argv.unshift(bin_file) if Byebug.mode == :standalone
+      argv
+    end
+
+    def prepend_ruby_bin(argv)
+      argv.unshift(RbConfig.ruby)
+      argv
     end
   end
 end
