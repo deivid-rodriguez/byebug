@@ -26,7 +26,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.4.0)
+    addressable (2.5.1)
+      public_suffix (~> 2.0, >= 2.0.2)
     ast (2.3.0)
     chandler (0.7.0)
       netrc
@@ -37,11 +38,11 @@ GEM
       simplecov (<= 0.13)
     coderay (1.1.1)
     docile (1.1.5)
-    faraday (0.12.0.1)
+    faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
     iniparse (1.4.2)
-    json (2.0.3)
+    json (2.1.0)
     kramdown (1.13.2)
     mdl (0.4.0)
       kramdown (~> 1.12, >= 1.12.0)
@@ -62,6 +63,7 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     powerpack (0.1.1)
+    public_suffix (2.0.5)
     rainbow (2.2.2)
       rake
     rake (12.0.0)
