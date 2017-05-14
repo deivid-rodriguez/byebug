@@ -9,7 +9,7 @@ module Byebug
   class EditTest < TestCase
     def test_edit_opens_current_file_in_current_line_in_configured_editor
       with_env("EDITOR", "edi") do
-        assert_calls(Kernel, :system, "edi +4 #{example_path}") do
+        assert_calls(Kernel, :system, "edi +2 #{example_path}") do
           enter "edit"
           debug_code(minimal_program)
         end
@@ -18,7 +18,7 @@ module Byebug
 
     def test_edit_calls_vim_if_no_editor_environment_variable_is_set
       with_env("EDITOR", nil) do
-        assert_calls(Kernel, :system, "vim +4 #{example_path}") do
+        assert_calls(Kernel, :system, "vim +2 #{example_path}") do
           enter "edit"
           debug_code(minimal_program)
         end
@@ -27,8 +27,8 @@ module Byebug
 
     def test_edit_opens_configured_editor_at_specific_line_and_file
       with_env("EDITOR", "edi") do
-        assert_calls(Kernel, :system, "edi +3 #{readme_path}") do
-          enter "edit README.md:3"
+        assert_calls(Kernel, :system, "edi +1 #{readme_path}") do
+          enter "edit README.md:1"
           debug_code(minimal_program)
         end
       end

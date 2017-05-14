@@ -202,13 +202,7 @@ module Byebug
     # A minimal program that gives you a byebug's prompt
     #
     def minimal_program
-      <<-RUBY
-        module Byebug
-          byebug
-
-          "Hello world"
-        end
-      RUBY
+      "byebug\nsleep 0\n"
     end
 
     #
