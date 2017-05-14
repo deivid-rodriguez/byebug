@@ -1,5 +1,6 @@
 require 'byebug/command'
 require 'irb'
+require 'English'
 
 module Byebug
   #
@@ -29,7 +30,7 @@ module Byebug
         return errmsg(pr('base.errors.only_local'))
       end
 
-      # @todo IRB tries to parse ARGV so we must clear it (see #197). Add a
+      # @todo IRB tries to parse $ARGV so we must clear it (see #197). Add a
       #   test case for it so we can remove this comment.
       with_clean_argv { IRB.start }
     end
@@ -37,12 +38,12 @@ module Byebug
     private
 
     def with_clean_argv
-      saved_argv = ARGV.dup
-      ARGV.clear
+      saved_argv = $ARGV.dup
+      $ARGV.clear
       begin
         yield
       ensure
-        ARGV.concat(saved_argv)
+        $ARGV.concat(saved_argv)
       end
     end
   end
