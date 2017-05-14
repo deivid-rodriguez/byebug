@@ -15,5 +15,4 @@ gem 'rake-compiler', '~> 1.0'
 gem 'rubocop', git: 'https://github.com/bbatsov/rubocop'
 
 gem 'simplecov', '0.13.0'
-gem 'travis', '~> 1.8'
 gem 'yard', '0.9.8'
