@@ -1,11 +1,14 @@
 require 'test_helper'
 require 'minitest/mock'
+require 'byebug/helpers/string'
 
 module Byebug
   #
   # Tests the plain text printer
   #
   class PrintersPlainTest < TestCase
+    include Helpers::StringHelper
+
     def klass
       @klass ||= Printers::Plain
     end
@@ -15,7 +18,7 @@ module Byebug
     end
 
     def yaml_plain
-      <<-YAML.gsub(/^ {8}/, '')
+      deindent <<-YAML, leading_spaces: 8
         foo:
           bar: 'plain {zee}, {uga} gaa'
           confirmations:
@@ -26,7 +29,7 @@ module Byebug
     end
 
     def yaml_base
-      <<-YAML.gsub(/^ {8}/, '')
+      deindent <<-YAML, leading_spaces: 8
         foo:
           bar: 'base {zee}, {uga} gaa'
           boo: '{zee}, gau'

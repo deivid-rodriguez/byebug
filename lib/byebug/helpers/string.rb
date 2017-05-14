@@ -17,7 +17,17 @@ module Byebug
       # command prompt.
       #
       def prettify(str)
-        "\n" + str.gsub(/^ {6}/, '') + "\n"
+        "\n" + deindent(str) + "\n"
+      end
+
+      #
+      # Removes a number of leading whitespace for each input line.
+      #
+      # @note Might be unnecessary when Ruby 2.2 support is dropped and we can
+      # use squiggly heredoc's.
+      #
+      def deindent(str, leading_spaces: 6)
+        str.gsub(/^ {#{leading_spaces}}/, '')
       end
     end
   end
