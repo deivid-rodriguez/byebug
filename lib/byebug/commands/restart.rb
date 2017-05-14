@@ -36,27 +36,27 @@ module Byebug
     end
 
     def execute
-      argv = [$PROGRAM_NAME]
+      cmd = [$PROGRAM_NAME]
 
-      argv = prepend_byebug_bin(argv)
-      argv = prepend_ruby_bin(argv)
+      cmd = prepend_byebug_bin(cmd)
+      cmd = prepend_ruby_bin(cmd)
 
-      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV)
+      cmd += (@match[:args] ? @match[:args].shellsplit : $ARGV)
 
-      puts pr('restart.success', cmd: argv.shelljoin)
-      Kernel.exec(*argv)
+      puts pr('restart.success', cmd: cmd.shelljoin)
+      Kernel.exec(*cmd)
     end
 
     private
 
-    def prepend_byebug_bin(argv)
-      argv.unshift(bin_file) if Byebug.mode == :standalone
-      argv
+    def prepend_byebug_bin(cmd)
+      cmd.unshift(bin_file) if Byebug.mode == :standalone
+      cmd
     end
 
-    def prepend_ruby_bin(argv)
-      argv.unshift(RbConfig.ruby) if which('ruby') != which(argv.first)
-      argv
+    def prepend_ruby_bin(cmd)
+      cmd.unshift(RbConfig.ruby) if which('ruby') != which(cmd.first)
+      cmd
     end
   end
 end
