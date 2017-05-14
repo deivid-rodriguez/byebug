@@ -109,7 +109,7 @@ module Byebug
     attr_writer :interface
 
     def interface
-      @interface ||= LocalInterface.new
+      @interface ||= Context.interface
     end
 
     #
