@@ -84,8 +84,12 @@ module Byebug
     # Starts byebug to debug a program.
     #
     def run
+      Byebug.mode = :standalone
+
       option_parser.order!($ARGV)
       return if non_script_option? || error_in_script?
+
+      $PROGRAM_NAME = program
 
       Byebug.run_init_script if init_script
 
@@ -113,6 +117,13 @@ module Byebug
 
         OptionSetter.new(self, opts).setup
       end
+    end
+
+    def program
+      @program ||= begin
+                     candidate = which($ARGV.shift)
+                     candidate == which('ruby') ? which($ARGV.shift) : candidate
+                   end
     end
 
     #
@@ -143,25 +154,17 @@ module Byebug
     # Extracts debugged program from command line args.
     #
     def non_existing_script?
-      Byebug.mode = :standalone
+      return false if program
 
-      program = which($ARGV.shift)
-      program = which($ARGV.shift) if program == which('ruby')
-
-      if program
-        $PROGRAM_NAME = program
-        false
-      else
-        print_error("The script doesn't exist")
-        true
-      end
+      print_error("The script doesn't exist")
+      true
     end
 
     #
     # Checks the debugged script has correct syntax
     #
     def invalid_script?
-      return false if syntax_valid?(File.read($PROGRAM_NAME))
+      return false if syntax_valid?(File.read(program))
 
       print_error('The script has incorrect syntax')
       true
@@ -171,7 +174,7 @@ module Byebug
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      error = Byebug.debug_load($PROGRAM_NAME, stop)
+      error = Byebug.debug_load(program, stop)
       puts "#{error}\n#{error.backtrace}" if error
     end
 
