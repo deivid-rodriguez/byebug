@@ -214,7 +214,7 @@ module Byebug
     #
     # @return Program's output
     #
-    def run_program(cmd, input)
+    def run_program(cmd, input = "")
       env = { "RUBYOPT" => "-I#{Context.lib_path}" }
 
       stdout, = Open3.capture2e(env, *cmd, stdin_data: input)

@@ -10,6 +10,9 @@ AllCops:
 Layout/ExtraSpacing:
   AllowForAlignment: false
 
+Lint/InterpolationCheck:
+  Enabled: false
+
 Metrics/AbcSize:
   Enabled: false
 

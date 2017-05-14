@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "byebug/runner"
+require "byebug/version"
 
 module Byebug
   #
@@ -16,129 +16,113 @@ module Byebug
     end
 
     def test_run_with_a_script_to_debug
-      with_command_line("bin/byebug", example_path) do
-        non_stop_runner.run
+      stdout = run_program(
+        [*binstub, example_path],
+        'puts "Program: #{$PROGRAM_NAME}"'
+      )
 
-        assert_equal $PROGRAM_NAME, example_path
-      end
+      assert_match(/Program: #{example_path}/, stdout)
     end
 
     def test_run_with_a_script_and_params_does_not_consume_script_params
-      with_command_line("bin/byebug", "--", example_path, "-opt", "value") do
-        non_stop_runner.run
+      stdout = run_program(
+        [*binstub, "--", example_path, "-opt", "value"],
+        'puts "Args: #{$ARGV.join(\', \')}"'
+      )
 
-        assert_equal ["-opt", "value"], $ARGV
-      end
+      assert_match(/Args: -opt, value/, stdout)
     end
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
-      with_command_line("bin/byebug", "--", "ruby", example_path) do
-        non_stop_runner.run
+      stdout = run_program(
+        [*binstub, "--", "ruby", example_path],
+        'puts "Program: #{$0}"'
+      )
 
-        assert_equal example_path, $PROGRAM_NAME
-      end
+      assert_match(/Program: #{example_path}/, stdout)
     end
 
     def test_run_with_post_mortem_mode_flag
-      with_setting :post_mortem, false do
-        with_command_line("bin/byebug", "-m", example_path) do
-          non_stop_runner.run
+      stdout = run_program(
+        [*binstub, "-m", example_path],
+        "show post_mortem"
+      )
 
-          assert_equal true, Setting[:post_mortem]
-        end
-      end
+      assert_match(/post_mortem is on/, stdout)
     end
 
     def test_run_with_linetracing_flag
-      with_setting :linetrace, false do
-        with_command_line("bin/byebug", "-t", example_path) do
-          non_stop_runner.run
+      stdout = run_program(
+        [*binstub, "-t", example_path],
+        "show linetrace"
+      )
 
-          assert_equal true, Setting[:linetrace]
-        end
-      end
+      assert_match(/linetrace is on/, stdout)
     end
 
     def test_run_with_no_quit_flag
       skip
 
-      with_command_line("bin/byebug", "--no-quit", example_path) do
-        non_stop_runner.run
+      stdout = run_program(
+        [*binstub, "--no-quit", example_path],
+        "quit!"
+      )
 
-        check_output_includes("(byebug:ctrl)")
-      end
+      assert_match(/\(byebug:ctrl\)/, stdout)
     end
 
     def test_run_with_require_flag
-      with_command_line("bin/byebug", "-r", "abbrev", example_path) do
-        non_stop_runner.run
-      end
+      stdout = run_program(
+        [*binstub, "-r", "abbrev", example_path],
+        'puts "Abbrev loaded? #{$LOADED_FEATURES.last.include?(\'abbrev\')}"'
+      )
 
-      hsh = { "can" => "can", "cat" => "cat" }
-      assert_equal hsh, %w[can cat].abbrev
+      assert_match(/Abbrev loaded\? true/, stdout)
     end
 
     def test_run_with_a_single_include_flag
-      with_command_line("bin/byebug", "-I", "dir1", example_path) do
-        non_stop_runner.run
-      end
+      stdout = run_program(
+        [*binstub, "-I", "dir1", example_path],
+        'puts "dir1 in LOAD_PATH? #{$LOAD_PATH.include?(\'dir1\')}"'
+      )
 
-      assert_includes $LOAD_PATH, "dir1"
+      assert_match(/dir1 in LOAD_PATH\? true/, stdout)
     end
 
     def test_run_with_several_include_flags
-      with_command_line("bin/byebug", "-I", "dir1:dir2", example_path) do
-        non_stop_runner.run
-      end
+      stdout = run_program(
+        [*binstub, "-I", "d1:d2", example_path],
+        'puts "d1 and d2 in LOAD_PATH? #{(%w(d1 d2) - $LOAD_PATH).empty?}"'
+      )
 
-      assert_includes $LOAD_PATH, "dir1"
-      assert_includes $LOAD_PATH, "dir2"
+      assert_match(/d1 and d2 in LOAD_PATH\? true/, stdout)
     end
 
     def test_run_with_debug_flag
-      with_command_line("bin/byebug", "-d", example_path) do
-        non_stop_runner.run
-      end
+      stdout = run_program(
+        [*binstub, "-d", example_path],
+        'puts "Debug flag is #{$DEBUG}"'
+      )
 
-      assert_equal $DEBUG, true
-      $DEBUG = false
+      assert_match(/Debug flag is true/, stdout)
     end
 
     def test_run_stops_at_the_first_line_by_default
-      enter "cont"
-      with_command_line("bin/byebug", example_path) { stop_first_runner.run }
+      stdout = run_program([*binstub, example_path])
 
-      check_output_includes "=> 1: sleep 0"
+      assert_match(/=> 1: sleep 0/, stdout)
     end
 
     def test_run_with_no_stop_flag_does_not_stop_at_the_first_line
-      non_stop_runner.interface = Context.interface
+      stdout = run_program([*binstub, "--no-stop", example_path])
 
-      with_command_line("bin/byebug --no-stop", example_path) do
-        non_stop_runner.run
-      end
-
-      assert_empty non_stop_runner.interface.output
+      refute_match(/=> 1: sleep 0/, stdout)
     end
 
     def test_run_with_stop_flag_stops_at_the_first_line
-      enter "cont"
+      stdout = run_program([*binstub, "--stop", example_path])
 
-      with_command_line("bin/byebug --stop", example_path) do
-        stop_first_runner.run
-      end
-
-      check_output_includes "=> 1: sleep 0"
-    end
-
-    private
-
-    def non_stop_runner
-      @non_stop_runner ||= Byebug::Runner.new(false)
-    end
-
-    def stop_first_runner
-      @stop_first_runner ||= Byebug::Runner.new(true)
+      assert_match(/=> 1: sleep 0/, stdout)
     end
   end
 end
