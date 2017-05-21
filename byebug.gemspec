@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
     stack frames among other things and it comes with an easy to use command
     line interface."
 
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.2.0'
 
   s.files = Dir['lib/**/*.rb', 'lib/**/*.yml', 'ext/**/*.[ch]', 'LICENSE']
   s.bindir = 'bin'
