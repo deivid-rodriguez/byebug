@@ -7,6 +7,9 @@ AllCops:
 
   TargetRubyVersion: 2.1
 
+Layout/ExtraSpacing:
+  AllowForAlignment: false
+
 TrivialAccessors:
   ExactNameMatch: true
 
@@ -23,8 +26,5 @@ Style/RaiseArgs:
 
 EmptyMethod:
   EnforcedStyle: expanded
-
-Style/ExtraSpacing:
-  AllowForAlignment: false
 
 inherit_from: .rubocop_todo.yml
