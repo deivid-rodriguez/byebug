@@ -7,13 +7,12 @@ Gem::Specification.new do |s|
   s.email = 'deivid.rodriguez@mail.com'
   s.license = 'BSD-2-Clause'
   s.homepage = 'http://github.com/deivid-rodriguez/byebug'
-  s.summary = 'Ruby 2.0 fast debugger - base + CLI'
-  s.description = "Byebug is a Ruby 2 debugger. It's implemented using the
-    Ruby 2 TracePoint C API for execution control and the Debug Inspector C API
-    for call stack navigation.  The core component provides support that
-    front-ends can build on. It provides breakpoint handling and bindings for
-    stack frames among other things and it comes with an easy to use command
-    line interface."
+  s.summary = 'Ruby fast debugger - base + CLI'
+  s.description = "Byebug is a Ruby debugger. It's implemented using the
+    TracePoint C API for execution control and the Debug Inspector C API for
+    call stack navigation.  The core component provides support that front-ends
+    can build on. It provides breakpoint handling and bindings for stack frames
+    among other things and it comes with an easy to use command line interface."
 
   s.required_ruby_version = '>= 2.2.0'
 
