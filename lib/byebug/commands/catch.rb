@@ -36,7 +36,7 @@ module Byebug
     def execute
       return info unless @match[1]
 
-      return 'off' == @match[1] ? clear : add(@match[1]) unless @match[2]
+      return @match[1] == 'off' ? clear : add(@match[1]) unless @match[2]
 
       return errmsg pr('catch.errors.off', off: cmd) unless @match[2] == 'off'
 

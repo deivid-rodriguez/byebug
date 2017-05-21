@@ -38,7 +38,7 @@ module Byebug
         signame = 'KILL'
       end
 
-      processor.interface.close if 'KILL' == signame
+      processor.interface.close if signame == 'KILL'
       Process.kill(signame, Process.pid)
     end
   end

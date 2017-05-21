@@ -1,16 +1,4 @@
 GIT
-  remote: https://github.com/bbatsov/rubocop
-  revision: 03bda6cde059c4a83f03db025c904f3fb60968c0
-  specs:
-    rubocop (0.48.1)
-      parallel (~> 1.10)
-      parser (>= 2.3.3.1, < 3.0)
-      powerpack (~> 0.1)
-      rainbow (>= 1.99.1, < 3.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.0, >= 1.0.1)
-
-GIT
   remote: https://github.com/pry/pry
   revision: f19d3e2ae86a677e1e926016fa1a5763675e3659
   specs:
@@ -69,6 +57,13 @@ GEM
     rake (12.0.0)
     rake-compiler (1.0.3)
       rake
+    rubocop (0.49.1)
+      parallel (~> 1.10)
+      parser (>= 2.3.3.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
@@ -95,7 +90,7 @@ DEPENDENCIES
   pry!
   rake (~> 12.0)
   rake-compiler (~> 1.0)
-  rubocop!
+  rubocop (= 0.49.1)
   simplecov (= 0.13.0)
   yard (= 0.9.9)
 

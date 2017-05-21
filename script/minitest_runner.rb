@@ -56,7 +56,7 @@ class MinitestRunner
 
   def expand(str)
     runnables.each do |runnable|
-      return runnable.runnable_methods if "Byebug::#{runnable}" == str
+      return runnable.runnable_methods if str == "Byebug::#{runnable}"
     end
   end
 
