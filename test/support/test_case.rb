@@ -63,10 +63,6 @@ module Byebug
     #
     def example_file
       @example_file ||= Tempfile.new(['byebug_test', '.rb'], example_folder)
-
-      @example_file.open if @example_file.closed?
-
-      @example_file
     end
 
     #

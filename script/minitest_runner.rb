@@ -4,6 +4,7 @@ $LOAD_PATH << File.expand_path(File.join('..', 'lib'), __dir__)
 $LOAD_PATH << File.expand_path(File.join('..', 'test'), __dir__)
 
 require 'minitest'
+require 'English'
 
 #
 # Helper class to aid running minitest
@@ -18,7 +19,7 @@ class MinitestRunner
 
     flags = ["--name=/#{filtered_methods.join('|')}/", ENV['TESTOPTS']]
 
-    Minitest.run(flags + ARGV)
+    Minitest.run(flags + $ARGV)
   end
 
   private
@@ -68,9 +69,9 @@ class MinitestRunner
   end
 
   def extract_from_argv
-    matching, non_matching = ARGV.partition { |arg| yield(arg) }
+    matching, non_matching = $ARGV.partition { |arg| yield(arg) }
 
-    ARGV.replace(non_matching)
+    $ARGV.replace(non_matching)
 
     matching
   end

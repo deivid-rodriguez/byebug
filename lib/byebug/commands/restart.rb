@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/helpers/bin'
 require 'byebug/helpers/path'
 require 'shellwords'
 require 'English'
@@ -9,6 +10,7 @@ module Byebug
   # Restart debugged program from within byebug.
   #
   class RestartCommand < Command
+    include Helpers::BinHelper
     include Helpers::PathHelper
 
     self.allow_in_control = true
@@ -34,15 +36,27 @@ module Byebug
     end
 
     def execute
-      argv = [$PROGRAM_NAME]
+      cmd = [$PROGRAM_NAME]
 
-      argv.unshift(bin_file) if Byebug.mode == :standalone
-      argv.unshift(RbConfig.ruby)
+      cmd = prepend_byebug_bin(cmd)
+      cmd = prepend_ruby_bin(cmd)
 
-      argv += (@match[:args] ? @match[:args].shellsplit : $ARGV.compact)
+      cmd += (@match[:args] ? @match[:args].shellsplit : $ARGV)
 
-      puts pr('restart.success', cmd: argv.shelljoin)
-      Kernel.exec(*argv)
+      puts pr('restart.success', cmd: cmd.shelljoin)
+      Kernel.exec(*cmd)
+    end
+
+    private
+
+    def prepend_byebug_bin(cmd)
+      cmd.unshift(bin_file) if Byebug.mode == :standalone
+      cmd
+    end
+
+    def prepend_ruby_bin(cmd)
+      cmd.unshift(RbConfig.ruby) if which('ruby') != which(cmd.first)
+      cmd
     end
   end
 end

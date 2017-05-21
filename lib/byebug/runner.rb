@@ -2,6 +2,7 @@ require 'optparse'
 require 'English'
 require 'byebug/core'
 require 'byebug/version'
+require 'byebug/helpers/bin'
 require 'byebug/helpers/parse'
 require 'byebug/option_setter'
 require 'byebug/processors/control_processor'
@@ -11,6 +12,7 @@ module Byebug
   # Responsible for starting the debugger when started from the command line.
   #
   class Runner
+    include Helpers::BinHelper
     include Helpers::ParseHelper
 
     #
@@ -84,8 +86,12 @@ module Byebug
     # Starts byebug to debug a program.
     #
     def run
+      Byebug.mode = :standalone
+
       option_parser.order!($ARGV)
       return if non_script_option? || error_in_script?
+
+      $PROGRAM_NAME = program
 
       Byebug.run_init_script if init_script
 
@@ -113,6 +119,13 @@ module Byebug
 
         OptionSetter.new(self, opts).setup
       end
+    end
+
+    def program
+      @program ||= begin
+                     candidate = which($ARGV.shift)
+                     candidate == which('ruby') ? which($ARGV.shift) : candidate
+                   end
     end
 
     #
@@ -143,25 +156,17 @@ module Byebug
     # Extracts debugged program from command line args.
     #
     def non_existing_script?
-      Byebug.mode = :standalone
+      return false if program
 
-      program = which($ARGV.shift)
-      program = which($ARGV.shift) if program == which('ruby')
-
-      if program
-        $PROGRAM_NAME = program
-        false
-      else
-        print_error("The script doesn't exist")
-        true
-      end
+      print_error("The script doesn't exist")
+      true
     end
 
     #
     # Checks the debugged script has correct syntax
     #
     def invalid_script?
-      return false if syntax_valid?(File.read($PROGRAM_NAME))
+      return false if syntax_valid?(File.read(program))
 
       print_error('The script has incorrect syntax')
       true
@@ -171,26 +176,8 @@ module Byebug
     # Debugs a script only if syntax checks okay.
     #
     def debug_program
-      error = Byebug.debug_load($PROGRAM_NAME, stop)
+      error = Byebug.debug_load(program, stop)
       puts "#{error}\n#{error.backtrace}" if error
-    end
-
-    #
-    # Cross-platform way of finding an executable in the $PATH.
-    # Borrowed from: http://stackoverflow.com/questions/2108727
-    #
-    def which(cmd)
-      return File.expand_path(cmd) if File.exist?(cmd)
-
-      exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-        exts.each do |ext|
-          exe = File.join(path, "#{cmd}#{ext}")
-          return exe if File.executable?(exe) && !File.directory?(exe)
-        end
-      end
-
-      nil
     end
 
     #
