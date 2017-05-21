@@ -10,6 +10,7 @@ module Byebug
     #
     class FileCommand < Command
       include Helpers::FileHelper
+      include Helpers::StringHelper
 
       self.allow_in_post_mortem = true
 
@@ -38,8 +39,7 @@ module Byebug
           return errmsg(pr('info.errors.undefined_file', file: file))
         end
 
-        puts <<-EOC.gsub(/^ {6}/, '')
-
+        puts prettify <<-EOC
           File #{info_file_basic(file)}
 
           Breakpoint line numbers: #{info_file_breakpoints(file)}
@@ -47,7 +47,6 @@ module Byebug
           Modification time: #{info_file_mtime(file)}
 
           Sha1 Signature: #{info_file_sha1(file)}
-
         EOC
       end
 

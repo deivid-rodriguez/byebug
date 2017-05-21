@@ -45,7 +45,11 @@ module Byebug
     # Removes test example file and its memoization
     #
     def clear_example_file
-      example_file.unlink
+      # TODO: Remove the `closed?` check once Ruby 2.2 support is dropped since
+      # it seems to be checked internally by `close`.
+      example_file.close unless example_file.closed?
+
+      delete_example_file
 
       @example_file = nil
     end
@@ -62,14 +66,14 @@ module Byebug
     # Temporary file where code for each test is saved
     #
     def example_file
-      @example_file ||= Tempfile.new(['byebug_test', '.rb'], example_folder)
+      @example_file ||= File.new(example_path, 'w+')
     end
 
     #
     # Path to file where test code is saved
     #
     def example_path
-      File.realpath(example_file.path)
+      File.join(example_folder, 'byebug_test.rb')
     end
 
     #
@@ -104,6 +108,14 @@ module Byebug
 
     def camelized_path
       camelize(File.basename(example_path, '.rb'))
+    end
+
+    def delete_example_file
+      File.unlink(example_file)
+    rescue
+      # On windows we need the file closed before deleting it, and sometimes it
+      # didn't have time to close yet. So retry until we can delete it.
+      retry
     end
   end
 end

@@ -4,6 +4,7 @@ require 'byebug/core'
 require 'byebug/version'
 require 'byebug/helpers/bin'
 require 'byebug/helpers/parse'
+require 'byebug/helpers/string'
 require 'byebug/option_setter'
 require 'byebug/processors/control_processor'
 
@@ -14,6 +15,7 @@ module Byebug
   class Runner
     include Helpers::BinHelper
     include Helpers::ParseHelper
+    include Helpers::StringHelper
 
     #
     # Special working modes that don't actually start the debugger.
@@ -73,12 +75,10 @@ module Byebug
     # Usage banner.
     #
     def banner
-      <<-EOB.gsub(/^ {6}/, '')
-
+      prettify <<-EOB
         byebug #{Byebug::VERSION}
 
         Usage: byebug [options] <script.rb> -- <script.rb parameters>
-
       EOB
     end
 
