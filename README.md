@@ -18,10 +18,10 @@
 [tip_url]: https://gratipay.com/byebug
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
-Byebug is a simple to use, feature rich debugger for Ruby. It uses the new
-TracePoint API for execution control and the new Debug Inspector API for call
-stack navigation, so it doesn't depend on internal core sources. It's developed
-as a C extension, so it's fast. And it has a full test suite so it's reliable.
+Byebug is a simple to use, feature rich debugger for Ruby. It uses the
+TracePoint API for execution control and the Debug Inspector API for call stack
+navigation, so it doesn't depend on internal core sources. It's developed as a C
+extension, so it's fast. And it has a full test suite so it's reliable.
 
 It allows you to see what is going on _inside_ a Ruby program while it executes
 and offers many of the traditional debugging features such as:
