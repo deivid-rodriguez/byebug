@@ -98,7 +98,7 @@ byebug myscript.rb
 
 ## Byebug's commands
 
-    Command     | Aliases      | Subcommands
+    Command     | Aliases      | Description / Subcommands
     ----------- |:------------ |:-----------
     `backtrace` | `bt` `where` |
     `break`     |              |
@@ -118,8 +118,8 @@ byebug myscript.rb
     `history`   |              |
     `info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
     `irb`       |              |
-    `kill`      |              |
-    `list`      |              |
+    [`kill`]    |              | forceful `kill -9`
+    [`list`]    | `l`          | prints more lines, following the last lines printed; `l=` - print surrounding code near executing line
     `method`    |              | `instance`
     `next`      |              |
     `pry`       |              |
@@ -135,6 +135,9 @@ byebug myscript.rb
     `undisplay` |              |
     `up`        |              |
     `var`       |              | `all` `constant` `global` `instance` `local`
+
+[`kill`]: https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#quitting-byebug
+[`list`]: https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#examining-program-source-files-list
 
 ## Semantic Versioning
 
