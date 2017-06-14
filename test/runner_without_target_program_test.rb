@@ -17,9 +17,7 @@ module Byebug
     def test_run_with_help_flag
       stdout = run_byebug("--help")
 
-      opts = [/-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/]
-
-      opts.each { |regexp| assert_match(regexp, stdout) }
+      assert_match full_help, stdout
     end
 
     def test_run_with_remote_option_only_with_a_port_number
@@ -62,6 +60,28 @@ module Byebug
 
     def assert_match_error(message, output)
       assert_match(/\*\*\* #{message}/, output)
+    end
+
+    def full_help
+      deindent <<-HELP
+
+        byebug #{Byebug::VERSION}
+
+        Usage: byebug [options] <script.rb> -- <script.rb parameters>
+
+          -d, --debug               Set $DEBUG=true
+          -I, --include list        Add to paths to $LOAD_PATH
+          -m, --[no-]post-mortem    Use post-mortem mode
+          -q, --[no-]quit           Quit when script finishes
+          -x, --[no-]rc             Run byebug initialization file
+          -s, --[no-]stop           Stop when script is loaded
+          -r, --require file        Require library before script
+          -R, --remote [host:]port  Remote debug [host:]port
+          -t, --[no-]trace          Turn on line tracing
+          -v, --version             Print program version
+          -h, --help                Display this message
+
+      HELP
     end
   end
 end
