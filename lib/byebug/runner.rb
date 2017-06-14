@@ -60,7 +60,9 @@ module Byebug
     def version=(number)
       @version ||= number
 
-      interface.puts("\n  Running byebug #{number}\n")
+      interface.puts prettify <<-VERSION
+        Running byebug #{number}
+      VERSION
     end
 
     def remote=(host_and_port)
