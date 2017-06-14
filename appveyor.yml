@@ -28,12 +28,12 @@ test_script:
 
 environment:
   matrix:
-    - ruby_version: '21'
-    - ruby_version: 21-x64
     - ruby_version: '22'
     - ruby_version: 22-x64
     - ruby_version: '23'
     - ruby_version: 23-x64
+    - ruby_version: '24'
+    - ruby_version: 24-x64
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
 41cab138408'
@@ -51,6 +51,3 @@ notifications:
     on_build_success: false
     on_build_failure: false
     on_build_status_changed: true
-
-    to:
-      - deivid.rodriguez@gmail.com
