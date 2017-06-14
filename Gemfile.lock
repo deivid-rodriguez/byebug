@@ -55,7 +55,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.0.0)
-    rake-compiler (1.0.3)
+    rake-compiler (1.0.4)
       rake
     rubocop (0.49.1)
       parallel (~> 1.10)
