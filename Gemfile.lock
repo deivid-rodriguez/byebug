@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pry/pry
-  revision: f19d3e2ae86a677e1e926016fa1a5763675e3659
+  revision: 8d030c3faae899534128c527b3053797cfec0c8d
   specs:
     pry (0.10.4)
       coderay (~> 1.1.0)
