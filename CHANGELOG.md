@@ -8,7 +8,7 @@
 
 ### Fixed
 
-* `where` command failing on instance_exec block stack frames
+* `where` command failing on instance_exec block stack frames.
 * `restart` command crashing in certain cases because of a missing `require 'English'` (#321, @akaneko3).
 * `restart` command crashing when debugged script is not executable or has no shebang (#321, @akaneko3).
 
