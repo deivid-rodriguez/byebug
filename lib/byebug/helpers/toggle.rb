@@ -12,7 +12,7 @@ module Byebug
         raise pr('toggle.errors.no_breakpoints') if Breakpoint.none?
 
         select_breakpoints(is_enable, args).each do |b|
-          enabled = ('enable' == is_enable)
+          enabled = (is_enable == 'enable')
           if enabled && !syntax_valid?(b.expr)
             raise pr('toggle.errors.expression', expr: b.expr)
           end
@@ -32,7 +32,7 @@ module Byebug
           pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
           raise err unless err.nil?
 
-          Byebug.displays[pos - 1][0] = ('enable' == is_enable)
+          Byebug.displays[pos - 1][0] = (is_enable == 'enable')
         end
       end
 
