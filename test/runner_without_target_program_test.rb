@@ -11,7 +11,7 @@ module Byebug
     def test_run_with_version_flag
       stdout = run_byebug("--version")
 
-      assert_match(/#{Byebug::VERSION}/, stdout)
+      assert_match full_version, stdout
     end
 
     def test_run_with_help_flag
@@ -60,6 +60,14 @@ module Byebug
 
     def assert_match_error(message, output)
       assert_match(/\*\*\* #{message}/, output)
+    end
+
+    def full_version
+      deindent <<-HELP
+
+        Running byebug #{Byebug::VERSION}
+
+      HELP
     end
 
     def full_help
