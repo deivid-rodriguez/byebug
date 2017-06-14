@@ -29,7 +29,7 @@ GEM
     faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
-    iniparse (1.4.2)
+    iniparse (1.4.3)
     json (2.1.0)
     kramdown (1.13.2)
     mdl (0.4.0)
