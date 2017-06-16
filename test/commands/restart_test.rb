@@ -27,8 +27,8 @@ module Byebug
 
     def test_restart_with_no_args__original_script_through_ruby__attached
       with_mode(:attached) do
-        with_command_line("ruby", example_path) do
-          assert_restarts(nil, "ruby #{example_path}")
+        with_command_line(ruby_bin, example_path) do
+          assert_restarts(nil, "#{ruby_bin} #{example_path}")
         end
       end
     end
