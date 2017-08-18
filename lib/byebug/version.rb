@@ -4,5 +4,5 @@
 # Reopen main module to define the library version
 #
 module Byebug
-  VERSION = '9.0.6'.freeze
+  VERSION = '9.1.0'.freeze
 end
