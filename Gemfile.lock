@@ -37,7 +37,7 @@ GEM
       mixlib-cli (~> 1.7, >= 1.7.0)
       mixlib-config (~> 2.2, >= 2.2.1)
     method_source (0.8.2)
-    minitest (5.10.2)
+    minitest (5.10.3)
     mixlib-cli (1.7.0)
     mixlib-config (2.2.4)
     multipart-post (2.0.0)
@@ -85,7 +85,7 @@ DEPENDENCIES
   chandler (= 0.7.0)
   codeclimate-test-reporter (~> 1.0)
   mdl (= 0.4.0)
-  minitest (~> 5.7)
+  minitest (~> 5.10)
   overcommit (= 0.40.0)
   pry!
   rake (~> 12.0)
