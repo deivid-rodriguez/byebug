@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 9.1.0 - 2016-08-22
+
 ### Added
 
 * Better UI messages for breakpoint management.
