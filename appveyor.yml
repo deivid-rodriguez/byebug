@@ -1,9 +1,15 @@
 ---
+init:
+  # clean path up to just what we need
+  - set PATH=C:\ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:\Program Files\7-Zip;C:\Program Files\AppVeyor\BuildAgent;C:\Windows\system32;C:\Windows
+  # download and install current MinGW trunk build, add swap GDBM & OpenSSL packages
+  - if %ruby_version%==_trunk (
+      appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:/ruby_trunk.7z &
+      7z x C:/ruby_trunk.7z -oC:/ruby_trunk & C:/ruby_trunk/trunk_install.cmd)
 
 version: "{build}"
 
 install:
-  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - echo %PATH%
 
   - ruby --version
@@ -35,12 +41,14 @@ environment:
     - ruby_version: 23-x64
     - ruby_version: '24'
     - ruby_version: 24-x64
+    - ruby_version: _trunk
 
-  codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
-41cab138408'
+  codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408'
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - ruby_version: _trunk
 
 branches:
   only:
