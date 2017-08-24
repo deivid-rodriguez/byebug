@@ -40,7 +40,7 @@ Linux [![Tra][tra]][tra_url]
 
 Windows [![Vey][vey]][vey_url]
 
-[tra]: https://img.shields.io/travis/deivid-rodriguez/byebug.svg?branch=master
+[tra]: https://api.travis-ci.org/deivid-rodriguez/byebug.svg?branch=master
 [vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
 
 [tra_url]: https://travis-ci.org/deivid-rodriguez/byebug

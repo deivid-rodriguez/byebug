@@ -41,6 +41,8 @@ rvm:
   - ruby-head-clang
 
 matrix:
+  fast_finish: true
+
   allow_failures:
     - rvm: ruby-head
     - rvm: ruby-head-clang
