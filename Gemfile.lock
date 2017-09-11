@@ -54,7 +54,7 @@ GEM
     public_suffix (2.0.5)
     rainbow (2.2.2)
       rake
-    rake (12.0.0)
+    rake (12.1.0)
     rake-compiler (1.0.4)
       rake
     rubocop (0.49.1)
@@ -88,7 +88,7 @@ DEPENDENCIES
   minitest (~> 5.10)
   overcommit (= 0.41.0)
   pry!
-  rake (~> 12.0)
+  rake (~> 12.1)
   rake-compiler (~> 1.0)
   rubocop (= 0.49.1)
   simplecov (= 0.13.0)
