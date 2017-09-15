@@ -6,7 +6,7 @@ module Byebug
   #
   class BreakAtMethodsTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
           1:  module Byebug
           2:    #
           3:    # Toy class to test breakpoints
@@ -35,7 +35,7 @@ module Byebug
          26:    #{example_class}.a(1)
          27:    #{example_module}.c
          28:  end
-      EOC
+      RUBY
     end
 
     def test_break_with_instance_method_stops_at_correct_place
@@ -113,7 +113,7 @@ module Byebug
   #
   class BreakAtLinesTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test breakpoints
@@ -130,7 +130,7 @@ module Byebug
         14:
         15:    #{example_class}.a
         16:  end
-      EOC
+      RUBY
     end
 
     def test_setting_breakpoint_sets_correct_fields
@@ -301,7 +301,7 @@ module Byebug
   #
   class BreakWithByebugKeywordAtMethodEndTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a method
@@ -314,7 +314,7 @@ module Byebug
         10:      new.a
         11:    end
         12:  end
-      EOC
+      RUBY
     end
 
     def test_stops_right_before_method_returns
@@ -333,7 +333,7 @@ module Byebug
   #
   class BreakWithByebugKeywordAtBlockEndTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a block
@@ -350,7 +350,7 @@ module Byebug
         14:      end
         15:    end
         16:  end
-      EOC
+      RUBY
     end
 
     def test_stops_right_before_block_returns
@@ -369,7 +369,7 @@ module Byebug
   #
   class BreakWithByebugKeywordAtClassDefinitionEndTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test byebug at the end of a class
@@ -382,7 +382,7 @@ module Byebug
         10:      byebug
         11:    end
         12:  end
-      EOC
+      RUBY
     end
 
     def test_stops_right_before_class_definition_ends

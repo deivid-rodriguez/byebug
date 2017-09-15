@@ -6,7 +6,7 @@ module Byebug
   #
   class MethodTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test the method command.
@@ -31,7 +31,7 @@ module Byebug
         22:    a = #{example_class}.new
         23:    a.bla
         24:  end
-      EOC
+      RUBY
     end
 
     def test_method_shows_instance_methods_of_a_class

@@ -15,7 +15,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         m[ethod] (i[nstance][ <obj>]|<class|module>)
 
         #{short_description}
@@ -25,7 +25,7 @@ module Byebug
 
         When invoked only with a class or module, shows class methods of the
         class or module specified as argument.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

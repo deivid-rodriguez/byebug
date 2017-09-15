@@ -21,7 +21,7 @@ module Byebug
 
       def locate(path)
         result = nil
-        contents.each do |_, contents|
+        contents.each_value do |contents|
           result = parts(path).reduce(contents) do |r, part|
             r && r.key?(part) ? r[part] : nil
           end

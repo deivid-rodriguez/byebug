@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'test_helper'
 
 module Byebug
@@ -8,7 +6,7 @@ module Byebug
   #
   class WhereStandardTest < TestCase
     def program
-      strip_line_numbers <<-EOP
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test backtraces.
@@ -32,7 +30,7 @@ module Byebug
         21:
         22:    frame
         23:  end
-      EOP
+      RUBY
     end
 
     def test_where_displays_current_backtrace_with_fullpaths_by_default
@@ -85,7 +83,7 @@ module Byebug
 
     def test_where_displays_instance_exec_block_frames
       enter 'where'
-      program = strip_line_numbers <<-EOP
+      program = strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    class #{example_full_class}
          3:      def foo
@@ -97,7 +95,7 @@ module Byebug
          9:
         10:    #{example_full_class}.new.foo
         11:  end
-      EOP
+      RUBY
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT

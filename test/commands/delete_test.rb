@@ -6,7 +6,7 @@ module Byebug
   #
   class DeleteTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    #
         3:    # Toy class to test breakpoints
@@ -22,7 +22,7 @@ module Byebug
        13:
        14:    #{example_class}.new.add_two(0)
        15:  end
-      EOC
+      RUBY
     end
 
     def test_deleting_a_breakpoint_removes_it_from_breakpoints_list

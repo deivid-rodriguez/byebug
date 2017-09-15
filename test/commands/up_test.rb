@@ -6,7 +6,7 @@ module Byebug
   #
   class UpTest < TestCase
     def program
-      strip_line_numbers <<-EOP
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test backtraces.
@@ -30,7 +30,7 @@ module Byebug
         21:
         22:    frame
         23:  end
-      EOP
+      RUBY
     end
 
     def test_up_moves_up_in_the_callstack

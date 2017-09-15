@@ -6,7 +6,7 @@ module Byebug
   #
   class DisableTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test breakpoints
@@ -30,7 +30,7 @@ module Byebug
         21:    #{example_class}.new.b
         22:    #{example_class}.a(y + z)
         23:  end
-      EOC
+      RUBY
     end
 
     def test_disable_all_breakpoints_sets_all_enabled_flags_to_false

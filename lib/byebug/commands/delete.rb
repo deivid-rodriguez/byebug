@@ -16,14 +16,14 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         del[ete][ nnn...]
 
         #{short_description}
 
         Without and argument, deletes all breakpoints. With integer arguments,
         it deletes specific breakpoints.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

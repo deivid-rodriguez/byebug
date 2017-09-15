@@ -167,7 +167,7 @@ module Byebug
 
     def safely
       yield
-    rescue => e
+    rescue StandardError => e
       errmsg(e.message)
     end
   end

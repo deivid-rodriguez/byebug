@@ -6,7 +6,7 @@ module Byebug
   #
   class PostMortemTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test post mortem functionality
@@ -22,7 +22,7 @@ module Byebug
         13:    c = #{example_class}.new
         14:    c.a
         15:  end
-      EOC
+      RUBY
     end
 
     def test_rises_before_exit_in_post_mortem_mode
@@ -52,7 +52,7 @@ module Byebug
 
         begin
           debug_code(program)
-        rescue
+        rescue StandardError
           assert_equal 7, Byebug.raised_exception.__bb_context.frame.line
         end
       end

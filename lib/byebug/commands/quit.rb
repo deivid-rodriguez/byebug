@@ -13,7 +13,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         q[uit] [!|unconditionally]
 
         #{short_description}
@@ -21,7 +21,7 @@ module Byebug
         Normally we prompt before exiting. However if the parameter
         "unconditionally" is given or command is suffixed with !, we exit
         without asking further questions.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

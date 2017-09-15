@@ -6,7 +6,7 @@ module Byebug
   #
   class ContinueTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test continue command.
@@ -24,7 +24,7 @@ module Byebug
         15:    #{example_class}.new.add_four(c)
         16:    eval('c')
         17:  end
-      EOC
+      RUBY
     end
 
     def test_continues_until_the_end_if_no_line_specified_and_no_breakpoints

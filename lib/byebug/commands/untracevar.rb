@@ -10,11 +10,11 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         untr[acevar] <variable>
 
         #{short_description}
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

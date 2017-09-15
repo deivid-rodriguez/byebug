@@ -17,7 +17,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         cat[ch][ (off|<exception>[ off])]
 
         #{short_description}
@@ -26,7 +26,7 @@ module Byebug
         catch off             -- deletes all catchpoints
         catch <exception>     -- enables handling <exception>
         catch <exception> off -- disables handling <exception>
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description
@@ -69,7 +69,7 @@ module Byebug
 
     def info
       if Byebug.catchpoints && !Byebug.catchpoints.empty?
-        Byebug.catchpoints.each do |exception, _hits|
+        Byebug.catchpoints.each_key do |exception|
           puts("#{exception}: #{exception.is_a?(Class)}")
         end
       else

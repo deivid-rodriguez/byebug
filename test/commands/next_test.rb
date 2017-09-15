@@ -6,7 +6,7 @@ module Byebug
   #
   class BasicNextTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test stepping.
@@ -24,7 +24,7 @@ module Byebug
         15:
         16:    res + 1
         17:  end
-      EOC
+      RUBY
     end
 
     def test_next_goes_to_the_next_line
@@ -63,7 +63,7 @@ module Byebug
   #
   class NextWhenReturnInsideLoopInsideInitializeTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  byebug
          2:
          3:  module Byebug
@@ -80,7 +80,7 @@ module Byebug
         14:
         15:    'Bye!'
         16:  end
-      EOC
+      RUBY
     end
 
     def test_next_works_return_inside_loop_inside_initialize
@@ -95,7 +95,7 @@ module Byebug
   #
   class NextAndDefineMethodTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test cases where next should not stay in frame
@@ -117,7 +117,7 @@ module Byebug
         19:
         20:    'bye!'
         21:  end
-      EOC
+      RUBY
     end
 
     def test_next_works_as_expected_with_define_method
@@ -132,7 +132,7 @@ module Byebug
   #
   class NextRescueTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test stepping and rescue interaction.
@@ -160,7 +160,7 @@ module Byebug
         25:    #{example_class}.raise_from_c
         26:    #{example_class}.raise_from_ruby
         27:  end
-      EOC
+      RUBY
     end
 
     def test_next_steps_over_rescue_when_raising_from_c_method
@@ -181,7 +181,7 @@ module Byebug
   #
   class NextBacktracesTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test the combination of "up" and "next" commands.
@@ -206,7 +206,7 @@ module Byebug
         22:
         23:    #{example_class}.new.a
         24:  end
-      EOC
+      RUBY
     end
 
     def test_step_then_up_then_next_advances_in_the_upper_frame
@@ -221,7 +221,7 @@ module Byebug
   #
   class NextGoingUpFramesTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test cases where next should not stay in frame
@@ -249,7 +249,7 @@ module Byebug
         25:
         26:    #{example_class}.new.finite_loop
         27:  end
-      EOC
+      RUBY
     end
 
     def test_next_goes_up_a_frame_if_current_frame_finishes

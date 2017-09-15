@@ -16,7 +16,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         set <setting> <value>
 
         #{short_description}
@@ -26,7 +26,7 @@ module Byebug
         you can use "set no<setting>" to disable them.
 
         You can see these environment settings with the "show" command.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

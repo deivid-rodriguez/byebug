@@ -16,11 +16,11 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         s[tep][ times]
 
         #{short_description}
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

@@ -14,7 +14,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         h[elp][ <cmd>[ <subcmd>]]
 
         #{short_description}
@@ -22,7 +22,7 @@ module Byebug
         help                -- prints a summary of all commands
         help <cmd>          -- prints help on command <cmd>
         help <cmd> <subcmd> -- prints help on <cmd>'s subcommand <subcmd>
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

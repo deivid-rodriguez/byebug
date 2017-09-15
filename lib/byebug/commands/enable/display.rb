@@ -18,7 +18,7 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           en[able] d[isplay][ <id1> <id2> .. <idn>]
 
           #{short_description}
@@ -26,7 +26,7 @@ module Byebug
           Arguments are the code numbers of the expressions to enable. Do "info
           display" to see the current list of code numbers. If no arguments are
           specified, all displays are enabled.
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description

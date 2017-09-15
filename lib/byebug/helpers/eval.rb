@@ -110,13 +110,13 @@ module Byebug
 
       def safe_inspect(var)
         var.inspect
-      rescue
+      rescue StandardError
         safe_to_s(var)
       end
 
       def safe_to_s(var)
         var.to_s
-      rescue
+      rescue StandardError
         '*Error in evaluation*'
       end
     end

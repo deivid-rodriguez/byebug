@@ -48,10 +48,10 @@ module Byebug
     # @example
     #
     #   enter 'next'
-    #   prog <<-EOC
+    #   prog <<-RUBY
     #     byebug
     #     puts 'hello'
-    #   EOC
+    #   RUBY
     #
     #   debug_code(prog) { assert_equal 3, frame.line }
     #

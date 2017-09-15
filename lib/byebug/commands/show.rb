@@ -13,13 +13,13 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         show <setting> <value>
 
         #{short_description}
 
         You can change them with the "set" command.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

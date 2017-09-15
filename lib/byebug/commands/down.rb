@@ -18,13 +18,13 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         down[ count]
 
         #{short_description}
 
         Use the "bt" command to find out where you want to go.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

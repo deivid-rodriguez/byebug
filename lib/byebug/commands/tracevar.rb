@@ -12,7 +12,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         tr[acevar] <variable> [[no]stop]
 
         #{short_description}
@@ -20,7 +20,7 @@ module Byebug
         If "stop" is specified, execution will stop every time the variable
         changes its value. If nothing or "nostop" is specified, execution won't
         stop, changes will just be logged in byebug's output.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

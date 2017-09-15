@@ -6,7 +6,7 @@ module Byebug
   #
   class TracevarTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test global variable tracing
@@ -28,7 +28,7 @@ module Byebug
         19:      $VERBOSE &&= false
         20:    end
         21:  end
-      EOC
+      RUBY
     end
 
     def test_tracevar_tracks_global_variables

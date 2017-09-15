@@ -6,7 +6,7 @@ module Byebug
   #
   class VarTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test variable evaluation.
@@ -29,7 +29,7 @@ module Byebug
         20:    v = #{example_class}.new
         21:    v.run(2)
         22:  end
-      EOC
+      RUBY
     end
 
     def test_var_args_shows_information_about_current_frame_arguments

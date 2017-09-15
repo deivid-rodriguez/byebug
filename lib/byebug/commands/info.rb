@@ -21,11 +21,11 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         info[ subcommand]
 
         #{short_description}
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

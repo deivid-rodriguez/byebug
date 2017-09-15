@@ -21,14 +21,14 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         restart [args]
 
         #{short_description}
 
         This is a re-exec - all byebug state is lost. If command arguments are
         passed those are used.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

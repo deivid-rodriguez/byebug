@@ -7,14 +7,14 @@ module Byebug
   #
   class IrbTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:
         4:    a = 2
         5:    a + 4
         6:  end
-      EOC
+      RUBY
     end
 
     def test_irb_command_starts_an_irb_session

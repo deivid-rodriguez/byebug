@@ -6,14 +6,14 @@ module Byebug
   #
   class SourceTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:
         4:    a = 2
         5:    a + 3
         6:  end
-      EOC
+      RUBY
     end
 
     def setup
@@ -28,7 +28,7 @@ module Byebug
     def teardown
       File.delete('source_example.txt')
       super
-    rescue
+    rescue StandardError
       retry
     end
 
