@@ -1,11 +1,11 @@
 begin
   require 'readline'
 rescue LoadError
-  warn <<-EOW
+  warn <<-MESSAGE
     Sorry, you can't use byebug without Readline. To solve this, you need to
     rebuild Ruby with Readline support. If using Ubuntu, try `sudo apt-get
     install libreadline-dev` and then reinstall your Ruby.
-  EOW
+  MESSAGE
 
   raise
 end

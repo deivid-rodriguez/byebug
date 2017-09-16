@@ -14,11 +14,11 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           inf[o] b[reakpoints]
 
           #{short_description}
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description

@@ -7,7 +7,7 @@ module Byebug
   #
   class FinishAfterReturnTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test the +finish+ command
@@ -36,7 +36,7 @@ module Byebug
         26:
         27:    #{example_class}.new.a
         28:  end
-      EOC
+      RUBY
     end
 
     def test_finish_stops_after_current_single_line_frame_is_finished
@@ -95,7 +95,7 @@ module Byebug
   #
   class FinishBeforeReturnTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test the +finish+ command
@@ -116,7 +116,7 @@ module Byebug
         18:
         19:    #{example_class}.new.a
         20:  end
-      EOC
+      RUBY
     end
 
     def test_finish_0_stops_right_before_frame_returns__simple_case

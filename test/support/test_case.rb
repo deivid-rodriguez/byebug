@@ -112,7 +112,7 @@ module Byebug
 
     def delete_example_file
       File.unlink(example_file)
-    rescue
+    rescue StandardError
       # On windows we need the file closed before deleting it, and sometimes it
       # didn't have time to close yet. So retry until we can delete it.
       retry

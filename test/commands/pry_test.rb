@@ -8,14 +8,14 @@ module Byebug
   #
   class PryTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:
         4:    a = 2
         5:    a + 4
         6:  end
-      EOC
+      RUBY
     end
 
     def test_pry_command_starts_a_pry_session_if_pry_installed

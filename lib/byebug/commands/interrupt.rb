@@ -12,11 +12,11 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         int[errupt]
 
         #{short_description}
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

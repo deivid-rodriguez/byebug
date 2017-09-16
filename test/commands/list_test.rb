@@ -6,7 +6,7 @@ module Byebug
   #
   class ListTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test breakpoints
@@ -23,7 +23,7 @@ module Byebug
         14:
         15:    str
         16:  end
-      EOC
+      RUBY
     end
 
     def test_lists_source_code_lines

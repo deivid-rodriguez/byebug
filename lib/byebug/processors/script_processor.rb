@@ -38,7 +38,7 @@ module Byebug
 
     def without_exceptions
       yield
-    rescue
+    rescue StandardError
       nil
     end
   end

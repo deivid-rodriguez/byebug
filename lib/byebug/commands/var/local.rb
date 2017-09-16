@@ -18,11 +18,11 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           v[ar] l[ocal]
 
           #{short_description}
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description

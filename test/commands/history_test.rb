@@ -7,14 +7,14 @@ unless ENV['LIBEDIT']
     #
     class HistoryTest < TestCase
       def program
-        strip_line_numbers <<-EOC
+        strip_line_numbers <<-RUBY
           1:  module Byebug
           2:    byebug
           3:
           4:    a = 2
           5:    a + 3
           6:  end
-        EOC
+        RUBY
       end
 
       def test_history_displays_latest_records_from_readline_history

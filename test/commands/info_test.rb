@@ -6,7 +6,7 @@ module Byebug
   #
   class InfoTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test information about files.
@@ -34,7 +34,7 @@ module Byebug
         25:    i = #{example_class}.new
         26:    i.b
         27:  end
-      EOC
+      RUBY
     end
 
     def test_info_breakpoints_shows_information_about_all_breakpoints
@@ -138,12 +138,12 @@ module Byebug
   #
   class InfoFileTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:    3
         4:  end
-      EOC
+      RUBY
     end
 
     def test_info_file_shows_basic_info_about_current_file
@@ -234,11 +234,11 @@ module Byebug
   #
   class InfoCrashedTest < TestCase
     def program_raising
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         byebug
 
         fail 'Bang'
-      EOC
+      RUBY
     end
 
     def test_info_program_shows_the_catchpoint_stop_reason_for_crashed_programs

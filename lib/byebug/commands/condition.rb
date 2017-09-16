@@ -17,7 +17,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         cond[ition] <n>[ expr]
 
         #{short_description}
@@ -26,7 +26,7 @@ module Byebug
         an integer and <expr> is an expression to be evaluated whenever
         breakpoint <n> is reached. If no expression is specified, the condition
         is removed.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

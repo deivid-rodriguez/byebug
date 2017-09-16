@@ -16,14 +16,14 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         disp[lay][ <expression>]
 
         #{short_description}
 
         If <expression> specified, adds <expression> into display expression
         list. Otherwise, it lists all expressions.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description
@@ -57,7 +57,7 @@ module Byebug
 
     def eval_expr(expression)
       error_eval(expression).inspect
-    rescue
+    rescue StandardError
       '(undefined)'
     end
   end

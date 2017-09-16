@@ -75,11 +75,11 @@ module Byebug
     # Usage banner.
     #
     def banner
-      prettify <<-EOB
+      prettify <<-BANNER
         byebug #{Byebug::VERSION}
 
         Usage: byebug [options] <script.rb> -- <script.rb parameters>
-      EOB
+      BANNER
     end
 
     #

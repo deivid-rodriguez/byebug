@@ -16,7 +16,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         w[here]|bt|backtrace
 
         #{short_description}
@@ -27,7 +27,7 @@ module Byebug
         The position of the current frame is marked with -->. C-frames hang
         from their most immediate Ruby frame to indicate that they are not
         navigable.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

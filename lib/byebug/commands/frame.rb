@@ -18,7 +18,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         f[rame][ frame-number]
 
         #{short_description}
@@ -34,7 +34,7 @@ module Byebug
         if there is a front end also watching over things.
 
         Use the "bt" command to find out where you want to go.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

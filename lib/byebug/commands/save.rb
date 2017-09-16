@@ -13,7 +13,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         save[ FILE]
 
         #{short_description}
@@ -24,7 +24,7 @@ module Byebug
 
         Use the "source" command in another debug session to restore the saved
         file.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description
@@ -52,7 +52,7 @@ module Byebug
     end
 
     def save_catchpoints(file)
-      Byebug.catchpoints.keys.each do |c|
+      Byebug.catchpoints.each_key do |c|
         file.puts "catch #{c}"
       end
     end

@@ -12,13 +12,13 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         kill[ signal]
 
         #{short_description}
 
         Equivalent of Process.kill(Process.pid)
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

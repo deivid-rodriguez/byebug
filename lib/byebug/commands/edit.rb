@@ -13,7 +13,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         edit[ file:lineno]
 
         #{short_description}
@@ -21,7 +21,7 @@ module Byebug
         With no argumnt, edits file containing most re line listed. Editing
         targets can also be specified to start editing at a specific line in a
         specific file
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

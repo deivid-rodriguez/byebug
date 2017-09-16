@@ -19,7 +19,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         b[reak] [file:]line [if expr]
         b[reak] [module::...]class(.|#)method [if expr]
 
@@ -27,7 +27,7 @@ module Byebug
         for conditionally enabled breakpoints.
 
         #{short_description}
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description
@@ -74,7 +74,7 @@ module Byebug
       k = error_eval(str)
 
       k && k.is_a?(Module) ? k.name : str
-    rescue
+    rescue StandardError
       errmsg('Warning: breakpoint source is not yet defined')
       str
     end

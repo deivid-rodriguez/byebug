@@ -15,7 +15,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         undisp[lay][ nnn]
 
         #{short_description}
@@ -23,7 +23,7 @@ module Byebug
         Arguments are the code numbers of the expressions to stop displaying. No
         argument means cancel all automatic-display expressions. Type "info
         display" to see the current list of code numbers.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

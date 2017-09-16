@@ -17,7 +17,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         l[ist][[-=]][ nn-mm]
 
         #{short_description}
@@ -27,7 +27,7 @@ module Byebug
         "list=" is specified, lists from current line regardless of where code
         was last listed. A line range can also be specified to list specific
         sections of code.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

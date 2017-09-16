@@ -6,7 +6,7 @@ module Byebug
   #
   class FrameTest < TestCase
     def program
-      strip_line_numbers <<-EOP
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test backtraces.
@@ -30,7 +30,7 @@ module Byebug
         21:
         22:    frame
         23:  end
-      EOP
+      RUBY
     end
 
     def test_frame_moves_to_a_specific_frame

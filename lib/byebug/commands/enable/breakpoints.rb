@@ -18,14 +18,14 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           en[able] b[reakpoints][ <ids>]
 
           #{short_description}
 
           Give breakpoint numbers (separated by spaces) as arguments or no
           argument at all if you want to enable every breakpoint.
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description

@@ -6,7 +6,7 @@ module Byebug
   #
   class InterruptTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    byebug
          3:
@@ -16,7 +16,7 @@ module Byebug
          7:      ex += 1
          8:    end
          9:  end
-      EOC
+      RUBY
     end
 
     def test_interrupt_stops_at_the_next_statement

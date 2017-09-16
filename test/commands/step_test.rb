@@ -6,7 +6,7 @@ module Byebug
   #
   class BasicSteppingTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test stepping.
@@ -24,7 +24,7 @@ module Byebug
         15:
         16:    res + 1
         17:  end
-      EOC
+      RUBY
     end
 
     def test_step_goes_to_the_next_statement
@@ -45,7 +45,7 @@ module Byebug
   #
   class MoreThanOneStepTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test advanced stepping.
@@ -66,7 +66,7 @@ module Byebug
         18:
         19:    res
         20:  end
-      EOC
+      RUBY
     end
 
     def step_steps_into_blocks
@@ -87,7 +87,7 @@ module Byebug
   #
   class SteppingBacktracesTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test the combination of "up" and "next" commands.
@@ -112,7 +112,7 @@ module Byebug
         22:
         23:    #{example_class}.new.a
         24:  end
-      EOC
+      RUBY
     end
 
     def test_step_then_up_then_steps_in_from_the_upper_frame

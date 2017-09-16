@@ -6,7 +6,7 @@ module Byebug
   #
   class KillTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test signals
@@ -21,7 +21,7 @@ module Byebug
         12:
         13:    #{example_class}.kill_me
         14:  end
-      EOC
+      RUBY
     end
 
     def test_kill_sends_signal_to_some_pid

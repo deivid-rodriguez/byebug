@@ -7,7 +7,7 @@ module Byebug
   #
   class ProcessorBaseTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:
@@ -15,7 +15,7 @@ module Byebug
         5:    d += 1
         6:    d
         7:  end
-      EOC
+      RUBY
     end
 
     def test_syntax_error_gives_a_prompt_back
@@ -57,7 +57,7 @@ module Byebug
   #
   class ProcessorUnknownInputTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1: module Byebug
          2:   #
          3:   # Toy class to test evaluation of unknown input
@@ -76,7 +76,7 @@ module Byebug
         16:
         17:   'Bye!'
         18: end
-      EOC
+      RUBY
     end
 
     def test_arithmetic_expressions_are_evaluated_on_unknown_input
@@ -101,7 +101,10 @@ module Byebug
     end
 
     def test_eval_evaluates_just_like_without_it
+      # rubocop:disable Lint/InterpolationCheck
       enter 's = "something"', 'eval "s is #{s}"'
+      # rubocop:enable Lint/InterpolationCheck
+
       debug_code(minimal_program)
 
       check_output_includes '"s is something"'
@@ -136,7 +139,7 @@ module Byebug
   #
   class ProcessorEvaluationAndBreakpointsTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1: module Byebug
          2:   #
          3:   # Toy class to test subdebuggers inside evaluation prompt
@@ -157,7 +160,7 @@ module Byebug
         18:
         19:   'Bye!'
         20: end
-      EOC
+      RUBY
     end
 
     def test_does_not_show_incorrect_info_about_having_stopped_at_breakpoint
@@ -178,7 +181,7 @@ module Byebug
   #
   class ProcessorAutocommandsTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1: module Byebug
          2:   #
          3:   # Toy class to test subdebuggers inside evaluation prompt
@@ -193,7 +196,7 @@ module Byebug
         12:
         13:   'Bye!'
         14: end
-      EOC
+      RUBY
     end
 
     def test_autolists_lists_source_before_stopping
@@ -215,7 +218,7 @@ module Byebug
   #
   class ProcessorEvaluationAndThreadsTest < TestCase
     def program
-      <<-EOC
+      <<-RUBY
         module Byebug
           #
           # Toy class to test evaluation in Byebug's prompt
@@ -258,7 +261,7 @@ module Byebug
 
           worker.thread.kill
         end
-      EOC
+      RUBY
     end
 
     def test_properly_evaluates_expressions_using_threads

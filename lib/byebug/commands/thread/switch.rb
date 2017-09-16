@@ -16,11 +16,11 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           th[read] sw[itch] <thnum>
 
           #{short_description}
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description

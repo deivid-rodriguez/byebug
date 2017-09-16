@@ -6,13 +6,13 @@ module Byebug
   #
   class SaveTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:    a = 2
         4:    a + 3
         5:  end
-      EOC
+      RUBY
     end
 
     def cleanup(file)

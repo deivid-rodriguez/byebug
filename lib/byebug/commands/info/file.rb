@@ -19,14 +19,14 @@ module Byebug
       end
 
       def self.description
-        <<-EOD
+        <<-DESCRIPTION
           inf[o] f[ile]
 
           #{short_description}
 
           It informs about file name, number of lines, possible breakpoints in
           the file, last modification time and sha1 digest.
-        EOD
+        DESCRIPTION
       end
 
       def self.short_description
@@ -39,7 +39,7 @@ module Byebug
           return errmsg(pr('info.errors.undefined_file', file: file))
         end
 
-        puts prettify <<-EOC
+        puts prettify <<-RUBY
           File #{info_file_basic(file)}
 
           Breakpoint line numbers: #{info_file_breakpoints(file)}
@@ -47,7 +47,7 @@ module Byebug
           Modification time: #{info_file_mtime(file)}
 
           Sha1 Signature: #{info_file_sha1(file)}
-        EOC
+        RUBY
       end
 
       private

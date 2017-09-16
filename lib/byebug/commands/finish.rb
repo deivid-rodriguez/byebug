@@ -17,7 +17,7 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         fin[ish][ n_frames]
 
         #{short_description}
@@ -25,7 +25,7 @@ module Byebug
         If no number is given, we run until the current frame returns. If a
         number of frames `n_frames` is given, then we run until `n_frames`
         return from the current position.
-      EOD
+      DESCRIPTION
     end
 
     def self.short_description

@@ -6,7 +6,7 @@ module Byebug
   #
   class ThreadTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
          3:    # Toy class to test threading
@@ -44,7 +44,7 @@ module Byebug
         35:    t.launch
         36:    t.kill
         37:  end
-      EOC
+      RUBY
     end
 
     def t1_context

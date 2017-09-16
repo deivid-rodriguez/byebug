@@ -6,7 +6,7 @@ module Byebug
   #
   class SubdebuggersTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
          1:  module Byebug
          2:   #
          3:   # Toy class to test subdebuggers inside evaluation prompt
@@ -21,7 +21,7 @@ module Byebug
         12:
         13:   'Bye!'
         14:  end
-      EOC
+      RUBY
     end
 
     def test_subdebugger_stops_at_correct_point_when_invoked_through_byebug_call

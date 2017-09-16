@@ -17,11 +17,11 @@ module Byebug
     end
 
     def self.description
-      <<-EOD
+      <<-DESCRIPTION
         dis[able][[ breakpoints| display)][ n1[ n2[ ...[ nn]]]]]
 
         #{short_description}
-       EOD
+       DESCRIPTION
     end
 
     def self.short_description

@@ -6,7 +6,7 @@ module Byebug
   #
   class DisplayTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    d = 0
         3:
@@ -15,7 +15,7 @@ module Byebug
         6:    d += 3
         7:    d + 6
         8:  end
-      EOC
+      RUBY
     end
 
     def test_shows_expressions

@@ -6,7 +6,7 @@ module Byebug
   #
   class ConditionTest < TestCase
     def program
-      strip_line_numbers <<-EOC
+      strip_line_numbers <<-RUBY
         1:  module Byebug
         2:    byebug
         3:
@@ -14,7 +14,7 @@ module Byebug
         5:    c = b + 5
         6:    c + 3
         7:  end
-      EOC
+      RUBY
     end
 
     def test_setting_condition_assigns_expression_to_breakpoint
