@@ -20,9 +20,7 @@ module Byebug
     def self.description
       <<-DESCRIPTION
         c[ont[inue]][ <line_number>]
-
         #{short_description}
-
         Normally the program stops at the next breakpoint. However, if the
         parameter "unconditionally" is given or the command is suffixed with
         "!", the program will run until the end regardless of any enabled
