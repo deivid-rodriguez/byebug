@@ -15,11 +15,9 @@ install:
   - ruby --version
   - where ruby
 
-  - gem update --system --no-document
   - gem --version
   - where gem
 
-  - gem install bundler --no-document
   - bundler --version
   - where bundler
 
