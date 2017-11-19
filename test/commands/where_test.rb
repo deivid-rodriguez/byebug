@@ -115,9 +115,10 @@ module Byebug
   # nested.
   #
   # @note We skip this tests in Windows since the paths in this CI environment
-  #   are usually very deeply nested.
+  #   are usually very deeply nested and on OS X where tmp path is always
+  #   deeply nested.
   #
-  unless /cygwin|mswin|mingw/ =~ RUBY_PLATFORM
+  unless /cygwin|mswin|mingw|darwin/ =~ RUBY_PLATFORM
     class WhereWithNotDeeplyNestedPathsTest < WhereStandardTest
       def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
         enter 'set nofullpath', 'where', 'set fullpath'
@@ -143,7 +144,7 @@ module Byebug
   class WhereWithDeeplyNestedPathsTest < WhereStandardTest
     def setup
       @example_parent_folder = Dir.mktmpdir(nil)
-      @example_folder = Dir.mktmpdir(nil, @example_parent_folder)
+      @example_folder = File.realpath(Dir.mktmpdir(nil, @example_parent_folder))
 
       super
     end
