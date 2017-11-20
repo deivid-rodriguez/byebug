@@ -3,19 +3,16 @@
 [![Version][gem]][gem_url]
 [![Quality][gpa]][gpa_url]
 [![Coverage][cov]][cov_url]
-[![Gratipay][tip]][tip_url]
 [![Gitter][irc]][irc_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [gpa]: https://img.shields.io/codeclimate/github/deivid-rodriguez/byebug.svg
 [cov]: https://img.shields.io/codeclimate/coverage/github/deivid-rodriguez/byebug.svg
-[tip]: https://img.shields.io/gittip/byebug.svg
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
 [gpa_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[tip_url]: https://gratipay.com/byebug
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
 Byebug is a simple to use, feature rich debugger for Ruby. It uses the
@@ -160,6 +157,11 @@ started. Proper documentation will be eventually written.
 
 See [Getting Started with Development](CONTRIBUTING.md).
 
+You can also help `byebug` by leaving a small (or big) tip through
+[Liberapay][liberapay.com].
+
+[![Support via Liberapay][liberapay-button]][liberapay-donate]
+
 ## Credits
 
 Everybody who has ever contributed to this forked and reforked piece of
@@ -179,3 +181,6 @@ software, especially:
 [minitest-byebug]: https://github.com/kaspth/minitest-byebug
 [sublime_debugger]: https://github.com/shuky19/sublime_debugger
 [atom-byebug]: https://github.com/izaera/atom-byebug
+[liberapay.com]: https://liberapay.com
+[liberapay-button]: https://liberapay.com/assets/widgets/donate.svg
+[liberapay-donate]: https://liberapay.com/byebug/donate
