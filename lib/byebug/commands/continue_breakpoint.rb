@@ -14,20 +14,12 @@ module Byebug
     class << self
       attr_writer :file_line, :file_path
 
-      def file_line=(file_line)
-        @file_line = file_line
-      end
-
       def file_line
-        @file_line
-      end
-
-      def file_path=(file_path)
-        @file_path = file_path
+        @file_line ||= 0
       end
 
       def file_path
-        @file_path
+        @file_path ||= ''
       end
     end
 
@@ -47,7 +39,7 @@ module Byebug
     end
 
     def keep_execution(file, line)
-      [self.class.file_path, self.class.file_line] === [file, line]
+      [self.class.file_path, self.class.file_line] == [file, line]
     end
 
     def reset_attributes
@@ -56,7 +48,8 @@ module Byebug
 
     def auto_run(frame)
       if self.class.always_run == 2
-        keep_execution(frame.file, frame.line) ? processor.proceed! : reset_attributes
+        keep = keep_execution(frame.file, frame.line)
+        keep ? processor.proceed! : reset_attributes
         return true
       end
 

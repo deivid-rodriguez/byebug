@@ -23,7 +23,7 @@ module Byebug
         14:    c = 5
         15:
         16:    result = #{example_class}.new.factor(c)
-        17:    
+        17:    byebug
         18:    "Result is: " + result.to_s
         19:  end
       RUBY
@@ -41,14 +41,14 @@ module Byebug
       reset_commands
     end
 
-    def test_continues_and_never_stop_again_using_abbreviation
+    def test_continues_and_never_stop_using_abbreviation
       enter 'ca'
 
       debug_code(program) { assert_program_finished }
       reset_commands
     end
 
-    def test_continues_and_never_stop_again_using_another_abbreviation
+    def test_continues_and_never_stop_using_another_abbreviation
       enter 'cont_always'
 
       debug_code(program) { assert_program_finished }
@@ -56,4 +56,3 @@ module Byebug
     end
   end
 end
-
