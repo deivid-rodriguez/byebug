@@ -101,7 +101,7 @@ module Byebug
     # Temporary folder where the test file lives
     #
     def example_folder
-      @example_folder ||= Dir.tmpdir
+      @example_folder ||= File.realpath(Dir.tmpdir)
     end
 
     private
