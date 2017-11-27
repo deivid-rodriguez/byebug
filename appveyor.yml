@@ -2,10 +2,10 @@
 init:
   # clean path up to just what we need
   - set PATH=C:\ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:\Program Files\7-Zip;C:\Program Files\AppVeyor\BuildAgent;C:\Windows\system32;C:\Windows
-  # download and install current MinGW trunk build, add swap GDBM & OpenSSL packages
+  # Loads trunk build, updates MSYS2 / MinGW to most recent gcc compiler, replaces GDBM & OpenSSL packages
   - if %ruby_version%==_trunk (
-      appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:/ruby_trunk.7z &
-      7z x C:/ruby_trunk.7z -oC:/ruby_trunk & C:/ruby_trunk/trunk_install.cmd)
+      appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:\ruby_trunk.7z &
+      7z x C:\ruby_trunk.7z -oC:\ruby_trunk & C:\ruby_trunk\trunk_msys2.cmd)
 
 version: "{build}"
 
@@ -23,7 +23,7 @@ install:
 
   - gem install bundler -v 1.16.0 --no-document --force --conservative
   - bundle config force_ruby_platform true
-  - bundle install --jobs 3 --retry 3
+  - bundle install --jobs 3 --retry 3 --path av_bundle/%ruby_version%
 
 build_script:
   - bundle exec rake clobber
@@ -43,6 +43,9 @@ environment:
     - ruby_version: _trunk
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408'
+
+cache:
+  - av_bundle
 
 matrix:
   fast_finish: true
