@@ -1,8 +1,8 @@
 ---
 
-sudo: required
-
-dist: trusty
+os:
+  - linux
+  - osx
 
 cache:
   directories:
@@ -11,9 +11,18 @@ cache:
 language: ruby
 
 before_install:
-  - sudo apt-get install shellcheck
-  - if [ "$LIBEDIT" == "true" ]; then
-      sudo apt-get install libedit-dev;
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update;
+      brew install shellcheck;
+      if [ "$LIBEDIT" == "true" ]; then
+        brew install libedit;
+      fi
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get install shellcheck;
+      if [ "$LIBEDIT" == "true" ]; then
+        sudo apt-get install libedit-dev;
+      fi
     fi
 
 install:
@@ -46,6 +55,13 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: ruby-head-clang
+
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+    - os: osx
+      osx_image: xcode9.1
 
 env:
   matrix:
