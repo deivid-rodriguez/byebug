@@ -22,7 +22,7 @@ CommitMsg:
 # editor is displayed.
 #
 PreCommit:
-  CCop:
+  ClangFormat:
     description: Formatting C files with clang-format
     enabled: true
     required_executable: clang-format

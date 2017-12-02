@@ -7,7 +7,7 @@ module Overcommit
       #
       # Inherit from base hook
       #
-      class CCop < Base
+      class ClangFormat < Base
         #
         # Implement overcommit's interface
         #
