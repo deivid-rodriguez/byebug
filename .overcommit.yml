@@ -23,11 +23,11 @@ CommitMsg:
 #
 PreCommit:
   CCop:
-    description: Analyzing C files with indent
+    description: Formatting C files with clang-format
     enabled: true
-    required_executable: indent
-    install_command: sudo apt-get install indent
+    required_executable: clang-format
     include: ext/byebug/*.[ch]
+    flags: ['-style=file']
 
   BundleCheck:
     enabled: true
