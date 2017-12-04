@@ -239,7 +239,7 @@ brkpt_source(VALUE self)
 }
 
 static void
-mark_breakpoint(breakpoint_t * breakpoint)
+mark_breakpoint(breakpoint_t *breakpoint)
 {
   rb_gc_mark(breakpoint->source);
   rb_gc_mark(breakpoint->expr);

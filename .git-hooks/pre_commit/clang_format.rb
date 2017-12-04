@@ -7,7 +7,7 @@ module Overcommit
       #
       # Inherit from base hook
       #
-      class CCop < Base
+      class ClangFormat < Base
         #
         # Implement overcommit's interface
         #
@@ -17,19 +17,18 @@ module Overcommit
 
           offenses = 0
           applicable_files.each do |file|
-            res = execute([required_executable, file, '-o', "#{file}_"])
+            res = execute(command, args: [file])
 
-            unchanged = FileUtils.compare_file(file, "#{file}_") if res.success?
+            unchanged = res.success? && File.read(file) == res.stdout
 
             offenses += 1 unless unchanged
-
-            FileUtils.rm_f("#{file}_")
           end
 
           return :pass if offenses.zero?
 
           file_list = applicable_files.join(' ')
-          [:fail, "#{offenses} errors found. Run `indent #{file_list}`"]
+          fixing_command = "#{command.join(' ')} -i #{file_list}"
+          [:fail, "#{offenses} errors found. Run `#{fixing_command}`"]
         end
       end
     end

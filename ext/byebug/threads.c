@@ -14,12 +14,12 @@ t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 {
   UNUSED(tbl);
 
-  rb_gc_mark((VALUE) key);
+  rb_gc_mark((VALUE)key);
 
   if (!value)
     return ST_CONTINUE;
 
-  rb_gc_mark((VALUE) value);
+  rb_gc_mark((VALUE)value);
 
   return ST_CONTINUE;
 }
@@ -27,16 +27,16 @@ t_tbl_mark_keyvalue(st_data_t key, st_data_t value, st_data_t tbl)
 static void
 t_tbl_mark(void *data)
 {
-  threads_table_t *t_tbl = (threads_table_t *) data;
+  threads_table_t *t_tbl = (threads_table_t *)data;
   st_table *tbl = t_tbl->tbl;
 
-  st_foreach(tbl, t_tbl_mark_keyvalue, (st_data_t) tbl);
+  st_foreach(tbl, t_tbl_mark_keyvalue, (st_data_t)tbl);
 }
 
 static void
 t_tbl_free(void *data)
 {
-  threads_table_t *t_tbl = (threads_table_t *) data;
+  threads_table_t *t_tbl = (threads_table_t *)data;
 
   st_free_table(t_tbl->tbl);
   xfree(t_tbl);
@@ -70,7 +70,7 @@ check_thread_i(st_data_t key, st_data_t value, st_data_t data)
   if (!value)
     return ST_DELETE;
 
-  if (!is_living_thread((VALUE) key))
+  if (!is_living_thread((VALUE)key))
     return ST_DELETE;
 
   return ST_CONTINUE;
@@ -110,7 +110,7 @@ cleanup_dead_threads(void)
  * Looks up a context in the threads table. If not present, it creates it.
  */
 void
-thread_context_lookup(VALUE thread, VALUE * context)
+thread_context_lookup(VALUE thread, VALUE *context)
 {
   threads_table_t *t_tbl;
 
@@ -129,7 +129,7 @@ thread_context_lookup(VALUE thread, VALUE * context)
  * Thanks to this, all threads are "frozen" while the user is typing commands.
  */
 void
-acquire_lock(debug_context_t * dc)
+acquire_lock(debug_context_t *dc)
 {
   while ((!NIL_P(locker) && locker != rb_thread_current())
          || CTX_FL_TEST(dc, CTX_FL_SUSPEND))

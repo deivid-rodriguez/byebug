@@ -1,0 +1,17 @@
+AlwaysBreakAfterDefinitionReturnType: All
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: true
+ColumnLimit: 0
+ContinuationIndentWidth: 2
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 2
+PointerAlignment: Right
+SpaceAfterCStyleCast: false
+SpacesBeforeTrailingComments: 1

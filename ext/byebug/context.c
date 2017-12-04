@@ -7,7 +7,7 @@ static int thnum_max = 0;
 /* "Step", "Next" and "Finish" do their work by saving information about where
  * to stop next. reset_stepping_stop_points removes/resets this information. */
 extern void
-reset_stepping_stop_points(debug_context_t * context)
+reset_stepping_stop_points(debug_context_t *context)
 {
   context->dest_frame = -1;
   context->lines = -1;
@@ -34,19 +34,19 @@ Context_dead(VALUE self)
 static void
 context_mark(void *data)
 {
-  debug_context_t *context = (debug_context_t *) data;
+  debug_context_t *context = (debug_context_t *)data;
 
   rb_gc_mark(context->backtrace);
 }
 
 static VALUE
-dc_backtrace(const debug_context_t * context)
+dc_backtrace(const debug_context_t *context)
 {
   return context->backtrace;
 }
 
 static int
-dc_stack_size(debug_context_t * context)
+dc_stack_size(debug_context_t *context)
 {
 
   if (NIL_P(dc_backtrace(context)))
@@ -76,7 +76,7 @@ context_create(VALUE thread)
 }
 
 extern VALUE
-context_dup(debug_context_t * context)
+context_dup(debug_context_t *context)
 {
   debug_context_t *new_context = ALLOC(debug_context_t);
 
@@ -90,7 +90,7 @@ context_dup(debug_context_t * context)
 
 
 static VALUE
-dc_frame_get(const debug_context_t * context, int frame_index, frame_part type)
+dc_frame_get(const debug_context_t *context, int frame_index, frame_part type)
 {
   VALUE frame;
 
@@ -105,31 +105,31 @@ dc_frame_get(const debug_context_t * context, int frame_index, frame_part type)
 }
 
 static VALUE
-dc_frame_location(const debug_context_t * context, int frame_index)
+dc_frame_location(const debug_context_t *context, int frame_index)
 {
   return dc_frame_get(context, frame_index, LOCATION);
 }
 
 static VALUE
-dc_frame_self(const debug_context_t * context, int frame_index)
+dc_frame_self(const debug_context_t *context, int frame_index)
 {
   return dc_frame_get(context, frame_index, SELF);
 }
 
 static VALUE
-dc_frame_class(const debug_context_t * context, int frame_index)
+dc_frame_class(const debug_context_t *context, int frame_index)
 {
   return dc_frame_get(context, frame_index, CLASS);
 }
 
 static VALUE
-dc_frame_binding(const debug_context_t * context, int frame_index)
+dc_frame_binding(const debug_context_t *context, int frame_index)
 {
   return dc_frame_get(context, frame_index, BINDING);
 }
 
 static VALUE
-load_backtrace(const rb_debug_inspector_t * inspector)
+load_backtrace(const rb_debug_inspector_t *inspector)
 {
   VALUE backtrace = rb_ary_new();
   VALUE locs = rb_debug_inspector_backtrace_locations(inspector);
@@ -151,9 +151,9 @@ load_backtrace(const rb_debug_inspector_t * inspector)
 }
 
 extern VALUE
-context_backtrace_set(const rb_debug_inspector_t * inspector, void *data)
+context_backtrace_set(const rb_debug_inspector_t *inspector, void *data)
 {
-  debug_context_t *dc = (debug_context_t *) data;
+  debug_context_t *dc = (debug_context_t *)data;
 
   dc->backtrace = load_backtrace(inspector);
 
@@ -161,7 +161,7 @@ context_backtrace_set(const rb_debug_inspector_t * inspector, void *data)
 }
 
 static VALUE
-open_debug_inspector_i(const rb_debug_inspector_t * inspector, void *data)
+open_debug_inspector_i(const rb_debug_inspector_t *inspector, void *data)
 {
   struct call_with_inspection_data *cwi =
     (struct call_with_inspection_data *)data;
@@ -187,8 +187,8 @@ close_debug_inspector(struct call_with_inspection_data *cwi)
 extern VALUE
 call_with_debug_inspector(struct call_with_inspection_data *data)
 {
-  return rb_ensure(open_debug_inspector, (VALUE) data, close_debug_inspector,
-                   (VALUE) data);
+  return rb_ensure(open_debug_inspector, (VALUE)data, close_debug_inspector,
+                   (VALUE)data);
 }
 
 #define FRAME_SETUP                                \
@@ -208,7 +208,7 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
  *  Returns frame's binding.
  */
 static VALUE
-Context_frame_binding(int argc, VALUE * argv, VALUE self)
+Context_frame_binding(int argc, VALUE *argv, VALUE self)
 {
   FRAME_SETUP;
 
@@ -222,7 +222,7 @@ Context_frame_binding(int argc, VALUE * argv, VALUE self)
  *  Returns frame's defined class.
  */
 static VALUE
-Context_frame_class(int argc, VALUE * argv, VALUE self)
+Context_frame_class(int argc, VALUE *argv, VALUE self)
 {
   FRAME_SETUP;
 
@@ -236,7 +236,7 @@ Context_frame_class(int argc, VALUE * argv, VALUE self)
  *  Returns the name of the file in the frame.
  */
 static VALUE
-Context_frame_file(int argc, VALUE * argv, VALUE self)
+Context_frame_file(int argc, VALUE *argv, VALUE self)
 {
   VALUE loc, absolute_path;
 
@@ -259,7 +259,7 @@ Context_frame_file(int argc, VALUE * argv, VALUE self)
  *  Returns the line number in the file in the frame.
  */
 static VALUE
-Context_frame_line(int argc, VALUE * argv, VALUE self)
+Context_frame_line(int argc, VALUE *argv, VALUE self)
 {
   VALUE loc;
 
@@ -277,7 +277,7 @@ Context_frame_line(int argc, VALUE * argv, VALUE self)
  *  Returns the sym of the method in the frame.
  */
 static VALUE
-Context_frame_method(int argc, VALUE * argv, VALUE self)
+Context_frame_method(int argc, VALUE *argv, VALUE self)
 {
   VALUE loc;
 
@@ -295,7 +295,7 @@ Context_frame_method(int argc, VALUE * argv, VALUE self)
  *  Returns self object of the frame.
  */
 static VALUE
-Context_frame_self(int argc, VALUE * argv, VALUE self)
+Context_frame_self(int argc, VALUE *argv, VALUE self)
 {
   FRAME_SETUP;
 
@@ -395,7 +395,7 @@ Context_stop_reason(VALUE self)
  *  +frame+ (by default the newest one).
  */
 static VALUE
-Context_step_into(int argc, VALUE * argv, VALUE self)
+Context_step_into(int argc, VALUE *argv, VALUE self)
 {
   VALUE steps, v_frame;
   int n_args, from_frame;
@@ -435,7 +435,7 @@ Context_step_into(int argc, VALUE * argv, VALUE self)
  *  event for that frame is triggered.
  */
 static VALUE
-Context_step_out(int argc, VALUE * argv, VALUE self)
+Context_step_out(int argc, VALUE *argv, VALUE self)
 {
   int n_args, n_frames;
   VALUE v_frames, force;
@@ -468,7 +468,7 @@ Context_step_out(int argc, VALUE * argv, VALUE self)
  *  higher (if frame +frame+ finishes).
  */
 static VALUE
-Context_step_over(int argc, VALUE * argv, VALUE self)
+Context_step_over(int argc, VALUE *argv, VALUE self)
 {
   int n_args, frame;
   VALUE lines, v_frame;

@@ -1,6 +1,6 @@
 #include "byebug.h"
 
-static VALUE mByebug;   /* Ruby Byebug Module object */
+static VALUE mByebug; /* Ruby Byebug Module object */
 
 static VALUE tracing = Qfalse;
 static VALUE post_mortem = Qfalse;
@@ -75,7 +75,7 @@ check_started()
 }
 
 static void
-trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
+trace_print(rb_trace_arg_t *trace_arg, debug_context_t *dc,
             const char *file_filter, const char *debug_msg)
 {
   char *fullpath = NULL;
@@ -127,7 +127,7 @@ trace_print(rb_trace_arg_t * trace_arg, debug_context_t * dc,
 }
 
 static void
-cleanup(debug_context_t * dc)
+cleanup(debug_context_t *dc)
 {
   dc->stop_reason = CTX_STOP_NONE;
 
@@ -156,11 +156,11 @@ cleanup(debug_context_t * dc)
   if (CTX_FL_TEST(dc, CTX_FL_IGNORE))                   \
     return;                                             \
                                                         \
-  acquire_lock(dc);                                     \
-                                                        \
+  acquire_lock(dc);
 
-#define CALL_EVENT_SETUP                                      \
-  dc->calced_stack_size++;                                    \
+
+#define CALL_EVENT_SETUP   \
+  dc->calced_stack_size++; \
   dc->steps_out = dc->steps_out < 0 ? -1 : dc->steps_out + 1;
 
 #define RETURN_EVENT_SETUP \
@@ -176,7 +176,7 @@ cleanup(debug_context_t * dc)
 /* Functions that return control to byebug after the different events */
 
 static VALUE
-call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE arg)
+call_at(VALUE ctx, debug_context_t *dc, ID mid, int argc, VALUE arg)
 {
   struct call_with_inspection_data cwi;
   VALUE argv[1];
@@ -193,19 +193,19 @@ call_at(VALUE ctx, debug_context_t * dc, ID mid, int argc, VALUE arg)
 }
 
 static VALUE
-call_at_line(VALUE ctx, debug_context_t * dc)
+call_at_line(VALUE ctx, debug_context_t *dc)
 {
   return call_at(ctx, dc, rb_intern("at_line"), 0, Qnil);
 }
 
 static VALUE
-call_at_tracing(VALUE ctx, debug_context_t * dc)
+call_at_tracing(VALUE ctx, debug_context_t *dc)
 {
   return call_at(ctx, dc, rb_intern("at_tracing"), 0, Qnil);
 }
 
 static VALUE
-call_at_breakpoint(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
+call_at_breakpoint(VALUE ctx, debug_context_t *dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
@@ -213,7 +213,7 @@ call_at_breakpoint(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
 }
 
 static VALUE
-call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
+call_at_catchpoint(VALUE ctx, debug_context_t *dc, VALUE exp)
 {
   dc->stop_reason = CTX_STOP_CATCHPOINT;
 
@@ -221,7 +221,7 @@ call_at_catchpoint(VALUE ctx, debug_context_t * dc, VALUE exp)
 }
 
 static VALUE
-call_at_return(VALUE ctx, debug_context_t * dc, VALUE return_value)
+call_at_return(VALUE ctx, debug_context_t *dc, VALUE return_value)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
@@ -229,7 +229,7 @@ call_at_return(VALUE ctx, debug_context_t * dc, VALUE return_value)
 }
 
 static VALUE
-call_at_end(VALUE ctx, debug_context_t * dc)
+call_at_end(VALUE ctx, debug_context_t *dc)
 {
   dc->stop_reason = CTX_STOP_BREAKPOINT;
 
@@ -237,7 +237,7 @@ call_at_end(VALUE ctx, debug_context_t * dc)
 }
 
 static void
-call_at_line_check(VALUE ctx, debug_context_t * dc, VALUE breakpoint)
+call_at_line_check(VALUE ctx, debug_context_t *dc, VALUE breakpoint)
 {
   dc->stop_reason = CTX_STOP_STEP;
 
@@ -721,7 +721,7 @@ Start(VALUE self)
  *  +stop+ parameter forces byebug to stop at the first line of code in +file+
  */
 static VALUE
-Debug_load(int argc, VALUE * argv, VALUE self)
+Debug_load(int argc, VALUE *argv, VALUE self)
 {
   VALUE file, stop, context;
   debug_context_t *dc;

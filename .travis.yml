@@ -11,7 +11,7 @@ cache:
 language: ruby
 
 before_install:
-  - sudo apt-get install indent shellcheck
+  - sudo apt-get install shellcheck
   - if [ "$LIBEDIT" == "true" ]; then
       sudo apt-get install libedit-dev;
     fi

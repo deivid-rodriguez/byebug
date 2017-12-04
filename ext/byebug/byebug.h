@@ -8,22 +8,29 @@
 #define UNUSED(x) (void)(x)
 
 /* flags */
-#define CTX_FL_DEAD         (1<<1)      /* this context belonged to a dead thread */
-#define CTX_FL_IGNORE       (1<<2)      /* this context belongs to ignored thread */
-#define CTX_FL_SUSPEND      (1<<3)      /* thread currently suspended             */
-#define CTX_FL_TRACING      (1<<4)      /* call at_tracing method                 */
-#define CTX_FL_WAS_RUNNING  (1<<5)      /* thread was previously running          */
-#define CTX_FL_STOP_ON_RET  (1<<6)      /* can stop on method 'end'               */
-#define CTX_FL_IGNORE_STEPS (1<<7)      /* doesn't countdown steps to break       */
+#define CTX_FL_DEAD (1 << 1)         /* this context belonged to a dead thread */
+#define CTX_FL_IGNORE (1 << 2)       /* this context belongs to ignored thread */
+#define CTX_FL_SUSPEND (1 << 3)      /* thread currently suspended             */
+#define CTX_FL_TRACING (1 << 4)      /* call at_tracing method                 */
+#define CTX_FL_WAS_RUNNING (1 << 5)  /* thread was previously running          */
+#define CTX_FL_STOP_ON_RET (1 << 6)  /* can stop on method 'end'               */
+#define CTX_FL_IGNORE_STEPS (1 << 7) /* doesn't countdown steps to break       */
 
 /* macro functions */
-#define CTX_FL_TEST(c,f) ((c)->flags & (f))
-#define CTX_FL_SET(c,f) do { (c)->flags |= (f); } while (0)
-#define CTX_FL_UNSET(c,f) do { (c)->flags &= ~(f); } while (0)
+#define CTX_FL_TEST(c, f) ((c)->flags & (f))
+#define CTX_FL_SET(c, f) \
+  do                     \
+  {                      \
+    (c)->flags |= (f);   \
+  } while (0)
+#define CTX_FL_UNSET(c, f) \
+  do                       \
+  {                        \
+    (c)->flags &= ~(f);    \
+  } while (0)
 
 /* types */
-typedef enum
-{
+typedef enum {
   CTX_STOP_NONE,
   CTX_STOP_STEP,
   CTX_STOP_BREAKPOINT,
@@ -39,16 +46,15 @@ typedef struct
   VALUE thread;
   int thnum;
 
-  int dest_frame;       /* next stop's frame if stopped by next     */
-  int lines;    /* # of lines in dest_frame before stopping */
-  int steps;    /* # of steps before stopping               */
-  int steps_out;        /* # of returns before stopping             */
+  int dest_frame; /* next stop's frame if stopped by next     */
+  int lines;      /* # of lines in dest_frame before stopping */
+  int steps;      /* # of steps before stopping               */
+  int steps_out;  /* # of returns before stopping             */
 
-  VALUE backtrace;      /* [[loc, self, klass, binding], ...] */
+  VALUE backtrace; /* [[loc, self, klass, binding], ...] */
 } debug_context_t;
 
-typedef enum
-{
+typedef enum {
   LOCATION,
   SELF,
   CLASS,
@@ -70,10 +76,18 @@ typedef struct
 } threads_table_t;
 
 enum bp_type
-{ BP_POS_TYPE, BP_METHOD_TYPE };
+{
+  BP_POS_TYPE,
+  BP_METHOD_TYPE
+};
 
 enum hit_condition
-{ HIT_COND_NONE, HIT_COND_GE, HIT_COND_EQ, HIT_COND_MOD };
+{
+  HIT_COND_NONE,
+  HIT_COND_GE,
+  HIT_COND_EQ,
+  HIT_COND_MOD
+};
 
 typedef struct
 {
@@ -100,9 +114,9 @@ extern void remove_from_locked(VALUE thread);
 /* functions from threads.c */
 extern void Init_threads_table(VALUE mByebug);
 extern VALUE create_threads_table(void);
-extern void thread_context_lookup(VALUE thread, VALUE * context);
+extern void thread_context_lookup(VALUE thread, VALUE *context);
 extern int is_living_thread(VALUE thread);
-extern void acquire_lock(debug_context_t * dc);
+extern void acquire_lock(debug_context_t *dc);
 extern void release_lock(void);
 
 /* global variables */
@@ -112,10 +126,10 @@ extern VALUE next_thread;
 /* functions from context.c */
 extern void Init_context(VALUE mByebug);
 extern VALUE context_create(VALUE thread);
-extern VALUE context_dup(debug_context_t * context);
-extern void reset_stepping_stop_points(debug_context_t * context);
+extern VALUE context_dup(debug_context_t *context);
+extern void reset_stepping_stop_points(debug_context_t *context);
 extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
-extern VALUE context_backtrace_set(const rb_debug_inspector_t * inspector,
+extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
                                    void *data);
 
 /* functions from breakpoint.c */

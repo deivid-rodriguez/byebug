@@ -7,6 +7,7 @@ USER root
 RUN apt-get update && apt-get install -y \
   autoconf \
   automake \
+  clang-format \
   bison \
   bzip2 \
   curl \
@@ -14,7 +15,6 @@ RUN apt-get update && apt-get install -y \
   g++ \
   gcc \
   git \
-  indent \
   libc6-dev \
   libffi-dev \
   libgdbm-dev \
