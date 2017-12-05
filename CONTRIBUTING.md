@@ -51,7 +51,22 @@ abide by its terms.
   `bundle exec overcommit --install`. They will review your changes before they
   are committed, checking they are consistent with the project's code style.
 
+### Runnning `clang-format` on macOS
+
+At the moment byebug uses older `clang-format` version to enforce C codestyle than
+can be found in Homebrew. If you are planning to change some C source here it is
+recommended to use [direnv][] to hook that older version into your shell:
+
+* Install [direnv][] as described in their README
+* Install `clang-format@3.8` with `brew install clang-format@3.8`
+* In byebug source code directory do `echo 'export PATH="/usr/local/opt/clang-format@3.8/bin:$PATH"' > .envrc`
+* Allow direnv to use that `.envrc` file with `direnv allow`
+
+With that your `$PATH` will be updated to use older `clang-format` every time you `cd`
+into byebug source code folder. It will reverted back when you `cd` out of it as well.
+
 [overcommit]: https://github.com/brigade/overcommit/
+[direnv]: https://github.com/direnv/direnv/
 
 ## Byebug as a C-extension
 
