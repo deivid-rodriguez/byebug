@@ -13,7 +13,8 @@ language: ruby
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
-      brew install shellcheck clang-format;
+      brew install shellcheck clang-format@3.8;
+      ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
       if [ "$LIBEDIT" == "true" ]; then
         brew install libedit;
       fi

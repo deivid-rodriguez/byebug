@@ -30,8 +30,7 @@
   } while (0)
 
 /* types */
-typedef enum
-{
+typedef enum {
   CTX_STOP_NONE,
   CTX_STOP_STEP,
   CTX_STOP_BREAKPOINT,
@@ -55,8 +54,7 @@ typedef struct
   VALUE backtrace; /* [[loc, self, klass, binding], ...] */
 } debug_context_t;
 
-typedef enum
-{
+typedef enum {
   LOCATION,
   SELF,
   CLASS,
