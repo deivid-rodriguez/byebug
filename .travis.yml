@@ -13,7 +13,7 @@ language: ruby
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
-      brew install shellcheck;
+      brew install shellcheck clang-format;
       if [ "$LIBEDIT" == "true" ]; then
         brew install libedit;
       fi
