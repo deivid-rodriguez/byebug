@@ -63,6 +63,16 @@ matrix:
     - os: osx
       osx_image: xcode9.1
 
+  exclude:
+    - os: osx
+      rvm: 2.2.8-clang
+    - os: osx
+      rvm: 2.3.5-clang
+    - os: osx
+      rvm: 2.4.2-clang
+    - os: osx
+      rvm: ruby-head-clang
+
 env:
   matrix:
     - "LIBEDIT=true"
