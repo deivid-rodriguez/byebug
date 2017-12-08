@@ -1,8 +1,11 @@
 ---
 
-sudo: required
+os:
+  - linux
+  - osx
 
 dist: trusty
+sudo: required
 
 cache:
   directories:
@@ -11,9 +14,19 @@ cache:
 language: ruby
 
 before_install:
-  - sudo apt-get install shellcheck
-  - if [ "$LIBEDIT" == "true" ]; then
-      sudo apt-get install libedit-dev;
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update;
+      brew install shellcheck clang-format@3.8;
+      ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
+      if [ "$LIBEDIT" == "true" ]; then
+        brew install libedit;
+      fi
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get install shellcheck;
+      if [ "$LIBEDIT" == "true" ]; then
+        sudo apt-get install libedit-dev;
+      fi
     fi
 
 install:
@@ -46,6 +59,16 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: ruby-head-clang
+
+  exclude:
+    - os: osx
+      rvm: 2.2.8-clang
+    - os: osx
+      rvm: 2.3.5-clang
+    - os: osx
+      rvm: 2.4.2-clang
+    - os: osx
+      rvm: ruby-head-clang
 
 env:
   matrix:

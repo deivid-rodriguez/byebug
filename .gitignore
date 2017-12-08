@@ -11,6 +11,7 @@ coverage
 .bundle
 .byebugrc
 .byebug_history
+.envrc
 
 lib/byebug/byebug.so
 lib/byebug/byebug.bundle

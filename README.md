@@ -33,7 +33,7 @@ and offers many of the traditional debugging features such as:
 
 ## Build Status
 
-Linux [![Tra][tra]][tra_url]
+Linux and macOS [![Tra][tra]][tra_url]
 
 Windows [![Vey][vey]][vey_url]
 
