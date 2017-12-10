@@ -23,10 +23,6 @@ module Byebug
       end
     end
 
-    def after_repl
-      interface.close
-    end
-
     #
     # Prompt shown before reading a command.
     #
