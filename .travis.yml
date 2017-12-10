@@ -1,9 +1,5 @@
 ---
 
-os:
-  - linux
-  - osx
-
 dist: trusty
 sudo: required
 
@@ -41,17 +37,9 @@ before_script:
 
 script:
   - script/ci.sh
-  - bundle exec codeclimate-test-reporter || test true
-
-rvm:
-  - 2.2.8
-  - 2.2.8-clang
-  - 2.3.5
-  - 2.3.5-clang
-  - 2.4.2
-  - 2.4.2-clang
-  - ruby-head
-  - ruby-head-clang
+  - if [[ $TRAVIS_RUBY_VERSION =~ ruby-head* ]]; then
+      bundle exec codeclimate-test-reporter;
+    fi
 
 matrix:
   fast_finish: true
@@ -60,20 +48,81 @@ matrix:
     - rvm: ruby-head
     - rvm: ruby-head-clang
 
-  exclude:
+  include:
     - os: osx
-      rvm: 2.2.8-clang
+      rvm: 2.2.8
+      env: LIBEDIT=false
     - os: osx
-      rvm: 2.3.5-clang
+      rvm: 2.2.8
+      env: LIBEDIT=true
     - os: osx
-      rvm: 2.4.2-clang
+      rvm: 2.3.5
+      env: LIBEDIT=false
     - os: osx
-      rvm: ruby-head-clang
+      rvm: 2.3.5
+      env: LIBEDIT=true
+    - os: osx
+      rvm: 2.4.2
+      env: LIBEDIT=false
+    - os: osx
+      rvm: 2.4.2
+      env: LIBEDIT=true
+    - os: osx
+      rvm: ruby-head
+      env: NOCOV=1 LIBEDIT=false
+    - os: osx
+      rvm: ruby-head
+      env: NOCOV=1 LIBEDIT=true
 
-env:
-  matrix:
-    - "LIBEDIT=true"
-    - "LIBEDIT=false"
+    - os: linux
+      rvm: 2.2.8
+      env: LIBEDIT=false
+    - os: linux
+      rvm: 2.2.8
+      env: LIBEDIT=true
+    - os: linux
+      rvm: 2.3.5
+      env: LIBEDIT=false
+    - os: linux
+      rvm: 2.3.5
+      env: LIBEDIT=true
+    - os: linux
+      rvm: 2.4.2
+      env: LIBEDIT=false
+    - os: linux
+      rvm: 2.4.2
+      env: LIBEDIT=true
+    - os: linux
+      rvm: ruby-head
+      env: NOCOV=1 LIBEDIT=false
+    - os: linux
+      rvm: ruby-head
+      env: NOCOV=1 LIBEDIT=true
+
+    - ox: linux
+      rvm: 2.2.8-clang
+      env: LIBEDIT=false
+    - ox: linux
+      rvm: 2.2.8-clang
+      env: LIBEDIT=true
+    - os: linux
+      rvm: 2.3.5-clang
+      env: LIBEDIT=false
+    - os: linux
+      rvm: 2.3.5-clang
+      env: LIBEDIT=true
+    - os: linux
+      rvm: 2.4.2-clang
+      env: LIBEDIT=false
+    - os: linux
+      rvm: 2.4.2-clang
+      env: LIBEDIT=true
+    - os: linux
+      rvm: ruby-head-clang
+      env: NOCOV=true LIBEDIT=false
+    - os: linux
+      rvm: ruby-head-clang
+      env: NOCOV=true LIBEDIT=true
 
 branches:
   only:
