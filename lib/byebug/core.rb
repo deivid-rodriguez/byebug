@@ -86,13 +86,9 @@ module Byebug
   # Runs a initialization script file
   #
   def run_rc_file(rc_file)
-    old_interface = Context.interface
+    interface = ScriptInterface.new(rc_file)
 
-    Context.interface = ScriptInterface.new(rc_file)
-
-    ScriptProcessor.new(nil).process_commands
-  ensure
-    Context.interface = old_interface
+    ScriptProcessor.new(nil, interface).process_commands
   end
 
   #

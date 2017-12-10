@@ -5,10 +5,6 @@ module Byebug
   # Processes commands when there's not program running
   #
   class ControlProcessor < CommandProcessor
-    def initialize(context = nil)
-      @context = context
-    end
-
     #
     # Available commands
     #

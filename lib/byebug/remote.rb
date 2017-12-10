@@ -61,9 +61,10 @@ module Byebug
 
       @control_thread = DebugThread.new do
         while (session = server.accept)
-          Context.interface = RemoteInterface.new(session)
+          context = Byebug.current_context
+          interface = RemoteInterface.new(session)
 
-          ControlProcessor.new(Byebug.current_context).process_commands
+          ControlProcessor.new(context, interface).process_commands
         end
       end
 
