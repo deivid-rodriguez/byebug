@@ -37,6 +37,7 @@ module Byebug
       clear_example_file
 
       Byebug.breakpoints.clear if Byebug.breakpoints
+      Byebug.catchpoints.clear if Byebug.catchpoints
 
       Byebug.stop
     end
