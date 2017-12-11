@@ -47,7 +47,12 @@ module Byebug
   # are debugging, in the directory where you invoke byebug.
   #
   def run_init_script
-    rc_dirs.each { |dir| run_rc_file(dir) }
+    rc_dirs.each do |dir|
+      rc_file = File.expand_path(File.join(dir, init_file))
+      next unless File.exist?(rc_file)
+
+      run_rc_file(rc_file)
+    end
   end
 
   def self.load_settings
@@ -80,17 +85,10 @@ module Byebug
   #
   # Runs a initialization script file
   #
-  def run_rc_file(base_path)
-    old_interface = Context.interface
+  def run_rc_file(rc_file)
+    interface = ScriptInterface.new(rc_file)
 
-    rc_file = File.expand_path(File.join(base_path, init_file))
-    return unless File.exist?(rc_file)
-
-    Context.interface = ScriptInterface.new(rc_file)
-
-    ScriptProcessor.new(nil).process_commands
-  ensure
-    Context.interface = old_interface
+    ScriptProcessor.new(nil, interface).process_commands
   end
 
   #

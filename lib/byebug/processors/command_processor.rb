@@ -16,17 +16,14 @@ module Byebug
     include Helpers::EvalHelper
 
     attr_accessor :prev_line
-    attr_reader :context
+    attr_reader :context, :interface
 
-    def initialize(context)
+    def initialize(context, interface = LocalInterface.new)
       @context = context
+      @interface = interface
 
       @proceed = false
       @prev_line = nil
-    end
-
-    def interface
-      @interface ||= Context.interface
     end
 
     def printer
@@ -119,6 +116,7 @@ module Byebug
 
     def after_repl
       interface.autosave
+      interface.close
     end
 
     #

@@ -20,6 +20,10 @@ module Byebug
       @interface = SpecificInterface.new
     end
 
+    def teardown
+      @interface.history.clear
+    end
+
     def test_reads_simple_commands
       @interface.fake_input_queue = ['a_command']
 

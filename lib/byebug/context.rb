@@ -140,7 +140,7 @@ module Byebug
     private
 
     def processor
-      @processor ||= self.class.processor.new(self)
+      @processor ||= self.class.processor.new(self, self.class.interface)
     end
 
     #

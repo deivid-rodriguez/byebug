@@ -100,7 +100,7 @@ module Byebug
 
         break if quit
 
-        ControlProcessor.new.process_commands
+        ControlProcessor.new(nil, interface).process_commands
       end
     end
 
