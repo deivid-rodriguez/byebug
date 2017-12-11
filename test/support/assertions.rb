@@ -1,3 +1,5 @@
+require 'minitest/mock'
+
 module Minitest
   #
   # Custom Minitest assertions
