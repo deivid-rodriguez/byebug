@@ -19,10 +19,16 @@ class MinitestRunner
 
     flags = ["--name=/#{filtered_methods.join('|')}/", ENV['TESTOPTS']]
 
-    Minitest.run(flags + $ARGV)
+    run_with_timeout(flags)
   end
 
   private
+
+  def run_with_timeout(flags)
+    Timeout.timeout(180) { Minitest.run(flags + $ARGV) }
+  rescue Timeout::Error
+    false
+  end
 
   def runnables
     Minitest::Runnable.runnables
