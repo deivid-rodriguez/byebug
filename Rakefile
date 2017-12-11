@@ -43,8 +43,19 @@ Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 desc 'Runs the test suite'
 task :test do
   require_relative 'script/minitest_runner'
-
-  exit 1 unless MinitestRunner.new.run
+  # Set high to bypass, adds -v option and timeout to testing when true
+  if RUBY_VERSION >= '2.5'
+    require 'timeout'
+    ENV['TESTOPTS'] = "#{(ENV['TESTOPTS'] || '')} -v".strip
+    begin
+      Timeout.timeout(180) { exit 1 unless MinitestRunner.new.run }
+    rescue Timeout::Error
+      STDERR.puts "\n\nTests timed out in 3 minutes"
+      exit 1
+    end
+  else
+    exit 1 unless MinitestRunner.new.run
+  end
 end
 
 desc 'Run overcommit hooks manually'
