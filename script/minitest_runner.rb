@@ -5,6 +5,7 @@ $LOAD_PATH << File.expand_path(File.join('..', 'test'), __dir__)
 
 require 'minitest'
 require 'English'
+require 'shellwords'
 
 #
 # Helper class to aid running minitest
@@ -17,7 +18,7 @@ class MinitestRunner
   def run
     test_suites.each { |f| require File.expand_path(f) }
 
-    flags = ["--name=/#{filtered_methods.join('|')}/", ENV['TESTOPTS']]
+    flags = ["--name=/#{filtered_methods.join('|')}/", *test_opts]
 
     run_with_timeout(flags)
   end
@@ -36,6 +37,12 @@ class MinitestRunner
 
   def test_suite?(str)
     all_test_suites.include?(str)
+  end
+
+  def test_opts
+    return [] unless ENV['TESTOPTS']
+
+    ENV['TESTOPTS'].shellsplit
   end
 
   def test_suites
