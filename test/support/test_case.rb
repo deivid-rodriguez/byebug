@@ -27,8 +27,6 @@ module Byebug
     def setup
       Byebug.start
       interface.clear
-
-      Byebug.breakpoints.clear if Byebug.breakpoints
     end
 
     #
@@ -37,6 +35,8 @@ module Byebug
     def teardown
       cleanup_namespace
       clear_example_file
+
+      Byebug.breakpoints.clear if Byebug.breakpoints
 
       Byebug.stop
     end
