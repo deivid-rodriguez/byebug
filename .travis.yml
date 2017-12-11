@@ -9,7 +9,7 @@ sudo: required
 
 cache:
   directories:
-    - vendor/bundle
+    - .bundle/gems
 
 language: ruby
 
