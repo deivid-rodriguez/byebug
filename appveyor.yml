@@ -20,7 +20,7 @@ install:
 
   - gem install bundler -v 1.16.0 --no-document --force --conservative
   - bundle config force_ruby_platform true
-  - bundle install --jobs 3 --retry 3 --path av_bundle/%ruby_version%
+  - bundle install --jobs 3 --retry 3 --path .bundle/gems/%ruby_version%
 
 build_script:
   - bundle exec rake clobber
@@ -42,7 +42,7 @@ environment:
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408'
 
 cache:
-  - av_bundle
+  - .bundle/gems
 
 matrix:
   fast_finish: true
