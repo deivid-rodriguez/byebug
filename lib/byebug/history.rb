@@ -84,7 +84,7 @@ module Byebug
       commands = buffer.last(show_size)
 
       last_ids(show_size).zip(commands).map do |l|
-        format('%5d  %s', l[0], l[1])
+        format('%<position>5d  %<command>s', position: l[0], command: l[1])
       end.join("\n") + "\n"
     end
 

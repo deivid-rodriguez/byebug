@@ -34,7 +34,14 @@ module Byebug
         puts 'Num Enb Expression'
 
         Byebug.displays.each_with_index do |d, i|
-          puts(format('%3d: %s  %s', i + 1, d[0] ? 'y' : 'n', d[1]))
+          interp = format(
+            '%<number>3d: %<status>s  %<expression>s',
+            number: i + 1,
+            status: d[0] ? 'y' : 'n',
+            expression: d[1]
+          )
+
+          puts(interp)
         end
       end
     end

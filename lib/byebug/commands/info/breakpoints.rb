@@ -45,10 +45,14 @@ module Byebug
       private
 
       def info_breakpoint(brkpt)
-        expr = brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
-        y_n = brkpt.enabled? ? 'y' : 'n'
-        interp = format('%-3d %-3s at %s:%s%s',
-                        brkpt.id, y_n, brkpt.source, brkpt.pos, expr)
+        interp = format(
+          '%-<id>3d %-<status>3s at %<file>s:%<line>s%<expression>s',
+          id: brkpt.id,
+          status: brkpt.enabled? ? 'y' : 'n',
+          file: brkpt.source,
+          line: brkpt.pos,
+          expression: brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+        )
         puts interp
         hits = brkpt.hit_count
         return unless hits > 0

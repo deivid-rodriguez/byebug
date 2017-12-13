@@ -21,9 +21,12 @@ module Byebug
       File.foreach(file).with_index.map do |line, lineno|
         next unless (min..max).cover?(lineno + 1)
 
-        annotation = annotator.call(lineno + 1)
-
-        format("%s %#{max.to_s.size}d: %s", annotation, lineno + 1, line)
+        format(
+          "%<annotation>s %<lineno>#{max.to_s.size}d: %<source>s",
+          annotation: annotator.call(lineno + 1),
+          lineno: lineno + 1,
+          source: line
+        )
       end
     end
 
