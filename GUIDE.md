@@ -1312,7 +1312,7 @@ at the same speed as if there were no byebug.
 To enter byebug this way, just drop `byebug` in whichever line you want to start
 debugging at. You also have to require byebug somehow. If using bundler, it will
 take care of that for you, otherwise you can use the ruby `-r` flag or add
-`require 'byebug'` in the line previous to the `byebug` call.
+`require 'byebug'` in the line previous to the `byebug` call. Note: to install byebug by using bundler issue `bundler add byebug` on command-line.
 
 If speed is crucial, you may want to start and stop this around certain sections
 of code, using `Byebug.start` and `Byebug.stop`. Alternatively, instead of
