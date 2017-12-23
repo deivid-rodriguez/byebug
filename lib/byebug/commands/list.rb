@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/source_file_formatter'
 require 'byebug/helpers/file'
 require 'byebug/helpers/parse'
 
@@ -38,9 +39,7 @@ module Byebug
       msg = "No sourcefile available for #{frame.file}"
       raise(msg) unless File.exist?(frame.file)
 
-      max_lines = n_lines(frame.file)
-      b, e = range(@match[2], max_lines)
-      raise('Invalid line range') unless valid_range?(b, e, max_lines)
+      b, e = range(@match[2])
 
       display_lines(b, e)
 
@@ -56,34 +55,36 @@ module Byebug
     #
     # Otherwise it's automatically chosen.
     #
-    def range(input, max_line)
-      size = [Setting[:listsize], max_line].min
+    def range(input)
+      return auto_range(@match[1] || '+') unless input
 
-      return set_range(size, max_line) unless input
+      b, e = parse_range(input)
+      raise('Invalid line range') unless valid_range?(b, e)
 
-      parse_range(input, size, max_line)
+      [b, e]
     end
 
-    def valid_range?(first, last, max)
-      first <= last && (1..max).cover?(first) && (1..max).cover?(last)
+    def valid_range?(first, last)
+      first <= last && (1..max_line).cover?(first) && (1..max_line).cover?(last)
     end
 
     #
     # Set line range to be printed by list
     #
-    # @param size - number of lines to be printed
-    # @param max_line - max line number that can be printed
-    #
     # @return first line number to list
     # @return last line number to list
     #
-    def set_range(size, max_line)
-      first = amend(lower(size, @match[1] || '+'), max_line - size + 1)
+    def auto_range(direction)
+      prev_line = processor.prev_line
 
-      [first, move(first, size - 1)]
+      if direction == '=' || prev_line.nil?
+        source_file_formatter.range_around(frame.line)
+      else
+        source_file_formatter.range_from(move(prev_line, size, direction))
+      end
     end
 
-    def parse_range(input, size, max_line)
+    def parse_range(input)
       first, err = get_int(lower_bound(input), 'List', 1, max_line)
       raise(err) unless first
 
@@ -91,25 +92,12 @@ module Byebug
         last, err = get_int(upper_bound(input), 'List', 1, max_line)
         raise(err) unless last
 
-        last = amend(last, max_line)
+        last = amend_final(last)
       else
         first -= (size / 2)
       end
 
       [first, last || move(first, size - 1)]
-    end
-
-    def amend(line, max_line)
-      return 1 if line < 1
-
-      [max_line, line].min
-    end
-
-    def lower(size, direction = '+')
-      prev_line = processor.prev_line
-      return frame.line - size / 2 if direction == '=' || prev_line.nil?
-
-      move(prev_line, size, direction)
     end
 
     def move(line, size, direction = '+')
@@ -125,13 +113,7 @@ module Byebug
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      File.foreach(frame.file).with_index do |line, lineno|
-        break if lineno + 1 > max
-        next unless (min..max).cover?(lineno + 1)
-
-        mark = lineno + 1 == frame.line ? '=> ' : '   '
-        puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
-      end
+      puts source_file_formatter.lines(min, max).join
     end
 
     #
@@ -159,6 +141,17 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
+    end
+
+    extend Forwardable
+
+    def_delegators :source_file_formatter, :amend_final, :size, :max_line
+
+    def source_file_formatter
+      @source_file_formatter ||= SourceFileFormatter.new(
+        frame.file,
+        ->(n) { n == frame.line ? '=>' : '  ' }
+      )
     end
   end
 end

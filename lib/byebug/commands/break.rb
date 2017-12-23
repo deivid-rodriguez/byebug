@@ -2,6 +2,7 @@ require 'byebug/command'
 require 'byebug/helpers/eval'
 require 'byebug/helpers/file'
 require 'byebug/helpers/parse'
+require 'byebug/source_file_formatter'
 
 module Byebug
   #
@@ -89,10 +90,25 @@ module Byebug
       end
 
       unless Breakpoint.potential_line?(fullpath, line)
-        raise(pr('break.errors.line', file: fullpath, line: line))
+        msg = pr(
+          'break.errors.line',
+          file: fullpath,
+          line: line,
+          valid_breakpoints: valid_breakpoints_for(fullpath, line)
+        )
+
+        raise(msg)
       end
 
       Breakpoint.add(fullpath, line, @match[2])
+    end
+
+    def valid_breakpoints_for(path, line)
+      potential_lines = Breakpoint.potential_lines(path)
+      annotator = ->(n) { potential_lines.include?(n) ? '[B]' : '   ' }
+      source_file_formatter = SourceFileFormatter.new(path, annotator)
+
+      source_file_formatter.lines_around(line).join.chomp
     end
   end
 end

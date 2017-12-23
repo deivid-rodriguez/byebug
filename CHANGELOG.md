@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Added
+
+* Show valid breakpoint locations when invalid location given (#393, @ko1).
+
 ## 9.1.0 - 2017-08-22
 
 ### Added
