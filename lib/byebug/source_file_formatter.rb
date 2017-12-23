@@ -27,8 +27,12 @@ module Byebug
       end
     end
 
+    def max_line
+      @max_line ||= n_lines(file)
+    end
+
     def size
-      [Setting[:listsize], n_lines(file)].min
+      [Setting[:listsize], max_line].min
     end
   end
 end

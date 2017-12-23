@@ -39,9 +39,8 @@ module Byebug
       msg = "No sourcefile available for #{frame.file}"
       raise(msg) unless File.exist?(frame.file)
 
-      max_lines = n_lines(frame.file)
-      b, e = range(@match[2], max_lines)
-      raise('Invalid line range') unless valid_range?(b, e, max_lines)
+      b, e = range(@match[2])
+      raise('Invalid line range') unless valid_range?(b, e)
 
       display_lines(b, e)
 
@@ -57,34 +56,33 @@ module Byebug
     #
     # Otherwise it's automatically chosen.
     #
-    def range(input, max_line)
+    def range(input)
       size = source_file_formatter.size
 
-      return set_range(size, max_line) unless input
+      return range_for(size) unless input
 
-      parse_range(input, size, max_line)
+      parse_range(input, size)
     end
 
-    def valid_range?(first, last, max)
-      first <= last && (1..max).cover?(first) && (1..max).cover?(last)
+    def valid_range?(first, last)
+      first <= last && (1..max_line).cover?(first) && (1..max_line).cover?(last)
     end
 
     #
     # Set line range to be printed by list
     #
     # @param size - number of lines to be printed
-    # @param max_line - max line number that can be printed
     #
     # @return first line number to list
     # @return last line number to list
     #
-    def set_range(size, max_line)
+    def range_for(size)
       first = amend(lower(size, @match[1] || '+'), max_line - size + 1)
 
       [first, move(first, size - 1)]
     end
 
-    def parse_range(input, size, max_line)
+    def parse_range(input, size)
       first, err = get_int(lower_bound(input), 'List', 1, max_line)
       raise(err) unless first
 
@@ -100,10 +98,8 @@ module Byebug
       [first, last || move(first, size - 1)]
     end
 
-    def amend(line, max_line)
-      return 1 if line < 1
-
-      [max_line, line].min
+    def amend(line, ceiling)
+      [ceiling, [1, line].max].min
     end
 
     def lower(size, direction = '+')
@@ -154,6 +150,10 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
+    end
+
+    def max_line
+      source_file_formatter.max_line
     end
 
     def source_file_formatter
