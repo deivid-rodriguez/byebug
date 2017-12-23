@@ -107,8 +107,10 @@ module Byebug
 
     def valid_breakpoints_for(path, min, max)
       potential_lines = Breakpoint.potential_lines(path)
+
       File.foreach(path).with_index.map do |src_line, src_lineno|
-        next unless (min..max).cover? src_lineno
+        next unless (min..max).cover?(src_lineno)
+
         b = potential_lines.include?(src_lineno + 1) ? '[B]' : '   '
         format("#{b} %#{max.to_s.size}d: %s", src_lineno + 1, src_line)
       end.join
