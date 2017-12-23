@@ -57,7 +57,7 @@ module Byebug
     # Otherwise it's automatically chosen.
     #
     def range(input)
-      return auto_range unless input
+      return auto_range(@match[1] || '+') unless input
 
       parse_range(input)
     end
@@ -72,8 +72,14 @@ module Byebug
     # @return first line number to list
     # @return last line number to list
     #
-    def auto_range
-      source_file_formatter.range_from(lower(@match[1] || '+'))
+    def auto_range(direction)
+      prev_line = processor.prev_line
+
+      if direction == '=' || prev_line.nil?
+        source_file_formatter.range_around(frame.line)
+      else
+        source_file_formatter.range_from(move(prev_line, size, direction))
+      end
     end
 
     def parse_range(input)
@@ -90,13 +96,6 @@ module Byebug
       end
 
       [first, last || move(first, size - 1)]
-    end
-
-    def lower(direction = '+')
-      prev_line = processor.prev_line
-      return frame.line - size / 2 if direction == '=' || prev_line.nil?
-
-      move(prev_line, size, direction)
     end
 
     def move(line, size, direction = '+')

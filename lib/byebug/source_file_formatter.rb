@@ -27,6 +27,10 @@ module Byebug
       end
     end
 
+    def range_around(center)
+      range_from(center - size / 2)
+    end
+
     def range_from(min)
       first = amend_initial(min)
 
