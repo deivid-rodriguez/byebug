@@ -73,10 +73,7 @@ module Byebug
     # @return last line number to list
     #
     def auto_range
-      first = amend(
-        lower(@match[1] || '+'),
-        source_file_formatter.max_initial_line
-      )
+      first = amend_initial(lower(@match[1] || '+'))
 
       [first, move(first, size - 1)]
     end
@@ -89,16 +86,12 @@ module Byebug
         last, err = get_int(upper_bound(input), 'List', 1, max_line)
         raise(err) unless last
 
-        last = amend(last, max_line)
+        last = amend_final(last)
       else
         first -= (size / 2)
       end
 
       [first, last || move(first, size - 1)]
-    end
-
-    def amend(line, ceiling)
-      [ceiling, [1, line].max].min
     end
 
     def lower(direction = '+')
@@ -149,6 +142,14 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
+    end
+
+    def amend_initial(line)
+      source_file_formatter.amend_initial(line)
+    end
+
+    def amend_final(line)
+      source_file_formatter.amend_final(line)
     end
 
     def size

@@ -27,6 +27,14 @@ module Byebug
       end
     end
 
+    def amend_initial(line)
+      amend(line, max_initial_line)
+    end
+
+    def amend_final(line)
+      amend(line, max_line)
+    end
+
     def max_initial_line
       max_line - size + 1
     end
@@ -37,6 +45,10 @@ module Byebug
 
     def size
       [Setting[:listsize], max_line].min
+    end
+
+    def amend(line, ceiling)
+      [ceiling, [1, line].max].min
     end
   end
 end
