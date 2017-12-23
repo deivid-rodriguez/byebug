@@ -27,6 +27,10 @@ module Byebug
       end
     end
 
+    def lines_around(center)
+      lines(*range_around(center))
+    end
+
     def range_around(center)
       range_from(center - size / 2)
     end

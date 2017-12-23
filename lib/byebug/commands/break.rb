@@ -90,14 +90,11 @@ module Byebug
       end
 
       unless Breakpoint.potential_line?(fullpath, line)
-        min = [line - 5, 1].max
-        max = [line + 5, n_lines(file)].min
-
         msg = pr(
           'break.errors.line',
           file: fullpath,
           line: line,
-          valid_breakpoints: valid_breakpoints_for(fullpath, min, max)
+          valid_breakpoints: valid_breakpoints_for(fullpath, line)
         )
 
         raise(msg)
@@ -106,11 +103,12 @@ module Byebug
       Breakpoint.add(fullpath, line, @match[2])
     end
 
-    def valid_breakpoints_for(path, min, max)
+    def valid_breakpoints_for(path, line)
       potential_lines = Breakpoint.potential_lines(path)
       annotator = ->(n) { potential_lines.include?(n) ? '[B]' : '   ' }
+      source_file_formatter = SourceFileFormatter.new(path, annotator)
 
-      SourceFileFormatter.new(path, annotator).lines(min, max).join
+      source_file_formatter.lines_around(line).join
     end
   end
 end
