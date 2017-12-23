@@ -143,17 +143,9 @@ module Byebug
       str.split(/[-,]/)
     end
 
-    def amend_final(line)
-      source_file_formatter.amend_final(line)
-    end
+    extend Forwardable
 
-    def size
-      source_file_formatter.size
-    end
-
-    def max_line
-      source_file_formatter.max_line
-    end
+    def_delegators :source_file_formatter, :amend_final, :size, :max_line
 
     def source_file_formatter
       @source_file_formatter ||= SourceFileFormatter.new(
