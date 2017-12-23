@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
+require 'byebug/helpers/file'
+require 'byebug/setting'
+
 module Byebug
   #
   # Formats specific line ranges in a source file
   #
   class SourceFileFormatter
+    include Helpers::FileHelper
+
     attr_reader :file, :annotator
 
     def initialize(file, annotator)
@@ -20,6 +25,10 @@ module Byebug
 
         format("%s %#{max.to_s.size}d: %s", annotation, lineno + 1, line)
       end
+    end
+
+    def size
+      [Setting[:listsize], n_lines(file)].min
     end
   end
 end

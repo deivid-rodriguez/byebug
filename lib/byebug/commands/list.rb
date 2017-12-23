@@ -58,7 +58,7 @@ module Byebug
     # Otherwise it's automatically chosen.
     #
     def range(input, max_line)
-      size = [Setting[:listsize], max_line].min
+      size = source_file_formatter.size
 
       return set_range(size, max_line) unless input
 
@@ -126,9 +126,7 @@ module Byebug
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      annotator = ->(n) { n == frame.line ? '=>' : '  ' }
-
-      puts SourceFileFormatter.new(frame.file, annotator).lines(min, max).join
+      puts source_file_formatter.lines(min, max).join
     end
 
     #
@@ -156,6 +154,13 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
+    end
+
+    def source_file_formatter
+      @source_file_formatter ||= SourceFileFormatter.new(
+        frame.file,
+        ->(n) { n == frame.line ? '=>' : '  ' }
+      )
     end
   end
 end
