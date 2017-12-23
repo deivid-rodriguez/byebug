@@ -2,6 +2,7 @@ require 'byebug/command'
 require 'byebug/helpers/eval'
 require 'byebug/helpers/file'
 require 'byebug/helpers/parse'
+require 'byebug/source_file_formatter'
 
 module Byebug
   #
@@ -107,13 +108,9 @@ module Byebug
 
     def valid_breakpoints_for(path, min, max)
       potential_lines = Breakpoint.potential_lines(path)
+      annotator = ->(n) { potential_lines.include?(n) ? '[B]' : '   ' }
 
-      File.foreach(path).with_index.map do |src_line, src_lineno|
-        next unless (min..max).cover?(src_lineno)
-
-        b = potential_lines.include?(src_lineno + 1) ? '[B]' : '   '
-        format("#{b} %#{max.to_s.size}d: %s", src_lineno + 1, src_line)
-      end.join
+      SourceFileFormatter.new(path, annotator).lines(min, max).join
     end
   end
 end

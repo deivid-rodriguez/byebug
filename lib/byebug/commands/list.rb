@@ -1,4 +1,5 @@
 require 'byebug/command'
+require 'byebug/source_file_formatter'
 require 'byebug/helpers/file'
 require 'byebug/helpers/parse'
 
@@ -125,13 +126,9 @@ module Byebug
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      File.foreach(frame.file).with_index do |line, lineno|
-        break if lineno + 1 > max
-        next unless (min..max).cover?(lineno + 1)
+      annotator = ->(n) { n == frame.line ? '=>' : '  ' }
 
-        mark = lineno + 1 == frame.line ? '=> ' : '   '
-        puts format("#{mark}%#{max.to_s.size}d: %s", lineno + 1, line)
-      end
+      puts SourceFileFormatter.new(frame.file, annotator).lines(min, max).join
     end
 
     #
