@@ -108,7 +108,7 @@ module Byebug
       annotator = ->(n) { potential_lines.include?(n) ? '[B]' : '   ' }
       source_file_formatter = SourceFileFormatter.new(path, annotator)
 
-      source_file_formatter.lines_around(line).join
+      source_file_formatter.lines_around(line).join.chomp
     end
   end
 end
