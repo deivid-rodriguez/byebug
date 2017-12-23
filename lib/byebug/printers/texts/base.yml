@@ -4,7 +4,7 @@ base:
 
 break:
   errors:
-    line: "Line {line} is not a valid breakpoint in file {file}"
+    line: "Line {line} is not a valid breakpoint in file {file}.\nValid break points are:\n{valid_breakpoints}"
     location: "Invalid breakpoint location"
     state: "We are not in a state that has an associated file"
     class: "Unknown class {klass}"
