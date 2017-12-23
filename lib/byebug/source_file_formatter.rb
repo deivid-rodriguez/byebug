@@ -27,6 +27,10 @@ module Byebug
       end
     end
 
+    def max_initial_line
+      max_line - size + 1
+    end
+
     def max_line
       @max_line ||= n_lines(file)
     end

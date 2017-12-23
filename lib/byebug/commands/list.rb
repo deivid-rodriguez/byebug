@@ -57,11 +57,9 @@ module Byebug
     # Otherwise it's automatically chosen.
     #
     def range(input)
-      size = source_file_formatter.size
+      return auto_range unless input
 
-      return range_for(size) unless input
-
-      parse_range(input, size)
+      parse_range(input)
     end
 
     def valid_range?(first, last)
@@ -71,18 +69,19 @@ module Byebug
     #
     # Set line range to be printed by list
     #
-    # @param size - number of lines to be printed
-    #
     # @return first line number to list
     # @return last line number to list
     #
-    def range_for(size)
-      first = amend(lower(size, @match[1] || '+'), max_line - size + 1)
+    def auto_range
+      first = amend(
+        lower(@match[1] || '+'),
+        source_file_formatter.max_initial_line
+      )
 
       [first, move(first, size - 1)]
     end
 
-    def parse_range(input, size)
+    def parse_range(input)
       first, err = get_int(lower_bound(input), 'List', 1, max_line)
       raise(err) unless first
 
@@ -102,7 +101,7 @@ module Byebug
       [ceiling, [1, line].max].min
     end
 
-    def lower(size, direction = '+')
+    def lower(direction = '+')
       prev_line = processor.prev_line
       return frame.line - size / 2 if direction == '=' || prev_line.nil?
 
@@ -150,6 +149,10 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
+    end
+
+    def size
+      source_file_formatter.size
     end
 
     def max_line
