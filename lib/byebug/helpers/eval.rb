@@ -98,7 +98,7 @@ module Byebug
 
       #
       # Runs the given block in a new thread, waits for it to finish and
-      # returns the new thred's result.
+      # returns the new thread's result.
       #
       def in_new_thread
         res = nil
