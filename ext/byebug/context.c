@@ -217,7 +217,7 @@ Context_frame_binding(int argc, VALUE *argv, VALUE self)
 
 /*
  *  call-seq:
- *    context.frame_class(frame_position = 0) -> binding
+ *    context.frame_class(frame_position = 0) -> class
  *
  *  Returns frame's defined class.
  */
