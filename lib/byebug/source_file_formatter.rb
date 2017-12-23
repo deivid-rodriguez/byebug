@@ -27,6 +27,12 @@ module Byebug
       end
     end
 
+    def range_from(min)
+      first = amend_initial(min)
+
+      [first, first + size - 1]
+    end
+
     def amend_initial(line)
       amend(line, max_initial_line)
     end

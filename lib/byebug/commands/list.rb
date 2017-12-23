@@ -73,9 +73,7 @@ module Byebug
     # @return last line number to list
     #
     def auto_range
-      first = amend_initial(lower(@match[1] || '+'))
-
-      [first, move(first, size - 1)]
+      source_file_formatter.range_from(lower(@match[1] || '+'))
     end
 
     def parse_range(input)
@@ -142,10 +140,6 @@ module Byebug
     #
     def split_range(str)
       str.split(/[-,]/)
-    end
-
-    def amend_initial(line)
-      source_file_formatter.amend_initial(line)
     end
 
     def amend_final(line)
