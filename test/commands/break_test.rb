@@ -287,12 +287,20 @@ module Byebug
       check_error_includes "There are only 16 lines in file #{example_path}"
     end
 
-    def test_setting_breakpoint_to_invalid_line_shows_an_error
+    def test_setting_breakpoint_to_invalid_line_shows_an_error_and_alternatives
       enter 'break 14'
       debug_code(program)
 
       check_error_includes \
-        "Line 14 is not a valid breakpoint in file #{example_path}"
+        "Line 14 is not a valid breakpoint in file #{example_path}.",
+        'Valid break points are:',
+        '[B] 10:     end',
+        '[B] 11:   end',
+        '12:',
+        '[B] 13:   byebug',
+        '14:',
+        '[B] 15:   ByebugTestClass.a',
+        '[B] 16: end'
     end
   end
 
