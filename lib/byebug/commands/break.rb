@@ -91,16 +91,27 @@ module Byebug
       unless Breakpoint.potential_line?(fullpath, line)
         min = [line - 5, 1].max
         max = [line + 5, n_lines(file)].min
-        potential_lines = Breakpoint.potential_lines(fullpath)
-        valid_breakpoints = File.foreach(fullpath).with_index.map do |src_line, src_lineno|
-          next unless (min..max).cover? src_lineno
-          b = potential_lines.include?(src_lineno + 1) ? '[B]' : '   '
-          format("#{b} %#{max.to_s.size}d: %s", src_lineno + 1, src_line)
-        end.join
-        raise(pr('break.errors.line', file: fullpath, line: line, valid_breakpoints: valid_breakpoints))
+
+        msg = pr(
+          'break.errors.line',
+          file: fullpath,
+          line: line,
+          valid_breakpoints: valid_breakpoints_for(fullpath, min, max)
+        )
+
+        raise(msg)
       end
 
       Breakpoint.add(fullpath, line, @match[2])
+    end
+
+    def valid_breakpoints_for(path, min, max)
+      potential_lines = Breakpoint.potential_lines(path)
+      File.foreach(path).with_index.map do |src_line, src_lineno|
+        next unless (min..max).cover? src_lineno
+        b = potential_lines.include?(src_lineno + 1) ? '[B]' : '   '
+        format("#{b} %#{max.to_s.size}d: %s", src_lineno + 1, src_line)
+      end.join
     end
   end
 end
