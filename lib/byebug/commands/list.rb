@@ -40,7 +40,6 @@ module Byebug
       raise(msg) unless File.exist?(frame.file)
 
       b, e = range(@match[2])
-      raise('Invalid line range') unless valid_range?(b, e)
 
       display_lines(b, e)
 
@@ -59,7 +58,10 @@ module Byebug
     def range(input)
       return auto_range(@match[1] || '+') unless input
 
-      parse_range(input)
+      b, e = parse_range(input)
+      raise('Invalid line range') unless valid_range?(b, e)
+
+      [b, e]
     end
 
     def valid_range?(first, last)
