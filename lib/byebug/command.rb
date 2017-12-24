@@ -84,7 +84,11 @@ module Byebug
       end
 
       def columnize(width)
-        format("  %-#{width}s -- %s\n", to_s, short_description)
+        format(
+          "  %-<name>#{width}s -- %<description>s\n",
+          name: to_s,
+          description: short_description
+        )
       end
 
       #
