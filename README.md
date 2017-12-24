@@ -56,6 +56,12 @@ Windows [![Vey][vey]][vey_url]
 gem install byebug
 ```
 
+Or if you use `bundler`,
+
+```shell
+bundle add byebug
+```
+
 ## Usage
 
 ### From within the Ruby code
