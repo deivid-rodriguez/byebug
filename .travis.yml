@@ -37,7 +37,7 @@ before_script:
 
 script:
   - script/ci.sh
-  - if [ $TRAVIS_RUBY_VERSION =~ ruby-head* ]; then
+  - if [ "$TRAVIS_RUBY_VERSION" != "ruby-head" ] && [ "$TRAVIS_RUBY_VERSION" != "ruby-head-clang" ]; then
       bundle exec codeclimate-test-reporter;
     fi
 
