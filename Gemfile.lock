@@ -6,24 +6,24 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.5.1)
-      public_suffix (~> 2.0, >= 2.0.2)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     ast (2.3.0)
     chandler (0.7.0)
       netrc
       octokit (>= 2.2.0)
-    childprocess (0.7.1)
+    childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
     coderay (1.1.2)
     docile (1.1.5)
-    faraday (0.12.1)
+    faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
     iniparse (1.4.4)
     json (2.1.0)
-    kramdown (1.13.2)
+    kramdown (1.16.2)
     mdl (0.4.0)
       kramdown (~> 1.12, >= 1.12.0)
       mixlib-cli (~> 1.7, >= 1.7.0)
@@ -34,19 +34,19 @@ GEM
     mixlib-config (2.2.4)
     multipart-post (2.0.0)
     netrc (0.11.0)
-    octokit (4.7.0)
+    octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     overcommit (0.41.0)
       childprocess (~> 0.6, >= 0.6.3)
       iniparse (~> 1.4)
-    parallel (1.12.0)
+    parallel (1.12.1)
     parser (2.4.0.2)
       ast (~> 2.3)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (2.0.5)
+    public_suffix (3.0.1)
     rainbow (3.0.0)
     rake (12.3.0)
     rake-compiler (1.0.4)
@@ -66,7 +66,7 @@ GEM
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.0)
+    simplecov-html (0.10.2)
     unicode-display_width (1.3.0)
     yard (0.9.12)
 
@@ -89,4 +89,4 @@ DEPENDENCIES
   yard (= 0.9.12)
 
 BUNDLED WITH
-   1.15.4
+   1.16.1
