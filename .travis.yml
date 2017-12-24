@@ -50,10 +50,10 @@ matrix:
 
   include:
     - os: osx
-      rvm: 2.2.8
+      rvm: 2.2.9
       env: LIBEDIT=false
     - os: osx
-      rvm: 2.2.8
+      rvm: 2.2.9
       env: LIBEDIT=true
     - os: osx
       rvm: 2.3.5
@@ -62,10 +62,10 @@ matrix:
       rvm: 2.3.5
       env: LIBEDIT=true
     - os: osx
-      rvm: 2.4.2
+      rvm: 2.4.3
       env: LIBEDIT=false
     - os: osx
-      rvm: 2.4.2
+      rvm: 2.4.3
       env: LIBEDIT=true
     - os: osx
       rvm: ruby-head
@@ -75,22 +75,22 @@ matrix:
       env: NOCOV=1 LIBEDIT=true
 
     - os: linux
-      rvm: 2.2.8
+      rvm: 2.2.9
       env: LIBEDIT=false
     - os: linux
-      rvm: 2.2.8
+      rvm: 2.2.9
       env: LIBEDIT=true
     - os: linux
-      rvm: 2.3.5
+      rvm: 2.3.6
       env: LIBEDIT=false
     - os: linux
-      rvm: 2.3.5
+      rvm: 2.3.6
       env: LIBEDIT=true
     - os: linux
-      rvm: 2.4.2
+      rvm: 2.4.3
       env: LIBEDIT=false
     - os: linux
-      rvm: 2.4.2
+      rvm: 2.4.3
       env: LIBEDIT=true
     - os: linux
       rvm: ruby-head
@@ -100,22 +100,22 @@ matrix:
       env: NOCOV=1 LIBEDIT=true
 
     - ox: linux
-      rvm: 2.2.8-clang
+      rvm: 2.2.9-clang
       env: LIBEDIT=false
     - ox: linux
-      rvm: 2.2.8-clang
+      rvm: 2.2.9-clang
       env: LIBEDIT=true
     - os: linux
-      rvm: 2.3.5-clang
+      rvm: 2.3.6-clang
       env: LIBEDIT=false
     - os: linux
-      rvm: 2.3.5-clang
+      rvm: 2.3.6-clang
       env: LIBEDIT=true
     - os: linux
-      rvm: 2.4.2-clang
+      rvm: 2.4.3-clang
       env: LIBEDIT=false
     - os: linux
-      rvm: 2.4.2-clang
+      rvm: 2.4.3-clang
       env: LIBEDIT=true
     - os: linux
       rvm: ruby-head-clang
