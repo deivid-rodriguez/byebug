@@ -59,7 +59,7 @@ gem install byebug
 Or if you use `bundler`,
 
 ```shell
-bundle add byebug
+bundle add byebug --group "development, test"
 ```
 
 ## Usage
