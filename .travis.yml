@@ -69,10 +69,10 @@ matrix:
       env: LIBEDIT=true
     - os: osx
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
+      env: NOCOV=true LIBEDIT=false
     - os: osx
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
+      env: NOCOV=true LIBEDIT=true
 
     - os: linux
       rvm: 2.2.9
@@ -94,10 +94,10 @@ matrix:
       env: LIBEDIT=true
     - os: linux
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
+      env: NOCOV=true LIBEDIT=false
     - os: linux
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
+      env: NOCOV=true LIBEDIT=true
 
     - ox: linux
       rvm: 2.2.9-clang
