@@ -14,10 +14,19 @@ steps: &steps
         name: Run CI checks
         command: ./script/ci.sh
 
+    - run:
+        name: Save coverage
+        command: cc-test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
+
+    - persist_to_workspace:
+        root: ./coverage
+        paths:
+          - codeclimate.*.json
+
     - save_cache:
         key: dependencies-{{ checksum "Gemfile.lock" }}
         paths:
-          - /byebug/.vendor/bundle
+          - .vendor/bundle
 
 jobs:
   2.2.9-readline-gcc:
@@ -80,6 +89,21 @@ jobs:
       - image: deividrodriguez/byebug:2.4.3-libedit-clang
     <<: *steps
 
+  upload_coverage:
+    docker:
+      - image: deividrodriguez/byebug:2.4.3-readline-clang
+        environment:
+          - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
+
+    steps:
+      - attach_workspace:
+          at: ./coverage
+      - run:
+          name: Upload coverage results to Code Climate
+          command: |
+            cc-test-reporter sum-coverage coverage/codeclimate.*.json
+            cc-test-reporter upload-coverage
+
 workflows:
   version: 2
 
@@ -99,3 +123,20 @@ workflows:
       - 2.4.3-libedit-gcc
       - 2.4.3-readline-clang
       - 2.4.3-libedit-clang
+
+      - upload_coverage:
+          requires:
+            - 2.2.9-readline-gcc
+            - 2.2.9-libedit-gcc
+            - 2.2.9-readline-clang
+            - 2.2.9-libedit-clang
+
+            - 2.3.6-readline-gcc
+            - 2.3.6-libedit-gcc
+            - 2.3.6-readline-clang
+            - 2.3.6-libedit-clang
+
+            - 2.4.3-readline-gcc
+            - 2.4.3-libedit-gcc
+            - 2.4.3-readline-clang
+            - 2.4.3-libedit-clang
