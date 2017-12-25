@@ -1,0 +1,91 @@
+---
+
+version: 2
+
+steps: &steps
+  steps:
+    - checkout
+    - run:
+        name: Run CI checks
+        command: ./script/ci.sh
+
+jobs:
+  2.2.9-readline-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.2.9-readline-gcc
+    <<: *steps
+
+  2.2.9-libedit-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.2.9-libedit-gcc
+    <<: *steps
+
+  2.2.9-readline-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.2.9-readline-clang
+    <<: *steps
+
+  2.2.9-libedit-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.2.9-libedit-clang
+    <<: *steps
+
+  2.3.6-readline-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.3.6-readline-gcc
+    <<: *steps
+
+  2.3.6-libedit-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.3.6-libedit-gcc
+    <<: *steps
+
+  2.3.6-readline-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.3.6-readline-clang
+    <<: *steps
+
+  2.3.6-libedit-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.3.6-libedit-clang
+    <<: *steps
+
+  2.4.3-readline-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.4.3-readline-gcc
+    <<: *steps
+
+  2.4.3-libedit-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.4.3-libedit-gcc
+    <<: *steps
+
+  2.4.3-readline-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.4.3-readline-clang
+    <<: *steps
+
+  2.4.3-libedit-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.4.3-libedit-clang
+    <<: *steps
+
+workflows:
+  version: 2
+
+  test:
+    jobs:
+      - 2.2.9-readline-gcc
+      - 2.2.9-libedit-gcc
+      - 2.2.9-readline-clang
+      - 2.2.9-libedit-clang
+
+      - 2.3.6-readline-gcc
+      - 2.3.6-libedit-gcc
+      - 2.3.6-readline-clang
+      - 2.3.6-libedit-clang
+
+      - 2.4.3-readline-gcc
+      - 2.4.3-libedit-gcc
+      - 2.4.3-readline-clang
+      - 2.4.3-libedit-clang
