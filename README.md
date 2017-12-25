@@ -31,18 +31,6 @@ and offers many of the traditional debugging features such as:
 * Tracking: Keeping track of the different values of your variables or the
   different lines executed by your program.
 
-## Build Status
-
-Linux and macOS [![Tra][tra]][tra_url]
-
-Windows [![Vey][vey]][vey_url]
-
-[tra]: https://api.travis-ci.org/deivid-rodriguez/byebug.svg?branch=master
-[vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
-
-[tra_url]: https://travis-ci.org/deivid-rodriguez/byebug
-[vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
-
 ## Requirements
 
 * Recommended:
