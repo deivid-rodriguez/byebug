@@ -10,25 +10,26 @@ cache:
 language: ruby
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       brew update;
       brew install shellcheck clang-format@3.8;
       ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
-      if [ "$LIBEDIT" == "true" ]; then
+      if [ "$LIBEDIT" = "true" ]; then
         brew install libedit;
       fi
     fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       sudo apt-get install shellcheck;
-      if [ "$LIBEDIT" == "true" ]; then
+      if [ "$LIBEDIT" = "true" ]; then
         sudo apt-get install libedit-dev;
       fi
     fi
 
 install:
-  - if [ "$LIBEDIT" == "true" ]; then
-      rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit
-                                           --rubygems ignore;
+  - if [ "$LIBEDIT" = "true" ]; then
+      rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
+    else
+      rvm reinstall "$TRAVIS_RUBY_VERSION";
     fi
 
 before_script:
@@ -37,7 +38,7 @@ before_script:
 
 script:
   - script/ci.sh
-  - if [[ $TRAVIS_RUBY_VERSION =~ ruby-head* ]]; then
+  - if [ "$TRAVIS_RUBY_VERSION" != "ruby-head" ] && [ "$TRAVIS_RUBY_VERSION" != "ruby-head-clang" ]; then
       bundle exec codeclimate-test-reporter;
     fi
 
@@ -69,10 +70,10 @@ matrix:
       env: LIBEDIT=true
     - os: osx
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
+      env: NOCOV=true LIBEDIT=false
     - os: osx
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
+      env: NOCOV=true LIBEDIT=true
 
     - os: linux
       rvm: 2.2.9
@@ -94,10 +95,10 @@ matrix:
       env: LIBEDIT=true
     - os: linux
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
+      env: NOCOV=true LIBEDIT=false
     - os: linux
       rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
+      env: NOCOV=true LIBEDIT=true
 
     - ox: linux
       rvm: 2.2.9-clang
