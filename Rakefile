@@ -58,6 +58,20 @@ task :sign_hooks do
   system('bundle exec overcommit --sign pre-commit')
 end
 
+desc 'Build docker images'
+task :build_docker_images do
+  require_relative 'docker/manager'
+
+  Docker::Manager.build_all
+end
+
+desc 'Push docker images to dockerhub'
+task :push_docker_images do
+  require_relative 'docker/manager'
+
+  Docker::Manager.push_all
+end
+
 task default: %i[compile test overcommit]
 
 #
