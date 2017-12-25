@@ -109,6 +109,56 @@ module Byebug
   end
 
   #
+  # Tests adding breakpoints to empty methods
+  #
+  class BreakAtEmptyMethodsTest < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+          1:  module Byebug
+          2:    #
+          3:    # Toy class to test breakpoints
+          4:    #
+          5:    class #{example_class}
+          6:      def self.a
+          7:      end
+          8:
+          9:      def b
+         10:
+         11:      end
+         12:      def c; end
+         13:    end
+         14:
+         15:    byebug
+         16:
+         17:    #{example_class}.new.b
+         18:    #{example_class}.a
+         19:    #{example_class}.new.c
+         20:  end
+      RUBY
+    end
+
+    def test_break_with_instance_method_stops_at_correct_place
+      # instance method #b has extra empty line intentionally
+      # to test lineno 10 is not displayed.
+      enter "break #{example_class}#b", 'cont'
+
+      debug_code(program) { assert_location example_path, 9 }
+    end
+
+    def test_break_with_oneline_instance_method_stops_at_correct_place
+      enter "break #{example_class}#c", 'cont'
+
+      debug_code(program) { assert_location example_path, 12 }
+    end
+
+    def test_break_with_class_method_stops_at_correct_place
+      enter "break #{example_class}.a", 'cont'
+
+      debug_code(program) { assert_location example_path, 6 }
+    end
+  end
+
+  #
   # Tests adding breakpoints to lines
   #
   class BreakAtLinesTest < TestCase
