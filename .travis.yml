@@ -1,7 +1,7 @@
 ---
 
-dist: trusty
-sudo: required
+os: osx
+sudo: false
 
 cache:
   directories:
@@ -9,20 +9,25 @@ cache:
 
 language: ruby
 
+rvm:
+  - 2.2.9
+  - 2.3.5
+  - 2.4.3
+  - ruby-head
+
+env:
+  global: "NOCOV=true"
+
+  matrix:
+    - "LIBEDIT=true"
+    - "LIBEDIT=false"
+
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew update;
-      brew install shellcheck clang-format@3.8;
-      ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
-      if [ "$LIBEDIT" == "true" ]; then
-        brew install libedit;
-      fi
-    fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo apt-get install shellcheck;
-      if [ "$LIBEDIT" == "true" ]; then
-        sudo apt-get install libedit-dev;
-      fi
+  - brew update;
+  - brew install shellcheck clang-format@3.8;
+  - ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
+  - if [ "$LIBEDIT" == "true" ]; then
+      brew install libedit;
     fi
 
 install:
@@ -37,92 +42,12 @@ before_script:
 
 script:
   - script/ci.sh
-  - if [[ $TRAVIS_RUBY_VERSION =~ ruby-head* ]]; then
-      bundle exec codeclimate-test-reporter;
-    fi
 
 matrix:
   fast_finish: true
 
   allow_failures:
     - rvm: ruby-head
-    - rvm: ruby-head-clang
-
-  include:
-    - os: osx
-      rvm: 2.2.9
-      env: LIBEDIT=false
-    - os: osx
-      rvm: 2.2.9
-      env: LIBEDIT=true
-    - os: osx
-      rvm: 2.3.5
-      env: LIBEDIT=false
-    - os: osx
-      rvm: 2.3.5
-      env: LIBEDIT=true
-    - os: osx
-      rvm: 2.4.3
-      env: LIBEDIT=false
-    - os: osx
-      rvm: 2.4.3
-      env: LIBEDIT=true
-    - os: osx
-      rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
-    - os: osx
-      rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
-
-    - os: linux
-      rvm: 2.2.9
-      env: LIBEDIT=false
-    - os: linux
-      rvm: 2.2.9
-      env: LIBEDIT=true
-    - os: linux
-      rvm: 2.3.6
-      env: LIBEDIT=false
-    - os: linux
-      rvm: 2.3.6
-      env: LIBEDIT=true
-    - os: linux
-      rvm: 2.4.3
-      env: LIBEDIT=false
-    - os: linux
-      rvm: 2.4.3
-      env: LIBEDIT=true
-    - os: linux
-      rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=false
-    - os: linux
-      rvm: ruby-head
-      env: NOCOV=1 LIBEDIT=true
-
-    - ox: linux
-      rvm: 2.2.9-clang
-      env: LIBEDIT=false
-    - ox: linux
-      rvm: 2.2.9-clang
-      env: LIBEDIT=true
-    - os: linux
-      rvm: 2.3.6-clang
-      env: LIBEDIT=false
-    - os: linux
-      rvm: 2.3.6-clang
-      env: LIBEDIT=true
-    - os: linux
-      rvm: 2.4.3-clang
-      env: LIBEDIT=false
-    - os: linux
-      rvm: 2.4.3-clang
-      env: LIBEDIT=true
-    - os: linux
-      rvm: ruby-head-clang
-      env: NOCOV=true LIBEDIT=false
-    - os: linux
-      rvm: ruby-head-clang
-      env: NOCOV=true LIBEDIT=true
 
 branches:
   only:
@@ -132,7 +57,3 @@ notifications:
   email:
     on_success: change
     on_failure: change
-
-addons:
-  code_climate:
-    repo_token: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
