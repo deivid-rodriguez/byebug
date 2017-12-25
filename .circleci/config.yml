@@ -5,9 +5,19 @@ version: 2
 steps: &steps
   steps:
     - checkout
+
+    - restore_cache:
+        keys:
+          - dependencies-{{ checksum "Gemfile.lock" }}
+
     - run:
         name: Run CI checks
         command: ./script/ci.sh
+
+    - save_cache:
+        key: dependencies-{{ checksum "Gemfile.lock" }}
+        paths:
+          - /byebug/.vendor/bundle
 
 jobs:
   2.2.9-readline-gcc:
