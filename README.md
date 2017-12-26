@@ -37,6 +37,7 @@ and offers many of the traditional debugging features such as:
   * MRI 2.2.4 or higher.
   * MRI 2.3.0 or higher.
   * MRI 2.4.0 or higher.
+  * MRI 2.5.0 or higher.
 
 ## Install
 

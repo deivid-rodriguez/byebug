@@ -89,9 +89,29 @@ jobs:
       - image: deividrodriguez/byebug:2.4.3-libedit-clang
     <<: *steps
 
+  2.5.0-readline-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.5.0-readline-gcc
+    <<: *steps
+
+  2.5.0-libedit-gcc:
+    docker:
+      - image: deividrodriguez/byebug:2.5.0-libedit-gcc
+    <<: *steps
+
+  2.5.0-readline-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.5.0-readline-clang
+    <<: *steps
+
+  2.5.0-libedit-clang:
+    docker:
+      - image: deividrodriguez/byebug:2.5.0-libedit-clang
+    <<: *steps
+
   upload_coverage:
     docker:
-      - image: deividrodriguez/byebug:2.4.3-readline-clang
+      - image: deividrodriguez/byebug:2.5.0-readline-clang
         environment:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
@@ -124,6 +144,11 @@ workflows:
       - 2.4.3-readline-clang
       - 2.4.3-libedit-clang
 
+      - 2.5.0-readline-gcc
+      - 2.5.0-libedit-gcc
+      - 2.5.0-readline-clang
+      - 2.5.0-libedit-clang
+
       - upload_coverage:
           requires:
             - 2.2.9-readline-gcc
@@ -140,3 +165,8 @@ workflows:
             - 2.4.3-libedit-gcc
             - 2.4.3-readline-clang
             - 2.4.3-libedit-clang
+
+            - 2.5.0-readline-gcc
+            - 2.5.0-libedit-gcc
+            - 2.5.0-readline-clang
+            - 2.5.0-libedit-clang

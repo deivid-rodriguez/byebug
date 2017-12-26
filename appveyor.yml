@@ -37,6 +37,8 @@ environment:
     - ruby_version: 23-x64
     - ruby_version: '24'
     - ruby_version: 24-x64
+    - ruby_version: '25'
+    - ruby_version: 25-x64
     - ruby_version: _trunk
 
   codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408'
