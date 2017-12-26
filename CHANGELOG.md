@@ -5,6 +5,7 @@
 ### Added
 
 * Show valid breakpoint locations when invalid location given (#393, @ko1).
+* Ruby 2.5.0 support (#397, @yui-knk).
 
 ## 9.1.0 - 2017-08-22
 
