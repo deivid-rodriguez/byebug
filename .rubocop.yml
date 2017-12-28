@@ -16,9 +16,6 @@ TrivialAccessors:
 Style/ModuleFunction:
   EnforcedStyle: extend_self
 
-Style/ExtendSelf:
-  Enabled: false
-
 # https://github.com/bbatsov/rubocop/pull/72
 Style/AsciiComments:
   Enabled: false
