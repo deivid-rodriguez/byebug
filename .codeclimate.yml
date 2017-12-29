@@ -2,6 +2,26 @@
 
 version: "2"
 
+checks:
+  file-lines:
+    config:
+      threshold: 370
+
+  method-complexity:
+    config:
+      threshold: 17
+
+  method-count:
+    config:
+      threshold: 37
+
+  return-statements:
+    config:
+      threshold: 5
+
+  similar-code:
+    enabled: false
+
 plugins:
   grep:
     enabled: true
@@ -38,5 +58,7 @@ plugins:
     enabled: true
 
 exclude_patterns:
-  - coverage/
   - .bundle/
+  - coverage/
+  - doc/
+  - tmp/

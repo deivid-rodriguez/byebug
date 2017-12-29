@@ -10,6 +10,21 @@ AllCops:
 Layout/ExtraSpacing:
   AllowForAlignment: false
 
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
 TrivialAccessors:
   ExactNameMatch: true
 
@@ -26,5 +41,3 @@ Style/RaiseArgs:
 
 EmptyMethod:
   EnforcedStyle: expanded
-
-inherit_from: .rubocop_todo.yml
