@@ -47,14 +47,14 @@ module Byebug
         components = Pathname(fullpath).each_filename.to_a
         return fullpath if components.size <= 2
 
-        File.join('...', components[-3..-1])
+        File.join("...", components[-3..-1])
       end
 
       #
       # True for special files like -e, false otherwise
       #
       def virtual_file?(name)
-        ['(irb)', '-e', '(byebug)', '(eval)'].include?(name)
+        ["(irb)", "-e", "(byebug)", "(eval)"].include?(name)
       end
     end
   end

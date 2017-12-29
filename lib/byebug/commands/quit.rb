@@ -1,4 +1,4 @@
-require 'byebug/command'
+require "byebug/command"
 
 module Byebug
   #
@@ -25,11 +25,11 @@ module Byebug
     end
 
     def self.short_description
-      'Exits byebug'
+      "Exits byebug"
     end
 
     def execute
-      return unless @match[1] || confirm(pr('quit.confirmations.really'))
+      return unless @match[1] || confirm(pr("quit.confirmations.really"))
 
       processor.interface.autosave
       processor.interface.close

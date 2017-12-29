@@ -9,10 +9,10 @@ module LinterMixin
 
     applicable_files.each do |file|
       if clean?(file)
-        print '.'
+        print "."
       else
         offenses << file
-        print 'F'
+        print "F"
       end
     end
 
@@ -45,7 +45,7 @@ class CLangFormatLinter
   include LinterMixin
 
   def applicable_files
-    Dir.glob('ext/byebug/*.[ch]')
+    Dir.glob("ext/byebug/*.[ch]")
   end
 
   def fixing_cmd(offenses)
@@ -66,7 +66,7 @@ class ExecutableLinter
   include LinterMixin
 
   def applicable_files
-    Open3.capture2('git ls-files')[0].split
+    Open3.capture2("git ls-files")[0].split
   end
 
   def clean?(file)

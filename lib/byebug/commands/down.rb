@@ -1,7 +1,7 @@
-require 'pathname'
-require 'byebug/command'
-require 'byebug/helpers/frame'
-require 'byebug/helpers/parse'
+require "pathname"
+require "byebug/command"
+require "byebug/helpers/frame"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -28,11 +28,11 @@ module Byebug
     end
 
     def self.short_description
-      'Moves to a lower frame in the stack trace'
+      "Moves to a lower frame in the stack trace"
     end
 
     def execute
-      pos, err = parse_steps(@match[1], 'Down')
+      pos, err = parse_steps(@match[1], "Down")
       return errmsg(err) unless pos
 
       jump_frames(-pos)

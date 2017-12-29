@@ -1,5 +1,5 @@
-require 'socket'
-require 'byebug/processors/control_processor'
+require "socket"
+require "byebug/processors/control_processor"
 
 #
 # Remote debugging functionality.
@@ -74,11 +74,11 @@ module Byebug
     #
     # Connects to the remote byebug
     #
-    def start_client(host = 'localhost', port = PORT)
+    def start_client(host = "localhost", port = PORT)
       interface = LocalInterface.new
-      puts 'Connecting to byebug server...'
+      puts "Connecting to byebug server..."
       socket = TCPSocket.new(host, port)
-      puts 'Connected.'
+      puts "Connected."
 
       while (line = socket.gets)
         case line
@@ -99,8 +99,8 @@ module Byebug
     end
 
     def parse_host_and_port(host_port_spec)
-      location = host_port_spec.split(':')
-      location[1] ? [location[0], location[1].to_i] : ['localhost', location[0]]
+      location = host_port_spec.split(":")
+      location[1] ? [location[0], location[1].to_i] : ["localhost", location[0]]
     end
   end
 end

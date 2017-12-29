@@ -1,4 +1,4 @@
-require 'byebug/command'
+require "byebug/command"
 
 module Byebug
   #
@@ -18,16 +18,16 @@ module Byebug
     end
 
     def self.short_description
-      'Stops tracing a global variable'
+      "Stops tracing a global variable"
     end
 
     def execute
       var = @match[1]
       if global_variables.include?(:"#{var}")
         untrace_var(:"#{var}")
-        puts pr('trace.messages.undo', var: var)
+        puts pr("trace.messages.undo", var: var)
       else
-        errmsg pr('trace.errors.not_global', var: var)
+        errmsg pr("trace.errors.not_global", var: var)
       end
     end
   end

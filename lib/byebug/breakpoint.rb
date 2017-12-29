@@ -72,7 +72,7 @@ module Byebug
     def self.potential_lines_without_trace_points(iseq, lines)
       iseq.disasm.each_line do |line|
         res = /^\d+ (?<insn>\w+)\s+.+\(\s*(?<lineno>\d+)\)$/.match(line)
-        next unless res && res[:insn] == 'trace'
+        next unless res && res[:insn] == "trace"
 
         lines[res[:lineno].to_i] = true
       end
@@ -102,7 +102,7 @@ module Byebug
     #
     def inspect
       meths = %w[id pos source expr hit_condition hit_count hit_value enabled?]
-      values = meths.map { |field| "#{field}: #{send(field)}" }.join(', ')
+      values = meths.map { |field| "#{field}: #{send(field)}" }.join(", ")
       "#<Byebug::Breakpoint #{values}>"
     end
   end

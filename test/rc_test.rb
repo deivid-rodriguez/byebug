@@ -1,17 +1,17 @@
-require 'test_helper'
-require 'byebug/runner'
+require "test_helper"
+require "byebug/runner"
 
 module Byebug
   class RcTest < TestCase
     def setup
       super
 
-      example_file.write('sleep 0')
+      example_file.write("sleep 0")
       example_file.close
     end
 
     def test_run_with_no_rc_option
-      with_command_line('bin/byebug', '--no-rc', example_path) do
+      with_command_line("bin/byebug", "--no-rc", example_path) do
         refute_calls(Byebug, :run_init_script) { non_stop_runner.run }
       end
     end
@@ -21,16 +21,16 @@ module Byebug
     end
 
     def test_rc_file_commands_are_properly_run_by_explicit_option
-      rc_positive_test('--rc')
+      rc_positive_test("--rc")
     end
 
     def test_rc_file_commands_are_properly_run_when_home_folder_not_known
-      with_env('HOME', nil) { rc_positive_test(nil) }
+      with_env("HOME", nil) { rc_positive_test(nil) }
     end
 
     def test_rc_file_with_invalid_commands
-      with_init_file('seta callstyle long') do
-        with_command_line('bin/byebug', '--rc', example_path) do
+      with_init_file("seta callstyle long") do
+        with_command_line("bin/byebug", "--rc", example_path) do
           assert_output(nil, /Unknown command 'seta callstyle long'/) do
             non_stop_runner.run
           end
@@ -43,12 +43,12 @@ module Byebug
     def rc_positive_test(flag)
       args = [flag, example_path].compact
 
-      with_setting :callstyle, 'short' do
-        with_init_file('set callstyle long') do
-          with_command_line('bin/byebug', *args) do
+      with_setting :callstyle, "short" do
+        with_init_file("set callstyle long") do
+          with_command_line("bin/byebug", *args) do
             non_stop_runner.run
 
-            assert_equal 'long', Setting[:callstyle]
+            assert_equal "long", Setting[:callstyle]
           end
         end
       end

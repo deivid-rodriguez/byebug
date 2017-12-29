@@ -22,11 +22,11 @@ module Byebug
       end
 
       def self.short_description
-        'Status of user settable breakpoints'
+        "Status of user settable breakpoints"
       end
 
       def execute
-        return puts('No breakpoints.') if Byebug.breakpoints.empty?
+        return puts("No breakpoints.") if Byebug.breakpoints.empty?
 
         breakpoints = Byebug.breakpoints.sort_by(&:id)
 
@@ -34,11 +34,11 @@ module Byebug
           indices = @match[1].split(/ +/).map(&:to_i)
           breakpoints = breakpoints.select { |b| indices.member?(b.id) }
           if breakpoints.empty?
-            return errmsg('No breakpoints found among list given')
+            return errmsg("No breakpoints found among list given")
           end
         end
 
-        puts 'Num Enb What'
+        puts "Num Enb What"
         breakpoints.each { |b| info_breakpoint(b) }
       end
 
@@ -46,18 +46,18 @@ module Byebug
 
       def info_breakpoint(brkpt)
         interp = format(
-          '%-<id>3d %-<status>3s at %<file>s:%<line>s%<expression>s',
+          "%-<id>3d %-<status>3s at %<file>s:%<line>s%<expression>s",
           id: brkpt.id,
-          status: brkpt.enabled? ? 'y' : 'n',
+          status: brkpt.enabled? ? "y" : "n",
           file: brkpt.source,
           line: brkpt.pos,
-          expression: brkpt.expr.nil? ? '' : " if #{brkpt.expr}"
+          expression: brkpt.expr.nil? ? "" : " if #{brkpt.expr}"
         )
         puts interp
         hits = brkpt.hit_count
         return unless hits > 0
 
-        s = hits > 1 ? 's' : ''
+        s = hits > 1 ? "s" : ""
         puts "  breakpoint already hit #{hits} time#{s}"
       end
     end

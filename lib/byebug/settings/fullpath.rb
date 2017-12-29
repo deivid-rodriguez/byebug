@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -8,7 +8,7 @@ module Byebug
     DEFAULT = true
 
     def banner
-      'Display full file names in backtraces'
+      "Display full file names in backtraces"
     end
   end
 end

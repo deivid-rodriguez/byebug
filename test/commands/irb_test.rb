@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'minitest/mock'
+require "test_helper"
+require "minitest/mock"
 
 module Byebug
   #
@@ -20,7 +20,7 @@ module Byebug
     def test_irb_command_starts_an_irb_session
       interface.stub(:instance_of?, true) do
         assert_calls(IRB, :start) do
-          enter 'irb'
+          enter "irb"
           debug_code(minimal_program)
         end
       end
@@ -29,7 +29,7 @@ module Byebug
     def test_autoirb_calls_irb_automatically_after_every_stop
       interface.stub(:instance_of?, true) do
         assert_calls(IRB, :start) do
-          enter 'set autoirb', 'cont 5', 'set noautoirb'
+          enter "set autoirb", "cont 5", "set noautoirb"
           debug_code(program)
         end
       end

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -69,14 +69,14 @@ module Byebug
 
     def test_thread_list_marks_current_thread_with_a_plus_sign
       file = example_path
-      enter 'cont 13', 'thread list', 'lock << 0'
+      enter "cont 13", "thread list", "lock << 0"
       debug_code(program)
 
       check_output_includes(/\+ \d+ #<Thread:0x\h+ run> #{file}:13/)
     end
 
     def test_thread_list_shows_all_available_threads
-      enter 'cont 24', 'thread list', 'lock << 0'
+      enter "cont 24", "thread list", "lock << 0"
       debug_code(program)
 
       check_output_includes(
@@ -87,31 +87,31 @@ module Byebug
     end
 
     def test_thread_stop_marks_thread_as_suspended
-      enter 'cont 24', -> { "thread stop #{t2_thnum}" }, 'lock << 0'
+      enter "cont 24", -> { "thread stop #{t2_thnum}" }, "lock << 0"
       debug_code(program)
 
       check_output_includes(/\$ \d+ #<Thread:/)
     end
 
     def test_thread_stop_actually_suspends_thread_execution
-      enter 'cont 24',
-            'set linetrace',
+      enter "cont 24",
+            "set linetrace",
             -> { "thread stop #{t2_thnum}" },
-            'lock << 0'
+            "lock << 0"
       debug_code(program) { Setting[:linetrace] = false }
 
       check_output_doesnt_include(/Tracing: #{example_path}:21/)
     end
 
     def test_thread_stop_shows_help_when_no_thread_number_specified
-      enter 'cont 13', 'thread stop', 'lock << 0'
+      enter "cont 13", "thread stop", "lock << 0"
       debug_code(program)
 
-      check_output_includes 'Stops the execution of the specified thread'
+      check_output_includes "Stops the execution of the specified thread"
     end
 
     def test_thread_stop_shows_error_when_trying_to_stop_current_thread
-      enter 'cont 13', -> { "thread stop #{curr_thnum}" }, 'lock << 0'
+      enter "cont 13", -> { "thread stop #{curr_thnum}" }, "lock << 0"
       debug_code(program)
 
       check_error_includes "It's the current thread"
@@ -124,10 +124,10 @@ module Byebug
         "thread stop #{t2_thnum}"
       end
 
-      enter 'cont 24',
+      enter "cont 24",
             save_second_ctx_and_stop,
             -> { "thread resume #{t2_thnum}" },
-            'lock << 0'
+            "lock << 0"
 
       debug_code(program) { assert_equal false, ctx.suspended? }
       check_output_includes(/\$ #{ctx.thnum} #<Thread:0x\h+/,
@@ -135,42 +135,42 @@ module Byebug
     end
 
     def test_thread_resume_shows_help_if_thread_number_not_specified
-      enter 'cont 13', 'thread resume', 'lock << 0'
+      enter "cont 13", "thread resume", "lock << 0"
       debug_code(program)
 
-      check_output_includes 'Resumes execution of the specified thread'
+      check_output_includes "Resumes execution of the specified thread"
     end
 
     def test_thread_resume_shows_error_when_trying_to_resume_current_thread
-      enter 'cont 13', -> { "thread resume #{curr_thnum}" }, 'lock << 0'
+      enter "cont 13", -> { "thread resume #{curr_thnum}" }, "lock << 0"
       debug_code(program)
 
       check_error_includes "It's the current thread"
     end
 
     def test_thread_resume_shows_error_if_thread_is_already_running
-      enter 'cont 24', -> { "thread resume #{t2_thnum}" }, 'lock << 0'
+      enter "cont 24", -> { "thread resume #{t2_thnum}" }, "lock << 0"
       debug_code(program)
 
-      check_error_includes 'Already running'
+      check_error_includes "Already running"
     end
 
     def test_thread_switch_changes_execution_to_another_thread
-      enter 'cont 24', -> { "thread switch #{t2_thnum}" }, 'lock << 0'
+      enter "cont 24", -> { "thread switch #{t2_thnum}" }, "lock << 0"
       debug_code(program)
 
-      check_output_includes '=> 21:         loop { sleep 0.01 }'
+      check_output_includes "=> 21:         loop { sleep 0.01 }"
     end
 
     def test_thread_switch_shows_help_if_thread_number_not_specified
-      enter 'cont 13', 'thread switch', 'lock << 0'
+      enter "cont 13", "thread switch", "lock << 0"
       debug_code(program)
 
-      check_output_includes 'Switches execution to the specified thread'
+      check_output_includes "Switches execution to the specified thread"
     end
 
     def test_thread_switch_shows_error_when_trying_to_switch_current_thread
-      enter 'cont 13', -> { "thread switch #{curr_thnum}" }, 'lock << 0'
+      enter "cont 13", -> { "thread switch #{curr_thnum}" }, "lock << 0"
       debug_code(program)
 
       check_error_includes "It's the current thread"

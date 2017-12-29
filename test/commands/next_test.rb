@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -28,31 +28,31 @@ module Byebug
     end
 
     def test_next_goes_to_the_next_line
-      enter 'next'
+      enter "next"
 
       debug_code(program) { assert_location example_path, 9 }
     end
 
     def test_n_goes_to_the_next_line
-      enter 'n'
+      enter "n"
 
       debug_code(program) { assert_location example_path, 9 }
     end
 
     def test_next_stays_in_current_frame_while_not_finished
-      enter 'next 2'
+      enter "next 2"
 
       debug_code(program) { assert_location example_path, 10 }
     end
 
     def test_next_goes_up_a_frame_when_current_frame_finishes
-      enter 'next 3'
+      enter "next 3"
 
       debug_code(program) { assert_equal 16, frame.line }
     end
 
     def test_next_does_not_stop_at_byebug_internal_frames
-      enter 'next 4'
+      enter "next 4"
 
       debug_code(program) { assert_program_finished }
     end
@@ -84,7 +84,7 @@ module Byebug
     end
 
     def test_next_works_return_inside_loop_inside_initialize
-      enter 'cont 13', 'next'
+      enter "cont 13", "next"
 
       debug_code(program) { assert_location example_path, 15 }
     end
@@ -121,7 +121,7 @@ module Byebug
     end
 
     def test_next_works_as_expected_with_define_method
-      enter 'next'
+      enter "next"
 
       debug_code(program) { assert_equal 20, frame.line }
     end
@@ -164,13 +164,13 @@ module Byebug
     end
 
     def test_next_steps_over_rescue_when_raising_from_c_method
-      enter "break Byebug::#{example_class}.raise_from_c", 'cont', 'next 2'
+      enter "break Byebug::#{example_class}.raise_from_c", "cont", "next 2"
 
       debug_code(program) { assert_equal 9, frame.line }
     end
 
     def test_next_steps_over_rescue_when_raising_from_ruby_method
-      enter "break Byebug::#{example_class}.raise_from_ruby", 'cont', 'next 2'
+      enter "break Byebug::#{example_class}.raise_from_ruby", "cont", "next 2"
 
       debug_code(program) { assert_equal 15, frame.line }
     end
@@ -210,7 +210,7 @@ module Byebug
     end
 
     def test_step_then_up_then_next_advances_in_the_upper_frame
-      enter 'step', 'up', 'next'
+      enter "step", "up", "next"
 
       debug_code(program) { assert_equal 9, frame.line }
     end
@@ -253,13 +253,13 @@ module Byebug
     end
 
     def test_next_goes_up_a_frame_if_current_frame_finishes
-      enter 'cont 19', 'next'
+      enter "cont 19", "next"
 
       debug_code(program) { assert_equal 10, frame.line }
     end
 
     def test_next_does_not_enter_other_frames_of_the_same_size
-      enter 'b 19', 'cont', 'cont', 'next'
+      enter "b 19", "cont", "cont", "next"
 
       debug_code(program) { assert_equal 9, frame.line }
     end

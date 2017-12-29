@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'minitest/mock'
+require "test_helper"
+require "minitest/mock"
 
 module Byebug
   #
@@ -12,36 +12,36 @@ module Byebug
 
     def test_quit_finishes_byebug_if_user_confirms
       faking_exit! do
-        enter 'quit', 'y'
+        enter "quit", "y"
         debug_code(minimal_program)
 
-        check_output_includes 'Really quit? (y/n)'
+        check_output_includes "Really quit? (y/n)"
       end
     end
 
     def test_quit_quits_inmediately_if_used_with_bang
       faking_exit! do
-        enter 'quit!'
+        enter "quit!"
         debug_code(minimal_program)
 
-        check_output_doesnt_include 'Really quit? (y/n)'
+        check_output_doesnt_include "Really quit? (y/n)"
       end
     end
 
     def test_quit_quits_inmediately_if_used_with_unconditionally
       faking_exit! do
-        enter 'quit unconditionally'
+        enter "quit unconditionally"
         debug_code(minimal_program)
 
-        check_output_doesnt_include 'Really quit? (y/n)'
+        check_output_doesnt_include "Really quit? (y/n)"
       end
     end
 
     def test_does_not_quit_if_user_did_not_confirm
-      enter 'quit', 'n'
+      enter "quit", "n"
       debug_code(minimal_program)
 
-      check_output_includes 'Really quit? (y/n)'
+      check_output_includes "Really quit? (y/n)"
     end
   end
 end

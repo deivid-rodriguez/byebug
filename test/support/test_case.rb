@@ -1,8 +1,8 @@
-require 'minitest'
-require 'byebug'
-require 'byebug/core'
-require 'byebug/interfaces/test_interface'
-require 'support/utils'
+require "minitest"
+require "byebug"
+require "byebug/core"
+require "byebug/interfaces/test_interface"
+require "support/utils"
 
 module Byebug
   #
@@ -15,7 +15,7 @@ module Byebug
     include Helpers::StringHelper
 
     def self.before_suite
-      Byebug.init_file = '.byebug_test_rc'
+      Byebug.init_file = ".byebug_test_rc"
 
       Context.interface = TestInterface.new
       Context.ignored_files = Context.all_files
@@ -65,14 +65,14 @@ module Byebug
     # Temporary file where code for each test is saved
     #
     def example_file
-      @example_file ||= File.new(example_path, 'w+')
+      @example_file ||= File.new(example_path, "w+")
     end
 
     #
     # Path to file where test code is saved
     #
     def example_path
-      File.join(example_folder, 'byebug_test.rb')
+      File.join(example_folder, "byebug_test.rb")
     end
 
     #
@@ -106,7 +106,7 @@ module Byebug
     private
 
     def camelized_path
-      camelize(File.basename(example_path, '.rb'))
+      camelize(File.basename(example_path, ".rb"))
     end
 
     def delete_example_file

@@ -41,9 +41,9 @@ module Byebug
 
     def inspect
       [
-        'Input:', input.join("\n"),
-        'Output:', output.join("\n"),
-        'Error:', error.join("\n")
+        "Input:", input.join("\n"),
+        "Output:", output.join("\n"),
+        "Error:", error.join("\n")
       ].join("\n")
     end
 

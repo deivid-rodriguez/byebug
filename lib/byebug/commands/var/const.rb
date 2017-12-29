@@ -1,4 +1,4 @@
-require 'byebug/helpers/eval'
+require "byebug/helpers/eval"
 
 module Byebug
   #
@@ -26,23 +26,23 @@ module Byebug
       end
 
       def self.short_description
-        'Shows constants of an object.'
+        "Shows constants of an object."
       end
 
       def execute
         obj = warning_eval(str_obj)
         unless obj.is_a?(Module)
-          return errmsg(pr('variable.errors.not_module', object: str_obj))
+          return errmsg(pr("variable.errors.not_module", object: str_obj))
         end
 
         constants = warning_eval("#{str_obj}.constants")
-        puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, 'constant')
+        puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, "constant")
       end
 
       private
 
       def str_obj
-        @str_obj ||= @match[1] || 'self.class'
+        @str_obj ||= @match[1] || "self.class"
       end
     end
   end

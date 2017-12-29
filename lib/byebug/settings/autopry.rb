@@ -1,5 +1,5 @@
-require 'byebug/setting'
-require 'byebug/commands/pry'
+require "byebug/setting"
+require "byebug/commands/pry"
 
 module Byebug
   #
@@ -13,7 +13,7 @@ module Byebug
     end
 
     def banner
-      'Invoke Pry on every stop'
+      "Invoke Pry on every stop"
     end
 
     def value=(v)

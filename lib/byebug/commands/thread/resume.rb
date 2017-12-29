@@ -1,4 +1,4 @@
-require 'byebug/helpers/thread'
+require "byebug/helpers/thread"
 
 module Byebug
   #
@@ -24,7 +24,7 @@ module Byebug
       end
 
       def self.short_description
-        'Resumes execution of the specified thread'
+        "Resumes execution of the specified thread"
       end
 
       def execute
@@ -34,7 +34,7 @@ module Byebug
         return errmsg(err) if err
 
         unless context.suspended?
-          return errmsg(pr('thread.errors.already_running'))
+          return errmsg(pr("thread.errors.already_running"))
         end
 
         context.resume

@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -7,7 +7,7 @@ module Byebug
   #
   class StackOnErrorSetting < Setting
     def banner
-      'Display stack trace when `eval` raises an exception'
+      "Display stack trace when `eval` raises an exception"
     end
   end
 end

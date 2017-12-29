@@ -1,4 +1,4 @@
-require 'byebug/processors/command_processor'
+require "byebug/processors/command_processor"
 
 module Byebug
   #
@@ -16,7 +16,7 @@ module Byebug
     # Prompt shown before reading a command.
     #
     def prompt
-      '(byebug:ctrl) '
+      "(byebug:ctrl) "
     end
   end
 end

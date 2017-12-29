@@ -1,4 +1,4 @@
-require 'byebug/helpers/var'
+require "byebug/helpers/var"
 
 module Byebug
   #
@@ -26,7 +26,7 @@ module Byebug
       end
 
       def self.short_description
-        'Information about arguments of the current scope'
+        "Information about arguments of the current scope"
       end
 
       def execute

@@ -1,7 +1,7 @@
-require 'forwardable'
+require "forwardable"
 
-require 'byebug/helpers/reflection'
-require 'byebug/command_list'
+require "byebug/helpers/reflection"
+require "byebug/command_list"
 
 module Byebug
   #

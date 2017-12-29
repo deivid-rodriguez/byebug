@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -29,7 +29,7 @@ module Byebug
     def execute
       history = processor.interface.history
 
-      size, = get_int(@match[:num_cmds], 'history', 1) if @match[:num_cmds]
+      size, = get_int(@match[:num_cmds], "history", 1) if @match[:num_cmds]
 
       puts history.to_s(size)
     end

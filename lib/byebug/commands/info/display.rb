@@ -22,22 +22,22 @@ module Byebug
       end
 
       def self.short_description
-        'List of expressions to display when program stops'
+        "List of expressions to display when program stops"
       end
 
       def execute
         unless Byebug.displays.find { |d| d[0] }
-          return puts('There are no auto-display expressions now.')
+          return puts("There are no auto-display expressions now.")
         end
 
-        puts 'Auto-display expressions now in effect:'
-        puts 'Num Enb Expression'
+        puts "Auto-display expressions now in effect:"
+        puts "Num Enb Expression"
 
         Byebug.displays.each_with_index do |d, i|
           interp = format(
-            '%<number>3d: %<status>s  %<expression>s',
+            "%<number>3d: %<status>s  %<expression>s",
             number: i + 1,
-            status: d[0] ? 'y' : 'n',
+            status: d[0] ? "y" : "n",
             expression: d[1]
           )
 

@@ -1,4 +1,4 @@
-require 'byebug/helpers/toggle'
+require "byebug/helpers/toggle"
 
 module Byebug
   #
@@ -29,11 +29,11 @@ module Byebug
       end
 
       def self.short_description
-        'Enable all or specific breakpoints'
+        "Enable all or specific breakpoints"
       end
 
       def execute
-        enable_disable_breakpoints('enable', @match[1])
+        enable_disable_breakpoints("enable", @match[1])
       end
     end
   end

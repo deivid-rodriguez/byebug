@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -8,7 +8,7 @@ module Byebug
     DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_save")
 
     def banner
-      'File where settings are saved to. Default: ~/.byebug_save'
+      "File where settings are saved to. Default: ~/.byebug_save"
     end
 
     def to_s

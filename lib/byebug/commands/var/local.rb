@@ -1,4 +1,4 @@
-require 'byebug/helpers/var'
+require "byebug/helpers/var"
 
 module Byebug
   #
@@ -26,7 +26,7 @@ module Byebug
       end
 
       def self.short_description
-        'Shows local variables in current scope.'
+        "Shows local variables in current scope."
       end
 
       def execute

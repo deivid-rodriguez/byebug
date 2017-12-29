@@ -1,7 +1,7 @@
-require 'byebug/subcommands'
+require "byebug/subcommands"
 
-require 'byebug/commands/disable/breakpoints'
-require 'byebug/commands/disable/display'
+require "byebug/commands/disable/breakpoints"
+require "byebug/commands/disable/display"
 
 module Byebug
   #
@@ -25,7 +25,7 @@ module Byebug
     end
 
     def self.short_description
-      'Disables breakpoints or displays'
+      "Disables breakpoints or displays"
     end
   end
 end

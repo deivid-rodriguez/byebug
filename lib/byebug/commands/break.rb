@@ -1,8 +1,8 @@
-require 'byebug/command'
-require 'byebug/helpers/eval'
-require 'byebug/helpers/file'
-require 'byebug/helpers/parse'
-require 'byebug/source_file_formatter'
+require "byebug/command"
+require "byebug/helpers/eval"
+require "byebug/helpers/file"
+require "byebug/helpers/parse"
+require "byebug/source_file_formatter"
 
 module Byebug
   #
@@ -32,20 +32,20 @@ module Byebug
     end
 
     def self.short_description
-      'Sets breakpoints in the source code'
+      "Sets breakpoints in the source code"
     end
 
     def execute
       return puts(help) unless @match[1]
 
       b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
-      return errmsg(pr('break.errors.location')) unless b
+      return errmsg(pr("break.errors.location")) unless b
 
       if syntax_valid?(@match[2])
-        return puts(pr('break.created', id: b.id, file: b.source, line: b.pos))
+        return puts(pr("break.created", id: b.id, file: b.source, line: b.pos))
       end
 
-      errmsg(pr('break.errors.expression', expr: @match[2]))
+      errmsg(pr("break.errors.expression", expr: @match[2]))
       b.enabled = false
     end
 
@@ -76,22 +76,22 @@ module Byebug
 
       k && k.is_a?(Module) ? k.name : str
     rescue StandardError
-      errmsg('Warning: breakpoint source is not yet defined')
+      errmsg("Warning: breakpoint source is not yet defined")
       str
     end
 
     def add_line_breakpoint(file, line)
-      raise(pr('break.errors.source', file: file)) unless File.exist?(file)
+      raise(pr("break.errors.source", file: file)) unless File.exist?(file)
 
       fullpath = File.realpath(file)
 
       if line > n_lines(file)
-        raise(pr('break.errors.far_line', lines: n_lines(file), file: fullpath))
+        raise(pr("break.errors.far_line", lines: n_lines(file), file: fullpath))
       end
 
       unless Breakpoint.potential_line?(fullpath, line)
         msg = pr(
-          'break.errors.line',
+          "break.errors.line",
           file: fullpath,
           line: line,
           valid_breakpoints: valid_breakpoints_for(fullpath, line)
@@ -105,7 +105,7 @@ module Byebug
 
     def valid_breakpoints_for(path, line)
       potential_lines = Breakpoint.potential_lines(path)
-      annotator = ->(n) { potential_lines.include?(n) ? '[B]' : '   ' }
+      annotator = ->(n) { potential_lines.include?(n) ? "[B]" : "   " }
       source_file_formatter = SourceFileFormatter.new(path, annotator)
 
       source_file_formatter.lines_around(line).join.chomp

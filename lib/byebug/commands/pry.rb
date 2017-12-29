@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/eval'
+require "byebug/command"
+require "byebug/helpers/eval"
 
 module Byebug
   #
@@ -21,18 +21,18 @@ module Byebug
     end
 
     def self.short_description
-      'Starts a Pry session'
+      "Starts a Pry session"
     end
 
     def execute
       unless processor.interface.instance_of?(LocalInterface)
-        return errmsg(pr('base.errors.only_local'))
+        return errmsg(pr("base.errors.only_local"))
       end
 
       begin
-        require 'pry'
+        require "pry"
       rescue LoadError
-        return errmsg(pr('pry.errors.not_installed'))
+        return errmsg(pr("pry.errors.not_installed"))
       end
 
       Pry.start(context.frame._binding)

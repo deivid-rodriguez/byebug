@@ -22,11 +22,11 @@ module Byebug
       end
 
       def self.short_description
-        'Information about the current status of the debugged program.'
+        "Information about the current status of the debugged program."
       end
 
       def execute
-        puts 'Program stopped. '
+        puts "Program stopped. "
         format_stop_reason context.stop_reason
       end
 
@@ -37,9 +37,9 @@ module Byebug
         when :step
           puts "It stopped after stepping, next'ing or initial start."
         when :breakpoint
-          puts 'It stopped at a breakpoint.'
+          puts "It stopped at a breakpoint."
         when :catchpoint
-          puts 'It stopped at a catchpoint.'
+          puts "It stopped at a catchpoint."
         end
       end
     end

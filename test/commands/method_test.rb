@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -35,26 +35,26 @@ module Byebug
     end
 
     def test_method_shows_instance_methods_of_a_class
-      enter 'cont 7', "method #{example_class}"
+      enter "cont 7", "method #{example_class}"
       debug_code(program)
 
-      check_output_includes('bla')
-      check_output_doesnt_include('foo')
+      check_output_includes("bla")
+      check_output_doesnt_include("foo")
     end
 
     def test_m_shows_an_error_if_specified_object_is_not_a_class_or_module
-      enter 'm a'
+      enter "m a"
       debug_code(program)
 
-      check_output_includes 'Should be Class/Module: a'
+      check_output_includes "Should be Class/Module: a"
     end
 
     def test_method_instance_shows_methods_of_object
-      enter 'cont 23', 'method instance a'
+      enter "cont 23", "method instance a"
       debug_code(program)
 
-      check_output_includes('bla')
-      check_output_doesnt_include('foo')
+      check_output_includes("bla")
+      check_output_doesnt_include("foo")
     end
   end
 end

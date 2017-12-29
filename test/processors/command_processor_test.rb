@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'timeout'
+require "test_helper"
+require "timeout"
 
 module Byebug
   #
@@ -19,19 +19,19 @@ module Byebug
     end
 
     def test_syntax_error_gives_a_prompt_back
-      enter 'd.'
+      enter "d."
 
       debug_code(program) { assert_equal 4, frame.line }
     end
 
     def test_empty_command_repeats_last_command
-      enter 'n', ''
+      enter "n", ""
 
       debug_code(program) { assert_equal 6, frame.line }
     end
 
     def test_multiple_commands_are_executed_sequentially
-      enter 'n ; n'
+      enter "n ; n"
 
       debug_code(program) { assert_equal 6, frame.line }
     end
@@ -43,7 +43,7 @@ module Byebug
     end
 
     def test_shows_an_error_for_unknown_subcommands_by_default
-      enter 'info unknown_subcmd'
+      enter "info unknown_subcmd"
       debug_code(minimal_program)
 
       check_error_includes \
@@ -80,24 +80,24 @@ module Byebug
     end
 
     def test_arithmetic_expressions_are_evaluated_on_unknown_input
-      enter '3 + 2'
+      enter "3 + 2"
       debug_code(minimal_program)
 
-      check_output_includes '5'
+      check_output_includes "5"
     end
 
     def test_ruby_code_is_evaluated_on_unknown_input
-      enter '[5, 6, 7].inject(&:+)'
+      enter "[5, 6, 7].inject(&:+)"
       debug_code(minimal_program)
 
-      check_output_includes '18'
+      check_output_includes "18"
     end
 
     def test_arrays_are_properly_printed_after_evaluation_of_unknown_input
-      enter '(1..3).to_a'
+      enter "(1..3).to_a"
       debug_code(minimal_program)
 
-      check_output_includes '[1, 2, 3]'
+      check_output_includes "[1, 2, 3]"
     end
 
     def test_eval_evaluates_just_like_without_it
@@ -114,22 +114,22 @@ module Byebug
       enter "#{example_class}.new"
       debug_code(program)
 
-      check_output_includes 'A very cool string representation'
+      check_output_includes "A very cool string representation"
     end
 
     def test_shows_backtrace_on_error_if_stack_on_error_enabled
-      enter 'set stack_on_error', '2 / 0'
+      enter "set stack_on_error", "2 / 0"
       debug_code(minimal_program)
 
       check_error_includes(/\s*from \S+:in \`eval\'/)
-      check_error_doesnt_include 'ZeroDivisionError Exception: divided by 0'
+      check_error_doesnt_include "ZeroDivisionError Exception: divided by 0"
     end
 
     def test_shows_only_exception_if_stack_on_error_disabled
-      enter 'set stack_on_error off', '2 / 0'
+      enter "set stack_on_error off", "2 / 0"
       debug_code(minimal_program)
 
-      check_error_includes 'ZeroDivisionError Exception: divided by 0'
+      check_error_includes "ZeroDivisionError Exception: divided by 0"
       check_error_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
     end
   end
@@ -164,7 +164,7 @@ module Byebug
     end
 
     def test_does_not_show_incorrect_info_about_having_stopped_at_breakpoint
-      enter 'b 7', 'cont', 'm2'
+      enter "b 7", "cont", "m2"
       debug_code(program)
 
       # Regular breakpoint: OK
@@ -206,10 +206,10 @@ module Byebug
     end
 
     def test_shows_error_when_current_source_location_is_unknown
-      enter 'step'
+      enter "step"
 
-      debug_code(program) { assert_equal '(eval)', frame.file }
-      check_error_includes 'No sourcefile available for (eval)'
+      debug_code(program) { assert_equal "(eval)", frame.file }
+      check_error_includes "No sourcefile available for (eval)"
     end
   end
 
@@ -265,28 +265,28 @@ module Byebug
     end
 
     def test_properly_evaluates_expressions_using_threads
-      enter 'Timeout::timeout(60) { 1 }'
+      enter "Timeout::timeout(60) { 1 }"
       debug_code(minimal_program)
 
-      check_output_includes '1'
+      check_output_includes "1"
     end
 
     def test_does_not_hang_when_evaluating_expressions_using_new_threads
-      enter 'Thread.new {}.join'
+      enter "Thread.new {}.join"
       debug_code(minimal_program)
 
       check_output_includes(/#<Thread:0x.*>/)
     end
 
     def test_does_not_hang_when_evaluating_expressions_using_old_threads
-      enter 'worker.calc(10)'
+      enter "worker.calc(10)"
       debug_code(program)
 
-      check_output_includes '100'
+      check_output_includes "100"
     end
 
     def test_thread_context_is_kept
-      enter 'Thread.current[:greeting] = "hi!"', 'Thread.current[:greeting]'
+      enter 'Thread.current[:greeting] = "hi!"', "Thread.current[:greeting]"
       debug_code(minimal_program)
 
       check_output_includes '"hi!"', # After set

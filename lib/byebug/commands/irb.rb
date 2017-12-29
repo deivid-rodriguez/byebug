@@ -1,6 +1,6 @@
-require 'byebug/command'
-require 'irb'
-require 'English'
+require "byebug/command"
+require "irb"
+require "English"
 
 module Byebug
   #
@@ -22,12 +22,12 @@ module Byebug
     end
 
     def self.short_description
-      'Starts an IRB session'
+      "Starts an IRB session"
     end
 
     def execute
       unless processor.interface.instance_of?(LocalInterface)
-        return errmsg(pr('base.errors.only_local'))
+        return errmsg(pr("base.errors.only_local"))
       end
 
       # @todo IRB tries to parse $ARGV so we must clear it (see #197). Add a

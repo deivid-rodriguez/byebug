@@ -1,7 +1,7 @@
-require 'forwardable'
+require "forwardable"
 
-require 'byebug/helpers/eval'
-require 'byebug/errors'
+require "byebug/helpers/eval"
+require "byebug/errors"
 
 module Byebug
   #
@@ -103,7 +103,7 @@ module Byebug
     # Prompt shown before reading a command.
     #
     def prompt
-      '(byebug) '
+      "(byebug) "
     end
 
     def before_repl
@@ -127,7 +127,7 @@ module Byebug
         cmd = interface.read_command(prompt)
         return if cmd.nil?
 
-        next if cmd == ''
+        next if cmd == ""
 
         run_cmd(cmd)
       end

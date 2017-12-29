@@ -1,5 +1,5 @@
-require 'byebug/setting'
-require 'byebug/commands/list'
+require "byebug/setting"
+require "byebug/commands/list"
 
 module Byebug
   #
@@ -13,7 +13,7 @@ module Byebug
     end
 
     def banner
-      'Invoke list command on every stop'
+      "Invoke list command on every stop"
     end
 
     def value=(v)

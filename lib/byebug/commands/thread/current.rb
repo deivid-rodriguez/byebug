@@ -1,4 +1,4 @@
-require 'byebug/helpers/thread'
+require "byebug/helpers/thread"
 
 module Byebug
   #
@@ -24,7 +24,7 @@ module Byebug
       end
 
       def self.short_description
-        'Shows current thread information'
+        "Shows current thread information"
       end
 
       def execute

@@ -1,4 +1,4 @@
-require 'byebug/printers/base'
+require "byebug/printers/base"
 
 module Byebug
   module Printers
@@ -8,7 +8,7 @@ module Byebug
     class Plain < Base
       def print(path, args = {})
         message = translate(locate(path), args)
-        tail = parts(path).include?('confirmations') ? ' (y/n) ' : "\n"
+        tail = parts(path).include?("confirmations") ? " (y/n) " : "\n"
         message << tail
       end
 
@@ -21,11 +21,11 @@ module Byebug
       end
 
       def print_variables(variables, *_)
-        print_collection('variable.variable', variables) do |(key, value), _|
-          value = value.nil? ? 'nil' : value.to_s
+        print_collection("variable.variable", variables) do |(key, value), _|
+          value = value.nil? ? "nil" : value.to_s
           if "#{key} = #{value}".size > Setting[:width]
             key_size = "#{key} = ".size
-            value = value[0..Setting[:width] - key_size - 4] + '...'
+            value = value[0..Setting[:width] - key_size - 4] + "..."
           end
 
           { key: key, value: value }
@@ -35,7 +35,7 @@ module Byebug
       private
 
       def contents_files
-        [File.join(__dir__, 'texts', 'plain.yml')] + super
+        [File.join(__dir__, "texts", "plain.yml")] + super
       end
     end
   end

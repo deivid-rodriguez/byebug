@@ -1,4 +1,4 @@
-require 'byebug/command'
+require "byebug/command"
 
 module Byebug
   #
@@ -23,7 +23,7 @@ module Byebug
     end
 
     def self.short_description
-      'Shows byebug settings'
+      "Shows byebug settings"
     end
 
     def self.help
@@ -35,7 +35,7 @@ module Byebug
       return puts(help) unless key
 
       setting = Setting.find(key)
-      return errmsg(pr('show.errors.unknown_setting', key: key)) unless setting
+      return errmsg(pr("show.errors.unknown_setting", key: key)) unless setting
 
       puts Setting.settings[setting.to_sym]
     end

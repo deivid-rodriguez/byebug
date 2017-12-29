@@ -1,4 +1,4 @@
-require 'byebug/helpers/parse'
+require "byebug/helpers/parse"
 
 module Byebug
   module Helpers
@@ -9,22 +9,22 @@ module Byebug
       include ParseHelper
 
       def enable_disable_breakpoints(is_enable, args)
-        raise pr('toggle.errors.no_breakpoints') if Breakpoint.none?
+        raise pr("toggle.errors.no_breakpoints") if Breakpoint.none?
 
         select_breakpoints(is_enable, args).each do |b|
-          enabled = (is_enable == 'enable')
+          enabled = (is_enable == "enable")
           if enabled && !syntax_valid?(b.expr)
-            raise pr('toggle.errors.expression', expr: b.expr)
+            raise pr("toggle.errors.expression", expr: b.expr)
           end
 
-          puts pr('toggle.messages.toggled', bpnum: b.id,
-                                             endis: enabled ? 'en' : 'dis')
+          puts pr("toggle.messages.toggled", bpnum: b.id,
+                                             endis: enabled ? "en" : "dis")
           b.enabled = enabled
         end
       end
 
       def enable_disable_display(is_enable, args)
-        raise pr('toggle.errors.no_display') if n_displays.zero?
+        raise pr("toggle.errors.no_display") if n_displays.zero?
 
         selected_displays = args ? args.split(/ +/) : [1..n_displays + 1]
 
@@ -32,7 +32,7 @@ module Byebug
           pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
           raise err unless err.nil?
 
-          Byebug.displays[pos - 1][0] = (is_enable == 'enable')
+          Byebug.displays[pos - 1][0] = (is_enable == "enable")
         end
       end
 

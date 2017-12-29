@@ -1,5 +1,5 @@
-require 'forwardable'
-require 'byebug/helpers/string'
+require "forwardable"
+require "byebug/helpers/string"
 
 module Byebug
   #
@@ -47,7 +47,7 @@ module Byebug
     end
 
     def arguments
-      @match[0].split(' ').drop(1).join(' ')
+      @match[0].split(" ").drop(1).join(" ")
     end
 
     def_delegators :'self.class', :help, :match
@@ -77,10 +77,10 @@ module Byebug
       #
       def to_s
         name
-          .split('::')
-          .map { |n| n.gsub(/Command$/, '').downcase if n =~ /Command$/ }
+          .split("::")
+          .map { |n| n.gsub(/Command$/, "").downcase if n =~ /Command$/ }
           .compact
-          .join(' ')
+          .join(" ")
       end
 
       def columnize(width)

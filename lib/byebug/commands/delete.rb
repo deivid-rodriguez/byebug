@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -27,12 +27,12 @@ module Byebug
     end
 
     def self.short_description
-      'Deletes breakpoints'
+      "Deletes breakpoints"
     end
 
     def execute
       unless @match[1]
-        if confirm(pr('break.confirmations.delete_all'))
+        if confirm(pr("break.confirmations.delete_all"))
           Byebug.breakpoints.clear
         end
 
@@ -40,14 +40,14 @@ module Byebug
       end
 
       @match[1].split(/ +/).each do |number|
-        pos, err = get_int(number, 'Delete', 1)
+        pos, err = get_int(number, "Delete", 1)
 
         return errmsg(err) unless pos
 
         if Breakpoint.remove(pos)
-          puts(pr('break.messages.breakpoint_deleted', pos: pos))
+          puts(pr("break.messages.breakpoint_deleted", pos: pos))
         else
-          errmsg(pr('break.errors.no_breakpoint_delete', pos: pos))
+          errmsg(pr("break.errors.no_breakpoint_delete", pos: pos))
         end
       end
     end

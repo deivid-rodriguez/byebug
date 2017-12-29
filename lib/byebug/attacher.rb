@@ -7,7 +7,7 @@ module Byebug
   # events occur. Before entering byebug the init script is read.
   #
   def self.attach
-    require 'byebug/core'
+    require "byebug/core"
 
     unless started?
       self.mode = :attached

@@ -6,7 +6,7 @@ module Byebug
     module FrameHelper
       def switch_to_frame(frame)
         new_frame = index_from_start(frame)
-        return frame_err('c_frame') if Frame.new(context, new_frame).c_frame?
+        return frame_err("c_frame") if Frame.new(context, new_frame).c_frame?
 
         adjust_frame(new_frame)
       end
@@ -18,8 +18,8 @@ module Byebug
       private
 
       def adjust_frame(new_frame)
-        return frame_err('too_low') if new_frame >= context.stack_size
-        return frame_err('too_high') if new_frame < 0
+        return frame_err("too_low") if new_frame >= context.stack_size
+        return frame_err("too_high") if new_frame < 0
 
         context.frame = new_frame
         processor.prev_line = nil

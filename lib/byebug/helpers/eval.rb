@@ -56,7 +56,7 @@ module Byebug
       private
 
       def safe_eval(str, binding)
-        binding.eval(str.gsub(/\Aeval /, ''), '(byebug)', 1)
+        binding.eval(str.gsub(/\Aeval /, ""), "(byebug)", 1)
       rescue StandardError, ScriptError => e
         yield(e)
       end
@@ -64,7 +64,7 @@ module Byebug
       def msg(e)
         msg = Setting[:stack_on_error] ? error_msg(e) : warning_msg(e)
 
-        pr('eval.exception', text_message: msg)
+        pr("eval.exception", text_message: msg)
       end
 
       def error_msg(e)
@@ -117,7 +117,7 @@ module Byebug
       def safe_to_s(var)
         var.to_s
       rescue StandardError
-        '*Error in evaluation*'
+        "*Error in evaluation*"
       end
     end
   end

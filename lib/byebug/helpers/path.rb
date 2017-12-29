@@ -5,19 +5,19 @@ module Byebug
     #
     module PathHelper
       def bin_file
-        @bin_file ||= File.join(root_path, 'bin', 'byebug')
+        @bin_file ||= File.join(root_path, "bin", "byebug")
       end
 
       def root_path
-        @root_path ||= File.expand_path(File.join('..', '..', '..'), __dir__)
+        @root_path ||= File.expand_path(File.join("..", "..", ".."), __dir__)
       end
 
       def lib_files
-        @lib_files ||= glob_for('lib')
+        @lib_files ||= glob_for("lib")
       end
 
       def test_files
-        @test_files ||= glob_for('test')
+        @test_files ||= glob_for("test")
       end
 
       def gem_files
@@ -31,7 +31,7 @@ module Byebug
       private
 
       def glob_for(dir)
-        Dir.glob(File.join(root_path, dir, '**', '*.rb'))
+        Dir.glob(File.join(root_path, dir, "**", "*.rb"))
       end
     end
   end

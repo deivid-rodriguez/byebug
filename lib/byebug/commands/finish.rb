@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -29,12 +29,12 @@ module Byebug
     end
 
     def self.short_description
-      'Runs the program until frame returns'
+      "Runs the program until frame returns"
     end
 
     def execute
       if @match[1]
-        n_frames, err = get_int(@match[1], 'finish', 0, max_frames - 1)
+        n_frames, err = get_int(@match[1], "finish", 0, max_frames - 1)
         return errmsg(err) unless n_frames
       else
         n_frames = 1
