@@ -38,23 +38,7 @@ PreCommit:
       - bin/byebug
       - script/*
 
-  HardTabs:
-    enabled: true
-
   LocalPathsInGemfile:
-    enabled: true
-
-  Mdl:
-    enabled: true
-    flags: ['-c', '.mdlrc']
-
-  RuboCop:
-    enabled: true
-
-  ShellCheck:
-    enabled: true
-
-  TrailingWhitespace:
     enabled: true
 
   YamlSyntax:
