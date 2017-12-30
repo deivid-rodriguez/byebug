@@ -51,9 +51,9 @@ end
 #
 #   $ TIMES=1 rake loop_tests
 #
-# @example Run tests 1 time for each Ruby in 2.2 and 2.3
+# @example Run tests 1 time for each Ruby in 2.4 and 2.5
 #
-#   $ TIMES=1 RUBIES=2.2,2.3 rake loop_tests
+#   $ TIMES=1 RUBIES=2.4,2.5 rake loop_tests
 #
 # @example Run tests 1 time using Ruby 2.3 and rvm
 #
@@ -62,7 +62,7 @@ end
 desc 'Runs tests continuously'
 task :loop_tests do
   iterations = (ENV['TIMES'] || '8').to_i
-  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w[2.2 2.3 2.4 2.5]
+  rubies = ENV['RUBIES'] ? ENV['RUBIES'].split(',') : %w[2.3 2.4 2.5]
   ruby_manager = ENV['MANAGER'] || 'chruby'
 
   LoopRunner.new(iterations, rubies, ruby_manager).run

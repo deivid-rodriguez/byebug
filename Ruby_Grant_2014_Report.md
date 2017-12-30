@@ -80,10 +80,7 @@ This is the list of available commands and a short explanation of its usage:
   * A mark '$' for a stopped thread.
   * An internal `id` for the thread, specific to Byebug.
   * Ruby's id and status for the thread, in the format
-    `#<Thread:0x0123456789ABCD (run|sleep)>`. In Ruby 2.2.x, also the file and
-    line number where the thread is defined are included. This feature is very
-    useful to correctly identify threads, because otherwise the only way to tell
-    which thread is which is from the order they are defined.
+    `#<Thread:0x0123456789ABCD (run|sleep)> </path/to/file>:<line_number>`.
   * Current file and line number location of the thread's execution, in the
     format `file:line`.
 
