@@ -2,6 +2,7 @@
 
 require "socket"
 require "byebug/processors/control_processor"
+require "byebug/remote/client"
 
 #
 # Remote debugging functionality.
@@ -77,32 +78,18 @@ module Byebug
     # Connects to the remote byebug
     #
     def start_client(host = "localhost", port = PORT)
-      interface = LocalInterface.new
-      puts "Connecting to byebug server at #{host}:#{port}..."
-      socket = TCPSocket.new(host, port)
-      puts "Connected."
-
-      while (line = socket.gets)
-        case line
-        when /^PROMPT (.*)$/
-          input = interface.read_command(Regexp.last_match[1])
-          break unless input
-          socket.puts input
-        when /^CONFIRM (.*)$/
-          input = interface.readline(Regexp.last_match[1])
-          break unless input
-          socket.puts input
-        else
-          puts line
-        end
-      end
-
-      socket.close
+      client.start(host, port)
     end
 
     def parse_host_and_port(host_port_spec)
       location = host_port_spec.split(":")
       location[1] ? [location[0], location[1].to_i] : ["localhost", location[0]]
+    end
+
+    private
+
+    def client
+      @client ||= Remote::Client.new(LocalInterface.new)
     end
   end
 end
