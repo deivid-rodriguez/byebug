@@ -12,6 +12,7 @@
 ## Fixed
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
+* Remote server crash when interrupting client (#141, #274).
 
 ## 9.1.0 - 2017-08-22
 

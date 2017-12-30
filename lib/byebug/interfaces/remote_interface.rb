@@ -22,17 +22,27 @@ module Byebug
       super("CONFIRM #{prompt}")
     end
 
+    def print(message)
+      super(message)
+    rescue Errno::EPIPE
+      nil
+    end
+
+    def puts(message)
+      super(message)
+    rescue Errno::EPIPE
+      nil
+    end
+
     def close
       output.close
-    rescue IOError
-      errmsg("Error closing the interface...")
     end
 
     def readline(prompt)
-      output.puts(prompt)
+      puts(prompt)
 
       result = input.gets
-      raise IOError unless result
+      return "continue" unless result
 
       result.chomp
     end
