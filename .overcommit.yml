@@ -8,16 +8,6 @@
 gemfile: Gemfile
 
 #
-# Hooks that are run against every commit message after a user has written it.
-#
-CommitMsg:
-  HardTabs:
-    enabled: true
-
-  SingleLineSubject:
-    enabled: true
-
-#
 # Hooks that are run after `git commit` is executed, before the commit message
 # editor is displayed.
 #
@@ -29,18 +19,8 @@ PreCommit:
     include: ext/byebug/*.[ch]
     flags: ['-style=file']
 
-  BundleCheck:
-    enabled: true
-
   ExecutePermissions:
     enabled: true
     exclude:
       - bin/byebug
       - script/*
-
-  LocalPathsInGemfile:
-    enabled: true
-
-  YamlSyntax:
-    enabled: true
-    required_files: true
