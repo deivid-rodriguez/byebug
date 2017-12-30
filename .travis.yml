@@ -12,6 +12,7 @@ language: ruby
 rvm:
   - 2.3.5
   - 2.4.3
+  - 2.5.0
   - ruby-head
 
 env:
@@ -35,6 +36,8 @@ install:
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
+  - gem update --system
+  - gem update --remote bundler
 
 script:
   - bin/ci.sh
