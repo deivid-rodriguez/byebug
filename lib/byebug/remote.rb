@@ -2,6 +2,7 @@
 
 require "socket"
 require "byebug/processors/control_processor"
+require "byebug/remote/server"
 require "byebug/remote/client"
 
 #
@@ -18,10 +19,14 @@ module Byebug
     attr_accessor :wait_connection
 
     # The actual port that the server is started at
-    attr_reader :actual_port
+    def actual_port
+      server.actual_port
+    end
 
     # The actual port that the control server is started at
-    attr_reader :actual_control_port
+    def actual_control_port
+      control.actual_port
+    end
 
     #
     # Interrupts the current thread
@@ -34,49 +39,16 @@ module Byebug
     # Starts the remote server main thread
     #
     def start_server(host = nil, port = PORT)
-      return if @thread
-
-      start
-
       start_control(host, port.zero? ? 0 : port + 1)
 
-      if wait_connection
-        mutex = Mutex.new
-        proceed = ConditionVariable.new
-      end
-
-      server = TCPServer.new(host, port)
-      @actual_port = server.addr[1]
-
-      yield if block_given?
-
-      @thread = DebugThread.new do
-        while (session = server.accept)
-          Context.interface = RemoteInterface.new(session)
-          mutex.synchronize { proceed.signal } if wait_connection
-        end
-      end
-
-      mutex.synchronize { proceed.wait(mutex) } if wait_connection
+      server.start(host, port)
     end
 
     #
     # Starts the remote server control thread
     #
     def start_control(host = nil, port = PORT + 1)
-      return if @control_thread
-
-      server = TCPServer.new(host, port)
-      @actual_control_port = server.addr[1]
-
-      @control_thread = DebugThread.new do
-        while (session = server.accept)
-          context = Byebug.current_context
-          interface = RemoteInterface.new(session)
-
-          ControlProcessor.new(context, interface).process_commands
-        end
-      end
+      control.start(host, port)
     end
 
     #
@@ -95,6 +67,21 @@ module Byebug
 
     def client
       @client ||= Remote::Client.new(LocalInterface.new)
+    end
+
+    def server
+      @server ||= Remote::Server.new(wait_connection: wait_connection) do |s|
+        Context.interface = RemoteInterface.new(s)
+      end
+    end
+
+    def control
+      @control ||= Remote::Server.new(wait_connection: false) do |s|
+        context = Byebug.current_context
+        interface = RemoteInterface.new(s)
+
+        ControlProcessor.new(context, interface).process_commands
+      end
     end
   end
 end
