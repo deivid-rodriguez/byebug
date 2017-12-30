@@ -138,4 +138,38 @@ module Byebug
       debug_code(program) { assert_equal 14, frame.line }
     end
   end
+
+  #
+  # Tests +finish+ functionality inside autoloaded files.
+  #
+  class FinishInsideAutoloadedFilesTest < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+         1:  autoload :ByebugBar, './byebug_bar'
+         2:
+         3:  def main
+         4:    ByebugBar
+         5:    'end of main'
+         6:  end
+         7:
+         8:  main
+         9:
+        10:  'end of program'
+      RUBY
+    end
+
+    def teardown
+      super
+
+      force_remove_const(Object, :ByebugBar)
+    end
+
+    def test_finish_inside_autoloaded_files
+      with_new_file('byebug_bar.rb', "byebug\nmodule ByebugBar; end") do
+        enter 'finish'
+
+        debug_code(program) { assert_equal 5, frame.line }
+      end
+    end
+  end
 end
