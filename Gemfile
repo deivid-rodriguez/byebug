@@ -5,7 +5,6 @@ gemspec
 gem 'chandler', '0.7.0'
 gem 'mdl', '0.4.0'
 gem 'minitest', '~> 5.11'
-gem 'overcommit', '0.41.0'
 gem 'pry', '0.11.3'
 gem 'rake', '~> 12.3'
 gem 'rake-compiler', '~> 1.0'

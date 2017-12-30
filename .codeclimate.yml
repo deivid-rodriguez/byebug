@@ -9,7 +9,7 @@ checks:
 
   method-complexity:
     config:
-      threshold: 17
+      threshold: 13
 
   method-count:
     config:

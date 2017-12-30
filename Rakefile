@@ -47,16 +47,26 @@ task :test do
   exit 1 unless MinitestRunner.new.run
 end
 
-desc 'Run overcommit hooks manually'
-task :overcommit do
-  exit 1 unless system('bundle exec overcommit --run')
+namespace :lint do
+  require_relative 'tasks/linter'
+
+  desc 'Run clang_format on C files'
+  task :clang_format do
+    puts 'Running linter on C files'
+
+    CLangFormatLinter.new.run
+  end
+
+  desc 'Check unnecessary execute permissions'
+  task :unnecessary_executables do
+    puts 'Checking for unnecessary executables'
+
+    ExecutableLinter.new.run
+  end
 end
 
-desc 'Sign overcommit hooks'
-task :sign_hooks do
-  system('bundle exec overcommit --sign')
-  system('bundle exec overcommit --sign pre-commit')
-end
+desc 'Runs lint tasks not available on codeclimate'
+task lint: ['lint:clang_format', 'lint:unnecessary_executables']
 
 desc 'Build docker images'
 task :build_docker_images do
@@ -72,7 +82,7 @@ task :push_docker_images do
   Docker::Manager.push_all
 end
 
-task default: %i[compile test overcommit]
+task default: %i[compile test lint]
 
 #
 # Custom tasks for development
