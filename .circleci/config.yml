@@ -29,26 +29,6 @@ steps: &steps
           - .vendor/bundle
 
 jobs:
-  2.2.9-readline-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.2.9-readline-gcc
-    <<: *steps
-
-  2.2.9-libedit-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.2.9-libedit-gcc
-    <<: *steps
-
-  2.2.9-readline-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.2.9-readline-clang
-    <<: *steps
-
-  2.2.9-libedit-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.2.9-libedit-clang
-    <<: *steps
-
   2.3.6-readline-gcc:
     docker:
       - image: deividrodriguez/byebug:2.3.6-readline-gcc
@@ -129,11 +109,6 @@ workflows:
 
   test:
     jobs:
-      - 2.2.9-readline-gcc
-      - 2.2.9-libedit-gcc
-      - 2.2.9-readline-clang
-      - 2.2.9-libedit-clang
-
       - 2.3.6-readline-gcc
       - 2.3.6-libedit-gcc
       - 2.3.6-readline-clang
@@ -151,11 +126,6 @@ workflows:
 
       - upload_coverage:
           requires:
-            - 2.2.9-readline-gcc
-            - 2.2.9-libedit-gcc
-            - 2.2.9-readline-clang
-            - 2.2.9-libedit-clang
-
             - 2.3.6-readline-gcc
             - 2.3.6-libedit-gcc
             - 2.3.6-readline-clang

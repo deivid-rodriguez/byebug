@@ -47,11 +47,9 @@ Windows [![Vey][vey]][vey_url]
 
 ## Requirements
 
-* Recommended:
-  * MRI 2.2.4 or higher.
-  * MRI 2.3.0 or higher.
-  * MRI 2.4.0 or higher.
-  * MRI 2.5.0 or higher.
+* Required: MRI 2.2.0 or higher.
+
+* Recommended: MRI 2.3.0 or higher.
 
 ## Install
 

@@ -953,8 +953,7 @@ We have started by debugging the `employee` thread. To do that, we switch to
 that thread using the `thread switch 3` command. The thread number is the one
 specified by `thread list`, we know this is our worker thread because `thread
 list` specifies where the thread is defined in the file (and its current
-position if the thread is currently running, although this is only available
-since Ruby 2.2.1).
+position if the thread is currently running).
 
 After that we stopped the main thread and the worker thread, using the command
 `thread stop`. We do this because we want to focus on the employee thread first

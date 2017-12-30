@@ -46,9 +46,7 @@ module Byebug
     # Removes test example file and its memoization
     #
     def clear_example_file
-      # TODO: Remove the `closed?` check once Ruby 2.2 support is dropped since
-      # it seems to be checked internally by `close`.
-      example_file.close unless example_file.closed?
+      example_file.close
 
       delete_example_file
 
