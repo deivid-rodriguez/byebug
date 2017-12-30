@@ -8,8 +8,6 @@ require "byebug/remote/client"
 #
 # Remote debugging functionality.
 #
-# @todo Refactor & add tests
-#
 module Byebug
   # Port number used for remote debugging
   PORT = 8989 unless defined?(PORT)
@@ -66,7 +64,7 @@ module Byebug
     private
 
     def client
-      @client ||= Remote::Client.new(LocalInterface.new)
+      @client ||= Remote::Client.new(Context.interface)
     end
 
     def server
