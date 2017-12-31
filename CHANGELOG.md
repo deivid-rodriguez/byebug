@@ -14,6 +14,7 @@
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
 * Remote server crash when interrupting client (#141, #274).
+* Control server thread being able to `interrupt` main thread only a single time. (#239).
 
 ## 9.1.0 - 2017-08-22
 
