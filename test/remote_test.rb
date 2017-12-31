@@ -8,21 +8,25 @@ module Byebug
   # Tests remote debugging functionality.
   #
   class RemoteTest < TestCase
-    def program
+    def self.define_test(name, &block)
+      define_method("test_#{name}", &block)
+    end
+
+    def program_with_standard_remote_debugging
       strip_line_numbers <<-RUBY
          1:  require "byebug"
-         2:  require "byebug/core"
-         3:
-         4:  module Byebug
-         5:    #
-         6:    # Toy class to test remote debugging
-         7:    #
-         8:    class #{example_class}
-         9:      def a
-        10:        3
-        11:      end
-        12:    end
-        13:
+         2:
+         3:  module Byebug
+         4:    #
+         5:    # Toy class to test remote debugging
+         6:    #
+         7:    class #{example_class}
+         8:      def a
+         9:        3
+        10:      end
+        11:    end
+        12:
+        13:    require "byebug/core"
         14:    self.wait_connection = true
         15:    self.start_server("127.0.0.1")
         16:
@@ -30,6 +34,27 @@ module Byebug
         18:
         19:    #{example_class}.new.a
         20:  end
+      RUBY
+    end
+
+    def program_with_remote_debugging_shortcut
+      strip_line_numbers <<-RUBY
+         1:  require "byebug"
+         2:
+         3:  module Byebug
+         4:    #
+         5:    # Toy class to test remote debugging
+         6:    #
+         7:    class #{example_class}
+         8:      def a
+         9:        3
+        10:      end
+        11:    end
+        12:
+        13:    remote_byebug("127.0.0.1")
+        14:
+        15:    #{example_class}.new.a
+        16:  end
       RUBY
     end
 
@@ -63,49 +88,54 @@ module Byebug
       RUBY
     end
 
-    def test_connecting_to_the_remote_debugger
-      write_program(program)
+    %w[
+      program_with_standard_remote_debugging
+      program_with_remote_debugging_shortcut
+    ].each do |code|
+      define_test("connecting_to_remote_debugger_using_#{code}") do
+        write_program(send(code))
 
-      remote_debug("quit!")
+        remote_debug("quit!")
 
-      check_output_includes \
-        "Connecting to byebug server at 127.0.0.1:8989...",
-        "Connected."
-    end
-
-    def test_interacting_with_the_remote_debugger
-      write_program(program)
-
-      remote_debug("cont 10", "cont")
-
-      check_output_includes \
-        "8:   class ByebugExampleClass",
-        "9:     def a",
-        "=> 10:       3",
-        "11:     end"
-    end
-
-    def test_interrupting_client_doesnt_abort_server
-      skip unless Process.respond_to?(:fork)
-
-      write_program(program)
-
-      i, oe, t = Open3.popen2e(
-        { "MINITEST_TEST" => __method__.to_s },
-        "ruby -rsimplecov #{example_path}"
-      )
-
-      pid = fork do
-        launch_client
+        check_output_includes \
+          "Connecting to byebug server at 127.0.0.1:8989...",
+          "Connected."
       end
 
-      sleep 1
-      Process.kill("INT", pid)
+      define_test("interacting_with_remote_debugger_using_#{code}") do
+        write_program(send(code))
 
-      assert_equal true, t.value.success?
+        remote_debug("cont 9", "cont")
 
-      i.close
-      oe.close
+        check_output_includes \
+          "7:   class ByebugExampleClass",
+          "8:     def a",
+          "=>  9:       3",
+          "10:     end"
+      end
+
+      define_test("interrupting_client_doesnt_abort_server_using_#{code}") do
+        skip unless Process.respond_to?(:fork)
+
+        write_program(send(code))
+
+        i, oe, t = Open3.popen2e(
+          { "MINITEST_TEST" => __method__.to_s },
+          "ruby -rsimplecov #{example_path}"
+        )
+
+        pid = fork do
+          launch_client
+        end
+
+        sleep 1
+        Process.kill("INT", pid)
+
+        i.close
+        oe.close
+
+        assert_equal true, t.value.success?
+      end
     end
 
     def test_interrupting_client_doesnt_abort_server_after_a_second_breakpoint
@@ -127,10 +157,10 @@ module Byebug
       sleep 1
       Process.kill("INT", pid)
 
-      assert_equal true, t.value.success?
-
       i.close
       oe.close
+
+      assert_equal true, t.value.success?
     end
 
     private

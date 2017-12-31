@@ -8,6 +8,7 @@
 * Ruby 2.5.0 support (#397, @yui-knk).
 * Log host & port when launching byebug's client in remote mode.
 * Some love & tests to remote debugging (#82).
+* `remote_byebug` shortcut to start the most common case for remote debugging (#141).
 
 ## Fixed
 

@@ -19,6 +19,13 @@ module Byebug
 
     current_context.step_out(3, true)
   end
+
+  def self.spawn(host = "localhost", port = nil)
+    require "byebug/core"
+
+    self.wait_connection = true
+    start_server(host, port || PORT)
+  end
 end
 
 #
@@ -28,6 +35,12 @@ end
 #
 module Kernel
   def byebug
+    Byebug.attach
+  end
+
+  def remote_byebug(host = "localhost", port = nil)
+    Byebug.spawn(host, port)
+
     Byebug.attach
   end
 
