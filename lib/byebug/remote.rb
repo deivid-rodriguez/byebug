@@ -36,7 +36,6 @@ module Byebug
     def start_server(host = nil, port = PORT)
       return if @thread
 
-      Context.interface = nil
       start
 
       start_control(host, port.zero? ? 0 : port + 1)
