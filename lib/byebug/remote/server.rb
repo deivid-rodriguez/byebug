@@ -22,8 +22,6 @@ module Byebug
       def start(host, port)
         return if @thread
 
-        Byebug.start
-
         if wait_connection
           mutex = Mutex.new
           proceed = ConditionVariable.new
