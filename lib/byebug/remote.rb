@@ -19,6 +19,8 @@ module Byebug
 
     # The actual port that the server is started at
     attr_accessor :actual_port
+
+    # The actual port that the control server is started at
     attr_reader :actual_control_port
 
     #
