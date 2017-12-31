@@ -62,9 +62,9 @@ module Byebug
     #
     # Starts the remote server control thread
     #
-    def start_control(host = nil, ctrl_port = PORT + 1)
+    def start_control(host = nil, port = PORT + 1)
       return @actual_control_port if @control_thread
-      server = TCPServer.new(host, ctrl_port)
+      server = TCPServer.new(host, port)
       @actual_control_port = server.addr[1]
 
       @control_thread = DebugThread.new do
