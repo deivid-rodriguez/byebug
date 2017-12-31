@@ -41,8 +41,10 @@ module Byebug
 
       start_control(host, port.zero? ? 0 : port + 1)
 
-      mutex = Mutex.new
-      proceed = ConditionVariable.new
+      if wait_connection
+        mutex = Mutex.new
+        proceed = ConditionVariable.new
+      end
 
       server = TCPServer.new(host, port)
       @actual_port = server.addr[1]
