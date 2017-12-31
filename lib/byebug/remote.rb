@@ -18,7 +18,7 @@ module Byebug
     attr_accessor :wait_connection
 
     # The actual port that the server is started at
-    attr_accessor :actual_port
+    attr_reader :actual_port
 
     # The actual port that the control server is started at
     attr_reader :actual_control_port
@@ -45,7 +45,7 @@ module Byebug
       proceed = ConditionVariable.new
 
       server = TCPServer.new(host, port)
-      self.actual_port = server.addr[1]
+      @actual_port = server.addr[1]
 
       yield if block_given?
 
