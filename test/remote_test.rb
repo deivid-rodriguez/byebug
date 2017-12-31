@@ -136,6 +136,16 @@ module Byebug
 
         assert_equal true, t.value.success?
       end
+
+      define_test("ignoring_main_server_and_control_threads_using_#{code}") do
+        write_program(send(code))
+
+        remote_debug("thread list", "cont")
+
+        check_output_includes \
+          %r{!.*/byebug/remote/server.rb},
+          %r{!.*/byebug/remote/server.rb}
+      end
     end
 
     def test_interrupting_client_doesnt_abort_server_after_a_second_breakpoint
