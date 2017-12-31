@@ -5,8 +5,7 @@
 #
 module Byebug
   #
-  # Enters byebug right before (or right after if _before_ is false) return
-  # events occur. Before entering byebug the init script is read.
+  # Starts byebug, and stops at the first line of user's code.
   #
   def self.attach
     require "byebug/core"
