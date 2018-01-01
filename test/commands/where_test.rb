@@ -93,7 +93,7 @@ module Byebug
          5:          byebug
          6:        end
          7:      end
-         8:     end
+         8:    end
          9:
         10:    #{example_full_class}.new.foo
         11:  end

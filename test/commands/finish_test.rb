@@ -150,13 +150,13 @@ module Byebug
          1:  autoload :ByebugBar, './byebug_bar'
          2:
          3:  def main
-         4:    ByebugBar
-         5:    'end of main'
+         4:    b = ByebugBar
+         5:    b
          6:  end
          7:
          8:  main
          9:
-        10:  'end of program'
+        10:  sleep 0
       RUBY
     end
 
