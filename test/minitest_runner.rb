@@ -20,7 +20,7 @@ module Byebug
     def run
       test_suites.each { |f| require File.expand_path(f) }
 
-      flags = ["--name=/#{filtered_methods.join('|')}/", *test_opts]
+      flags = ["--name=/#{filtered_methods.join('|')}/"]
 
       run_with_timeout(flags)
     end
@@ -41,12 +41,6 @@ module Byebug
       all_test_suites.include?(str)
     end
 
-    def test_opts
-      return [] unless ENV["TESTOPTS"]
-
-      ENV["TESTOPTS"].shellsplit
-    end
-
     def test_suites
       return all_test_suites if @test_suites.empty?
 
@@ -55,24 +49,32 @@ module Byebug
 
     def test_methods(str)
       if str =~ /test_.*/
-        normalize(str)
-      elsif str =~ /.*#test_.*/
-        [str]
+        filter_runnables_by_method(str)
       else
-        expand(str)
+        filter_runnables_by_class(str)
       end
     end
 
-    def normalize(str)
-      runnables.each do |runnable|
-        return "#{runnable}##{str}" if runnable.runnable_methods.include?(str)
+    def filter_runnables_by_method(str)
+      filter_runnables do |runnable|
+        "#{runnable}##{str}" if runnable.runnable_methods.include?(str)
       end
     end
 
-    def expand(str)
-      runnables.each do |runnable|
-        return runnable.runnable_methods if str == "Byebug::#{runnable}"
+    def filter_runnables_by_class(str)
+      filter_runnables do |runnable|
+        runnable.runnable_methods if runnable.name == "Byebug::#{str}"
       end
+    end
+
+    def filter_runnables
+      selected = runnables.flat_map do |runnable|
+        yield(runnable)
+      end.compact
+
+      return unless selected.any?
+
+      selected
     end
 
     def filtered_methods
