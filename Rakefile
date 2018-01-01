@@ -31,9 +31,9 @@ Rake::ExtensionTask.new("byebug", spec) { |ext| ext.lib_dir = "lib/byebug" }
 
 desc "Runs the test suite"
 task :test do
-  require_relative "bin/minitest"
+  require_relative "test/minitest_runner"
 
-  exit 1 unless MinitestRunner.new.run
+  exit 1 unless Byebug::MinitestRunner.new.run
 end
 
 namespace :lint do
