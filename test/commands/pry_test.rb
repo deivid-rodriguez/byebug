@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "pry"
 require "test_helper"
 require "minitest/mock"

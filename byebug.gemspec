@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.join(__dir__, "lib", "byebug", "version")
 
 Gem::Specification.new do |s|

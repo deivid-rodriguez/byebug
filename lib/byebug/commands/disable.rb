@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/subcommands"
 
 require "byebug/commands/disable/breakpoints"

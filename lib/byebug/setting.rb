@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/helpers/string"
 
 module Byebug
@@ -64,7 +66,7 @@ module Byebug
         output = "  List of supported settings:\n\n"
         width = settings.keys.max_by(&:size).size
         settings.each_value do |sett|
-          output << format(
+          output += format(
             "  %<name>-#{width}s -- %<description>s\n",
             name: sett.to_sym,
             description: sett.banner

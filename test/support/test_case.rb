@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "minitest"
 require "byebug"
 require "byebug/core"

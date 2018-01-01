@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Byebug
   #
   # Some custom matches for changing stuff temporarily during tests

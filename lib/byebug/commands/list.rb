@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/command"
 require "byebug/source_file_formatter"
 require "byebug/helpers/file"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Byebug
   #
   # Handles byebug's command line options

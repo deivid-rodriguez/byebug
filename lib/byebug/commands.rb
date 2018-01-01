@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/commands/break"
 require "byebug/commands/catch"
 require "byebug/commands/condition"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 module Byebug
@@ -251,7 +253,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_with_relative_path_adds_the_breakpoint
-      enter "break ./test/commands/break_test.rb:8"
+      enter "break ./test/commands/break_test.rb:3"
       debug_code(program)
 
       check_output_includes(/Created breakpoint/)
