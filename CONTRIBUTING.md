@@ -32,17 +32,15 @@ abide by its terms.
   task is composed of 3 subtasks: `bundle exec rake compile` &&
   `bundle exec rake test` && `bundle exec rake lint`.
 * If you want to run specific tests, use the provided test runner, like so:
-  * Specific test files. For example,
-    `bin/minitest_runner.rb test/commands/break_test.rb`
+  * Specific test files. For example, `bin/minitest test/commands/break_test.rb`
   * Specific test classes. For example,
-    `bin/minitest_runner.rb Byebug::BreakAtLinesTestCase`
+    `bin/minitest Byebug::BreakAtLinesTestCase`
   * Specific tests. For example,
-    `bin/minitest_runner.rb test_catch_removes_specific_catchpoint`
+    `bin/minitest test_catch_removes_specific_catchpoint`
   * Specific fully qualified tests. For example,
-    `bin/minitest_runner.rb
-    BreakAtLinesTest#test_setting_breakpoint_sets_correct_fields`
+    `bin/minitest BreakAtLinesTest#test_setting_breakpoint_sets_correct_fields`
   * You can combine any of them and you will get the union of all filters. For
-    example: `bin/minitest_runner.rb Byebug::BreakAtLinesTestCase
+    example: `bin/minitest Byebug::BreakAtLinesTestCase
     test_catch_removes_specific_catchpoint`
 
 ## Code style
