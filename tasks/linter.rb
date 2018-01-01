@@ -70,7 +70,7 @@ class ExecutableLinter
   end
 
   def clean?(file)
-    in_exec_folder = !(%r{\A(script|bin)/} =~ file).nil?
+    in_exec_folder = !(%r{\A(exe|bin)/} =~ file).nil?
     executable = File.executable?(file)
 
     (in_exec_folder && executable) || (!in_exec_folder && !executable)

@@ -7,7 +7,7 @@ module Byebug
     #
     module PathHelper
       def bin_file
-        @bin_file ||= File.join(root_path, "bin", "byebug")
+        @bin_file ||= File.join(root_path, "exe", "byebug")
       end
 
       def root_path
