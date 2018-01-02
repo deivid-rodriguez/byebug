@@ -23,8 +23,7 @@ install:
   - bundle install --jobs 3 --retry 3 --path .bundle/gems
 
 build_script:
-  - bundle exec rake clobber
-  - bundle exec rake compile
+  - bundle exec rake clobber compile
 
 test_script:
   - bundle exec rake test
