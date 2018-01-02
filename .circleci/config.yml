@@ -12,7 +12,7 @@ steps: &steps
 
     - run:
         name: Run CI checks
-        command: ./script/ci.sh
+        command: script/ci.sh
 
     - run:
         name: Save coverage
