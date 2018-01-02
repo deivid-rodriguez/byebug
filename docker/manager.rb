@@ -85,14 +85,16 @@ module Docker
 
       def release_info
         @release_info ||= YAML.safe_load(
-          Net::HTTP.get(
-            URI.parse('https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml')
-          ),
+          Net::HTTP.get(URI.parse(releases_url)),
           [Date]
         )
       end
 
       private
+
+      def releases_url
+        'https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml'
+      end
 
       def for_all_images
         VERSIONS.each do |version|

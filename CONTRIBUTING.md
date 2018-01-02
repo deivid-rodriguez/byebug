@@ -29,8 +29,8 @@ abide by its terms.
 * Make sure you compile the C-extension using `bundle exec rake compile`.
   Otherwise you won't be able to use `byebug`.
 * Run the test suite using the default rake task (`bundle exec rake`). This
-  task is composed of 2 subtasks: `bundle exec rake compile` &&
-  `bundle exec rake test`.
+  task is composed of 3 subtasks: `bundle exec rake compile` &&
+  `bundle exec rake test` && `bundle exec rake lint`.
 * If you want to run specific tests, use the provided test runner, like so:
   * Specific test files. For example,
     `script/minitest_runner.rb test/commands/break_test.rb`
@@ -47,9 +47,20 @@ abide by its terms.
 
 ## Code style
 
-* Byebug uses [overcommit][] to enforce code style. Install the git hooks using
-  `bundle exec overcommit --install`. They will review your changes before they
-  are committed, checking they are consistent with the project's code style.
+* Byebug uses [codeclimate][] to enforce code style. You can run codeclimate
+  checks locally using the [codeclimate CLI][] with `codeclimate analyze`.
+
+* It also uses some extra style checks that are not available in codeclimate.
+  You can run those using `bundle exec rake lint`. These tasks are:
+
+  * Linting of c-files using `clang-format`. Configuration is specific to
+    clang-format 3.8, you may need some extra work to get that installed on macOS,
+    see below.
+
+  * Checking correct executable bit on repository files.
+
+[codeclimate]: https://codeclimate.com/github/deivid-rodriguez/byebug
+[codeclimate CLI]: https://github.com/codeclimate/codeclimate
 
 ### Runnning `clang-format` on macOS
 
@@ -65,7 +76,6 @@ recommended to use [direnv][] to hook that older version into your shell:
 With that your `$PATH` will be updated to use older `clang-format` every time you `cd`
 into byebug source code folder. It will reverted back when you `cd` out of it as well.
 
-[overcommit]: https://github.com/brigade/overcommit/
 [direnv]: https://github.com/direnv/direnv/
 
 ## Byebug as a C-extension

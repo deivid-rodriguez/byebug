@@ -1,0 +1,64 @@
+---
+
+version: "2"
+
+checks:
+  file-lines:
+    config:
+      threshold: 370
+
+  method-complexity:
+    config:
+      threshold: 13
+
+  method-count:
+    config:
+      threshold: 25
+
+  return-statements:
+    config:
+      threshold: 5
+
+  similar-code:
+    enabled: false
+
+plugins:
+  grep:
+    enabled: true
+
+    config:
+      patterns:
+        no-trailing-whitespace:
+          pattern: \s*$
+          annotation: "Don't leave trailing whitespace"
+          severity: minor
+          categories: Style
+          path_patterns:
+            - .rubocop.yml
+            - .rubocop_todo.yml
+            - .travis.yml
+
+        no-tabs:
+          pattern: "	"
+          annotation: "Don't use hard tabs"
+          severity: minor
+          categories: Style
+          path_patterns:
+            - .rubocop.yml
+            - .rubocop_todo.yml
+            - .travis.yml
+
+  markdownlint:
+    enabled: true
+
+  rubocop:
+    enabled: true
+
+  shellcheck:
+    enabled: true
+
+exclude_patterns:
+  - .bundle/
+  - coverage/
+  - doc/
+  - tmp/
