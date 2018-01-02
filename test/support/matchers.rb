@@ -1,4 +1,4 @@
-require 'support/assertions'
+require "support/assertions"
 
 module Byebug
   #

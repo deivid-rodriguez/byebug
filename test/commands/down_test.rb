@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -34,14 +34,14 @@ module Byebug
     end
 
     def test_down_moves_down_in_the_callstack
-      enter 'up', 'down'
+      enter "up", "down"
 
       debug_code(program) { assert_equal 16, frame.line }
     end
 
     def test_down_autolists_new_source_location_when_autolist_enabled
       with_setting :autolist, true do
-        enter 'up 2', 'down'
+        enter "up 2", "down"
         debug_code(program)
 
         check_output_includes "=> 11:       integerize(str + 'x') + 5"
@@ -50,7 +50,7 @@ module Byebug
 
     def test_down_does_not_autolist_new_source_location_when_autolist_disabled
       with_setting :autolist, false do
-        enter 'up 2', 'down'
+        enter "up 2", "down"
         debug_code(program)
 
         check_output_doesnt_include "=> 11:       integerize(str + 'x') + 5"
@@ -58,13 +58,13 @@ module Byebug
     end
 
     def test_down_moves_down_in_the_callstack_a_specific_number_of_frames
-      enter 'up 3', 'down 2'
+      enter "up 3", "down 2"
 
       debug_code(program) { assert_equal 11, frame.line }
     end
 
     def test_down_skips_c_frames
-      enter 'up 3', 'down', 'frame'
+      enter "up 3", "down", "frame"
       debug_code(program)
 
       check_output_includes(
@@ -73,7 +73,7 @@ module Byebug
     end
 
     def test_down_does_not_move_if_frame_number_to_too_low
-      enter 'down'
+      enter "down"
 
       debug_code(program) { assert_equal 16, frame.line }
       check_error_includes "Can't navigate beyond the newest frame"

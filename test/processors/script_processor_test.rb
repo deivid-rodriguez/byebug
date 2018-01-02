@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -8,7 +8,7 @@ module Byebug
     include TestUtils
 
     def test_script_processor_clears_history
-      with_init_file('set callstyle long') do
+      with_init_file("set callstyle long") do
         interface = ScriptInterface.new(Byebug.init_file)
 
         previous_history = Readline::HISTORY.to_a

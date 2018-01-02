@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -6,7 +6,7 @@ module Byebug
   #
   class ScriptInterfaceTest < TestCase
     def test_initialize_wires_up_dependencies
-      with_new_tempfile('show') do |path|
+      with_new_tempfile("show") do |path|
         interface = ScriptInterface.new(path)
 
         assert_instance_of File, interface.input
@@ -16,7 +16,7 @@ module Byebug
     end
 
     def test_initialize_verbose_writes_to_stdout_and_stderr
-      with_new_tempfile('show') do |path|
+      with_new_tempfile("show") do |path|
         interface = ScriptInterface.new(path, true)
 
         assert_instance_of File, interface.input
@@ -29,7 +29,7 @@ module Byebug
       with_new_tempfile("# Run the show command\nshow\n") do |path|
         interface = ScriptInterface.new(path)
 
-        assert_equal 'show', interface.readline
+        assert_equal "show", interface.readline
       end
     end
   end

@@ -1,10 +1,10 @@
-require 'byebug/subcommands'
+require "byebug/subcommands"
 
-require 'byebug/commands/info/breakpoints'
-require 'byebug/commands/info/display'
-require 'byebug/commands/info/file'
-require 'byebug/commands/info/line'
-require 'byebug/commands/info/program'
+require "byebug/commands/info/breakpoints"
+require "byebug/commands/info/display"
+require "byebug/commands/info/file"
+require "byebug/commands/info/line"
+require "byebug/commands/info/program"
 
 module Byebug
   #
@@ -29,7 +29,7 @@ module Byebug
     end
 
     def self.short_description
-      'Shows several informations about the program being debugged'
+      "Shows several informations about the program being debugged"
     end
   end
 end

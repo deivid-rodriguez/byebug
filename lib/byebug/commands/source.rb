@@ -1,4 +1,4 @@
-require 'byebug/command'
+require "byebug/command"
 
 module Byebug
   #
@@ -23,7 +23,7 @@ module Byebug
     end
 
     def self.short_description
-      'Restores a previously saved byebug session'
+      "Restores a previously saved byebug session"
     end
 
     def execute
@@ -31,7 +31,7 @@ module Byebug
 
       file = File.expand_path(@match[1]).strip
       unless File.exist?(file)
-        return errmsg(pr('source.errors.not_found', file: file))
+        return errmsg(pr("source.errors.not_found", file: file))
       end
 
       processor.interface.read_file(file)

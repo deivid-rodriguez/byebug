@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'minitest/mock'
-require 'byebug/helpers/string'
+require "test_helper"
+require "minitest/mock"
+require "byebug/helpers/string"
 
 module Byebug
   #
@@ -40,13 +40,13 @@ module Byebug
       with_dummy_yaml do
         assert_equal \
           "plain zuu, aga gaa\n",
-          printer.print('foo.bar', zee: 'zuu', uga: 'aga')
+          printer.print("foo.bar", zee: "zuu", uga: "aga")
       end
     end
 
     def test_add_yn_to_the_confirmation_strings
       with_dummy_yaml do
-        assert_equal('Okay? (y/n) ', printer.print('foo.confirmations.okay'))
+        assert_equal("Okay? (y/n) ", printer.print("foo.confirmations.okay"))
       end
     end
 
@@ -54,7 +54,7 @@ module Byebug
       with_new_tempfile(yaml_plain) do |path_plain|
         with_new_tempfile(yaml_base) do |path_base|
           printer.stub(:contents_files, [path_plain, path_base]) do
-            assert_equal("zuu, gau\n", printer.print('foo.boo', zee: 'zuu'))
+            assert_equal("zuu, gau\n", printer.print("foo.boo", zee: "zuu"))
           end
         end
       end
@@ -62,14 +62,14 @@ module Byebug
 
     def test_error_if_there_is_no_specified_path
       with_dummy_yaml do
-        assert_raises(klass::MissedPath) { printer.print('foo.bla') }
+        assert_raises(klass::MissedPath) { printer.print("foo.bla") }
       end
     end
 
     def test_error_if_there_is_no_specified_argument
       with_dummy_yaml do
         assert_raises(klass::MissedArgument) do
-          printer.print('foo.bar', zee: 'zuu')
+          printer.print("foo.bar", zee: "zuu")
         end
       end
     end
@@ -79,8 +79,8 @@ module Byebug
         assert_equal(
           "plain 0, a gaa\nplain 1, b gaa\n",
           printer.print_collection(
-            'foo.bar',
-            [{ uga: 'a' }, { uga: 'b' }]
+            "foo.bar",
+            [{ uga: "a" }, { uga: "b" }]
           ) do |item, index|
             item.merge(zee: index)
           end

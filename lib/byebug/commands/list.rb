@@ -1,7 +1,7 @@
-require 'byebug/command'
-require 'byebug/source_file_formatter'
-require 'byebug/helpers/file'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/source_file_formatter"
+require "byebug/helpers/file"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -32,7 +32,7 @@ module Byebug
     end
 
     def self.short_description
-      'Lists lines of source code'
+      "Lists lines of source code"
     end
 
     def execute
@@ -56,10 +56,10 @@ module Byebug
     # Otherwise it's automatically chosen.
     #
     def range(input)
-      return auto_range(@match[1] || '+') unless input
+      return auto_range(@match[1] || "+") unless input
 
       b, e = parse_range(input)
-      raise('Invalid line range') unless valid_range?(b, e)
+      raise("Invalid line range") unless valid_range?(b, e)
 
       [b, e]
     end
@@ -77,7 +77,7 @@ module Byebug
     def auto_range(direction)
       prev_line = processor.prev_line
 
-      if direction == '=' || prev_line.nil?
+      if direction == "=" || prev_line.nil?
         source_file_formatter.range_around(frame.line)
       else
         source_file_formatter.range_from(move(prev_line, size, direction))
@@ -85,11 +85,11 @@ module Byebug
     end
 
     def parse_range(input)
-      first, err = get_int(lower_bound(input), 'List', 1, max_line)
+      first, err = get_int(lower_bound(input), "List", 1, max_line)
       raise(err) unless first
 
       if upper_bound(input)
-        last, err = get_int(upper_bound(input), 'List', 1, max_line)
+        last, err = get_int(upper_bound(input), "List", 1, max_line)
         raise(err) unless last
 
         last = amend_final(last)
@@ -100,7 +100,7 @@ module Byebug
       [first, last || move(first, size - 1)]
     end
 
-    def move(line, size, direction = '+')
+    def move(line, size, direction = "+")
       line.send(direction, size)
     end
 
@@ -150,7 +150,7 @@ module Byebug
     def source_file_formatter
       @source_file_formatter ||= SourceFileFormatter.new(
         frame.file,
-        ->(n) { n == frame.line ? '=>' : '  ' }
+        ->(n) { n == frame.line ? "=>" : "  " }
       )
     end
   end

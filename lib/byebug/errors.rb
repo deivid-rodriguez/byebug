@@ -17,11 +17,11 @@ module Byebug
     end
 
     def help
-      build_cmd('help', @parent)
+      build_cmd("help", @parent)
     end
 
     def build_cmd(*args)
-      args.compact.join(' ')
+      args.compact.join(" ")
     end
   end
 end

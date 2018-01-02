@@ -1,4 +1,4 @@
-require 'byebug/helpers/string'
+require "byebug/helpers/string"
 
 module Byebug
   #
@@ -28,7 +28,7 @@ module Byebug
     end
 
     def to_sym
-      name = self.class.name.gsub(/^Byebug::/, '').gsub(/Setting$/, '')
+      name = self.class.name.gsub(/^Byebug::/, "").gsub(/Setting$/, "")
       name.gsub(/(.)([A-Z])/, '\1_\2').downcase.to_sym
     end
 

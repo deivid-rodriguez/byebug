@@ -1,11 +1,11 @@
-require 'byebug/subcommands'
+require "byebug/subcommands"
 
-require 'byebug/commands/var/all'
-require 'byebug/commands/var/args'
-require 'byebug/commands/var/const'
-require 'byebug/commands/var/instance'
-require 'byebug/commands/var/local'
-require 'byebug/commands/var/global'
+require "byebug/commands/var/all"
+require "byebug/commands/var/args"
+require "byebug/commands/var/const"
+require "byebug/commands/var/instance"
+require "byebug/commands/var/local"
+require "byebug/commands/var/global"
 
 module Byebug
   #
@@ -29,7 +29,7 @@ module Byebug
     end
 
     def self.short_description
-      'Shows variables and its values'
+      "Shows variables and its values"
     end
   end
 end

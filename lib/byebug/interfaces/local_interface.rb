@@ -5,7 +5,7 @@ module Byebug
   # Interface class for standard byebug use.
   #
   class LocalInterface < Interface
-    EOF_ALIAS = 'continue'.freeze
+    EOF_ALIAS = "continue".freeze
 
     def initialize
       super()
@@ -32,13 +32,13 @@ module Byebug
     # @note Any external 'INT' traps are overriden during this method.
     #
     def with_repl_like_sigint
-      orig_handler = trap('INT') { raise Interrupt }
+      orig_handler = trap("INT") { raise Interrupt }
       yield
     rescue Interrupt
-      puts('^C')
+      puts("^C")
       retry
     ensure
-      trap('INT', orig_handler)
+      trap("INT", orig_handler)
     end
   end
 end

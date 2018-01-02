@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -29,37 +29,37 @@ module Byebug
     end
 
     def test_show_callstyle
-      enter 'show callstyle'
+      enter "show callstyle"
       debug_code(minimal_program)
 
       check_output_includes "Frame display callstyle is 'long'"
     end
 
     def test_show_listsize
-      enter 'show listsize'
+      enter "show listsize"
       debug_code(minimal_program)
 
-      check_output_includes 'Number of source lines to list is 10'
+      check_output_includes "Number of source lines to list is 10"
     end
 
     def test_show_width
       width = Setting[:width]
-      enter 'show width'
+      enter "show width"
       debug_code(minimal_program)
 
       check_output_includes "Maximum width of byebug's output is #{width}"
     end
 
     def test_show_unknown_setting
-      enter 'show bla'
+      enter "show bla"
       debug_code(minimal_program)
 
-      check_error_includes 'Unknown setting :bla'
+      check_error_includes "Unknown setting :bla"
     end
 
     def test_show_histfile
       filename = Setting[:histfile]
-      enter 'show histfile'
+      enter "show histfile"
       debug_code(minimal_program)
 
       check_output_includes "The command history file is #{filename}"
@@ -67,7 +67,7 @@ module Byebug
 
     def test_show_histsize
       max_size = Setting[:histsize]
-      enter 'show histsize'
+      enter "show histsize"
       debug_code(minimal_program)
 
       check_output_includes \
@@ -75,11 +75,11 @@ module Byebug
     end
 
     def test_show_without_arguments_displays_help_for_the_show_command
-      enter 'show'
+      enter "show"
       debug_code(minimal_program)
 
-      check_output_includes('Shows byebug settings',
-                            'List of supported settings:')
+      check_output_includes("Shows byebug settings",
+                            "List of supported settings:")
     end
   end
 end

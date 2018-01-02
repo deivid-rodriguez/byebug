@@ -1,4 +1,4 @@
-require 'byebug/helpers/file'
+require "byebug/helpers/file"
 
 module Byebug
   #
@@ -68,11 +68,11 @@ module Byebug
     # +callstyle+ setting is 'short'
     #
     def deco_class
-      Setting[:callstyle] == 'short' || _class.to_s.empty? ? '' : "#{_class}."
+      Setting[:callstyle] == "short" || _class.to_s.empty? ? "" : "#{_class}."
     end
 
     def deco_block
-      _method[/(?:block(?: \(\d+ levels\))?|rescue) in /] || ''
+      _method[/(?:block(?: \(\d+ levels\))?|rescue) in /] || ""
     end
 
     def deco_method
@@ -85,12 +85,12 @@ module Byebug
     # setting
     #
     def deco_args
-      return '' if args.empty?
+      return "" if args.empty?
 
       my_args = args.map do |arg|
         prefix, default = prefix_and_default(arg[0])
 
-        kls = use_short_style?(arg) ? '' : "##{locals[arg[1]].class}"
+        kls = use_short_style?(arg) ? "" : "##{locals[arg[1]].class}"
 
         "#{prefix}#{arg[1] || default}#{kls}"
       end
@@ -116,7 +116,7 @@ module Byebug
     # Properly formatted frame number of frame
     #
     def deco_pos
-      format('%-2d', pos)
+      format("%-2d", pos)
     end
 
     #
@@ -127,10 +127,10 @@ module Byebug
     #     marks regular frames
     #
     def mark
-      return '-->' if current?
-      return '    ͱ--' if c_frame?
+      return "-->" if current?
+      return "    ͱ--" if c_frame?
 
-      '   '
+      "   "
     end
 
     #
@@ -154,13 +154,13 @@ module Byebug
     private
 
     def c_args
-      return [] unless _self.to_s != 'main'
+      return [] unless _self.to_s != "main"
 
       _class.instance_method(_method).parameters
     end
 
     def ruby_args
-      meth_name = _binding.eval('__method__')
+      meth_name = _binding.eval("__method__")
       return [] unless meth_name
 
       meth_obj = _class.instance_method(meth_name)
@@ -170,14 +170,14 @@ module Byebug
     end
 
     def use_short_style?(arg)
-      Setting[:callstyle] == 'short' || arg[1].nil? || locals.empty?
+      Setting[:callstyle] == "short" || arg[1].nil? || locals.empty?
     end
 
     def prefix_and_default(arg_type)
-      return ['&', 'block'] if arg_type == :block
-      return ['*', 'args'] if arg_type == :rest
+      return ["&", "block"] if arg_type == :block
+      return ["*", "args"] if arg_type == :rest
 
-      ['', nil]
+      ["", nil]
     end
   end
 end

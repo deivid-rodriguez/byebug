@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH << File.expand_path(File.join('..', 'lib'), __dir__)
-$LOAD_PATH << File.expand_path(File.join('..', 'test'), __dir__)
+$LOAD_PATH << File.expand_path(File.join("..", "lib"), __dir__)
+$LOAD_PATH << File.expand_path(File.join("..", "test"), __dir__)
 
-require 'minitest'
-require 'English'
-require 'shellwords'
+require "minitest"
+require "English"
+require "shellwords"
 
 #
 # Helper class to aid running minitest
@@ -40,9 +40,9 @@ class MinitestRunner
   end
 
   def test_opts
-    return [] unless ENV['TESTOPTS']
+    return [] unless ENV["TESTOPTS"]
 
-    ENV['TESTOPTS'].shellsplit
+    ENV["TESTOPTS"].shellsplit
   end
 
   def test_suites
@@ -78,7 +78,7 @@ class MinitestRunner
   end
 
   def all_test_suites
-    Dir.glob('test/**/*_test.rb')
+    Dir.glob("test/**/*_test.rb")
   end
 
   def extract_from_argv

@@ -1,4 +1,4 @@
-require 'byebug/helpers/var'
+require "byebug/helpers/var"
 
 module Byebug
   #
@@ -26,12 +26,12 @@ module Byebug
       end
 
       def self.short_description
-        'Shows local, global and instance variables of self.'
+        "Shows local, global and instance variables of self."
       end
 
       def execute
         var_global
-        var_instance('self')
+        var_instance("self")
         var_local
       end
     end

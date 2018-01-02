@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -13,7 +13,7 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def a
-         7:        fail 'blabla'
+         7:        fail "blabla"
          8:      end
          9:    end
         10:
@@ -27,7 +27,7 @@ module Byebug
 
     def test_rises_before_exit_in_post_mortem_mode
       with_setting :post_mortem, true do
-        enter 'cont'
+        enter "cont"
 
         assert_raises(RuntimeError) { debug_code(program) }
       end
@@ -35,7 +35,7 @@ module Byebug
 
     def test_post_mortem_mode_sets_post_mortem_flag_to_true
       with_setting :post_mortem, true do
-        enter 'cont'
+        enter "cont"
 
         begin
           debug_code(program)
@@ -46,9 +46,9 @@ module Byebug
     end
 
     def test_execution_is_stopped_at_the_correct_line_after_exception
-      skip('See issue #165')
+      skip("See issue #165")
       with_setting :post_mortem, true do
-        enter 'cont'
+        enter "cont"
 
         begin
           debug_code(program)
@@ -61,7 +61,7 @@ module Byebug
     def test_command_forbidden_in_post_mortem_mode
       with_post_mortem_processor do
         with_setting :post_mortem, true do
-          enter 'help next'
+          enter "help next"
 
           begin
             debug_code(program)
@@ -75,12 +75,12 @@ module Byebug
     def test_command_permitted_in_post_mortem_mode
       with_post_mortem_processor do
         with_setting :post_mortem, true do
-          enter 'help where'
+          enter "help where"
 
           begin
             debug_code(program)
           rescue RuntimeError
-            check_output_includes 'Displays the backtrace'
+            check_output_includes "Displays the backtrace"
           end
         end
       end

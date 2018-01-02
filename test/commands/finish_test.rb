@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -40,50 +40,50 @@ module Byebug
     end
 
     def test_finish_stops_after_current_single_line_frame_is_finished
-      enter 'break 21', 'cont', 'finish'
+      enter "break 21", "cont", "finish"
 
       debug_code(program) { assert_equal 17, frame.line }
     end
 
     def test_finish_stops_after_current_multiline_frame_is_finished
-      enter 'break 16', 'cont', 'finish'
+      enter "break 16", "cont", "finish"
 
       debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_1_stops_after_current_frame_is_finished
-      enter 'break 21', 'cont', 'finish 1'
+      enter "break 21", "cont", "finish 1"
 
       debug_code(program) { assert_equal 17, frame.line }
     end
 
     def test_finish_works_for_frame_numbers_higher_than_one
-      enter 'break 21', 'cont', 'finish 2'
+      enter "break 21", "cont", "finish 2"
 
       debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_behaves_consistenly_even_if_current_frame_has_been_changed
-      enter 'break 21', 'cont', 'up', 'finish'
+      enter "break 21", "cont", "up", "finish"
 
       debug_code(program) { assert_equal 12, frame.line }
     end
 
     def test_finish_shows_an_error_if_incorrect_frame_number_specified
-      enter 'break 21', 'cont', 'finish foo'
+      enter "break 21", "cont", "finish foo"
       debug_code(program)
 
       check_error_includes '"finish" argument "foo" needs to be a number'
     end
 
     def test_finish_stays_at_the_same_line_if_incorrect_frame_number_specified
-      enter 'break 21', 'cont', 'finish foo'
+      enter "break 21", "cont", "finish foo"
 
       debug_code(program) { assert_equal 21, frame.line }
     end
 
     def test_finish_does_not_stop_in_byebug_internal_frames
-      enter 'break 21', 'cont', 'finish 4'
+      enter "break 21", "cont", "finish 4"
 
       debug_code(program) { assert_program_finished }
     end
@@ -120,20 +120,20 @@ module Byebug
     end
 
     def test_finish_0_stops_right_before_frame_returns__simple_case
-      enter 'b 7', 'cont', 'finish 0'
+      enter "b 7", "cont", "finish 0"
 
       debug_code(program) { assert_equal 8, frame.line }
     end
 
     def test_finish_0_shows_information_about_the_return_value
-      enter 'b 7', 'cont', 'finish 0'
+      enter "b 7", "cont", "finish 0"
       debug_code(program)
 
-      check_output_includes 'Return value is: [1, 4, 9, 16, 25]'
+      check_output_includes "Return value is: [1, 4, 9, 16, 25]"
     end
 
     def test_finish_0_stops_right_before_frame_returns__convoluted_case
-      enter 'b 11', 'cont', 'finish 0'
+      enter "b 11", "cont", "finish 0"
 
       debug_code(program) { assert_equal 14, frame.line }
     end
@@ -165,8 +165,8 @@ module Byebug
     end
 
     def test_finish_inside_autoloaded_files
-      with_new_file('byebug_bar.rb', "byebug\nmodule ByebugBar; end") do
-        enter 'finish'
+      with_new_file("byebug_bar.rb", "byebug\nmodule ByebugBar; end") do
+        enter "finish"
 
         debug_code(program) { assert_equal 5, frame.line }
       end

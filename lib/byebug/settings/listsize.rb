@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -9,7 +9,7 @@ module Byebug
     DEFAULT = 10
 
     def banner
-      'Set number of source lines to list by default'
+      "Set number of source lines to list by default"
     end
 
     def to_s

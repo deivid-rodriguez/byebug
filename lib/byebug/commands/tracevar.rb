@@ -1,4 +1,4 @@
-require 'byebug/command'
+require "byebug/command"
 
 module Byebug
   #
@@ -24,15 +24,15 @@ module Byebug
     end
 
     def self.short_description
-      'Enables tracing of a global variable'
+      "Enables tracing of a global variable"
     end
 
     def execute
       var = @match[1]
-      return errmsg(pr('trace.errors.needs_global_variable')) unless var
+      return errmsg(pr("trace.errors.needs_global_variable")) unless var
 
       unless global_variables.include?(:"#{var}")
-        return errmsg(pr('trace.errors.var_is_not_global', name: var))
+        return errmsg(pr("trace.errors.var_is_not_global", name: var))
       end
 
       stop = @match[2] && @match[2] !~ /nostop/
@@ -41,13 +41,13 @@ module Byebug
         trace_var(:"#{var}") { |val| on_change(var, val, stop) }
       end
 
-      puts pr('trace.messages.success', var: var)
+      puts pr("trace.messages.success", var: var)
     end
 
     private
 
     def on_change(name, value, stop)
-      puts pr('trace.messages.on_change', name: name, value: value)
+      puts pr("trace.messages.on_change", name: name, value: value)
 
       context.step_out(1, false) if stop
     end

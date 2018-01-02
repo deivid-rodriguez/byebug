@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -20,13 +20,13 @@ module Byebug
     end
 
     def test_interrupt_stops_at_the_next_statement
-      enter 'interrupt', 'continue'
+      enter "interrupt", "continue"
 
       debug_code(program) { assert_equal 6, frame.line }
     end
 
     def test_interrupt_steps_into_blocks
-      enter 'next', 'interrupt', 'continue'
+      enter "next", "interrupt", "continue"
 
       debug_code(program) { assert_equal 7, frame.line }
     end

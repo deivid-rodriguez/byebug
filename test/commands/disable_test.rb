@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -34,7 +34,7 @@ module Byebug
     end
 
     def test_disable_all_breakpoints_sets_all_enabled_flags_to_false
-      enter 'break 21', 'break 22', 'disable breakpoints'
+      enter "break 21", "break 22", "disable breakpoints"
 
       debug_code(program) do
         assert_equal false, Breakpoint.first.enabled?
@@ -43,7 +43,7 @@ module Byebug
     end
 
     def test_disable_all_breakpoints_shows_success_messages_for_all_breakpoints
-      enter 'break 21', 'break 22', 'disable breakpoints'
+      enter "break 21", "break 22", "disable breakpoints"
       debug_code(program)
 
       check_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/,
@@ -51,20 +51,20 @@ module Byebug
     end
 
     def test_disable_all_breakpoints_ignores_all_breakpoints
-      enter 'break 21', 'break 22', 'disable breakpoints', 'cont'
+      enter "break 21", "break 22", "disable breakpoints", "cont"
       debug_code(program)
 
-      check_output_doesnt_include 'Stopped by breakpoint'
+      check_output_doesnt_include "Stopped by breakpoint"
     end
 
     def test_disable_specific_breakpoints_sets_enabled_to_false
-      enter 'b 21', 'b 22', -> { "disable breakpoints #{Breakpoint.first.id}" }
+      enter "b 21", "b 22", -> { "disable breakpoints #{Breakpoint.first.id}" }
 
       debug_code(program) { assert_equal false, Breakpoint.first.enabled? }
     end
 
     def test_disable_specific_breakpoints_shows_success_message
-      enter 'break 21', 'break 22',
+      enter "break 21", "break 22",
             -> { "disable breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
 
@@ -72,14 +72,14 @@ module Byebug
     end
 
     def test_disable_specific_breakpoints_properly_ignores_them
-      enter 'break 21', 'break 22',
-            -> { "disable breakpoints #{Breakpoint.first.id}" }, 'cont'
+      enter "break 21", "break 22",
+            -> { "disable breakpoints #{Breakpoint.first.id}" }, "cont"
 
       debug_code(program) { assert_equal 22, frame.line }
     end
 
     def test_disable_with_an_incorrect_breakpoint_number_shows_error
-      enter 'break 21', 'break 22',
+      enter "break 21", "break 22",
             -> { "disable breakpoints #{Breakpoint.last.id + 1}" }
       debug_code(program)
 
@@ -88,10 +88,10 @@ module Byebug
     end
 
     def test_disable_without_an_argument_shows_help
-      enter 'disable'
+      enter "disable"
       debug_code(program)
 
-      check_output_includes 'Disables breakpoints or displays'
+      check_output_includes "Disables breakpoints or displays"
     end
   end
 end

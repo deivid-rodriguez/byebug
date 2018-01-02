@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'minitest/mock'
+require "test_helper"
+require "minitest/mock"
 
 module Byebug
   #
@@ -10,7 +10,7 @@ module Byebug
       # `Readline.readline` returns nil for Control-D
       Readline.stub(:readline, nil) do
         interface = LocalInterface.new
-        assert_equal 'continue', interface.readline('(byebug)')
+        assert_equal "continue", interface.readline("(byebug)")
       end
     end
   end

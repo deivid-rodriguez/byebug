@@ -22,7 +22,7 @@ module Byebug
       end
 
       def self.short_description
-        'Line number and file name of current position in source file.'
+        "Line number and file name of current position in source file."
       end
 
       def execute

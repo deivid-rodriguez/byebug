@@ -1,1 +1,1 @@
-require 'byebug/attacher'
+require "byebug/attacher"

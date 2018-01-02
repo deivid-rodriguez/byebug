@@ -1,4 +1,4 @@
-require 'byebug/history'
+require "byebug/history"
 
 module Byebug
   #
@@ -23,7 +23,7 @@ module Byebug
     def close
       output.close
     rescue IOError
-      errmsg('Error closing the interface...')
+      errmsg("Error closing the interface...")
     end
 
     def readline(prompt)

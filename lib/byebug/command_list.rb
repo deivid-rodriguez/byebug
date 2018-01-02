@@ -1,4 +1,4 @@
-require 'byebug/errors'
+require "byebug/errors"
 
 module Byebug
   #

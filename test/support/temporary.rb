@@ -53,7 +53,7 @@ module Byebug
     # Temporary creates a new file a yields it to the passed block
     #
     def with_new_tempfile(content)
-      file = Tempfile.new('foo')
+      file = Tempfile.new("foo")
       file.write(content)
       file.close
 
@@ -69,9 +69,9 @@ module Byebug
     #
     def with_init_file(content)
       old_init_file = Byebug.init_file
-      Byebug.init_file = '.byebug_test_rc'
+      Byebug.init_file = ".byebug_test_rc"
 
-      with_new_file(File.expand_path('.byebug_test_rc'), content) do
+      with_new_file(File.expand_path(".byebug_test_rc"), content) do
         yield
       end
     ensure
@@ -85,7 +85,7 @@ module Byebug
     # @param content [String] Content for the file
     #
     def with_new_file(name, content)
-      File.open(name, 'w') { |f| f.write(content) }
+      File.open(name, "w") { |f| f.write(content) }
 
       yield
     ensure

@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -30,7 +30,7 @@ module Byebug
     end
 
     def self.short_description
-      'Modifies byebug settings'
+      "Modifies byebug settings"
     end
 
     def self.help
@@ -43,10 +43,10 @@ module Byebug
       return puts(help) if key.nil? && value.nil?
 
       setting = Setting.find(key)
-      return errmsg(pr('set.errors.unknown_setting', key: key)) unless setting
+      return errmsg(pr("set.errors.unknown_setting", key: key)) unless setting
 
       if !setting.boolean? && value.nil?
-        err = pr('set.errors.must_specify_value', key: key)
+        err = pr("set.errors.must_specify_value", key: key)
       elsif setting.boolean?
         value, err = get_onoff(value, key =~ /^no/ ? false : true)
       elsif setting.integer?
@@ -65,12 +65,12 @@ module Byebug
       return default if arg.nil?
 
       case arg
-      when '1', 'on', 'true'
+      when "1", "on", "true"
         true
-      when '0', 'off', 'false'
+      when "0", "off", "false"
         false
       else
-        [nil, pr('set.errors.on_off', arg: arg)]
+        [nil, pr("set.errors.on_off", arg: arg)]
       end
     end
   end

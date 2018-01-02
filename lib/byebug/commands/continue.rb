@@ -1,5 +1,5 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -24,17 +24,17 @@ module Byebug
     end
 
     def self.short_description
-      'Runs until program ends, hits a breakpoint or reaches a line'
+      "Runs until program ends, hits a breakpoint or reaches a line"
     end
 
     def execute
       if @match[1]
-        num, err = get_int(@match[1], 'Continue', 0, nil)
+        num, err = get_int(@match[1], "Continue", 0, nil)
         return errmsg(err) unless num
 
         filename = File.expand_path(frame.file)
         unless Breakpoint.potential_line?(filename, num)
-          return errmsg(pr('continue.errors.unstopped_line', line: num))
+          return errmsg(pr("continue.errors.unstopped_line", line: num))
         end
 
         Breakpoint.add(filename, num)

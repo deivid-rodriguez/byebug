@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -9,7 +9,7 @@ module Byebug
     DEFAULT = true
 
     def banner
-      'Automatically save command history record on exit'
+      "Automatically save command history record on exit"
     end
   end
 end

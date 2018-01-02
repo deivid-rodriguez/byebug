@@ -24,7 +24,7 @@ module Byebug
       end
 
       def self.short_description
-        'Shows global variables.'
+        "Shows global variables."
       end
 
       def execute

@@ -35,6 +35,9 @@ Style/ModuleFunction:
 Style/AsciiComments:
   Enabled: false
 
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
 # Don't see why storing context information in the exception is a bad thing
 Style/RaiseArgs:
   Enabled: false

@@ -1,4 +1,4 @@
-require 'minitest/mock'
+require "minitest/mock"
 
 module Minitest
   #
@@ -48,7 +48,7 @@ module Minitest
     end
 
     def assert_program_finished
-      assert_nil context.backtrace, 'Expected program to have finished'
+      assert_nil context.backtrace, "Expected program to have finished"
     end
 
     def assert_calls(object, method, *expected_args, &block)
@@ -73,7 +73,7 @@ module Minitest
     def signature(method, *args)
       return method.to_s unless args.any?
 
-      [method, *args].join(' ')
+      [method, *args].join(" ")
     end
 
     def includes_in_order(collection, original_collection)

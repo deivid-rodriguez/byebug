@@ -1,12 +1,12 @@
-require 'optparse'
-require 'English'
-require 'byebug/core'
-require 'byebug/version'
-require 'byebug/helpers/bin'
-require 'byebug/helpers/parse'
-require 'byebug/helpers/string'
-require 'byebug/option_setter'
-require 'byebug/processors/control_processor'
+require "optparse"
+require "English"
+require "byebug/core"
+require "byebug/version"
+require "byebug/helpers/bin"
+require "byebug/helpers/parse"
+require "byebug/helpers/string"
+require "byebug/option_setter"
+require "byebug/processors/control_processor"
 
 module Byebug
   #
@@ -124,7 +124,7 @@ module Byebug
     def program
       @program ||= begin
                      candidate = which($ARGV.shift)
-                     candidate == which('ruby') ? which($ARGV.shift) : candidate
+                     candidate == which("ruby") ? which($ARGV.shift) : candidate
                    end
     end
 
@@ -148,7 +148,7 @@ module Byebug
     def no_script?
       return false unless $ARGV.empty?
 
-      print_error('You must specify a program to debug')
+      print_error("You must specify a program to debug")
       true
     end
 
@@ -168,7 +168,7 @@ module Byebug
     def invalid_script?
       return false if syntax_valid?(File.read(program))
 
-      print_error('The script has incorrect syntax')
+      print_error("The script has incorrect syntax")
       true
     end
 

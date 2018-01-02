@@ -5,7 +5,7 @@ module Byebug
     #
     module ThreadHelper
       def display_context(ctx)
-        puts pr('thread.context', thread_arguments(ctx))
+        puts pr("thread.context", thread_arguments(ctx))
       end
 
       def thread_arguments(ctx)
@@ -29,11 +29,11 @@ module Byebug
         ctx = Byebug.contexts.find { |c| c.thnum.to_s == thnum }
 
         err = if ctx.nil?
-                pr('thread.errors.no_thread')
+                pr("thread.errors.no_thread")
               elsif ctx == context
-                pr('thread.errors.current_thread')
+                pr("thread.errors.current_thread")
               elsif ctx.ignored?
-                pr('thread.errors.ignored', arg: thnum)
+                pr("thread.errors.ignored", arg: thnum)
               end
 
         [ctx, err]
@@ -46,19 +46,19 @@ module Byebug
         return context.location if ctx == Byebug.current_context
 
         backtrace = ctx.thread.backtrace_locations
-        return '' unless backtrace && backtrace[0]
+        return "" unless backtrace && backtrace[0]
 
         "#{backtrace[0].path}:#{backtrace[0].lineno}"
       end
 
       def status_flag(ctx)
-        return '$' if ctx.suspended?
+        return "$" if ctx.suspended?
 
-        current_thread?(ctx) ? '+' : ' '
+        current_thread?(ctx) ? "+" : " "
       end
 
       def debug_flag(ctx)
-        ctx.ignored? ? '!' : ' '
+        ctx.ignored? ? "!" : " "
       end
     end
   end

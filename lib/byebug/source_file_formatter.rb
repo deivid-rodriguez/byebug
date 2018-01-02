@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'byebug/helpers/file'
-require 'byebug/setting'
+require "byebug/helpers/file"
+require "byebug/setting"
 
 module Byebug
   #

@@ -1,5 +1,5 @@
-require 'support/matchers'
-require 'support/temporary'
+require "support/matchers"
+require "support/temporary"
 
 module Byebug
   #
@@ -92,7 +92,7 @@ module Byebug
     #   puts 'bye'
     #
     def strip_line_numbers(str_with_ruby_code)
-      str_with_ruby_code.gsub(/  *\d+: ? ?/, '')
+      str_with_ruby_code.gsub(/  *\d+: ? ?/, "")
     end
 
     #
@@ -179,7 +179,7 @@ module Byebug
     def change_line(file, lineno, new_line)
       lines = File.readlines(file).tap { |c| c[lineno - 1] = "#{new_line}\n" }
 
-      File.open(file, 'w') { |f| f.write(lines.join) }
+      File.open(file, "w") { |f| f.write(lines.join) }
     end
 
     #

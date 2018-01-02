@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
@@ -8,7 +8,7 @@ module Byebug
     DEFAULT = 256
 
     def banner
-      'Maximum number of commands that can be stored in byebug history'
+      "Maximum number of commands that can be stored in byebug history"
     end
 
     def to_s

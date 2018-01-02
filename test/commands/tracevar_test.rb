@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -32,7 +32,7 @@ module Byebug
     end
 
     def test_tracevar_tracks_global_variables
-      enter 'tracevar $VERBOSE', 'cont 19', 'untracevar $VERBOSE'
+      enter "tracevar $VERBOSE", "cont 19", "untracevar $VERBOSE"
       debug_code(program)
 
       check_output_includes \
@@ -41,26 +41,26 @@ module Byebug
     end
 
     def test_tracevar_stop_makes_program_stop_when_global_var_changes
-      enter 'tracevar $VERBOSE stop', 'cont 19', 'untracevar $VERBOSE'
+      enter "tracevar $VERBOSE stop", "cont 19", "untracevar $VERBOSE"
 
       debug_code(program) { assert_equal 18, frame.line }
     end
 
     def test_tracevar_nostop_does_not_stop_when_global_var_changes
-      enter 'tracevar $VERBOSE nostop', 'cont 19', 'untracevar $VERBOSE'
+      enter "tracevar $VERBOSE nostop", "cont 19", "untracevar $VERBOSE"
 
       debug_code(program) { assert_equal 19, frame.line }
     end
 
     def test_tracevar_shows_an_error_message_if_no_global_variable_is_specified
-      enter 'tracevar'
+      enter "tracevar"
       debug_code(program)
 
-      check_error_includes('tracevar needs a global variable name')
+      check_error_includes("tracevar needs a global variable name")
     end
 
     def test_tracevar_shows_an_error_message_if_there_is_no_such_global_var
-      enter 'tracevar $FOO'
+      enter "tracevar $FOO"
       debug_code(program)
 
       check_error_includes "'$FOO' is not a global variable."

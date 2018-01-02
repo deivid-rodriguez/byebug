@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'yaml'
+require "net/http"
+require "yaml"
 
 module Docker
   #
@@ -47,7 +47,7 @@ module Docker
           .
       COMMAND
 
-      puts(status ? '✔' : '❌')
+      puts(status ? "✔" : "❌")
     end
 
     def push
@@ -63,7 +63,7 @@ module Docker
       ]
 
       unless system(*login_cmd, out: File::NULL, err: File::NULL)
-        puts '❌'
+        puts "❌"
         return
       end
 
@@ -71,7 +71,7 @@ module Docker
         docker push #{tag}
       COMMAND
 
-      puts pushed ? '✔' : '❌'
+      puts pushed ? "✔" : "❌"
     end
 
     class << self
@@ -93,7 +93,10 @@ module Docker
       private
 
       def releases_url
-        'https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml'
+        # rubocop:disable Metrics/LineLength
+        # see https://github.com/bbatsov/rubocop/issues/5350
+        "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
+        # rubocop:enable Metrics/LineLength
       end
 
       def for_all_images
@@ -116,11 +119,11 @@ module Docker
     private
 
     def line_editor_package
-      line_editor == 'readline' ? 'libreadline-dev' : 'libedit-dev'
+      line_editor == "readline" ? "libreadline-dev" : "libedit-dev"
     end
 
     def line_editor_configure_flag
-      line_editor == 'readline' ? '' : '--enable-libedit'
+      line_editor == "readline" ? "" : "--enable-libedit"
     end
 
     def release_info
@@ -128,7 +131,7 @@ module Docker
     end
 
     def sha256
-      release_info.find { |entry| entry['version'] == version }['sha256']['xz']
+      release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
     end
 
     def tag

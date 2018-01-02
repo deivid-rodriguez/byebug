@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -34,31 +34,31 @@ module Byebug
     end
 
     def test_frame_moves_to_a_specific_frame
-      enter 'frame 2'
+      enter "frame 2"
 
       debug_code(program) { assert_equal 7, frame.line }
     end
 
     def test_frame_autolists_new_source_location_when_autolist_enabled
       with_setting :autolist, true do
-        enter 'frame 2'
+        enter "frame 2"
         debug_code(program)
 
-        check_output_includes '=>  7:       @letter = encode(letter)'
+        check_output_includes "=>  7:       @letter = encode(letter)"
       end
     end
 
     def test_frame_does_not_autolist_new_source_location_when_autolist_disabled
       with_setting :autolist, false do
-        enter 'frame 2'
+        enter "frame 2"
         debug_code(program)
 
-        check_output_doesnt_include '=>  7:       @letter = encode(letter)'
+        check_output_doesnt_include "=>  7:       @letter = encode(letter)"
       end
     end
 
     def test_frame_prints_the_callstack_when_called_without_arguments
-      enter 'up', 'frame'
+      enter "up", "frame"
       debug_code(program)
 
       check_output_includes(
@@ -67,19 +67,19 @@ module Byebug
     end
 
     def test_frame_0_sets_frame_to_the_first_one
-      enter 'up', 'frame 0'
+      enter "up", "frame 0"
 
       debug_code(program) { assert_equal 16, frame.line }
     end
 
     def test_frame_minus_one_sets_frame_to_the_last_one
-      enter 'frame -1'
+      enter "frame -1"
 
       debug_code(program) { assert_location example_path, 1 }
     end
 
     def test_frame_cannot_navigate_to_c_frames
-      enter 'frame 3'
+      enter "frame 3"
       debug_code(program)
 
       check_error_includes "Can't navigate to c-frame"

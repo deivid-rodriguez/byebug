@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Byebug
   #
@@ -34,7 +34,7 @@ module Byebug
     end
 
     def test_where_displays_current_backtrace_with_fullpaths_by_default
-      enter 'where'
+      enter "where"
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT
@@ -50,7 +50,7 @@ module Byebug
     end
 
     def test_where_displays_backtraces_using_long_callstyle_by_default
-      enter 'where'
+      enter "where"
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT
@@ -66,7 +66,7 @@ module Byebug
     end
 
     def test_where_displays_backtraces_using_short_callstyle
-      enter 'set callstyle short', 'where', 'set callstyle long'
+      enter "set callstyle short", "where", "set callstyle long"
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT
@@ -82,7 +82,7 @@ module Byebug
     end
 
     def test_where_displays_instance_exec_block_frames
-      enter 'where'
+      enter "where"
       program = strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    class #{example_full_class}
@@ -121,7 +121,7 @@ module Byebug
   unless /cygwin|mswin|mingw|darwin/ =~ RUBY_PLATFORM
     class WhereWithNotDeeplyNestedPathsTest < WhereStandardTest
       def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
-        enter 'set nofullpath', 'where', 'set fullpath'
+        enter "set nofullpath", "where", "set fullpath"
         debug_code(program)
 
         expected_output = prepare_for_regexp <<-TXT
@@ -156,7 +156,7 @@ module Byebug
     end
 
     def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
-      enter 'set nofullpath', 'where', 'set fullpath'
+      enter "set nofullpath", "where", "set fullpath"
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT

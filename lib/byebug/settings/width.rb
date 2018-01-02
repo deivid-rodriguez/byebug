@@ -1,4 +1,4 @@
-require 'byebug/setting'
+require "byebug/setting"
 
 module Byebug
   #
