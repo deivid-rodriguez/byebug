@@ -1,12 +1,7 @@
-#
-# For the `release` task
-#
 require 'bundler/gem_tasks'
-
-#
-# For automatic creation of github releases
-#
 require 'chandler/tasks'
+require 'rake/extensiontask'
+require 'yard'
 
 #
 # Add chandler as a prerequisite for `rake release`
@@ -29,17 +24,9 @@ if Gem.win_platform?
   task compile: :devkit
 end
 
-#
-# For the `compile` task
-#
-require 'rake/extensiontask'
-
 spec = Gem::Specification.load('byebug.gemspec')
 Rake::ExtensionTask.new('byebug', spec) { |ext| ext.lib_dir = 'lib/byebug' }
 
-#
-# Test task
-#
 desc 'Runs the test suite'
 task :test do
   require_relative 'script/minitest_runner'
@@ -84,8 +71,4 @@ end
 
 task default: %i[compile test lint]
 
-#
-# Generate docs
-#
-require 'yard'
 YARD::Rake::YardocTask.new
