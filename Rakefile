@@ -85,11 +85,6 @@ end
 task default: %i[compile test lint]
 
 #
-# Custom tasks for development
-#
-require_relative 'tasks/dev_utils.rb'
-
-#
 # Generate docs
 #
 require 'yard'
