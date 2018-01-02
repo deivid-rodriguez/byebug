@@ -13,7 +13,7 @@ checks:
 
   method-count:
     config:
-      threshold: 37
+      threshold: 25
 
   return-statements:
     config:
