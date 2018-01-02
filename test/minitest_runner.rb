@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift(File.expand_path(File.join("..", "lib"), __dir__))
-$LOAD_PATH.unshift(File.expand_path(File.join("..", "test"), __dir__))
+$LOAD_PATH.unshift(__dir__)
 
 require "minitest"
 require "English"
