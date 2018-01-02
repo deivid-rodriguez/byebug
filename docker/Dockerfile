@@ -57,14 +57,9 @@ RUN set -ex \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   clang-format \
-  git \
-  libffi-dev \
   shellcheck
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
-
-ENV GIT_AUTHOR_NAME='Byebug Contributor'
-ENV GIT_AUTHOR_EMAIL=byebug@example.org
 
 RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
   && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
