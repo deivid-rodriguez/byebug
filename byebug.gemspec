@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.2.0"
 
   s.files = Dir["lib/**/*.rb", "lib/**/*.yml", "ext/**/*.[ch]", "LICENSE"]
-  s.bindir = "bin"
+  s.bindir = "exe"
   s.executables = ["byebug"]
   s.extra_rdoc_files = %w[CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md]
   s.extensions = ["ext/byebug/extconf.rb"]

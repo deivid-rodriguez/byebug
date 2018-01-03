@@ -39,7 +39,7 @@ before_script:
   - git config --local user.name 'Travis CI'
 
 script:
-  - script/ci.sh
+  - bin/ci.sh
 
 matrix:
   fast_finish: true
