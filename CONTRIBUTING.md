@@ -29,8 +29,8 @@ abide by its terms.
 * Make sure you compile the C-extension using `bundle exec rake compile`.
   Otherwise you won't be able to use `byebug`.
 * Run the test suite using the default rake task (`bundle exec rake`). This
-  task is composed of 3 subtasks: `bundle exec rake compile` &&
-  `bundle exec rake test` && `bundle exec rake lint`.
+  task is composed of 3 subtasks: `bundle exec rake compile`,
+  `bundle exec rake test` & `bundle exec rake lint`.
 * If you want to run specific tests, use the provided test runner, like so:
   * Specific test files. For example, `bin/minitest test/commands/break_test.rb`
   * Specific test classes. For example, `bin/minitest BreakAtLinesTest`
