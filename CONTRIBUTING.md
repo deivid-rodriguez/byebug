@@ -21,16 +21,15 @@ abide by its terms.
   always have the lastest patch level release installed.
 * The recommended tool to manage development dependencies is `bundler`. Run
   `gem install bundler` to install it.
-* Running `bundle install` inside a local clone of `byebug` will get development
-  dependencies installed.
+* Running `bin/bundle install` inside a local clone of `byebug` will get
+  development dependencies installed.
 
 ## Running the test suite
 
-* Make sure you compile the C-extension using `bundle exec rake compile`.
+* Make sure you compile the C-extension using `bin/rake compile`.
   Otherwise you won't be able to use `byebug`.
-* Run the test suite using the default rake task (`bundle exec rake`). This
-  task is composed of 3 subtasks: `bundle exec rake compile` &&
-  `bundle exec rake test` && `bundle exec rake lint`.
+* Run the test suite using the default rake task (`bin/rake`). This task is
+  composed of 3 subtasks: `bin/rake compile`, `bin/rake test` & `bin/rake lint`.
 * If you want to run specific tests, use the provided test runner, like so:
   * Specific test files. For example, `bin/minitest test/commands/break_test.rb`
   * Specific test classes. For example, `bin/minitest BreakAtLinesTest`
@@ -48,7 +47,7 @@ abide by its terms.
   checks locally using the [codeclimate CLI][] with `codeclimate analyze`.
 
 * It also uses some extra style checks that are not available in codeclimate.
-  You can run those using `bundle exec rake lint`. These tasks are:
+  You can run those using `bin/rake lint`. These tasks are:
 
   * Linting of c-files using `clang-format`. Configuration is specific to
     clang-format 3.8, you may need some extra work to get that installed on macOS,

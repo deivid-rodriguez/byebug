@@ -30,13 +30,11 @@ before_install:
     fi
 
 install:
+  - gem install bundler -v 1.16.1
+
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
-
-before_script:
-  - git config --local user.email 'travis@travis.ci'
-  - git config --local user.name 'Travis CI'
 
 script:
   - bin/ci.sh
