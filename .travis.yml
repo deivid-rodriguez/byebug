@@ -36,10 +36,6 @@ install:
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
 
-before_script:
-  - git config --local user.email 'travis@travis.ci'
-  - git config --local user.name 'Travis CI'
-
 script:
   - bin/ci.sh
 
