@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/setting"
 require "byebug/history"
 require "byebug/helpers/file"

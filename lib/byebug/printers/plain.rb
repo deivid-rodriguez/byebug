@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/printers/base"
 
 module Byebug

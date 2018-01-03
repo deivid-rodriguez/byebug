@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Byebug
   #
   # Custom exception exception to signal "command not found" errors

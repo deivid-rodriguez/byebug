@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/helpers/thread"
 
 module Byebug

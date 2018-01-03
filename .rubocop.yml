@@ -28,6 +28,10 @@ Metrics/PerceivedComplexity:
 TrivialAccessors:
   ExactNameMatch: true
 
+# Until we bump TargetRubyVersion to 2.3
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always
+
 Style/ModuleFunction:
   EnforcedStyle: extend_self
 

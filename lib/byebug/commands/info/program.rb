@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Byebug
   #
   # Reopens the +info+ command to define the +args+ subcommand

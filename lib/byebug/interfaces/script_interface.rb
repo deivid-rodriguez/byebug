@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Byebug
   #
   # Interface class for command execution from script files.

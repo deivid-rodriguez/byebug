@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/frame"
 require "byebug/helpers/path"
 require "byebug/helpers/file"

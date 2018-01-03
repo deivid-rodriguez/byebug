@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Main Container for all of Byebug's code
 #

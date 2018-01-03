@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug/helpers/reflection"
 require "byebug/byebug"
 require "byebug/context"
