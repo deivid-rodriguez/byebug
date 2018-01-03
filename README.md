@@ -119,8 +119,8 @@ byebug myscript.rb
     `history`   |              |
     `info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
     `irb`       |              |
-    `kill`      |              |
-    `list`      |              |
+    [`kill`]    |              | 
+    [`list`]    | `l`          | 
     `method`    |              | `instance`
     `next`      |              |
     `pry`       |              |
@@ -136,6 +136,9 @@ byebug myscript.rb
     `undisplay` |              |
     `up`        |              |
     `var`       |              | `all` `constant` `global` `instance` `local`
+
+[`kill`]: https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#quitting-byebug
+[`list`]: https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#examining-program-source-files-list
 
 ## Semantic Versioning
 
