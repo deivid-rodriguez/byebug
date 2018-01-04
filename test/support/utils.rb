@@ -2,6 +2,7 @@
 
 require "support/matchers"
 require "support/temporary"
+require "open3"
 
 module Byebug
   #
@@ -208,6 +209,33 @@ module Byebug
           "Hello world"
         end
       RUBY
+    end
+
+    #
+    # Runs program <cmd> in a subprocess feeding it with some input <input> and
+    # returns the output of the program.
+    #
+    # @param cmd Command line to be run
+    # @param input Input string to feed to the program
+    #
+    # @return Program's output
+    #
+    def run_program(cmd, input)
+      env = { "RUBYOPT" => "-I#{Context.lib_path}" }
+
+      stdout, = Open3.capture2e(env, *cmd, stdin_data: input)
+
+      stdout
+    end
+
+    #
+    # Binstub command used to run byebug in standalone mode during tests
+    #
+    def binstub
+      cmd = "exe/byebug"
+      return [cmd] unless Gem.win_platform?
+
+      [RbConfig.ruby, cmd]
     end
   end
 end

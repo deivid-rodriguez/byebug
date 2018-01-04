@@ -87,7 +87,7 @@ module Byebug
 
     def binstub
       cmd = "bin/minitest"
-      return [cmd] unless windows?
+      return [cmd] unless Gem.win_platform?
 
       %W[#{RbConfig.ruby} #{cmd}]
     end

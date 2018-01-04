@@ -46,10 +46,14 @@ module Byebug
       cmd += (@match[:args] ? @match[:args].shellsplit : $ARGV)
 
       puts pr("restart.success", cmd: cmd.shelljoin)
-      Kernel.exec(*cmd)
+      Kernel.exec(env, *cmd)
     end
 
     private
+
+    def env
+      { "RUBYOPT" => "-I #{Context.lib_path}" }
+    end
 
     def prepend_byebug_bin(cmd)
       cmd.unshift(bin_file) if Byebug.mode == :standalone
