@@ -15,13 +15,13 @@ module Byebug
     end
 
     def test_run_with_version_flag
-      with_command_line("bin/byebug", "--version") { runner.run }
+      with_command_line("exe/byebug", "--version") { runner.run }
 
       check_output_includes(/#{Byebug::VERSION}/)
     end
 
     def test_run_with_help_flag
-      with_command_line("bin/byebug", "--help") { runner.run }
+      with_command_line("exe/byebug", "--help") { runner.run }
 
       check_output_includes(
         /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/
@@ -29,19 +29,19 @@ module Byebug
     end
 
     def test_run_with_remote_option_only_with_a_port_number
-      with_command_line("bin/byebug", "--remote", "9999") do
+      with_command_line("exe/byebug", "--remote", "9999") do
         assert_calls(Byebug, :start_client, "localhost 9999") { runner.run }
       end
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
-      with_command_line("bin/byebug", "--remote", "myhost:9999") do
+      with_command_line("exe/byebug", "--remote", "myhost:9999") do
         assert_calls(Byebug, :start_client, "myhost 9999") { runner.run }
       end
     end
 
     def test_run_without_a_script_to_debug
-      with_command_line("bin/byebug") do
+      with_command_line("exe/byebug") do
         runner.run
 
         check_error_includes "You must specify a program to debug"
@@ -49,7 +49,7 @@ module Byebug
     end
 
     def test_run_with_an_nonexistent_script
-      with_command_line("bin/byebug", "non_existent_script.rb") do
+      with_command_line("exe/byebug", "non_existent_script.rb") do
         runner.run
 
         check_error_includes "The script doesn't exist"
@@ -60,7 +60,7 @@ module Byebug
       example_file.write("[1,2,")
       example_file.close
 
-      with_command_line("bin/byebug", example_path) do
+      with_command_line("exe/byebug", example_path) do
         runner.run
 
         check_error_includes "The script has incorrect syntax"
@@ -86,7 +86,7 @@ module Byebug
     end
 
     def test_run_with_a_script_to_debug
-      with_command_line("bin/byebug", example_path) do
+      with_command_line("exe/byebug", example_path) do
         non_stop_runner.run
 
         assert_equal $PROGRAM_NAME, example_path
@@ -94,7 +94,7 @@ module Byebug
     end
 
     def test_run_with_a_script_and_params_does_not_consume_script_params
-      with_command_line("bin/byebug", "--", example_path, "-opt", "value") do
+      with_command_line("exe/byebug", "--", example_path, "-opt", "value") do
         non_stop_runner.run
 
         assert_equal ["-opt", "value"], $ARGV
@@ -102,7 +102,7 @@ module Byebug
     end
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
-      with_command_line("bin/byebug", "--", "ruby", example_path) do
+      with_command_line("exe/byebug", "--", "ruby", example_path) do
         non_stop_runner.run
 
         assert_equal example_path, $PROGRAM_NAME
@@ -111,7 +111,7 @@ module Byebug
 
     def test_run_with_post_mortem_mode_flag
       with_setting :post_mortem, false do
-        with_command_line("bin/byebug", "-m", example_path) do
+        with_command_line("exe/byebug", "-m", example_path) do
           non_stop_runner.run
 
           assert_equal true, Setting[:post_mortem]
@@ -121,7 +121,7 @@ module Byebug
 
     def test_run_with_linetracing_flag
       with_setting :linetrace, false do
-        with_command_line("bin/byebug", "-t", example_path) do
+        with_command_line("exe/byebug", "-t", example_path) do
           non_stop_runner.run
 
           assert_equal true, Setting[:linetrace]
@@ -132,7 +132,7 @@ module Byebug
     def test_run_with_no_quit_flag
       skip
 
-      with_command_line("bin/byebug", "--no-quit", example_path) do
+      with_command_line("exe/byebug", "--no-quit", example_path) do
         non_stop_runner.run
 
         check_output_includes("(byebug:ctrl)")
@@ -140,7 +140,7 @@ module Byebug
     end
 
     def test_run_with_require_flag
-      with_command_line("bin/byebug", "-r", "abbrev", example_path) do
+      with_command_line("exe/byebug", "-r", "abbrev", example_path) do
         non_stop_runner.run
       end
 
@@ -149,7 +149,7 @@ module Byebug
     end
 
     def test_run_with_a_single_include_flag
-      with_command_line("bin/byebug", "-I", "dir1", example_path) do
+      with_command_line("exe/byebug", "-I", "dir1", example_path) do
         non_stop_runner.run
       end
 
@@ -157,7 +157,7 @@ module Byebug
     end
 
     def test_run_with_several_include_flags
-      with_command_line("bin/byebug", "-I", "dir1:dir2", example_path) do
+      with_command_line("exe/byebug", "-I", "dir1:dir2", example_path) do
         non_stop_runner.run
       end
 
@@ -166,7 +166,7 @@ module Byebug
     end
 
     def test_run_with_debug_flag
-      with_command_line("bin/byebug", "-d", example_path) do
+      with_command_line("exe/byebug", "-d", example_path) do
         non_stop_runner.run
       end
 
@@ -176,7 +176,7 @@ module Byebug
 
     def test_run_stops_at_the_first_line_by_default
       enter "cont"
-      with_command_line("bin/byebug", example_path) { stop_first_runner.run }
+      with_command_line("exe/byebug", example_path) { stop_first_runner.run }
 
       check_output_includes "=> 1: sleep 0"
     end
@@ -184,7 +184,7 @@ module Byebug
     def test_run_with_no_stop_flag_does_not_stop_at_the_first_line
       non_stop_runner.interface = Context.interface
 
-      with_command_line("bin/byebug --no-stop", example_path) do
+      with_command_line("exe/byebug --no-stop", example_path) do
         non_stop_runner.run
       end
 
@@ -194,7 +194,7 @@ module Byebug
     def test_run_with_stop_flag_stops_at_the_first_line
       enter "cont"
 
-      with_command_line("bin/byebug --stop", example_path) do
+      with_command_line("exe/byebug --stop", example_path) do
         stop_first_runner.run
       end
 
