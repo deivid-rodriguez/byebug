@@ -191,7 +191,7 @@ module Byebug
     end
 
     def launch_client
-      Timeout.timeout(1) do
+      Timeout.timeout(5) do
         begin
           Byebug.start_client("127.0.0.1")
         rescue Errno::ECONNREFUSED
