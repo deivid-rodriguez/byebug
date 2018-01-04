@@ -349,7 +349,7 @@ can use the `restart` command here.
 ```bash
 (byebug) restart 3
 Re exec'ing:
-  /path/to/bin/byebug /path/to/hanoi.rb 3
+  /path/to/exe/byebug /path/to/hanoi.rb 3
 
 [1, 10] in /path/to/hanoi.rb
     1: #
