@@ -35,7 +35,7 @@ module Byebug
 
     def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
       stdout = run_program(
-        [*binstub, "--", "ruby", example_path],
+        [*binstub, "--", RbConfig.ruby, example_path],
         'puts "Program: #{$0}"'
       )
 
