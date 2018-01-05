@@ -101,8 +101,16 @@ module Byebug
       end
     end
 
-    def test_run_with_ruby_script_ruby_is_ignored_and_script_passed_instead
+    def test_run_with_ruby_is_ignored_and_script_passed_instead
       with_command_line("exe/byebug", "--", "ruby", example_path) do
+        non_stop_runner.run
+
+        assert_equal example_path, $PROGRAM_NAME
+      end
+    end
+
+    def test_run_with_fullpath_ruby_is_ignored_and_script_passed_instead
+      with_command_line("exe/byebug", "--", RbConfig.ruby, example_path) do
         non_stop_runner.run
 
         assert_equal example_path, $PROGRAM_NAME

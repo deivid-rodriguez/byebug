@@ -126,7 +126,12 @@ module Byebug
     def program
       @program ||= begin
                      candidate = which($ARGV.shift)
-                     candidate == which("ruby") ? which($ARGV.shift) : candidate
+
+                     if [which("ruby"), RbConfig.ruby].include?(candidate)
+                       which($ARGV.shift)
+                     else
+                       candidate
+                     end
                    end
     end
 
