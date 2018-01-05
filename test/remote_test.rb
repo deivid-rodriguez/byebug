@@ -8,6 +8,8 @@ module Byebug
   # Tests remote debugging functionality.
   #
   class RemoteTest < TestCase
+    BYEBUG = File.absolute_path("../lib", __dir__)
+
     def self.define_test(name, &block)
       define_method("test_#{name}", &block)
     end
@@ -115,21 +117,16 @@ module Byebug
       end
 
       define_test("interrupting_client_doesnt_abort_server_using_#{code}") do
-        skip unless Process.respond_to?(:fork)
-
         write_program(send(code))
 
         i, oe, t = Open3.popen2e(
           { "MINITEST_TEST" => __method__.to_s },
-          "ruby -rsimplecov #{example_path}"
+          "ruby -I#{BYEBUG} -rsimplecov #{example_path}"
         )
 
-        pid = fork do
-          launch_client
-        end
-
-        sleep 1
-        Process.kill("INT", pid)
+        th = Thread.new { launch_client }
+        sleep(windows? ? 3 : 1)
+        Thread.kill(th)
 
         i.close
         oe.close
@@ -149,23 +146,18 @@ module Byebug
     end
 
     def test_interrupting_client_doesnt_abort_server_after_a_second_breakpoint
-      skip unless Process.respond_to?(:fork)
-
       write_program(program_with_two_breakpoints)
 
       i, oe, t = Open3.popen2e(
         { "MINITEST_TEST" => __method__.to_s },
-        "ruby -rsimplecov #{example_path}"
+        "ruby -I#{BYEBUG} -rsimplecov #{example_path}"
       )
 
       enter "cont"
 
-      pid = fork do
-        launch_client
-      end
-
-      sleep 1
-      Process.kill("INT", pid)
+      th = Thread.new { launch_client }
+      sleep(windows? ? 3 : 1)
+      Thread.kill(th)
 
       i.close
       oe.close
@@ -183,7 +175,7 @@ module Byebug
     def remote_debug(*commands)
       enter(*commands)
 
-      Open3.popen2e("ruby #{example_path}") do |_i, _oe, t|
+      Open3.popen2e("ruby -I#{BYEBUG} #{example_path}") do |_i, _oe, t|
         launch_client
 
         t.value
