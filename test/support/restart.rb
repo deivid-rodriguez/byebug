@@ -31,12 +31,6 @@ module Byebug
       RUBY
     end
 
-    def assert_restarts(launch_cmd, restart_cmd, expected_output)
-      stdout = run_program(launch_cmd, restart_cmd)
-
-      assert_match(/#{expected_output}/, stdout)
-    end
-
     def byebug_bin
       Context.bin_file
     end

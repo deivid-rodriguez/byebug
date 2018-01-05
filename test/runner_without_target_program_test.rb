@@ -9,19 +9,28 @@ module Byebug
   #
   class RunnerWithoutTargetProgramTest < TestCase
     def test_run_with_version_flag
-      stdout = run_program([*binstub, "--version"])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, "--version"]
+      )
 
-      assert_equal full_version, stdout
+      assert_match full_version, stdout
     end
 
     def test_run_with_help_flag
-      stdout = run_program([*binstub, "--help"])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, "--help"]
+      )
 
-      assert_equal full_help, stdout
+      assert_match full_help, stdout
     end
 
     def test_run_with_remote_option_only_with_a_port_number
-      stdout = run_program([*binstub, "--remote", "9999"])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, "--remote", "9999"]
+      )
 
       assert_match(
         /Connecting to byebug server at localhost:9999\.\.\./,
@@ -30,19 +39,28 @@ module Byebug
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
-      stdout = run_program([*binstub, "--remote", "myhost:9999"])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, "--remote", "myhost:9999"]
+      )
 
       assert_match(/Connecting to byebug server at myhost:9999\.\.\./, stdout)
     end
 
     def test_run_without_a_script_to_debug
-      stdout = run_program(binstub)
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        binstub
+      )
 
       assert_match_error("You must specify a program to debug", stdout)
     end
 
     def test_run_with_an_nonexistent_script
-      stdout = run_program([*binstub, "non_existent_script.rb"])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, "non_existent_script.rb"]
+      )
 
       assert_match_error("The script doesn't exist", stdout)
     end
@@ -51,7 +69,10 @@ module Byebug
       example_file.write("[1,2,")
       example_file.close
 
-      stdout = run_program([*binstub, example_path])
+      stdout = run_program(
+        { "MINITEST_TEST" => __method__.to_s },
+        [*binstub, example_path]
+      )
 
       assert_match_error("The script has incorrect syntax", stdout)
     end

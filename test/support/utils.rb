@@ -214,10 +214,10 @@ module Byebug
     #
     # @return Program's output
     #
-    def run_program(cmd, input = "")
-      env = { "RUBYOPT" => "-I#{Context.lib_path}" }
+    def run_program(env, cmd, input = "")
+      base_env = { "RUBYOPT" => "-I#{Context.lib_path} -rsimplecov" }
 
-      stdout, = Open3.capture2e(env, *cmd, stdin_data: input)
+      stdout, = Open3.capture2e(env.merge(base_env), *cmd, stdin_data: input)
 
       stdout
     end
