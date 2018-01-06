@@ -52,13 +52,13 @@ module Byebug
       @match[0].split(" ").drop(1).join(" ")
     end
 
-    def_delegators :'self.class', :help, :match
+    def_delegators "self.class", :help, :match
 
-    def_delegator :'processor.printer', :print, :pr
-    def_delegator :'processor.printer', :print_collection, :prc
-    def_delegator :'processor.printer', :print_variables, :prv
+    def_delegator "processor.printer", :print, :pr
+    def_delegator "processor.printer", :print_collection, :prc
+    def_delegator "processor.printer", :print_variables, :prv
 
-    def_delegators :'processor.interface', :errmsg, :puts, :print, :confirm
+    def_delegators "processor.interface", :errmsg, :puts, :print, :confirm
 
     class << self
       include Helpers::StringHelper
