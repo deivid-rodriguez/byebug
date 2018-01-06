@@ -22,10 +22,10 @@ module Minitest
     #   assert_includes_in_order(%w(1 2 3 4 5), %w(1 5 3))
     #
     # @example Passing assertion with array and regexp elements
-    #   assert_includes_in_order(%w(1 2 3 4 5), ['1', /\d+/, '5'])
+    #   assert_includes_in_order(%w(1 2 3 4 5), ["1", /\d+/, "5"])
     #
     # @example Failing assertion with array and regexp elements
-    #   assert_includes_in_order(%w(1 2 3 4 5), ['1', /\[a-z]+/, '5'])
+    #   assert_includes_in_order(%w(1 2 3 4 5), ["1", /\[a-z]+/, "5"])
     #
     def assert_includes_in_order(given, original, msg = nil)
       msg = message(msg) do

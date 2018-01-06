@@ -21,8 +21,8 @@ module Byebug
     #
     # @example
     #
-    #   enter 'b 12', 'cont'
-    #   enter 'b 12', ->{ "disable #{breakpoint.id}" }, 'cont'
+    #   enter "b 12", "cont"
+    #   enter "b 12", ->{ "disable #{breakpoint.id}" }, "cont"
     #
     def enter(*messages)
       interface.input.concat(messages)
@@ -49,10 +49,10 @@ module Byebug
     #
     # @example
     #
-    #   enter 'next'
+    #   enter "next"
     #   prog <<-RUBY
     #     byebug
-    #     puts 'hello'
+    #     puts "hello"
     #   RUBY
     #
     #   debug_code(prog) { assert_equal 3, frame.line }
@@ -84,14 +84,14 @@ module Byebug
     # @example
     #
     #   strip_line_numbers <<-EOF
-    #     1:  puts 'hello'
-    #     2:  puts 'bye'
+    #     1:  puts "hello"
+    #     2:  puts "bye"
     #   EOF
     #
     #   returns
     #
-    #   puts 'hello'
-    #   puts 'bye'
+    #   puts "hello"
+    #   puts "bye"
     #
     def strip_line_numbers(str_with_ruby_code)
       str_with_ruby_code.gsub(/  *\d+: ? ?/, "")
@@ -113,7 +113,7 @@ module Byebug
     #
     #   returns
     #
-    #   ['Sample command', 'It does an amazing thing.']
+    #   ["Sample command", "It does an amazing thing."]
     #
     def split_lines(output_str)
       output_str.split("\n").map(&:strip)

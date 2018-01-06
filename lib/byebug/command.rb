@@ -18,11 +18,11 @@ module Byebug
   #   end
   #
   #   def self.description
-  #     'Custom long desc'
+  #     "Custom long desc"
   #   end
   #
   #   def.short_description
-  #     'Custom short desc'
+  #     "Custom short desc"
   #   end
   #
   #   def execute
