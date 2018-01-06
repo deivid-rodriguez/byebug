@@ -59,7 +59,7 @@ module Byebug
       stdout = run_program(
         { "MINITEST_TEST" => __method__.to_s },
         [*binstub, "-t", example_path],
-        "show linetrace"
+        "show linetrace\nset linetrace off"
       )
 
       assert_match(/linetrace is on/, stdout)
