@@ -82,7 +82,7 @@ module Byebug
         18:    thingy = #{example_class}.new
         19:    byebug
         20:    thingy.a
-        21:    sleep 5
+        21:    sleep 3
         22:    thingy.a
         23:    byebug
         24:    thingy.a

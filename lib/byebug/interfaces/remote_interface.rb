@@ -16,10 +16,14 @@ module Byebug
 
     def read_command(prompt)
       super("PROMPT #{prompt}")
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      "continue"
     end
 
     def confirm(prompt)
       super("CONFIRM #{prompt}")
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      false
     end
 
     def print(message)
@@ -40,11 +44,7 @@ module Byebug
 
     def readline(prompt)
       puts(prompt)
-
-      result = input.gets
-      return "continue" unless result
-
-      result.chomp
+      (input.gets || "continue").chomp
     end
   end
 end
