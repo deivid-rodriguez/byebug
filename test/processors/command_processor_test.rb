@@ -66,17 +66,17 @@ module Byebug
          4:   #
          5:   class #{example_class}
          6:     def inspect
-         7:       'A very cool string representation'
+         7:       "A very cool string representation"
          8:     end
          9:
         10:     def to_s
-        11:       'A not so cool string representation'
+        11:       "A not so cool string representation"
         12:     end
         13:   end
         14:
         15:   byebug
         16:
-        17:   'Bye!'
+        17:   "Bye!"
         18: end
       RUBY
     end
@@ -152,7 +152,7 @@ module Byebug
          8:     end
          9:
         10:     def self.m2
-        11:       'm2'
+        11:       "m2"
         12:     end
         13:   end
         14:
@@ -160,7 +160,7 @@ module Byebug
         16:
         17:   #{example_class}.m1
         18:
-        19:   'Bye!'
+        19:   "Bye!"
         20: end
       RUBY
     end
@@ -189,14 +189,14 @@ module Byebug
          3:   # Toy class to test subdebuggers inside evaluation prompt
          4:   #
          5:   class #{example_class}
-         6:     class_eval 'def self.a; 1 end'
+         6:     class_eval "def self.a; 1 end"
          7:   end
          8:
          9:   byebug
         10:
         11:   #{example_class}.a
         12:
-        13:   'Bye!'
+        13:   "Bye!"
         14: end
       RUBY
     end

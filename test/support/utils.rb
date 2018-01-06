@@ -205,7 +205,7 @@ module Byebug
         module Byebug
           byebug
 
-          'Hello world'
+          "Hello world"
         end
       RUBY
     end

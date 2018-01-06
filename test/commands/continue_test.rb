@@ -24,7 +24,7 @@ module Byebug
         13:    b = 5
         14:    c = b + 5
         15:    #{example_class}.new.add_four(c)
-        16:    eval('c')
+        16:    eval("c")
         17:  end
       RUBY
     end

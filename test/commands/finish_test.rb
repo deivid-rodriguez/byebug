@@ -147,7 +147,7 @@ module Byebug
   class FinishInsideAutoloadedFilesTest < TestCase
     def program
       strip_line_numbers <<-RUBY
-         1:  autoload :ByebugBar, './byebug_bar'
+         1:  autoload :ByebugBar, "./byebug_bar"
          2:
          3:  def main
          4:    b = ByebugBar
