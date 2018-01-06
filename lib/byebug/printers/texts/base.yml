@@ -1,6 +1,6 @@
 base:
   errors:
-    only_local: 'Command is available only in local mode.'
+    only_local: "Command is available only in local mode."
 
 break:
   errors:
@@ -62,7 +62,7 @@ info:
 
 pry:
   errors:
-    not_installed: 'You need to install pry in order to run this command'
+    not_installed: "You need to install pry in order to run this command"
 
 quit:
   confirmations:
