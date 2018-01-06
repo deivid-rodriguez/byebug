@@ -2,6 +2,11 @@ AllCops:
   Exclude:
     - tmp/**/*
 
+  Include:
+    - .simplecov
+    - Gemfile
+    - Rakefile
+
   DisplayCopNames: true
   DisplayStyleGuide: true
 
