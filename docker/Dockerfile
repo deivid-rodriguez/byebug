@@ -3,8 +3,8 @@ FROM buildpack-deps:stretch
 # skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
   && { \
-    echo 'install: --no-document'; \
-    echo 'update: --no-document'; \
+    echo "install: --no-document"; \
+    echo "update: --no-document"; \
   } >> /usr/local/etc/gemrc
 
 ARG ruby_version=
