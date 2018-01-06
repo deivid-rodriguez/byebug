@@ -5,35 +5,25 @@ require "test_helper"
 module Byebug
   class MinitestRunnerTest < Minitest::Test
     def test_runs
-      output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
-        "test/debugger_alias_test.rb"
-      )
+      output = run_minitest_runner("test/debugger_alias_test.rb")
 
       assert_includes output, "\n.\n"
     end
 
     def test_per_test_class
-      output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
-        "DebuggerAliasTest"
-      )
+      output = run_minitest_runner("DebuggerAliasTest")
 
       assert_includes output, "\n.\n"
     end
 
     def test_per_test
-      output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
-        "test_aliases_debugger_to_byebug"
-      )
+      output = run_minitest_runner("test_aliases_debugger_to_byebug")
 
       assert_includes output, "\n.\n"
     end
 
     def test_combinations
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
         "DebuggerAliasTest",
         "test_script_processor_clears_history"
       )
@@ -42,11 +32,7 @@ module Byebug
     end
 
     def test_with_verbose_option
-      output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
-        "DebuggerAliasTest",
-        "--verbose"
-      )
+      output = run_minitest_runner("DebuggerAliasTest", "--verbose")
 
       assert_includes \
         output,
@@ -58,11 +44,7 @@ module Byebug
     end
 
     def test_with_seed_option
-      output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
-        "DebuggerAliasTest",
-        "--seed=37"
-      )
+      output = run_minitest_runner("DebuggerAliasTest", "--seed=37")
 
       assert_includes output, "\n.\n"
 
@@ -73,10 +55,12 @@ module Byebug
 
     private
 
-    def run_minitest_runner(env, *args)
+    def run_minitest_runner(*args)
+      test_name = Thread.current.backtrace_locations[2].label
+
       out, = capture_subprocess_io do
         assert_equal true, system(
-          env.merge("RUBYOPT" => "-rsimplecov"),
+          { "RUBYOPT" => "-rsimplecov", "MINITEST_RUNNER_TEST" => test_name },
           *binstub,
           *args
         )
