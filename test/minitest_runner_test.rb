@@ -60,7 +60,7 @@ module Byebug
 
       out, = capture_subprocess_io do
         assert_equal true, system(
-          { "RUBYOPT" => "-rsimplecov", "MINITEST_RUNNER_TEST" => test_name },
+          { "RUBYOPT" => "-rsimplecov", "MINITEST_TEST" => test_name },
           *binstub,
           *args
         )
