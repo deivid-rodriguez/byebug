@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-require File.join(__dir__, "lib", "byebug", "version")
+lib = File.expand_path("lib", __dir__)
+
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require "byebug/version"
 
 Gem::Specification.new do |s|
   s.name = "byebug"

@@ -78,7 +78,7 @@ module Byebug
     #
     def start_client(host = "localhost", port = PORT)
       interface = LocalInterface.new
-      puts "Connecting to byebug server..."
+      puts "Connecting to byebug server at #{host}:#{port}..."
       socket = TCPSocket.new(host, port)
       puts "Connected."
 

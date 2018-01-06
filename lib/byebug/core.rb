@@ -35,7 +35,7 @@ module Byebug
   # Running mode of the debugger. Can be either:
   #
   # * :attached => Attached to a running program through the `byebug` method.
-  # * :standalone => Started through `bin/byebug` script.
+  # * :standalone => Started through `byebug` script.
   #
   attr_accessor :mode
 

@@ -204,7 +204,7 @@ module Byebug
       enter "info file"
       debug_code(minimal_program)
 
-      check_output_includes "Breakpoint line numbers: 1 2 4 5"
+      check_output_includes "Breakpoint line numbers: 1 2"
     end
 
     def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename

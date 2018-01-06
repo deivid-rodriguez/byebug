@@ -6,7 +6,7 @@ module Byebug
   class MinitestRunnerTest < Minitest::Test
     def test_runs
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "test/debugger_alias_test.rb"
       )
 
@@ -15,7 +15,7 @@ module Byebug
 
     def test_per_test_class
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "DebuggerAliasTest"
       )
 
@@ -24,7 +24,7 @@ module Byebug
 
     def test_per_test
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "test_aliases_debugger_to_byebug"
       )
 
@@ -33,7 +33,7 @@ module Byebug
 
     def test_combinations
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "DebuggerAliasTest",
         "test_script_processor_clears_history"
       )
@@ -43,7 +43,7 @@ module Byebug
 
     def test_with_verbose_option
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "DebuggerAliasTest",
         "--verbose"
       )
@@ -59,7 +59,7 @@ module Byebug
 
     def test_with_seed_option
       output = run_minitest_runner(
-        { "MINITEST_RUNNER_TEST" => __method__.to_s },
+        { "MINITEST_TEST" => __method__.to_s },
         "DebuggerAliasTest",
         "--seed=37"
       )
@@ -87,7 +87,7 @@ module Byebug
 
     def binstub
       cmd = "bin/minitest"
-      return [cmd] unless windows?
+      return [cmd] unless Gem.win_platform?
 
       %W[#{RbConfig.ruby} #{cmd}]
     end

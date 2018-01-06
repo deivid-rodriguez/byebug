@@ -10,8 +10,12 @@ module Byebug
         @bin_file ||= File.join(root_path, "exe", "byebug")
       end
 
+      def lib_path
+        @lib_path ||= File.expand_path(File.join("..", ".."), __dir__)
+      end
+
       def root_path
-        @root_path ||= File.expand_path(File.join("..", "..", ".."), __dir__)
+        @root_path ||= File.expand_path("..", lib_path)
       end
 
       def lib_files

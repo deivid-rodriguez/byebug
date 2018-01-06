@@ -2,6 +2,7 @@
 
 require "support/matchers"
 require "support/temporary"
+require "open3"
 
 module Byebug
   #
@@ -21,8 +22,8 @@ module Byebug
     #
     # @example
     #
-    #   enter 'b 12', 'cont'
-    #   enter 'b 12', ->{ "disable #{breakpoint.id}" }, 'cont'
+    #   enter "b 12", "cont"
+    #   enter "b 12", ->{ "disable #{breakpoint.id}" }, "cont"
     #
     def enter(*messages)
       interface.input.concat(messages)
@@ -49,10 +50,10 @@ module Byebug
     #
     # @example
     #
-    #   enter 'next'
+    #   enter "next"
     #   prog <<-RUBY
     #     byebug
-    #     puts 'hello'
+    #     puts "hello"
     #   RUBY
     #
     #   debug_code(prog) { assert_equal 3, frame.line }
@@ -84,14 +85,14 @@ module Byebug
     # @example
     #
     #   strip_line_numbers <<-EOF
-    #     1:  puts 'hello'
-    #     2:  puts 'bye'
+    #     1:  puts "hello"
+    #     2:  puts "bye"
     #   EOF
     #
     #   returns
     #
-    #   puts 'hello'
-    #   puts 'bye'
+    #   puts "hello"
+    #   puts "bye"
     #
     def strip_line_numbers(str_with_ruby_code)
       str_with_ruby_code.gsub(/  *\d+: ? ?/, "")
@@ -113,7 +114,7 @@ module Byebug
     #
     #   returns
     #
-    #   ['Sample command', 'It does an amazing thing.']
+    #   ["Sample command", "It does an amazing thing."]
     #
     def split_lines(output_str)
       output_str.split("\n").map(&:strip)
@@ -201,13 +202,34 @@ module Byebug
     # A minimal program that gives you a byebug's prompt
     #
     def minimal_program
-      <<-RUBY
-        module Byebug
-          byebug
+      "byebug\nsleep 0\n"
+    end
 
-          'Hello world'
-        end
-      RUBY
+    #
+    # Runs program <cmd> in a subprocess feeding it with some input <input> and
+    # returns the output of the program.
+    #
+    # @param cmd Command line to be run
+    # @param input Input string to feed to the program
+    #
+    # @return Program's output
+    #
+    def run_program(env, cmd, input = "")
+      base_env = { "RUBYOPT" => "-I#{Context.lib_path} -rsimplecov" }
+
+      stdout, = Open3.capture2e(env.merge(base_env), *cmd, stdin_data: input)
+
+      stdout
+    end
+
+    #
+    # Binstub command used to run byebug in standalone mode during tests
+    #
+    def binstub
+      cmd = "exe/byebug"
+      return [cmd] unless Gem.win_platform?
+
+      [RbConfig.ruby, cmd]
     end
   end
 end

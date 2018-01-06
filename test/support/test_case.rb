@@ -67,14 +67,14 @@ module Byebug
     # Temporary file where code for each test is saved
     #
     def example_file
-      @example_file ||= File.new(example_path, "w+")
+      @example_file ||= File.new(example_path, "w+", 0o755)
     end
 
     #
     # Path to file where test code is saved
     #
     def example_path
-      File.join(example_folder, "byebug_test.rb")
+      File.join(example_folder, "byebug_example.rb")
     end
 
     #

@@ -25,18 +25,6 @@ module Byebug
     end
 
     #
-    # Yields a block using a specific mode of the debugger
-    #
-    def with_mode(mode)
-      old_mode = Byebug.mode
-      Byebug.mode = mode
-
-      yield
-    ensure
-      Byebug.mode = old_mode
-    end
-
-    #
     # Yields a block using a temporary value for a setting
     #
     # @param key [Symbol] Setting key
