@@ -36,8 +36,6 @@ install:
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
-  - gem update --system
-  - gem update --remote bundler
 
 script:
   - bin/ci.sh
