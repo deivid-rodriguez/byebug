@@ -22,19 +22,19 @@ module Byebug
     def yaml_plain
       deindent <<-YAML, leading_spaces: 8
         foo:
-          bar: 'plain {zee}, {uga} gaa'
+          bar: "plain {zee}, {uga} gaa"
           confirmations:
-            okay: 'Okay?'
+            okay: "Okay?"
         variable:
-          variable: '{key}: {value}'
+          variable: "{key}: {value}"
       YAML
     end
 
     def yaml_base
       deindent <<-YAML, leading_spaces: 8
         foo:
-          bar: 'base {zee}, {uga} gaa'
-          boo: '{zee}, gau'
+          bar: "base {zee}, {uga} gaa"
+          boo: "{zee}, gau"
       YAML
     end
 

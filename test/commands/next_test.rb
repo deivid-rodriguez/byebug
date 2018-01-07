@@ -80,7 +80,7 @@ module Byebug
         12:
         13:    #{example_class}.new
         14:
-        15:    'Bye!'
+        15:    "Bye!"
         16:  end
       RUBY
     end
@@ -103,13 +103,13 @@ module Byebug
          3:    # Toy class to test cases where next should not stay in frame
          4:    #
          5:    class #{example_class}
-         6:      define_method 'method1' do
+         6:      define_method "method1" do
          7:        return 1
          8:      end
          9:
         10:      def foo
         11:        method1
-        12:        'bye foo!'
+        12:        "bye foo!"
         13:      end
         14:    end
         15:
@@ -117,7 +117,7 @@ module Byebug
         17:
         18:    #{example_class}.new.foo
         19:
-        20:    'bye!'
+        20:    "bye!"
         21:  end
       RUBY
     end
@@ -153,7 +153,7 @@ module Byebug
         16:      end
         17:
         18:      def self.fails_badly
-        19:        fail 'booooooooooooooom'
+        19:        fail "booooooooooooooom"
         20:      end
         21:    end
         22:

@@ -15,7 +15,7 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def build_percentage_string
-         7:        '%1'
+         7:        "%1"
          8:      end
          9:    end
         10:
@@ -170,7 +170,7 @@ module Byebug
       enter "list 7"
       debug_code(program)
 
-      check_output_includes(/7:\s+'%1'/)
+      check_output_includes(/7:\s+"%1"/)
     end
 
     def test_shows_error_when_invoked_with_invalid_syntax
@@ -187,7 +187,7 @@ module Byebug
     end
 
     def replace_build_percentage_string_line_and_list_it
-      cmd_after_replace(example_path, 7, "      '%11'", "list 7-7")
+      cmd_after_replace(example_path, 7, "      \"%11\"", "list 7-7")
     end
 
     def test_lists_file_changes
@@ -195,7 +195,7 @@ module Byebug
       enter -> { replace_build_percentage_string_line_and_list_it }
       debug_code(program)
 
-      check_output_includes(/7:\s+'%11'/)
+      check_output_includes(/7:\s+"%11"/)
     end
   end
 end

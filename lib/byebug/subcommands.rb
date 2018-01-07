@@ -15,7 +15,7 @@ module Byebug
     end
 
     extend Forwardable
-    def_delegators :'self.class', :subcommand_list
+    def_delegators "self.class", :subcommand_list
 
     #
     # Delegates to subcommands or prints help if no subcommand specified.

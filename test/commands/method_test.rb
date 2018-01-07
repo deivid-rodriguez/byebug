@@ -15,16 +15,16 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def initialize
-         7:        @a = 'b'
-         8:        @c = 'd'
+         7:        @a = "b"
+         8:        @c = "d"
          9:      end
         10:
         11:      def self.foo
-        12:        'asdf'
+        12:        "asdf"
         13:      end
         14:
         15:      def bla
-        16:        'asdf'
+        16:        "asdf"
         17:      end
         18:    end
         19:

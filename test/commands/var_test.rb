@@ -14,10 +14,10 @@ module Byebug
          3:    # Toy class to test variable evaluation.
          4:    #
          5:    class #{example_class}
-         6:      SOMECONST = 'foo' unless defined?(SOMECONST)
+         6:      SOMECONST = "foo" unless defined?(SOMECONST)
          7:
          8:      def initialize
-         9:        @instance_variable = '1' * 20
+         9:        @instance_variable = "1" * 20
         10:        byebug
         11:      end
         12:

@@ -186,7 +186,7 @@ end
 
 n_args = $ARGV.length
 
-raise('*** Need number of disks or no parameter') if n_args > 1
+raise("*** Need number of disks or no parameter") if n_args > 1
 
 n = 3
 
@@ -198,7 +198,7 @@ if n_args > 0
   end
 end
 
-raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+raise("*** Number of disks should be between 1 and 100") if n < 1 || n > 100
 
 hanoi(n, :a, :b, :c)
 ```
@@ -330,7 +330,7 @@ Now let's see what happens after stepping:
    11:
 => 12: n_args = $ARGV.length
    13:
-   14: raise('*** Need number of disks or no parameter') if n_args > 1
+   14: raise("*** Need number of disks or no parameter") if n_args > 1
 (byebug) private_methods.member?(:hanoi)
 true
 (byebug)
@@ -460,7 +460,7 @@ NameError Exception: undefined local variable or method `n_args' for main:Object
    23:   end
    24: end
    25:
-   26: raise('*** Number of disks should be between 1 and 100') if n < 1 || n > 100
+   26: raise("*** Number of disks should be between 1 and 100") if n < 1 || n > 100
    27:
 => 28: hanoi(n, :a, :b, :c)
 (byebug) n_args
@@ -527,8 +527,8 @@ framework for that. Here's the test code, it should be placed in the same
 directory as `triangle.rb`.
 
 ```ruby
-require 'minitest/autorun'
-require_relative 'triangle.rb'
+require "minitest/autorun"
+require_relative "triangle.rb"
 
 class TestTriangle < Minitest::Test
   def test_basic
@@ -536,7 +536,7 @@ class TestTriangle < Minitest::Test
 
     0.upto(5) { |i| solutions << triangle(i) }
 
-    assert_equal([0, 1, 3, 6, 10, 15], solutions, 'First 5 triangle numbers')
+    assert_equal([0, 1, 3, 6, 10, 15], solutions, "First 5 triangle numbers")
   end
 end
 ```
@@ -561,7 +561,7 @@ Run options: --seed 31679
 # Running:
 
 [2, 11] in test_triangle.rb
-    2: require_relative 'triangle.rb'
+    2: require_relative "triangle.rb"
     3:
     4: class TestTriangle < Minitest::Test
     5:   def test_basic
@@ -570,7 +570,7 @@ Run options: --seed 31679
     8:
     9:     0.upto(5) { |i| solutions << triangle(i) }
    10:
-   11:     assert_equal([0, 1, 3, 6, 10, 15], solutions, 'First 5 triangle numbers')
+   11:     assert_equal([0, 1, 3, 6, 10, 15], solutions, "First 5 triangle numbers")
 (byebug)
 ```
 
@@ -740,7 +740,7 @@ _current_ class of the object.
 Consider the following little Ruby program.
 
 ```ruby
-'Yes it does' =~ /
+"Yes it does" =~ /
 (Yes) \s+
 it  \s+
 does
@@ -1311,7 +1311,7 @@ at the same speed as if there were no byebug.
 To enter byebug this way, just drop `byebug` in whichever line you want to start
 debugging at. You also have to require byebug somehow. If using bundler, it will
 take care of that for you, otherwise you can use the ruby `-r` flag or add
-`require 'byebug'` in the line previous to the `byebug` call.
+`require "byebug"` in the line previous to the `byebug` call.
 
 If speed is crucial, you may want to start and stop this around certain sections
 of code, using `Byebug.start` and `Byebug.stop`. Alternatively, instead of
@@ -1327,7 +1327,7 @@ problem you want to investigate. And since `byebug` is just a method call it's
 possible to enclose it in a conditional expression, for example
 
 ```ruby
-byebug if 'bar' == foo and 20 == iter_count
+byebug if "bar" == foo and 20 == iter_count
 ```
 
 ### Restarting Byebug
@@ -1354,9 +1354,9 @@ program that you want to debug (In Rails, the
 `config/environments/development.rb` could be a good candidate).
 
 ```ruby
-  require 'byebug/core'
+  require "byebug/core"
   Byebug.wait_connection = true
-  Byebug.start_server('localhost', <port>)
+  Byebug.start_server("localhost", <port>)
 ```
 
 Once this piece gets executed, you can connect to the remote debugger from your

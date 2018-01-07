@@ -19,7 +19,7 @@ module Byebug
          8:      end
          9:
         10:      def encode(str)
-        11:        integerize(str + 'x') + 5
+        11:        integerize(str + "x") + 5
         12:      end
         13:
         14:      def integerize(str)
@@ -28,7 +28,7 @@ module Byebug
         17:      end
         18:    end
         19:
-        20:    frame = #{example_class}.new('f')
+        20:    frame = #{example_class}.new("f")
         21:
         22:    frame
         23:  end
@@ -46,7 +46,7 @@ module Byebug
         enter "up 2", "down"
         debug_code(program)
 
-        check_output_includes "=> 11:       integerize(str + 'x') + 5"
+        check_output_includes '=> 11:       integerize(str + "x") + 5'
       end
     end
 
@@ -55,7 +55,7 @@ module Byebug
         enter "up 2", "down"
         debug_code(program)
 
-        check_output_doesnt_include "=> 11:       integerize(str + 'x') + 5"
+        check_output_doesnt_include '=> 11:       integerize(str + "x") + 5'
       end
     end
 

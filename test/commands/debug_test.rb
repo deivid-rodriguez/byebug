@@ -21,7 +21,7 @@ module Byebug
         10:
         11:   byebug
         12:
-        13:   'Bye!'
+        13:   "Bye!"
         14:  end
       RUBY
     end

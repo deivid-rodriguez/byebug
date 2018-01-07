@@ -16,7 +16,7 @@
 ### Fixed
 
 * `where` command failing on instance_exec block stack frames.
-* `restart` command crashing in certain cases because of a missing `require 'English'` (#321, @akaneko3).
+* `restart` command crashing in certain cases because of a missing `require "English"` (#321, @akaneko3).
 * `restart` command crashing when debugged script is not executable or has no shebang (#321, @akaneko3).
 
 ### Removed
@@ -37,7 +37,7 @@
 
 ### Fixed
 
-* Error loading rc file when `ENV['HOME']` is unset.
+* Error loading rc file when `ENV["HOME"]` is unset.
 
 ## 9.0.4 - 2016-05-19
 

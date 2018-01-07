@@ -15,7 +15,7 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def self.kill_me
-         7:        'dieeee'
+         7:        "dieeee"
          8:      end
          9:    end
         10:
