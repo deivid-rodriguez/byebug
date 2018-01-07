@@ -106,8 +106,6 @@ module Byebug
       end
     end
 
-    attr_writer :interface
-
     def interface
       @interface ||= Context.interface
     end

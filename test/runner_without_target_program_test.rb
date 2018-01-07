@@ -1,76 +1,67 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "byebug/runner"
+require "byebug/version"
 
 module Byebug
   #
   # Tests standalone byebug when flags that require no target program are used
   #
   class RunnerWithoutTargetProgramTest < TestCase
-    def setup
-      super
-
-      runner.interface = Context.interface
-    end
-
     def test_run_with_version_flag
-      with_command_line("exe/byebug", "--version") { runner.run }
+      stdout = run_byebug("--version")
 
-      check_output_includes(/#{Byebug::VERSION}/)
+      assert_match(/#{Byebug::VERSION}/, stdout)
     end
 
     def test_run_with_help_flag
-      with_command_line("exe/byebug", "--help") { runner.run }
+      stdout = run_byebug("--help")
 
-      check_output_includes(
-        /-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/
-      )
+      opts = [/-d/, /-I/, /-q/, /-s/, /-x/, /-m/, /-r/, /-R/, /-t/, /-v/, /-h/]
+
+      opts.each { |regexp| assert_match(regexp, stdout) }
     end
 
     def test_run_with_remote_option_only_with_a_port_number
-      with_command_line("exe/byebug", "--remote", "9999") do
-        assert_calls(Byebug, :start_client, "localhost 9999") { runner.run }
-      end
+      stdout = run_byebug("--remote", "9999")
+
+      assert_match(
+        /Connecting to byebug server at localhost:9999\.\.\./,
+        stdout
+      )
     end
 
     def test_run_with_remote_option_with_host_and_port_specification
-      with_command_line("exe/byebug", "--remote", "myhost:9999") do
-        assert_calls(Byebug, :start_client, "myhost 9999") { runner.run }
-      end
+      stdout = run_byebug("--remote", "myhost:9999")
+
+      assert_match(/Connecting to byebug server at myhost:9999\.\.\./, stdout)
     end
 
     def test_run_without_a_script_to_debug
-      with_command_line("exe/byebug") do
-        runner.run
+      stdout = run_byebug
 
-        check_error_includes "You must specify a program to debug"
-      end
+      assert_match_error("You must specify a program to debug", stdout)
     end
 
     def test_run_with_an_nonexistent_script
-      with_command_line("exe/byebug", "non_existent_script.rb") do
-        runner.run
+      stdout = run_byebug("non_existent_script.rb")
 
-        check_error_includes "The script doesn't exist"
-      end
+      assert_match_error("The script doesn't exist", stdout)
     end
 
     def test_run_with_an_invalid_script
       example_file.write("[1,2,")
       example_file.close
 
-      with_command_line("exe/byebug", example_path) do
-        runner.run
+      stdout = run_byebug(example_path)
 
-        check_error_includes "The script has incorrect syntax"
-      end
+      assert_match_error("The script has incorrect syntax", stdout)
     end
 
     private
 
-    def runner
-      @runner ||= Byebug::Runner.new(false)
+    def assert_match_error(message, output)
+      assert_match(/\*\*\* #{message}/, output)
     end
   end
 end
