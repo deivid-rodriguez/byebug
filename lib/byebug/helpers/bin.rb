@@ -8,20 +8,39 @@ module Byebug
     module BinHelper
       #
       # Cross-platform way of finding an executable in the $PATH.
-      # Borrowed from: http://stackoverflow.com/questions/2108727
+      # Adapted from: https://gist.github.com/steakknife/88b6c3837a5e90a08296
       #
       def which(cmd)
         return File.expand_path(cmd) if File.exist?(cmd)
 
-        exts = ENV["PATHEXT"] ? ENV["PATHEXT"].split(";") : [""]
-        ENV["PATH"].split(File::PATH_SEPARATOR).each do |path|
-          exts.each do |ext|
-            exe = File.join(path, "#{cmd}#{ext}")
-            return exe if File.executable?(exe) && !File.directory?(exe)
-          end
+        [nil, *search_paths].each do |path|
+          exe = find_executable(path, cmd)
+          return exe if exe
         end
 
         nil
+      end
+
+      def find_executable(path, cmd)
+        executable_file_extensions.each do |ext|
+          exe = File.expand_path(cmd + ext, path)
+
+          return exe if real_executable?(exe)
+        end
+
+        nil
+      end
+
+      def search_paths
+        ENV["PATH"].split(File::PATH_SEPARATOR)
+      end
+
+      def executable_file_extensions
+        ENV["PATHEXT"] ? ENV["PATHEXT"].split(";") : [""]
+      end
+
+      def real_executable?(f)
+        File.executable?(f) && !File.directory?(f)
       end
     end
   end
