@@ -7,6 +7,10 @@
 * Show valid breakpoint locations when invalid location given (#393, @ko1).
 * Ruby 2.5.0 support (#397, @yui-knk).
 
+## Fixed
+
+* Properly ignore ruby fullpath executable when passed to byebug script (#419).
+
 ## 9.1.0 - 2017-08-22
 
 ### Added
