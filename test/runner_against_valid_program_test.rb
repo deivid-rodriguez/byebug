@@ -54,7 +54,7 @@ module Byebug
     def test_run_with_post_mortem_mode_flag
       stdout = run_byebug(
         "-m", example_path,
-        input: "show post_mortem"
+        input: "show post_mortem\nset post_mortem off"
       )
 
       assert_match(/post_mortem is on/, stdout)
@@ -63,7 +63,7 @@ module Byebug
     def test_run_with_linetracing_flag
       stdout = run_byebug(
         "-t", example_path,
-        input: "show linetrace"
+        input: "show linetrace\nset linetrace off"
       )
 
       assert_match(/linetrace is on/, stdout)
