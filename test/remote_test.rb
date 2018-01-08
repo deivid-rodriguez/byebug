@@ -97,7 +97,7 @@ module Byebug
       define_test("connecting_to_remote_debugger_using_#{code}") do
         write_program(send(code))
 
-        remote_debug("quit!")
+        remote_debug_and_connect("quit!")
 
         check_output_includes \
           "Connecting to byebug server at 127.0.0.1:8989...",
@@ -107,7 +107,7 @@ module Byebug
       define_test("interacting_with_remote_debugger_using_#{code}") do
         write_program(send(code))
 
-        remote_debug("cont 9", "cont")
+        remote_debug_and_connect("cont 9", "cont")
 
         check_output_includes \
           "7:   class ByebugExampleClass",
@@ -119,25 +119,15 @@ module Byebug
       define_test("interrupting_client_doesnt_abort_server_using_#{code}") do
         write_program(send(code))
 
-        i, oe, t = Open3.popen2e(
-          { "MINITEST_TEST" => __method__.to_s },
-          "ruby -I#{BYEBUG} -rsimplecov #{example_path}"
-        )
+        status = remote_debug_connect_and_interrupt("cont")
 
-        th = Thread.new { launch_client }
-        sleep(windows? ? 3 : 1)
-        Thread.kill(th)
-
-        i.close
-        oe.close
-
-        assert_equal true, t.value.success?
+        assert_equal true, status.success?
       end
 
       define_test("ignoring_main_server_and_control_threads_using_#{code}") do
         write_program(send(code))
 
-        remote_debug("thread list", "cont")
+        remote_debug_and_connect("thread list", "cont")
 
         check_output_includes \
           %r{!.*/byebug/remote/server.rb},
@@ -148,21 +138,9 @@ module Byebug
     def test_interrupting_client_doesnt_abort_server_after_a_second_breakpoint
       write_program(program_with_two_breakpoints)
 
-      i, oe, t = Open3.popen2e(
-        { "MINITEST_TEST" => __method__.to_s },
-        "ruby -I#{BYEBUG} -rsimplecov #{example_path}"
-      )
+      status = remote_debug_connect_and_interrupt("cont")
 
-      enter "cont"
-
-      th = Thread.new { launch_client }
-      sleep(windows? ? 3 : 1)
-      Thread.kill(th)
-
-      i.close
-      oe.close
-
-      assert_equal true, t.value.success?
+      assert_equal true, status.success?
     end
 
     private
@@ -172,13 +150,34 @@ module Byebug
       example_file.close
     end
 
+    def remote_debug_and_connect(*commands)
+      remote_debug(*commands) do |wait_th|
+        launch_client
+
+        wait_th.value
+      end
+    end
+
+    def remote_debug_connect_and_interrupt(*commands)
+      remote_debug(*commands) do |wait_th|
+        th = Thread.new { launch_client }
+        sleep(windows? ? 3 : 1)
+        Thread.kill(th)
+
+        wait_th.value
+      end
+    end
+
     def remote_debug(*commands)
       enter(*commands)
 
-      Open3.popen2e("ruby -I#{BYEBUG} #{example_path}") do |_i, _oe, t|
-        launch_client
+      test_name = Thread.current.backtrace_locations[3].label
 
-        t.value
+      Open3.popen2e(
+        { "MINITEST_TEST" => test_name },
+        "ruby -rsimplecov -I#{BYEBUG} #{example_path}"
+      ) do |_i, _oe, t|
+        yield(t)
       end
     end
 
