@@ -5,7 +5,7 @@ init:
   # Loads trunk build, updates MSYS2 / MinGW to most recent gcc compiler, replaces GDBM & OpenSSL packages
   - if %ruby_version%==_trunk (
       appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:\ruby_trunk.7z &
-      7z x C:\ruby_trunk.7z -oC:\ruby_trunk & C:\ruby_trunk\trunk_msys2.cmd)
+      7z x C:\ruby_trunk.7z -oC:\ruby_trunk)
 
 version: "{build}"
 
