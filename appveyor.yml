@@ -1,7 +1,5 @@
 ---
 
-version: "{build}"
-
 install:
   - SET PATH=C:\ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:/Windows/system32
 
