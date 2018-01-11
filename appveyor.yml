@@ -12,7 +12,7 @@ version: "{build}"
 install:
   - git clone -q --depth=5  --no-tags --branch=byebug https://github.com/MSP-greg/rb-readline.git C:\rb-readline
 
-  - set n_dir=C:\ruby%ruby_version%\lib\ruby\site_ruby\%r_vers%
+  - set n_dir=C:\ruby%ruby_version%\lib\ruby\site_ruby\%ruby_abi_version%
   - attrib.exe -r %n_dir%\*.rb
   - del /q %n_dir%\readline.rb
   - del /q %n_dir%\rbreadline.rb
@@ -40,15 +40,15 @@ test_script:
 environment:
   matrix:
     - ruby_version: "23"
-      r_vers: 2.3.0
+      ruby_abi_version: 2.3.0
     - ruby_version: 23-x64
-      r_vers: 2.3.0
+      ruby_abi_version: 2.3.0
     - ruby_version: "24"
-      r_vers: 2.4.0
+      ruby_abi_version: 2.4.0
     - ruby_version: 24-x64
-      r_vers: 2.4.0
+      ruby_abi_version: 2.4.0
     - ruby_version: _trunk
-      r_vers: 2.6.0
+      ruby_abi_version: 2.6.0
 
 cache:
   - .bundle/gems
