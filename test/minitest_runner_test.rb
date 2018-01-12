@@ -3,7 +3,7 @@
 require "test_helper"
 
 module Byebug
-  class MinitestRunnerTest < Minitest::Test
+  class MinitestRunnerTest < TestCase
     def test_runs
       output = run_minitest_runner("test/debugger_alias_test.rb")
 
@@ -56,14 +56,8 @@ module Byebug
     private
 
     def run_minitest_runner(*args)
-      test_name = Thread.current.backtrace_locations[2].label
-
       out, = capture_subprocess_io do
-        assert_equal true, system(
-          { "RUBYOPT" => "-rsimplecov", "MINITEST_TEST" => test_name },
-          *binstub,
-          *args
-        )
+        assert_equal true, system(shell_out_env, *binstub, *args)
       end
 
       out
