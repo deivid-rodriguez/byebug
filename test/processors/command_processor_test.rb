@@ -103,9 +103,7 @@ module Byebug
     end
 
     def test_eval_evaluates_just_like_without_it
-      # rubocop:disable Lint/InterpolationCheck
       enter 's = "something"', 'eval "s is #{s}"'
-      # rubocop:enable Lint/InterpolationCheck
 
       debug_code(minimal_program)
 
