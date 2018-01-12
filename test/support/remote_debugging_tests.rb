@@ -66,7 +66,7 @@ module Byebug
     def remote_debug_connect_and_interrupt(*commands)
       remote_debug(*commands) do |wait_th|
         th = Thread.new { launch_client }
-        sleep(windows? ? 3 : 1)
+        sleep(7)
         Thread.kill(th)
 
         wait_th.value
@@ -82,7 +82,7 @@ module Byebug
     end
 
     def launch_client
-      Timeout.timeout(5) do
+      Timeout.timeout(7) do
         begin
           Byebug.start_client("127.0.0.1")
         rescue Errno::ECONNREFUSED
