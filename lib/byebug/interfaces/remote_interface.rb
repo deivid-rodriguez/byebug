@@ -28,13 +28,13 @@ module Byebug
 
     def print(message)
       super(message)
-    rescue Errno::EPIPE
+    rescue Errno::EPIPE, Errno::ECONNABORTED
       nil
     end
 
     def puts(message)
       super(message)
-    rescue Errno::EPIPE
+    rescue Errno::EPIPE, Errno::ECONNABORTED
       nil
     end
 
