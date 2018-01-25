@@ -215,14 +215,13 @@ module Byebug
     # Runs program <cmd> in a subprocess feeding it with some input <input> and
     # returns the output of the program.
     #
-    # @param env [Hash] Environment to be passed to the subprocess.
     # @param cmd [Array] Command line to be run.
     # @param input [String] Input string to feed to the program.
     #
     # @return Program's output
     #
-    def run_program(env, cmd, input = "")
-      stdout, = Open3.capture2e(env, *cmd, stdin_data: input)
+    def run_program(cmd, input = "")
+      stdout, = Open3.capture2e(shell_out_env, *cmd, stdin_data: input)
 
       stdout
     end
@@ -238,15 +237,26 @@ module Byebug
     # @return Byebug's output
     #
     def run_byebug(*args, input: "")
-      caller_method = Thread.current.backtrace_locations[2].label
-      cmd = [*binstub, *args]
+      run_program([*binstub, *args], input)
+    end
+
+    #
+    # Common environment shared by specs that shell out. It needs to:
+    #
+    # * Adds byebug to the LOAD_PATH.
+    # * Setup coverage tracking so that coverage in the subprocess is tracked.
+    #
+    def shell_out_env
+      minitest_test = Thread.current.backtrace_locations.find do |location|
+        location.label.start_with?("test_")
+      end
+
       byebug_dir = File.absolute_path(File.join("..", "..", "lib"), __dir__)
-      env = {
-        "MINITEST_TEST" => caller_method,
+
+      {
+        "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
         "RUBYOPT" => "-r simplecov -I #{byebug_dir}"
       }
-
-      run_program(env, cmd, input)
     end
 
     #

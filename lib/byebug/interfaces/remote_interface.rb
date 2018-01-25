@@ -16,25 +16,35 @@ module Byebug
 
     def read_command(prompt)
       super("PROMPT #{prompt}")
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      "continue"
     end
 
     def confirm(prompt)
       super("CONFIRM #{prompt}")
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      false
+    end
+
+    def print(message)
+      super(message)
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      nil
+    end
+
+    def puts(message)
+      super(message)
+    rescue Errno::EPIPE, Errno::ECONNABORTED
+      nil
     end
 
     def close
       output.close
-    rescue IOError
-      errmsg("Error closing the interface...")
     end
 
     def readline(prompt)
-      output.puts(prompt)
-
-      result = input.gets
-      raise IOError unless result
-
-      result.chomp
+      puts(prompt)
+      (input.gets || "continue").chomp
     end
   end
 end

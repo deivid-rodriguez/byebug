@@ -10,14 +10,32 @@ module Byebug
     include TestUtils
 
     def test_script_processor_clears_history
-      with_init_file("set callstyle long") do
+      previous_history = Readline::HISTORY.to_a
+
+      process_rc_file("set callstyle long")
+
+      assert_equal previous_history, Readline::HISTORY.to_a
+    end
+
+    def test_script_processor_closes_files
+      process_rc_file("set callstyle long")
+
+      assert_equal 0, dangling_descriptors.count
+    end
+
+    private
+
+    def dangling_descriptors
+      ObjectSpace.each_object(File).select do |f|
+        f.path == Byebug.init_file && !f.closed?
+      end
+    end
+
+    def process_rc_file(content)
+      with_init_file(content) do
         interface = ScriptInterface.new(Byebug.init_file)
 
-        previous_history = Readline::HISTORY.to_a
-
         ScriptProcessor.new(nil, interface).process_commands
-
-        assert_equal previous_history, Readline::HISTORY.to_a
       end
     end
   end

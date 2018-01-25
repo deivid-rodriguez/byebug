@@ -5,8 +5,7 @@
 #
 module Byebug
   #
-  # Enters byebug right before (or right after if _before_ is false) return
-  # events occur. Before entering byebug the init script is read.
+  # Starts byebug, and stops at the first line of user's code.
   #
   def self.attach
     require "byebug/core"
@@ -20,6 +19,13 @@ module Byebug
 
     current_context.step_out(3, true)
   end
+
+  def self.spawn(host = "localhost", port = nil)
+    require "byebug/core"
+
+    self.wait_connection = true
+    start_server(host, port || PORT)
+  end
 end
 
 #
@@ -29,6 +35,12 @@ end
 #
 module Kernel
   def byebug
+    Byebug.attach
+  end
+
+  def remote_byebug(host = "localhost", port = nil)
+    Byebug.spawn(host, port)
+
     Byebug.attach
   end
 

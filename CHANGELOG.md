@@ -7,10 +7,14 @@
 * Show valid breakpoint locations when invalid location given (#393, @ko1).
 * Ruby 2.5.0 support (#397, @yui-knk).
 * Log host & port when launching byebug's client in remote mode.
+* Some love & tests to remote debugging (#82).
+* `remote_byebug` shortcut to start the most common case for remote debugging (#141).
 
 ## Fixed
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
+* Remote server crash when interrupting client (#141, #274).
+* Control server thread being able to `interrupt` main thread only a single time. (#239).
 
 ## 9.1.0 - 2017-08-22
 
