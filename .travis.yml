@@ -23,9 +23,6 @@ env:
     - "LIBEDIT=false"
 
 before_install:
-  - brew update;
-  - brew install shellcheck clang-format@3.8;
-  - ln -s /usr/local/opt/clang-format@3.8/bin/clang-format /usr/local/bin/clang-format;
   - if [ "$LIBEDIT" == "true" ]; then
       brew install libedit;
     fi
