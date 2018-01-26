@@ -60,8 +60,10 @@ cache:
 
 matrix:
   allow_failures:
-    - ruby_version: head
+    - ruby_version: head-x86
+      ruby_abi_version: 2.6.0
     - ruby_version: head-x64
+      ruby_abi_version: 2.6.0
 
 branches:
   only:
