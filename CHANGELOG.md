@@ -2,6 +2,13 @@
 
 ## Master (Unreleased)
 
+## 10.0.0 - 2018-01-26
+
+### Changed
+
+* Breaking on methods now stops on the first effective line of a method, not on
+  the line containing the `def` keyword.
+
 ### Added
 
 * Show valid breakpoint locations when invalid location given (#393, @ko1).
