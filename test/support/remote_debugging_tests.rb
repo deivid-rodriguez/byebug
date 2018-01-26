@@ -59,6 +59,8 @@ module Byebug
       remote_debug(*commands) do |wait_th|
         launch_client
 
+        wait_for_client_startup
+
         wait_th.value
       end
     end
@@ -67,7 +69,7 @@ module Byebug
       remote_debug(*commands) do |wait_th|
         th = Thread.new { launch_client }
 
-        sleep 0.1 until mutex.synchronize { client.started? }
+        wait_for_client_startup
 
         th.kill
 
@@ -83,15 +85,15 @@ module Byebug
       end
     end
 
+    def wait_for_client_startup
+      sleep 0.1 until mutex.synchronize { client.started? }
+    end
+
     def launch_client
-      Timeout.timeout(7) do
-        begin
-          mutex.synchronize { client.start("127.0.0.1") }
-        rescue Errno::ECONNREFUSED
-          sleep 0.1
-          retry
-        end
-      end
+      mutex.synchronize { client.start("127.0.0.1") }
+    rescue Errno::ECONNREFUSED
+      sleep 0.1
+      retry
     end
 
     def mutex
