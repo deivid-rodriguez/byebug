@@ -46,6 +46,10 @@ environment:
       ruby_abi_version: 2.4.0
     - ruby_version: 24-x64
       ruby_abi_version: 2.4.0
+    - ruby_version: "25"
+      ruby_abi_version: 2.5.0
+    - ruby_version: 25-x64
+      ruby_abi_version: 2.5.0
     - ruby_version: head-x86
       ruby_abi_version: 2.6.0
     - ruby_version: head-x64
