@@ -64,6 +64,13 @@ task :build_docker_images do
   Docker::Manager.build_all
 end
 
+desc "Test docker images"
+task :test_docker_images do
+  require_relative "docker/manager"
+
+  Docker::Manager.test_all
+end
+
 desc "Push docker images to dockerhub"
 task :push_docker_images do
   require_relative "docker/manager"
