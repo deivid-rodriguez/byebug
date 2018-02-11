@@ -50,6 +50,16 @@ module Docker
       puts(status ? "✔" : "❌")
     end
 
+    def test
+      print "Testing image #{tag}... "
+
+      status = system <<-COMMAND
+        docker run -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
+      COMMAND
+
+      puts(status ? "✔" : "❌")
+    end
+
     def push
       print "Pushing image #{tag}... "
 
@@ -77,6 +87,10 @@ module Docker
     class << self
       def build_all
         for_all_images(&:build)
+      end
+
+      def test_all
+        for_all_images(&:test)
       end
 
       def push_all

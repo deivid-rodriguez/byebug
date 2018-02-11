@@ -57,18 +57,23 @@ end
 desc "Runs lint tasks not available on codeclimate"
 task lint: ["lint:clang_format", "lint:unnecessary_executables"]
 
-desc "Build docker images"
-task :build_docker_images do
+namespace :docker do
   require_relative "docker/manager"
 
-  Docker::Manager.build_all
-end
+  desc "Build docker images"
+  task :build do
+    Docker::Manager.build_all
+  end
 
-desc "Push docker images to dockerhub"
-task :push_docker_images do
-  require_relative "docker/manager"
+  desc "Test docker images"
+  task :test do
+    Docker::Manager.test_all
+  end
 
-  Docker::Manager.push_all
+  desc "Push docker images to dockerhub"
+  task :push do
+    Docker::Manager.push_all
+  end
 end
 
 task default: %i[compile test lint]
