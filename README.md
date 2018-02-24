@@ -138,7 +138,6 @@ Command     | Aliases      | Subcommands
 `untracevar`|              |
 `up`        |              |
 `var`       |              | `all` `constant` `global` `instance` `local`
-`where`     |              |
 
 ## Semantic Versioning
 
