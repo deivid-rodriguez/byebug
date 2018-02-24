@@ -106,8 +106,8 @@ Command     | Aliases      | Subcommands
 `catch`     |              |
 `condition` |              |
 `continue`  |              |
-`delete`    |              |
 `debug`     |              |
+`delete`    |              |
 `disable`   |              | `breakpoints` `display`
 `display`   |              |
 `down`      |              |
@@ -118,6 +118,7 @@ Command     | Aliases      | Subcommands
 `help`      |              |
 `history`   |              |
 `info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
+`interrupt` |              |
 `irb`       |              |
 `kill`      |              |
 `list`      |              |
@@ -134,8 +135,10 @@ Command     | Aliases      | Subcommands
 `thread`    |              | `current` `list` `resume` `stop` `switch`
 `tracevar`  |              |
 `undisplay` |              |
+`untracevar`|              |
 `up`        |              |
 `var`       |              | `all` `constant` `global` `instance` `local`
+`where`     |              |
 
 ## Semantic Versioning
 
