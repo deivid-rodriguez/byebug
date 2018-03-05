@@ -39,8 +39,8 @@ module Byebug
         ENV["PATHEXT"] ? ENV["PATHEXT"].split(";") : [""]
       end
 
-      def real_executable?(f)
-        File.executable?(f) && !File.directory?(f)
+      def real_executable?(file)
+        File.executable?(file) && !File.directory?(file)
       end
     end
   end

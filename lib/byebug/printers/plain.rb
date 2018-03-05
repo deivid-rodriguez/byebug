@@ -22,7 +22,7 @@ module Byebug
         lines.join
       end
 
-      def print_variables(variables, *_)
+      def print_variables(variables, *_unused)
         print_collection("variable.variable", variables) do |(key, value), _|
           value = value.nil? ? "nil" : value.to_s
           if "#{key} = #{value}".size > Setting[:width]

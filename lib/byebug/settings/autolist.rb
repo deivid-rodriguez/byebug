@@ -18,8 +18,8 @@ module Byebug
       "Invoke list command on every stop"
     end
 
-    def value=(v)
-      ListCommand.always_run = v ? 1 : 0
+    def value=(val)
+      ListCommand.always_run = val ? 1 : 0
     end
 
     def value
