@@ -67,8 +67,8 @@ module Byebug
       #
       # @param i [Integer] Integer to be converted in a proper positive index.
       #
-      def index_from_start(i)
-        i >= 0 ? i : context.stack_size + i
+      def index_from_start(index)
+        index >= 0 ? index : context.stack_size + index
       end
     end
   end

@@ -16,8 +16,8 @@ module Byebug
       "Enable/disable post-mortem mode"
     end
 
-    def value=(v)
-      Byebug.post_mortem = v
+    def value=(val)
+      Byebug.post_mortem = val
     end
 
     def value

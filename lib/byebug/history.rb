@@ -45,7 +45,7 @@ module Byebug
     def save
       n_cmds = Setting[:histsize] > size ? size : Setting[:histsize]
 
-      open(Setting[:histfile], "w") do |file|
+      File.open(Setting[:histfile], "w") do |file|
         n_cmds.times { file.puts(pop) }
       end
 
@@ -91,10 +91,10 @@ module Byebug
     end
 
     #
-    # Array of ids of the last n commands.
+    # Array of ids of the last +number+ commands.
     #
-    def last_ids(n)
-      (1 + size - n..size).to_a
+    def last_ids(number)
+      (1 + size - number..size).to_a
     end
 
     #

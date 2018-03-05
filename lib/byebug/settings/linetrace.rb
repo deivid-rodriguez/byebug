@@ -11,8 +11,8 @@ module Byebug
       "Enable line execution tracing"
     end
 
-    def value=(v)
-      Byebug.tracing = v
+    def value=(val)
+      Byebug.tracing = val
     end
 
     def value

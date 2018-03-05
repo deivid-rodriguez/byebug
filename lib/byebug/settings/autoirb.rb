@@ -18,8 +18,8 @@ module Byebug
       "Invoke IRB on every stop"
     end
 
-    def value=(v)
-      IrbCommand.always_run = v ? 1 : 0
+    def value=(val)
+      IrbCommand.always_run = val ? 1 : 0
     end
 
     def value

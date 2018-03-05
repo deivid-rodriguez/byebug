@@ -18,8 +18,8 @@ module Byebug
       "Invoke Pry on every stop"
     end
 
-    def value=(v)
-      PryCommand.always_run = v ? 1 : 0
+    def value=(val)
+      PryCommand.always_run = val ? 1 : 0
     end
 
     def value

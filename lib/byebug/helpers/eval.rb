@@ -63,22 +63,22 @@ module Byebug
         yield(e)
       end
 
-      def msg(e)
-        msg = Setting[:stack_on_error] ? error_msg(e) : warning_msg(e)
+      def msg(exception)
+        msg = Setting[:stack_on_error] ? error_msg(exception) : warning_msg(exception)
 
         pr("eval.exception", text_message: msg)
       end
 
-      def error_msg(e)
-        at = e.backtrace
+      def error_msg(exception)
+        at = exception.backtrace
 
-        locations = ["#{at.shift}: #{warning_msg(e)}"]
+        locations = ["#{at.shift}: #{warning_msg(exception)}"]
         locations += at.map { |path| "  from #{path}" }
         locations.join("\n")
       end
 
-      def warning_msg(e)
-        "#{e.class} Exception: #{e.message}"
+      def warning_msg(exception)
+        "#{exception.class} Exception: #{exception.message}"
       end
 
       #
