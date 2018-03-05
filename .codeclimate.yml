@@ -51,9 +51,6 @@ plugins:
   markdownlint:
     enabled: true
 
-  rubocop:
-    enabled: true
-
   shellcheck:
     enabled: true
 

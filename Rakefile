@@ -37,6 +37,9 @@ task :test do
 end
 
 namespace :lint do
+  desc "Run all linters"
+  task all: %i[clang_format unnecessary_executables rubocop]
+
   require_relative "tasks/linter"
 
   desc "Run clang_format on C files"
@@ -52,10 +55,14 @@ namespace :lint do
 
     ExecutableLinter.new.run
   end
+
+  require "rubocop/rake_task"
+
+  RuboCop::RakeTask.new
 end
 
 desc "Runs lint tasks not available on codeclimate"
-task lint: ["lint:clang_format", "lint:unnecessary_executables"]
+task lint: "lint:all"
 
 namespace :docker do
   require_relative "docker/manager"

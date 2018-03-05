@@ -107,10 +107,7 @@ module Docker
       private
 
       def releases_url
-        # rubocop:disable Metrics/LineLength
-        # see https://github.com/bbatsov/rubocop/issues/5350
         "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
-        # rubocop:enable Metrics/LineLength
       end
 
       def for_all_images
