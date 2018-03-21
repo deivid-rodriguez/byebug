@@ -21,7 +21,7 @@
 * Some love & tests to remote debugging (#82).
 * `remote_byebug` shortcut to start the most common case for remote debugging (#141).
 
-## Fixed
+### Fixed
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
 * Remote server crash when interrupting client (#141, #274).
