@@ -124,7 +124,7 @@ extern VALUE threads;
 extern VALUE next_thread;
 
 /* functions from context.c */
-extern void Init_context(VALUE mByebug);
+extern void Init_byebug_context(VALUE mByebug);
 extern VALUE byebug_context_create(VALUE thread);
 extern VALUE context_dup(debug_context_t *context);
 extern void reset_stepping_stop_points(debug_context_t *context);
