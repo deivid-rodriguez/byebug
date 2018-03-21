@@ -891,7 +891,7 @@ Init_byebug()
   rb_define_module_function(mByebug, "verbose=", Set_verbose, 1);
 
   Init_threads_table(mByebug);
-  Init_context(mByebug);
+  Init_byebug_context(mByebug);
   Init_breakpoint(mByebug);
 
   rb_global_variable(&breakpoints);

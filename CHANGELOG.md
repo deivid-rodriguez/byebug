@@ -2,6 +2,10 @@
 
 ## Master (Unreleased)
 
+### Fixed
+
+* Error when using byebug with `debase` gem (#443, @tzmfreedom)
+
 ## 10.0.0 - 2018-01-26
 
 ### Changed

@@ -56,7 +56,7 @@ dc_stack_size(debug_context_t *context)
 }
 
 extern VALUE
-context_create(VALUE thread)
+byebug_context_create(VALUE thread)
 {
   debug_context_t *context = ALLOC(debug_context_t);
 
@@ -642,7 +642,7 @@ dt_inherited(VALUE klass)
  *   Byebug keeps a single instance of this class per thread.
  */
 void
-Init_context(VALUE mByebug)
+Init_byebug_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
 
