@@ -2,6 +2,8 @@
 
 ## Master (Unreleased)
 
+## 10.0.1 - 2018-03-21
+
 ### Fixed
 
 * Error when using byebug with `debase` gem (#443, @tzmfreedom)
@@ -21,7 +23,7 @@
 * Some love & tests to remote debugging (#82).
 * `remote_byebug` shortcut to start the most common case for remote debugging (#141).
 
-## Fixed
+### Fixed
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
 * Remote server crash when interrupting client (#141, #274).
