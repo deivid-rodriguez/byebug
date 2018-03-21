@@ -56,7 +56,7 @@ dc_stack_size(debug_context_t *context)
 }
 
 extern VALUE
-context_create(VALUE thread)
+byebug_context_create(VALUE thread)
 {
   debug_context_t *context = ALLOC(debug_context_t);
 

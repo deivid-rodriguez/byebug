@@ -118,7 +118,7 @@ thread_context_lookup(VALUE thread, VALUE *context)
 
   if (!st_lookup(t_tbl->tbl, thread, context) || !*context)
   {
-    *context = context_create(thread);
+    *context = byebug_context_create(thread);
     st_insert(t_tbl->tbl, thread, *context);
   }
 }
