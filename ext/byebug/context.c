@@ -5,9 +5,9 @@ static VALUE cDebugThread;
 static int thnum_max = 0;
 
 /* "Step", "Next" and "Finish" do their work by saving information about where
- * to stop next. reset_stepping_stop_points removes/resets this information. */
+ * to stop next. byebug_reset_stepping_stop_points removes/resets this information. */
 extern void
-reset_stepping_stop_points(debug_context_t *context)
+byebug_reset_stepping_stop_points(debug_context_t *context)
 {
   context->dest_frame = -1;
   context->lines = -1;
@@ -63,7 +63,7 @@ byebug_context_create(VALUE thread)
   context->flags = 0;
   context->thnum = ++thnum_max;
   context->thread = thread;
-  reset_stepping_stop_points(context);
+  byebug_reset_stepping_stop_points(context);
   context->stop_reason = CTX_STOP_NONE;
 
   rb_debug_inspector_open(context_backtrace_set, (void *)context);
@@ -81,7 +81,7 @@ context_dup(debug_context_t *context)
   debug_context_t *new_context = ALLOC(debug_context_t);
 
   memcpy(new_context, context, sizeof(debug_context_t));
-  reset_stepping_stop_points(new_context);
+  byebug_reset_stepping_stop_points(new_context);
   new_context->backtrace = context->backtrace;
   CTX_FL_SET(new_context, CTX_FL_DEAD);
 

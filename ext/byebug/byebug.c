@@ -244,7 +244,7 @@ call_at_line_check(VALUE ctx, debug_context_t *dc, VALUE breakpoint)
   if (!NIL_P(breakpoint))
     call_at_breakpoint(ctx, dc, breakpoint);
 
-  reset_stepping_stop_points(dc);
+  byebug_reset_stepping_stop_points(dc);
 
   call_at_line(ctx, dc);
 }
@@ -344,7 +344,7 @@ return_event(VALUE trace_point, void *data)
 
   if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
-    reset_stepping_stop_points(dc);
+    byebug_reset_stepping_stop_points(dc);
 
     call_at_return(context, dc, rb_tracearg_return_value(trace_arg));
   }
@@ -393,7 +393,7 @@ end_event(VALUE trace_point, void *data)
 
   if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))
   {
-    reset_stepping_stop_points(dc);
+    byebug_reset_stepping_stop_points(dc);
 
     call_at_end(context, dc);
   }
@@ -747,7 +747,7 @@ Debug_load(int argc, VALUE *argv, VALUE self)
   if (0 != state)
   {
     status = rb_errinfo();
-    reset_stepping_stop_points(dc);
+    byebug_reset_stepping_stop_points(dc);
   }
 
   return status;
@@ -892,7 +892,7 @@ Init_byebug()
 
   Init_threads_table(mByebug);
   Init_byebug_context(mByebug);
-  Init_breakpoint(mByebug);
+  Init_byebug_breakpoint(mByebug);
 
   rb_global_variable(&breakpoints);
   rb_global_variable(&catchpoints);

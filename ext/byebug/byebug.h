@@ -107,9 +107,9 @@ typedef struct
 } breakpoint_t;
 
 /* functions from locker.c */
-extern void add_to_locked(VALUE thread);
-extern VALUE pop_from_locked();
-extern void remove_from_locked(VALUE thread);
+extern void byebug_add_to_locked(VALUE thread);
+extern VALUE byebug_pop_from_locked();
+extern void byebug_remove_from_locked(VALUE thread);
 
 /* functions from threads.c */
 extern void Init_threads_table(VALUE mByebug);
@@ -127,13 +127,13 @@ extern VALUE next_thread;
 extern void Init_byebug_context(VALUE mByebug);
 extern VALUE byebug_context_create(VALUE thread);
 extern VALUE context_dup(debug_context_t *context);
-extern void reset_stepping_stop_points(debug_context_t *context);
+extern void byebug_reset_stepping_stop_points(debug_context_t *context);
 extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
 extern VALUE context_backtrace_set(const rb_debug_inspector_t *inspector,
                                    void *data);
 
 /* functions from breakpoint.c */
-extern void Init_breakpoint(VALUE mByebug);
+extern void Init_byebug_breakpoint(VALUE mByebug);
 extern VALUE find_breakpoint_by_pos(VALUE breakpoints, VALUE source, VALUE pos,
                                     VALUE bind);
 

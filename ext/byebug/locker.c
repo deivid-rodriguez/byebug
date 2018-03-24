@@ -29,7 +29,7 @@ is_in_locked(VALUE thread)
 }
 
 extern void
-add_to_locked(VALUE thread)
+byebug_add_to_locked(VALUE thread)
 {
   locked_thread_t *node;
 
@@ -50,7 +50,7 @@ add_to_locked(VALUE thread)
 }
 
 extern VALUE
-pop_from_locked()
+byebug_pop_from_locked()
 {
   VALUE thread;
   locked_thread_t *node;
@@ -71,7 +71,7 @@ pop_from_locked()
 }
 
 extern void
-remove_from_locked(VALUE thread)
+byebug_remove_from_locked(VALUE thread)
 {
   locked_thread_t *node;
   locked_thread_t *next_node;
@@ -81,7 +81,7 @@ remove_from_locked(VALUE thread)
 
   if (locked_head->thread == thread)
   {
-    pop_from_locked();
+    byebug_pop_from_locked();
     return;
   }
 

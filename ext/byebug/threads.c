@@ -134,7 +134,7 @@ acquire_lock(debug_context_t *dc)
   while ((!NIL_P(locker) && locker != rb_thread_current())
          || CTX_FL_TEST(dc, CTX_FL_SUSPEND))
   {
-    add_to_locked(rb_thread_current());
+    byebug_add_to_locked(rb_thread_current());
     rb_thread_stop();
 
     if (CTX_FL_TEST(dc, CTX_FL_SUSPEND))
@@ -159,10 +159,10 @@ release_lock(void)
   locker = Qnil;
 
   if (NIL_P(next_thread))
-    thread = pop_from_locked();
+    thread = byebug_pop_from_locked();
   else
   {
-    remove_from_locked(next_thread);
+    byebug_remove_from_locked(next_thread);
     thread = next_thread;
     next_thread = Qnil;
   }
