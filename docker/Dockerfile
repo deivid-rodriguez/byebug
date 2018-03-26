@@ -62,8 +62,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
-  && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
-  && chmod +x /usr/local/bin/cc-test-reporter
-
 WORKDIR /byebug
