@@ -9,7 +9,7 @@ steps: &steps
     - run:
         name: Install coverage reporter
         command: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.5.1-linux-amd64 > cc-test-reporter
           chmod +x cc-test-reporter
 
     - restore_cache:
