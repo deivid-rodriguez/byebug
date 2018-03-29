@@ -54,7 +54,7 @@ module Docker
       print "Testing image #{tag}... "
 
       status = system <<-COMMAND
-        docker run -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
+        docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
       COMMAND
 
       puts(status ? "✔" : "❌")
