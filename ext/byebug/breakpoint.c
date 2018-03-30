@@ -491,7 +491,7 @@ find_breakpoint_by_method(VALUE breakpoints, VALUE klass, ID mid, VALUE bind,
 }
 
 void
-Init_breakpoint(VALUE mByebug)
+Init_byebug_breakpoint(VALUE mByebug)
 {
   breakpoint_max = 0;
 
