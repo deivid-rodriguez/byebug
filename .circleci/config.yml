@@ -6,12 +6,6 @@ steps: &steps
   steps:
     - checkout
 
-    - run:
-        name: Install coverage reporter
-        command: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.5.1-linux-amd64 > cc-test-reporter
-          chmod +x cc-test-reporter
-
     - restore_cache:
         keys:
           - dependencies-{{ checksum "Gemfile.lock" }}
@@ -35,69 +29,69 @@ steps: &steps
           - .vendor/bundle
 
 jobs:
-  2.3.6-readline-gcc:
+  prior-to-prior-to-latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.3.6-readline-gcc
+      - image: deividrodriguez/byebug:2.3.7-readline-gcc
     <<: *steps
 
-  2.3.6-libedit-gcc:
+  prior-to-prior-to-latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.3.6-libedit-gcc
+      - image: deividrodriguez/byebug:2.3.7-libedit-gcc
     <<: *steps
 
-  2.3.6-readline-clang:
+  prior-to-prior-to-latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.3.6-readline-clang
+      - image: deividrodriguez/byebug:2.3.7-readline-clang
     <<: *steps
 
-  2.3.6-libedit-clang:
+  prior-to-prior-to-latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.3.6-libedit-clang
+      - image: deividrodriguez/byebug:2.3.7-libedit-clang
     <<: *steps
 
-  2.4.3-readline-gcc:
+  prior-to-latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.4.3-readline-gcc
+      - image: deividrodriguez/byebug:2.4.4-readline-gcc
     <<: *steps
 
-  2.4.3-libedit-gcc:
+  prior-to-latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.4.3-libedit-gcc
+      - image: deividrodriguez/byebug:2.4.4-libedit-gcc
     <<: *steps
 
-  2.4.3-readline-clang:
+  prior-to-latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.4.3-readline-clang
+      - image: deividrodriguez/byebug:2.4.4-readline-clang
     <<: *steps
 
-  2.4.3-libedit-clang:
+  prior-to-latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.4.3-libedit-clang
+      - image: deividrodriguez/byebug:2.4.4-libedit-clang
     <<: *steps
 
-  2.5.0-readline-gcc:
+  latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.5.0-readline-gcc
+      - image: deividrodriguez/byebug:2.5.1-readline-gcc
     <<: *steps
 
-  2.5.0-libedit-gcc:
+  latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.5.0-libedit-gcc
+      - image: deividrodriguez/byebug:2.5.1-libedit-gcc
     <<: *steps
 
-  2.5.0-readline-clang:
+  latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.5.0-readline-clang
+      - image: deividrodriguez/byebug:2.5.1-readline-clang
     <<: *steps
 
-  2.5.0-libedit-clang:
+  latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.5.0-libedit-clang
+      - image: deividrodriguez/byebug:2.5.1-libedit-clang
     <<: *steps
 
   upload_coverage:
     docker:
-      - image: deividrodriguez/byebug:2.5.0-readline-clang
+      - image: deividrodriguez/byebug:2.5.1-readline-clang
         environment:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
@@ -115,34 +109,34 @@ workflows:
 
   test:
     jobs:
-      - 2.3.6-readline-gcc
-      - 2.3.6-libedit-gcc
-      - 2.3.6-readline-clang
-      - 2.3.6-libedit-clang
+      - prior-to-prior-to-latest-readline-gcc
+      - prior-to-prior-to-latest-libedit-gcc
+      - prior-to-prior-to-latest-readline-clang
+      - prior-to-prior-to-latest-libedit-clang
 
-      - 2.4.3-readline-gcc
-      - 2.4.3-libedit-gcc
-      - 2.4.3-readline-clang
-      - 2.4.3-libedit-clang
+      - prior-to-latest-readline-gcc
+      - prior-to-latest-libedit-gcc
+      - prior-to-latest-readline-clang
+      - prior-to-latest-libedit-clang
 
-      - 2.5.0-readline-gcc
-      - 2.5.0-libedit-gcc
-      - 2.5.0-readline-clang
-      - 2.5.0-libedit-clang
+      - latest-readline-gcc
+      - latest-libedit-gcc
+      - latest-readline-clang
+      - latest-libedit-clang
 
       - upload_coverage:
           requires:
-            - 2.3.6-readline-gcc
-            - 2.3.6-libedit-gcc
-            - 2.3.6-readline-clang
-            - 2.3.6-libedit-clang
+            - prior-to-prior-to-latest-readline-gcc
+            - prior-to-prior-to-latest-libedit-gcc
+            - prior-to-prior-to-latest-readline-clang
+            - prior-to-prior-to-latest-libedit-clang
 
-            - 2.4.3-readline-gcc
-            - 2.4.3-libedit-gcc
-            - 2.4.3-readline-clang
-            - 2.4.3-libedit-clang
+            - prior-to-latest-readline-gcc
+            - prior-to-latest-libedit-gcc
+            - prior-to-latest-readline-clang
+            - prior-to-latest-libedit-clang
 
-            - 2.5.0-readline-gcc
-            - 2.5.0-libedit-gcc
-            - 2.5.0-readline-clang
-            - 2.5.0-libedit-clang
+            - latest-readline-gcc
+            - latest-libedit-gcc
+            - latest-readline-clang
+            - latest-libedit-clang
