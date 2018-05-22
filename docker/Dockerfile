@@ -52,7 +52,7 @@ RUN set -ex \
   && cd / \
   && rm -r /usr/src/ruby \
   \
-  && gem update --system 2.7.5 \
+  && gem update --system 2.7.7 \
   && rm -r /root/.gem
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
