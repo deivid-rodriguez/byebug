@@ -2,7 +2,7 @@
 
 set +x
 
-bin/bundle install --jobs 3 --retry 3 --path .bundle/gems
+bin/bundle install --jobs 3 --retry 3 --path .bundle
 bin/rake
 
 set -x

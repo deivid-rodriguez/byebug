@@ -5,7 +5,7 @@ sudo: false
 
 cache:
   directories:
-    - .bundle/gems
+    - .bundle
 
 language: ruby
 
