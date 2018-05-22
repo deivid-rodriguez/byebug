@@ -52,8 +52,7 @@ RUN set -ex \
   && cd / \
   && rm -r /usr/src/ruby \
   \
-  && gem update --system 2.7.5 \
-  && gem install bundler --version 1.16.1 --force \
+  && gem update --system 2.7.7 \
   && rm -r /root/.gem
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -62,7 +61,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-0.5.1-linux-amd64 \
+RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.0-linux-amd64 \
   && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
   && chmod +x /usr/local/bin/cc-test-reporter
 

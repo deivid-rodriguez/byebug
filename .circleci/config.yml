@@ -96,8 +96,11 @@ jobs:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
     steps:
+      - checkout
+
       - attach_workspace:
           at: ./coverage
+
       - run:
           name: Upload coverage results to Code Climate
           command: |

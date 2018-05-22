@@ -53,7 +53,7 @@ module Docker
     def test
       print "Testing image #{tag}... "
 
-      status = system <<-COMMAND
+      status = system <<-COMMAND, out: File::NULL, err: File::NULL
         docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
       COMMAND
 

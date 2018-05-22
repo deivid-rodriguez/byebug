@@ -5,7 +5,7 @@ sudo: false
 
 cache:
   directories:
-    - .bundle/gems
+    - .bundle
 
 language: ruby
 
@@ -28,7 +28,7 @@ before_install:
     fi
 
 install:
-  - gem install bundler -v 1.16.2
+  - gem update --system 2.7.7
 
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
