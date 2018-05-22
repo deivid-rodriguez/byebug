@@ -27,7 +27,7 @@ install:
   - gem --version
   - where gem
 
-  - gem install bundler -v 1.16.2 --no-document --force --conservative
+  - gem update --system 2.7.7
   - bundle config force_ruby_platform true
   - bundle install --jobs 3 --retry 3 --path .bundle
 
