@@ -100,6 +100,7 @@ jobs:
 
       - attach_workspace:
           at: ./coverage
+
       - run:
           name: Upload coverage results to Code Climate
           command: |
