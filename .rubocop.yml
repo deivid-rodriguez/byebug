@@ -1,11 +1,8 @@
+---
+
 AllCops:
   Exclude:
     - tmp/**/*
-
-  Include:
-    - .simplecov
-    - Gemfile
-    - Rakefile
 
   DisplayCopNames: true
   DisplayStyleGuide: true
@@ -20,6 +17,10 @@ Lint/InterpolationCheck:
 
 Metrics:
   Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - .simplecov
 
 TrivialAccessors:
   ExactNameMatch: true
