@@ -23,7 +23,7 @@ module Byebug
         dis[able][[ breakpoints| display)][ n1[ n2[ ...[ nn]]]]]
 
         #{short_description}
-       DESCRIPTION
+      DESCRIPTION
     end
 
     def self.short_description
