@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
-SimpleCov.command_name ENV["MINITEST_TEST"] || "MiniTest"
-SimpleCov.add_filter ".bundle"
-SimpleCov.start
+SimpleCov.start do
+  command_name ENV["MINITEST_TEST"] || "MiniTest"
+  add_filter ".bundle"
+end
