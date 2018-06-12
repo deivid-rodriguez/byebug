@@ -1,0 +1,70 @@
+---
+
+.defaults: &defaults
+  script: bin/ci.sh
+
+  stage: test
+
+prior-to-prior-to-latest-readline-gcc:
+  image: deividrodriguez/byebug:2.3.7-readline-gcc
+  <<: *defaults
+
+prior-to-prior-to-latest-libedit-gcc:
+  image: deividrodriguez/byebug:2.3.7-libedit-gcc
+  <<: *defaults
+
+prior-to-prior-to-latest-readline-clang:
+  image: deividrodriguez/byebug:2.3.7-readline-clang
+  <<: *defaults
+
+prior-to-prior-to-latest-libedit-clang:
+  image: deividrodriguez/byebug:2.3.7-libedit-clang
+  <<: *defaults
+
+prior-to-latest-readline-gcc:
+  image: deividrodriguez/byebug:2.4.4-readline-gcc
+  <<: *defaults
+
+prior-to-latest-libedit-gcc:
+  image: deividrodriguez/byebug:2.4.4-libedit-gcc
+  <<: *defaults
+
+prior-to-latest-readline-clang:
+  image: deividrodriguez/byebug:2.4.4-readline-clang
+  <<: *defaults
+
+prior-to-latest-libedit-clang:
+  image: deividrodriguez/byebug:2.4.4-libedit-clang
+  <<: *defaults
+
+latest-readline-gcc:
+  image: deividrodriguez/byebug:2.5.1-readline-gcc
+  <<: *defaults
+
+latest-libedit-gcc:
+  image: deividrodriguez/byebug:2.5.1-libedit-gcc
+  <<: *defaults
+
+latest-readline-clang:
+  image: deividrodriguez/byebug:2.5.1-readline-clang
+  <<: *defaults
+
+latest-libedit-clang:
+  image: deividrodriguez/byebug:2.5.1-libedit-clang
+  <<: *defaults
+
+upload-coverage:
+  image: deividrodriguez/byebug:2.5.1-readline-clang
+
+  script:
+    - cc-test-reporter sum-coverage coverage/codeclimate.*.json
+    - cc-test-reporter upload-coverage
+
+  stage: coverage
+
+  variables:
+    CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
+
+stages:
+  - test
+  - coverage
