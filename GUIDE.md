@@ -69,12 +69,13 @@ Now let us step through the program.
     5:   tri = 0
     6:
     7:   0.upto(n) { |i| tri += i }
-    9:   end
-   10:
-   11:   tri
-   12: end
-   13:
-=> 14: triangle(3)
+    8:
+    9:   tri
+   10: end
+   11:   
+=> 12: t = triangle(3)
+   13: puts t
+   14: 
 (byebug) <RET> # hit enter
 
 [1, 10] in /path/to/triangle.rb
