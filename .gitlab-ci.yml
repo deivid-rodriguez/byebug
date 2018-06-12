@@ -1,7 +1,13 @@
 ---
 
 .defaults: &defaults
-  script: bin/ci.sh
+  artifacts:
+    paths:
+      - coverage
+
+  script:
+    - bin/ci.sh
+    - cc-test-reporter format-coverage --output coverage/codeclimate.$CI_JOB_NAME.json
 
   stage: test
 
@@ -54,6 +60,20 @@ latest-libedit-clang:
   <<: *defaults
 
 upload-coverage:
+  dependencies:
+    - prior-to-prior-to-latest-readline-gcc
+    - prior-to-prior-to-latest-libedit-gcc
+    - prior-to-prior-to-latest-readline-clang
+    - prior-to-prior-to-latest-libedit-clang
+    - prior-to-latest-readline-gcc
+    - prior-to-latest-libedit-gcc
+    - prior-to-latest-readline-clang
+    - prior-to-latest-libedit-clang
+    - latest-readline-gcc
+    - latest-libedit-gcc
+    - latest-readline-clang
+    - latest-libedit-clang
+
   image: deividrodriguez/byebug:2.5.1-readline-clang
 
   script:
