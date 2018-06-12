@@ -72,7 +72,7 @@ Now let us step through the program.
     8:
     9:   tri
    10: end
-   11:   
+   11:
 => 12: t = triangle(3)
    13: puts t
 (byebug) <RET> # hit enter
