@@ -75,7 +75,6 @@ Now let us step through the program.
    11:   
 => 12: t = triangle(3)
    13: puts t
-   14: 
 (byebug) <RET> # hit enter
 
 [1, 10] in /path/to/triangle.rb
