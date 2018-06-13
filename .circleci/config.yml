@@ -95,6 +95,19 @@ jobs:
       - attach_workspace:
           at: ./coverage
 
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install dependencies
+          command: bin/bundle install --jobs 3 --retry 3 --path .bundle
+
+      - save_cache:
+          key: dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - .bundle
+
       - run:
           name: Upload coverage results to Code Climate
           command: bin/rake coverage:report
