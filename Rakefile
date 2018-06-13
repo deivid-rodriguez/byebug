@@ -114,3 +114,13 @@ end
 task default: %i[compile test lint]
 
 YARD::Rake::YardocTask.new
+
+namespace :coverage do
+  task :report do
+    require "simplecov"
+
+    SimpleCov.collate Dir["coverage/**/.resultset.json"] do
+      add_filter ".bundle"
+    end
+  end
+end

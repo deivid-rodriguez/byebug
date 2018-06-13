@@ -14,14 +14,10 @@ steps: &steps
         name: Run CI checks
         command: bin/ci.sh
 
-    - run:
-        name: Save coverage
-        command: cc-test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
-
     - persist_to_workspace:
         root: ./coverage
         paths:
-          - codeclimate.*.json
+          - "**/.resultset.json"
 
     - save_cache:
         key: dependencies-{{ checksum "Gemfile.lock" }}
@@ -89,11 +85,9 @@ jobs:
       - image: deividrodriguez/byebug:2.5.1-libedit-clang
     <<: *steps
 
-  upload_coverage:
+  coverage:
     docker:
       - image: deividrodriguez/byebug:2.5.1-readline-clang
-        environment:
-          - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
     steps:
       - checkout
@@ -103,9 +97,10 @@ jobs:
 
       - run:
           name: Upload coverage results to Code Climate
-          command: |
-            cc-test-reporter sum-coverage coverage/codeclimate.*.json
-            cc-test-reporter upload-coverage
+          command: bin/rake coverage:report
+
+      - store_artifacts:
+          path: coverage/index.html
 
 workflows:
   version: 2
@@ -127,7 +122,7 @@ workflows:
       - latest-readline-clang
       - latest-libedit-clang
 
-      - upload_coverage:
+      - coverage:
           requires:
             - prior-to-prior-to-latest-readline-gcc
             - prior-to-prior-to-latest-libedit-gcc

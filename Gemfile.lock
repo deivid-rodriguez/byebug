@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/buildkite/simplecov
+  revision: 7da8306d002eec976d84f3a2a91c30bd09cdc27b
+  branch: allow-manual-merging
+  specs:
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+
 PATH
   remote: .
   specs:
@@ -13,7 +23,7 @@ GEM
       netrc
       octokit (>= 2.2.0)
     coderay (1.1.2)
-    docile (1.3.0)
+    docile (1.3.1)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     jaro_winkler (1.5.1)
@@ -56,10 +66,6 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
-    simplecov (0.16.1)
-      docile (~> 1.1)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     tomlrb (1.2.7)
     unicode-display_width (1.4.0)
@@ -78,7 +84,7 @@ DEPENDENCIES
   rake (~> 12.3)
   rake-compiler (~> 1.0)
   rubocop (= 0.58.2)
-  simplecov (= 0.16.1)
+  simplecov (= 0.16.1)!
   yard (= 0.9.16)
 
 BUNDLED WITH
