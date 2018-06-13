@@ -1298,7 +1298,7 @@ Running a program from byebug adds a bit of overhead and slows it down a little.
 Furthermore, by necessity, debuggers change the operation of the program they
 are debugging. And this can lead to unexpected and unwanted differences. It has
 happened so often that the term
-[Heisenbugs](http://en.wikipedia.org/wiki/Heisenbug) was coined to describe the
+[Heisenbugs](https://en.wikipedia.org/wiki/Heisenbug) was coined to describe the
 situation where using a debugger (among other possibilities) changes the
 behavior of the program so that the bug doesn't manifest itself anymore.
 
