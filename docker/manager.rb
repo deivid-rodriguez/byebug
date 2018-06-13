@@ -53,7 +53,7 @@ module Docker
 
     def test
       command = <<-COMMAND
-        docker run --rm -v$(pwd):/byebug #{tag} bash -c ' bin/bundle && bin/rake'
+        docker run --rm -v$(pwd):/byebug #{tag} bash -c ' bin/bundle --path .bundle && bin/rake'
       COMMAND
 
       print "Testing image #{tag}: #{squish(command)}  "
