@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.name = "byebug"
   s.version = Byebug::VERSION
   s.authors = ["David Rodriguez", "Kent Sibilev", "Mark Moseley"]
-  s.email = "deivid.rodriguez@mail.com"
+  s.email = "deivid.rodriguez@riseup.net"
   s.license = "BSD-2-Clause"
   s.homepage = "https://github.com/deivid-rodriguez/byebug"
   s.summary = "Ruby fast debugger - base + CLI"
