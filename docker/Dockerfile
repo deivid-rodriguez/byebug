@@ -26,6 +26,7 @@ RUN set -ex \
     libffi-dev \
     libressl-dev \
     make \
+    sudo \
   " \
   && buildOnlyDeps=" \
     autoconf \
@@ -99,3 +100,9 @@ RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-repor
   && chmod +x /usr/local/bin/cc-test-reporter
 
 WORKDIR /byebug
+
+RUN adduser --shell /bin/bash --disabled-password --gecos "" byebug \
+  && adduser byebug sudo \
+  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+ENTRYPOINT ["/byebug/docker/entrypoint.sh"]
