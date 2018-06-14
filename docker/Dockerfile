@@ -105,4 +105,4 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" byebug \
   && adduser byebug sudo \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-ENTRYPOINT ["/byebug/docker/entrypoint.sh"]
+ENTRYPOINT ["/byebug/docker/bin/entrypoint.sh"]
