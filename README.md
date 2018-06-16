@@ -4,16 +4,20 @@
 [![Maintainability][mai]][mai_url]
 [![Coverage][cov]][cov_url]
 [![Gitter][irc]][irc_url]
+[![SemVer][semver]][semver_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [mai]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/maintainability
 [cov]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/test_coverage
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
+[semver]: https://api.dependabot.com/badges/compatibility_score?dependency-name=byebug&package-manager=bundler&version-scheme=semver
+
 
 [gem_url]: https://rubygems.org/gems/byebug
 [mai_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/maintainability
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/test_coverage
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
+[semver_url]: https://dependabot.com/compatibility-score.html?dependency-name=byebug&package-manager=bundler&version-scheme=semver
 
 Byebug is a simple to use, feature rich debugger for Ruby. It uses the
 TracePoint API for execution control and the Debug Inspector API for call stack
