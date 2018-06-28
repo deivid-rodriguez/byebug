@@ -38,8 +38,8 @@ module Byebug
       cleanup_namespace
       clear_example_file
 
-      Byebug.breakpoints.clear if Byebug.breakpoints
-      Byebug.catchpoints.clear if Byebug.catchpoints
+      Byebug.breakpoints&.clear
+      Byebug.catchpoints&.clear
 
       Byebug.stop
     end

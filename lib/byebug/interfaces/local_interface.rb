@@ -5,7 +5,7 @@ module Byebug
   # Interface class for standard byebug use.
   #
   class LocalInterface < Interface
-    EOF_ALIAS = "continue".freeze
+    EOF_ALIAS = "continue"
 
     def initialize
       super()

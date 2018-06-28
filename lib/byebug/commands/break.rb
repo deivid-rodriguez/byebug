@@ -76,7 +76,7 @@ module Byebug
     def target_object(str)
       k = error_eval(str)
 
-      k && k.is_a?(Module) ? k.name : str
+      k&.is_a?(Module) ? k.name : str
     rescue StandardError
       errmsg("Warning: breakpoint source is not yet defined")
       str
