@@ -57,7 +57,7 @@ module Byebug
 
     def run_minitest_runner(*args)
       out, = capture_subprocess_io do
-        assert_equal true, system(shell_out_env, *binstub, *args)
+        assert_equal true, system(shell_out_env(simplecov: false), *binstub, *args)
       end
 
       out
