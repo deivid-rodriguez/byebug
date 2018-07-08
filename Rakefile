@@ -38,7 +38,7 @@ end
 
 namespace :lint do
   desc "Run all linters"
-  task all: %i[clang_format unnecessary_executables rubocop]
+  task all: %i[clang_format unnecessary_executables rubocop mdl]
 
   require_relative "tasks/linter"
 
@@ -59,6 +59,13 @@ namespace :lint do
   require "rubocop/rake_task"
 
   RuboCop::RakeTask.new
+
+  desc "Checks markdown code style with Markdownlint"
+  task :mdl do
+    puts "Running mdl..."
+
+    abort unless system("mdl", *Dir.glob("*.md"))
+  end
 end
 
 desc "Runs lint tasks not available on codeclimate"
