@@ -48,9 +48,6 @@ plugins:
             - .rubocop_todo.yml
             - .travis.yml
 
-  markdownlint:
-    enabled: true
-
   shellcheck:
     enabled: true
 
