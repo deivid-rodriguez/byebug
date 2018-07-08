@@ -67,12 +67,9 @@ bundle add byebug --group "development, test"
 
 ### From within the Ruby code
 
-Simply drop
-
-    byebug
-
-wherever you want to start debugging and the execution will stop there.
-If you were debugging Rails, for example, you would add `byebug` to your code.
+Simply drop `byebug` wherever you want to start debugging and the execution will
+stop there. If you were debugging Rails, for example, you would add `byebug` to
+your code.
 
 ```ruby
 def index
