@@ -26,7 +26,7 @@ steps: &steps
     - save_cache:
         key: dependencies-{{ checksum "Gemfile.lock" }}
         paths:
-          - .vendor/bundle
+          - .bundle
 
 jobs:
   prior-to-prior-to-latest-readline-gcc:
