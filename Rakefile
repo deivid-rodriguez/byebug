@@ -38,7 +38,7 @@ end
 
 namespace :lint do
   desc "Run all linters"
-  task all: %i[clang_format unnecessary_executables rubocop mdl]
+  task all: %i[clang_format executables rubocop mdl]
 
   require_relative "tasks/linter"
 
@@ -50,7 +50,7 @@ namespace :lint do
   end
 
   desc "Check unnecessary execute permissions"
-  task :unnecessary_executables do
+  task :executables do
     puts "Checking for unnecessary executables"
 
     ExecutableLinter.new.run
