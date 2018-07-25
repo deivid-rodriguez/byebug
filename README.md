@@ -6,12 +6,10 @@
 [![Gitter][irc]][irc_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
-[mai]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/maintainability
 [cov]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/test_coverage
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
-[mai_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/maintainability
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/test_coverage
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 

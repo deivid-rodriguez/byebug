@@ -3,53 +3,35 @@
 version: "2"
 
 checks:
+  argument-count:
+    enabled: false
+
+  complex-logic:
+    enabled: false
+
   file-lines:
-    config:
-      threshold: 370
+    enabled: false
 
   method-complexity:
-    config:
-      threshold: 13
+    enabled: false
 
   method-count:
-    config:
-      threshold: 25
+    enabled: false
+
+  method-lines:
+    enabled: false
+
+  nested-control-flow:
+    enabled: false
 
   return-statements:
-    config:
-      threshold: 5
+    enabled: false
 
   similar-code:
     enabled: false
 
-plugins:
-  grep:
-    enabled: true
-
-    config:
-      patterns:
-        no-trailing-whitespace:
-          pattern: \s*$
-          annotation: "Don't leave trailing whitespace"
-          severity: minor
-          categories: Style
-          path_patterns:
-            - .rubocop.yml
-            - .rubocop_todo.yml
-            - .travis.yml
-
-        no-tabs:
-          pattern: "	"
-          annotation: "Don't use hard tabs"
-          severity: minor
-          categories: Style
-          path_patterns:
-            - .rubocop.yml
-            - .rubocop_todo.yml
-            - .travis.yml
-
-  shellcheck:
-    enabled: true
+  identical-code:
+    enabled: false
 
 exclude_patterns:
   - .bundle/

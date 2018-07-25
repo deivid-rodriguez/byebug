@@ -38,7 +38,7 @@ end
 
 namespace :lint do
   desc "Run all linters"
-  task all: %i[clang_format unnecessary_executables rubocop mdl]
+  task all: %i[clang_format executables tabs trailing_whitespace rubocop mdl]
 
   require_relative "tasks/linter"
 
@@ -50,10 +50,24 @@ namespace :lint do
   end
 
   desc "Check unnecessary execute permissions"
-  task :unnecessary_executables do
+  task :executables do
     puts "Checking for unnecessary executables"
 
     ExecutableLinter.new.run
+  end
+
+  desc "Check for tabs"
+  task :tabs do
+    puts "Checking for unnecessary tabs"
+
+    TabLinter.new.run
+  end
+
+  desc "Check for trailing whitespace"
+  task :trailing_whitespace do
+    puts "Checking for unnecessary trailing whitespace"
+
+    TrailingWhitespaceLinter.new.run
   end
 
   require "rubocop/rake_task"
@@ -62,13 +76,20 @@ namespace :lint do
 
   desc "Checks markdown code style with Markdownlint"
   task :mdl do
-    puts "Running mdl..."
+    puts "Running mdl"
 
     abort unless system("mdl", *Dir.glob("*.md"))
   end
+
+  desc "Checks shell code style with shellcheck"
+  task :shellcheck do
+    puts "Running shellcheck"
+
+    abort unless system("shellcheck", *Dir.glob("bin/*.sh"))
+  end
 end
 
-desc "Runs lint tasks not available on codeclimate"
+desc "Runs lint tasks"
 task lint: "lint:all"
 
 namespace :docker do

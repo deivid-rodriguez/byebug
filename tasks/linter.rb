@@ -76,3 +76,35 @@ class ExecutableLinter
     (in_exec_folder && executable) || (!in_exec_folder && !executable)
   end
 end
+
+#
+# Checks no tabs in source code
+#
+class TabLinter
+  include LinterMixin
+
+  def applicable_files
+    Open3.capture2("git ls-files")[0].split
+  end
+
+  def clean?(file)
+    relative_path = Pathname.new(__FILE__).relative_path_from(Pathname.new(File.dirname(__dir__))).to_s
+
+    file == relative_path || !File.read(file, encoding: Encoding::UTF_8).include?("	")
+  end
+end
+
+#
+# Checks trailing whitespace
+#
+class TrailingWhitespaceLinter
+  include LinterMixin
+
+  def applicable_files
+    Open3.capture2("git ls-files")[0].split
+  end
+
+  def clean?(file)
+    !File.read(file, encoding: Encoding::UTF_8).match?(/ +$/)
+  end
+end

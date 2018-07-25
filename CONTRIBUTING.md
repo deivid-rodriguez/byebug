@@ -43,20 +43,8 @@ abide by its terms.
 
 ## Code style
 
-* Byebug uses [codeclimate][] to enforce code style. You can run codeclimate
-  checks locally using the [codeclimate CLI][] with `codeclimate analyze`.
-
-* It also uses some extra style checks that are not available in codeclimate.
-  You can run those using `bin/rake lint`. These tasks are:
-
-  * Linting of c-files using `clang-format`. Configuration is specific to
-    clang-format 3.8, you may need some extra work to get that installed on macOS,
-    see below.
-
-  * Checking correct executable bit on repository files.
-
-[codeclimate]: https://codeclimate.com/github/deivid-rodriguez/byebug
-[codeclimate CLI]: https://github.com/codeclimate/codeclimate
+* Byebug uses several style checks to check code style consistent. You can run
+  those using `bin/rake lint`.
 
 ### Runnning `clang-format` on macOS
 
