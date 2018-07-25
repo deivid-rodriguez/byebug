@@ -244,19 +244,24 @@ module Byebug
     # Common environment shared by specs that shell out. It needs to:
     #
     # * Adds byebug to the LOAD_PATH.
-    # * Setup coverage tracking so that coverage in the subprocess is tracked.
+    # * (Optionally) Setup coverage tracking so that coverage in the subprocess
+    #   is tracked.
     #
-    def shell_out_env
+    def shell_out_env(simplecov: true)
       minitest_test = Thread.current.backtrace_locations.find do |location|
         location.label.start_with?("test_")
       end
 
       byebug_dir = File.absolute_path(File.join("..", "..", "lib"), __dir__)
 
-      {
+      base = {
         "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
-        "RUBYOPT" => "-r simplecov -I #{byebug_dir}"
+        "RUBYOPT" => "-I #{byebug_dir}"
       }
+
+      base["RUBYOPT"] += " -r simplecov" if simplecov
+
+      base
     end
 
     #
