@@ -76,7 +76,7 @@ namespace :lint do
 
   desc "Checks markdown code style with Markdownlint"
   task :mdl do
-    puts "Running mdl..."
+    puts "Running mdl"
 
     abort unless system("mdl", *Dir.glob("*.md"))
   end
