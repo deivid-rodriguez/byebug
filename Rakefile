@@ -89,7 +89,7 @@ namespace :lint do
   end
 end
 
-desc "Runs lint tasks not available on codeclimate"
+desc "Runs lint tasks"
 task lint: "lint:all"
 
 namespace :docker do
