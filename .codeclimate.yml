@@ -23,21 +23,6 @@ checks:
     enabled: false
 
 plugins:
-  grep:
-    enabled: true
-
-    config:
-      patterns:
-        no-trailing-whitespace:
-          pattern: \s*$
-          annotation: "Don't leave trailing whitespace"
-          severity: minor
-          categories: Style
-          path_patterns:
-            - .rubocop.yml
-            - .rubocop_todo.yml
-            - .travis.yml
-
   shellcheck:
     enabled: true
 

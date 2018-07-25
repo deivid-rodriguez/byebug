@@ -93,3 +93,18 @@ class TabLinter
     file == relative_path || !File.read(file, encoding: Encoding::UTF_8).include?("	")
   end
 end
+
+#
+# Checks trailing whitespace
+#
+class TrailingWhitespaceLinter
+  include LinterMixin
+
+  def applicable_files
+    Open3.capture2("git ls-files")[0].split
+  end
+
+  def clean?(file)
+    !File.read(file, encoding: Encoding::UTF_8).match?(/ +$/)
+  end
+end

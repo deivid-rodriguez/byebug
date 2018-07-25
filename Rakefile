@@ -38,7 +38,7 @@ end
 
 namespace :lint do
   desc "Run all linters"
-  task all: %i[clang_format executables tabs rubocop mdl]
+  task all: %i[clang_format executables tabs trailing_whitespace rubocop mdl]
 
   require_relative "tasks/linter"
 
@@ -61,6 +61,13 @@ namespace :lint do
     puts "Checking for unnecessary tabs"
 
     TabLinter.new.run
+  end
+
+  desc "Check for trailing whitespace"
+  task :trailing_whitespace do
+    puts "Checking for unnecessary trailing whitespace"
+
+    TrailingWhitespaceLinter.new.run
   end
 
   require "rubocop/rake_task"
