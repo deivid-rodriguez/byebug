@@ -22,10 +22,6 @@ checks:
   similar-code:
     enabled: false
 
-plugins:
-  shellcheck:
-    enabled: true
-
 exclude_patterns:
   - .bundle/
   - coverage/

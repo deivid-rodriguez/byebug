@@ -80,6 +80,13 @@ namespace :lint do
 
     abort unless system("mdl", *Dir.glob("*.md"))
   end
+
+  desc "Checks shell code style with shellcheck"
+  task :shellcheck do
+    puts "Running shellcheck"
+
+    abort unless system("shellcheck", *Dir.glob("bin/*.sh"))
+  end
 end
 
 desc "Runs lint tasks not available on codeclimate"
