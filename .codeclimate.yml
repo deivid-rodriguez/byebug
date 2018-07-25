@@ -38,16 +38,6 @@ plugins:
             - .rubocop_todo.yml
             - .travis.yml
 
-        no-tabs:
-          pattern: "	"
-          annotation: "Don't use hard tabs"
-          severity: minor
-          categories: Style
-          path_patterns:
-            - .rubocop.yml
-            - .rubocop_todo.yml
-            - .travis.yml
-
   shellcheck:
     enabled: true
 

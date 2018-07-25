@@ -38,7 +38,7 @@ end
 
 namespace :lint do
   desc "Run all linters"
-  task all: %i[clang_format executables rubocop mdl]
+  task all: %i[clang_format executables tabs rubocop mdl]
 
   require_relative "tasks/linter"
 
@@ -54,6 +54,13 @@ namespace :lint do
     puts "Checking for unnecessary executables"
 
     ExecutableLinter.new.run
+  end
+
+  desc "Check for tabs"
+  task :tabs do
+    puts "Checking for unnecessary tabs"
+
+    TabLinter.new.run
   end
 
   require "rubocop/rake_task"
