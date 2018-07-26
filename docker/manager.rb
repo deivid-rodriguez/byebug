@@ -33,9 +33,7 @@ module Docker
     end
 
     def build
-      print "Building image #{tag}... "
-
-      status = system <<-COMMAND, out: File::NULL
+      command = <<-COMMAND
         docker build \
           --tag "#{tag}" \
           --build-arg "ruby_version=#{version}" \
@@ -47,17 +45,23 @@ module Docker
           .
       COMMAND
 
+      print "Building image #{tag}: #{command.gsub(/[\n ]+/, ' ').strip}  "
+
+      status = system(command, out: File::NULL)
+
       puts(status ? "✔" : "❌")
     end
 
     def test
-      print "Testing image #{tag}... "
-
-      status = system <<-COMMAND, out: File::NULL, err: File::NULL
+      command = <<-COMMAND
         docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
       COMMAND
 
-      puts(status ? "✔" : "❌")
+      print "Testing image #{tag}: #{command.gsub(/[\n ]+/, ' ').strip}  "
+
+      status = system(command, out: File::NULL, err: File::NULL)
+
+      puts(status ? " ✔" : " ❌")
     end
 
     def push
