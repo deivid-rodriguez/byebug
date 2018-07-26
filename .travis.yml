@@ -35,7 +35,7 @@ install:
     fi
 
 script:
-  - bin/test.sh
+  - bin/ci.sh
 
 matrix:
   fast_finish: true

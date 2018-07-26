@@ -11,8 +11,8 @@ steps: &steps
           - dependencies-{{ checksum "Gemfile.lock" }}
 
     - run:
-        name: Run tests
-        command: bin/test.sh
+        name: Run CI checks
+        command: bin/ci.sh
 
     - run:
         name: Save coverage
@@ -29,26 +29,6 @@ steps: &steps
           - .bundle
 
 jobs:
-  lint:
-    docker:
-      - image: deividrodriguez/byebug:2.5.1-readline-clang
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - dependencies-{{ checksum "Gemfile.lock" }}
-
-      - run:
-          name: Run linters
-          command: bin/lint.sh
-
-      - save_cache:
-          key: dependencies-{{ checksum "Gemfile.lock" }}
-          paths:
-            - .bundle
-
   prior-to-prior-to-latest-readline-gcc:
     docker:
       - image: deividrodriguez/byebug:2.3.7-readline-gcc
@@ -132,55 +112,20 @@ workflows:
 
   test:
     jobs:
-      - lint
+      - prior-to-prior-to-latest-readline-gcc
+      - prior-to-prior-to-latest-libedit-gcc
+      - prior-to-prior-to-latest-readline-clang
+      - prior-to-prior-to-latest-libedit-clang
 
-      - prior-to-prior-to-latest-readline-gcc:
-          requires:
-            - lint
+      - prior-to-latest-readline-gcc
+      - prior-to-latest-libedit-gcc
+      - prior-to-latest-readline-clang
+      - prior-to-latest-libedit-clang
 
-      - prior-to-prior-to-latest-libedit-gcc:
-          requires:
-            - lint
-
-      - prior-to-prior-to-latest-readline-clang:
-          requires:
-            - lint
-
-      - prior-to-prior-to-latest-libedit-clang:
-          requires:
-            - lint
-
-      - prior-to-latest-readline-gcc:
-          requires:
-            - lint
-
-      - prior-to-latest-libedit-gcc:
-          requires:
-            - lint
-
-      - prior-to-latest-readline-clang:
-          requires:
-            - lint
-
-      - prior-to-latest-libedit-clang:
-          requires:
-            - lint
-
-      - latest-readline-gcc:
-          requires:
-            - lint
-
-      - latest-libedit-gcc:
-          requires:
-            - lint
-
-      - latest-readline-clang:
-          requires:
-            - lint
-
-      - latest-libedit-clang:
-          requires:
-            - lint
+      - latest-readline-gcc
+      - latest-libedit-gcc
+      - latest-readline-clang
+      - latest-libedit-clang
 
       - upload_coverage:
           requires:
