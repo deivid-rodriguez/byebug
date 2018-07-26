@@ -105,6 +105,6 @@ class TrailingWhitespaceLinter
   end
 
   def clean?(file)
-    !File.read(file, encoding: Encoding::UTF_8).match?(/ +$/)
+    File.read(file, encoding: Encoding::UTF_8) !~ / +$/
   end
 end
