@@ -2,6 +2,7 @@
 
 require "net/http"
 require "yaml"
+require "open3"
 
 module Docker
   #
@@ -47,9 +48,7 @@ module Docker
 
       print "Building image #{tag}: #{squish(command)}  "
 
-      status = system(command, out: File::NULL)
-
-      puts(status ? "✔" : "❌")
+      run(command)
     end
 
     def test
@@ -59,9 +58,7 @@ module Docker
 
       print "Testing image #{tag}: #{squish(command)}  "
 
-      status = system(command, out: File::NULL, err: File::NULL)
-
-      puts(status ? " ✔" : " ❌")
+      run(command)
     end
 
     def push
@@ -81,11 +78,7 @@ module Docker
         return
       end
 
-      pushed = system <<-COMMAND, out: File::NULL
-        docker push #{tag}
-      COMMAND
-
-      puts pushed ? "✔" : "❌"
+      run("docker push #{tag}")
     end
 
     class << self
@@ -147,6 +140,14 @@ module Docker
 
     def sha256
       release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
+    end
+
+    def run(command)
+      output, status = Open3.capture2e(command)
+
+      puts(status ? "✔" : "❌")
+
+      puts output unless status.success?
     end
 
     def tag
