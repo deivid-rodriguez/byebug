@@ -45,7 +45,7 @@ module Docker
           .
       COMMAND
 
-      print "Building image #{tag}: #{command.gsub(/[\n ]+/, ' ').strip}  "
+      print "Building image #{tag}: #{squish(command)}  "
 
       status = system(command, out: File::NULL)
 
@@ -57,7 +57,7 @@ module Docker
         docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
       COMMAND
 
-      print "Testing image #{tag}: #{command.gsub(/[\n ]+/, ' ').strip}  "
+      print "Testing image #{tag}: #{squish(command)}  "
 
       status = system(command, out: File::NULL, err: File::NULL)
 
@@ -151,6 +151,10 @@ module Docker
 
     def tag
       "deividrodriguez/byebug:#{version}-#{line_editor}-#{compiler}"
+    end
+
+    def squish(command)
+      command.gsub(/[\n ]+/, " ").strip
     end
   end
 end
