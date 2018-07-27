@@ -17,7 +17,7 @@ ENV CC $compiler
 
 RUN set -ex \
   \
-  && baseDeps="  \
+  && baseDeps=" \
     $compiler \
   " \
   && buildOnlyDeps=" \
