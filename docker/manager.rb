@@ -127,7 +127,7 @@ module Docker
     private
 
     def line_editor_package
-      line_editor == "readline" ? "libreadline-dev" : "libedit-dev"
+      line_editor == "readline" ? "readline-dev" : "libedit-dev"
     end
 
     def line_editor_configure_flag

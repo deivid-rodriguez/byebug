@@ -1,4 +1,4 @@
-FROM buildpack-deps:stretch
+FROM alpine:3.7
 
 # skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
@@ -18,16 +18,33 @@ ENV CC $compiler
 RUN set -ex \
   \
   && baseDeps=" \
-    $compiler \
+    bash \
+    ca-certificates \
+    cmake \
+    clang \
+    gcc \
+    libffi-dev \
+    libressl-dev \
+    make \
   " \
   && buildOnlyDeps=" \
-    libssl1.0-dev \
+    autoconf \
+    bison \
+    build-base \
+    bzip2-dev \
+    dpkg \
+    dpkg-dev \
+    gdbm-dev \
+    glib-dev \
+    libc-dev \
+    libxml2-dev \
+    libxslt-dev \
     $line_edit_lib \
+    linux-headers \
+    ncurses-dev \
     ruby \
   " \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends $baseDeps $buildOnlyDeps \
-  && rm -rf /var/lib/apt/lists/* \
+  && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \
   && wget -O ruby.tar.xz "https://cache.ruby-lang.org/pub/ruby/${ruby_version%.*}/ruby-$ruby_version.tar.xz" \
   && echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c - \
@@ -48,16 +65,31 @@ RUN set -ex \
   && make -j "$(nproc)" \
   && make install \
   \
-  && apt-get purge -y --auto-remove $buildOnlyDeps \
+  && libDeps="$( \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+      | tr ',' '\n' \
+      | sort -u \
+      | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+  )" \
+  && runOnlyDeps=" \
+    $libDeps \
+    binutils \
+    git \
+    libc-dev \
+    libc6-compat \
+  " \
+  && apk add --virtual .ruby-rundeps $baseDeps $runOnlyDeps \
+  && apk del .ruby-builddeps \
   && cd / \
   && rm -r /usr/src/ruby \
   \
   && gem update --system 2.7.7 \
   && rm -r /root/.gem
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  clang-format \
-  shellcheck
+RUN SHELLCHECK_VERSION=v0.5.0 \
+  && wget "https://storage.googleapis.com/shellcheck/shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz" \
+  && tar -xJf shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz \
+  && cp shellcheck-$SHELLCHECK_VERSION/shellcheck /usr/bin/
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
