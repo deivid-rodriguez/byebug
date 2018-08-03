@@ -2,6 +2,7 @@
 
 require "net/http"
 require "yaml"
+require "open3"
 
 module Docker
   #
@@ -33,9 +34,7 @@ module Docker
     end
 
     def build
-      print "Building image #{tag}... "
-
-      status = system <<-COMMAND, out: File::NULL
+      command = <<-COMMAND
         docker build \
           --tag "#{tag}" \
           --build-arg "ruby_version=#{version}" \
@@ -47,17 +46,19 @@ module Docker
           .
       COMMAND
 
-      puts(status ? "✔" : "❌")
+      print "Building image #{tag}: #{squish(command)}  "
+
+      run(command)
     end
 
     def test
-      print "Testing image #{tag}... "
-
-      status = system <<-COMMAND, out: File::NULL, err: File::NULL
-        docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bundle && bundle exec rake'
+      command = <<-COMMAND
+        docker run --rm -v$(pwd):/byebug #{tag} bash -c ' bin/bundle && bin/rake'
       COMMAND
 
-      puts(status ? "✔" : "❌")
+      print "Testing image #{tag}: #{squish(command)}  "
+
+      run(command)
     end
 
     def push
@@ -77,11 +78,7 @@ module Docker
         return
       end
 
-      pushed = system <<-COMMAND, out: File::NULL
-        docker push #{tag}
-      COMMAND
-
-      puts pushed ? "✔" : "❌"
+      run("docker push #{tag}")
     end
 
     class << self
@@ -130,7 +127,7 @@ module Docker
     private
 
     def line_editor_package
-      line_editor == "readline" ? "libreadline-dev" : "libedit-dev"
+      line_editor == "readline" ? "readline-dev" : "libedit-dev"
     end
 
     def line_editor_configure_flag
@@ -145,8 +142,20 @@ module Docker
       release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
     end
 
+    def run(command)
+      output, status = Open3.capture2e(command)
+
+      puts(status ? "✔" : "❌")
+
+      puts output unless status.success?
+    end
+
     def tag
       "deividrodriguez/byebug:#{version}-#{line_editor}-#{compiler}"
+    end
+
+    def squish(command)
+      command.gsub(/[\n ]+/, " ").strip
     end
   end
 end
