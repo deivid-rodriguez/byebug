@@ -29,6 +29,7 @@ before_install:
 
 install:
   - gem update --system 2.7.7
+  - gem install bundler --version 1.16.3
 
   - if [ "$LIBEDIT" == "true" ]; then
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
