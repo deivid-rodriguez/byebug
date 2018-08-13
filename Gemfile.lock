@@ -63,7 +63,7 @@ GEM
     simplecov-html (0.10.2)
     tomlrb (1.2.7)
     unicode-display_width (1.4.0)
-    yard (0.9.15)
+    yard (0.9.16)
 
 PLATFORMS
   ruby
@@ -79,7 +79,7 @@ DEPENDENCIES
   rake-compiler (~> 1.0)
   rubocop (= 0.58.2)
   simplecov (= 0.16.1)
-  yard (= 0.9.15)
+  yard (= 0.9.16)
 
 BUNDLED WITH
    1.16.3
