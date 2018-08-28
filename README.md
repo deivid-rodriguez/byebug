@@ -1,7 +1,6 @@
 # Byebug
 
 [![Version][gem]][gem_url]
-[![Maintainability][mai]][mai_url]
 [![Coverage][cov]][cov_url]
 [![Gitter][irc]][irc_url]
 
