@@ -69,6 +69,6 @@ functionality is implemented in C (the interaction with the TracePoint API).
 The rest of the gem is implemented in Ruby. Normally you won't need to touch
 the C-extension, but it will obviously depended on the bug you're trying to fix
 or the feature you are willing to add. You can learn more about C-extensions
-[here](http://tenderlovemaking.com/2009/12/18/writing-ruby-c-extensions-part-1.html)
+[here](https://tenderlovemaking.com/2009/12/18/writing-ruby-c-extensions-part-1.html)
 or
-[here](http://tenderlovemaking.com/2010/12/11/writing-ruby-c-extensions-part-2.html).
+[here](https://tenderlovemaking.com/2010/12/11/writing-ruby-c-extensions-part-2.html).

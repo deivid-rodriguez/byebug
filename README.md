@@ -1,7 +1,6 @@
 # Byebug
 
 [![Version][gem]][gem_url]
-[![Maintainability][mai]][mai_url]
 [![Coverage][cov]][cov_url]
 [![Gitter][irc]][irc_url]
 
@@ -136,7 +135,7 @@ Command     | Aliases      | Subcommands
 
 ## Semantic Versioning
 
-Byebug tries to follow [semantic versioning](http://semver.org) and tries to
+Byebug tries to follow [semantic versioning](https://semver.org) and tries to
 bump major version only when backwards incompatible changes are released.
 Backwards compatibility is targeted to [pry-byebug] and any other plugins
 relying on `byebug`.
