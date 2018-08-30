@@ -82,6 +82,18 @@ module Docker
     end
 
     class << self
+      def build_default
+        default_image.build
+      end
+
+      def test_default
+        default_image.test
+      end
+
+      def push_default
+        default_image.push
+      end
+
       def build_all
         for_all_images(&:build)
       end
@@ -121,6 +133,10 @@ module Docker
             end
           end
         end
+      end
+
+      def default_image
+        new(version: VERSIONS.last, line_editor: "readline", compiler: "gcc")
       end
     end
 
