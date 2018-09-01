@@ -93,6 +93,7 @@ RUN SHELLCHECK_VERSION=v0.5.0 \
   && cp shellcheck-$SHELLCHECK_VERSION/shellcheck /usr/bin/
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
+ENV BUNDLE_PATH=.bundle
 
 RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.0-linux-amd64 \
   && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
