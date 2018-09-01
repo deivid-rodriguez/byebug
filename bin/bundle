@@ -35,6 +35,8 @@ m = Module.new do
   end
 
   def lockfile_version
+    return unless File.file?(lockfile)
+
     lockfile_contents = File.read(lockfile)
 
     regexp = /\n\nBUNDLED WITH\n\s{2,}(#{Gem::Version::VERSION_PATTERN})\n/

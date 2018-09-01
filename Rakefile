@@ -72,6 +72,7 @@ namespace :lint do
 
   require "rubocop/rake_task"
 
+  desc "Checks ruby code style with RuboCop"
   RuboCop::RakeTask.new
 
   desc "Checks markdown code style with Markdownlint"
@@ -95,19 +96,34 @@ task lint: "lint:all"
 namespace :docker do
   require_relative "docker/manager"
 
-  desc "Build docker images"
-  task :build do
+  desc "Build all docker images"
+  task :build_all do
     Docker::Manager.build_all
   end
 
-  desc "Test docker images"
-  task :test do
+  desc "Build the default docker image"
+  task :build do
+    Docker::Manager.build_default
+  end
+
+  desc "Test all docker images"
+  task :test_all do
     Docker::Manager.test_all
   end
 
-  desc "Push docker images to dockerhub"
-  task :push do
+  desc "Test the default docker image"
+  task :test do
+    Docker::Manager.test_default
+  end
+
+  desc "Push all docker images to dockerhub"
+  task :push_all do
     Docker::Manager.push_all
+  end
+
+  desc "Push the default docker image to dockerhub"
+  task :push do
+    Docker::Manager.push_default
   end
 end
 
