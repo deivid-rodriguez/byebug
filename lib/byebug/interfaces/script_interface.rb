@@ -25,6 +25,7 @@ module Byebug
       while (result = input.gets)
         output.puts "+ #{result}" if @verbose
         next if result =~ /^\s*#/
+
         return result.chomp
       end
     end

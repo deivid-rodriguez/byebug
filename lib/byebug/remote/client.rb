@@ -26,10 +26,12 @@ module Byebug
           when /^PROMPT (.*)$/
             input = interface.read_command(Regexp.last_match[1])
             break unless input
+
             socket.puts input
           when /^CONFIRM (.*)$/
             input = interface.readline(Regexp.last_match[1])
             break unless input
+
             socket.puts input
           else
             interface.puts line
