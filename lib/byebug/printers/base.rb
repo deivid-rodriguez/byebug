@@ -28,6 +28,7 @@ module Byebug
           break if result
         end
         raise MissedPath, "Can't find part path '#{path}'" unless result
+
         result
       end
 

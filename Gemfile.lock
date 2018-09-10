@@ -44,7 +44,7 @@ GEM
     rake (12.3.1)
     rake-compiler (1.0.5)
       rake
-    rubocop (0.58.2)
+    rubocop (0.59.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -52,7 +52,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.9.0)
+    ruby-progressbar (1.10.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -77,7 +77,7 @@ DEPENDENCIES
   pry (= 0.11.3)
   rake (~> 12.3)
   rake-compiler (~> 1.0)
-  rubocop (= 0.58.2)
+  rubocop (= 0.59.0)
   simplecov (= 0.16.1)
   yard (= 0.9.16)
 

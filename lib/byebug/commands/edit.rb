@@ -46,6 +46,7 @@ module Byebug
       if matched.nil?
         file = frame.file
         return errmsg(pr("edit.errors.state")) unless file
+
         line = frame.line
       elsif (@pos_match = /([^:]+)[:]([0-9]+)/.match(matched))
         file, line = @pos_match.captures
