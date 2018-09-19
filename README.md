@@ -169,10 +169,7 @@ Subscribe to [tidelift] to ensure byebug stays actively maintained, and at the
 same time get licensing assurances and timely security notifications for your
 open source dependencies.
 
-You can also help `byebug` by leaving a small (or big) tip through
-[Liberapay][liberapay.com].
-
-[![Support via Liberapay][liberapay-button]][liberapay-donate]
+You can also help `byebug` by leaving a small (or big) tip through [Liberapay].
 
 ## Credits
 
@@ -193,7 +190,5 @@ software, especially:
 [minitest-byebug]: https://github.com/kaspth/minitest-byebug
 [sublime_debugger]: https://github.com/shuky19/sublime_debugger
 [atom-byebug]: https://github.com/izaera/atom-byebug
-[liberapay.com]: https://liberapay.com
-[liberapay-button]: https://liberapay.com/assets/widgets/donate.svg
-[liberapay-donate]: https://liberapay.com/byebug/donate
+[liberapay]: https://liberapay.com/byebug/donate
 [tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
