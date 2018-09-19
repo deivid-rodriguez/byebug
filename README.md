@@ -1,14 +1,17 @@
 # Byebug
 
 [![Version][gem]][gem_url]
+[![Tidelift][tid]][tid_url]
 [![Coverage][cov]][cov_url]
 [![Gitter][irc]][irc_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
+[tid]: https://tidelift.com/badges/github/deivid-rodriguez/byebug
 [cov]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/test_coverage
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
+[tid_url]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_badge
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/test_coverage
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
@@ -160,10 +163,13 @@ started. Proper documentation will be eventually written.
 
 See [Getting Started with Development](CONTRIBUTING.md).
 
-You can also help `byebug` by leaving a small (or big) tip through
-[Liberapay][liberapay.com].
+## Funding
 
-[![Support via Liberapay][liberapay-button]][liberapay-donate]
+Subscribe to [tidelift] to ensure byebug stays actively maintained, and at the
+same time get licensing assurances and timely security notifications for your
+open source dependencies.
+
+You can also help `byebug` by leaving a small (or big) tip through [Liberapay].
 
 ## Credits
 
@@ -184,6 +190,5 @@ software, especially:
 [minitest-byebug]: https://github.com/kaspth/minitest-byebug
 [sublime_debugger]: https://github.com/shuky19/sublime_debugger
 [atom-byebug]: https://github.com/izaera/atom-byebug
-[liberapay.com]: https://liberapay.com
-[liberapay-button]: https://liberapay.com/assets/widgets/donate.svg
-[liberapay-donate]: https://liberapay.com/byebug/donate
+[liberapay]: https://liberapay.com/byebug/donate
+[tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
