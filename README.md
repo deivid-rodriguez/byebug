@@ -163,6 +163,12 @@ started. Proper documentation will be eventually written.
 
 See [Getting Started with Development](CONTRIBUTING.md).
 
+## Funding
+
+Subscribe to [tidelift] to ensure byebug stays actively maintained, and at the
+same time get licensing assurances and timely security notifications for your
+open source dependencies.
+
 You can also help `byebug` by leaving a small (or big) tip through
 [Liberapay][liberapay.com].
 
@@ -190,3 +196,4 @@ software, especially:
 [liberapay.com]: https://liberapay.com
 [liberapay-button]: https://liberapay.com/assets/widgets/donate.svg
 [liberapay-donate]: https://liberapay.com/byebug/donate
+[tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
