@@ -35,8 +35,10 @@ install:
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
 
+  - bin/bundle install --jobs 3 --retry 3
+
 script:
-  - bin/ci.sh
+  - bin/rake compile test
 
 matrix:
   fast_finish: true
