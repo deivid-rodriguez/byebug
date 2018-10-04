@@ -1,20 +1,20 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
 
-## 10.0.2 - 2018-03-30
+## [10.0.2] - 2018-03-30
 
 ### Fixed
 
 * Error when using byebug with `debase` gem (#447, @tzmfreedom)
 
-## 10.0.1 - 2018-03-21
+## [10.0.1] - 2018-03-21
 
 ### Fixed
 
 * Error when using byebug with `debase` gem (#443, @tzmfreedom)
 
-## 10.0.0 - 2018-01-26
+## [10.0.0] - 2018-01-26
 
 ### Changed
 
@@ -35,7 +35,7 @@
 * Remote server crash when interrupting client (#141, #274).
 * Control server thread being able to `interrupt` main thread only a single time. (#239).
 
-## 9.1.0 - 2017-08-22
+## [9.1.0] - 2017-08-22
 
 ### Added
 
@@ -52,7 +52,7 @@
 * Ruby 2.0 and Ruby 2.1 official & unofficial support. Byebug no longer installs
   on these platforms.
 
-## 9.0.6 - 2016-09-29
+## [9.0.6] - 2016-09-29
 
 ### Fixed
 
@@ -61,19 +61,19 @@
   port is already known (#277, thanks @cben).
 * Use a standard license name so it can be more reliably used by tools (#275).
 
-## 9.0.5 - 2016-05-28
+## [9.0.5] - 2016-05-28
 
 ### Fixed
 
 * Error loading rc file when `ENV["HOME"]` is unset.
 
-## 9.0.4 - 2016-05-19
+## [9.0.4] - 2016-05-19
 
 ### Fixed
 
 * Errors in rc file not being displayed to the user.
 
-## 9.0.3 - 2016-05-16
+## [9.0.3] - 2016-05-16
 
 ### Fixed
 
@@ -81,7 +81,7 @@
 * Unfriendly output in byebug's executable when script doesn't exist.
 * Unfriendly output in byebug's executable when script has invalid code.
 
-## 9.0.2 - 2016-05-15
+## [9.0.2] - 2016-05-15
 
 ### Fixed
 
@@ -89,13 +89,13 @@
 * Debugger getting disabled after `continue` even when linetrace is enabled
   (#264, thanks @k0kubun).
 
-## 9.0.1 - 2016-05-14
+## [9.0.1] - 2016-05-14
 
 ### Fixed
 
 * `quit` never exiting when remote debugging (#201).
 
-## 9.0.0 - 2016-05-11
+## [9.0.0] - 2016-05-11
 
 ### Fixed
 
@@ -107,25 +107,25 @@
 
 ### Removed
 
-* Official Ruby 2.0.0 support. `var local` no longer works in Ruby 2.0. The
+* Official Ruby [2.0.0] support. `var local` no longer works in Ruby 2.0. The
   rest of the commands should still work as before, but `byebug` is no longer
   tested against this version so they might start breaking in the
   future.
 
-## 8.2.5 - 2016-04-27
+## [8.2.5] - 2016-04-27
 
 ### Fixed
 
 * Allows paths with spaces (#244, thanks @HookyQR).
 * Allows paths with colons (#244, thanks @HookyQR).
 
-## 8.2.4 - 2016-04-08
+## [8.2.4] - 2016-04-08
 
 ### Fixed
 
 * Reverts #211 which leads to an unusable debugger.
 
-## 8.2.3 - 2016-04-07
+## [8.2.3] - 2016-04-07
 
 ### Fixed
 
@@ -135,19 +135,19 @@
 * RC file loading when no explicit flag included (#223).
 * Installation on some Windows systems (#175, #226).
 
-## 8.2.2 - 2016-02-01
+## [8.2.2] - 2016-02-01
 
 ### Fixed
 
 * Bug in rc file loading where most initialization commands would not be run.
 
-## 8.2.1 - 2015-11-26
+## [8.2.1] - 2015-11-26
 
 ### Fixed
 
 * Bug in evaluations using "eval".
 
-## 8.2.0 - 2015-11-12
+## [8.2.0] - 2015-11-12
 
 ### Fixed
 
@@ -160,7 +160,7 @@
 * `debug` command to evaluate things in a separate thread, since this behavior
   was removed from default `eval` to fix the above issues.
 
-## 8.1.0 - 2015-11-09
+## [8.1.0] - 2015-11-09
 
 ### Fixed
 
@@ -174,14 +174,14 @@
 * Ability to autolist source code after `frame` command.
 * Ability to stop at lines where methods return.
 
-## 8.0.1 - 2015-11-07
+## [8.0.1] - 2015-11-07
 
 ### Fixed
 
 * Error stream wouldn't be properly reset when using standalone `byebug`.
 * Confusing error message for invalid breakpoint locations.
 
-## 8.0.0 - 2015-11-05
+## [8.0.0] - 2015-11-05
 
 ### Fixed
 
@@ -195,7 +195,7 @@
 * Plugins now need to implement an `at_end` method (separate from `at_return`)
   in their custom processors.
 
-## 7.0.0 - 2015-11-04
+## [7.0.0] - 2015-11-04
 
 ### Fixed
 
@@ -230,21 +230,21 @@
 * `autopry` setting that calls `pry` on every stop.
 * Return value information to debugger's output when `finish 0` is used.
 
-## 6.0.2 - 2015-08-20
+## [6.0.2] - 2015-08-20
 
 ### Fixed
 
 * The user should always be given back a prompt unless (s)he explicitly states
   the opposite. This provides a more general fix to the bug resolved in 6.0.1.
 
-## 6.0.1 - 2015-08-19
+## [6.0.1] - 2015-08-19
 
 ### Fixed
 
 * Bug in evaluation where the user would lose the command prompt when entering
   an expression with a syntax error.
 
-## 6.0.0 - 2015-08-17
+## [6.0.0] - 2015-08-17
 
 ### Removed
 
@@ -274,7 +274,7 @@
 
 * API to define custom command processors (see the CommandProcessor class).
 
-## 5.0.0 - 2015-05-18
+## [5.0.0] - 2015-05-18
 
 ### Fixed
 
@@ -301,7 +301,7 @@
   it's not verbose enough so that this is a problem. Same with `help
   show <setting>`.
 
-## 4.0.5 - 2015-04-02
+## [4.0.5] - 2015-04-02
 
 ### Fixed
 
@@ -309,19 +309,19 @@
 * Thread commands help format should be consistent with the rest of the help
   system now.
 
-## 4.0.4 - 2015-03-27
+## [4.0.4] - 2015-03-27
 
 ### Fixed
 
 * [#127](https://github.com/deivid-rodriguez/byebug/issues/127)
 
-## 4.0.3 - 2015-03-19
+## [4.0.3] - 2015-03-19
 
 ### Fixed
 
 * Unused variable warning in context.c
 
-## 4.0.2 - 2015-03-16
+## [4.0.2] - 2015-03-16
 
 ### Fixed
 
@@ -329,7 +329,7 @@
   `rb-readline` as a dependency and show a help message whenever requiring
   `readline` fails instead.
 
-## 4.0.1 - 2015-03-13
+## [4.0.1] - 2015-03-13
 
 ### Fixed
 
@@ -337,7 +337,7 @@
 * [#118](https://github.com/deivid-rodriguez/byebug/issues/118). Add `readline`
   as a dependency.
 
-## 4.0.0 - 2015-03-13
+## [4.0.0] - 2015-03-13
 
 ### Added
 
@@ -405,7 +405,7 @@
   autoevaluate it.
 * `exit` alias for `quit`.
 
-## 3.5.1 - 2014-09-29
+## [3.5.1] - 2014-09-29
 
 ### Fixed
 
@@ -413,7 +413,7 @@
   installation.
 * `condition` command not properly detecting invalid breakpoint ids.
 
-## 3.5.0 - 2014-09-28
+## [3.5.0] - 2014-09-28
 
 ### Fixed
 
@@ -428,7 +428,7 @@
 * Complete rewrite of list command.
 * Docs about stacktrace related commands (up, down, frame, backtrace).
 
-## 3.4.2 - 2014-09-26
+## [3.4.2] - 2014-09-26
 
 ### Fixed
 
@@ -436,7 +436,7 @@
   commands invoked by ruby executable, as in `byebug -- ruby -Itest a_test.rb
   -n test_something`.
 
-## 3.4.1 - 2014-09-25
+## [3.4.1] - 2014-09-25
 
 ### Fixed
 
@@ -444,13 +444,13 @@
   inside `eval` command.
 * `list` command not listing backwards after reaching the end of the file.
 
-## 3.4.0 - 2014-09-01
+## [3.4.0] - 2014-09-01
 
 ### Fixed
 
 * deivid-rodriguez/pry-byebug#32 in a better way.
 
-## 3.3.0 - 2014-08-28
+## [3.3.0] - 2014-08-28
 
 ### Fixed
 
@@ -477,7 +477,7 @@
   [8e226d0](https://github.com/deivid-rodriguez/byebug/commit/8e226d0).
 * `script` and `restart-script` options for `bin/byebug`.
 
-## 3.2.0 - 2014-08-02
+## [3.2.0] - 2014-08-02
 
 ### Fixed
 
@@ -494,20 +494,20 @@
 * `method iv` command. Use `var instance` instead.
 * [#77](https://github.com/deivid-rodriguez/byebug/issues/77). Warning.
 
-## 3.1.2 - 2014-04-23
+## [3.1.2] - 2014-04-23
 
 ### Fixed
 
 * `post_mortem` mode in `bin/byebug` (really).
 * Line tracing in `bin/byebug`.
 
-## 3.1.1 - 2014-04-23
+## [3.1.1] - 2014-04-23
 
 ### Fixed
 
 * `post_mortem` mode in bin/byebug.
 
-## 3.1.0 - 2014-04-23
+## [3.1.0] - 2014-04-23
 
 ### Removed
 
@@ -527,7 +527,7 @@
 
 * `history` command to check byebug's history of previous commands.
 
-## 3.0.0 - 2014-04-17
+## [3.0.0] - 2014-04-17
 
 ### Fixed
 
@@ -557,7 +557,7 @@
 * The `init` option for `Byebug.start`. Information to make the `restart`
   command work is always saved now.
 
-## 2.7.0 - 2014-02-24
+## [2.7.0] - 2014-02-24
 
 ### Fixed
 
@@ -567,26 +567,26 @@
   [#54](https://github.com/deivid-rodriguez/byebug/issues/54). Calling
   `Byebug.start` with `Timeout.timeout`.
 
-## 2.6.0 - 2014-02-08
+## [2.6.0] - 2014-02-08
 
 ### Fixed
 
 * Circular dependency affecting `pry-byebug` (thanks @andreychernih).
 
-## 2.5.0 - 2013-12-14
+## [2.5.0] - 2013-12-14
 
 ### Added
 
 * Support for `sublime-debugger`.
 
-## 2.4.1 - 2013-12-05
+## [2.4.1] - 2013-12-05
 
 ### Fixed
 
 * [#40](https://github.com/deivid-rodriguez/byebug/issues/40). Installation
   error in Mac OSX (thanks @luislavena).
 
-## 2.4.0 - 2013-12-02
+## [2.4.0] - 2013-12-02
 
 ### Fixed
 
@@ -607,14 +607,14 @@
   library (thanks @nobu).
 * `trace variable $foo` should be now `trace variable $foo`.
 
-## 2.3.1 - 2013-10-17
+## [2.3.1] - 2013-10-17
 
 ### Fixed
 
 * Breakpoint removal.
 * Broken test suite.
 
-## 2.3.0 - 2013-10-09
+## [2.3.0] - 2013-10-09
 
 ### Added
 
@@ -624,24 +624,24 @@
 
 * More minimalist help system.
 
-## 2.2.2 - 2013-09-25
+## [2.2.2] - 2013-09-25
 
 ### Fixed
 
 * Compilation issue in 64 bit systems.
 
-## 2.2.1 - 2013-09-24
+## [2.2.1] - 2013-09-24
 
 ### Fixed
 
 * [#26](https://github.com/deivid-rodriguez/byebug/issues/26). Compilation issue
-  introduced in `2.2.0`.
+  introduced in `[2.2.0]`.
 
 ### Changed
 
 * `show/set stack_trace_on_error` is now `show/set stack_on_error`.
 
-## 2.2.0 - 2013-09-22
+## [2.2.0] - 2013-09-22
 
 ### Fixed
 
@@ -657,13 +657,13 @@
 * Warning free byebug.
 * Allow `edit <filename>` without a line number.
 
-## 2.1.1 - 2013-09-10
+## [2.1.1] - 2013-09-10
 
 ### Fixed
 
 * Debugging code inside `-e` Ruby flag.
 
-## 2.1.0 - 2013-09-08
+## [2.1.0] - 2013-09-08
 
 ### Fixed
 
@@ -675,7 +675,7 @@
 * `enable breakpoints` now enables every breakpoint.
 * `disable breakpoints` now disables every breakpoint.
 
-## 2.0.0 - 2013-08-30
+## [2.0.0] - 2013-08-30
 
 ### Added
 
@@ -690,7 +690,7 @@
 
 * Several internal refactorings.
 
-## 1.8.2 - 2013-08-16
+## [1.8.2] - 2013-08-16
 
 ### Fixed
 
@@ -702,19 +702,19 @@
 * More user friendly regexps for commands.
 * Better help for some commands.
 
-## 1.8.1 - 2013-08-12
+## [1.8.1] - 2013-08-12
 
 ### Fixed
 
-* Major regression introduced in 1.8.0.
+* Major regression introduced in [1.8.0].
 
-## 1.8.0 - 2013-08-12
+## [1.8.0] - 2013-08-12
 
 ### Added
 
 * Remote debugging support.
 
-## 1.7.0 - 2013-08-03
+## [1.7.0] - 2013-08-03
 
 ### Added
 
@@ -722,13 +722,13 @@
 * C-frames specifically marked in the callstack.
 * C-frames skipped when navigating the callstack.
 
-## 1.6.1 - 2013-07-10
+## [1.6.1] - 2013-07-10
 
 ### Fixed
 
 * Windows compatibiliy: compilation and terminal width issues.
 
-## 1.6.0 - 2013-07-10
+## [1.6.0] - 2013-07-10
 
 ### Fixed
 
@@ -740,13 +740,13 @@
 * Backtrace callstyles. Use `long` for detailed frames in callstack and `short`
   for more concise frames.
 
-## 1.5.0 - 2013-06-21
+## [1.5.0] - 2013-06-21
 
 ### Fixed
 
 * Incomplete backtraces when the debugger was not started at program startup.
 
-## 1.4.2 - 2013-06-20
+## [1.4.2] - 2013-06-20
 
 ### Fixed
 
@@ -755,7 +755,7 @@
 * `post_mortem` mode when running byebug from the outset.
 * `no-quit` flag when running byebug from the outset.
 
-## 1.4.1 - 2013-06-15
+## [1.4.1] - 2013-06-15
 
 ### Fixed
 
@@ -763,7 +763,7 @@
 * Allow byebug developers to easily use compilers different from gcc (thanks
   @GarthSnyder!).
 
-## 1.4.0 - 2013-06-05
+## [1.4.0] - 2013-06-05
 
 ### Fixed
 
@@ -773,7 +773,7 @@
 
 * Use the Debug Inspector API for backtrace information.
 
-## 1.3.1 - 2013-06-02
+## [1.3.1] - 2013-06-02
 
 ### Fixed
 
@@ -781,13 +781,13 @@
 * Crash when trying to print lines of code containing the character '%'.
 * `basename` and `linetrace` options not working together.
 
-## 1.3.0 - 2013-05-25
+## [1.3.0] - 2013-05-25
 
 ### Added
 
 * Support colon-delimited include paths in command-line front-end (@ender672).
 
-## 1.2.0 - 2013-05-20
+## [1.2.0] - 2013-05-20
 
 ### Fixed
 
@@ -797,7 +797,7 @@
 
 * `pry` command.
 
-## 1.1.1 - 2013-05-07
+## [1.1.1] - 2013-05-07
 
 ### Added
 
@@ -808,13 +808,13 @@
 * Better help system.
 * Code cleanup.
 
-## 1.1.0 - 2013-04-30
+## [1.1.0] - 2013-04-30
 
 ### Added
 
 * Post Mortem support.
 
-## 1.0.3 - 2013-04-23
+## [1.0.3] - 2013-04-23
 
 ### Fixed
 
@@ -828,7 +828,7 @@
 * `autoreload` is set by default now.
 * Try some thread support (not even close to usable).
 
-## 1.0.2 - 2013-04-09
+## [1.0.2] - 2013-04-09
 
 ### Fixed
 
@@ -839,13 +839,13 @@
 
 * `autolist` and `autoeval` are default settings now.
 
-## 1.0.1 - 2013-04-06
+## [1.0.1] - 2013-04-06
 
 ### Fixed
 
 * Byebug not loading properly.
 
-## 1.0.0 - 2013-03-29
+## [1.0.0] - 2013-03-29
 
 ### Fixed
 
@@ -856,3 +856,79 @@
 ### Added
 
 * Initial release.
+
+[Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...HEAD
+[10.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.1...v10.0.2
+[10.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.0...v10.0.1
+[10.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v9.1.0...v10.0.0
+[9.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.6...v9.1.0
+[9.0.6]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.5...v9.0.6
+[9.0.5]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.4...v9.0.5
+[9.0.4]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.3...v9.0.4
+[9.0.3]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.2...v9.0.3
+[9.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.1...v9.0.2
+[9.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v9.0.0...v9.0.1
+[9.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.5...v9.0.0
+[8.2.5]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.4...v8.2.5
+[8.2.4]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.3...v8.2.4
+[8.2.3]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.2...v8.2.3
+[8.2.2]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.1...v8.2.2
+[8.2.1]: https://github.com/deivid-rodriguez/byebug/compare/v8.2.0...v8.2.1
+[8.2.0]: https://github.com/deivid-rodriguez/byebug/compare/v8.1.0...v8.2.0
+[8.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v8.0.1...v8.1.0
+[8.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v8.0.0...v8.0.1
+[8.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v7.0.0...v8.0.0
+[7.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v6.0.2...v7.0.0
+[6.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v6.0.1...v6.0.2
+[6.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v6.0.0...v6.0.1
+[6.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v5.0.0...v6.0.0
+[5.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.5...v5.0.0
+[4.0.5]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.4...v4.0.5
+[4.0.4]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.3...v4.0.4
+[4.0.3]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.2...v4.0.3
+[4.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.5.1...v4.0.0
+[3.5.1]: https://github.com/deivid-rodriguez/byebug/compare/v3.5.0...v3.5.1
+[3.5.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.4.2...v3.5.0
+[3.4.2]: https://github.com/deivid-rodriguez/byebug/compare/v3.4.1...v3.4.2
+[3.4.1]: https://github.com/deivid-rodriguez/byebug/compare/v3.4.0...v3.4.1
+[3.4.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.3.0...v3.4.0
+[3.3.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.2.0...v3.3.0
+[3.2.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.1.2...v3.2.0
+[3.1.2]: https://github.com/deivid-rodriguez/byebug/compare/v3.1.1...v3.1.2
+[3.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v3.1.0...v3.1.1
+[3.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.7.0...v3.0.0
+[2.7.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.6.0...v2.7.0
+[2.6.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.5.0...v2.6.0
+[2.5.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.4.1...v2.5.0
+[2.4.1]: https://github.com/deivid-rodriguez/byebug/compare/v2.4.0...v2.4.1
+[2.4.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.3.1...v2.4.0
+[2.3.1]: https://github.com/deivid-rodriguez/byebug/compare/v2.3.0...v2.3.1
+[2.3.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.2.2...v2.3.0
+[2.2.2]: https://github.com/deivid-rodriguez/byebug/compare/v2.2.1...v2.2.2
+[2.2.1]: https://github.com/deivid-rodriguez/byebug/compare/v2.2.0...v2.2.1
+[2.2.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.8.2...v2.0.0
+[1.8.2]: https://github.com/deivid-rodriguez/byebug/compare/v1.8.1...v1.8.2
+[1.8.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.8.0...v1.8.1
+[1.8.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.6.1...v1.7.0
+[1.6.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.6.0...v1.6.1
+[1.6.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.4.2...v1.5.0
+[1.4.2]: https://github.com/deivid-rodriguez/byebug/compare/v1.4.1...v1.4.2
+[1.4.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.1.1...v1.2.0
+[1.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.3...v1.1.0
+[1.0.3]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v0.0.1...v1.0.0
