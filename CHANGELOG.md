@@ -1,4 +1,4 @@
-# CHANGELOG
+# Changelog
 
 ## Master (Unreleased)
 
