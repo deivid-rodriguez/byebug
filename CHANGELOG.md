@@ -1,6 +1,6 @@
 # Changelog
 
-## Master (Unreleased)
+## Unreleased
 
 ## 10.0.2 - 2018-03-30
 
