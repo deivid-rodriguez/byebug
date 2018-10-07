@@ -58,7 +58,7 @@
 
 * Error when using `byebug` with a ruby compiled against libedit (#241).
 * Allow `Byebug.start_server` to yield the block passed to it when the actual
-  port is already known (#277, thanks @cben).
+  port is already known (#277, @cben).
 * Use a standard license name so it can be more reliably used by tools (#275).
 
 ## [9.0.5] - 2016-05-28
@@ -85,9 +85,9 @@
 
 ### Fixed
 
-* Skip to get a line in eval context (#263, thanks @k0kubun).
+* Skip to get a line in eval context (#263, @k0kubun).
 * Debugger getting disabled after `continue` even when linetrace is enabled
-  (#264, thanks @k0kubun).
+  (#264, @k0kubun).
 
 ## [9.0.1] - 2016-05-14
 
@@ -102,8 +102,7 @@
 * `irb` command unintentionally changing $PROGRAM_NAME.
 * `pry` command failing.
 * Unrelated error message when using `pry` command and Pry not installed.
-* Interrupting program execution from remote control interface (#239, thanks
-  @izaera).
+* Interrupting program execution from remote control interface (#239, @izaera).
 
 ### Removed
 
@@ -116,8 +115,8 @@
 
 ### Fixed
 
-* Allows paths with spaces (#244, thanks @HookyQR).
-* Allows paths with colons (#244, thanks @HookyQR).
+* Allows paths with spaces (#244, @HookyQR).
+* Allows paths with colons (#244, @HookyQR).
 
 ## [8.2.4] - 2016-04-08
 
@@ -130,8 +129,8 @@
 ### Fixed
 
 * Better interaction with utilities like RSpec when hitting Ctrl-C.
-* `irb` command when original program modified ARGV (#197, thanks @josephks).
-* Unusable debugger when stdin redirected (#211,thanks @sethk).
+* `irb` command when original program modified ARGV (#197, @josephks).
+* Unusable debugger when stdin redirected (#211, @sethk).
 * RC file loading when no explicit flag included (#223).
 * Installation on some Windows systems (#175, #226).
 
@@ -208,7 +207,7 @@
 * Another evaluation bug in autocommands.
 * `finish 0` command would sometimes fail to stop right before exiting the
   current frame.
-* Runner's `--[no-]stop` option now works (thanks @windwiny).
+* Runner's `--[no-]stop` option now works (@windwiny).
 * Change variable name `bool`, avoid conflict clang's predefined macro
 
 ### Removed
@@ -218,8 +217,7 @@
 ### Changed
 
 * [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
-  the entire library on require, but only when a `byebug` call is issued. Thanks
-  @bquorning.
+  the entire library on require, but only when a `byebug` call is issued (@bquorning).
 * The above fix to the `finish 0` command cause `byebug`'s entrypoint to
   require 3 steps out instead of 2. In general, plugins using
   `Byebug::Context.step_out` will need to be changed to consider "c return
@@ -279,7 +277,7 @@
 ### Fixed
 
 * [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`
-  command not working with negative numbers (thanks @ark6).
+  command not working with negative numbers (@ark6).
 
 ### Added
 
@@ -346,8 +344,8 @@
 * OSX CI build through Travis.
 * Style enforcement through RuboCop.
 * C style enforment using the `indent` command line utility.
-* Some remote debugging tests (thanks @eric-hu).
-* Printer's support (thanks @astashov).
+* Some remote debugging tests (@eric-hu).
+* Printer's support (@astashov).
 
 ### Changed
 
@@ -482,9 +480,9 @@
 ### Fixed
 
 * [#71](https://github.com/deivid-rodriguez/byebug/issues/71). Remote debugging
-  (thanks @shuky19).
+  (@shuky19).
 * [#69](https://github.com/deivid-rodriguez/byebug/issues/69). `source` command
-  (thanks @Olgagr).
+  (@Olgagr).
 
 ### Removed
 
@@ -535,7 +533,7 @@
 * `post_mortem` mode.
 * Command history not being saved after regular program termination.
 * [#54](https://github.com/deivid-rodriguez/byebug/issues/54). (Again) calling
-  `Byebug.start` with `Timeout.timeout` (thanks @zmoazeni).
+  `Byebug.start` with `Timeout.timeout` (@zmoazeni).
 
 ### Added
 
@@ -571,7 +569,7 @@
 
 ### Fixed
 
-* Circular dependency affecting `pry-byebug` (thanks @andreychernih).
+* Circular dependency affecting `pry-byebug` (@andreychernih).
 
 ## [2.5.0] - 2013-12-14
 
@@ -584,7 +582,7 @@
 ### Fixed
 
 * [#40](https://github.com/deivid-rodriguez/byebug/issues/40). Installation
-  error in Mac OSX (thanks @luislavena).
+  error in Mac OSX (@luislavena).
 
 ## [2.4.0] - 2013-12-02
 
@@ -597,14 +595,14 @@
 
 ### Added
 
-* (Again) `debugger` as an alias to `byebug` (thanks @wallace).
+* (Again) `debugger` as an alias to `byebug` (@wallace).
 * `-R` option for `bin/byebug` to specify server's hostname:port for remote
-  debugging (thanks @mrkn).
+  debugging (@mrkn).
 
 ### Changed
 
 * Use `require` instead of `require_relative` for loading byebug's extension
-  library (thanks @nobu).
+  library (@nobu).
 * `trace variable $foo` should be now `trace variable $foo`.
 
 ## [2.3.1] - 2013-10-17
@@ -618,7 +616,7 @@
 
 ### Added
 
-* Compatibility with Phusion Passenger Enterprise (thanks @FooBarWidget).
+* Compatibility with Phusion Passenger Enterprise (@FooBarWidget).
 
 ### Changed
 
@@ -760,8 +758,7 @@
 ### Fixed
 
 * Crash when printing some filenames in backtraces.
-* Allow byebug developers to easily use compilers different from gcc (thanks
-  @GarthSnyder!).
+* Allow byebug developers to easily use compilers different from gcc (@GarthSnyder).
 
 ## [1.4.0] - 2013-06-05
 
