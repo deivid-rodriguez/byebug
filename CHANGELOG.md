@@ -176,7 +176,7 @@
 
 ### Fixed
 
-* [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation in Ruby 2.0. Regression introduced in [7.0.0]
+* [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation in Ruby 2.0. Regression introduced in [7.0.0].
 * "Return value is: nil" would be displayed when stopping right before the end of a class definition. We want to avoid showing anything instead.
 
 ### Changed
@@ -193,7 +193,7 @@
 * Another evaluation bug in autocommands.
 * `finish 0` command would sometimes fail to stop right before exiting the current frame.
 * Runner's `--[no-]stop` option now works ([@windwiny]).
-* Change variable name `bool`, avoid conflict clang's predefined macro
+* Change variable name `bool`, avoid conflict clang's predefined macro.
 
 ### Removed
 
@@ -269,20 +269,20 @@
 
 ### Fixed
 
-* [#131](https://github.com/deivid-rodriguez/byebug/issues/131)
+* [#131](https://github.com/deivid-rodriguez/byebug/issues/131).
 * Thread commands help format should be consistent with the rest of the help system now.
 
 ## [4.0.4] - 2015-03-27
 
 ### Fixed
 
-* [#127](https://github.com/deivid-rodriguez/byebug/issues/127)
+* [#127](https://github.com/deivid-rodriguez/byebug/issues/127).
 
 ## [4.0.3] - 2015-03-19
 
 ### Fixed
 
-* Unused variable warning in `context.c`
+* Unused variable warning in `context.c`.
 
 ## [4.0.2] - 2015-03-16
 
@@ -468,9 +468,9 @@
 ### Changed
 
 * `show commands` command for listing history of previous commands now behaves like shell's `history` command.
-* `show/set history filename` is now `show/set histfile`
-* `show/set history size` is now `show/set histsize`
-* `show/set history save` is now `show/set autosave`
+* `show/set history filename` is now `show/set histfile`.
+* `show/set history size` is now `show/set histsize`.
+* `show/set history save` is now `show/set autosave`.
 * `finish` semantics, see [61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d).
 * Use per project history file by default.
 
