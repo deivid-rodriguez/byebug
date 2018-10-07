@@ -22,18 +22,18 @@
 
 ### Added
 
-* Show valid breakpoint locations when invalid location given (#393, [@ko1]).
-* Ruby 2.5.0 support (#397, [@yui-knk]).
+* [#393](https://github.com/deivid-rodriguez/byebug/pull/393): Show valid breakpoint locations when invalid location given ([@ko1]).
+* [#397](https://github.com/deivid-rodriguez/byebug/pull/397): Ruby 2.5.0 support ([@yui-knk]).
 * Log host & port when launching byebug's client in remote mode.
-* Some love & tests to remote debugging (#82).
-* `remote_byebug` shortcut to start the most common case for remote debugging (#141).
+* [#82](https://github.com/deivid-rodriguez/byebug/issues/82): Some love & tests to remote debugging.
+* [#141](https://github.com/deivid-rodriguez/byebug/issues/141): `remote_byebug` shortcut to start the most common case for remote debugging.
 
 ### Fixed
 
-* Properly ignore ruby fullpath executable when passed to byebug script (#419).
-* Remote server crash when interrupting client (#141).
-* Remote server crash when interrupting client (#274).
-* Control server thread being able to `interrupt` main thread only a single time. (#239).
+* [#419](https://github.com/deivid-rodriguez/byebug/pull/419): Properly ignore ruby fullpath executable when passed to byebug script.
+* [#141](https://github.com/deivid-rodriguez/byebug/issues/141): Remote server crash when interrupting client.
+* [#274](https://github.com/deivid-rodriguez/byebug/issues/274): Remote server crash when interrupting client.
+* [#239](https://github.com/deivid-rodriguez/byebug/issues/239): Control server thread being able to `interrupt` main thread only a single time.
 
 ## [9.1.0] - 2017-08-22
 
@@ -44,8 +44,8 @@
 ### Fixed
 
 * `where` command failing on instance_exec block stack frames.
-* `restart` command crashing in certain cases because of a missing `require "English"` (#321, [@akaneko3]).
-* `restart` command crashing when debugged script is not executable or has no shebang (#321, [@akaneko3]).
+* [#321](https://github.com/deivid-rodriguez/byebug/pull/321): `restart` command crashing in certain cases because of a missing `require "English"` ([@akaneko3]).
+* [#321](https://github.com/deivid-rodriguez/byebug/pull/321): `restart` command crashing when debugged script is not executable or has no shebang ([@akaneko3]).
 
 ### Removed
 
@@ -55,9 +55,9 @@
 
 ### Fixed
 
-* Error when using `byebug` with a ruby compiled against libedit (#241).
-* Allow `Byebug.start_server` to yield the block passed to it when the actual port is already known (#277, [@cben]).
-* Use a standard license name so it can be more reliably used by tools (#275).
+* [#241](https://github.com/deivid-rodriguez/byebug/issues/241): Error when using `byebug` with a ruby compiled against libedit.
+* [#277](https://github.com/deivid-rodriguez/byebug/pull/277): Allow `Byebug.start_server` to yield the block passed to it when the actual port is already known ([@cben]).
+* [#275](https://github.com/deivid-rodriguez/byebug/pull/275): Use a standard license name so it can be more reliably used by tools.
 
 ## [9.0.5] - 2016-05-28
 
@@ -75,7 +75,7 @@
 
 ### Fixed
 
-* Unfriendly output in byebug's executable when no script specified (#256).
+* [#256](https://github.com/deivid-rodriguez/byebug/issues/256): Unfriendly output in byebug's executable when no script specified.
 * Unfriendly output in byebug's executable when script doesn't exist.
 * Unfriendly output in byebug's executable when script has invalid code.
 
@@ -83,14 +83,14 @@
 
 ### Fixed
 
-* Skip to get a line in eval context (#263, [@k0kubun]).
-* Debugger getting disabled after `continue` even when linetrace is enabled (#264, [@k0kubun]).
+* [#263](https://github.com/deivid-rodriguez/byebug/pull/263): Skip to get a line in eval context ([@k0kubun]).
+* [#264](https://github.com/deivid-rodriguez/byebug/pull/264): Debugger getting disabled after `continue` even when linetrace is enabled ([@k0kubun]).
 
 ## [9.0.1] - 2016-05-14
 
 ### Fixed
 
-* `quit` never exiting when remote debugging (#201).
+* [#201](https://github.com/deivid-rodriguez/byebug/issues/201): `quit` never exiting when remote debugging.
 
 ## [9.0.0] - 2016-05-11
 
@@ -99,7 +99,7 @@
 * `irb` command unintentionally changing $PROGRAM_NAME.
 * `pry` command failing.
 * Unrelated error message when using `pry` command and Pry not installed.
-* Interrupting program execution from remote control interface (#239, [@izaera]).
+* [#239](https://github.com/deivid-rodriguez/byebug/issues/239): Interrupting program execution from remote control interface ([@izaera]).
 
 ### Removed
 
@@ -109,25 +109,25 @@
 
 ### Fixed
 
-* Allows paths with spaces (#244, [@HookyQR]).
-* Allows paths with colons (#244, [@HookyQR]).
+* [#244](https://github.com/deivid-rodriguez/byebug/pull/244): Allows paths with spaces ([@HookyQR]).
+* [#244](https://github.com/deivid-rodriguez/byebug/pull/244): Allows paths with colons ([@HookyQR]).
 
 ## [8.2.4] - 2016-04-08
 
 ### Fixed
 
-* Reverts #211 which leads to an unusable debugger.
+* Reverts [#211](https://github.com/deivid-rodriguez/byebug/pull/211) which leads to an unusable debugger.
 
 ## [8.2.3] - 2016-04-07
 
 ### Fixed
 
 * Better interaction with utilities like RSpec when hitting Ctrl-C.
-* `irb` command when original program modified ARGV (#197, [@josephks]).
-* Unusable debugger when stdin redirected (#211, [@sethk]).
-* RC file loading when no explicit flag included (#223).
-* Installation on some Windows systems (#175).
-* Installation on some Windows systems (#226).
+* [#197](https://github.com/deivid-rodriguez/byebug/issues/197): `irb` command when original program modified ARGV ([@josephks]).
+* [#211](https://github.com/deivid-rodriguez/byebug/pull/211): Unusable debugger when stdin redirected ([@sethk]).
+* [#223](https://github.com/deivid-rodriguez/byebug/issues/223): RC file loading when no explicit flag included.
+* [#175](https://github.com/deivid-rodriguez/byebug/issues/175): Installation on some Windows systems.
+* [#226](https://github.com/deivid-rodriguez/byebug/issues/226): Installation on some Windows systems.
 
 ## [8.2.2] - 2016-02-01
 
@@ -322,7 +322,7 @@
 
 * Code reloading issues.
 * `set fullpath` was not showing fullpaths. Now it is.
-* `up`, `down` and `frame` commands now work in post_mortem mode (#93).
+* [#93](https://github.com/deivid-rodriguez/byebug/issues/93): `up`, `down` and `frame` commands now work in post_mortem mode.
 * rc file (`.byebugrc`) loading: invalid commands are just ignored instead of aborting, global (home) rc file is now properly loaded before project's file.
 * [#93](https://github.com/deivid-rodriguez/byebug/issues/93). Backtraces not working in `post_mortem` mode.
 * 'cmd1 ; cmd2 ; ...; cmdN' syntax which allows running several commands sequentially.
