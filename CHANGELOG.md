@@ -103,7 +103,7 @@
 
 ### Removed
 
-* Official Ruby [2.0.0] support. `var local` no longer works in Ruby 2.0. The rest of the commands should still work as before, but `byebug` is no longer tested against this version so they might start breaking in the future.
+* Official Ruby 2.0.0 support. `var local` no longer works in Ruby 2.0. The rest of the commands should still work as before, but `byebug` is no longer tested against this version so they might start breaking in the future.
 
 ## [8.2.5] - 2016-04-27
 
