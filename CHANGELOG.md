@@ -6,13 +6,13 @@
 
 ### Fixed
 
-* Error when using byebug with `debase` gem (#447, [@tzmfreedom])
+* [#447](https://github.com/deivid-rodriguez/byebug/pull/447): Error when using byebug with `debase` gem ([@tzmfreedom]).
 
 ## [10.0.1] - 2018-03-21
 
 ### Fixed
 
-* Error when using byebug with `debase` gem (#443, [@tzmfreedom])
+* [#443](https://github.com/deivid-rodriguez/byebug/pull/443): Error when using byebug with `debase` gem ([@tzmfreedom]).
 
 ## [10.0.0] - 2018-01-26
 
@@ -31,7 +31,8 @@
 ### Fixed
 
 * Properly ignore ruby fullpath executable when passed to byebug script (#419).
-* Remote server crash when interrupting client (#141, #274).
+* Remote server crash when interrupting client (#141).
+* Remote server crash when interrupting client (#274).
 * Control server thread being able to `interrupt` main thread only a single time. (#239).
 
 ## [9.1.0] - 2017-08-22
@@ -125,7 +126,8 @@
 * `irb` command when original program modified ARGV (#197, [@josephks]).
 * Unusable debugger when stdin redirected (#211, [@sethk]).
 * RC file loading when no explicit flag included (#223).
-* Installation on some Windows systems (#175, #226).
+* Installation on some Windows systems (#175).
+* Installation on some Windows systems (#226).
 
 ## [8.2.2] - 2016-02-01
 
@@ -143,7 +145,8 @@
 
 ### Fixed
 
-* [#184](https://github.com/deivid-rodriguez/byebug/issues/184) & [#188](https://github.com/deivid-rodriguez/byebug/issues/188), both due to the way of running evaluations in a separate thread.
+* [#184](https://github.com/deivid-rodriguez/byebug/issues/184): Due to the way of running evaluations in a separate thread.
+* [#188](https://github.com/deivid-rodriguez/byebug/issues/188): Due to the way of running evaluations in a separate thread.
 
 ### Added
 
@@ -480,7 +483,8 @@
 ### Fixed
 
 * [#52](https://github.com/deivid-rodriguez/byebug/issues/52). `IGNORED_FILES` slowing down startup.
-* [#53](https://github.com/deivid-rodriguez/byebug/issues/53) and [#54](https://github.com/deivid-rodriguez/byebug/issues/54). Calling `Byebug.start` with `Timeout.timeout`.
+* [#53](https://github.com/deivid-rodriguez/byebug/issues/53). Calling `Byebug.start` with `Timeout.timeout`.
+* [#54](https://github.com/deivid-rodriguez/byebug/issues/54). Calling `Byebug.start` with `Timeout.timeout`.
 
 ## [2.6.0] - 2014-02-08
 
