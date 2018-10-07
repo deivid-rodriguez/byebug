@@ -282,7 +282,7 @@
 
 ### Fixed
 
-* Unused variable warning in context.c
+* Unused variable warning in `context.c`
 
 ## [4.0.2] - 2015-03-16
 
@@ -363,7 +363,7 @@
 
 * Complete rewrite of byebug's history.
 * Complete rewrite of list command.
-* Docs about stacktrace related commands (up, down, frame, backtrace).
+* Docs about stacktrace related commands (`up`, `down`, `frame`, `backtrace`).
 
 ## [3.4.2] - 2014-09-26
 
