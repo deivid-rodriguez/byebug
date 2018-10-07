@@ -176,7 +176,7 @@
 
 ### Fixed
 
-* [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation in Ruby 2.0. Regression introduced in 7.0.0
+* [#183](https://github.com/deivid-rodriguez/byebug/issues/183). Compilation in Ruby 2.0. Regression introduced in [7.0.0]
 * "Return value is: nil" would be displayed when stopping right before the end of a class definition. We want to avoid showing anything instead.
 
 ### Changed
@@ -213,7 +213,7 @@
 
 ### Fixed
 
-* The user should always be given back a prompt unless (s)he explicitly states the opposite. This provides a more general fix to the bug resolved in 6.0.1.
+* The user should always be given back a prompt unless (s)he explicitly states the opposite. This provides a more general fix to the bug resolved in [6.0.1].
 
 ## [6.0.1] - 2015-08-19
 
