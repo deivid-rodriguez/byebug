@@ -472,7 +472,7 @@
 * `show/set history size` is now `show/set histsize`
 * `show/set history save` is now `show/set autosave`
 * `finish` semantics, see [61f9b4d](https://github.com/deivid-rodriguez/byebug/commit/61f9b4d).
-* Use `per project` history file by default.
+* Use per project history file by default.
 
 ### Removed
 
@@ -548,7 +548,7 @@
 
 ### Fixed
 
-* [#26](https://github.com/deivid-rodriguez/byebug/issues/26). Compilation issue introduced in `[2.2.0]`.
+* [#26](https://github.com/deivid-rodriguez/byebug/issues/26). Compilation issue introduced in [2.2.0].
 
 ### Changed
 
