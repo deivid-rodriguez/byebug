@@ -6,13 +6,13 @@
 
 ### Fixed
 
-* Error when using byebug with `debase` gem (#447, @tzmfreedom)
+* Error when using byebug with `debase` gem (#447, [@tzmfreedom])
 
 ## [10.0.1] - 2018-03-21
 
 ### Fixed
 
-* Error when using byebug with `debase` gem (#443, @tzmfreedom)
+* Error when using byebug with `debase` gem (#443, [@tzmfreedom])
 
 ## [10.0.0] - 2018-01-26
 
@@ -23,8 +23,8 @@
 
 ### Added
 
-* Show valid breakpoint locations when invalid location given (#393, @ko1).
-* Ruby 2.5.0 support (#397, @yui-knk).
+* Show valid breakpoint locations when invalid location given (#393, [@ko1]).
+* Ruby 2.5.0 support (#397, [@yui-knk]).
 * Log host & port when launching byebug's client in remote mode.
 * Some love & tests to remote debugging (#82).
 * `remote_byebug` shortcut to start the most common case for remote debugging (#141).
@@ -44,8 +44,8 @@
 ### Fixed
 
 * `where` command failing on instance_exec block stack frames.
-* `restart` command crashing in certain cases because of a missing `require "English"` (#321, @akaneko3).
-* `restart` command crashing when debugged script is not executable or has no shebang (#321, @akaneko3).
+* `restart` command crashing in certain cases because of a missing `require "English"` (#321, [@akaneko3]).
+* `restart` command crashing when debugged script is not executable or has no shebang (#321, [@akaneko3]).
 
 ### Removed
 
@@ -58,7 +58,7 @@
 
 * Error when using `byebug` with a ruby compiled against libedit (#241).
 * Allow `Byebug.start_server` to yield the block passed to it when the actual
-  port is already known (#277, @cben).
+  port is already known (#277, [@cben]).
 * Use a standard license name so it can be more reliably used by tools (#275).
 
 ## [9.0.5] - 2016-05-28
@@ -85,9 +85,9 @@
 
 ### Fixed
 
-* Skip to get a line in eval context (#263, @k0kubun).
+* Skip to get a line in eval context (#263, [@k0kubun]).
 * Debugger getting disabled after `continue` even when linetrace is enabled
-  (#264, @k0kubun).
+  (#264, [@k0kubun]).
 
 ## [9.0.1] - 2016-05-14
 
@@ -102,7 +102,7 @@
 * `irb` command unintentionally changing $PROGRAM_NAME.
 * `pry` command failing.
 * Unrelated error message when using `pry` command and Pry not installed.
-* Interrupting program execution from remote control interface (#239, @izaera).
+* Interrupting program execution from remote control interface (#239, [@izaera]).
 
 ### Removed
 
@@ -115,8 +115,8 @@
 
 ### Fixed
 
-* Allows paths with spaces (#244, @HookyQR).
-* Allows paths with colons (#244, @HookyQR).
+* Allows paths with spaces (#244, [@HookyQR]).
+* Allows paths with colons (#244, [@HookyQR]).
 
 ## [8.2.4] - 2016-04-08
 
@@ -129,8 +129,8 @@
 ### Fixed
 
 * Better interaction with utilities like RSpec when hitting Ctrl-C.
-* `irb` command when original program modified ARGV (#197, @josephks).
-* Unusable debugger when stdin redirected (#211, @sethk).
+* `irb` command when original program modified ARGV (#197, [@josephks]).
+* Unusable debugger when stdin redirected (#211, [@sethk]).
 * RC file loading when no explicit flag included (#223).
 * Installation on some Windows systems (#175, #226).
 
@@ -207,7 +207,7 @@
 * Another evaluation bug in autocommands.
 * `finish 0` command would sometimes fail to stop right before exiting the
   current frame.
-* Runner's `--[no-]stop` option now works (@windwiny).
+* Runner's `--[no-]stop` option now works ([@windwiny]).
 * Change variable name `bool`, avoid conflict clang's predefined macro
 
 ### Removed
@@ -217,7 +217,7 @@
 ### Changed
 
 * [#166](https://github.com/deivid-rodriguez/byebug/issues/166). Don't load
-  the entire library on require, but only when a `byebug` call is issued (@bquorning).
+  the entire library on require, but only when a `byebug` call is issued ([@bquorning]).
 * The above fix to the `finish 0` command cause `byebug`'s entrypoint to
   require 3 steps out instead of 2. In general, plugins using
   `Byebug::Context.step_out` will need to be changed to consider "c return
@@ -277,7 +277,7 @@
 ### Fixed
 
 * [#136](https://github.com/deivid-rodriguez/byebug/issues/136). `frame`
-  command not working with negative numbers (@ark6).
+  command not working with negative numbers ([@ark6]).
 
 ### Added
 
@@ -344,8 +344,8 @@
 * OSX CI build through Travis.
 * Style enforcement through RuboCop.
 * C style enforment using the `indent` command line utility.
-* Some remote debugging tests (@eric-hu).
-* Printer's support (@astashov).
+* Some remote debugging tests ([@eric-hu]).
+* Printer's support ([@astashov]).
 
 ### Changed
 
@@ -380,7 +380,7 @@
 * Setting breakpoint in a method would stop not only at the beginning of the
   method but also at the beginning of every block inside the method.
 * [#122](https://github.com/deivid-rodriguez/byebug/issues/122). Setting
-  breakpoints on module methods (@x-yuri).
+  breakpoints on module methods ([@x-yuri]).
 
 ### Removed
 
@@ -480,9 +480,9 @@
 ### Fixed
 
 * [#71](https://github.com/deivid-rodriguez/byebug/issues/71). Remote debugging
-  (@shuky19).
+  ([@shuky19]).
 * [#69](https://github.com/deivid-rodriguez/byebug/issues/69). `source` command
-  (@Olgagr).
+  ([@Olgagr]).
 
 ### Removed
 
@@ -533,7 +533,7 @@
 * `post_mortem` mode.
 * Command history not being saved after regular program termination.
 * [#54](https://github.com/deivid-rodriguez/byebug/issues/54). (Again) calling
-  `Byebug.start` with `Timeout.timeout` (@zmoazeni).
+  `Byebug.start` with `Timeout.timeout` ([@zmoazeni]).
 
 ### Added
 
@@ -569,7 +569,7 @@
 
 ### Fixed
 
-* Circular dependency affecting `pry-byebug` (@andreychernih).
+* Circular dependency affecting `pry-byebug` ([@andreychernih]).
 
 ## [2.5.0] - 2013-12-14
 
@@ -582,7 +582,7 @@
 ### Fixed
 
 * [#40](https://github.com/deivid-rodriguez/byebug/issues/40). Installation
-  error in Mac OSX (@luislavena).
+  error in Mac OSX ([@luislavena]).
 
 ## [2.4.0] - 2013-12-02
 
@@ -595,14 +595,14 @@
 
 ### Added
 
-* (Again) `debugger` as an alias to `byebug` (@wallace).
+* (Again) `debugger` as an alias to `byebug` ([@wallace]).
 * `-R` option for `bin/byebug` to specify server's hostname:port for remote
-  debugging (@mrkn).
+  debugging ([@mrkn]).
 
 ### Changed
 
 * Use `require` instead of `require_relative` for loading byebug's extension
-  library (@nobu).
+  library ([@nobu]).
 * `trace variable $foo` should be now `trace variable $foo`.
 
 ## [2.3.1] - 2013-10-17
@@ -616,7 +616,7 @@
 
 ### Added
 
-* Compatibility with Phusion Passenger Enterprise (@FooBarWidget).
+* Compatibility with Phusion Passenger Enterprise ([@FooBarWidget]).
 
 ### Changed
 
@@ -666,7 +666,7 @@
 ### Fixed
 
 * Remote debugging display.
-* `eval` crashing when inspecting raised an exception (reported by @iblue).
+* `eval` crashing when inspecting raised an exception (reported by [@iblue]).
 
 ### Changed
 
@@ -758,7 +758,7 @@
 ### Fixed
 
 * Crash when printing some filenames in backtraces.
-* Allow byebug developers to easily use compilers different from gcc (@GarthSnyder).
+* Allow byebug developers to easily use compilers different from gcc ([@GarthSnyder]).
 
 ## [1.4.0] - 2013-06-05
 
@@ -782,7 +782,7 @@
 
 ### Added
 
-* Support colon-delimited include paths in command-line front-end (@ender672).
+* Support colon-delimited include paths in command-line front-end ([@ender672]).
 
 ## [1.2.0] - 2013-05-20
 
@@ -929,3 +929,32 @@
 [1.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v0.0.1...v1.0.0
+
+[@akaneko3]: https://github.com/akaneko3
+[@andreychernih]: https://github.com/andreychernih
+[@ark6]: https://github.com/ark6
+[@astashov]: https://github.com/astashov
+[@bquorning]: https://github.com/bquorning
+[@cben]: https://github.com/cben
+[@ender672]: https://github.com/ender672
+[@eric-hu]: https://github.com/eric-hu
+[@FooBarWidget]: https://github.com/FooBarWidget
+[@GarthSnyder]: https://github.com/GarthSnyder
+[@HookyQR]: https://github.com/HookyQR
+[@iblue]: https://github.com/iblue
+[@izaera]: https://github.com/izaera
+[@josephks]: https://github.com/josephks
+[@k0kubun]: https://github.com/k0kubun
+[@ko1]: https://github.com/ko1
+[@luislavena]: https://github.com/luislavena
+[@mrkn]: https://github.com/mrkn
+[@nobu]: https://github.com/nobu
+[@Olgagr]: https://github.com/Olgagr
+[@sethk]: https://github.com/sethk
+[@shuky19]: https://github.com/shuky19
+[@tzmfreedom]: https://github.com/tzmfreedom
+[@wallace]: https://github.com/wallace
+[@windwiny]: https://github.com/windwiny
+[@x-yuri]: https://github.com/x-yuri
+[@yui-knk]: https://github.com/yui-knk
+[@zmoazeni]: https://github.com/zmoazeni
