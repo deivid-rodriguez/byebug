@@ -10,9 +10,9 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      2.3.7
-      2.4.4
-      2.5.1
+      2.3.8
+      2.4.5
+      2.5.3
     ].freeze
 
     LINE_EDITORS = %w[

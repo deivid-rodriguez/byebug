@@ -31,67 +31,67 @@ steps: &steps
 jobs:
   prior-to-prior-to-latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.3.7-readline-gcc
+      - image: deividrodriguez/byebug:2.3.8-readline-gcc
     <<: *steps
 
   prior-to-prior-to-latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.3.7-libedit-gcc
+      - image: deividrodriguez/byebug:2.3.8-libedit-gcc
     <<: *steps
 
   prior-to-prior-to-latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.3.7-readline-clang
+      - image: deividrodriguez/byebug:2.3.8-readline-clang
     <<: *steps
 
   prior-to-prior-to-latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.3.7-libedit-clang
+      - image: deividrodriguez/byebug:2.3.8-libedit-clang
     <<: *steps
 
   prior-to-latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.4.4-readline-gcc
+      - image: deividrodriguez/byebug:2.4.5-readline-gcc
     <<: *steps
 
   prior-to-latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.4.4-libedit-gcc
+      - image: deividrodriguez/byebug:2.4.5-libedit-gcc
     <<: *steps
 
   prior-to-latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.4.4-readline-clang
+      - image: deividrodriguez/byebug:2.4.5-readline-clang
     <<: *steps
 
   prior-to-latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.4.4-libedit-clang
+      - image: deividrodriguez/byebug:2.4.5-libedit-clang
     <<: *steps
 
   latest-readline-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.5.1-readline-gcc
+      - image: deividrodriguez/byebug:2.5.3-readline-gcc
     <<: *steps
 
   latest-libedit-gcc:
     docker:
-      - image: deividrodriguez/byebug:2.5.1-libedit-gcc
+      - image: deividrodriguez/byebug:2.5.3-libedit-gcc
     <<: *steps
 
   latest-readline-clang:
     docker:
-      - image: deividrodriguez/byebug:2.5.1-readline-clang
+      - image: deividrodriguez/byebug:2.5.3-readline-clang
     <<: *steps
 
   latest-libedit-clang:
     docker:
-      - image: deividrodriguez/byebug:2.5.1-libedit-clang
+      - image: deividrodriguez/byebug:2.5.3-libedit-clang
     <<: *steps
 
   upload_coverage:
     docker:
-      - image: deividrodriguez/byebug:2.5.1-readline-clang
+      - image: deividrodriguez/byebug:2.5.3-readline-clang
         environment:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
