@@ -32,6 +32,7 @@ install:
   - gem install bundler --version 1.16.6
 
   - if [ "$LIBEDIT" == "true" ]; then
+      rvm autolibs disable;
       rvm reinstall "$TRAVIS_RUBY_VERSION" --configure --enable-libedit;
     fi
 
