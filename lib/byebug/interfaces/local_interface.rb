@@ -44,7 +44,7 @@ module Byebug
     end
 
     def highlight(str)
-      formatter = Rouge::Formatters::Terminal256.new(Rouge::Themes::Github)
+      formatter = Rouge::Formatters::Terminal256.new(Rouge::Themes::Github.new)
       lexer = Rouge::Lexers::Ruby.new
 
       formatter.format(lexer.lex(str))
