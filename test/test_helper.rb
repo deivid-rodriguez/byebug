@@ -2,10 +2,10 @@
 
 if ENV["NOCOV"].nil?
   require "simplecov"
-  
+
   SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
   SimpleCov.start do
-    add_filter ['test']
+    add_filter "test"
   end
 end
 
