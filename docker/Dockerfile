@@ -84,7 +84,7 @@ RUN set -ex \
   && rm -r /usr/src/ruby \
   \
   && gem update --system 2.7.7 \
-  && gem install bundler --version 1.16.4 --force \
+  && gem install bundler --version 1.16.6 --force \
   && rm -r /root/.gem
 
 RUN SHELLCHECK_VERSION=v0.5.0 \
