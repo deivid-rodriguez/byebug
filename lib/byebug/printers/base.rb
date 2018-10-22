@@ -11,7 +11,7 @@ module Byebug
       class MissedPath < StandardError; end
       class MissedArgument < StandardError; end
 
-      SEPARATOR = ".".freeze
+      SEPARATOR = "."
 
       def type
         self.class.name.split("::").last.downcase
@@ -23,7 +23,7 @@ module Byebug
         result = nil
         contents.each_value do |contents|
           result = parts(path).reduce(contents) do |r, part|
-            r && r.key?(part) ? r[part] : nil
+            r&.key?(part) ? r[part] : nil
           end
           break if result
         end

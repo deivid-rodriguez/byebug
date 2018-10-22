@@ -40,7 +40,7 @@ module Byebug
     def_delegator :printer, :print_collection, :prc
     def_delegator :printer, :print_variables, :prv
 
-    def_delegators :interface, :errmsg, :puts, :confirm
+    def_delegators :interface, :errmsg, :puts, :print, :confirm, :highlight
 
     def_delegators :Byebug, :commands
 

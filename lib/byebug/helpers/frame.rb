@@ -21,7 +21,7 @@ module Byebug
 
       def adjust_frame(new_frame)
         return frame_err("too_low") if new_frame >= context.stack_size
-        return frame_err("too_high") if new_frame < 0
+        return frame_err("too_high") if new_frame.negative?
 
         context.frame = new_frame
         processor.prev_line = nil

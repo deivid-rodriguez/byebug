@@ -7,7 +7,7 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
 
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 
 Layout/ExtraSpacing:
   AllowForAlignment: false
@@ -24,10 +24,6 @@ Naming/FileName:
 
 TrivialAccessors:
   ExactNameMatch: true
-
-# Until we bump TargetRubyVersion to 2.3
-Style/FrozenStringLiteralComment:
-  EnforcedStyle: always
 
 Style/ModuleFunction:
   EnforcedStyle: extend_self

@@ -109,13 +109,36 @@ module Byebug
     #
     # Show a range of lines in the current file.
     #
-    # @param min [Integer] Lower bound
-    # @param max [Integer] Upper bound
+    # @param min [Integer] Lower line number bound
+    # @param max [Integer] Upper line number bound
     #
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      puts source_file_formatter.lines(min, max).join
+      (min..max).to_a.zip(code_chunk(min, max)).each do |lineno, line|
+        mark = lineno == frame.line ? '=> ' : '   '
+        puts format("#{mark}%#{max.to_s.size}d: %s", lineno, line)
+      end
+    end
+
+    #
+    # Highlighted code chunk to be displayed
+    #
+    # @param min [Integer] Lower line number bound
+    # @param max [Integer] Upper line number bound
+    #
+    def code_chunk(min, max)
+      highlight(File.read(frame.file)).split("\n")[min - 1..max - 1]
+    end
+
+    #
+    # Highlighted code chunk to be displayed
+    #
+    # @param min [Integer] Lower line number bound
+    # @param max [Integer] Upper line number bound
+    #
+    def contextless_code_chunk(min, max)
+      highlight(IO.readlines(frame.file)[min..max].join).split("\n")
     end
 
     #
