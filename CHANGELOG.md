@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+* Support for MRI 2.2. Byebug no longer installs on this platform.
+
 ## [10.0.2] - 2018-03-30
 
 ### Fixed

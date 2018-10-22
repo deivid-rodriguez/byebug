@@ -25,9 +25,6 @@ module Byebug
       #
       # Removes a number of leading whitespace for each input line.
       #
-      # @note Might be unnecessary when Ruby 2.2 support is dropped and we can
-      # use squiggly heredoc's.
-      #
       def deindent(str, leading_spaces: 6)
         str.gsub(/^ {#{leading_spaces}}/, "")
       end

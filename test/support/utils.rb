@@ -61,7 +61,7 @@ module Byebug
     def debug_code(program, &block)
       interface.test_block = block
       debug_in_temp_file(program)
-      interface.test_block.call if interface.test_block
+      interface.test_block&.call
     end
 
     #
