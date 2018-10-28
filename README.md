@@ -137,7 +137,7 @@ Command     | Aliases      | Subcommands
 
 ## Semantic Versioning
 
-Byebug attempts to follow [semantic versioning](https://semver.org) as well as
+Byebug attempts to follow [semantic versioning](https://semver.org) and
 bump major version only when backwards incompatible changes are released.
 Backwards compatibility is targeted to [pry-byebug] and any other plugins
 relying on `byebug`.
