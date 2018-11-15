@@ -115,9 +115,13 @@ module Byebug
     def display_lines(min, max)
       puts "\n[#{min}, #{max}] in #{frame.file}"
 
-      (min..max).to_a.zip(code_chunk(min, max)).each do |lineno, line|
-        mark = lineno == frame.line ? '=> ' : '   '
-        puts format("#{mark}%#{max.to_s.size}d: %s", lineno, line)
+      if Setting[:highlight]
+        (min..max).to_a.zip(code_chunk(min, max)).each do |lineno, line|
+          mark = lineno == frame.line ? "=> " : "   "
+          puts format("#{mark}%#{max.to_s.size}d: %s", lineno, line)
+        end
+      else
+        puts source_file_formatter.lines(min, max).join
       end
     end
 
