@@ -35,7 +35,6 @@ while it executes and offers many of the traditional debugging features such as:
 ## Build Status
 
 Linux [![Cir][cir]][cir_url]
-macOS [![Tra][tra]][tra_url]
 Windows [![Vey][vey]][vey_url]
 
 [cir]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master.svg?style=svg
