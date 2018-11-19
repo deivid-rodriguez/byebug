@@ -83,7 +83,7 @@ RUN set -ex \
   && cd / \
   && rm -r /usr/src/ruby \
   \
-  && gem update --system 2.7.7 \
+  && gem update --system 2.7.8 \
   && gem install bundler --version 1.16.6 --force \
   && rm -r /root/.gem
 
