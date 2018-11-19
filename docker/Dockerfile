@@ -92,6 +92,8 @@ RUN SHELLCHECK_VERSION=v0.5.0 \
   && tar -xJf shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz \
   && cp shellcheck-$SHELLCHECK_VERSION/shellcheck /usr/bin/
 
+RUN ln -s clang-format /usr/bin/clang-format-5.0
+
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 ENV BUNDLE_PATH=.bundle
 
