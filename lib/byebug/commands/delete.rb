@@ -34,9 +34,7 @@ module Byebug
 
     def execute
       unless @match[1]
-        if confirm(pr("break.confirmations.delete_all"))
-          Byebug.breakpoints.clear
-        end
+        Byebug.breakpoints.clear if confirm(pr("break.confirmations.delete_all"))
 
         return
       end

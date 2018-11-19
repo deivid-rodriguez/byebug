@@ -31,9 +31,7 @@ module Byebug
       if @match[1]
         signame = @match[1]
 
-        unless Signal.list.member?(signame)
-          return errmsg("signal name #{signame} is not a signal I know about\n")
-        end
+        return errmsg("signal name #{signame} is not a signal I know about\n") unless Signal.list.member?(signame)
       else
         return unless confirm("Really kill? (y/n) ")
 

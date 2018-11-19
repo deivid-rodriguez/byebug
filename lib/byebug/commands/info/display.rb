@@ -28,9 +28,7 @@ module Byebug
       end
 
       def execute
-        unless Byebug.displays.find { |d| d[0] }
-          return puts("There are no auto-display expressions now.")
-        end
+        return puts("There are no auto-display expressions now.") unless Byebug.displays.find { |d| d[0] }
 
         puts "Auto-display expressions now in effect:"
         puts "Num Enb Expression"

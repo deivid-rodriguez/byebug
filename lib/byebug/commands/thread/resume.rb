@@ -35,9 +35,7 @@ module Byebug
         context, err = context_from_thread(@match[1])
         return errmsg(err) if err
 
-        unless context.suspended?
-          return errmsg(pr("thread.errors.already_running"))
-        end
+        return errmsg(pr("thread.errors.already_running")) unless context.suspended?
 
         context.resume
         display_context(context)

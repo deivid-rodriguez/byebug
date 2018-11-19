@@ -43,9 +43,7 @@ module Byebug
       b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
       return errmsg(pr("break.errors.location")) unless b
 
-      if syntax_valid?(@match[2])
-        return puts(pr("break.created", id: b.id, file: b.source, line: b.pos))
-      end
+      return puts(pr("break.created", id: b.id, file: b.source, line: b.pos)) if syntax_valid?(@match[2])
 
       errmsg(pr("break.errors.expression", expr: @match[2]))
       b.enabled = false
@@ -87,9 +85,7 @@ module Byebug
 
       fullpath = File.realpath(file)
 
-      if line > n_lines(file)
-        raise(pr("break.errors.far_line", lines: n_lines(file), file: fullpath))
-      end
+      raise(pr("break.errors.far_line", lines: n_lines(file), file: fullpath)) if line > n_lines(file)
 
       unless Breakpoint.potential_line?(fullpath, line)
         msg = pr(

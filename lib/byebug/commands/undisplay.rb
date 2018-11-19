@@ -37,11 +37,10 @@ module Byebug
         pos, err = get_int(@match[1], "Undisplay", 1, Byebug.displays.size)
         return errmsg(err) unless err.nil?
 
-        unless Byebug.displays[pos - 1]
-          return errmsg(pr("display.errors.undefined", expr: pos))
-        end
+        last_display = Byebug.displays[pos - 1]
+        return errmsg(pr("display.errors.undefined", expr: pos)) unless last_display
 
-        Byebug.displays[pos - 1][0] = nil
+        last_display[0] = nil
       else
         return unless confirm(pr("display.confirmations.clear_all"))
 

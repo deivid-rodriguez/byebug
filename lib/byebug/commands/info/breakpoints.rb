@@ -35,9 +35,7 @@ module Byebug
         if @match[1]
           indices = @match[1].split(/ +/).map(&:to_i)
           breakpoints = breakpoints.select { |b| indices.member?(b.id) }
-          if breakpoints.empty?
-            return errmsg("No breakpoints found among list given")
-          end
+          return errmsg("No breakpoints found among list given") if breakpoints.empty?
         end
 
         puts "Num Enb What"
