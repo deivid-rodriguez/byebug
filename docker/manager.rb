@@ -64,20 +64,6 @@ module Docker
     def push
       print "Pushing image #{tag}... "
 
-      login_cmd = %W[
-        docker
-        login
-        -u
-        #{ENV['DOCKER_USER']}
-        -p
-        #{ENV['DOCKER_PASS']}
-      ]
-
-      unless system(*login_cmd, out: File::NULL, err: File::NULL)
-        puts "❌"
-        return
-      end
-
       run("docker push #{tag}")
     end
 
@@ -91,6 +77,8 @@ module Docker
       end
 
       def push_default
+        login
+
         default_image.push
       end
 
@@ -103,6 +91,8 @@ module Docker
       end
 
       def push_all
+        login
+
         for_all_images(&:push)
       end
 
@@ -113,7 +103,30 @@ module Docker
         )
       end
 
+      def run(*command)
+        output, status = Open3.capture2e(*command)
+
+        puts(status ? "✔" : "❌")
+
+        puts output unless status.success?
+      end
+
       private
+
+      def login
+        print "Logging in to dockerhub... "
+
+        login_cmd = %W[
+          docker
+          login
+          -u
+          #{ENV['DOCKER_USER']}
+          -p
+          #{ENV['DOCKER_PASS']}
+        ]
+
+        run(*login_cmd)
+      end
 
       def releases_url
         "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
@@ -159,11 +172,7 @@ module Docker
     end
 
     def run(command)
-      output, status = Open3.capture2e(command)
-
-      puts(status ? "✔" : "❌")
-
-      puts output unless status.success?
+      self.class.run(command)
     end
 
     def tag
