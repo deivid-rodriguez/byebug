@@ -36,9 +36,7 @@ module Byebug
         # they may contain #{} string interpolation
         string.gsub(/\|\w+$/, "").gsub(/([^#]?){([^}]*)}/) do
           key = Regexp.last_match[2].to_s
-          unless args.key?(key.to_sym)
-            raise MissedArgument, "Missed argument #{key} for '#{string}'"
-          end
+          raise MissedArgument, "Missed argument #{key} for '#{string}'" unless args.key?(key.to_sym)
 
           "#{Regexp.last_match[1]}#{args[key.to_sym]}"
         end

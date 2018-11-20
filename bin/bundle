@@ -17,9 +17,7 @@ m = Module.new do
     bundler_version = nil
     update_index = nil
     ARGV.each_with_index do |a, i|
-      if update_index && update_index.succ == i && a =~ Gem::Version::ANCHORED_VERSION_PATTERN
-        bundler_version = a
-      end
+      bundler_version = a if update_index && update_index.succ == i && a =~ Gem::Version::ANCHORED_VERSION_PATTERN
       next unless a =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/
 
       bundler_version = Regexp.last_match(1) || ">= 0.a"

@@ -33,9 +33,7 @@ module Byebug
 
       def execute
         obj = warning_eval(str_obj)
-        unless obj.is_a?(Module)
-          return errmsg(pr("variable.errors.not_module", object: str_obj))
-        end
+        return errmsg(pr("variable.errors.not_module", object: str_obj)) unless obj.is_a?(Module)
 
         constants = warning_eval("#{str_obj}.constants")
         puts prv(constants.sort.map { |c| [c, obj.const_get(c)] }, "constant")
