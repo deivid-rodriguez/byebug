@@ -15,9 +15,7 @@ module Byebug
 
         select_breakpoints(is_enable, args).each do |b|
           enabled = (is_enable == "enable")
-          if enabled && !syntax_valid?(b.expr)
-            raise pr("toggle.errors.expression", expr: b.expr)
-          end
+          raise pr("toggle.errors.expression", expr: b.expr) if enabled && !syntax_valid?(b.expr)
 
           puts pr("toggle.messages.toggled", bpnum: b.id,
                                              endis: enabled ? "en" : "dis")

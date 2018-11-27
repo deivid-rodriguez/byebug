@@ -35,9 +35,7 @@ module Byebug
         return errmsg(err) unless num
 
         filename = File.expand_path(frame.file)
-        unless Breakpoint.potential_line?(filename, num)
-          return errmsg(pr("continue.errors.unstopped_line", line: num))
-        end
+        return errmsg(pr("continue.errors.unstopped_line", line: num)) unless Breakpoint.potential_line?(filename, num)
 
         Breakpoint.add(filename, num)
       end

@@ -32,9 +32,7 @@ module Byebug
       return puts(help) unless @match[1]
 
       file = File.expand_path(@match[1]).strip
-      unless File.exist?(file)
-        return errmsg(pr("source.errors.not_found", file: file))
-      end
+      return errmsg(pr("source.errors.not_found", file: file)) unless File.exist?(file)
 
       processor.interface.read_file(file)
     end

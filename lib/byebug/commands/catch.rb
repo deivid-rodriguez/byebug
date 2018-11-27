@@ -48,18 +48,14 @@ module Byebug
     private
 
     def remove(exception)
-      unless Byebug.catchpoints.member?(exception)
-        return errmsg pr("catch.errors.not_found", exception: exception)
-      end
+      return errmsg pr("catch.errors.not_found", exception: exception) unless Byebug.catchpoints.member?(exception)
 
       puts pr("catch.removed", exception: exception)
       Byebug.catchpoints.delete(exception)
     end
 
     def add(exception)
-      if warning_eval(exception.is_a?(Class).to_s)
-        errmsg pr("catch.errors.not_class", class: exception)
-      end
+      errmsg pr("catch.errors.not_class", class: exception) if warning_eval(exception.is_a?(Class).to_s)
 
       puts pr("catch.added", exception: exception)
       Byebug.add_catchpoint(exception)

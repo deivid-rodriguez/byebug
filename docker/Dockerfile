@@ -83,14 +83,16 @@ RUN set -ex \
   && cd / \
   && rm -r /usr/src/ruby \
   \
-  && gem update --system 2.7.7 \
-  && gem install bundler --version 1.16.6 --force \
+  && gem update --system 2.7.8 \
+  && gem install bundler --version 1.17.1 --force \
   && rm -r /root/.gem
 
 RUN SHELLCHECK_VERSION=v0.5.0 \
   && wget "https://storage.googleapis.com/shellcheck/shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz" \
   && tar -xJf shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz \
   && cp shellcheck-$SHELLCHECK_VERSION/shellcheck /usr/bin/
+
+RUN ln -s clang-format /usr/bin/clang-format-5.0
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 ENV BUNDLE_PATH=.bundle

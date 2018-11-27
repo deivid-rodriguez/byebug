@@ -28,9 +28,7 @@ module Byebug
     end
 
     def execute
-      unless processor.interface.instance_of?(LocalInterface)
-        return errmsg(pr("base.errors.only_local"))
-      end
+      return errmsg(pr("base.errors.only_local")) unless processor.interface.instance_of?(LocalInterface)
 
       # @todo IRB tries to parse $ARGV so we must clear it (see #197). Add a
       #   test case for it so we can remove this comment.

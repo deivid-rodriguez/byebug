@@ -37,9 +37,7 @@ module Byebug
 
       def execute
         file = @match[1] || frame.file
-        unless File.exist?(file)
-          return errmsg(pr("info.errors.undefined_file", file: file))
-        end
+        return errmsg(pr("info.errors.undefined_file", file: file)) unless File.exist?(file)
 
         puts prettify <<-RUBY
           File #{info_file_basic(file)}

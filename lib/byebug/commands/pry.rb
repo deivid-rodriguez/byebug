@@ -27,9 +27,7 @@ module Byebug
     end
 
     def execute
-      unless processor.interface.instance_of?(LocalInterface)
-        return errmsg(pr("base.errors.only_local"))
-      end
+      return errmsg(pr("base.errors.only_local")) unless processor.interface.instance_of?(LocalInterface)
 
       begin
         require "pry"

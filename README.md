@@ -15,13 +15,14 @@
 [cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/test_coverage
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
-Byebug is a simple to use, feature rich debugger for Ruby. It uses the
+Byebug is a simple to use and feature rich debugger for Ruby. It uses the
 TracePoint API for execution control and the Debug Inspector API for call stack
-navigation, so it doesn't depend on internal core sources. It's developed as a C
-extension, so it's fast. And it has a full test suite so it's reliable.
+navigation. Therefore, Byebug doesn't depend on internal core sources. Byebug is also
+fast because it is developed as a C extension and reliable because it is supported
+by a full test suite.
 
-It allows you to see what is going on _inside_ a Ruby program while it executes
-and offers many of the traditional debugging features such as:
+The debugger permits the ability to understand what is going on _inside_ a Ruby program
+while it executes and offers many of the traditional debugging features such as:
 
 * Stepping: Running your program one line at a time.
 * Breaking: Pausing the program at some event or specified instruction, to
@@ -34,7 +35,6 @@ and offers many of the traditional debugging features such as:
 ## Build Status
 
 Linux [![Cir][cir]][cir_url]
-macOS [![Tra][tra]][tra_url]
 Windows [![Vey][vey]][vey_url]
 
 [cir]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master.svg?style=svg
@@ -55,7 +55,7 @@ MRI 2.3.0 or higher.
 gem install byebug
 ```
 
-Or if you use `bundler`,
+Alternatively, if you use `bundler`:
 
 ```shell
 bundle add byebug --group "development, test"
@@ -65,9 +65,9 @@ bundle add byebug --group "development, test"
 
 ### From within the Ruby code
 
-Simply drop `byebug` wherever you want to start debugging and the execution will
-stop there. If you were debugging Rails, for example, you would add `byebug` to
-your code.
+Simply include `byebug` wherever you want to start debugging and the execution will
+stop there. For example, if you were debugging Rails, you would add `byebug` to
+your code:
 
 ```ruby
 def index
@@ -76,13 +76,13 @@ def index
 end
 ```
 
-And then start a Rails server.
+And then start a Rails server:
 
 ```shell
 bin/rails s
 ```
 
-Once the execution gets to your `byebug` command you will get a debugging prompt.
+Once the execution gets to your `byebug` command, you will receive a debugging prompt.
 
 ### From the command line
 
@@ -136,7 +136,7 @@ Command     | Aliases      | Subcommands
 
 ## Semantic Versioning
 
-Byebug tries to follow [semantic versioning](https://semver.org) and tries to
+Byebug attempts to follow [semantic versioning](https://semver.org) and
 bump major version only when backwards incompatible changes are released.
 Backwards compatibility is targeted to [pry-byebug] and any other plugins
 relying on `byebug`.

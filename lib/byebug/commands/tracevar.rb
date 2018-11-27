@@ -32,10 +32,7 @@ module Byebug
     def execute
       var = @match[1]
       return errmsg(pr("trace.errors.needs_global_variable")) unless var
-
-      unless global_variables.include?(:"#{var}")
-        return errmsg(pr("trace.errors.var_is_not_global", name: var))
-      end
+      return errmsg(pr("trace.errors.var_is_not_global", name: var)) unless global_variables.include?(:"#{var}")
 
       stop = @match[2] && @match[2] !~ /nostop/
 
