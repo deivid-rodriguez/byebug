@@ -44,7 +44,7 @@ Style/StringLiterals:
 
 # Don't see why storing context information in the exception is a bad thing
 Style/RaiseArgs:
-  Description: Checks the args passed to `fail` and `raise`. 
+  Description: Checks the args passed to `fail` and `raise`.
   Enabled: false
 
 EmptyMethod:
