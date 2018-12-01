@@ -14,28 +14,28 @@ Layout/ExtraSpacing:
   AllowForAlignment: false
 
 Lint/InterpolationCheck:
-  Description: This cop checks for interpolation in a single quoted string.
+  Description: Checks for interpolation in a single quoted string.
   Enabled: false
 
 Metrics:
   Enabled: false
 
 Naming/FileName:
-  Description: This cop makes sure that Ruby source files have snake_case names.
+  Description: Makes sure that Ruby source files have snake_case names.
   Exclude:
     - .simplecov
 
 TrivialAccessors:
-  Description: This cop looks for trivial reader/writer methods, that could have been created with the attr_* family of functions automatically.
+  Description: Looks for trivial reader/writer methods, that could have been created with the attr_* family of functions automatically.
   ExactNameMatch: true
 
 Style/ModuleFunction:
-  Description: This cops checks for use of `extend self` or `module_function` in a module.
+  Description: Checks for use of `extend self` or `module_function` in a module.
   EnforcedStyle: extend_self
 
 # https://github.com/bbatsov/rubocop/pull/72
 Style/AsciiComments:
-  Description: This cop checks for non-ascii (non-English) characters in comments.
+  Description: Checks for non-ascii (non-English) characters in comments.
   Enabled: false
 
 Style/StringLiterals:
@@ -44,9 +44,9 @@ Style/StringLiterals:
 
 # Don't see why storing context information in the exception is a bad thing
 Style/RaiseArgs:
-  Description: This cop checks the args passed to `fail` and `raise`. 
+  Description: Checks the args passed to `fail` and `raise`. 
   Enabled: false
 
 EmptyMethod:
-  Description: This cop checks for the formatting of empty method definitions.
+  Description: Checks for the formatting of empty method definitions.
   EnforcedStyle: expanded
