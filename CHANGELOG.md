@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* [#507](https://github.com/deivid-rodriguez/byebug/pull/507): Add --[no-]color to the CLI ([@vbrazo]).
+
 ### Removed
 
 * Support for MRI 2.2. Byebug no longer installs on this platform.

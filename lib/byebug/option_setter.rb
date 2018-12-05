@@ -11,6 +11,7 @@ module Byebug
     end
 
     def setup
+      color
       debug
       include_flag
       post_mortem
@@ -25,6 +26,12 @@ module Byebug
     end
 
     private
+
+    def color
+      @opts.on "-c", "--[no-]color", "Highlight output" do |h|
+        Setting[:highlight] = h
+      end
+    end
 
     def debug
       @opts.on "-d", "--debug", "Set $DEBUG=true" do

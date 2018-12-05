@@ -25,6 +25,9 @@ Naming/FileName:
 TrivialAccessors:
   ExactNameMatch: true
 
+Style/FormatStringToken:
+  Enabled: false
+
 Style/ModuleFunction:
   EnforcedStyle: extend_self
 

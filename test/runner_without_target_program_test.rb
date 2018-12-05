@@ -77,6 +77,7 @@ module Byebug
 
         Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
+          -c, --[no-]color          Highlight output
           -d, --debug               Set $DEBUG=true
           -I, --include list        Add to paths to $LOAD_PATH
           -m, --[no-]post-mortem    Use post-mortem mode

@@ -118,6 +118,24 @@ module Byebug
       assert_match(/Debug flag is true/, stdout)
     end
 
+    def test_run_with_color
+      stdout = run_byebug(
+        "--color", example_path,
+        input: 'puts "Program: #{$PROGRAM_NAME}"'
+      )
+
+      assert_match(/Program: #{example_path}/, stdout)
+    end
+
+    def test_run_with_no_color
+      stdout = run_byebug(
+        "--no-color", example_path,
+        input: 'puts "Program: #{$PROGRAM_NAME}"'
+      )
+
+      assert_match(/Program: #{example_path}/, stdout)
+    end
+
     def test_run_stops_at_the_first_line_by_default
       stdout = run_byebug(example_path)
 

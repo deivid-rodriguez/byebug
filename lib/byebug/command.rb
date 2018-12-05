@@ -58,7 +58,7 @@ module Byebug
     def_delegator "processor.printer", :print_collection, :prc
     def_delegator "processor.printer", :print_variables, :prv
 
-    def_delegators "processor.interface", :errmsg, :puts, :print, :confirm
+    def_delegators :processor, :errmsg, :puts, :print, :confirm, :highlight
 
     class << self
       include Helpers::StringHelper
