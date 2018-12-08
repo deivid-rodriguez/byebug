@@ -55,13 +55,12 @@ module Byebug
         16:
         17:    byebug
         18:    thingy = #{example_class}.new
-        19:    byebug
-        20:    thingy.a
-        21:    sleep 3
-        22:    thingy.a
-        23:    byebug
-        24:    thingy.a
-        25:  end
+        19:    thingy.a
+        20:    sleep 3
+        21:    thingy.a
+        22:    byebug
+        23:    thingy.a
+        24:  end
       RUBY
     end
 
