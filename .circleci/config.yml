@@ -12,7 +12,9 @@ steps: &steps
 
     - run:
         name: Run CI checks
-        command: bin/ci.sh
+        command: |
+          bin/setup.sh
+          bin/rake
 
     - run:
         name: Save coverage

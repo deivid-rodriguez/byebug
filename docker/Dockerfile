@@ -81,11 +81,7 @@ RUN set -ex \
   && apk add --virtual .ruby-rundeps $baseDeps $runOnlyDeps \
   && apk del .ruby-builddeps \
   && cd / \
-  && rm -r /usr/src/ruby \
-  \
-  && gem update --system 2.7.8 \
-  && gem install bundler --version 1.17.1 --force \
-  && rm -r /root/.gem
+  && rm -r /usr/src/ruby
 
 RUN SHELLCHECK_VERSION=v0.5.0 \
   && wget "https://storage.googleapis.com/shellcheck/shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz" \
