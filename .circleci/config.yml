@@ -2,94 +2,55 @@
 
 version: 2.1
 
-steps: &steps
-  steps:
-    - checkout
+executors:
+  test:
+    parameters:
+      version:
+        type: string
 
-    - restore_cache:
-        keys:
-          - dependencies-{{ checksum "Gemfile.lock" }}
+      line_editor:
+        type: string
 
-    - run:
-        name: Run CI checks
-        command: |
-          bin/setup.sh
-          bin/rake
+      compiler:
+        type: string
 
-    - run:
-        name: Save coverage
-        command: cc-test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
-
-    - persist_to_workspace:
-        root: ./coverage
-        paths:
-          - codeclimate.*.json
-
-    - save_cache:
-        key: dependencies-{{ checksum "Gemfile.lock" }}
-        paths:
-          - .bundle
+    docker:
+      - image: deividrodriguez/byebug:<< parameters.version >>-<< parameters.line_editor >>-<< parameters.compiler >>
 
 jobs:
-  prior-to-prior-to-latest-readline-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.3.8-readline-gcc
-    <<: *steps
+  spec:
+    parameters:
+      executor:
+        type: executor
 
-  prior-to-prior-to-latest-libedit-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.3.8-libedit-gcc
-    <<: *steps
+    executor: << parameters.executor >>
 
-  prior-to-prior-to-latest-readline-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.3.8-readline-clang
-    <<: *steps
+    steps:
+      - checkout
 
-  prior-to-prior-to-latest-libedit-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.3.8-libedit-clang
-    <<: *steps
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "Gemfile.lock" }}
 
-  prior-to-latest-readline-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.4.5-readline-gcc
-    <<: *steps
+      - run:
+          name: Run CI checks
+          command: |
+            bin/setup.sh
+            bin/rake
 
-  prior-to-latest-libedit-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.4.5-libedit-gcc
-    <<: *steps
+      - run:
+          name: Save coverage
+          command: cc-test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
 
-  prior-to-latest-readline-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.4.5-readline-clang
-    <<: *steps
+      - persist_to_workspace:
+          root: ./coverage
+          paths:
+            - codeclimate.*.json
 
-  prior-to-latest-libedit-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.4.5-libedit-clang
-    <<: *steps
-
-  latest-readline-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.5.3-readline-gcc
-    <<: *steps
-
-  latest-libedit-gcc:
-    docker:
-      - image: deividrodriguez/byebug:2.5.3-libedit-gcc
-    <<: *steps
-
-  latest-readline-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.5.3-readline-clang
-    <<: *steps
-
-  latest-libedit-clang:
-    docker:
-      - image: deividrodriguez/byebug:2.5.3-libedit-clang
-    <<: *steps
+      - save_cache:
+          key: dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - .bundle
 
   upload_coverage:
     docker:
@@ -114,20 +75,101 @@ workflows:
 
   test:
     jobs:
-      - prior-to-prior-to-latest-readline-gcc
-      - prior-to-prior-to-latest-libedit-gcc
-      - prior-to-prior-to-latest-readline-clang
-      - prior-to-prior-to-latest-libedit-clang
+      - spec:
+          name: prior-to-prior-to-latest-readline-gcc
+          executor:
+            name: test
+            version: 2.3.8
+            line_editor: readline
+            compiler: gcc
 
-      - prior-to-latest-readline-gcc
-      - prior-to-latest-libedit-gcc
-      - prior-to-latest-readline-clang
-      - prior-to-latest-libedit-clang
+      - spec:
+          name: prior-to-prior-to-latest-libedit-gcc
+          executor:
+            name: test
+            version: 2.3.8
+            line_editor: libedit
+            compiler: gcc
 
-      - latest-readline-gcc
-      - latest-libedit-gcc
-      - latest-readline-clang
-      - latest-libedit-clang
+      - spec:
+          name: prior-to-prior-to-latest-readline-clang
+          executor:
+            name: test
+            version: 2.3.8
+            line_editor: readline
+            compiler: clang
+
+      - spec:
+          name: prior-to-prior-to-latest-libedit-clang
+          executor:
+            name: test
+            version: 2.3.8
+            line_editor: libedit
+            compiler: clang
+
+      - spec:
+          name: prior-to-latest-readline-gcc
+          executor:
+            name: test
+            version: 2.4.5
+            line_editor: readline
+            compiler: gcc
+
+      - spec:
+          name: prior-to-latest-libedit-gcc
+          executor:
+            name: test
+            version: 2.4.5
+            line_editor: libedit
+            compiler: gcc
+
+      - spec:
+          name: prior-to-latest-readline-clang
+          executor:
+            name: test
+            version: 2.4.5
+            line_editor: readline
+            compiler: clang
+
+      - spec:
+          name: prior-to-latest-libedit-clang
+          executor:
+            name: test
+            version: 2.4.5
+            line_editor: libedit
+            compiler: clang
+
+      - spec:
+          name: latest-readline-gcc
+          executor:
+            name: test
+            version: 2.5.3
+            line_editor: readline
+            compiler: gcc
+
+      - spec:
+          name: latest-libedit-gcc
+          executor:
+            name: test
+            version: 2.5.3
+            line_editor: libedit
+            compiler: gcc
+
+      - spec:
+          name: latest-readline-clang
+          executor:
+            name: test
+            version: 2.5.3
+            line_editor: readline
+            compiler: clang
+
+      - spec:
+          name: latest-libedit-clang
+          executor:
+            name: test
+            version: 2.5.3
+            line_editor: libedit
+            compiler: clang
 
       - upload_coverage:
           requires:
