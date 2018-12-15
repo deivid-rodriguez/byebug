@@ -7,7 +7,7 @@ RUN mkdir -p /usr/local/etc \
     echo "update: --no-document"; \
   } >> /usr/local/etc/gemrc
 
-ARG ruby_version=
+ARG ruby_download_url=
 ARG ruby_download_sha256=
 ARG line_edit_lib=
 ARG line_edit_config=
@@ -46,7 +46,7 @@ RUN set -ex \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \
-  && wget -O ruby.tar.xz "https://cache.ruby-lang.org/pub/ruby/${ruby_version%.*}/ruby-$ruby_version.tar.xz" \
+  && wget -O ruby.tar.xz "$ruby_download_url" \
   && echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c - \
   \
   && mkdir -p /usr/src/ruby \

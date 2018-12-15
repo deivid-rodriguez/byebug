@@ -37,7 +37,7 @@ module Docker
       command = <<-COMMAND
         docker build \
           --tag "#{tag}" \
-          --build-arg "ruby_version=#{version}" \
+          --build-arg "ruby_download_url=#{download_url}" \
           --build-arg "ruby_download_sha256=#{sha256}" \
           --build-arg "compiler=#{compiler}" \
           --build-arg "line_edit_lib=#{line_editor_package}" \
@@ -161,6 +161,18 @@ module Docker
 
     def line_editor_configure_flag
       line_editor == "readline" ? "" : "--enable-libedit"
+    end
+
+    def download_url
+      "#{download_url_base}/#{abi_version}/ruby-#{version}.tar.xz"
+    end
+
+    def abi_version
+      version.split(".")[0..1].join(".")
+    end
+
+    def download_url_base
+      "https://cache.ruby-lang.org/pub/ruby"
     end
 
     def release_info
