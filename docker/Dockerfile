@@ -47,7 +47,7 @@ RUN set -ex \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \
   && wget -O ruby.tar.xz "$ruby_download_url" \
-  && echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c - \
+  && if [ "$ruby_download_sha256" != "" ]; then echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c -; fi \
   \
   && mkdir -p /usr/src/ruby \
   && tar -xJf ruby.tar.xz -C /usr/src/ruby --strip-components=1 \

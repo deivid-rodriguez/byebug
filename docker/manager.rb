@@ -13,6 +13,7 @@ module Docker
       2.3.8
       2.4.5
       2.5.3
+      head
     ].freeze
 
     LINE_EDITORS = %w[
@@ -149,7 +150,7 @@ module Docker
       end
 
       def default_image
-        new(version: VERSIONS.last, line_editor: "readline", compiler: "gcc")
+        new(version: VERSIONS[-2], line_editor: "readline", compiler: "gcc")
       end
     end
 
@@ -164,7 +165,11 @@ module Docker
     end
 
     def download_url
-      "#{download_url_base}/#{abi_version}/ruby-#{version}.tar.xz"
+      if version == "head"
+        "#{download_url_base}/snapshot.tar.xz"
+      else
+        "#{download_url_base}/#{abi_version}/ruby-#{version}.tar.xz"
+      end
     end
 
     def abi_version
@@ -180,7 +185,10 @@ module Docker
     end
 
     def download_sha256
-      release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
+      version_info = release_info.find { |entry| entry["version"] == version }
+      return unless version_info
+
+      version_info["sha256"]["xz"]
     end
 
     def run(command)
