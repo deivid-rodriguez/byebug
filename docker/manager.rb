@@ -38,7 +38,7 @@ module Docker
         docker build \
           --tag "#{tag}" \
           --build-arg "ruby_download_url=#{download_url}" \
-          --build-arg "ruby_download_sha256=#{sha256}" \
+          --build-arg "ruby_download_sha256=#{download_sha256}" \
           --build-arg "compiler=#{compiler}" \
           --build-arg "line_edit_lib=#{line_editor_package}" \
           --build-arg "line_edit_config=#{line_editor_configure_flag}" \
@@ -179,7 +179,7 @@ module Docker
       self.class.release_info
     end
 
-    def sha256
+    def download_sha256
       release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
     end
 
