@@ -101,15 +101,4 @@ RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-repor
   && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
   && chmod +x /usr/local/bin/cc-test-reporter
 
-RUN apk add --no-cache sudo shadow
-
-RUN adduser -h /home/docker -D -s /bin/bash docker \
-  && echo '%docker ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-RUN mkdir /byebug && chown -R docker:docker /byebug
-
 WORKDIR /byebug
-
-COPY docker/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
