@@ -107,7 +107,7 @@ module Docker
       def run(*command)
         output, status = Open3.capture2e(*command)
 
-        puts(status ? "✔" : "❌")
+        puts(status.success? ? "✔" : "❌")
 
         puts output unless status.success?
       end
