@@ -18,6 +18,39 @@ executors:
       - image: deividrodriguez/byebug:<< parameters.version >>-<< parameters.line_editor >>-<< parameters.compiler >>
 
 jobs:
+  soft_spec:
+    parameters:
+      executor:
+        type: executor
+
+    executor: << parameters.executor >>
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Run CI checks
+          command: (bin/setup.sh && bin/rake) || exit 0
+
+      - run:
+          name: Save coverage
+          command: cc-test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
+
+      - persist_to_workspace:
+          root: ./coverage
+          paths:
+            - codeclimate.*.json
+
+      - save_cache:
+          key: dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - .bundle
+
+
   spec:
     parameters:
       executor:
@@ -171,6 +204,38 @@ workflows:
             line_editor: libedit
             compiler: clang
 
+      - soft_spec:
+          name: next-readline-gcc
+          executor:
+            name: test
+            version: head
+            line_editor: readline
+            compiler: gcc
+
+      - soft_spec:
+          name: next-libedit-gcc
+          executor:
+            name: test
+            version: head
+            line_editor: libedit
+            compiler: gcc
+
+      - soft_spec:
+          name: next-readline-clang
+          executor:
+            name: test
+            version: head
+            line_editor: readline
+            compiler: clang
+
+      - soft_spec:
+          name: next-libedit-clang
+          executor:
+            name: test
+            version: head
+            line_editor: libedit
+            compiler: clang
+
       - upload_coverage:
           requires:
             - prior-to-prior-to-latest-readline-gcc
@@ -187,3 +252,8 @@ workflows:
             - latest-libedit-gcc
             - latest-readline-clang
             - latest-libedit-clang
+
+            - next-readline-gcc
+            - next-libedit-gcc
+            - next-readline-clang
+            - next-libedit-clang
