@@ -103,6 +103,35 @@ jobs:
             cc-test-reporter sum-coverage coverage/codeclimate.*.json
             cc-test-reporter upload-coverage
 
+  build_and_push_head:
+    parameters:
+      line_editor:
+        type: string
+
+      compiler:
+        type: string
+
+    docker:
+      - image: deividrodriguez/byebug:2.5.3-readline-gcc
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Setup environment
+          command: bin/setup.sh
+
+      - run:
+          name: Build and push docker image
+          command: bin/rake docker:build_and_push_head[<< parameters.line_editor >>,<< parameters.compiler >>]
+
 workflows:
   version: 2
 
@@ -257,3 +286,33 @@ workflows:
             - next-libedit-gcc
             - next-readline-clang
             - next-libedit-clang
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+
+    jobs:
+      - build_and_push_head:
+          name: build-and-push-head-readline-gcc
+          line_editor: readline
+          compiler: gcc
+
+      - build_and_push_head:
+          name: build-and-push-head-readline-clang
+          line_editor: readline
+          compiler: clang
+
+      - build_and_push_head:
+          name: build-and-push-head-libedit-gcc
+          line_editor: libedit
+          compiler: gcc
+
+      - build_and_push_head:
+          name: build-and-push-head-libedit-clang
+          line_editor: libedit
+          compiler: clang

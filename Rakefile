@@ -106,6 +106,17 @@ namespace :docker do
     Docker::Manager.build_default
   end
 
+  desc "Build a ruby trunk image"
+  task :build_and_push_head, %i[line_editor compiler] do |_t, opts|
+    manager = Docker::Manager.new(
+      version: "head",
+      line_editor: opts[:line_editor],
+      compiler: opts[:compiler]
+    )
+
+    manager.build && manager.push
+  end
+
   desc "Test all docker images"
   task :test_all do
     Docker::Manager.test_all
