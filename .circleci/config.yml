@@ -87,7 +87,7 @@ jobs:
 
   upload_coverage:
     docker:
-      - image: deividrodriguez/byebug:2.5.3-readline-clang
+      - image: deividrodriguez/byebug:2.5.3-readline-gcc
         environment:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
