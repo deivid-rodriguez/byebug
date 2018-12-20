@@ -58,6 +58,7 @@ RUN set -ex \
   && autoconf \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
+    --disable-werror \
     --build="$gnuArch" \
     --disable-install-doc \
     $line_edit_config \
