@@ -34,7 +34,9 @@ jobs:
 
       - run:
           name: Run CI checks
-          command: (bin/setup.sh && bin/rake) || exit 0
+          command: |
+            bin/setup.sh
+            bin/rake
 
       - run:
           name: Save coverage
