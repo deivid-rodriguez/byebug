@@ -7,7 +7,7 @@ RUN mkdir -p /usr/local/etc \
     echo "update: --no-document"; \
   } >> /usr/local/etc/gemrc
 
-ARG ruby_version=
+ARG ruby_download_url=
 ARG ruby_download_sha256=
 ARG line_edit_lib=
 ARG line_edit_config=
@@ -46,8 +46,8 @@ RUN set -ex \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \
-  && wget -O ruby.tar.xz "https://cache.ruby-lang.org/pub/ruby/${ruby_version%.*}/ruby-$ruby_version.tar.xz" \
-  && echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c - \
+  && wget -O ruby.tar.xz "$ruby_download_url" \
+  && if [ "$ruby_download_sha256" != "" ]; then echo "$ruby_download_sha256 *ruby.tar.xz" | sha256sum -c -; fi \
   \
   && mkdir -p /usr/src/ruby \
   && tar -xJf ruby.tar.xz -C /usr/src/ruby --strip-components=1 \
@@ -58,6 +58,7 @@ RUN set -ex \
   && autoconf \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
+    --disable-werror \
     --build="$gnuArch" \
     --disable-install-doc \
     $line_edit_config \
@@ -81,11 +82,7 @@ RUN set -ex \
   && apk add --virtual .ruby-rundeps $baseDeps $runOnlyDeps \
   && apk del .ruby-builddeps \
   && cd / \
-  && rm -r /usr/src/ruby \
-  \
-  && gem update --system 2.7.8 \
-  && gem install bundler --version 1.17.1 --force \
-  && rm -r /root/.gem
+  && rm -r /usr/src/ruby
 
 RUN SHELLCHECK_VERSION=v0.5.0 \
   && wget "https://storage.googleapis.com/shellcheck/shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz" \
@@ -101,15 +98,4 @@ RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-repor
   && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
   && chmod +x /usr/local/bin/cc-test-reporter
 
-RUN apk add --no-cache sudo shadow
-
-RUN adduser -h /home/docker -D -s /bin/bash docker \
-  && echo '%docker ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-RUN mkdir /byebug && chown -R docker:docker /byebug
-
 WORKDIR /byebug
-
-COPY docker/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

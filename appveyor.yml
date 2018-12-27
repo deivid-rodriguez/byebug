@@ -1,7 +1,7 @@
 ---
 
 install:
-  - SET PATH=C:\Ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:/Windows/system32
+  - set PATH=C:\Ruby%ruby_version%\bin;C:\Program Files\Git\cmd;C:/Windows/system32;C:\Program Files\Git\usr\bin
 
   - ps: |
       if ($env:ruby_version -like "*head*") {
@@ -27,16 +27,14 @@ install:
   - gem --version
   - where gem
 
-  - gem update --system 2.7.8
-  - gem install bundler --version 1.17.1 --force
-
-  - bundle install --jobs 3 --retry 3 --path .bundle
+  - bash --version
+  - where bash
 
 build_script:
-  - bundle exec rake clobber compile
+  - bash -lc bin/setup.sh
 
 test_script:
-  - bundle exec rake test
+  - ruby bin/rake compile test
 
 environment:
   matrix:
@@ -60,6 +58,7 @@ matrix:
 branches:
   only:
     - master
+    - ruby_head
 
 notifications:
   - provider: Email

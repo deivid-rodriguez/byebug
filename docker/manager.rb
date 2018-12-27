@@ -13,6 +13,7 @@ module Docker
       2.3.8
       2.4.5
       2.5.3
+      head
     ].freeze
 
     LINE_EDITORS = %w[
@@ -37,8 +38,8 @@ module Docker
       command = <<-COMMAND
         docker build \
           --tag "#{tag}" \
-          --build-arg "ruby_version=#{version}" \
-          --build-arg "ruby_download_sha256=#{sha256}" \
+          --build-arg "ruby_download_url=#{download_url}" \
+          --build-arg "ruby_download_sha256=#{download_sha256}" \
           --build-arg "compiler=#{compiler}" \
           --build-arg "line_edit_lib=#{line_editor_package}" \
           --build-arg "line_edit_config=#{line_editor_configure_flag}" \
@@ -53,7 +54,7 @@ module Docker
 
     def test
       command = <<-COMMAND
-        docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bin/bundle && bin/rake'
+        docker run --rm -v$(pwd):/byebug #{tag} bash -c 'bin/setup.sh && bin/rake'
       COMMAND
 
       print "Testing image #{tag}: #{squish(command)}  "
@@ -106,9 +107,13 @@ module Docker
       def run(*command)
         output, status = Open3.capture2e(*command)
 
-        puts(status ? "✔" : "❌")
+        success = status.success?
 
-        puts output unless status.success?
+        puts(success ? "✔" : "❌")
+
+        puts output unless success
+
+        success
       end
 
       private
@@ -149,7 +154,7 @@ module Docker
       end
 
       def default_image
-        new(version: VERSIONS.last, line_editor: "readline", compiler: "gcc")
+        new(version: VERSIONS[-2], line_editor: "readline", compiler: "gcc")
       end
     end
 
@@ -163,12 +168,31 @@ module Docker
       line_editor == "readline" ? "" : "--enable-libedit"
     end
 
+    def download_url
+      if version == "head"
+        "#{download_url_base}/snapshot.tar.xz"
+      else
+        "#{download_url_base}/#{abi_version}/ruby-#{version}.tar.xz"
+      end
+    end
+
+    def abi_version
+      version.split(".")[0..1].join(".")
+    end
+
+    def download_url_base
+      "https://cache.ruby-lang.org/pub/ruby"
+    end
+
     def release_info
       self.class.release_info
     end
 
-    def sha256
-      release_info.find { |entry| entry["version"] == version }["sha256"]["xz"]
+    def download_sha256
+      version_info = release_info.find { |entry| entry["version"] == version }
+      return unless version_info
+
+      version_info["sha256"]["xz"]
     end
 
     def run(command)
