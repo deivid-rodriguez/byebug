@@ -79,14 +79,14 @@ namespace :lint do
   task :mdl do
     puts "Running mdl"
 
-    abort unless system("mdl", *Dir.glob("*.md"))
+    sh("mdl", *Dir.glob("*.md"))
   end
 
   desc "Checks shell code style with shellcheck"
   task :shellcheck do
     puts "Running shellcheck"
 
-    abort unless system("shellcheck", *Dir.glob("bin/*.sh"))
+    sh("shellcheck", *Dir.glob("bin/*.sh"))
   end
 end
 
@@ -114,7 +114,8 @@ namespace :docker do
       compiler: opts[:compiler]
     )
 
-    manager.build && manager.push
+    manager.build
+    manager.push
   end
 
   desc "Test all docker images"
