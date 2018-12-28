@@ -13,6 +13,7 @@ module Docker
       2.3.8
       2.4.5
       2.5.3
+      2.6.0
       head
     ].freeze
 
