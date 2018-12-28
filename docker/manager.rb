@@ -62,7 +62,7 @@ module Docker
           .
       COMMAND
 
-      print "Building image #{tag}: #{squish(command)}  "
+      print "Building image #{tag} via `#{squish(command)}`... "
 
       run(command)
     end
