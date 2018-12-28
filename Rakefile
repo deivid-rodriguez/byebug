@@ -114,7 +114,8 @@ namespace :docker do
       compiler: opts[:compiler]
     )
 
-    manager.build && manager.push
+    manager.build
+    manager.push
   end
 
   desc "Test all docker images"

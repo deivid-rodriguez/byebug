@@ -111,9 +111,10 @@ module Docker
 
         puts(success ? "✔" : "❌")
 
-        puts output unless success
+        return if success
 
-        success
+        puts output
+        abort
       end
 
       private
