@@ -37,7 +37,7 @@ module Docker
     def login
       print "Logging in to dockerhub... "
 
-      login_cmd = %W[
+      command = %W[
         docker
         login
         -u
@@ -46,7 +46,7 @@ module Docker
         #{ENV['DOCKER_PASS']}
       ]
 
-      run(*login_cmd)
+      run(*command)
     end
 
     def build
