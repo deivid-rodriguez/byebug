@@ -34,6 +34,21 @@ module Docker
       @compiler = compiler
     end
 
+    def login
+      command = %W[
+        docker
+        login
+        -u
+        #{ENV['DOCKER_USER']}
+        -p
+        #{ENV['DOCKER_PASS']}
+      ]
+
+      print "Logging in to dockerhub... "
+
+      run(*command)
+    end
+
     def build
       command = <<-COMMAND
         docker build \
@@ -47,7 +62,7 @@ module Docker
           .
       COMMAND
 
-      print "Building image #{tag}: #{squish(command)}  "
+      print "Building image #{tag} via `#{squish(command)}`... "
 
       run(command)
     end
@@ -119,21 +134,6 @@ module Docker
 
       private
 
-      def login
-        print "Logging in to dockerhub... "
-
-        login_cmd = %W[
-          docker
-          login
-          -u
-          #{ENV['DOCKER_USER']}
-          -p
-          #{ENV['DOCKER_PASS']}
-        ]
-
-        run(*login_cmd)
-      end
-
       def releases_url
         "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
       end
@@ -196,8 +196,8 @@ module Docker
       version_info["sha256"]["xz"]
     end
 
-    def run(command)
-      self.class.run(command)
+    def run(*command)
+      self.class.run(*command)
     end
 
     def tag

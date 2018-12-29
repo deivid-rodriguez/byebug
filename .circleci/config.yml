@@ -122,6 +122,13 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
+      - run:
+          name: Install Docker client
+          command: |
+            apk add curl
+            curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-18.09.0.tgz
+            tar -xz --strip-components 1 -C /usr/bin -f /tmp/docker.tgz
+
       - restore_cache:
           keys:
             - dependencies-{{ checksum "Gemfile.lock" }}

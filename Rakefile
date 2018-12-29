@@ -115,6 +115,7 @@ namespace :docker do
     )
 
     manager.build
+    manager.login
     manager.push
   end
 
