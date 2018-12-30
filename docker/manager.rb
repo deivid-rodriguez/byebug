@@ -13,6 +13,7 @@ module Docker
       2.3.8
       2.4.5
       2.5.3
+      2.6.0
       head
     ].freeze
 
@@ -35,18 +36,7 @@ module Docker
     end
 
     def login
-      command = %W[
-        docker
-        login
-        -u
-        #{ENV['DOCKER_USER']}
-        -p
-        #{ENV['DOCKER_PASS']}
-      ]
-
-      print "Logging in to dockerhub... "
-
-      run(*command)
+      self.class.login
     end
 
     def build
@@ -85,17 +75,17 @@ module Docker
 
     class << self
       def build_default
-        default_image.build
+        for_last_version_variants(&:build)
       end
 
       def test_default
-        default_image.test
+        for_last_version_variants(&:test)
       end
 
       def push_default
         login
 
-        default_image.push
+        for_last_version_variants(&:push)
       end
 
       def build_all
@@ -132,30 +122,49 @@ module Docker
         abort
       end
 
+      def login
+        command = %W[
+          docker
+          login
+          -u
+          #{ENV['DOCKER_USER']}
+          -p
+          #{ENV['DOCKER_PASS']}
+        ]
+
+        print "Logging in to dockerhub... "
+
+        run(*command)
+      end
+
       private
 
       def releases_url
         "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
       end
 
-      def for_all_images
+      def for_all_images(&block)
         VERSIONS.each do |version|
-          COMPILERS.each do |compiler|
-            LINE_EDITORS.each do |line_editor|
-              manager = new(
-                version: version,
-                line_editor: line_editor,
-                compiler: compiler
-              )
-
-              yield(manager)
-            end
-          end
+          for_variants_of(version, &block)
         end
       end
 
-      def default_image
-        new(version: VERSIONS[-2], line_editor: "readline", compiler: "gcc")
+      def for_last_version_variants(&block)
+        for_variants_of(VERSIONS[-2], &block)
+      end
+
+      def for_variants_of(version)
+        COMPILERS.each do |compiler|
+          LINE_EDITORS.each do |line_editor|
+            manager = new(
+              version: version,
+              line_editor: line_editor,
+              compiler: compiler
+            )
+
+            yield(manager)
+          end
+        end
       end
     end
 
