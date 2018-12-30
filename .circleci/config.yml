@@ -147,7 +147,7 @@ workflows:
   test:
     jobs:
       - spec:
-          name: prior-to-prior-to-latest-readline-gcc
+          name: 2.3-readline-gcc
           executor:
             name: test
             version: 2.3.8
@@ -155,7 +155,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: prior-to-prior-to-latest-libedit-gcc
+          name: 2.3-libedit-gcc
           executor:
             name: test
             version: 2.3.8
@@ -163,7 +163,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: prior-to-prior-to-latest-readline-clang
+          name: 2.3-readline-clang
           executor:
             name: test
             version: 2.3.8
@@ -171,7 +171,7 @@ workflows:
             compiler: clang
 
       - spec:
-          name: prior-to-prior-to-latest-libedit-clang
+          name: 2.3-libedit-clang
           executor:
             name: test
             version: 2.3.8
@@ -179,7 +179,7 @@ workflows:
             compiler: clang
 
       - spec:
-          name: prior-to-latest-readline-gcc
+          name: 2.4-readline-gcc
           executor:
             name: test
             version: 2.4.5
@@ -187,7 +187,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: prior-to-latest-libedit-gcc
+          name: 2.4-libedit-gcc
           executor:
             name: test
             version: 2.4.5
@@ -195,7 +195,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: prior-to-latest-readline-clang
+          name: 2.4-readline-clang
           executor:
             name: test
             version: 2.4.5
@@ -203,7 +203,7 @@ workflows:
             compiler: clang
 
       - spec:
-          name: prior-to-latest-libedit-clang
+          name: 2.4-libedit-clang
           executor:
             name: test
             version: 2.4.5
@@ -211,7 +211,7 @@ workflows:
             compiler: clang
 
       - spec:
-          name: latest-readline-gcc
+          name: 2.5-readline-gcc
           executor:
             name: test
             version: 2.5.3
@@ -219,7 +219,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: latest-libedit-gcc
+          name: 2.5-libedit-gcc
           executor:
             name: test
             version: 2.5.3
@@ -227,7 +227,7 @@ workflows:
             compiler: gcc
 
       - spec:
-          name: latest-readline-clang
+          name: 2.5-readline-clang
           executor:
             name: test
             version: 2.5.3
@@ -235,7 +235,7 @@ workflows:
             compiler: clang
 
       - spec:
-          name: latest-libedit-clang
+          name: 2.5-libedit-clang
           executor:
             name: test
             version: 2.5.3
@@ -276,20 +276,20 @@ workflows:
 
       - upload_coverage:
           requires:
-            - prior-to-prior-to-latest-readline-gcc
-            - prior-to-prior-to-latest-libedit-gcc
-            - prior-to-prior-to-latest-readline-clang
-            - prior-to-prior-to-latest-libedit-clang
+            - 2.3-readline-gcc
+            - 2.3-libedit-gcc
+            - 2.3-readline-clang
+            - 2.3-libedit-clang
 
-            - prior-to-latest-readline-gcc
-            - prior-to-latest-libedit-gcc
-            - prior-to-latest-readline-clang
-            - prior-to-latest-libedit-clang
+            - 2.4-readline-gcc
+            - 2.4-libedit-gcc
+            - 2.4-readline-clang
+            - 2.4-libedit-clang
 
-            - latest-readline-gcc
-            - latest-libedit-gcc
-            - latest-readline-clang
-            - latest-libedit-clang
+            - 2.5-readline-gcc
+            - 2.5-libedit-gcc
+            - 2.5-readline-clang
+            - 2.5-libedit-clang
 
             - next-readline-gcc
             - next-libedit-gcc
