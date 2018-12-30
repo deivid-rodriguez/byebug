@@ -36,18 +36,7 @@ module Docker
     end
 
     def login
-      command = %W[
-        docker
-        login
-        -u
-        #{ENV['DOCKER_USER']}
-        -p
-        #{ENV['DOCKER_PASS']}
-      ]
-
-      print "Logging in to dockerhub... "
-
-      run(*command)
+      self.class.login
     end
 
     def build
@@ -131,6 +120,21 @@ module Docker
 
         puts output
         abort
+      end
+
+      def login
+        command = %W[
+          docker
+          login
+          -u
+          #{ENV['DOCKER_USER']}
+          -p
+          #{ENV['DOCKER_PASS']}
+        ]
+
+        print "Logging in to dockerhub... "
+
+        run(*command)
       end
 
       private
