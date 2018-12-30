@@ -114,7 +114,7 @@ jobs:
         type: string
 
     docker:
-      - image: deividrodriguez/byebug:2.5.3-readline-gcc
+      - image: deividrodriguez/byebug:2.6.0-readline-gcc
 
     steps:
       - checkout
