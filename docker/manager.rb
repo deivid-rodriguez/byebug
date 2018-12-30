@@ -86,17 +86,17 @@ module Docker
 
     class << self
       def build_default
-        default_image.build
+        for_last_version_variants(&:build)
       end
 
       def test_default
-        default_image.test
+        for_last_version_variants(&:test)
       end
 
       def push_default
         login
 
-        default_image.push
+        for_last_version_variants(&:push)
       end
 
       def build_all
@@ -145,8 +145,8 @@ module Docker
         end
       end
 
-      def default_image
-        new(version: VERSIONS[-2], line_editor: "readline", compiler: "gcc")
+      def for_last_version_variants(&block)
+        for_variants_of(VERSIONS[-2], &block)
       end
 
       def for_variants_of(version)
