@@ -139,24 +139,28 @@ module Docker
         "https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
       end
 
-      def for_all_images
+      def for_all_images(&block)
         VERSIONS.each do |version|
-          COMPILERS.each do |compiler|
-            LINE_EDITORS.each do |line_editor|
-              manager = new(
-                version: version,
-                line_editor: line_editor,
-                compiler: compiler
-              )
-
-              yield(manager)
-            end
-          end
+          for_variants_of(version, &block)
         end
       end
 
       def default_image
         new(version: VERSIONS[-2], line_editor: "readline", compiler: "gcc")
+      end
+
+      def for_variants_of(version)
+        COMPILERS.each do |compiler|
+          LINE_EDITORS.each do |line_editor|
+            manager = new(
+              version: version,
+              line_editor: line_editor,
+              compiler: compiler
+            )
+
+            yield(manager)
+          end
+        end
       end
     end
 
