@@ -242,6 +242,38 @@ workflows:
             line_editor: libedit
             compiler: clang
 
+      - spec:
+          name: 2.6-readline-gcc
+          executor:
+            name: test
+            version: 2.6.0
+            line_editor: readline
+            compiler: gcc
+
+      - spec:
+          name: 2.6-libedit-gcc
+          executor:
+            name: test
+            version: 2.6.0
+            line_editor: libedit
+            compiler: gcc
+
+      - spec:
+          name: 2.6-readline-clang
+          executor:
+            name: test
+            version: 2.6.0
+            line_editor: readline
+            compiler: clang
+
+      - spec:
+          name: 2.6-libedit-clang
+          executor:
+            name: test
+            version: 2.6.0
+            line_editor: libedit
+            compiler: clang
+
       - soft_spec:
           name: next-readline-gcc
           executor:
@@ -290,6 +322,11 @@ workflows:
             - 2.5-libedit-gcc
             - 2.5-readline-clang
             - 2.5-libedit-clang
+
+            - 2.6-readline-gcc
+            - 2.6-libedit-gcc
+            - 2.6-readline-clang
+            - 2.6-libedit-clang
 
             - next-readline-gcc
             - next-libedit-gcc
