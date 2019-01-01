@@ -44,7 +44,7 @@ GEM
     rake (12.3.2)
     rake-compiler (1.0.6)
       rake
-    rubocop (0.61.1)
+    rubocop (0.62.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -62,7 +62,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     tomlrb (1.2.7)
-    unicode-display_width (1.4.0)
+    unicode-display_width (1.4.1)
     yard (0.9.16)
 
 PLATFORMS
@@ -77,7 +77,7 @@ DEPENDENCIES
   pry (= 0.12.2)
   rake (~> 12.3)
   rake-compiler (~> 1.0)
-  rubocop (= 0.61.1)
+  rubocop (= 0.62.0)
   simplecov (= 0.16.1)
   yard (= 0.9.16)
 
