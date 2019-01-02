@@ -86,8 +86,8 @@ module Byebug
       debug_code(minimal_program)
 
       expected_output = split_lines <<-TXT
-        b[reak] [file:]line [if expr]
-        b[reak] [module::...]class(.|#)method [if expr]
+        b[reak] [<file>:]<line> [if <expr>]
+        b[reak] [<module>::...]<class>(.|#)<method> [if <expr>]
 
         Sets breakpoints in the source code
       TXT
