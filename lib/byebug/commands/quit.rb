@@ -20,8 +20,8 @@ module Byebug
 
         #{short_description}
 
-        Normally we prompt before exiting. However if the parameter
-        "unconditionally" is given or command is suffixed with !, we exit
+        Normally we prompt before exiting. However, if the parameter
+        "unconditionally" is given or command is suffixed with "!", we exit
         without asking further questions.
       DESCRIPTION
     end
