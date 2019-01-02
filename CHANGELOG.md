@@ -5,6 +5,7 @@
 ### Fixed
 
 * [#527](https://github.com/deivid-rodriguez/byebug/pull/527): `break` help text to clarify placeholders from literals.
+* [#528](https://github.com/deivid-rodriguez/byebug/pull/528): `quit!` help to not show a space between "quit" and "!".
 
 ### Removed
 

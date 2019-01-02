@@ -16,7 +16,7 @@ module Byebug
 
     def self.description
       <<-DESCRIPTION
-        q[uit] [!|unconditionally]
+        q[uit][!| unconditionally]
 
         #{short_description}
 
