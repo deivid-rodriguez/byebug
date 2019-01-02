@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* [#524](https://github.com/deivid-rodriguez/byebug/pull/524): `continue!` (or `continue unconditionally`) to continue until the end of the program regardless of the currently enabled breakpoints ([@tacnomann]).
+
 ### Fixed
 
 * [#527](https://github.com/deivid-rodriguez/byebug/pull/527): `break` help text to clarify placeholders from literals.
@@ -872,6 +876,7 @@
 [@Olgagr]: https://github.com/Olgagr
 [@sethk]: https://github.com/sethk
 [@shuky19]: https://github.com/shuky19
+[@tacnoman]: https://github.com/tacnoman
 [@tzmfreedom]: https://github.com/tzmfreedom
 [@wallace]: https://github.com/wallace
 [@windwiny]: https://github.com/windwiny
