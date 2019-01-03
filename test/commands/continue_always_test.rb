@@ -1,4 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 module Byebug
   #
@@ -13,9 +15,9 @@ module Byebug
          4:    #
          5:    class #{example_class}
          6:      def factor(num)
-         7:        i=1
+         7:        i = 1
          8:        num.times do |new_number|
-         9:          i*= new_number
+         9:          i *= new_number
         10:          byebug
         11:        end
         12:      end
@@ -35,21 +37,21 @@ module Byebug
     end
 
     def test_continues_and_never_stop_again
-      enter 'continue_always'
+      enter "continue!"
 
       debug_code(program) { assert_program_finished }
       reset_commands
     end
 
     def test_continues_and_never_stop_using_abbreviation
-      enter 'ca'
+      enter "c!"
 
       debug_code(program) { assert_program_finished }
       reset_commands
     end
 
     def test_continues_and_never_stop_using_another_abbreviation
-      enter 'cont_always'
+      enter "cont!"
 
       debug_code(program) { assert_program_finished }
       reset_commands

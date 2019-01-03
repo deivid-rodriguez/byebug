@@ -1,5 +1,7 @@
-require 'byebug/command'
-require 'byebug/helpers/parse'
+# frozen_string_literal: true
+
+require "byebug/command"
+require "byebug/helpers/parse"
 
 module Byebug
   #
@@ -12,18 +14,18 @@ module Byebug
     include Helpers::ParseHelper
 
     def self.regexp
-      /^\s* c(?:ont(?:inue)?_)?(?:a(?:lways)?) \s*$/x
+      /^\s* c(?:ont(?:inue)?)?\! \s*$/x
     end
 
     def self.description
       <<-DESCRIPTION
-        c[ont[inue]_]a[lways]
+        c[ont[inue]_]!
         #{short_description}
       DESCRIPTION
     end
 
     def self.short_description
-      'Runs the command and ignore all next breakpoints'
+      "Runs the command and ignore all next breakpoints"
     end
 
     def execute
