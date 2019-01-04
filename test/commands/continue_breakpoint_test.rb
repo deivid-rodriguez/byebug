@@ -6,12 +6,12 @@ module Byebug
   #
   # Tests for continue command
   #
-  class ContinueAlwaysTest < TestCase
+  class ContinueBreakpointTest < TestCase
     def program
       strip_line_numbers <<-RUBY
          1:  module Byebug
          2:    #
-         3:    # Toy class to test continue command.
+         3:    # Toy class to test continue_breakpoint command.
          4:    #
          5:    class #{example_class}
          6:      def factor(num)
@@ -31,30 +31,16 @@ module Byebug
       RUBY
     end
 
-    def reset_commands
-      ContinueAlwaysCommand.always_run = 0
-      ListCommand.always_run = 1
+    def test_continues_until_the_end_if_no_line_specified_and_no_breakpoints
+      enter "continue_breakpoint"
+
+      debug_code(program) { assert_location example_path, 18 }
     end
 
-    def test_continues_and_never_stop_again
-      enter "continue!"
+    def test_works_in_abbreviated_mode_too
+      enter "cb"
 
-      debug_code(program) { assert_program_finished }
-      reset_commands
-    end
-
-    def test_continues_and_never_stop_using_abbreviation
-      enter "c!"
-
-      debug_code(program) { assert_program_finished }
-      reset_commands
-    end
-
-    def test_continues_and_never_stop_using_another_abbreviation
-      enter "cont!"
-
-      debug_code(program) { assert_program_finished }
-      reset_commands
+      debug_code(program) { assert_location example_path, 18 }
     end
   end
 end
