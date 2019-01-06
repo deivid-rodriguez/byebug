@@ -340,7 +340,7 @@ module Byebug
       enter "break", "cont"
       debug_code(program)
 
-      check_output_includes(/b\[reak\] \[file:\]line \[if expr\]/)
+      check_output_includes(/b\[reak\] \[<file>:\]<line> \[if <expr>\]/)
     end
 
     def test_setting_breakpoint_uses_new_source

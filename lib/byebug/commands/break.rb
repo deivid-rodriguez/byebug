@@ -23,8 +23,8 @@ module Byebug
 
     def self.description
       <<-DESCRIPTION
-        b[reak] [file:]line [if expr]
-        b[reak] [module::...]class(.|#)method [if expr]
+        b[reak] [<file>:]<line> [if <expr>]
+        b[reak] [<module>::...]<class>(.|#)<method> [if <expr>]
 
         They can be specified by line or method and an expression can be added
         for conditionally enabled breakpoints.

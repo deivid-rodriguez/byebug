@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#527](https://github.com/deivid-rodriguez/byebug/pull/527): `break` help text to clarify placeholders from literals.
+
 ### Removed
 
 * Support for MRI 2.2. Byebug no longer installs on this platform.
