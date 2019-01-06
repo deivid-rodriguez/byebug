@@ -14,7 +14,7 @@ module Byebug
     include Helpers::ParseHelper
 
     def self.regexp
-      /^\s* c(?:ont(?:inue)?)? (?:\s+(\S+))? \s*$/x
+      /^\s* c(?:ont(?:inue)?)? (?:(!|\s+unconditionally|\s+\S+))? \s*$/x
     end
 
     def self.description
@@ -22,6 +22,11 @@ module Byebug
         c[ont[inue]][ <line_number>]
 
         #{short_description}
+
+        Normally the program stops at the next breakpoint. However, if the
+        parameter "unconditionally" is given or the command is suffixed with
+        "!", the program will run until the end regardless of any enabled
+        breakpoints.
       DESCRIPTION
     end
 
@@ -30,8 +35,8 @@ module Byebug
     end
 
     def execute
-      if @match[1]
-        num, err = get_int(@match[1], "Continue", 0, nil)
+      if until_line?
+        num, err = get_int(modifier, "Continue", 0, nil)
         return errmsg(err) unless num
 
         filename = File.expand_path(frame.file)
@@ -42,7 +47,21 @@ module Byebug
 
       processor.proceed!
 
-      Byebug.stop if Byebug.stoppable?
+      Byebug.stop if unconditionally? || Byebug.stoppable?
+    end
+
+    private
+
+    def until_line?
+      @match[1] && !["!", "unconditionally"].include?(modifier)
+    end
+
+    def unconditionally?
+      @match[1] && ["!", "unconditionally"].include?(modifier)
+    end
+
+    def modifier
+      @match[1].lstrip
     end
   end
 end

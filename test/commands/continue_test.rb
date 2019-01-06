@@ -35,6 +35,18 @@ module Byebug
       debug_code(program) { assert_program_finished }
     end
 
+    def test_continues_until_the_end_if_used_with_bang
+      enter "break 14", "continue!"
+
+      debug_code(program) { assert_program_finished }
+    end
+
+    def test_continues_until_the_end_if_used_with_unconditionally
+      enter "break 14", "continue unconditionally"
+
+      debug_code(program) { assert_program_finished }
+    end
+
     def test_stops_byebug_after_continue
       enter "continue"
 
