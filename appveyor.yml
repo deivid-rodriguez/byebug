@@ -54,7 +54,6 @@ matrix:
 branches:
   only:
     - master
-    - ruby_head
 
 notifications:
   - provider: Email
