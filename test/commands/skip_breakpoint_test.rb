@@ -6,7 +6,7 @@ module Byebug
   #
   # Tests for continue command
   #
-  class ContinueBreakpointTest < TestCase
+  class SkipBreakpointTest < TestCase
     def program
       strip_line_numbers <<-RUBY
          1:  module Byebug
@@ -32,13 +32,13 @@ module Byebug
     end
 
     def test_continues_until_the_end_if_no_line_specified_and_no_breakpoints
-      enter "continue_breakpoint"
+      enter "skip_breakpoint"
 
       debug_code(program) { assert_location example_path, 18 }
     end
 
     def test_works_in_abbreviated_mode_too
-      enter "cb"
+      enter "sb"
 
       debug_code(program) { assert_location example_path, 18 }
     end

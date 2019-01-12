@@ -8,7 +8,7 @@ module Byebug
   # Allows the user to continue execution until the next breakpoint, if
   # the breakpoint file or line be different, stop again
   #
-  class ContinueBreakpointCommand < Command
+  class SkipBreakpointCommand < Command
     include Helpers::ParseHelper
 
     class << self
@@ -24,12 +24,12 @@ module Byebug
     end
 
     def self.regexp
-      /^\s* c(?:ont(?:inue)?_)?(?:b(?:reak(?:point)?)?) \s*$/x
+      /^\s* s(?:kip_)?(?:b(?:reak(?:point)?)?) \s*$/x
     end
 
     def self.description
       <<-DESCRIPTION
-        c[ont[inue]_]b[reak[point]]
+        s[kip_]b[reak[point]]
 
         #{short_description}
       DESCRIPTION
