@@ -4,7 +4,8 @@
 
 ### Added
 
-* [#524](https://github.com/deivid-rodriguez/byebug/pull/524): `continue!` (or `continue unconditionally`) to continue until the end of the program regardless of the currently enabled breakpoints ([@tacnomann]).
+* [#377](https://github.com/deivid-rodriguez/byebug/pull/377): `skip` to continue until the next breakpoint as long as it is different from the current one. You can use this command to get out of loops, for example ([@tacnoman]).
+* [#524](https://github.com/deivid-rodriguez/byebug/pull/524): `continue!` (or `continue unconditionally`) to continue until the end of the program regardless of the currently enabled breakpoints ([@tacnoman]).
 
 ### Fixed
 

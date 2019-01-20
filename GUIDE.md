@@ -1468,6 +1468,7 @@ display a short list of named classes of commands
   save       -- Saves current byebug session to a file
   set        -- Modifies byebug settings
   show       -- Shows byebug settings
+  skip       -- Runs until the next breakpoint as long as it is different from the current one
   source     -- Restores a previously saved byebug session
   step       -- Steps into blocks or methods one or more times
   thread     -- Commands to manipulate threads
