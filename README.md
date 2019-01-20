@@ -94,46 +94,46 @@ byebug myscript.rb
 
 ## Byebug's commands
 
-Command     | Aliases      | Subcommands
--------     | -------      | -----------
-`backtrace` | `bt` `where` |
-`break`     |              |
-`catch`     |              |
-`condition` |              |
-`continue`  |              |
-`debug`     |              |
-`delete`    |              |
-`disable`   |              | `breakpoints` `display`
-`display`   |              |
-`down`      |              |
-`edit`      |              |
-`enable`    |              | `breakpoints` `display`
-`finish`    |              |
-`frame`     |              |
-`help`      |              |
-`history`   |              |
-`info`      |              | `args` `breakpoints` `catch` `display` `file` `line` `program`
-`interrupt` |              |
-`irb`       |              |
-`kill`      |              |
-`list`      |              |
-`method`    |              | `instance`
-`next`      |              |
-`pry`       |              |
-`quit`      |              |
-`restart`   |              |
-`save`      |              |
-`set`       |              | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-`show`      |              | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-`skip`      | `sk`         |
-`source`    |              |
-`step`      |              |
-`thread`    |              | `current` `list` `resume` `stop` `switch`
-`tracevar`  |              |
-`undisplay` |              |
-`untracevar`|              |
-`up`        |              |
-`var`       |              | `all` `constant` `global` `instance` `local`
+Command     | Aliases         | Subcommands
+-------     | -------         | -----------
+`backtrace` | `bt` `w` `where`|
+`break`     | `b`             |
+`catch`     | `cat`           |
+`condition` | `cond`          |
+`continue`  | `c` `cont`      |
+`debug`     |                 |
+`delete`    | `del`           |
+`disable`   | `dis`           | `breakpoints` `display`
+`display`   | `disp`          |
+`down`      |                 |
+`edit`      | `ed`            |
+`enable`    | `en`            | `breakpoints` `display`
+`finish`    | `fin`           |
+`frame`     | `f`             |
+`help`      | `h`             |
+`history`   | `hist`          |
+`info`      | `i`             | `args` `breakpoints` `catch` `display` `file` `line` `program`
+`interrupt` | `int`           |
+`irb`       |                 |
+`kill`      |                 |
+`list`      | `l`             |
+`method`    | `m`             | `instance`
+`next`      | `n`             |
+`pry`       |                 |
+`quit`      | `q`             |
+`restart`   |                 |
+`save`      | `sa`            |
+`set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+`show`      |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+`skip`      | `sk`            |
+`source`    | `so`            |
+`step`      | `s`             |
+`thread`    | `th`            | `current` `list` `resume` `stop` `switch`
+`tracevar`  | `tr`            |
+`undisplay` | `undisp`        |
+`untracevar`| `untr`          |
+`up`        |                 |
+`var`       | `v`             | `all` `constant` `global` `instance` `local`
 
 ## Semantic Versioning
 

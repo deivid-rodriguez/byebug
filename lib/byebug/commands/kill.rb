@@ -10,7 +10,7 @@ module Byebug
     self.allow_in_control = true
 
     def self.regexp
-      /^\s* (?:kill) \s* (?:\s+(\S+))? \s*$/x
+      /^\s* kill \s* (?:\s+(\S+))? \s*$/x
     end
 
     def self.description
