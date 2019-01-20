@@ -5,10 +5,10 @@ require "byebug/helpers/parse"
 
 module Byebug
   #
-  # Allows the user to continue execution until the next breakpoint, if
-  # the breakpoint file or line be different, stop again
+  # Allows the user to continue execution until the next breakpoint, as
+  # long as it is different from the current one
   #
-  class SkipBreakpointCommand < Command
+  class SkipCommand < Command
     include Helpers::ParseHelper
 
     class << self
@@ -24,12 +24,12 @@ module Byebug
     end
 
     def self.regexp
-      /^\s* s(?:kip_)?(?:b(?:reak(?:point)?)?) \s*$/x
+      /^\s* sk(?:ip)? \s*$/x
     end
 
     def self.description
       <<-DESCRIPTION
-        s[kip_]b[reak[point]]
+        sk[ip]
 
         #{short_description}
       DESCRIPTION
@@ -39,8 +39,14 @@ module Byebug
       "Runs until the next breakpoint as long as it is different from the current one"
     end
 
-    def keep_execution(file, line)
-      [self.class.file_path, self.class.file_line] == [file, line]
+    def initialize_attributes
+      self.class.always_run = 2
+      self.class.file_path = frame.file
+      self.class.file_line = frame.line
+    end
+
+    def keep_execution
+      [self.class.file_path, self.class.file_line] == [frame.file, frame.line]
     end
 
     def reset_attributes
@@ -50,17 +56,14 @@ module Byebug
     def auto_run
       return false unless self.class.always_run == 2
 
-      keep_execution(frame.file, frame.line) ? processor.proceed! : reset_attributes
+      keep_execution ? processor.proceed! : reset_attributes
       true
     end
 
     def execute
       return if auto_run
 
-      self.class.always_run = 2
-      self.class.file_path = frame.file
-      self.class.file_line = frame.line
-
+      initialize_attributes
       processor.proceed!
       Byebug.stop if Byebug.stoppable?
     end

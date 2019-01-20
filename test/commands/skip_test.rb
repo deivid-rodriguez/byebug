@@ -6,7 +6,7 @@ module Byebug
   #
   # Tests for continue command
   #
-  class SkipBreakpointTest < TestCase
+  class SkipTest < TestCase
     def program
       strip_line_numbers <<-RUBY
          1:  module Byebug
@@ -25,22 +25,21 @@ module Byebug
         14:    c = 5
         15:
         16:    result = #{example_class}.new.factor(c)
-        17:    byebug
-        18:    "Result is: " + result.to_s
-        19:  end
+        17:    "Result is: " + result.to_s
+        18:  end
       RUBY
     end
 
     def test_continues_until_the_end_if_no_line_specified_and_no_breakpoints
-      enter "skip_breakpoint"
+      enter "break 17", "skip"
 
-      debug_code(program) { assert_location example_path, 18 }
+      debug_code(program) { assert_location example_path, 17 }
     end
 
     def test_works_in_abbreviated_mode_too
-      enter "sb"
+      enter "break 17", "sk"
 
-      debug_code(program) { assert_location example_path, 18 }
+      debug_code(program) { assert_location example_path, 17 }
     end
   end
 end
