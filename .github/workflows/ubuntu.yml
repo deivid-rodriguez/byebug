@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+    container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.compiler }}
 
     runs-on: ubuntu-24.04
 
@@ -20,7 +20,6 @@ jobs:
 
       matrix:
         version: [3.1.6, 3.2.7, 3.3.7]
-        line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
     steps:

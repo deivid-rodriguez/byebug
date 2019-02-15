@@ -247,9 +247,10 @@ module Byebug
     #
     def shell_out_env
       lib_dir = File.expand_path("../../lib", __dir__)
+      reline_support = File.expand_path("reline.rb", __dir__)
 
       {
-        "RUBYOPT" => "-I #{lib_dir}"
+        "RUBYOPT" => "-I #{lib_dir} -r #{reline_support}"
       }
     end
 

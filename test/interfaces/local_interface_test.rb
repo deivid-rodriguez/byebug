@@ -9,8 +9,8 @@ module Byebug
   #
   class LocalInterfaceTest < TestCase
     def test_continues_by_control_d
-      # `Readline.readline` returns nil for Control-D
-      Readline.stub(:readline, nil) do
+      # `Reline.readline` returns nil for Control-D
+      Reline.stub(:readline, nil) do
         interface = LocalInterface.new
         assert_equal "continue", interface.readline("(byebug)")
       end
