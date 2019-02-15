@@ -170,6 +170,11 @@ open source dependencies.
 
 You can also help `byebug` by leaving a small (or big) tip through [Liberapay].
 
+## Security contact information
+
+Please use the Tidelift security contact to [report a security vulnerability].
+Tidelift will coordinate the fix and disclosure.
+
 ## Credits
 
 Everybody who has ever contributed to this forked and reforked piece of
@@ -191,3 +196,4 @@ software, especially:
 [atom-byebug]: https://github.com/izaera/atom-byebug
 [liberapay]: https://liberapay.com/byebug/donate
 [tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
+[report a security vulnerability]: https://tidelift.com/security
