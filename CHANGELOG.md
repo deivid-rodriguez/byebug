@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [11.0.0] - 2019-02-15
+
 ### Added
 
 * [#377](https://github.com/deivid-rodriguez/byebug/pull/377): `skip` to continue until the next breakpoint as long as it is different from the current one. You can use this command to get out of loops, for example ([@tacnoman]).
