@@ -782,6 +782,7 @@
 * Initial release.
 
 [Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...HEAD
+[11.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...v11.0.0
 [10.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v9.1.0...v10.0.0
