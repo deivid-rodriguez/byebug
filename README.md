@@ -164,7 +164,7 @@ See [Getting Started with Development](CONTRIBUTING.md).
 
 ## Funding
 
-Subscribe to [tidelift] to ensure byebug stays actively maintained, and at the
+Subscribe to [Tidelift] to ensure byebug stays actively maintained, and at the
 same time get licensing assurances and timely security notifications for your
 open source dependencies.
 
@@ -194,6 +194,6 @@ software, especially:
 [minitest-byebug]: https://github.com/kaspth/minitest-byebug
 [sublime_debugger]: https://github.com/shuky19/sublime_debugger
 [atom-byebug]: https://github.com/izaera/atom-byebug
-[liberapay]: https://liberapay.com/byebug/donate
-[tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
+[Liberapay]: https://liberapay.com/byebug/donate
+[Tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
 [report a security vulnerability]: https://tidelift.com/security
