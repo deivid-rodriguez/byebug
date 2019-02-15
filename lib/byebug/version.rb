@@ -4,5 +4,5 @@
 # Reopen main module to define the library version
 #
 module Byebug
-  VERSION = "10.0.2"
+  VERSION = "11.0.0"
 end
