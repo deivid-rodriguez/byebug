@@ -17,8 +17,8 @@ module Byebug
          6:      def factor(num)
          7:        i = 1
          8:        num.times do |new_number|
-         9:          i *= new_number
-        10:          byebug
+         9:          byebug
+        10:          i *= new_number
         11:        end
         12:      end
         13:    end
