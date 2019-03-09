@@ -41,5 +41,14 @@ module Byebug
 
       debug_code(program) { assert_location example_path, 17 }
     end
+
+    def test_does_not_list_code_for_intermediate_breakpoints
+      enter "break 17", "skip"
+
+      debug_code(program)
+
+      check_output_includes "=> 10:         i *= new_number"
+      check_output_doesnt_include "=> 10:         i *= new_number", "=> 10:         i *= new_number"
+    end
   end
 end

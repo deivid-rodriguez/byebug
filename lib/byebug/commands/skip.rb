@@ -41,6 +41,7 @@ module Byebug
 
     def initialize_attributes
       self.class.always_run = 2
+      ListCommand.always_run = 0
       self.class.file_path = frame.file
       self.class.file_line = frame.line
     end
@@ -51,6 +52,7 @@ module Byebug
 
     def reset_attributes
       self.class.always_run = 0
+      ListCommand.always_run = 1
     end
 
     def auto_run
