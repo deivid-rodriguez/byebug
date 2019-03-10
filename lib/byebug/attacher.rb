@@ -8,8 +8,6 @@ module Byebug
   # Starts byebug, and stops at the first line of user's code.
   #
   def self.attach
-    require "byebug/core"
-
     unless started?
       self.mode = :attached
 
@@ -35,6 +33,8 @@ end
 #
 module Kernel
   def byebug
+    require "byebug/core"
+
     Byebug.attach unless Byebug.mode == :off
   end
 
