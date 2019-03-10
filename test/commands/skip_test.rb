@@ -25,8 +25,9 @@ module Byebug
         14:    c = 5
         15:
         16:    result = #{example_class}.new.factor(c)
-        17:    "Result is: " + result.to_s
-        18:  end
+        17:    sleep 0
+        18:    "Result is: " + result.to_s
+        19:  end
       RUBY
     end
 
@@ -49,6 +50,16 @@ module Byebug
 
       check_output_includes "=> 10:         i *= new_number"
       check_output_doesnt_include "=> 10:         i *= new_number", "=> 10:         i *= new_number"
+    end
+
+    def test_restores_previous_autolisting_after_skip
+      with_setting :autolist, false do
+        enter "break 17", "skip", "continue 18"
+
+        debug_code(program)
+
+        check_output_doesnt_include '=> 18:   "Result is: " + result.to_s'
+      end
     end
   end
 end

@@ -21,6 +21,16 @@ module Byebug
       def file_path
         @file_path ||= ""
       end
+
+      def setup_autolist(value)
+        @previous_autolist = ListCommand.always_run
+        ListCommand.always_run = value
+      end
+
+      def restore_autolist
+        ListCommand.always_run = @previous_autolist
+        @previous_autolist = nil
+      end
     end
 
     def self.regexp
@@ -41,7 +51,7 @@ module Byebug
 
     def initialize_attributes
       self.class.always_run = 2
-      ListCommand.always_run = 0
+      self.class.setup_autolist(0)
       self.class.file_path = frame.file
       self.class.file_line = frame.line
     end
@@ -52,7 +62,7 @@ module Byebug
 
     def reset_attributes
       self.class.always_run = 0
-      ListCommand.always_run = 1
+      self.class.restore_autolist
     end
 
     def auto_run
