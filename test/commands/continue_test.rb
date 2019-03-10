@@ -36,15 +36,19 @@ module Byebug
     end
 
     def test_continues_until_the_end_if_used_with_bang
-      enter "break 14", "continue!"
+      with_mode(:attached) do
+        enter "break 14", "continue!"
 
-      debug_code(program) { assert_program_finished }
+        debug_code(program) { assert_program_finished }
+      end
     end
 
     def test_continues_until_the_end_if_used_with_unconditionally
-      enter "break 14", "continue unconditionally"
+      with_mode(:attached) do
+        enter "break 14", "continue unconditionally"
 
-      debug_code(program) { assert_program_finished }
+        debug_code(program) { assert_program_finished }
+      end
     end
 
     def test_stops_byebug_after_continue
@@ -99,6 +103,40 @@ module Byebug
         debug_code(program)
 
         check_output_includes "Tracing: (eval):1"
+      end
+    end
+  end
+
+  class ContinueUnconditionallyWithByebugCallsTest < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+         1:  module Byebug
+         2:    byebug
+         3:
+         4:    b = 5
+         5:
+         6:    byebug
+         7:
+         8:    c = b + 5
+         9:
+        10:    d = c + 5
+        11:  end
+      RUBY
+    end
+
+    def test_continues_until_the_end_ignoring_byebug_calls_if_used_with_bang
+      with_mode(:attached) do
+        enter "continue!"
+
+        debug_code(program) { assert_program_finished }
+      end
+    end
+
+    def test_continues_until_the_end_ignoring_byebug_calls_if_used_with_unconditionally
+      with_mode(:attached) do
+        enter "continue unconditionally"
+
+        debug_code(program) { assert_program_finished }
       end
     end
   end

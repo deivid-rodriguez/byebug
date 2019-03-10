@@ -36,6 +36,7 @@ module Byebug
   #
   # * :attached => Attached to a running program through the `byebug` method.
   # * :standalone => Started through `byebug` script.
+  # * :off => Ignoring any `byebug` method calls.
   #
   attr_accessor :mode
 

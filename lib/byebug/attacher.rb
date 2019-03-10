@@ -35,7 +35,7 @@ end
 #
 module Kernel
   def byebug
-    Byebug.attach
+    Byebug.attach unless Byebug.mode == :off
   end
 
   def remote_byebug(host = "localhost", port = nil)
