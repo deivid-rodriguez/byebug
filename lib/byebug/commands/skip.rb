@@ -13,6 +13,7 @@ module Byebug
 
     class << self
       attr_writer :file_line, :file_path
+      attr_reader :previous_autolist
 
       def file_line
         @file_line ||= 0
@@ -62,6 +63,7 @@ module Byebug
 
     def reset_attributes
       self.class.always_run = 0
+      ListCommand.new(processor).execute if self.class.previous_autolist == 1
       self.class.restore_autolist
     end
 

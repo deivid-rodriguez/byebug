@@ -50,6 +50,7 @@ module Byebug
 
       check_output_includes "=> 10:         i *= new_number"
       check_output_doesnt_include "=> 10:         i *= new_number", "=> 10:         i *= new_number"
+      check_output_includes "=> 17:   sleep 0"
     end
 
     def test_restores_previous_autolisting_after_skip
