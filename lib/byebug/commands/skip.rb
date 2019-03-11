@@ -13,6 +13,7 @@ module Byebug
 
     class << self
       attr_writer :file_line, :file_path
+      attr_reader :previous_autolist
 
       def file_line
         @file_line ||= 0
@@ -20,6 +21,16 @@ module Byebug
 
       def file_path
         @file_path ||= ""
+      end
+
+      def setup_autolist(value)
+        @previous_autolist = ListCommand.always_run
+        ListCommand.always_run = value
+      end
+
+      def restore_autolist
+        ListCommand.always_run = @previous_autolist
+        @previous_autolist = nil
       end
     end
 
@@ -41,6 +52,7 @@ module Byebug
 
     def initialize_attributes
       self.class.always_run = 2
+      self.class.setup_autolist(0)
       self.class.file_path = frame.file
       self.class.file_line = frame.line
     end
@@ -51,6 +63,8 @@ module Byebug
 
     def reset_attributes
       self.class.always_run = 0
+      ListCommand.new(processor).execute if self.class.previous_autolist == 1
+      self.class.restore_autolist
     end
 
     def auto_run
