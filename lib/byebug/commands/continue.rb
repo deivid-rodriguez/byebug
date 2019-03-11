@@ -47,6 +47,7 @@ module Byebug
 
       processor.proceed!
 
+      Byebug.mode = :off if unconditionally?
       Byebug.stop if unconditionally? || Byebug.stoppable?
     end
 

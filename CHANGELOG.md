@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#546](https://github.com/deivid-rodriguez/byebug/pull/546): `continue!` to ignore further `byebug` calls.
+
 ## [11.0.0] - 2019-02-15
 
 ### Added
