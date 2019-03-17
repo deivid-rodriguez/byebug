@@ -12,8 +12,8 @@ module Docker
     VERSIONS = %w[
       2.3.8
       2.4.5
-      2.5.3
-      2.6.0
+      2.5.5
+      2.6.2
       head
     ].freeze
 
