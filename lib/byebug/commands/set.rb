@@ -50,7 +50,7 @@ module Byebug
       if !setting.boolean? && value.nil?
         err = pr("set.errors.must_specify_value", key: key)
       elsif setting.boolean?
-        value, err = get_onoff(value, key =~ /^no/ ? false : true)
+        value, err = get_onoff(value, /^no/.match?(key) ? false : true)
       elsif setting.integer?
         value, err = get_int(value, setting.to_sym, 1)
       end

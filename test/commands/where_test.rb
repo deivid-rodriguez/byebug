@@ -120,7 +120,7 @@ module Byebug
   #   are usually very deeply nested and on OS X where tmp path is always
   #   deeply nested.
   #
-  unless /cygwin|mswin|mingw|darwin/ =~ RUBY_PLATFORM
+  unless /cygwin|mswin|mingw|darwin/.match?(RUBY_PLATFORM)
     class WhereWithNotDeeplyNestedPathsTest < WhereStandardTest
       def test_where_displays_current_backtrace_w_shorpaths_if_fullpath_disabled
         enter "set nofullpath", "where", "set fullpath"

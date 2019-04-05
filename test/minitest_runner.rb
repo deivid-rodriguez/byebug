@@ -48,7 +48,7 @@ module Byebug
     end
 
     def test_methods(str)
-      if str =~ /test_.*/
+      if /test_.*/.match?(str)
         filter_runnables_by_method(str)
       else
         filter_runnables_by_class(str)
