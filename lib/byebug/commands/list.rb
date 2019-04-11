@@ -113,7 +113,7 @@ module Byebug
     # @param max [Integer] Upper bound
     #
     def display_lines(min, max)
-      puts "\n[#{min}, #{max}] in #{frame.file}"
+      puts "\nStopped at #{frame.file}:#{frame.line}. Showing lines [#{min}, #{max}]:"
 
       puts source_file_formatter.lines(min, max).join
     end
