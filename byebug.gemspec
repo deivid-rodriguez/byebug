@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     can build on. It provides breakpoint handling and bindings for stack frames
     among other things and it comes with an easy to use command line interface."
 
-  s.required_ruby_version = ">= 2.3.0"
+  s.required_ruby_version = ">= 2.4.0"
 
   s.files = Dir["lib/**/*.rb", "lib/**/*.yml", "ext/**/*.[ch]", "LICENSE"]
   s.bindir = "exe"

@@ -147,38 +147,6 @@ workflows:
   test:
     jobs:
       - spec:
-          name: 2.3-readline-gcc
-          executor:
-            name: test
-            version: 2.3.8
-            line_editor: readline
-            compiler: gcc
-
-      - spec:
-          name: 2.3-libedit-gcc
-          executor:
-            name: test
-            version: 2.3.8
-            line_editor: libedit
-            compiler: gcc
-
-      - spec:
-          name: 2.3-readline-clang
-          executor:
-            name: test
-            version: 2.3.8
-            line_editor: readline
-            compiler: clang
-
-      - spec:
-          name: 2.3-libedit-clang
-          executor:
-            name: test
-            version: 2.3.8
-            line_editor: libedit
-            compiler: clang
-
-      - spec:
           name: 2.4-readline-gcc
           executor:
             name: test
@@ -308,11 +276,6 @@ workflows:
 
       - upload_coverage:
           requires:
-            - 2.3-readline-gcc
-            - 2.3-libedit-gcc
-            - 2.3-readline-clang
-            - 2.3-libedit-clang
-
             - 2.4-readline-gcc
             - 2.4-libedit-gcc
             - 2.4-readline-clang
