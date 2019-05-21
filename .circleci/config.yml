@@ -89,7 +89,7 @@ jobs:
 
   upload_coverage:
     docker:
-      - image: deividrodriguez/byebug:2.6.2-readline-gcc
+      - image: deividrodriguez/byebug:2.6.3-readline-gcc
         environment:
           - CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
@@ -114,7 +114,7 @@ jobs:
         type: string
 
     docker:
-      - image: deividrodriguez/byebug:2.6.2-readline-gcc
+      - image: deividrodriguez/byebug:2.6.3-readline-gcc
 
     steps:
       - checkout
@@ -150,7 +150,7 @@ workflows:
           name: 2.4-readline-gcc
           executor:
             name: test
-            version: 2.4.5
+            version: 2.4.6
             line_editor: readline
             compiler: gcc
 
@@ -158,7 +158,7 @@ workflows:
           name: 2.4-libedit-gcc
           executor:
             name: test
-            version: 2.4.5
+            version: 2.4.6
             line_editor: libedit
             compiler: gcc
 
@@ -166,7 +166,7 @@ workflows:
           name: 2.4-readline-clang
           executor:
             name: test
-            version: 2.4.5
+            version: 2.4.6
             line_editor: readline
             compiler: clang
 
@@ -174,7 +174,7 @@ workflows:
           name: 2.4-libedit-clang
           executor:
             name: test
-            version: 2.4.5
+            version: 2.4.6
             line_editor: libedit
             compiler: clang
 
@@ -214,7 +214,7 @@ workflows:
           name: 2.6-readline-gcc
           executor:
             name: test
-            version: 2.6.2
+            version: 2.6.3
             line_editor: readline
             compiler: gcc
 
@@ -222,7 +222,7 @@ workflows:
           name: 2.6-libedit-gcc
           executor:
             name: test
-            version: 2.6.2
+            version: 2.6.3
             line_editor: libedit
             compiler: gcc
 
@@ -230,7 +230,7 @@ workflows:
           name: 2.6-readline-clang
           executor:
             name: test
-            version: 2.6.2
+            version: 2.6.3
             line_editor: readline
             compiler: clang
 
@@ -238,7 +238,7 @@ workflows:
           name: 2.6-libedit-clang
           executor:
             name: test
-            version: 2.6.2
+            version: 2.6.3
             line_editor: libedit
             compiler: clang
 

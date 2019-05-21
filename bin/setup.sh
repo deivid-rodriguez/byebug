@@ -4,9 +4,9 @@ set -eo pipefail
 
 set +x
 
-gem update --system 3.0.2
+gem update --system 3.0.3
 gem install bundler --version 2.0.1 --force
 
-bin/bundle install --jobs 3 --retry 3
+bundle install --jobs 3 --retry 3
 
 set -x

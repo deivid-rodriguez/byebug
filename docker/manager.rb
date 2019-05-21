@@ -10,10 +10,9 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      2.4.5
+      2.4.6
       2.5.5
-      2.6.2
-      head
+      2.6.3
     ].freeze
 
     LINE_EDITORS = %w[
@@ -149,7 +148,7 @@ module Docker
       end
 
       def for_last_version_variants(&block)
-        for_variants_of(VERSIONS[-2], &block)
+        for_variants_of(VERSIONS.last, &block)
       end
 
       def for_variants_of(version)

@@ -21,8 +21,8 @@ abide by its terms.
   always have the lastest patch level release installed.
 * The recommended tool to manage development dependencies is `bundler`. Run
   `gem install bundler` to install it.
-* Running `bin/bundle install` inside a local clone of `byebug` will get
-  development dependencies installed.
+* Running `bundle install` inside a local clone of `byebug` will get development
+  dependencies installed.
 
 ## Running the test suite
 
