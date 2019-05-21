@@ -62,6 +62,7 @@ module Byebug
       interface.test_block = block
       debug_in_temp_file(program)
       interface.test_block&.call
+      interface.test_block = nil
     end
 
     #
