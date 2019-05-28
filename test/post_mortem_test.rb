@@ -48,7 +48,6 @@ module Byebug
     end
 
     def test_execution_is_stopped_at_the_correct_line_after_exception
-      skip("See issue #165")
       with_setting :post_mortem, true do
         enter "cont"
 
