@@ -82,9 +82,9 @@ module Byebug
 
     def test_run_with_require_flag
       stdout = run_byebug(
-        "-r", "abbrev", example_path,
+        "-r", example_path, example_path,
         input: \
-          'puts "Abbrev loaded? #{$LOADED_FEATURES.last.include?(\'abbrev\')}"'
+          "puts \"Abbrev loaded? \#{$LOADED_FEATURES.last == '#{example_path}'}\""
       )
 
       assert_match(/Abbrev loaded\? true/, stdout)
