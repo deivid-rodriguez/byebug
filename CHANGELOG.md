@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#562](https://github.com/deivid-rodriguez/byebug/pull/562): post mortem mode landing in the wrong line when coming from an exception inside a `Kernel.load` call.
+
 ### Removed
 
 * Support for MRI 2.3. Byebug no longer installs on this platform.

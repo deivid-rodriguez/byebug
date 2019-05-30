@@ -436,7 +436,7 @@ raise_event(VALUE trace_point, void *data)
 
   raised_exception = rb_tracearg_raised_exception(trace_arg);
 
-  if (post_mortem == Qtrue)
+  if (post_mortem == Qtrue && !rb_ivar_defined(raised_exception, rb_intern("@__bb_context")))
   {
     pm_context = context_dup(dc);
     rb_ivar_set(raised_exception, rb_intern("@__bb_context"), pm_context);
