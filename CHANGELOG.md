@@ -2,7 +2,6 @@
 
 ## [Unreleased]
 
-
 ### Added
 
 * [#553](https://github.com/deivid-rodriguez/byebug/pull/553): Shows the line number in the byebug statement so that supporting IDEs can take cursor to the debug point instead of the head of the file ([@senhalil]).
@@ -10,7 +9,6 @@
 ### Fixed
 
 * [#562](https://github.com/deivid-rodriguez/byebug/pull/562): post mortem mode landing in the wrong line when coming from an exception inside a `Kernel.load` call.
-
 
 ### Removed
 
