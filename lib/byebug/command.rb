@@ -80,7 +80,7 @@ module Byebug
       def to_s
         name
           .split("::")
-          .map { |n| n.gsub(/Command$/, "").downcase if n =~ /Command$/ }
+          .map { |n| n.gsub(/Command$/, "").downcase if /Command$/.match?(n) }
           .compact
           .join(" ")
       end

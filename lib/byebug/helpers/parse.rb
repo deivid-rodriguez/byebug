@@ -15,7 +15,7 @@ module Byebug
       # purpose.
       #
       def get_int(str, cmd, min = nil, max = nil)
-        return nil, pr("parse.errors.int.not_number", cmd: cmd, str: str) if str !~ /\A-?[0-9]+\z/
+        return nil, pr("parse.errors.int.not_number", cmd: cmd, str: str) unless /\A-?[0-9]+\z/.match?(str)
 
         int = str.to_i
         if min && int < min

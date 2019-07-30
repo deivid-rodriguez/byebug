@@ -572,6 +572,9 @@ Performance/RedundantMatch:
 Performance/RedundantMerge:
   Enabled: true
 
+Performance/RegexpMatch:
+  Enabled: true
+
 Performance/ReverseEach:
   Enabled: true
 
