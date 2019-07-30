@@ -121,7 +121,7 @@ module Byebug
     # For now, empty lines and consecutive duplicates.
     #
     def ignore?(buf)
-      return true if /^\s*$/ =~ buf
+      return true if /^\s*$/.match?(buf)
       return false if Readline::HISTORY.empty?
 
       buffer[Readline::HISTORY.length - 1] == buf

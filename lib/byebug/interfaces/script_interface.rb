@@ -24,7 +24,7 @@ module Byebug
     def readline(*)
       while (result = input.gets)
         output.puts "+ #{result}" if @verbose
-        next if result =~ /^\s*#/
+        next if /^\s*#/.match?(result)
 
         return result.chomp
       end
