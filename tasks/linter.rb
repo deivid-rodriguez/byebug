@@ -49,13 +49,19 @@ class CLangFormatLinter
   end
 
   def fixing_cmd(offenses)
-    "clang-format-5.0 -i #{offenses.join(' ')} -style=file"
+    "#{clang_format} -i #{offenses.join(' ')} -style=file"
   end
 
   def clean?(file)
-    linted, status = Open3.capture2("clang-format-5.0 #{file} -style=file")
+    linted, status = Open3.capture2("#{clang_format} #{file} -style=file")
 
     status.success? && linted == File.read(file)
+  end
+
+  private
+
+  def clang_format
+    "clang-format-8"
   end
 end
 
