@@ -305,14 +305,7 @@ call_event(VALUE trace_point, void *data)
 
   CALL_EVENT_SETUP;
 
-  /* nil method_id means we are at top level so there can't be a method
-   * breakpoint here. Just leave then. */
   msym = rb_tracearg_method_id(trace_arg);
-  if (NIL_P(msym))
-  {
-    EVENT_TEARDOWN;
-    return;
-  }
 
   mid = SYM2ID(msym);
   klass = rb_tracearg_defined_class(trace_arg);
