@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/history"
+require_relative "../history"
 
 module Byebug
   #

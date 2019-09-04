@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "byebug/subcommands"
+require_relative "../subcommands"
 
-require "byebug/commands/var/all"
-require "byebug/commands/var/args"
-require "byebug/commands/var/const"
-require "byebug/commands/var/instance"
-require "byebug/commands/var/local"
-require "byebug/commands/var/global"
+require_relative "var/all"
+require_relative "var/args"
+require_relative "var/const"
+require_relative "var/instance"
+require_relative "var/local"
+require_relative "var/global"
 
 module Byebug
   #

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/var"
+require_relative "../../helpers/var"
 
 module Byebug
   #

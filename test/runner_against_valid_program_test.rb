@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "test_helper"
-require "byebug/version"
+require_relative "test_helper"
+require_relative "../lib/byebug/version"
 
 module Byebug
   #

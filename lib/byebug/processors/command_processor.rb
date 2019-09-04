@@ -2,8 +2,8 @@
 
 require "forwardable"
 
-require "byebug/helpers/eval"
-require "byebug/errors"
+require_relative "../helpers/eval"
+require_relative "../errors"
 
 module Byebug
   #

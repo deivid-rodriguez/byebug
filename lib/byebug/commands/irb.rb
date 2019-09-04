@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/command"
+require_relative "../command"
 require "irb"
 require "English"
 

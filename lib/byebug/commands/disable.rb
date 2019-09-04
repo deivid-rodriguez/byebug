@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "byebug/subcommands"
+require_relative "../subcommands"
 
-require "byebug/commands/disable/breakpoints"
-require "byebug/commands/disable/display"
+require_relative "../commands/disable/breakpoints"
+require_relative "../commands/disable/display"
 
 module Byebug
   #

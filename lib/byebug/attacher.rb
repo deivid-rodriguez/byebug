@@ -19,7 +19,7 @@ module Byebug
   end
 
   def self.spawn(host = "localhost", port = nil)
-    require "byebug/core"
+    require_relative "core"
 
     self.wait_connection = true
     start_server(host, port || PORT)
@@ -33,7 +33,7 @@ end
 #
 module Kernel
   def byebug
-    require "byebug/core"
+    require_relative "core"
 
     Byebug.attach unless Byebug.mode == :off
   end

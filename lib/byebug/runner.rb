@@ -2,13 +2,13 @@
 
 require "optparse"
 require "English"
-require "byebug/core"
-require "byebug/version"
-require "byebug/helpers/bin"
-require "byebug/helpers/parse"
-require "byebug/helpers/string"
-require "byebug/option_setter"
-require "byebug/processors/control_processor"
+require_relative "core"
+require_relative "version"
+require_relative "helpers/bin"
+require_relative "helpers/parse"
+require_relative "helpers/string"
+require_relative "option_setter"
+require_relative "processors/control_processor"
 
 module Byebug
   #

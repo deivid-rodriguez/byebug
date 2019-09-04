@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "byebug/command"
-require "byebug/errors"
+require_relative "../command"
+require_relative "../errors"
 
 module Byebug
   #

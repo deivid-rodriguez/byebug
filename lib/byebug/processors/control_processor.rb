@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/processors/command_processor"
+require_relative "command_processor"
 
 module Byebug
   #

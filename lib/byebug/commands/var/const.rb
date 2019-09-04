@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/eval"
+require_relative "../../helpers/eval"
 
 module Byebug
   #

@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require "byebug/attacher"
+require_relative "byebug/attacher"

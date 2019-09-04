@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "forwardable"
-require "byebug/helpers/string"
+require_relative "helpers/string"
 
 module Byebug
   #

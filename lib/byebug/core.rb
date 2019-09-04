@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/reflection"
-require "byebug/byebug"
-require "byebug/context"
-require "byebug/breakpoint"
-require "byebug/interface"
-require "byebug/processors/script_processor"
-require "byebug/processors/post_mortem_processor"
-require "byebug/commands"
-require "byebug/remote"
-require "byebug/printers/plain"
+require_relative "helpers/reflection"
+require_relative "byebug"
+require_relative "context"
+require_relative "breakpoint"
+require_relative "interface"
+require_relative "processors/script_processor"
+require_relative "processors/post_mortem_processor"
+require_relative "commands"
+require_relative "remote"
+require_relative "printers/plain"
 
 #
 # Main debugger's container module. Everything is defined under this module

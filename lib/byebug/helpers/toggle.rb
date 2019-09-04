@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/parse"
+require_relative "parse"
 
 module Byebug
   module Helpers

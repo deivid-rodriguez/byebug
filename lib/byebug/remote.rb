@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "socket"
-require "byebug/processors/control_processor"
-require "byebug/remote/server"
-require "byebug/remote/client"
+require_relative "processors/control_processor"
+require_relative "remote/server"
+require_relative "remote/client"
 
 #
 # Remote debugging functionality.
