@@ -360,7 +360,9 @@ return_event(VALUE trace_point, void *data)
      *   [#7] b_return@/hort/core_ext/numeric/conversions.rb:133 BigDecimal#to_s
      *  [#7] return@:0 Fixnum#to_s # => This guy...
      */
-    if (!NIL_P(file))
+    if (NIL_P(file))
+      rb_warn("The TracePoint API emitted a return event without file information. It might be a bug, please report this.");
+    else
     {
       line = rb_tracearg_lineno(trace_arg);
       binding = rb_tracearg_binding(trace_arg);
