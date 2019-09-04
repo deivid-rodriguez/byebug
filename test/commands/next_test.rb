@@ -266,4 +266,25 @@ module Byebug
       debug_code(program) { assert_equal 9, frame.line }
     end
   end
+
+  #
+  # Test top-level block events are properly handled
+  #
+  class TopLevelBlockEventsTest < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+        1:  byebug
+        2:
+        3:  1.times {}
+        4:
+        5:  sleep 0
+      RUBY
+    end
+
+    def test_top_level_b_call_event
+      enter "next"
+
+      debug_code(program) { assert_equal 5, frame.line }
+    end
+  end
 end
