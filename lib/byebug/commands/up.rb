@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "pathname"
-require "byebug/command"
-require "byebug/helpers/frame"
-require "byebug/helpers/parse"
+require_relative "../command"
+require_relative "../helpers/frame"
+require_relative "../helpers/parse"
 
 module Byebug
   #

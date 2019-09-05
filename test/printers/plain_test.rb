@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require_relative "../test_helper"
 require "minitest/mock"
-require "byebug/helpers/string"
+require_relative "../../lib/byebug/helpers/string"
 
 module Byebug
   #

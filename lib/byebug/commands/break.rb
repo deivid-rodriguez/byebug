@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "byebug/command"
-require "byebug/helpers/eval"
-require "byebug/helpers/file"
-require "byebug/helpers/parse"
-require "byebug/source_file_formatter"
+require_relative "../command"
+require_relative "../helpers/eval"
+require_relative "../helpers/file"
+require_relative "../helpers/parse"
+require_relative "../source_file_formatter"
 
 module Byebug
   #

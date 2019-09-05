@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "byebug/command"
-require "byebug/helpers/bin"
-require "byebug/helpers/path"
+require_relative "../command"
+require_relative "../helpers/bin"
+require_relative "../helpers/path"
 require "shellwords"
 require "English"
 require "rbconfig"

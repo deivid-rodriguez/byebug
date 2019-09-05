@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/toggle"
+require_relative "../../helpers/toggle"
 
 module Byebug
   #

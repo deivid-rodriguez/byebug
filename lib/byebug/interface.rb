@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "byebug/setting"
-require "byebug/history"
-require "byebug/helpers/file"
+require_relative "setting"
+require_relative "history"
+require_relative "helpers/file"
 
 #
 # Namespace for all of byebug's code
@@ -141,6 +141,6 @@ module Byebug
   end
 end
 
-require "byebug/interfaces/local_interface"
-require "byebug/interfaces/script_interface"
-require "byebug/interfaces/remote_interface"
+require_relative "interfaces/local_interface"
+require_relative "interfaces/script_interface"
+require_relative "interfaces/remote_interface"

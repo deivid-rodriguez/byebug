@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/thread"
+require_relative "../../helpers/thread"
 
 module Byebug
   #

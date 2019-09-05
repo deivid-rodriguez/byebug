@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/helpers/file"
+require_relative "helpers/file"
 
 module Byebug
   #

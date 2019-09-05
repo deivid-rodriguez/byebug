@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "byebug/printers/base"
+require_relative "base"
 
 module Byebug
   module Printers

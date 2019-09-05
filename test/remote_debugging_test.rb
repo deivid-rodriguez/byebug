@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "test_helper"
-require "support/remote_debugging_tests"
+require_relative "test_helper"
+require_relative "support/remote_debugging_tests"
 
 module Byebug
   #

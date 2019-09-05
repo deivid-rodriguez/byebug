@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require "minitest"
-require "byebug"
-require "byebug/core"
-require "byebug/interfaces/test_interface"
-require "support/utils"
+require_relative "../../lib/byebug"
+require_relative "../../lib/byebug/core"
+require_relative "../../lib/byebug/interfaces/test_interface"
+require_relative "utils"
 
 module Byebug
   #

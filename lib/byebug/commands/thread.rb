@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "byebug/subcommands"
+require_relative "../subcommands"
 
-require "byebug/commands/thread/current"
-require "byebug/commands/thread/list"
-require "byebug/commands/thread/resume"
-require "byebug/commands/thread/stop"
-require "byebug/commands/thread/switch"
+require_relative "../commands/thread/current"
+require_relative "../commands/thread/list"
+require_relative "../commands/thread/resume"
+require_relative "../commands/thread/stop"
+require_relative "../commands/thread/switch"
 
 module Byebug
   #

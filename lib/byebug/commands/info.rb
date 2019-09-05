@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "byebug/subcommands"
+require_relative "../subcommands"
 
-require "byebug/commands/info/breakpoints"
-require "byebug/commands/info/display"
-require "byebug/commands/info/file"
-require "byebug/commands/info/line"
-require "byebug/commands/info/program"
+require_relative "../commands/info/breakpoints"
+require_relative "../commands/info/display"
+require_relative "../commands/info/file"
+require_relative "../commands/info/line"
+require_relative "../commands/info/program"
 
 module Byebug
   #
