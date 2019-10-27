@@ -34,13 +34,11 @@ while it executes and offers many of the traditional debugging features such as:
 
 ## Build Status
 
-Linux [![Cir][cir]][cir_url]
+Linux ![](https://github.com/deivid-rodriguez/byebug/workflows/build/badge.svg)
 Windows [![Vey][vey]][vey_url]
 
-[cir]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master.svg?style=svg
 [vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
 
-[cir_url]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master
 [vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
 
 ## Requirements
