@@ -52,7 +52,6 @@ jobs:
           paths:
             - .bundle
 
-
   spec:
     parameters:
       executor:

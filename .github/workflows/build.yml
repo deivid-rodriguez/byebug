@@ -1,0 +1,33 @@
+---
+
+name: build
+
+on: [push]
+
+jobs:
+  test:
+    container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        version: ["2.4.7", "2.5.6", "2.6.4"]
+        line_editor: ["libedit", "readline"]
+        compiler: ["clang", "gcc"]
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Run CI checks
+        run: |
+          bin/setup.sh
+          bin/rake
+
+      - name: Save coverage
+        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ job.container.id }}.json
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: coverage-${{ job.container.id }}
+          path: coverage/codeclimate.${{ job.container.id }}.json
