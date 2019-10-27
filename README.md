@@ -38,11 +38,9 @@ Linux [![Cir][cir]][cir_url]
 Windows [![Vey][vey]][vey_url]
 
 [cir]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master.svg?style=svg
-[tra]: https://api.travis-ci.org/deivid-rodriguez/byebug.svg?branch=master
 [vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
 
 [cir_url]: https://circleci.com/gh/deivid-rodriguez/byebug/tree/master
-[tra_url]: https://travis-ci.org/deivid-rodriguez/byebug
 [vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
 
 ## Requirements
