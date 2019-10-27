@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        version: ["2.4.7", "2.5.6", "2.6.4", "head"]
+        version: ["2.4.9", "2.5.7", "2.6.5", "head"]
         line_editor: ["libedit", "readline"]
         compiler: ["clang", "gcc"]
 
@@ -33,7 +33,7 @@ jobs:
           path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
 
   coverage:
-    container: deividrodriguez/byebug:2.6.4-readline-gcc
+    container: deividrodriguez/byebug:2.6.5-readline-gcc
 
     runs-on: ubuntu-18.04
 
@@ -45,62 +45,62 @@ jobs:
     steps:
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.7-libedit-clang
+          name: coverage-2.4.9-libedit-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.7-libedit-gcc
+          name: coverage-2.4.9-libedit-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.7-readline-clang
+          name: coverage-2.4.9-readline-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.7-readline-gcc
+          name: coverage-2.4.9-readline-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.6-libedit-clang
+          name: coverage-2.5.7-libedit-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.6-libedit-gcc
+          name: coverage-2.5.7-libedit-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.6-readline-clang
+          name: coverage-2.5.7-readline-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.6-readline-gcc
+          name: coverage-2.5.7-readline-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.6.4-libedit-clang
+          name: coverage-2.6.5-libedit-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.6.4-libedit-gcc
+          name: coverage-2.6.5-libedit-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.6.4-readline-clang
+          name: coverage-2.6.5-readline-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.6.4-readline-gcc
+          name: coverage-2.6.5-readline-gcc
           path: coverage
 
       - name: Aggregate & upload results to Code Climate

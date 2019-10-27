@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    container: deividrodriguez/byebug:2.6.4-readline-gcc
+    container: deividrodriguez/byebug:2.6.5-readline-gcc
 
     runs-on: ubuntu-18.04
 
