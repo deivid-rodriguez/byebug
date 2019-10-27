@@ -118,7 +118,7 @@ module Byebug
     # Properly formatted frame number of frame
     #
     def deco_pos
-      format("%-2d", pos)
+      format("%-2<pos>d", pos: pos)
     end
 
     #
