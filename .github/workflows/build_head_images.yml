@@ -1,0 +1,33 @@
+---
+
+name: build_head_images
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build:
+    container: deividrodriguez/byebug:2.6.4-readline-gcc
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        line_editor: ["libedit", "readline"]
+        compiler: ["clang", "gcc"]
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Install Docker client
+        run: |
+          apk add curl
+          curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-18.09.0.tgz
+          tar -xz --strip-components 1 -C /usr/bin -f /tmp/docker.tgz
+
+      - name: Setup environment
+        run: bin/setup.sh
+
+      - name: Build and push docker image
+        run: bin/rake docker:build_and_push_head[${{ matrix.line_editor }},${{ matrix.compiler }}]
