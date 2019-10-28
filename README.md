@@ -32,6 +32,11 @@ while it executes and offers many of the traditional debugging features such as:
 * Tracking: Keeping track of the different values of your variables or the
   different lines executed by your program.
 
+## For enterprise
+
+Byebug for enterprise is available via the Tidelift Subscription. [Learn
+more][Tidelift for enterprise].
+
 ## Build Status
 
 Linux ![](https://github.com/deivid-rodriguez/byebug/workflows/build/badge.svg)
@@ -162,9 +167,9 @@ See [Getting Started with Development](CONTRIBUTING.md).
 
 ## Funding
 
-Subscribe to [Tidelift] to ensure byebug stays actively maintained, and at the
-same time get licensing assurances and timely security notifications for your
-open source dependencies.
+Subscribe to [Tidelift][Tidelift support] to ensure byebug stays actively
+maintained, and at the same time get licensing assurances and timely security
+notifications for your open source dependencies.
 
 You can also help `byebug` by leaving a small (or big) tip through [Liberapay].
 
@@ -194,4 +199,6 @@ software, especially:
 [atom-byebug]: https://github.com/izaera/atom-byebug
 [Liberapay]: https://liberapay.com/byebug/donate
 [Tidelift]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_text
+[Tidelift for enterprise]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=referral&utm_campaign=github&utm_content=enterprise
+[Tidelift support]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=referral&utm_campaign=github&utm_content=support
 [report a security vulnerability]: https://tidelift.com/security
