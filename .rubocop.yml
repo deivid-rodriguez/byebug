@@ -375,6 +375,18 @@ Lint/PercentSymbolArray:
 Lint/RandOne:
   Enabled: true
 
+Lint/RedundantCopDisableDirective:
+  Enabled: true
+
+Lint/RedundantCopEnableDirective:
+  Enabled: true
+
+Lint/RedundantRequireStatement:
+  Enabled: true
+
+Lint/RedundantSplatExpansion:
+  Enabled: true
+
 Lint/RedundantWithIndex:
   Enabled: true
 
@@ -430,18 +442,6 @@ Lint/UnderscorePrefixedVariableName:
   Enabled: true
 
 Lint/UnifiedInteger:
-  Enabled: true
-
-Lint/UnneededCopDisableDirective:
-  Enabled: true
-
-Lint/UnneededCopEnableDirective:
-  Enabled: true
-
-Lint/UnneededRequireStatement:
-  Enabled: true
-
-Lint/UnneededSplatExpansion:
   Enabled: true
 
 Lint/UnreachableCode:
@@ -889,6 +889,12 @@ Style/RandomWithOffset:
 Style/RedundantBegin:
   Enabled: true
 
+Style/RedundantCapitalW:
+  Enabled: true
+
+Style/RedundantCondition:
+  Enabled: true
+
 Style/RedundantConditional:
   Enabled: true
 
@@ -896,6 +902,9 @@ Style/RedundantException:
   Enabled: true
 
 Style/RedundantFreeze:
+  Enabled: true
+
+Style/RedundantInterpolation:
   Enabled: true
 
 Style/RedundantParentheses:
@@ -907,7 +916,13 @@ Style/RedundantReturn:
 Style/RedundantSelf:
   Enabled: true
 
+Style/RedundantSort:
+  Enabled: true
+
 Style/RedundantSortBy:
+  Enabled: true
+
+Style/RedundantPercentQ:
   Enabled: true
 
 Style/RegexpLiteral:
@@ -1000,21 +1015,6 @@ Style/TrivialAccessors:
   ExactNameMatch: true
 
 Style/UnlessElse:
-  Enabled: true
-
-Style/UnneededCapitalW:
-  Enabled: true
-
-Style/UnneededCondition:
-  Enabled: true
-
-Style/UnneededInterpolation:
-  Enabled: true
-
-Style/UnneededPercentQ:
-  Enabled: true
-
-Style/UnneededSort:
   Enabled: true
 
 Style/UnpackFirst:
