@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "chandler", "0.9.0"
-gem "mdl", "0.7.0"
+gem "mdl", "0.8.0"
 gem "minitest", "~> 5.11"
 gem "pry", "0.12.2"
 gem "rake", "~> 13.0"
