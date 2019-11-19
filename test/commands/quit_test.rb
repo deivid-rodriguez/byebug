@@ -39,6 +39,17 @@ module Byebug
       end
     end
 
+    def test_quit_quites_immediately_if_exit_prompt_disabled
+      with_setting :prompt_on_exit, false do
+        faking_exit! do
+          enter "q"
+          debug_code(minimal_program)
+
+          check_output_doesnt_include "Really quit? (y/n)"
+        end
+      end
+    end
+
     def test_does_not_quit_if_user_did_not_confirm
       enter "quit", "n"
       debug_code(minimal_program)
