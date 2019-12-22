@@ -178,16 +178,29 @@ open_debug_inspector(struct call_with_inspection_data *cwi)
 }
 
 static VALUE
+open_debug_inspector_ensure(VALUE v)
+{
+  return open_debug_inspector((struct call_with_inspection_data *)v);
+}
+
+
+static VALUE
 close_debug_inspector(struct call_with_inspection_data *cwi)
 {
   cwi->dc->backtrace = Qnil;
   return Qnil;
 }
 
+static VALUE
+close_debug_inspector_ensure(VALUE v)
+{
+  return close_debug_inspector((struct call_with_inspection_data *)v);
+}
+
 extern VALUE
 call_with_debug_inspector(struct call_with_inspection_data *data)
 {
-  return rb_ensure(open_debug_inspector, (VALUE)data, close_debug_inspector,
+  return rb_ensure(open_debug_inspector_ensure, (VALUE)data, close_debug_inspector_ensure,
                    (VALUE)data);
 }
 
