@@ -2,7 +2,12 @@
 
 name: build
 
-on: [push]
+on:
+  pull_request:
+
+  push:
+    branches:
+      - master
 
 jobs:
   test:
@@ -31,6 +36,8 @@ jobs:
         with:
           name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
           path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+
+    timeout-minutes: 15
 
   coverage:
     container: deividrodriguez/byebug:2.6.5-readline-gcc
