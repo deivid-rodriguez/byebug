@@ -82,9 +82,9 @@ module Byebug
       debug_code(program)
 
       check_output_includes(
-        /(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|sleep_forever|run)>/,
-        /(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|sleep_forever|run)>/,
-        /(\+)?\d+ #<Thread:0x\h+(@.+:\d+)? (sleep|sleep_forever|run)>/
+        /(\+)?\d+ #<Thread:0x\h+(.+:\d+)? (sleep|sleep_forever|run)>/,
+        /(\+)?\d+ #<Thread:0x\h+(.+:\d+)? (sleep|sleep_forever|run)>/,
+        /(\+)?\d+ #<Thread:0x\h+(.+:\d+)? (sleep|sleep_forever|run)>/
       )
     end
 
