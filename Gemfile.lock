@@ -17,7 +17,7 @@ GEM
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     jaro_winkler (1.5.4)
-    json (2.2.0)
+    json (2.3.0)
     kramdown (2.1.0)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
