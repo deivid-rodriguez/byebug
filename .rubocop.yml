@@ -17,16 +17,16 @@ AllCops:
 Layout/AccessModifierIndentation:
   Enabled: true
 
-Layout/AlignArguments:
+Layout/ArgumentAlignment:
   Enabled: true
 
-Layout/AlignArray:
+Layout/ArrayAlignment:
   Enabled: true
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: true
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: true
 
 Layout/BlockAlignment:
@@ -108,22 +108,22 @@ Layout/ExtraSpacing:
   AllowForAlignment: false
   Enabled: true
 
-Layout/IndentAssignment:
+Layout/AssignmentIndentation:
   Enabled: true
 
-Layout/IndentFirstArgument:
+Layout/FirstArgumentIndentation:
   Enabled: true
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   Enabled: true
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   Enabled: true
 
-Layout/IndentFirstParameter:
+Layout/FirstParameterIndentation:
   Enabled: true
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: true
 
 Layout/IndentationConsistency:
@@ -135,7 +135,7 @@ Layout/IndentationWidth:
 Layout/InitialIndentation:
   Enabled: true
 
-Layout/LeadingBlankLines:
+Layout/LeadingEmptyLines:
   Enabled: true
 
 Layout/LeadingCommentSpace:
@@ -240,7 +240,7 @@ Layout/SpaceInsideStringInterpolation:
 Layout/Tab:
   Enabled: true
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: true
 
 Layout/TrailingWhitespace:
@@ -282,7 +282,7 @@ Lint/DuplicateCaseCondition:
 Lint/DuplicateMethods:
   Enabled: true
 
-Lint/DuplicatedKey:
+Lint/DuplicateHashKey:
   Enabled: true
 
 Lint/EachWithObjectArgument:
@@ -321,7 +321,7 @@ Lint/FloatOutOfRange:
 Lint/FormatParameterMismatch:
   Enabled: true
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: true
 
 Lint/ImplicitStringConcatenation:
@@ -345,7 +345,7 @@ Lint/Loop:
 Lint/MissingCopEnableDirective:
   Enabled: true
 
-Lint/MultipleCompare:
+Lint/MultipleComparison:
   Enabled: true
 
 Lint/NestedMethodDefinition:
@@ -429,7 +429,7 @@ Lint/ShadowedException:
 Lint/ShadowingOuterLocalVariable:
   Enabled: true
 
-Lint/StringConversionInInterpolation:
+Lint/RedundantStringCoercion:
   Enabled: true
 
 Lint/Syntax:
@@ -518,10 +518,10 @@ Naming/PredicateName:
 Naming/RescuedExceptionsVariableName:
   Enabled: true
 
-Naming/UncommunicativeBlockParamName:
+Naming/BlockParameterName:
   Enabled: true
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: true
 
 Naming/VariableName:
