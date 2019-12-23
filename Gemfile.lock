@@ -44,7 +44,7 @@ GEM
     public_suffix (3.0.3)
     rainbow (3.0.0)
     rake (13.0.1)
-    rake-compiler (1.0.8)
+    rake-compiler (1.0.9)
       rake
     rubocop (0.78.0)
       jaro_winkler (~> 1.5.1)
