@@ -29,27 +29,14 @@ jobs:
           bin/setup.sh
           bin/rake
 
-      - name: Set ENV for codeclimate (pull_request)
-        run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
-          echo "::set-env name=GIT_BRANCH::$GITHUB_HEAD_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$(git rev-parse origin/$GITHUB_HEAD_REF)"
-        if: github.event_name == 'pull_request' && (startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5'))
-
-      - name: Set ENV for codeclimate (push)
-        run: |
-          echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
-          echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
-        if: github.event_name == 'push' && (startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5'))
-
       - name: Save coverage
-        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        run: mv coverage/.resultset.json coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
         if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
 
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
-          path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+          path: coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
         if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
 
     timeout-minutes: 15
@@ -59,12 +46,11 @@ jobs:
 
     runs-on: ubuntu-18.04
 
-    env:
-      CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
-
     needs: test
 
     steps:
+      - uses: actions/checkout@v2
+
       - uses: actions/download-artifact@v1
         with:
           name: coverage-2.4.9-libedit-clang
@@ -105,7 +91,7 @@ jobs:
           name: coverage-2.5.7-readline-gcc
           path: coverage
 
-      - name: Aggregate & upload results to Code Climate
+      - name: Aggregate coverage results
         run: |
-          cc-test-reporter sum-coverage coverage/codeclimate.*.json
-          cc-test-reporter upload-coverage
+          bin/setup.sh
+          bin/rake coverage:collate

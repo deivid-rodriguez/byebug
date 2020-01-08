@@ -2,17 +2,14 @@
 
 [![Version][gem]][gem_url]
 [![Tidelift][tid]][tid_url]
-[![Coverage][cov]][cov_url]
 [![Gitter][irc]][irc_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
 [tid]: https://tidelift.com/badges/github/deivid-rodriguez/byebug
-[cov]: https://api.codeclimate.com/v1/badges/f1a1bec582752c22da80/test_coverage
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
 [tid_url]: https://tidelift.com/subscription/pkg/rubygems-byebug?utm_source=rubygems-byebug&utm_medium=readme_badge
-[cov_url]: https://codeclimate.com/github/deivid-rodriguez/byebug/test_coverage
 [irc_url]: https://gitter.im/deivid-rodriguez/byebug
 
 Byebug is a simple to use and feature rich debugger for Ruby. It uses the
