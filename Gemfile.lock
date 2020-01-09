@@ -67,7 +67,7 @@ GEM
     simplecov-html (0.10.2)
     tomlrb (1.2.8)
     unicode-display_width (1.6.0)
-    yard (0.9.23)
+    yard (0.9.24)
 
 PLATFORMS
   ruby
@@ -84,7 +84,7 @@ DEPENDENCIES
   rubocop (= 0.79.0)
   rubocop-performance (~> 1.3)
   simplecov (= 0.17.1)
-  yard (= 0.9.23)
+  yard (= 0.9.24)
 
 BUNDLED WITH
    2.1.2
