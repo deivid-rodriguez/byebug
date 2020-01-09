@@ -13,6 +13,7 @@ module Docker
       2.4.9
       2.5.7
       2.6.5
+      2.7.0
     ].freeze
 
     LINE_EDITORS = %w[

@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        version: ["2.4.9", "2.5.7", "2.6.5", "head"]
+        version: ["2.4.9", "2.5.7", "2.6.5", "2.7.0", "head"]
         line_editor: ["libedit", "readline"]
         compiler: ["clang", "gcc"]
 
@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 15
 
   coverage:
-    container: deividrodriguez/byebug:2.6.5-readline-gcc
+    container: deividrodriguez/byebug:2.7.0-readline-gcc
 
     runs-on: ubuntu-18.04
 
@@ -108,6 +108,26 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: coverage-2.6.5-readline-gcc
+          path: coverage
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage-2.7.0-libedit-clang
+          path: coverage
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage-2.7.0-libedit-gcc
+          path: coverage
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage-2.7.0-readline-clang
+          path: coverage
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage-2.7.0-readline-gcc
           path: coverage
 
       - name: Aggregate & upload results to Code Climate
