@@ -33,7 +33,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "[12, 14] in #{example_path}"
+        check_output_includes "[12, 14] in #{example_path}:13"
       end
     end
 
@@ -42,7 +42,7 @@ module Byebug
         enter "set listsize 5.0", "list"
         debug_code(program)
 
-        check_output_doesnt_include "[11, 15] in #{example_path}"
+        check_output_doesnt_include "[11, 15] in #{example_path}:13"
       end
     end
 
@@ -51,7 +51,7 @@ module Byebug
         enter "cont 7", "list"
         debug_code(program)
 
-        check_output_includes "[1, 15] in #{example_path}"
+        check_output_includes "[1, 15] in #{example_path}:7"
       end
     end
 
@@ -60,7 +60,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "[4, 16] in #{example_path}"
+        check_output_includes "[4, 16] in #{example_path}:13"
       end
     end
 
@@ -69,7 +69,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "[1, 16] in #{example_path}"
+        check_output_includes "[1, 16] in #{example_path}:13"
       end
     end
 
@@ -78,7 +78,7 @@ module Byebug
         enter "cont 7", "list", "list"
         debug_code(program)
 
-        check_output_includes "[9, 11] in #{example_path}"
+        check_output_includes "[9, 11] in #{example_path}:7"
       end
     end
 
@@ -87,7 +87,7 @@ module Byebug
         enter "list-"
         debug_code(program)
 
-        check_output_includes "[12, 14] in #{example_path}"
+        check_output_includes "[12, 14] in #{example_path}:13"
       end
     end
 
@@ -96,7 +96,7 @@ module Byebug
         enter "list-", "list-"
         debug_code(program)
 
-        check_output_includes "[9, 11] in #{example_path}"
+        check_output_includes "[9, 11] in #{example_path}:13"
       end
     end
 
@@ -105,7 +105,7 @@ module Byebug
         enter "list 14-16", "list -"
         debug_code(program)
 
-        check_output_includes "[11, 13] in #{example_path}"
+        check_output_includes "[11, 13] in #{example_path}:13"
       end
     end
 
@@ -114,7 +114,7 @@ module Byebug
         enter "list ="
         debug_code(program)
 
-        check_output_includes "[12, 14] in #{example_path}"
+        check_output_includes "[12, 14] in #{example_path}:13"
       end
     end
 
@@ -122,14 +122,14 @@ module Byebug
       enter "list 6-8"
       debug_code(program)
 
-      check_output_includes "[6, 8] in #{example_path}"
+      check_output_includes "[6, 8] in #{example_path}:13"
     end
 
     def test_lists_specific_range_when_requested_in_comma_format
       enter "list 6,8"
       debug_code(program)
 
-      check_output_includes "[6, 8] in #{example_path}"
+      check_output_includes "[6, 8] in #{example_path}:13"
     end
 
     def test_lists_nothing_if_unexistent_range_is_specified
@@ -137,7 +137,7 @@ module Byebug
       debug_code(program)
 
       check_error_includes '"List" argument "20" needs to be at most 16'
-      check_output_doesnt_include "[20, 25] in #{example_path}"
+      check_output_doesnt_include "[20, 25] in #{example_path}:13"
     end
 
     def test_lists_nothing_if_invalid_range_is_specified
@@ -145,7 +145,7 @@ module Byebug
       debug_code(program)
 
       check_error_includes "Invalid line range"
-      check_output_doesnt_include "[5, 4] in #{example_path}"
+      check_output_doesnt_include "[5, 4] in #{example_path}:13"
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_hyphen
@@ -153,7 +153,7 @@ module Byebug
         enter "list 4-"
         debug_code(program)
 
-        check_output_includes "[3, 5] in #{example_path}"
+        check_output_includes "[3, 5] in #{example_path}:13"
       end
     end
 
@@ -162,7 +162,7 @@ module Byebug
         enter "list 4,"
         debug_code(program)
 
-        check_output_includes "[3, 5] in #{example_path}"
+        check_output_includes "[3, 5] in #{example_path}:13"
       end
     end
 

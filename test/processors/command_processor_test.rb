@@ -202,7 +202,7 @@ module Byebug
     def test_autolists_lists_source_before_stopping
       debug_code(program)
 
-      check_output_includes "[5, 14] in #{example_path}"
+      check_output_includes "[5, 14] in #{example_path}:11"
     end
 
     def test_shows_error_when_current_source_location_is_unknown
