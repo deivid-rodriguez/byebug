@@ -27,9 +27,14 @@ module Byebug
 
     private
 
+    def max_running_time
+      300
+    end
+
     def run_with_timeout(flags)
-      Timeout.timeout(300) { Minitest.run(flags + $ARGV) }
+      Timeout.timeout(max_running_time) { Minitest.run(flags + $ARGV) }
     rescue Timeout::Error
+      warn "Test suite timed out after #{max_running_time} seconds"
       false
     end
 
