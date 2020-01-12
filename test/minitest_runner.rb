@@ -28,7 +28,7 @@ module Byebug
     private
 
     def run_with_timeout(flags)
-      Timeout.timeout(180) { Minitest.run(flags + $ARGV) }
+      Timeout.timeout(300) { Minitest.run(flags + $ARGV) }
     rescue Timeout::Error
       false
     end
