@@ -104,6 +104,7 @@ Command     | Aliases         | Subcommands
 `catch`     | `cat`           |
 `condition` | `cond`          |
 `continue`  | `c` `cont`      |
+`continue!` | `c!` `cont!`    |
 `debug`     |                 |
 `delete`    | `del`           |
 `disable`   | `dis`           | `breakpoints` `display`
@@ -124,6 +125,7 @@ Command     | Aliases         | Subcommands
 `next`      | `n`             |
 `pry`       |                 |
 `quit`      | `q`             |
+`quit!`     | `q!`            |
 `restart`   |                 |
 `save`      | `sa`            |
 `set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
