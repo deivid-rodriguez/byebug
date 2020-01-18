@@ -20,7 +20,11 @@ module Byebug
     def run
       test_suites.each { |f| require File.expand_path(f) }
 
-      flags = ["--name=/#{filtered_methods.join('|')}/"]
+      flags = if ENV["TESTOPTS"]
+                ENV["TESTOPTS"].split(" ")
+              else
+                ["--name=/#{filtered_methods.join('|')}/"]
+              end
 
       run_with_timeout(flags)
     end
