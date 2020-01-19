@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [11.1.0] - 2020-01-20
+
+### Added
+
+* Official support for MRI 2.7 ([@yui-knk]).
+
 ### Fixed
 
 * [#562](https://github.com/deivid-rodriguez/byebug/pull/562): post mortem mode landing in the wrong line when coming from an exception inside a `Kernel.load` call.
@@ -797,6 +803,7 @@
 * Initial release.
 
 [Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...HEAD
+[11.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v11.0.1...v11.1.0
 [11.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v11.0.0...v11.0.1
 [11.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...v11.0.0
 [10.0.2]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.1...v10.0.2
