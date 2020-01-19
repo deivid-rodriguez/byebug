@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* Official support for MRI 2.7 ([@yui-knk]).
+
 ### Fixed
 
 * [#562](https://github.com/deivid-rodriguez/byebug/pull/562): post mortem mode landing in the wrong line when coming from an exception inside a `Kernel.load` call.
