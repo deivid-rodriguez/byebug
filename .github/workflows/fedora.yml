@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
       - name: Install OS dependencies
         run: dnf install -y ruby ruby-devel make gcc redhat-rpm-config
