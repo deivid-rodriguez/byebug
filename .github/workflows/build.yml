@@ -30,7 +30,9 @@ jobs:
           bin/rake
 
       - name: Save coverage
-        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
+          GIT_BRANCH=$GITHUB_HEAD_REF GIT_COMMIT_SHA=$(git rev-parse origin/$GITHUB_HEAD_REF) cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
 
       - uses: actions/upload-artifact@v1
         with:
