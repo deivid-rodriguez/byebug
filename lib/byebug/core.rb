@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "helpers/reflection"
-require_relative "byebug"
+require "byebug/byebug"
 require_relative "context"
 require_relative "breakpoint"
 require_relative "interface"
