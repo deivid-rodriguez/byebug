@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#635](https://github.com/deivid-rodriguez/byebug/pull/635): usage on Fedora 31 or any other `byebug` installation performed by a `rubygems` copy customized by setting `Gem.install_extension_in_lib` to false.
+
 ## [11.1.0] - 2020-01-20
 
 ### Added
