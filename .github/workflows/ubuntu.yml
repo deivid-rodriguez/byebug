@@ -1,6 +1,6 @@
 ---
 
-name: build
+name: ubuntu
 
 on:
   pull_request:
