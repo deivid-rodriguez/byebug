@@ -1,13 +1,13 @@
 ---
 
-name: build_head_images
+name: daily
 
 on:
   schedule:
     - cron: "0 0 * * *"
 
 jobs:
-  build:
+  build_head_images:
     container: deividrodriguez/byebug:2.6.5-readline-gcc
 
     runs-on: ubuntu-18.04
