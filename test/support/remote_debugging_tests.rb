@@ -56,35 +56,36 @@ module Byebug
     end
 
     def remote_debug_and_connect(*commands)
-      remote_debug(*commands) do |wait_th|
+      remote_debug(*commands) do
         launch_client
 
         wait_for_client_startup
-
-        wait_th.value
       end
     end
 
     def remote_debug_connect_and_interrupt(*commands)
-      remote_debug(*commands) do |wait_th, err_th|
+      remote_debug(*commands) do
         th = Thread.new { launch_client }
 
         wait_for_client_startup
 
         th.kill
-
-        err_th.join
-        wait_th.value
       end
     end
 
     def remote_debug(*commands)
       enter(*commands)
 
-      Open3.popen3(shell_out_env, "ruby #{example_path}") do |_i, _o, e, wait_thr|
-        err_thr = Thread.new { print e.read }
+      Open3.popen2e(shell_out_env, "ruby #{example_path}") do |_i, oe, wait_thr|
+        outerr_thr = Thread.new { oe.read }
 
-        yield(wait_thr, err_thr)
+        yield
+
+        exit_status = wait_thr.value
+
+        print outerr_thr.value unless exit_status.success?
+
+        exit_status
       end
     end
 
