@@ -23,7 +23,7 @@ jobs:
       - name: Install Docker client
         run: |
           apk add curl
-          curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-18.09.0.tgz
+          curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-19.03.5.tgz
           tar -xz --strip-components 1 -C /usr/bin -f /tmp/docker.tgz
 
       - name: Setup environment
