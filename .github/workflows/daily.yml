@@ -14,8 +14,8 @@ jobs:
 
     strategy:
       matrix:
-        line_editor: ["libedit", "readline"]
-        compiler: ["clang", "gcc"]
+        line_editor: [libedit, readline]
+        compiler: [clang, gcc]
 
     steps:
       - uses: actions/checkout@v2
