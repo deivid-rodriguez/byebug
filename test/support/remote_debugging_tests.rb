@@ -76,14 +76,14 @@ module Byebug
     def remote_debug(*commands)
       enter(*commands)
 
-      Open3.popen3(shell_out_env, "ruby #{example_path}") do |_i, _o, e, wait_thr|
-        err_thr = Thread.new { e.read }
+      Open3.popen2e(shell_out_env, "ruby #{example_path}") do |_i, oe, wait_thr|
+        outerr_thr = Thread.new { oe.read }
 
         yield
 
         exit_status = wait_thr.value
 
-        print err_thr.value unless exit_status.success?
+        print outerr_thr.value unless exit_status.success?
 
         exit_status
       end
