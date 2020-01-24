@@ -77,13 +77,15 @@ module Byebug
       enter(*commands)
 
       Open3.popen3(shell_out_env, "ruby #{example_path}") do |_i, _o, e, wait_thr|
-        err_thr = Thread.new { print e.read }
+        err_thr = Thread.new { e.read }
 
         yield
 
-        err_thr.join
+        exit_status = wait_thr.value
 
-        wait_thr.value
+        print err_thr.value unless exit_status.success?
+
+        exit_status
       end
     end
 
