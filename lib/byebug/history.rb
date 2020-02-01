@@ -17,10 +17,10 @@ module Byebug
   # Handles byebug's history of commands.
   #
   class History
-    attr_accessor :size
+    attr_reader :size
 
     def initialize
-      self.size = 0
+      @size = 0
     end
 
     #
@@ -65,7 +65,7 @@ module Byebug
     def push(cmd)
       return if ignore?(cmd)
 
-      self.size += 1
+      @size += 1
       Readline::HISTORY.push(cmd)
     end
 
@@ -73,7 +73,7 @@ module Byebug
     # Removes a command from Readline's history.
     #
     def pop
-      self.size -= 1
+      @size -= 1
       Readline::HISTORY.pop
     end
 
@@ -103,7 +103,7 @@ module Byebug
     # Never more than Setting[:histsize].
     #
     def default_max_size
-      [Setting[:histsize], self.size].min
+      [Setting[:histsize], size].min
     end
 
     #
@@ -112,7 +112,7 @@ module Byebug
     # The only bound here is not showing more items than available.
     #
     def specific_max_size(number)
-      [self.size, number].min
+      [size, number].min
     end
 
     #
