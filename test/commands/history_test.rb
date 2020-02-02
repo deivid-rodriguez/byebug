@@ -33,7 +33,7 @@ unless ENV["LIBEDIT"]
         check_output_includes(/\d+  show$/, /\d+  history 3$/)
       end
 
-      def test_history_n_displays_lastest_n_records_from_readline_history
+      def test_history_n_displays_latest_n_records_from_readline_history
         enter "show width", "show autolist", "history 2"
         debug_code(program)
 

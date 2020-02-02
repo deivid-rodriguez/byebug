@@ -65,7 +65,7 @@ module Byebug
       debug_code(program) { assert_equal 12, frame.line }
     end
 
-    def test_finish_behaves_consistenly_even_if_current_frame_has_been_changed
+    def test_finish_behaves_consistently_even_if_current_frame_has_been_changed
       enter "break 21", "cont", "up", "finish"
 
       debug_code(program) { assert_equal 12, frame.line }

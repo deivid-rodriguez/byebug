@@ -3,7 +3,7 @@
 module Byebug
   module Helpers
     #
-    # Reflection utilitie
+    # Reflection utility
     #
     module ReflectionHelper
       #

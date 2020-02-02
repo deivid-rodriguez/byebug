@@ -7,7 +7,7 @@ module Byebug
   #
   # Implements the step functionality.
   #
-  # Allows the user the continue execution until the next instruction, possibily
+  # Allows the user the continue execution until the next instruction, possibly
   # in a different frame. Use step to step into method calls or blocks.
   #
   class StepCommand < Command
