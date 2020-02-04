@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 require "minitest/mock"
-require_relative "../../lib/byebug/helpers/string"
+require "byebug/helpers/string"
 
 module Byebug
   #
