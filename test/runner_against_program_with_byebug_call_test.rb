@@ -16,7 +16,7 @@ module Byebug
 
     def test_run_with_a_script_to_debug
       stdout = run_program(
-        ["ruby", example_path],
+        [RbConfig.ruby, example_path],
         'puts "Program: #{$PROGRAM_NAME}"'
       )
 
