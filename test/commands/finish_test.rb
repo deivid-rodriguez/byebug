@@ -170,7 +170,30 @@ module Byebug
       with_new_file("byebug_bar.rb", "byebug\nmodule ByebugBar; end") do
         enter "finish"
 
-        debug_code(program) { assert_equal 5, frame.line }
+        with_unmonkeypatched_require do
+          debug_code(program) { assert_equal 5, frame.line }
+        end
+      end
+    end
+
+    private
+
+    def with_unmonkeypatched_require
+      return yield unless $LOADED_FEATURES.grep(%r{bundler/setup\.rb$}).empty?
+
+      begin
+        original_require = Kernel.instance_method(:gem_original_require)
+        monkeypatched_require = Kernel.instance_method(:require)
+
+        Kernel.remove_method(:require)
+        Kernel.define_method(:require, original_require)
+        Kernel.send(:private, :require)
+
+        yield
+      ensure
+        Kernel.remove_method(:require)
+        Kernel.define_method(:require, monkeypatched_require)
+        Kernel.send(:private, :require)
       end
     end
   end

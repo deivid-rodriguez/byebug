@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - master
+      - improve_reliability_of_finish_inside_autoload_test
 
 jobs:
   test:
@@ -52,6 +53,42 @@ jobs:
 
     timeout-minutes: 15
 
+  bare_test:
+    container: deividrodriguez/byebug:2.7.0-readline-gcc
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run CI checks
+        run: |
+          bin/setup.sh
+          rake
+
+      - name: Set ENV for codeclimate (pull_request)
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
+          echo "::set-env name=GIT_BRANCH::$GITHUB_HEAD_REF"
+          echo "::set-env name=GIT_COMMIT_SHA::$(git rev-parse origin/$GITHUB_HEAD_REF)"
+        if: github.event_name == 'pull_request'
+
+      - name: Set ENV for codeclimate (push)
+        run: |
+          echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
+          echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
+        if: github.event_name == 'push'
+
+      - name: Save coverage
+        run: cc-test-reporter format-coverage --output coverage/codeclimate.bare.json
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: coverage-bare
+          path: coverage/codeclimate.bare.json
+
+    timeout-minutes: 15
+
   coverage:
     container: deividrodriguez/byebug:2.7.0-readline-gcc
 
@@ -60,7 +97,9 @@ jobs:
     env:
       CC_TEST_REPORTER_ID: 02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad41cab138408
 
-    needs: test
+    needs:
+      - test
+      - bare_test
 
     steps:
       - uses: actions/download-artifact@v1
@@ -141,6 +180,11 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: coverage-2.7.0-readline-gcc
+          path: coverage
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage-bare
           path: coverage
 
       - name: Aggregate & upload results to Code Climate
