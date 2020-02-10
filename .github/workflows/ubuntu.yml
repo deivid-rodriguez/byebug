@@ -43,7 +43,7 @@ jobs:
         if: github.event_name == 'push'
 
       - name: Save coverage
-        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        run: bin/cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
 
       - uses: actions/upload-artifact@v1
         with:
@@ -145,5 +145,5 @@ jobs:
 
       - name: Aggregate & upload results to Code Climate
         run: |
-          cc-test-reporter sum-coverage coverage/codeclimate.*.json
-          cc-test-reporter upload-coverage
+          bin/cc-test-reporter sum-coverage coverage/codeclimate.*.json
+          bin/cc-test-reporter upload-coverage
