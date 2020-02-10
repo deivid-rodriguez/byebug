@@ -36,7 +36,7 @@ module Byebug
 
       assert_includes \
         output,
-        "Byebug::DebuggerAliasTest#test_aliases_debugger_to_byebug = 0.00 s = ."
+        "Byebug::DebuggerAliasTest#test_aliases_debugger_to_byebug ="
 
       assert_includes \
         output,
