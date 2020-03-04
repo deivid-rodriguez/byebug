@@ -9,16 +9,6 @@ install:
         cmd /c ruby-setup.exe /verysilent /dir=C:/Ruby$env:ruby_version
       }
 
-  - git clone -q --depth=5  --no-tags --branch=byebug https://github.com/MSP-greg/rb-readline.git C:\rb-readline
-
-  - ps: $env:ruby_abi_vers = (&ruby.exe -e "puts RbConfig::CONFIG['ruby_version']" | Out-String).Trim()
-  - set n_dir=C:\Ruby%ruby_version%\lib\ruby\site_ruby\%ruby_abi_vers%
-  - attrib.exe -r %n_dir%\*.rb
-  - del /q %n_dir%\readline.rb
-  - del /q %n_dir%\rbreadline.rb
-  - copy C:\rb-readline\lib\readline.rb %n_dir%\readline.rb
-  - copy C:\rb-readline\lib\rbreadline.rb %n_dir%\rbreadline.rb
-
   - echo %PATH%
 
   - ruby --version
@@ -38,7 +28,6 @@ test_script:
 
 environment:
   matrix:
-    - ruby_version: 24-x64
     - ruby_version: 25-x64
     - ruby_version: 26-x64
     - ruby_version: head-x64

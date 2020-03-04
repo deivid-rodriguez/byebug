@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
-begin
-  require "readline"
-rescue LoadError
-  warn <<-MESSAGE
-    Sorry, you can't use byebug without Readline. To solve this, you need to
-    rebuild Ruby with Readline support. If using Ubuntu, try `sudo apt-get
-    install libreadline-dev` and then reinstall your Ruby.
-  MESSAGE
-
-  raise
-end
+require "reline"
 
 module Byebug
   #
@@ -27,7 +17,7 @@ module Byebug
     # Array holding the list of commands in history
     #
     def buffer
-      Readline::HISTORY.to_a
+      Reline::HISTORY.to_a
     end
 
     #
@@ -60,21 +50,21 @@ module Byebug
     end
 
     #
-    # Adds a new command to Readline's history.
+    # Adds a new command to Reline's history.
     #
     def push(cmd)
       return if ignore?(cmd)
 
       self.size += 1
-      Readline::HISTORY.push(cmd)
+      Reline::HISTORY.push(cmd)
     end
 
     #
-    # Removes a command from Readline's history.
+    # Removes a command from Reline's history.
     #
     def pop
       self.size -= 1
-      Readline::HISTORY.pop
+      Reline::HISTORY.pop
     end
 
     #
@@ -122,9 +112,9 @@ module Byebug
     #
     def ignore?(buf)
       return true if /^\s*$/.match?(buf)
-      return false if Readline::HISTORY.empty?
+      return false if Reline::HISTORY.empty?
 
-      buffer[Readline::HISTORY.length - 1] == buf
+      buffer[Reline::HISTORY.length - 1] == buf
     end
   end
 end

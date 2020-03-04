@@ -10,15 +10,9 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      2.4.9
       2.5.7
       2.6.5
       2.7.0
-    ].freeze
-
-    LINE_EDITORS = %w[
-      readline
-      libedit
     ].freeze
 
     COMPILERS = %w[
@@ -26,11 +20,10 @@ module Docker
       clang
     ].freeze
 
-    attr_reader :version, :line_editor, :compiler
+    attr_reader :version, :compiler
 
-    def initialize(version:, line_editor:, compiler:)
+    def initialize(version:, compiler:)
       @version = version
-      @line_editor = line_editor
       @compiler = compiler
     end
 
@@ -45,8 +38,6 @@ module Docker
           --build-arg "ruby_download_url=#{download_url}" \
           --build-arg "ruby_download_sha256=#{download_sha256}" \
           --build-arg "compiler=#{compiler}" \
-          --build-arg "line_edit_lib=#{line_editor_package}" \
-          --build-arg "line_edit_config=#{line_editor_configure_flag}" \
           --file "docker/Dockerfile" \
           .
       COMMAND
@@ -154,28 +145,17 @@ module Docker
 
       def for_variants_of(version)
         COMPILERS.each do |compiler|
-          LINE_EDITORS.each do |line_editor|
-            manager = new(
-              version: version,
-              line_editor: line_editor,
-              compiler: compiler
-            )
+          manager = new(
+            version: version,
+            compiler: compiler
+          )
 
-            yield(manager)
-          end
+          yield(manager)
         end
       end
     end
 
     private
-
-    def line_editor_package
-      line_editor == "readline" ? "readline-dev" : "libedit-dev"
-    end
-
-    def line_editor_configure_flag
-      line_editor == "readline" ? "" : "--enable-libedit"
-    end
 
     def download_url
       if version == "head"
@@ -209,7 +189,7 @@ module Docker
     end
 
     def tag
-      "deividrodriguez/byebug:#{version}-#{line_editor}-#{compiler}"
+      "deividrodriguez/byebug:#{version}-#{compiler}"
     end
 
     def squish(command)

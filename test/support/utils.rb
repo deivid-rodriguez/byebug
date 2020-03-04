@@ -257,10 +257,14 @@ module Byebug
 
       base = {
         "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
+        "GEM_HOME" => Bundler.bundle_path.to_s,
         "RUBYOPT" => "-I #{byebug_dir}"
       }
 
+      reline_support = File.expand_path("reline.rb", __dir__)
+
       base["RUBYOPT"] += " -r simplecov" if simplecov
+      base["RUBYOPT"] += " -r#{reline_support}"
 
       base
     end

@@ -9,8 +9,6 @@ RUN mkdir -p /usr/local/etc \
 
 ARG ruby_download_url=
 ARG ruby_download_sha256=
-ARG line_edit_lib=
-ARG line_edit_config=
 ARG compiler=
 
 ENV CC $compiler
@@ -39,7 +37,6 @@ RUN set -ex \
     libc-dev \
     libxml2-dev \
     libxslt-dev \
-    $line_edit_lib \
     linux-headers \
     ncurses-dev \
     ruby \
@@ -61,7 +58,6 @@ RUN set -ex \
     --disable-werror \
     --build="$gnuArch" \
     --disable-install-doc \
-    $line_edit_config \
     --enable-shared \
   && make -j "$(nproc)" \
   && make install \

@@ -36,12 +36,10 @@ module Byebug
         return true unless code
 
         without_stderr do
-          begin
-            RubyVM::InstructionSequence.compile(code)
-            true
-          rescue SyntaxError
-            false
-          end
+          RubyVM::InstructionSequence.compile(code)
+          true
+        rescue SyntaxError
+          false
         end
       end
 

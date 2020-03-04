@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
     can build on. It provides breakpoint handling and bindings for stack frames
     among other things and it comes with an easy to use command line interface."
 
-  s.required_ruby_version = ">= 2.4.0"
+  s.required_ruby_version = ">= 2.5.0"
 
   s.files = Dir["lib/**/*.rb", "lib/**/*.yml", "ext/**/*.[ch]", "LICENSE"]
   s.bindir = "exe"
@@ -24,6 +24,8 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[CHANGELOG.md CONTRIBUTING.md README.md GUIDE.md]
   s.extensions = ["ext/byebug/extconf.rb"]
   s.require_path = "lib"
+
+  s.add_dependency "reline", ">= 0.1.2"
 
   s.add_development_dependency "bundler", "~> 2.0"
 end

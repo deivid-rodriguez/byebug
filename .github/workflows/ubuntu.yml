@@ -11,14 +11,13 @@ on:
 
 jobs:
   test:
-    container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+    container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.compiler }}
 
     runs-on: ubuntu-18.04
 
     strategy:
       matrix:
-        version: [2.4.9, 2.5.7, 2.6.5, 2.7.0, head]
-        line_editor: [libedit, readline]
+        version: [2.5.7, 2.6.5, 2.7.0, head]
         compiler: [clang, gcc]
 
     steps:
@@ -43,17 +42,17 @@ jobs:
         if: github.event_name == 'push'
 
       - name: Save coverage
-        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.compiler }}.json
 
       - uses: actions/upload-artifact@v1
         with:
-          name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
-          path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+          name: coverage-${{ matrix.version }}-${{ matrix.compiler }}
+          path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.compiler }}.json
 
     timeout-minutes: 15
 
   coverage:
-    container: deividrodriguez/byebug:2.7.0-readline-gcc
+    container: deividrodriguez/byebug:2.7.0-gcc
 
     runs-on: ubuntu-18.04
 
@@ -65,82 +64,32 @@ jobs:
     steps:
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.9-libedit-clang
+          name: coverage-2.5.7-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.9-libedit-gcc
+          name: coverage-2.5.7-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.9-readline-clang
+          name: coverage-2.6.5-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.4.9-readline-gcc
+          name: coverage-2.6.5-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-libedit-clang
+          name: coverage-2.7.0-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.5.7-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.5.7-readline-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-libedit-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-readline-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-libedit-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-readline-gcc
+          name: coverage-2.7.0-gcc
           path: coverage
 
       - name: Aggregate & upload results to Code Climate

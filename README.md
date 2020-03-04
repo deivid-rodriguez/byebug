@@ -48,7 +48,7 @@ Windows [![Vey][vey]][vey_url]
 
 ## Requirements
 
-* _Required_: MRI 2.4.0 or higher.
+* _Required_: MRI 2.5.0 or higher.
 * _Recommended_: MRI 2.6.4 or higher (MRI 2.6.0 to 2.6.3 contain a regression
   causing unbalanced call/return events in some cases, breaking the `next` command).
 

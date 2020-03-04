@@ -8,6 +8,14 @@
 
 * [#635](https://github.com/deivid-rodriguez/byebug/pull/635): usage on Fedora 31 or any other `byebug` installation performed by a `rubygems` copy customized by setting `Gem.install_extension_in_lib` to false.
 
+### Changed
+
+* [#615](https://github.com/deivid-rodriguez/byebug/pull/615): Byebug now uses a [pure ruby readline implementation](https://github.com/ruby/reline).
+
+### Removed
+
+* Support for MRI 2.4. Byebug no longer installs on this platform.
+
 ## [11.1.0] - 2020-01-20
 
 ### Added

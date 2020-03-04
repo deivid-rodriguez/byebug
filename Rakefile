@@ -16,11 +16,9 @@ task "release:rubygem_push" => "chandler:push"
 if Gem.win_platform?
   desc "Activates DevKit"
   task :devkit do
-    begin
-      require "devkit"
-    rescue LoadError
-      abort "Failed to load DevKit required for compilation"
-    end
+    require "devkit"
+  rescue LoadError
+    abort "Failed to load DevKit required for compilation"
   end
 
   task compile: :devkit
@@ -107,10 +105,9 @@ namespace :docker do
   end
 
   desc "Build a ruby trunk image"
-  task :build_and_push_head, %i[line_editor compiler] do |_t, opts|
+  task :build_and_push_head, %i[compiler] do |_t, opts|
     manager = Docker::Manager.new(
       version: "head",
-      line_editor: opts[:line_editor],
       compiler: opts[:compiler]
     )
 

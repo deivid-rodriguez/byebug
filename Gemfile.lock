@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     byebug (11.1.1)
+      reline (>= 0.1.2)
 
 GEM
   remote: https://rubygems.org/
@@ -16,6 +17,7 @@ GEM
     docile (1.3.2)
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
+    io-console (0.5.5)
     jaro_winkler (1.5.4)
     json (2.3.0)
     kramdown (2.1.0)
@@ -47,6 +49,8 @@ GEM
     rake (13.0.1)
     rake-compiler (1.1.0)
       rake
+    reline (0.1.2)
+      io-console (~> 0.5)
     rexml (3.2.3)
     rubocop (0.80.0)
       jaro_winkler (~> 1.5.1)
