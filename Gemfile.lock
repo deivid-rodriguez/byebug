@@ -47,7 +47,7 @@ GEM
     rake (13.0.1)
     rake-compiler (1.1.0)
       rake
-    rexml (3.2.3)
+    rexml (3.2.4)
     rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
