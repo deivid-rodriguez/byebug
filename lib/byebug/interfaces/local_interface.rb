@@ -21,7 +21,9 @@ module Byebug
     # @param prompt Prompt to be displayed.
     #
     def readline(prompt)
-      with_repl_like_sigint { Readline.readline(prompt) || EOF_ALIAS }
+      with_repl_like_sigint do
+        with_sane_stty { Readline.readline(prompt) || EOF_ALIAS }
+      end
     end
 
     #
@@ -39,6 +41,18 @@ module Byebug
       retry
     ensure
       trap("INT", orig_handler)
+    end
+
+    #
+    # Saves the initial terminal settings and restores them in the end, since
+    # reline does not seem to properly reset them.
+    #
+    def with_sane_stty
+      stty_save = `stty -g`.chomp
+
+      yield
+    ensure
+      `stty #{stty_save}`
     end
   end
 end
