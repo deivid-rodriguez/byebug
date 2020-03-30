@@ -21,7 +21,7 @@ module Byebug
     # @param prompt Prompt to be displayed.
     #
     def readline(prompt)
-      with_repl_like_sigint { Readline.readline(prompt) || EOF_ALIAS }
+      with_repl_like_sigint { without_readline_completion { Readline.readline(prompt) || EOF_ALIAS } }
     end
 
     #
@@ -39,6 +39,25 @@ module Byebug
       retry
     ensure
       trap("INT", orig_handler)
+    end
+
+    #
+    # Disable any Readline completion procs.
+    #
+    # Other gems, for example, IRB could've installed completion procs that are
+    # dependent on them being loaded. Disable those while byebug is the REPL
+    # making use of Readline.
+    #
+    def without_readline_completion
+      orig_completion = Readline.completion_proc
+      return yield unless orig_completion
+
+      begin
+        Readline.completion_proc = nil
+        yield
+      ensure
+        Readline.completion_proc = orig_completion
+      end
     end
   end
 end

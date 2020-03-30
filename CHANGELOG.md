@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#657](https://github.com/deivid-rodriguez/byebug/pull/657): crash when hitting \<TAB\> due to IRB completion mechanism included in the default ruby 2.7 version of the `irb` gem ([@terceiro]).
+
 ## [11.1.1] - 2020-01-24
 
 ### Fixed
@@ -911,6 +915,7 @@
 [@sethk]: https://github.com/sethk
 [@shuky19]: https://github.com/shuky19
 [@tacnoman]: https://github.com/tacnoman
+[@terceiro]: https://github.com/terceiro
 [@tzmfreedom]: https://github.com/tzmfreedom
 [@wallace]: https://github.com/wallace
 [@windwiny]: https://github.com/windwiny

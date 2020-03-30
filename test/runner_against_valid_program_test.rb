@@ -118,6 +118,15 @@ module Byebug
       assert_match(/Debug flag is true/, stdout)
     end
 
+    def test_run_and_press_tab_doesnt_make_byebug_crash
+      stdout = run_byebug(
+        example_path,
+        input: "\tputs 'Reached here'"
+      )
+
+      assert_match(/Reached here/, stdout)
+    end
+
     def test_run_stops_at_the_first_line_by_default
       stdout = run_byebug(example_path)
 
