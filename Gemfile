@@ -11,7 +11,7 @@ gem "pry", "0.12.2"
 gem "rake", "~> 13.0"
 gem "rake-compiler", "~> 1.0"
 gem "rexml", "~> 3.2" # TODO: remove when https://github.com/gettalong/kramdown/pull/638 released
-gem "rubocop", "0.80.1"
+gem "rubocop", "0.81.0"
 gem "rubocop-performance", "~> 1.3"
 gem "simplecov", "0.17.1"
 gem "yard", "0.9.24"
