@@ -34,3 +34,24 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        continue-on-error: true
+
+  test_head_images:
+    container: deividrodriguez/byebug:head-${{ matrix.line_editor }}-${{ matrix.compiler }}
+
+    needs: build_head_images
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        line_editor: [libedit, readline]
+        compiler: [clang, gcc]
+
+    steps:
+      - name: Run CI checks
+        run: |
+          bin/setup.sh
+          bin/rake
+
+    timeout-minutes: 15
