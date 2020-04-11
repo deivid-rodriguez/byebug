@@ -9,7 +9,7 @@ install:
         cmd /c ruby-setup.exe /verysilent /dir=C:/Ruby$env:ruby_version
       }
 
-  - git clone -q --depth=5  --no-tags --branch=byebug https://github.com/MSP-greg/rb-readline.git C:\rb-readline
+  - git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
 
   - ps: $env:ruby_abi_vers = (&ruby.exe -e "puts RbConfig::CONFIG['ruby_version']" | Out-String).Trim()
   - set n_dir=C:\Ruby%ruby_version%\lib\ruby\site_ruby\%ruby_abi_vers%
