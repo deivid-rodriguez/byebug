@@ -34,21 +34,23 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
           echo "::set-env name=GIT_BRANCH::$GITHUB_HEAD_REF"
           echo "::set-env name=GIT_COMMIT_SHA::$(git rev-parse origin/$GITHUB_HEAD_REF)"
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && (startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5'))
 
       - name: Set ENV for codeclimate (push)
         run: |
           echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
           echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && (startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5'))
 
       - name: Save coverage
         run: cc-test-reporter format-coverage --output coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
 
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
           path: coverage/codeclimate.${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
+        if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
 
     timeout-minutes: 15
 
@@ -101,46 +103,6 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: coverage-2.5.7-readline-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-libedit-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.6.5-readline-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-libedit-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.7.0-readline-gcc
           path: coverage
 
       - name: Aggregate & upload results to Code Climate
