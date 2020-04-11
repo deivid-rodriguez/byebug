@@ -39,20 +39,6 @@ jobs:
           Copy-Item -Path C:\rb-readline\lib\readline.rb -Destination $env:n_dir\readline.rb
           Copy-Item -Path C:\rb-readline\lib\rbreadline.rb -Destination $env:n_dir\rbreadline.rb
 
-      - name: Display environment information
-        shell: cmd
-        run: |
-          echo %PATH%
-
-          ruby --version
-          where ruby
-
-          gem --version
-          where gem
-
-          bash --version
-          where bash
-
       - name: Setup dependencies
         shell: bash
         run: bin/setup.sh
