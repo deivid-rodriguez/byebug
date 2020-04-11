@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [2.4.9, 2.5.7, 2.6.5, 2.7.0, head]
+        version: [2.4.9, 2.5.7, 2.6.5, 2.7.0]
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
