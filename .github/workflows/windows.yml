@@ -32,7 +32,7 @@ jobs:
       - name: Patch rb-readline
         run: |
           git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
-          $env:n_dir = (&ruby.exe -e "puts RbConfig::CONFIG['sitelibdir']" | Out-String).Trim()
+          $env:n_dir = $(ruby.exe -e "print RbConfig::CONFIG['sitelibdir']")
           Copy-Item -Path C:\rb-readline\lib\readline.rb -Destination $env:n_dir\readline.rb
           Copy-Item -Path C:\rb-readline\lib\rbreadline.rb -Destination $env:n_dir\rbreadline.rb
 
