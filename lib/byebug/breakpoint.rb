@@ -53,11 +53,7 @@ module Byebug
       name = "#{Time.new.to_i}_#{rand(2**31)}"
       iseq = RubyVM::InstructionSequence.compile(File.read(filename), name)
 
-      if iseq.respond_to?(:each_child)
-        potential_lines_with_trace_points(iseq, {})
-      else
-        potential_lines_without_trace_points(iseq, {})
-      end
+      potential_lines_with_trace_points(iseq, {})
     end
 
     def self.potential_lines_with_trace_points(iseq, lines)
@@ -70,19 +66,6 @@ module Byebug
     end
 
     private_class_method :potential_lines_with_trace_points
-
-    def self.potential_lines_without_trace_points(iseq, lines)
-      iseq.disasm.each_line do |line|
-        res = /^\d+ (?<insn>\w+)\s+.+\(\s*(?<lineno>\d+)\)$/.match(line)
-        next unless res && res[:insn] == "trace"
-
-        lines[res[:lineno].to_i] = true
-      end
-
-      lines.keys
-    end
-
-    private_class_method :potential_lines_without_trace_points
 
     #
     # Returns true if a breakpoint could be set in line number +lineno+ in file
