@@ -5,7 +5,7 @@
 [![Gitter][irc]][irc_url]
 
 [gem]: https://img.shields.io/gem/v/byebug.svg
-[tid]: https://tidelift.com/badges/github/deivid-rodriguez/byebug
+[tid]: https://tidelift.com/badges/package/rubygems/byebug
 [irc]: https://img.shields.io/badge/IRC%20(gitter)-devs%20%26%20users-brightgreen.svg
 
 [gem_url]: https://rubygems.org/gems/byebug
