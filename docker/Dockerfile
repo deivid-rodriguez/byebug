@@ -93,8 +93,4 @@ RUN ln -s clang-format /usr/bin/clang-format-8
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN TEST_REPORTER_URL=https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.0-linux-amd64 \
-  && wget -O /usr/local/bin/cc-test-reporter $TEST_REPORTER_URL \
-  && chmod +x /usr/local/bin/cc-test-reporter
-
 WORKDIR /byebug
