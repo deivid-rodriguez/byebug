@@ -84,10 +84,10 @@ module Byebug
       stdout = run_byebug(
         "-r", example_path, example_path,
         input: \
-          "puts \"Abbrev loaded? \#{$LOADED_FEATURES.last == '#{example_path}'}\""
+          "puts \"Example path loaded? \#{$LOADED_FEATURES.last == '#{example_path}'}\""
       )
 
-      assert_match(/Abbrev loaded\? true/, stdout)
+      assert_match(/Example path loaded\? true/, stdout)
     end
 
     def test_run_with_a_single_include_flag
