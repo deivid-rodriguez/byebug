@@ -36,8 +36,8 @@ more][Tidelift for enterprise].
 
 ## Build Status
 
-Linux ![ubuntu](https://github.com/deivid-rodriguez/byebug/workflows/ubuntu/badge.svg)
-Windows ![windows](https://github.com/deivid-rodriguez/byebug/workflows/windows/badge.svg)
+![ubuntu](https://github.com/deivid-rodriguez/byebug/workflows/ubuntu/badge.svg)
+![windows](https://github.com/deivid-rodriguez/byebug/workflows/windows/badge.svg)
 
 ## Requirements
 
