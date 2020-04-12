@@ -303,9 +303,6 @@ Lint/EmptyInterpolation:
 Lint/EmptyWhen:
   Enabled: true
 
-Lint/EndInMethod:
-  Enabled: true
-
 Lint/EnsureReturn:
   Enabled: true
 
