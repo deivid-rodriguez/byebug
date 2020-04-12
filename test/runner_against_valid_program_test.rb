@@ -84,7 +84,7 @@ module Byebug
       stdout = run_byebug(
         "-r", example_path, example_path,
         input: \
-          "puts \"Example path loaded? \#{$LOADED_FEATURES.last == '#{example_path}'}\""
+          "puts \"Example path loaded? \#{$LOADED_FEATURES.include?('#{example_path}')}\""
       )
 
       assert_match(/Example path loaded\? true/, stdout)

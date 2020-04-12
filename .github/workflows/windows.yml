@@ -1,0 +1,62 @@
+---
+
+name: windows
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: windows-2019
+
+    strategy:
+      matrix:
+        version: [2.4.9, 2.5.7, 2.6.5, head]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v1
+        with:
+          path: .bundle
+          key: gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.version }}
+
+      - name: Clone patched rb-readline
+        shell: cmd
+        run: git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
+
+      - name: Install patched rb-readline
+        run: |
+          $env:n_dir = (&ruby.exe -e "puts RbConfig::CONFIG['sitelibdir']" | Out-String).Trim()
+          Copy-Item -Path C:\rb-readline\lib\readline.rb -Destination $env:n_dir\readline.rb
+          Copy-Item -Path C:\rb-readline\lib\rbreadline.rb -Destination $env:n_dir\rbreadline.rb
+
+      - name: Display environment information
+        shell: cmd
+        run: |
+          echo %PATH%
+
+          ruby --version
+          where ruby
+
+          gem --version
+          where gem
+
+          bash --version
+          where bash
+
+      - name: Setup dependencies
+        shell: bash
+        run: bin/setup.sh
+
+      - name: Run tests
+        run: ruby bin/rake compile test
+        continue-on-error: ${{ matrix.version == 'head' }}
