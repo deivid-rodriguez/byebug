@@ -13,9 +13,6 @@ install:
 
   - ps: $env:ruby_abi_vers = (&ruby.exe -e "puts RbConfig::CONFIG['ruby_version']" | Out-String).Trim()
   - set n_dir=C:\Ruby%ruby_version%\lib\ruby\site_ruby\%ruby_abi_vers%
-  - attrib.exe -r %n_dir%\*.rb
-  - del /q %n_dir%\readline.rb
-  - del /q %n_dir%\rbreadline.rb
   - copy C:\rb-readline\lib\readline.rb %n_dir%\readline.rb
   - copy C:\rb-readline\lib\rbreadline.rb %n_dir%\rbreadline.rb
 
