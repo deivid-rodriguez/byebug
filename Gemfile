@@ -7,7 +7,7 @@ gemspec
 gem "chandler", "0.9.0"
 gem "mdl", "0.9.0"
 gem "minitest", "~> 5.11"
-gem "pry", "0.12.2"
+gem "pry", "0.13.0"
 gem "rake", "~> 13.0"
 gem "rake-compiler", "~> 1.0"
 gem "rexml", "~> 3.2" # TODO: remove when https://github.com/gettalong/kramdown/pull/638 released
