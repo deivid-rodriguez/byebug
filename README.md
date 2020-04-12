@@ -36,12 +36,8 @@ more][Tidelift for enterprise].
 
 ## Build Status
 
-Linux ![ubuntu](https://github.com/deivid-rodriguez/byebug/workflows/ubuntu/badge.svg)
-Windows [![Vey][vey]][vey_url]
-
-[vey]: https://ci.appveyor.com/api/projects/status/github/deivid-rodriguez/byebug?svg=true
-
-[vey_url]: https://ci.appveyor.com/project/deivid-rodriguez/byebug
+![ubuntu](https://github.com/deivid-rodriguez/byebug/workflows/ubuntu/badge.svg)
+![windows](https://github.com/deivid-rodriguez/byebug/workflows/windows/badge.svg)
 
 ## Requirements
 
