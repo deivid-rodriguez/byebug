@@ -260,7 +260,10 @@ module Byebug
         "RUBYOPT" => "-I #{lib_dir}"
       }
 
-      base["RUBYOPT"] += " -r simplecov" if simplecov
+      if simplecov
+        test_dir = File.expand_path("..", __dir__)
+        base["RUBYOPT"] += " -r #{test_dir}/support/simplecov.rb"
+      end
 
       base
     end
