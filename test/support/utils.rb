@@ -253,11 +253,11 @@ module Byebug
         location.label.start_with?("test_")
       end
 
-      byebug_dir = File.expand_path("../../lib", __dir__)
+      lib_dir = File.expand_path("../../lib", __dir__)
 
       base = {
         "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
-        "RUBYOPT" => "-I #{byebug_dir}"
+        "RUBYOPT" => "-I #{lib_dir}"
       }
 
       base["RUBYOPT"] += " -r simplecov" if simplecov
