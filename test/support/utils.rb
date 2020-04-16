@@ -253,14 +253,17 @@ module Byebug
         location.label.start_with?("test_")
       end
 
-      byebug_dir = File.absolute_path(File.join("..", "..", "lib"), __dir__)
+      lib_dir = File.expand_path("../../lib", __dir__)
 
       base = {
         "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
-        "RUBYOPT" => "-I #{byebug_dir}"
+        "RUBYOPT" => "-I #{lib_dir}"
       }
 
-      base["RUBYOPT"] += " -r simplecov" if simplecov
+      if simplecov
+        test_dir = File.expand_path("..", __dir__)
+        base["RUBYOPT"] += " -r #{test_dir}/support/simplecov.rb"
+      end
 
       base
     end
