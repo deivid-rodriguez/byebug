@@ -253,7 +253,7 @@ module Byebug
         location.label.start_with?("test_")
       end
 
-      byebug_dir = File.absolute_path(File.join("..", "..", "lib"), __dir__)
+      byebug_dir = File.expand_path("../../lib", __dir__)
 
       base = {
         "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
