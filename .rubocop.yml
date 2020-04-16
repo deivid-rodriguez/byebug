@@ -129,6 +129,9 @@ Layout/HeredocIndentation:
 Layout/IndentationConsistency:
   Enabled: true
 
+Layout/IndentationStyle:
+  Enabled: true
+
 Layout/IndentationWidth:
   Enabled: true
 
@@ -235,9 +238,6 @@ Layout/SpaceInsideReferenceBrackets:
   Enabled: true
 
 Layout/SpaceInsideStringInterpolation:
-  Enabled: true
-
-Layout/Tab:
   Enabled: true
 
 Layout/TrailingEmptyLines:
