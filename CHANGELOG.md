@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [11.1.2] - 2020-04-17
+
 ### Fixed
 
 * [#657](https://github.com/deivid-rodriguez/byebug/pull/657): crash when hitting \<TAB\> due to IRB completion mechanism included in the default ruby 2.7 version of the `irb` gem ([@terceiro]).
@@ -812,7 +814,8 @@
 
 * Initial release.
 
-[Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v10.0.2...HEAD
+[Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.2...HEAD
+[11.1.2]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.1...v11.1.2
 [11.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.0...v11.1.1
 [11.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v11.0.1...v11.1.0
 [11.0.1]: https://github.com/deivid-rodriguez/byebug/compare/v11.0.0...v11.0.1
