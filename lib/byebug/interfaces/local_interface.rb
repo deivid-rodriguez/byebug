@@ -53,7 +53,7 @@ module Byebug
       return yield unless orig_completion
 
       begin
-        Readline.completion_proc = nil
+        Readline.completion_proc = ->(_) { nil }
         yield
       ensure
         Readline.completion_proc = orig_completion

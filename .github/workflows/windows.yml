@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [2.4.9, 2.5.7, 2.6.5, head]
+        version: [2.4.9, 2.5.7, 2.6.5, 2.7.0, head]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,8 +33,7 @@ jobs:
         run: |
           git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
           $n_dir = $(ruby -e "print RbConfig::CONFIG['sitelibdir']")
-          Copy-Item -Path C:\rb-readline\lib\readline.rb -Destination $n_dir\readline.rb
-          Copy-Item -Path C:\rb-readline\lib\rbreadline.rb -Destination $n_dir\rbreadline.rb
+          Copy-Item -Path C:\rb-readline\lib\* -Destination $n_dir -Recurse
 
       - name: Setup dependencies
         shell: bash
