@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [11.1.3] - 2020-04-23
+
 ### Fixed
 
 * [#674](https://github.com/deivid-rodriguez/byebug/pull/674): crash when using byebug on ruby 2.7.0 on Windows.
@@ -818,7 +820,8 @@
 
 * Initial release.
 
-[Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.2...HEAD
+[Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.3...HEAD
+[11.1.3]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.2...v11.1.3
 [11.1.2]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.1...v11.1.2
 [11.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.0...v11.1.1
 [11.1.0]: https://github.com/deivid-rodriguez/byebug/compare/v11.0.1...v11.1.0
