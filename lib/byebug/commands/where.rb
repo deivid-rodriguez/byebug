@@ -14,12 +14,12 @@ module Byebug
     self.allow_in_post_mortem = true
 
     def self.regexp
-      /^\s* (?:w(?:here)?|bt|backtrace) \s*$/x
+      /^\s* (?:w(?:here)?|bt|backtrace) (?:\s+(\S+))? \s*$/x
     end
 
     def self.description
       <<-DESCRIPTION
-        w[here]|bt|backtrace
+        w[here]|bt|backtrace[ maximum-frame]
 
         #{short_description}
 
@@ -29,6 +29,10 @@ module Byebug
         The position of the current frame is marked with -->. C-frames hang
         from their most immediate Ruby frame to indicate that they are not
         navigable.
+
+        Without an argument, the command prints all the frames. With an argument
+        the command prints the largest between the argument or the maximum stack
+        frame.
       DESCRIPTION
     end
 
@@ -43,7 +47,14 @@ module Byebug
     private
 
     def print_backtrace
-      bt = prc("frame.line", (0...context.stack_size)) do |_, index|
+      max_frame =
+        if @match[1] && @match[1].to_i < context.stack_size
+          @match[1].to_i
+        else
+          context.stack_size
+        end
+
+      bt = prc("frame.line", (0...max_frame)) do |_, index|
         Frame.new(context, index).to_hash
       end
 
