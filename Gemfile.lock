@@ -36,7 +36,7 @@ GEM
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     parallel (1.19.1)
-    parser (2.7.1.1)
+    parser (2.7.1.2)
       ast (~> 2.4.0)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -55,7 +55,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-performance (1.5.2)
+    rubocop-performance (1.6.0)
       rubocop (>= 0.71.0)
     ruby-progressbar (1.10.1)
     sawyer (0.8.2)
