@@ -7,10 +7,10 @@ module Byebug
   # Setting to customize the file where byebug's history is saved.
   #
   class HistfileSetting < Setting
-    DEFAULT = File.expand_path(".byebug_history")
+    DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_history")
 
     def banner
-      "File where cmd history is saved to. Default: ./.byebug_history"
+      "File where command history is saved to. Default: ~/.byebug_history"
     end
 
     def to_s
