@@ -27,7 +27,8 @@ module Byebug
         b[reak] [<module>::...]<class>(.|#)<method> [if <expr>]
 
         They can be specified by line or method and an expression can be added
-        for conditionally enabled breakpoints.
+        for conditionally enabled breakpoints. Without arguments create a
+        a breakpoint in the current line.
 
         #{short_description}
       DESCRIPTION
@@ -38,9 +39,9 @@ module Byebug
     end
 
     def execute
-      return puts(help) unless @match[1]
+      b = line_breakpoint(frame.line.to_s) unless @match[1]
 
-      b = line_breakpoint(@match[1]) || method_breakpoint(@match[1])
+      b ||= line_breakpoint(@match[1]) || method_breakpoint(@match[1])
       return errmsg(pr("break.errors.location")) unless b
 
       return puts(pr("break.created", id: b.id, file: b.source, line: b.pos)) if syntax_valid?(@match[2])
