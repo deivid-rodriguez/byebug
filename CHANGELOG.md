@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+* [#690](https://github.com/deivid-rodriguez/byebug/pull/690): `break` without any arguments now sets a breakpoint on the current line, just like `gdb`.
+
 ### Fixed
 
 * [#741](https://github.com/deivid-rodriguez/byebug/pull/741): Small consistency issues in help messages.

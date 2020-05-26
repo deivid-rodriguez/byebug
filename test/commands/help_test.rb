@@ -86,10 +86,14 @@ module Byebug
       debug_code(minimal_program)
 
       expected_output = split_lines <<-TXT
-        b[reak] [<file>:]<line> [if <expr>]
+        b[reak] [[<file>:]<line> [if <expr>]]
         b[reak] [<module>::...]<class>(.|#)<method> [if <expr>]
 
         Sets breakpoints in the source code
+
+        They can be specified by line or method and an expression can be added
+        for conditionally enabled breakpoints. Without arguments create a
+        a breakpoint in the current line.
       TXT
 
       check_output_includes(*expected_output)
