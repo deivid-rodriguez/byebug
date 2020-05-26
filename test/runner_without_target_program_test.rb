@@ -78,7 +78,7 @@ module Byebug
         Usage: byebug [options] <script.rb> -- <script.rb parameters>
 
           -d, --debug               Set $DEBUG=true
-          -I, --include list        Add to paths to $LOAD_PATH
+          -I, --include list        Add paths to $LOAD_PATH
           -m, --[no-]post-mortem    Use post-mortem mode
           -q, --[no-]quit           Quit when script finishes
           -x, --[no-]rc             Run byebug initialization file

@@ -33,7 +33,7 @@ module Byebug
     end
 
     def include_flag
-      @opts.on "-I", "--include list", "Add to paths to $LOAD_PATH" do |list|
+      @opts.on "-I", "--include list", "Add paths to $LOAD_PATH" do |list|
         $LOAD_PATH.push(list.split(":")).flatten!
       end
     end
