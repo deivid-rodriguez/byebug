@@ -110,6 +110,35 @@ module Byebug
 
       check_output_includes(*expected_output)
     end
+
+    def test_where_with_argument_less_than_largest_frame
+      enter "where 3"
+      debug_code(program)
+
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+      TXT
+
+      check_output_includes(*expected_output)
+    end
+
+    def test_where_with_argument_greater_than_largest_frame
+      enter "where 20"
+      debug_code(program)
+
+      expected_output = prepare_for_regexp <<-TXT
+        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+            ͱ-- #3  Class.new(*args) at #{example_path}:20
+            #4  <module:Byebug> at #{example_path}:20
+            #5  <top (required)> at #{example_path}:1
+      TXT
+
+      check_output_includes(*expected_output)
+    end
   end
 
   #
