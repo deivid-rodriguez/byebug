@@ -221,7 +221,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_using_shortcut_properly_adds_the_breakpoint
-      enter "break 7"
+      enter "b 7"
 
       debug_code(program) { assert_equal 1, Byebug.breakpoints.size }
     end
