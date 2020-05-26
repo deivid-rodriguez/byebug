@@ -58,7 +58,7 @@ module Byebug
     # Otherwise it's automatically chosen.
     #
     def range(input)
-      return auto_range(@match[1] || "+") unless input
+      return auto_range(@match[1] || "") unless input
 
       b, e = parse_range(input)
       raise("Invalid line range") unless valid_range?(b, e)
@@ -79,7 +79,7 @@ module Byebug
     def auto_range(direction)
       prev_line = processor.prev_line
 
-      if direction == "=" || prev_line.nil?
+      if direction == "=" || prev_line.nil? || direction == ""
         source_file_formatter.range_around(frame.line)
       else
         source_file_formatter.range_from(move(prev_line, size, direction))
