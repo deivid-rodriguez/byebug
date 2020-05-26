@@ -221,7 +221,7 @@ module Byebug
     end
 
     def test_setting_breakpoint_using_shortcut_properly_adds_the_breakpoint
-      enter "break 7"
+      enter "b 7"
 
       debug_code(program) { assert_equal 1, Byebug.breakpoints.size }
     end
@@ -334,13 +334,6 @@ module Byebug
       debug_code(program)
 
       check_error_includes 'Incorrect expression "y -=) 1"; breakpoint disabled'
-    end
-
-    def test_shows_info_about_setting_breakpoints_when_using_just_break
-      enter "break", "cont"
-      debug_code(program)
-
-      check_output_includes(/b\[reak\] \[<file>:\]<line> \[if <expr>\]/)
     end
 
     def test_setting_breakpoint_uses_new_source
@@ -477,6 +470,49 @@ module Byebug
       debug_code(program)
 
       check_output_doesnt_include "Return value is: nil"
+    end
+  end
+
+  #
+  # Tests creating a breakpoint in the current line if no argument is passed
+  #
+  class BreakWithoutArguments < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+         1:  module Byebug
+         2:    #
+         3:    # Toy class to test breakpoints
+         4:    #
+         5:    class #{example_class}
+         6:      def self.a
+         7:        y = 1
+         8:        z = 2
+         9:        y + z
+        10:      end
+        11:    end
+        12:
+        13:    byebug
+        14:
+        15:    #{example_class}.a
+        16:  end
+      RUBY
+    end
+
+    def test_setting_breakpoint_sets_correct_fields
+      enter "break"
+
+      debug_code(program) do
+        b = Breakpoint.first
+        exp = [b.pos, b.source, b.expr, b.hit_count, b.hit_value, b.enabled?]
+        act = [15, example_path, nil, 0, 0, true]
+        assert_equal act, exp
+      end
+    end
+
+    def test_setting_breakpoint_using_shortcut_properly_adds_the_breakpoint
+      enter "b"
+
+      debug_code(program) { assert_equal 1, Byebug.breakpoints.size }
     end
   end
 end
