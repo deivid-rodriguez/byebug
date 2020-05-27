@@ -4,7 +4,7 @@ require_relative "../setting"
 
 module Byebug
   #
-  # Setting to customize the file where byebug's history is saved.
+  # Setting to customize the file where byebug's settings are saved.
   #
   class SavefileSetting < Setting
     DEFAULT = File.expand_path("#{ENV['HOME'] || '.'}/.byebug_save")
@@ -14,7 +14,7 @@ module Byebug
     end
 
     def to_s
-      "The command history file is #{value}\n"
+      "The settings file is #{value}\n"
     end
   end
 end
