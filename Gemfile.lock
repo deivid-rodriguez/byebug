@@ -26,7 +26,7 @@ GEM
       mixlib-cli (~> 2.1, >= 2.1.1)
       mixlib-config (>= 2.2.1, < 4)
     method_source (1.0.0)
-    minitest (5.14.0)
+    minitest (5.14.1)
     mixlib-cli (2.1.6)
     mixlib-config (3.0.6)
       tomlrb
