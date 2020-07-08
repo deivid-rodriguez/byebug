@@ -14,5 +14,5 @@ group :development do
   gem "rubocop", "0.87.1"
   gem "rubocop-performance", "~> 1.3"
   gem "simplecov", "0.18.5"
-  gem "yard", "0.9.24"
+  gem "yard", "0.9.25"
 end
