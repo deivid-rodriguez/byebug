@@ -13,6 +13,6 @@ group :development do
   gem "rake-compiler", "~> 1.0"
   gem "rubocop", "0.88.0"
   gem "rubocop-performance", "~> 1.3"
-  gem "simplecov", "0.18.5"
+  gem "simplecov", "0.19.0"
   gem "yard", "0.9.25"
 end
