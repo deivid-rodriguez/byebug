@@ -261,6 +261,9 @@ Lint/AssignmentInCondition:
 Lint/BigDecimalNew:
   Enabled: true
 
+Lint/BinaryOperatorWithIdenticalOperands:
+  Enabled: true
+
 Lint/BooleanSymbol:
   Enabled: true
 
@@ -460,9 +463,6 @@ Lint/UselessAccessModifier:
   Enabled: true
 
 Lint/UselessAssignment:
-  Enabled: true
-
-Lint/UselessComparison:
   Enabled: true
 
 Lint/UselessElseWithoutRescue:
@@ -766,9 +766,6 @@ Style/MethodCallWithoutArgsParentheses:
   Enabled: true
 
 Style/MethodDefParentheses:
-  Enabled: true
-
-Style/MethodMissingSuper:
   Enabled: true
 
 Style/MinMax:
