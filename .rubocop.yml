@@ -1,6 +1,7 @@
 ---
 
 require:
+  - rubocop-packaging
   - rubocop-performance
 
 AllCops:
@@ -525,6 +526,18 @@ Naming/VariableName:
   Enabled: true
 
 Naming/VariableNumber:
+  Enabled: true
+
+Packaging/BundlerSetupInTests:
+  Enabled: true
+
+Packaging/GemspecGit:
+  Enabled: true
+
+Packaging/RequireRelativeHardcodingLib:
+  Enabled: true
+
+Packaging/RequireHardcodingLib:
   Enabled: true
 
 Performance/Caller:
