@@ -35,11 +35,18 @@ module Byebug
       def syntax_valid?(code)
         return true unless code
 
-        without_stderr do
-          RubyVM::InstructionSequence.compile(code)
-          true
-        rescue SyntaxError
-          false
+        if defined?(RubyVM::InstructionSequence.compile)
+          without_stderr do
+            RubyVM::InstructionSequence.compile(code)
+            true
+          rescue SyntaxError
+            false
+          end
+        else
+          require "ripper" unless defined?(Ripper)
+          without_stderr do
+            !Ripper.sexp(code).nil?
+          end
         end
       end
 
