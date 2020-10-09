@@ -16,11 +16,9 @@ task "release:rubygem_push" => "chandler:push"
 if Gem.win_platform?
   desc "Activates DevKit"
   task :devkit do
-    begin
-      require "devkit"
-    rescue LoadError
-      abort "Failed to load DevKit required for compilation"
-    end
+    require "devkit"
+  rescue LoadError
+    abort "Failed to load DevKit required for compilation"
   end
 
   task compile: :devkit

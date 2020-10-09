@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [2.4.9, 2.5.7, 2.6.5, 2.7.0]
+        version: [2.5.7, 2.6.5, 2.7.0]
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
@@ -31,13 +31,13 @@ jobs:
 
       - name: Save coverage
         run: mv coverage/.resultset.json coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
-        if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
+        if: startsWith(matrix.version, '2.5')
 
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
           path: coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
-        if: startsWith(matrix.version, '2.4') || startsWith(matrix.version, '2.5')
+        if: startsWith(matrix.version, '2.5')
 
     timeout-minutes: 15
 
@@ -50,26 +50,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.4.9-libedit-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.4.9-libedit-gcc
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.4.9-readline-clang
-          path: coverage
-
-      - uses: actions/download-artifact@v1
-        with:
-          name: coverage-2.4.9-readline-gcc
-          path: coverage
 
       - uses: actions/download-artifact@v1
         with:
