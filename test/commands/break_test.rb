@@ -43,61 +43,37 @@ module Byebug
     def test_break_with_instance_method_stops_at_correct_place
       enter "break #{example_class}#b", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location example_path, 13 }
-      else
-        debug_code(program) { assert_location example_path, 12 }
-      end
+      debug_code(program) { assert_location example_path, 13 }
     end
 
     def test_break_with_namespaced_instance_method_stops_at_correct_place
       enter "break Byebug::#{example_class}#b", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location example_path, 13 }
-      else
-        debug_code(program) { assert_location example_path, 12 }
-      end
+      debug_code(program) { assert_location example_path, 13 }
     end
 
     def test_break_with_class_method_stops_at_correct_place
       enter "break #{example_class}.a", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location example_path, 7 }
-      else
-        debug_code(program) { assert_location example_path, 6 }
-      end
+      debug_code(program) { assert_location example_path, 7 }
     end
 
     def test_break_with_namespaced_class_method_stops_at_correct_place
       enter "break Byebug::#{example_class}.a", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location example_path, 7 }
-      else
-        debug_code(program) { assert_location example_path, 6 }
-      end
+      debug_code(program) { assert_location example_path, 7 }
     end
 
     def test_break_with_module_method_stops_at_correct_place
       enter "break #{example_module}.c", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location(example_path, 19) }
-      else
-        debug_code(program) { assert_location(example_path, 18) }
-      end
+      debug_code(program) { assert_location(example_path, 19) }
     end
 
     def test_break_with_namespaced_module_method_stops_at_correct_place
       enter "break Byebug::#{example_module}.c", "cont"
 
-      if RUBY_VERSION >= "2.5.0"
-        debug_code(program) { assert_location example_path, 19 }
-      else
-        debug_code(program) { assert_location example_path, 18 }
-      end
+      debug_code(program) { assert_location example_path, 19 }
     end
 
     def test_break_with_a_method_does_not_stop_at_blocks_in_the_method
