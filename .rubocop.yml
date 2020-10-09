@@ -1,6 +1,7 @@
 ---
 
 require:
+  - rubocop-packaging
   - rubocop-performance
 
 AllCops:
@@ -261,6 +262,9 @@ Lint/AssignmentInCondition:
 Lint/BigDecimalNew:
   Enabled: true
 
+Lint/BinaryOperatorWithIdenticalOperands:
+  Enabled: true
+
 Lint/BooleanSymbol:
   Enabled: true
 
@@ -462,9 +466,6 @@ Lint/UselessAccessModifier:
 Lint/UselessAssignment:
   Enabled: true
 
-Lint/UselessComparison:
-  Enabled: true
-
 Lint/UselessElseWithoutRescue:
   Enabled: true
 
@@ -525,6 +526,18 @@ Naming/VariableName:
   Enabled: true
 
 Naming/VariableNumber:
+  Enabled: true
+
+Packaging/BundlerSetupInTests:
+  Enabled: true
+
+Packaging/GemspecGit:
+  Enabled: true
+
+Packaging/RequireRelativeHardcodingLib:
+  Enabled: true
+
+Packaging/RequireHardcodingLib:
   Enabled: true
 
 Performance/Caller:
@@ -766,9 +779,6 @@ Style/MethodCallWithoutArgsParentheses:
   Enabled: true
 
 Style/MethodDefParentheses:
-  Enabled: true
-
-Style/MethodMissingSuper:
   Enabled: true
 
 Style/MinMax:
