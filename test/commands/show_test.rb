@@ -76,6 +76,13 @@ module Byebug
         "Maximum size of byebug's command history is #{max_size}"
     end
 
+    def test_show_savefile
+      enter "show savefile"
+      debug_code(minimal_program)
+
+      check_output_includes "The settings file is #{Dir.home}/.byebug_save"
+    end
+
     def test_show_without_arguments_displays_help_for_the_show_command
       enter "show"
       debug_code(minimal_program)
