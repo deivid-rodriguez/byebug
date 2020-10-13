@@ -31,7 +31,7 @@ module Byebug
       end
 
       def self.short_description
-        "Enable all or specific breakpoints"
+        "Enable all or specific breakpoints."
       end
 
       def execute
