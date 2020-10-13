@@ -26,7 +26,7 @@ module Byebug
       end
 
       def self.short_description
-        "Lists all threads"
+        "Lists all threads."
       end
 
       def execute

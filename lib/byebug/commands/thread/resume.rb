@@ -26,7 +26,7 @@ module Byebug
       end
 
       def self.short_description
-        "Resumes execution of the specified thread"
+        "Resumes execution of the specified thread."
       end
 
       def execute

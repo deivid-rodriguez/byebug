@@ -26,7 +26,7 @@ module Byebug
       end
 
       def self.short_description
-        "Stops the execution of the specified thread"
+        "Stops the execution of the specified thread."
       end
 
       def execute
