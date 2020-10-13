@@ -6,7 +6,7 @@ gemspec
 
 group :development do
   gem "chandler", "0.9.0"
-  gem "mdl", "0.9.0"
+  gem "mdl", "0.11.0"
   gem "minitest", "~> 5.11"
   gem "pry", "0.13.1"
   gem "rake", "~> 13.0"
