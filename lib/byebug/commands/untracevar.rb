@@ -20,7 +20,7 @@ module Byebug
     end
 
     def self.short_description
-      "Stops tracing a global variable"
+      "Stops tracing a global variable."
     end
 
     def execute
