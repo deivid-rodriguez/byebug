@@ -96,6 +96,20 @@ module Byebug
       check_error_includes(/"enable breakpoints" argument/)
     end
 
+    def test_enable_breakpoints_help
+      enter "help enable breakpoints"
+      debug_code(program)
+
+      check_output_includes "Enable all or specific breakpoints."
+    end
+
+    def test_enable_displays_help
+      enter "help enable display"
+      debug_code(program)
+
+      check_output_includes "Enables expressions to be displayed when program stops."
+    end
+
     def test_enable_by_itself_shows_help
       enter "enable"
       debug_code(program)
