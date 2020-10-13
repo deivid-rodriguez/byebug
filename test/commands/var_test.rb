@@ -41,6 +41,13 @@ module Byebug
       check_output_includes "level = 2"
     end
 
+    def test_var_args_help
+      enter "help var args"
+      debug_code(program)
+
+      check_output_includes "Information about arguments of the current scope."
+    end
+
     def test_var_const_shows_constants_in_class_or_module
       enter "var const Byebug::#{example_class}"
       debug_code(program)
@@ -62,6 +69,13 @@ module Byebug
       check_error_includes "Should be Class/Module: v"
     end
 
+    def test_var_const_help
+      enter "help var const"
+      debug_code(program)
+
+      check_output_includes "Shows constants of an object."
+    end
+
     def test_var_instance_shows_instance_vars_of_an_object
       enter "break 21", "cont", "var instance v"
       debug_code(program)
@@ -69,11 +83,25 @@ module Byebug
       check_output_includes '@instance_variable = "11111111111111111111"'
     end
 
+    def test_var_instance_help
+      enter "help var instance"
+      debug_code(program)
+
+      check_output_includes "Shows instance variables of self or a specific object."
+    end
+
     def test_var_global_shows_global_variables
       enter "var global"
       debug_code(program)
 
       check_output_includes "$ERROR_INFO = nil"
+    end
+
+    def test_var_global_help
+      enter "help var global"
+      debug_code(program)
+
+      check_output_includes "Shows global variables."
     end
 
     def test_var_instance_shows_instance_variables_of_self_if_no_object_given
@@ -99,6 +127,13 @@ module Byebug
       check_output_includes "i = 1", "level = 2"
     end
 
+    def test_var_local_help
+      enter "help var local"
+      debug_code(program)
+
+      check_output_includes "Shows local variables in current scope."
+    end
+
     def test_var_all_shows_all_variables
       enter "break 15", "cont", "var all"
       debug_code(program)
@@ -106,6 +141,13 @@ module Byebug
       check_output_includes "$ERROR_INFO = nil",
                             '@instance_variable = "11111111111111111111"',
                             "level = 2"
+    end
+
+    def test_var_all_help
+      enter "help var all"
+      debug_code(program)
+
+      check_output_includes "Shows local, global and instance variables of self."
     end
   end
 end

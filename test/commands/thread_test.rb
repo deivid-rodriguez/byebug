@@ -88,6 +88,13 @@ module Byebug
       )
     end
 
+    def test_thread_list_help
+      enter "cont 24", "help thread list", "lock << 0"
+      debug_code(program)
+
+      check_output_includes("Lists all threads.")
+    end
+
     def test_thread_stop_marks_thread_as_suspended
       enter "cont 24", -> { "thread stop #{t2_thnum}" }, "lock << 0"
       debug_code(program)
@@ -117,6 +124,13 @@ module Byebug
       debug_code(program)
 
       check_error_includes "It's the current thread"
+    end
+
+    def test_thread_stop_help
+      enter "cont 24", "help thread stop", "lock << 0"
+      debug_code(program)
+
+      check_output_includes "Stops the execution of the specified thread."
     end
 
     def test_thread_resume_removes_threads_from_the_suspended_state
@@ -157,6 +171,13 @@ module Byebug
       check_error_includes "Already running"
     end
 
+    def test_thread_resume_help
+      enter "cont 24", "help thread resume", "lock << 0"
+      debug_code(program)
+
+      check_output_includes "Resumes execution of the specified thread."
+    end
+
     def test_thread_switch_changes_execution_to_another_thread
       enter "cont 24", -> { "thread switch #{t2_thnum}" }, "lock << 0"
       debug_code(program)
@@ -176,6 +197,13 @@ module Byebug
       debug_code(program)
 
       check_error_includes "It's the current thread"
+    end
+
+    def test_thread_current_help
+      enter "cont 24", "help thread current", "lock << 0"
+      debug_code(program)
+
+      check_output_includes "Shows current thread information."
     end
   end
 end

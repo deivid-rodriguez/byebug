@@ -27,5 +27,26 @@ module Byebug
 
       assert_empty Byebug.catchpoints
     end
+
+    def test_catch_without_arguments_and_no_exceptions_caught
+      enter "catch"
+      debug_code(minimal_program)
+
+      check_output_includes "No exceptions set to be caught."
+    end
+
+    def test_catch_without_arguments_and_exceptions_caught
+      enter "catch NoMethodError", "catch"
+      debug_code(minimal_program)
+
+      check_output_includes "NoMethodError: false"
+    end
+
+    def test_catch_help
+      enter "help catch"
+      debug_code(minimal_program)
+
+      check_output_includes "cat[ch][ (off|<exception>[ off])]"
+    end
   end
 end
