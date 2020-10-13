@@ -198,5 +198,12 @@ module Byebug
 
       check_error_includes "It's the current thread"
     end
+
+    def test_thread_current_help
+      enter "cont 24", "help thread current", "lock << 0"
+      debug_code(program)
+
+      check_output_includes "Shows current thread information."
+    end
   end
 end
