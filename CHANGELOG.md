@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* [#741](https://github.com/deivid-rodriguez/byebug/pull/741): Small consistency issues in help messages.
+
 ### Removed
 
 * Support for MRI 2.4. Byebug no longer installs on this platform.

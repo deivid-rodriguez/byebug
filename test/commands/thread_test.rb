@@ -109,7 +109,7 @@ module Byebug
       enter "cont 13", "thread stop", "lock << 0"
       debug_code(program)
 
-      check_output_includes "Stops the execution of the specified thread"
+      check_output_includes "Stops the execution of the specified thread."
     end
 
     def test_thread_stop_shows_error_when_trying_to_stop_current_thread
@@ -140,7 +140,7 @@ module Byebug
       enter "cont 13", "thread resume", "lock << 0"
       debug_code(program)
 
-      check_output_includes "Resumes execution of the specified thread"
+      check_output_includes "Resumes execution of the specified thread."
     end
 
     def test_thread_resume_shows_error_when_trying_to_resume_current_thread
