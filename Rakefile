@@ -77,7 +77,7 @@ namespace :lint do
   task :mdl do
     puts "Running mdl"
 
-    sh("mdl", *Dir.glob("*.md"))
+    sh("bin/mdl", *Dir.glob("*.md"))
   end
 
   desc "Checks shell code style with shellcheck"
