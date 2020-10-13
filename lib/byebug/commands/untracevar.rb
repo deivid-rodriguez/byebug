@@ -29,7 +29,7 @@ module Byebug
         untrace_var(:"#{var}")
         puts pr("trace.messages.undo", var: var)
       else
-        errmsg pr("trace.errors.not_global", var: var)
+        errmsg pr("trace.errors.var_is_not_global", name: var)
       end
     end
   end

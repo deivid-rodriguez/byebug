@@ -5,6 +5,7 @@
 ### Fixed
 
 * [#741](https://github.com/deivid-rodriguez/byebug/pull/741): Small consistency issues in help messages.
+* [#743](https://github.com/deivid-rodriguez/byebug/pull/743): `untracevar` command crashing when giving a non existent global variable.
 
 ### Removed
 
