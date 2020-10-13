@@ -89,6 +89,20 @@ module Byebug
       check_error_includes(/"disable breakpoints" argument/)
     end
 
+    def test_disable_breakpoints_help
+      enter "help disable breakpoints"
+      debug_code(program)
+
+      check_output_includes "Disable all or specific breakpoints."
+    end
+
+    def test_disable_displays_help
+      enter "help disable display"
+      debug_code(program)
+
+      check_output_includes "Disables expressions to be displayed when program stops."
+    end
+
     def test_disable_without_an_argument_shows_help
       enter "disable"
       debug_code(program)
