@@ -33,7 +33,7 @@ module Byebug
 
       #
       # Evaluates a string containing Ruby code in a specific binding,
-      # returning nil in an error happens.
+      # returning nil if an error happens.
       #
       def silent_eval(str, binding = frame._binding)
         safe_eval(str, binding) { |_e| nil }
