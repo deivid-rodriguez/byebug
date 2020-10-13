@@ -71,13 +71,13 @@ module Byebug
       RUBY
     end
 
-    def step_steps_into_blocks
+    def test_step_steps_into_blocks
       enter "step 2"
 
       debug_code(program) { assert_equal 9, frame.line }
     end
 
-    def step_steps_out_of_blocks_when_done
+    def test_step_steps_out_of_blocks_when_done
       enter "step 3"
 
       debug_code(program) { assert_equal 12, frame.line }
