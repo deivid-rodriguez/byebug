@@ -1,2 +1,3 @@
 ---
 BUNDLE_PATH: ".bundle"
+BUNDLE_SPECIFIC_PLATFORM: "true"
