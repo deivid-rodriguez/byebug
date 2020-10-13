@@ -13,5 +13,12 @@ module Byebug
 
       check_output_includes "Stops tracing a global variable."
     end
+
+    def test_untracevar_not_global
+      enter "untracevar $foo"
+      debug_code(minimal_program)
+
+      check_error_includes "'$foo' is not a global variable."
+    end
   end
 end
