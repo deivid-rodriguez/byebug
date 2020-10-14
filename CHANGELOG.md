@@ -7,6 +7,7 @@
 * [#741](https://github.com/deivid-rodriguez/byebug/pull/741): Small consistency issues in help messages.
 * [#743](https://github.com/deivid-rodriguez/byebug/pull/743): `untracevar` command crashing when giving a non existent global variable.
 * [#744](https://github.com/deivid-rodriguez/byebug/pull/744): Another punctuation tweak in `enable breakpoints` help message.
+* [#736](https://github.com/deivid-rodriguez/byebug/pull/736): Skip warning about `$SAFE` global variable on ruby 2.7 when listing global variables.
 
 ### Removed
 

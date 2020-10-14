@@ -12,7 +12,23 @@ module Byebug
 
       def var_list(ary, binding = context.frame._binding)
         vars = ary.sort.map do |name|
-          [name, safe_inspect(silent_eval(name.to_s, binding))]
+          code = name.to_s
+
+          if code == "$SAFE" && Gem.ruby_version >= Gem::Version.new("2.7.0.preview3")
+            code = <<~RUBY
+              original_stderr = $stderr
+
+              begin
+                $stderr = StringIO.new
+
+                #{code}
+              ensure
+                $stderr = original_stderr
+              end
+            RUBY
+          end
+
+          [name, safe_inspect(silent_eval(code, binding))]
         end
 
         puts prv(vars, "instance")
