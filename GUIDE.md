@@ -1631,7 +1631,7 @@ program. If you issue a `list` without location information, the default
 location used is the current line rather than the current position that may have
 got updated via a prior `list` command.
 
-```
+```console
 $ byebug triangle.rb
 [1, 10] in /path/to/triangle.rb
     1: # Compute the n'th triangle number, the hard way: triangle(n) == (n*(n+1))/2
@@ -1712,7 +1712,7 @@ You can customize `byebug` to use any editor you want by using the `EDITOR`
 environment variable. The only restriction is that your editor (say `ex`) recognizes
 the following command-line syntax:
 
-```
+```bash
 ex +nnn file
 ```
 
