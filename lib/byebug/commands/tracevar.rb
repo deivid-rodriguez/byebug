@@ -4,7 +4,7 @@ require_relative "../command"
 
 module Byebug
   #
-  # Show (and possibily stop) at every line that changes a global variable.
+  # Show (and possibly stop) at every line that changes a global variable.
   #
   class TracevarCommand < Command
     def self.regexp

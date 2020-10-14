@@ -131,7 +131,7 @@ module Byebug
       debug_code(program)
 
       check_output_includes \
-        "Shows several informations about the program being debugged"
+        "Shows short description and information about the program being debugged"
     end
   end
 

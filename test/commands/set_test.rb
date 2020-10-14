@@ -55,7 +55,7 @@ module Byebug
       end
     end
 
-    def test_set_does_not_enable_a_setting_using_shorcut_when_ambiguous
+    def test_set_does_not_enable_a_setting_using_shortcut_when_ambiguous
       with_setting :autolist, false do
         enter "set auto"
         debug_code(program)
@@ -64,7 +64,7 @@ module Byebug
       end
     end
 
-    def test_set_enables_a_setting_using_shorcut_when_not_ambiguous
+    def test_set_enables_a_setting_using_shortcut_when_not_ambiguous
       with_setting :autolist, false do
         enter "set autol"
         debug_code(program)
@@ -73,7 +73,7 @@ module Byebug
       end
     end
 
-    def test_set_does_not_disable_a_setting_using_shorcut_when_ambiguous
+    def test_set_does_not_disable_a_setting_using_shortcut_when_ambiguous
       with_setting :autolist, true do
         enter "set noauto"
         debug_code(program)

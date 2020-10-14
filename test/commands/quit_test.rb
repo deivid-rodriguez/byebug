@@ -21,7 +21,7 @@ module Byebug
       end
     end
 
-    def test_quit_quits_inmediately_if_used_with_bang
+    def test_quit_quits_immediately_if_used_with_bang
       faking_exit! do
         enter "quit!"
         debug_code(minimal_program)
@@ -30,7 +30,7 @@ module Byebug
       end
     end
 
-    def test_quit_quits_inmediately_if_used_with_unconditionally
+    def test_quit_quits_immediately_if_used_with_unconditionally
       faking_exit! do
         enter "quit unconditionally"
         debug_code(minimal_program)

@@ -31,7 +31,7 @@ module Byebug
     end
 
     def self.short_description
-      "Shows several informations about the program being debugged"
+      "Shows short description and information about the program being debugged"
     end
   end
 end
