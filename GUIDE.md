@@ -1354,9 +1354,9 @@ program that you want to debug (In Rails, the
 `config/environments/development.rb` could be a good candidate).
 
 ```ruby
-  require "byebug/core"
-  Byebug.wait_connection = true
-  Byebug.start_server("localhost", <port>)
+require "byebug/core"
+Byebug.wait_connection = true
+Byebug.start_server("localhost", <port>)
 ```
 
 Once this piece gets executed, you can connect to the remote debugger from your
@@ -1366,9 +1366,9 @@ Next, at a place of program execution which gets run just before the code you
 want to debug, add a call to `byebug` as was done without remote execution:
 
 ```ruby
-   # work, work, work...
-   byebug
-   some ruby code  # byebug will stop before this line is run
+# work, work, work...
+byebug
+some ruby code  # byebug will stop before this line is run
 ```
 
 ## Byebug Command Reference
