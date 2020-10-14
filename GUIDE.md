@@ -26,7 +26,7 @@ puts t
 
 Let's debug it.
 
-```bash
+```console
 $ byebug /path/to/triangle.rb
 
 [1, 10] in /path/to/triangle.rb
@@ -62,7 +62,7 @@ accordingly so that only actual real lines of code are displayed.
 
 Now let us step through the program.
 
-```bash
+```console
 (byebug) step
 
 [5, 14] in /path/to/triangle.rb
@@ -118,7 +118,7 @@ previously. However after issuing another `step` command we see that the value
 is 0 as expected. If every time we stop we want to see the value of `tri` to see
 how things are going, there is a better way by setting a display expression:
 
-```bash
+```console
 (byebug) display tri
 1: tri = 0
 ```
@@ -127,7 +127,7 @@ Now let us run the program until right before we return from the function. We'll
 want to see which lines get run, so we turn on _line tracing_. If we don't want
 whole paths to be displayed when tracing, we can turn on _basename_.
 
-```bash
+```console
 (byebug) set linetrace
 linetrace is on
 (byebug) set basename
@@ -207,7 +207,7 @@ Recall in the first section it was stated that before the `def` is run, the
 method it names is undefined. Let's check that out. First let's see what
 private methods we can call before running `def hanoi`.
 
-```bash
+```console
 $ byebug path/to/hanoi.rb
 
     1: #
@@ -317,7 +317,7 @@ is stopped.
 
 Now let's see what happens after stepping:
 
-```bash
+```console
 (byebug) step
 
 [5, 14] in /path/to/hanoi.rb
@@ -338,7 +338,7 @@ true
 
 Okay, lets go on and talk about program arguments.
 
-```bash
+```console
 (byebug) $ARGV
 []
 ```
@@ -346,7 +346,7 @@ Okay, lets go on and talk about program arguments.
 Oops. We forgot to specify any parameters to this program. Let's try again. We
 can use the `restart` command here.
 
-```bash
+```console
 (byebug) restart 3
 Re exec'ing:
   /path/to/exe/byebug /path/to/hanoi.rb 3
@@ -445,7 +445,7 @@ trace (see [callstyle]()).
 
 Now let's move around the callstack.
 
-```bash
+```console
 (byebug) undisplay
 Clear all expressions? (y/n) y
 (byebug) n_args
@@ -554,7 +554,7 @@ def test_basic
 
 Now we run the program, requiring `byebug`
 
-```bash
+```console
 $ ruby -rbyebug test_triangle.rb
 Run options: --seed 31679
 
@@ -579,7 +579,7 @@ list `solutions`.
 
 Now let's see where we are...
 
-```bash
+```console
 (byebug) set nofullpath
 Displaying frame's full file names is off.
 (byebug) bt
@@ -671,7 +671,7 @@ SievePrime.new.next_prime do |prime|
 end
 ```
 
-```bash
+```console
 $ byebug primes.rb
 [1, 10] in /path/to/primes.rb
     1: #
@@ -874,7 +874,7 @@ We instantiate a new company with an initial task and after running that
 company we expect the result to be printed in the screen, but it is not.  Lets
 debug our sample program:
 
-```bash
+```console
 [1, 10] in /path/to/company.rb
 =>  1: class Company
     2:   def initialize(task)
@@ -926,7 +926,7 @@ can then check that the threads are there using the `thread list` command. Now
 we want to debug both of this threads to check what's happening and look for the
 bug.
 
-```bash
+```console
 (byebug) th switch 3
 
 [5, 14] in /path/to/company.rb
@@ -961,7 +961,7 @@ and don't want the program to finish while we are debugging. Notice that stopped
 threads are marked with the "$" symbol whereas the current thread is marked with
 the "+" symbol.
 
-```bash
+```console
 (byebug) s
 
 [17, 26] in /path/to/company.rb
@@ -1061,7 +1061,7 @@ Everything seems fine in this thread. The first iteration the employee will do
 his job, and after that it will just check for new tasks and sleep. Let's debug
 the manager task now:
 
-```bash
+```console
 (byebug) th resume 2
   2 #<Thread:0x000000019892d8@/path/to/company.rb:12 run> /path/to/company.rb:12
 (byebug) th switch 2
@@ -1088,7 +1088,7 @@ run a sleeping thread.
 
 Now we can investigate the problem in the employer's side:
 
-```bash
+```console
 (byebug) s
 [30, 39] in /path/to/company.rb
    30:
@@ -1173,7 +1173,7 @@ If you don't need to pass dash options to your program, which might be confused
 with byebug options, then you don't need to add the `--`. To get a brief list of
 options and descriptions, use the `--help` option.
 
-```bash
+```console
 $ byebug --help
 
   byebug 3.5.1
@@ -1241,7 +1241,7 @@ Turns on line tracing. Running `byebug --trace <rubyscript>.rb` is pretty much
 like running `ruby -rtracer <rubyscript>.rb`. If all you want to do however is
 get a line trace, `tracer` is most likely faster than `byebug`.
 
-```bash
+```console
 $ time byebug --trace --no-stop hanoi.rb > /dev/null
 
 real 0m0.743s
@@ -1388,7 +1388,7 @@ with a backslash.
 For example, you might want to enter the following code to compute the 5th
 Fibonacci number.
 
-```bash
+```console
 (byebug) fib1=0; fib2=1; 5.times {|temp| temp=fib1; fib1=fib2; fib2 += temp }
 0
 1
@@ -1438,7 +1438,7 @@ Once inside `byebug` you can always ask it for information on its commands using
 the `help` command. You can use `help` (abbreviated `h`) with no arguments to
 display a short list of named classes of commands
 
-```bash
+```console
 (byebug) help
 
   break      -- Sets breakpoints in the source code
@@ -1483,7 +1483,7 @@ display a short list of named classes of commands
 
 With a command name, `help` displays information on how to use the command.
 
-```bash
+```console
 (byebug) help list
 
   l[ist][[-=]][ nn-mm]
@@ -1511,7 +1511,7 @@ as `help info breakpoints`.
 
 Some examples follow.
 
-```bash
+```console
 (byebug) help info
 info[ subcommand]
 
@@ -1530,14 +1530,14 @@ info line        -- Line number and filename of current position in source file
 info program     -- Execution status of the program
 ```
 
-```bash
+```console
 (byebug) help info breakpoints
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
 With an integer argument, list info on that breakpoint.
 ```
 
-```bash
+```console
 (byebug) help info b
 Status of user-settable breakpoints.
 Without argument, list info about all breakpoints.
@@ -1582,7 +1582,7 @@ printed if line tracing is enabled. Each expression added to the list is given a
 number to identify it; to remove an expression from the list, you specify that
 number. The automatic display looks like this:
 
-```bash
+```console
 (byebug) display n
 1: n = 3
 ```
@@ -1591,7 +1591,7 @@ This display shows item numbers, expressions and their current values. If the
 expression is undefined or illegal the expression will be printed but no value
 will appear.
 
-```bash
+```console
 (byebug) display undefined_variable
 2: undefined_variable =
 (byebug) display 1/0
@@ -1784,7 +1784,7 @@ One such method is `each`. They are marked differently in the call stack to
 indicate that we cannot switch to those frames. This is because they have no
 source code in Ruby, so we can not debug them using Byebug.
 
-```bash
+```console
 (byebug) where
 --> #0 Object.gcd(a#Fixnum, b#Fixnum) at line gcd.rb:6
     #1 at line gcd.rb:19
