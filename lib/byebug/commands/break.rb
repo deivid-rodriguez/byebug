@@ -26,10 +26,10 @@ module Byebug
         b[reak] [<file>:]<line> [if <expr>]
         b[reak] [<module>::...]<class>(.|#)<method> [if <expr>]
 
+        #{short_description}
+
         They can be specified by line or method and an expression can be added
         for conditionally enabled breakpoints.
-
-        #{short_description}
       DESCRIPTION
     end
 
