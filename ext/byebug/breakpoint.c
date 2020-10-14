@@ -128,6 +128,13 @@ brkpt_set_hit_condition(VALUE self, VALUE value)
   ID id_value;
 
   Data_Get_Struct(self, breakpoint_t, breakpoint);
+
+  if (NIL_P(value))
+  {
+    breakpoint->hit_condition = HIT_COND_NONE;
+    return value;
+  }
+
   id_value = rb_to_id(value);
 
   if (rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
