@@ -854,7 +854,7 @@ Add_catchpoint(VALUE self, VALUE value)
 }
 
 /*
- *   Document-class: Byebug
+ *   Document-module: Byebug
  *
  *   == Summary
  *
