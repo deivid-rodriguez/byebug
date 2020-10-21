@@ -45,13 +45,25 @@ module Byebug
       private
 
       def info_breakpoint(brkpt)
+        conds = []
+        case brkpt.hit_condition
+        when :greater_or_equal
+          conds << "hits >= #{brkpt.hit_value}"
+        when :equal
+          conds << "hits == #{brkpt.hit_value}"
+        when :modulo
+          conds << "!(hits % #{brkpt.hit_value})"
+        end
+
+        conds << brkpt.expr if brkpt.expr
+
         interp = format(
           "%-<id>3d %-<status>3s at %<file>s:%<line>s%<expression>s",
           id: brkpt.id,
           status: brkpt.enabled? ? "y" : "n",
           file: brkpt.source,
           line: brkpt.pos,
-          expression: brkpt.expr.nil? ? "" : " if #{brkpt.expr}"
+          expression: conds.empty? ? "" : " if #{conds.join(" and ")}"
         )
         puts interp
         hits = brkpt.hit_count
