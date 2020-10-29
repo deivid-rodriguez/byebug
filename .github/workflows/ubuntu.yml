@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-18.04
 
     strategy:
+      fail-fast: false
+
       matrix:
         version: [2.5.7, 2.6.5, 2.7.0]
         line_editor: [libedit, readline]
