@@ -14,6 +14,6 @@ group :development do
   gem "rubocop", "0.93.1"
   gem "rubocop-packaging", "~> 0.5"
   gem "rubocop-performance", "~> 1.3"
-  gem "simplecov", "0.19.0"
+  gem "simplecov", "0.19.1"
   gem "yard", "0.9.25"
 end
