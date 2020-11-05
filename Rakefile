@@ -10,20 +10,6 @@ require "yard"
 #
 task "release:rubygem_push" => "chandler:push"
 
-#
-# Prepend DevKit into compilation phase
-#
-if Gem.win_platform?
-  desc "Activates DevKit"
-  task :devkit do
-    require "devkit"
-  rescue LoadError
-    abort "Failed to load DevKit required for compilation"
-  end
-
-  task compile: :devkit
-end
-
 spec = Gem::Specification.load("byebug.gemspec")
 Rake::ExtensionTask.new("byebug", spec) { |ext| ext.lib_dir = "lib/byebug" }
 
