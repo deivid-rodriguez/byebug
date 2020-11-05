@@ -45,5 +45,5 @@ jobs:
         run: bin/setup.sh
 
       - name: Run tests
-        run: ruby bin/rake compile test
+        run: ruby bin/rake
         continue-on-error: ${{ matrix.version == 'head' }}
