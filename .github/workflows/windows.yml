@@ -25,7 +25,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: .bundle
-          key: gems-${{ hashFiles('**/Gemfile.lock') }}
+          key: gems-${{ hashFiles('**/Gemfile.windows.lock') }}
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -36,6 +36,9 @@ jobs:
           git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
           $n_dir = $(ruby -e "print RbConfig::CONFIG['sitelibdir']")
           Copy-Item -Path C:\rb-readline\lib\* -Destination $n_dir -Recurse
+
+      - name: Set Gemfile
+        run: echo "::set-env name=BUNDLE_GEMFILE::$(pwd)\Gemfile.windows"
 
       - name: Setup dependencies
         shell: bash
