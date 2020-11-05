@@ -25,7 +25,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: .bundle
-          key: gems-${{ hashFiles('**/Gemfile.lock') }}
+          key: gems-${{ hashFiles('**/Gemfile.windows.lock') }}
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -37,10 +37,13 @@ jobs:
           $n_dir = $(ruby -e "print RbConfig::CONFIG['sitelibdir']")
           Copy-Item -Path C:\rb-readline\lib\* -Destination $n_dir -Recurse
 
+      - name: Set Gemfile
+        run: echo "::set-env name=BUNDLE_GEMFILE::$(pwd)\Gemfile.windows"
+
       - name: Setup dependencies
         shell: bash
         run: bin/setup.sh
 
       - name: Run tests
-        run: ruby bin/rake compile test
+        run: ruby bin/rake
         continue-on-error: ${{ matrix.version == 'head' }}
