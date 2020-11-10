@@ -26,7 +26,7 @@ module LinterMixin
   private
 
   def tracked_files
-    Open3.capture2("git ls-files")[0].split
+    Open3.capture2("git ls-files")[0].split - Open3.capture2("git ls-files --deleted")[0].split
   end
 
   def failure_message_for(offenses)
