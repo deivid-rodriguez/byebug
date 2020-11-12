@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 namespace :lint do
+  desc "Install lint tools"
+  task :install do
+    if RUBY_VERSION >= "2.6"
+      Bundler.original_system({ "BUNDLE_GEMFILE" => "gemfiles/lint/Gemfile" }, "bundle", "install", exception: true)
+    else
+      abort unless Bundler.original_system({ "BUNDLE_GEMFILE" => "gemfiles/lint/Gemfile" }, "bundle", "install")
+    end
+  end
+
   desc "Run all linters"
   task all: %i[clang_format executables tabs trailing_whitespace rubocop mdl]
 
@@ -34,16 +43,26 @@ namespace :lint do
     TrailingWhitespaceLinter.new.run
   end
 
-  require "rubocop/rake_task"
-
   desc "Checks ruby code style with RuboCop"
-  RuboCop::RakeTask.new
+  task :rubocop do
+    puts "Running rubocop"
+
+    if RUBY_VERSION >= "2.6"
+      Bundler.original_system("bin/rubocop", exception: true)
+    else
+      abort unless Bundler.original_system("bin/rubocop")
+    end
+  end
 
   desc "Checks markdown code style with Markdownlint"
   task :mdl do
     puts "Running mdl"
 
-    sh("bin/mdl", *Dir.glob("*.md"))
+    if RUBY_VERSION >= "2.6"
+      Bundler.original_system("bin/mdl", *Dir.glob("*.md"), exception: true)
+    else
+      abort unless Bundler.original_system("bin/mdl")
+    end
   end
 
   desc "Checks shell code style with shellcheck"
@@ -55,4 +74,4 @@ namespace :lint do
 end
 
 desc "Runs lint tasks"
-task lint: "lint:all"
+task lint: ["lint:install", "lint:all"]
