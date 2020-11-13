@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        version: [2.5.7, 2.6.5, 2.7.0]
+        version: [2.5.8, 2.6.6, 2.7.2]
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
@@ -44,7 +44,7 @@ jobs:
     timeout-minutes: 15
 
   coverage:
-    container: deividrodriguez/byebug:2.7.0-readline-gcc
+    container: deividrodriguez/byebug:2.7.2-readline-gcc
 
     runs-on: ubuntu-18.04
 
@@ -55,22 +55,22 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-libedit-clang
+          name: coverage-2.5.8-libedit-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-libedit-gcc
+          name: coverage-2.5.8-libedit-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-readline-clang
+          name: coverage-2.5.8-readline-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.7-readline-gcc
+          name: coverage-2.5.8-readline-gcc
           path: coverage
 
       - name: Aggregate coverage results
