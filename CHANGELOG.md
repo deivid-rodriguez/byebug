@@ -13,6 +13,10 @@
 * [#744](https://github.com/deivid-rodriguez/byebug/pull/744): Another punctuation tweak in `enable breakpoints` help message.
 * [#736](https://github.com/deivid-rodriguez/byebug/pull/736): Skip warning about `$SAFE` global variable on ruby 2.7 when listing global variables.
 
+### Added
+
+* [#688](https://github.com/deivid-rodriguez/byebug/pull/688): `where` command now receives an optional numeric argument `<n>` to print the nth first frames.
+
 ### Removed
 
 * Support for MRI 2.4. Byebug no longer installs on this platform.
