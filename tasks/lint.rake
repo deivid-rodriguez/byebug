@@ -17,16 +17,24 @@ namespace :lint do
 
   desc "Run clang_format on C files"
   task :clang_format do
-    puts "Running linter on C files"
+    if Gem.win_platform?
+      puts "Skipping C file linting on Windows since clang-format is not available"
+    else
+      puts "Running linter on C files"
 
-    CLangFormatLinter.new.run
+      CLangFormatLinter.new.run
+    end
   end
 
   desc "Check unnecessary execute permissions"
   task :executables do
-    puts "Checking for unnecessary executables"
+    if Gem.win_platform?
+      puts "Skipping check for exectuables on Windows since it does not support execute permissions separately from read permissions"
+    else
+      puts "Checking for unnecessary executables"
 
-    ExecutableLinter.new.run
+      ExecutableLinter.new.run
+    end
   end
 
   desc "Check for tabs"

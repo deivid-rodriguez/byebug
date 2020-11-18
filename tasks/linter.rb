@@ -25,6 +25,10 @@ module LinterMixin
 
   private
 
+  def tracked_files
+    Open3.capture2("git ls-files")[0].split - Open3.capture2("git ls-files --deleted")[0].split
+  end
+
   def failure_message_for(offenses)
     msg = "#{self.class.name} detected offenses. "
 
@@ -72,7 +76,7 @@ class ExecutableLinter
   include LinterMixin
 
   def applicable_files
-    Open3.capture2("git ls-files")[0].split
+    tracked_files
   end
 
   def clean?(file)
@@ -90,7 +94,7 @@ class TabLinter
   include LinterMixin
 
   def applicable_files
-    Open3.capture2("git ls-files")[0].split
+    tracked_files
   end
 
   def clean?(file)
@@ -107,7 +111,7 @@ class TrailingWhitespaceLinter
   include LinterMixin
 
   def applicable_files
-    Open3.capture2("git ls-files")[0].split
+    tracked_files
   end
 
   def clean?(file)
