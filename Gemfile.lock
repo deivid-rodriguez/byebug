@@ -32,16 +32,17 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    simplecov (0.19.1)
+    simplecov (0.20.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.2)
     yard (0.9.25)
 
 PLATFORMS
   ruby
   x86_64-linux
-  x86_64-linux-musl
 
 DEPENDENCIES
   bundler (~> 2.0)
@@ -51,7 +52,7 @@ DEPENDENCIES
   pry (= 0.13.1)
   rake (~> 13.0)
   rake-compiler (~> 1.0)
-  simplecov (= 0.19.1)
+  simplecov (= 0.20.0)
   yard (= 0.9.25)
 
 BUNDLED WITH
