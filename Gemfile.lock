@@ -16,7 +16,7 @@ GEM
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
     method_source (1.0.0)
-    minitest (5.14.3)
+    minitest (5.14.4)
     multipart-post (2.1.1)
     netrc (0.11.0)
     octokit (4.15.0)
