@@ -22,7 +22,7 @@ GEM
     octokit (4.15.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
-    pry (0.14.0)
+    pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.3)
@@ -49,7 +49,7 @@ DEPENDENCIES
   byebug!
   chandler (= 0.9.0)
   minitest (~> 5.11)
-  pry (= 0.14.0)
+  pry (= 0.14.1)
   rake (~> 13.0)
   rake-compiler (~> 1.0)
   simplecov (= 0.21.2)
