@@ -32,6 +32,14 @@ module Byebug
       debug_code(program) { assert_equal 6, frame.line }
     end
 
+    def test_empty_command_does_not_repeat_last_command_when_ignoring_empty_commands
+      with_setting :ignore_empty_commands, true do
+        enter "n", ""
+
+        debug_code(program) { assert_equal 5, frame.line }
+      end
+    end
+
     def test_multiple_commands_are_executed_sequentially
       enter "n ; n"
 
