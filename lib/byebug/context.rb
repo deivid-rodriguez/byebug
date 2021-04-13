@@ -7,7 +7,7 @@ require_relative "processors/command_processor"
 
 module Byebug
   #
-  # Mantains context information for the debugger and it's the main
+  # Maintains context information for the debugger and it's the main
   # communication point between the library and the C-extension through the
   # at_breakpoint, at_catchpoint, at_tracing, at_line and at_return callbacks
   #
