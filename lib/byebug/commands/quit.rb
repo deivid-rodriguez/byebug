@@ -31,7 +31,7 @@ module Byebug
     end
 
     def execute
-      return unless @match[1] || confirm(pr("quit.confirmations.really"))
+      return unless @match[1] || !Setting[:prompt_on_exit] || confirm(pr("quit.confirmations.really"))
 
       processor.interface.autosave
       processor.interface.close
