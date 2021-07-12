@@ -6,7 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     chandler (0.9.0)
       netrc
@@ -25,7 +25,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (4.0.3)
+    public_suffix (4.0.6)
     rake (13.0.3)
     rake-compiler (1.1.1)
       rake
