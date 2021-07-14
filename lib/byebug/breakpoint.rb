@@ -69,7 +69,7 @@ module Byebug
 
     #
     # Returns true if a breakpoint could be set in line number +lineno+ in file
-    # name +filename.
+    # name +filename+.
     #
     def self.potential_line?(filename, lineno)
       potential_lines(filename).member?(lineno)
