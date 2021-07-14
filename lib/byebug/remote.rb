@@ -36,6 +36,9 @@ module Byebug
     #
     # Starts the remote server main thread
     #
+    # If wait_connection is set to true, the call waits for the first client
+    # connection.
+    #
     def start_server(host = nil, port = PORT)
       start_control(host, port.zero? ? 0 : port + 1)
 
