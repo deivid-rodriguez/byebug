@@ -133,6 +133,13 @@ Command     | Aliases         | Subcommands
 `up`        |                 |
 `var`       | `v`             | `all` `constant` `global` `instance` `local`
 
+NOTE: If you want to access/inspect variables or method with same name as commands, wrap the variable in parentheses.
+```ruby
+list = [1, 3, 5, 7]
+
+(byebug) (list)
+```
+
 ## Semantic Versioning
 
 Byebug attempts to follow [semantic versioning](https://semver.org) and
