@@ -15,7 +15,9 @@ module Byebug
       run_init_script
     end
 
-    current_context.step_out(3, true)
+    ensure_foreground do
+      current_context.step_out(3, true)
+    end
   end
 
   def self.spawn(host = "localhost", port = nil)

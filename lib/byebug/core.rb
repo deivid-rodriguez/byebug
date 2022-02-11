@@ -69,6 +69,30 @@ module Byebug
     end
   end
 
+  def ensure_foreground
+    fg_group_id = foreground_process_group_id
+    group_id = Process.getpgrp
+
+    if group_id == fg_group_id
+      puts "========== Already in foreground"
+      yield
+    else
+      puts "========== In background"
+      yield
+      # begin
+      #   prev_ttou_handler = Signal.trap('SIGTTOU', 'IGNORE')
+      #   tty = File.open('/dev/tty', 'r')
+      #   set_foreground_process_group_id(tty.fileno, group_id)
+
+      #   yield
+      # ensure
+      #   set_foreground_process_group_id(tty.fileno, fg_group_id)
+      #   tty.close
+      #   Signal.trap('SIGTTOU', prev_ttou_handler)
+      # end
+    end
+  end
+
   #
   # Saves information about the unhandled exception and gives a byebug
   # prompt back to the user before program termination.

@@ -708,6 +708,12 @@ Start(VALUE self)
   return Qtrue;
 }
 
+static VALUE
+Foreground_process_group_id(int tty_fd, VALUE self)
+{
+  return tcgetpgrp(tty_fd);
+}
+
 /*
  *  call-seq:
  *    Byebug.debug_load(file, stop = false) -> nil
