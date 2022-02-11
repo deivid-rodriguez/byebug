@@ -70,27 +70,19 @@ module Byebug
   end
 
   def ensure_foreground
-    fg_group_id = foreground_process_group_id
+    tty = File.open('/dev/tty', 'r')
     group_id = Process.getpgrp
 
-    if group_id == fg_group_id
-      puts "========== Already in foreground"
-      yield
-    else
-      puts "========== In background"
-      yield
-      # begin
-      #   prev_ttou_handler = Signal.trap('SIGTTOU', 'IGNORE')
-      #   tty = File.open('/dev/tty', 'r')
-      #   set_foreground_process_group_id(tty.fileno, group_id)
-
-      #   yield
-      # ensure
-      #   set_foreground_process_group_id(tty.fileno, fg_group_id)
-      #   tty.close
-      #   Signal.trap('SIGTTOU', prev_ttou_handler)
-      # end
+    unless group_id == foreground_process_group_id(tty.fileno)
+      begin
+        prev_ttou_handler = Signal.trap('SIGTTOU', 'IGNORE')
+        set_foreground_process_group_id(tty.fileno, group_id)
+      ensure
+        Signal.trap('SIGTTOU', prev_ttou_handler)
+      end
     end
+  ensure
+    tty.close
   end
 
   #

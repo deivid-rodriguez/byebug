@@ -709,9 +709,18 @@ Start(VALUE self)
 }
 
 static VALUE
-Foreground_process_group_id(int tty_fd, VALUE self)
+Foreground_process_group_id(VALUE self, VALUE tty_fd)
 {
-  return tcgetpgrp(tty_fd);
+  Check_Type(tty_fd, T_FIXNUM);
+  return INT2NUM(tcgetpgrp(NUM2INT(tty_fd)));
+}
+
+static VALUE
+Set_foreground_process_group_id(VALUE self, VALUE tty_fd, VALUE pgrp)
+{
+  Check_Type(tty_fd, T_FIXNUM);
+  Check_Type(pgrp, T_FIXNUM);
+  return INT2NUM(tcsetpgrp(NUM2INT(tty_fd), NUM2INT(pgrp)));
 }
 
 /*
@@ -890,6 +899,8 @@ Init_byebug()
   rb_define_module_function(mByebug, "tracing=", Set_tracing, 1);
   rb_define_module_function(mByebug, "verbose?", Verbose, 0);
   rb_define_module_function(mByebug, "verbose=", Set_verbose, 1);
+  rb_define_module_function(mByebug, "foreground_process_group_id", Foreground_process_group_id, 1);
+  rb_define_module_function(mByebug, "set_foreground_process_group_id", Set_foreground_process_group_id, 2);
 
   Init_threads_table(mByebug);
   Init_byebug_context(mByebug);
