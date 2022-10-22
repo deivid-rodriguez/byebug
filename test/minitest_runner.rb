@@ -32,6 +32,9 @@ module Byebug
     private
 
     def runnables
+      if Minitest.respond_to?(:seed)
+        Minitest.seed = (ENV["SEED"] || srand).to_i % 0xFFFF
+      end
       Minitest::Runnable.runnables
     end
 
