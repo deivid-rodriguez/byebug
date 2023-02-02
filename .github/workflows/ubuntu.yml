@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        version: [2.5.8, 2.6.6, 2.7.2]
+        version: [2.5.8, 2.6.6, 2.7.2, 3.0.5]
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
