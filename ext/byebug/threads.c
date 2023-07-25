@@ -224,6 +224,7 @@ void
 Init_threads_table(VALUE mByebug)
 {
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
+  rb_undef_alloc_func(cThreadsTable);
 
   rb_define_module_function(mByebug, "unlock", Unlock, 0);
   rb_define_module_function(mByebug, "lock", Lock, 0);
