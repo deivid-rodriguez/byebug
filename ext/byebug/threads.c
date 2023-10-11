@@ -180,7 +180,15 @@ release_lock(void)
 static VALUE
 Unlock(VALUE self)
 {
+  debug_context_t *dc;
+  VALUE context;
+
   UNUSED(self);
+
+  thread_context_lookup(rb_thread_current(), &context);
+  Data_Get_Struct(context, debug_context_t, dc);
+
+  CTX_FL_SET(dc, CTX_FL_IGNORE);
 
   release_lock();
 
@@ -208,6 +216,8 @@ Lock(VALUE self)
   Data_Get_Struct(context, debug_context_t, dc);
 
   acquire_lock(dc);
+
+  CTX_FL_UNSET(dc, CTX_FL_IGNORE);
 
   return locker;
 }

@@ -88,14 +88,12 @@ module Byebug
       # creating new threads won't be properly evaluated because new threads
       # will get blocked by byebug's main thread.
       #
-      def allowing_other_threads
+      def allowing_other_threads(&block)
         Byebug.unlock
 
-        res = yield
-
+        tracepoint_allow_reentry(&block)
+      ensure
         Byebug.lock
-
-        res
       end
 
       #
@@ -120,6 +118,16 @@ module Byebug
         var.to_s
       rescue StandardError
         "*Error in evaluation*"
+      end
+
+      if TracePoint.respond_to?(:allow_reentry)
+        def tracepoint_allow_reentry(&block)
+          TracePoint.allow_reentry(&block)
+        end
+      else
+        def tracepoint_allow_reentry
+          yield
+        end
       end
     end
   end
