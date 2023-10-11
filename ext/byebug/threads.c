@@ -180,7 +180,15 @@ release_lock(void)
 static VALUE
 Unlock(VALUE self)
 {
+  debug_context_t *dc;
+  VALUE context;
+
   UNUSED(self);
+
+  thread_context_lookup(rb_thread_current(), &context);
+  Data_Get_Struct(context, debug_context_t, dc);
+
+  CTX_FL_SET(dc, CTX_FL_IGNORE);
 
   release_lock();
 
@@ -209,6 +217,8 @@ Lock(VALUE self)
 
   acquire_lock(dc);
 
+  CTX_FL_UNSET(dc, CTX_FL_IGNORE);
+
   return locker;
 }
 
@@ -224,6 +234,7 @@ void
 Init_threads_table(VALUE mByebug)
 {
   cThreadsTable = rb_define_class_under(mByebug, "ThreadsTable", rb_cObject);
+  rb_undef_alloc_func(cThreadsTable);
 
   rb_define_module_function(mByebug, "unlock", Unlock, 0);
   rb_define_module_function(mByebug, "lock", Lock, 0);

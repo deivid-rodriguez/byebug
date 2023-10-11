@@ -4,8 +4,8 @@ set -eo pipefail
 
 set +x
 
-gem update --system 3.1.2
-gem install bundler --version 2.2.0.rc.2 --force
+gem update --system 3.4.20
+gem install bundler --version 2.3.26 --force
 
 bundle install
 

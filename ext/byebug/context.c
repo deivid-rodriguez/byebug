@@ -658,6 +658,7 @@ void
 Init_byebug_context(VALUE mByebug)
 {
   cContext = rb_define_class_under(mByebug, "Context", rb_cObject);
+  rb_undef_alloc_func(cContext);
 
   rb_define_method(cContext, "backtrace", Context_backtrace, 0);
   rb_define_method(cContext, "dead?", Context_dead, 0);

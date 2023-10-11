@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-load File.expand_path("bundle", __dir__)
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 
+require "rubygems"
 require "bundler/setup"
 
 load Gem.bin_path("rake", "rake")

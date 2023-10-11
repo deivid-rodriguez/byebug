@@ -65,7 +65,7 @@ class CLangFormatLinter
   private
 
   def clang_format
-    "clang-format-8"
+    "clang-format"
   end
 end
 

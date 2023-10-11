@@ -7,6 +7,7 @@ require:
 AllCops:
   Exclude:
     - tmp/**/*
+    - bin/*
 
   DisplayCopNames: true
   DisplayStyleGuide: true

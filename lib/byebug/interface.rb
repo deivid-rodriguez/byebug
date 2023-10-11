@@ -129,7 +129,7 @@ module Byebug
       return [""] if cmd_line.empty?
 
       cmd_line.split(/;/).each_with_object([]) do |v, m|
-        if m.empty? || m.last[-1] != '\\'
+        if m.empty? || m.last[-1] != "\\"
           m << v.strip
           next
         end
