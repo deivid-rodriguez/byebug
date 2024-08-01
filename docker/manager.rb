@@ -102,7 +102,7 @@ module Docker
       def release_info
         @release_info ||= YAML.safe_load(
           Net::HTTP.get(URI.parse(releases_url)),
-          [Date]
+          permitted_classes: [Date]
         )
       end
 
