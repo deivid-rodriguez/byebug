@@ -124,7 +124,7 @@ module Docker
           docker
           login
           -u
-          #{ENV['DOCKER_USER']}
+          deividrodriguez
           -p
           #{ENV['DOCKER_PASS']}
         ]

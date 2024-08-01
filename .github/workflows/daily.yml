@@ -34,7 +34,6 @@ jobs:
       - name: Build and push docker image
         run: bin/rake docker:build_and_push_head[${{ matrix.line_editor }},${{ matrix.compiler }}]
         env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
         continue-on-error: true
 
