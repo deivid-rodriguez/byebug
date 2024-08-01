@@ -167,6 +167,8 @@ module Byebug
     end
 
     def test_finish_inside_autoloaded_files
+      skip "Ruby 3.2 or lower is missing a breturn event here" if Gem.ruby_version < Gem::Version.new("3.3.a")
+
       with_new_file("byebug_bar.rb", "byebug\nmodule ByebugBar; end") do
         enter "finish"
 

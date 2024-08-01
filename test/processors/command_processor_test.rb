@@ -208,8 +208,10 @@ module Byebug
     def test_shows_error_when_current_source_location_is_unknown
       enter "step"
 
-      debug_code(program) { assert_equal "(eval)", frame.file }
-      check_error_includes "No sourcefile available for (eval)"
+      expected_file = Gem.ruby_version >= Gem::Version.new("3.3.a") ? "(eval at #{example_path}:6)" : "(eval)"
+
+      debug_code(program) { assert_equal expected_file, frame.file }
+      check_error_includes "No sourcefile available for #{expected_file}"
     end
   end
 
