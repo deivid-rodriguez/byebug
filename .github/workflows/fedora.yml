@@ -21,9 +21,6 @@ jobs:
       - name: Install OS dependencies
         run: dnf install -y ruby ruby-devel make gcc redhat-rpm-config
 
-      - name: Install bundler
-        run: gem install bundler:2.2.0.rc.2
-
       - name: Install development dependencies
         run: bundle install
 
