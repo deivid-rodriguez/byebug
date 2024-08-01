@@ -43,6 +43,7 @@ RUN set -ex \
     linux-headers \
     ncurses-dev \
     ruby \
+    yaml-dev \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \

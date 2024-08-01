@@ -13,13 +13,13 @@ jobs:
   test:
     container: deividrodriguez/byebug:${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
 
       matrix:
-        version: [2.5.9, 2.6.10, 2.7.8, 3.0.6, 3.1.4, 3.2.2]
+        version: [3.1.6, 3.2.5, 3.3.3]
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
@@ -33,20 +33,20 @@ jobs:
 
       - name: Save coverage
         run: mv coverage/.resultset.json coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
-        if: startsWith(matrix.version, '2.5')
+        if: startsWith(matrix.version, '3.3')
 
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
           path: coverage/${{ matrix.version }}-${{ matrix.line_editor }}-${{ matrix.compiler }}.json
-        if: startsWith(matrix.version, '2.5')
+        if: startsWith(matrix.version, '3.3')
 
     timeout-minutes: 15
 
   coverage:
-    container: deividrodriguez/byebug:2.7.2-readline-gcc
+    container: deividrodriguez/byebug:3.3.3-readline-gcc
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     needs: test
 
@@ -55,22 +55,22 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.8-libedit-clang
+          name: coverage-3.3.3-libedit-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.8-libedit-gcc
+          name: coverage-3.3.3-libedit-gcc
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.8-readline-clang
+          name: coverage-3.3.3-readline-clang
           path: coverage
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.5.8-readline-gcc
+          name: coverage-3.3.3-readline-gcc
           path: coverage
 
       - name: Aggregate coverage results

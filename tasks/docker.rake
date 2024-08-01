@@ -26,6 +26,19 @@ namespace :docker do
     manager.push
   end
 
+  desc "Build and push an image"
+  task :build_and_push, %i[version line_editor compiler] do |_t, opts|
+    manager = Docker::Manager.new(
+      version: opts[:version],
+      line_editor: opts[:line_editor],
+      compiler: opts[:compiler]
+    )
+
+    manager.build
+    manager.login
+    manager.push
+  end
+
   desc "Test all docker images"
   task :test_all do
     Docker::Manager.test_all
