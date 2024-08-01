@@ -10,7 +10,7 @@ jobs:
   build_head_images:
     container: deividrodriguez/byebug:3.1.4-readline-gcc
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -43,7 +43,7 @@ jobs:
 
     needs: build_head_images
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
