@@ -370,20 +370,17 @@ check_breakpoint_by_hit_condition(VALUE rb_breakpoint)
   {
     case HIT_COND_NONE:
       return 1;
-    case HIT_COND_GE:
-    {
+    case HIT_COND_GE: {
       if (breakpoint->hit_count >= breakpoint->hit_value)
         return 1;
       break;
     }
-    case HIT_COND_EQ:
-    {
+    case HIT_COND_EQ: {
       if (breakpoint->hit_count == breakpoint->hit_value)
         return 1;
       break;
     }
-    case HIT_COND_MOD:
-    {
+    case HIT_COND_MOD: {
       if (breakpoint->hit_count % breakpoint->hit_value == 0)
         return 1;
       break;
