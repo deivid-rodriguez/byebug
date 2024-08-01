@@ -14,6 +14,7 @@ module Byebug
   #
   class MinitestRunner
     def initialize
+      Minitest.seed = ENV["SEED"] || srand
       @test_suites = extract_from_argv { |cmd_arg| test_suite?(cmd_arg) }
     end
 
