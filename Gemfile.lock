@@ -18,6 +18,8 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
+    faraday-retry (2.2.1)
+      faraday (~> 2.0)
     json (2.10.2)
     logger (1.6.6)
     method_source (1.0.0)
@@ -49,6 +51,7 @@ DEPENDENCIES
   bundler (~> 2.0)
   byebug!
   chandler (= 0.9.0)
+  faraday-retry (~> 2.2)
   minitest (~> 5.25)
   pry (= 0.15.2)
   rake (~> 13.0)
