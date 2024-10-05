@@ -20,7 +20,7 @@ module Byebug
     end
 
     settings =
-      %i[autolist autosave basename fullpath post_mortem stack_on_error]
+      %i[autolist autosave basename fullpath ignore_empty_commands post_mortem stack_on_error]
 
     settings.each do |set|
       ["on", "1", "true", ""].each do |key|
