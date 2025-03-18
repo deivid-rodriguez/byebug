@@ -57,7 +57,7 @@ module Byebug
 
     def run_minitest_runner(*args)
       Bundler.with_original_env do
-        output, status = Open3.capture2e(shell_out_env(simplecov: false), *binstub, *args)
+        output, status = Open3.capture2e(shell_out_env, *binstub, *args)
 
         assert_equal true, status.success?, output
 

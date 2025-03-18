@@ -14,7 +14,7 @@ AllCops:
 
   DisabledByDefault: true
 
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
 
 Layout/AccessModifierIndentation:
   Enabled: true
@@ -493,11 +493,6 @@ Naming/ClassAndModuleCamelCase:
 
 Naming/ConstantName:
   Enabled: true
-
-Naming/FileName:
-  Enabled: true
-  Exclude:
-    - .simplecov
 
 Naming/HeredocDelimiterCase:
   Enabled: true

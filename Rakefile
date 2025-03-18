@@ -2,7 +2,6 @@
 
 import "tasks/compile.rake"
 import "tasks/test.rake"
-import "tasks/coverage.rake"
 import "tasks/release.rake"
 import "tasks/docs.rake"
 import "tasks/lint.rake"

@@ -3,11 +3,7 @@
 namespace :lint do
   desc "Install lint tools"
   task :install do
-    if RUBY_VERSION >= "2.6"
-      Bundler.original_system({ "BUNDLE_GEMFILE" => "gemfiles/lint/Gemfile" }, "bundle", "install", exception: true)
-    else
-      abort unless Bundler.original_system({ "BUNDLE_GEMFILE" => "gemfiles/lint/Gemfile" }, "bundle", "install")
-    end
+    Bundler.original_system({ "BUNDLE_GEMFILE" => "gemfiles/lint/Gemfile" }, "bundle", "install", exception: true)
   end
 
   desc "Run all linters"
@@ -55,22 +51,14 @@ namespace :lint do
   task :rubocop do
     puts "Running rubocop"
 
-    if RUBY_VERSION >= "2.6"
-      Bundler.original_system("bin/rubocop", exception: true)
-    else
-      abort unless Bundler.original_system("bin/rubocop")
-    end
+    Bundler.original_system("bin/rubocop", exception: true)
   end
 
   desc "Checks markdown code style with Markdownlint"
   task :mdl do
     puts "Running mdl"
 
-    if RUBY_VERSION >= "2.6"
-      Bundler.original_system("bin/mdl", *Dir.glob("*.md"), exception: true)
-    else
-      abort unless Bundler.original_system("bin/mdl")
-    end
+    Bundler.original_system("bin/mdl", *Dir.glob("*.md"), exception: true)
   end
 
   desc "Checks shell code style with shellcheck"
