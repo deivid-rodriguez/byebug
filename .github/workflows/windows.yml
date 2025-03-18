@@ -22,11 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/cache@v1
-        with:
-          path: .bundle
-          key: gems-${{ hashFiles('**/Gemfile.lock') }}
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.version }}
