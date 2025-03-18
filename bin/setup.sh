@@ -4,7 +4,7 @@ set -eo pipefail
 
 set +x
 
-gem update --system 3.4.20
+gem update --system 3.6.6
 
 bundle install
 
