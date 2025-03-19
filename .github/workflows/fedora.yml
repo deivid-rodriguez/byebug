@@ -28,4 +28,6 @@ jobs:
         run: bin/rake install
 
       - name: Run byebug
-        run: byebug -h
+        run: .bundle/ruby/3.4.0/bin/byebug -h
+        env:
+          GEM_HOME: .bundle/ruby/3.4.0
