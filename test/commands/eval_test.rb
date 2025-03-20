@@ -50,8 +50,6 @@ module Byebug
     end
 
     def test_eval_triggers_class_tracepoint
-      skip unless TracePoint.respond_to?(:allow_reentry) # TracePoint.allow_reentry only supported in >= 3.1
-
       with_new_file("foo.rb", foo_program) do
         enter "Foo.bar", "result"
         debug_code(program)

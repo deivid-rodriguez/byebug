@@ -91,7 +91,7 @@ module Byebug
       def allowing_other_threads(&block)
         Byebug.unlock
 
-        tracepoint_allow_reentry(&block)
+        TracePoint.allow_reentry(&block)
       ensure
         Byebug.lock
       end
@@ -118,16 +118,6 @@ module Byebug
         var.to_s
       rescue StandardError
         "*Error in evaluation*"
-      end
-
-      if TracePoint.respond_to?(:allow_reentry)
-        def tracepoint_allow_reentry(&block)
-          TracePoint.allow_reentry(&block)
-        end
-      else
-        def tracepoint_allow_reentry
-          yield
-        end
       end
     end
   end
