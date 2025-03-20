@@ -41,9 +41,7 @@ more][Tidelift for enterprise].
 
 ## Requirements
 
-* _Required_: MRI 2.6.0 or higher.
-* _Recommended_: MRI 2.6.4 or higher (MRI 2.6.0 to 2.6.3 contain a regression
-  causing unbalanced call/return events in some cases, breaking the `next` command).
+* _Required_: MRI 2.7.0 or higher.
 
 ## Install
 

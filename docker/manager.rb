@@ -10,7 +10,6 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      2.6.10
       2.7.8
       3.0.6
       3.1.4
