@@ -42,7 +42,7 @@ module Byebug
         n_frames = 1
       end
 
-      force = n_frames.zero? ? true : false
+      force = n_frames.zero? || false
       context.step_out(context.frame.pos + n_frames, force)
       context.frame = 0
       processor.proceed!

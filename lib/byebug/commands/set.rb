@@ -58,7 +58,7 @@ module Byebug
 
       setting.value = value
 
-      puts setting.to_s
+      puts setting
     end
 
     private
