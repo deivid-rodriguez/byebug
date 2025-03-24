@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
+## [12.0.0] - 2025-03-25
+
 ### Changed
 
-* [#690](https://github.com/deivid-rodriguez/byebug/pull/690): `break` without any arguments now sets a breakpoint on the current line, just like `gdb`.
+* [#690](https://github.com/deivid-rodriguez/byebug/pull/690): `break` without any arguments now sets a breakpoint on the current line, just like `gdb` ([@sergioro9].
 
 ### Fixed
 
@@ -15,11 +17,12 @@
 
 ### Added
 
-* [#688](https://github.com/deivid-rodriguez/byebug/pull/688): `where` command now receives an optional numeric argument `<n>` to print the nth first frames.
+* [#847](https://github.com/deivid-rodriguez/byebug/pull/847) and [#850](https://github.com/deivid-rodriguez/byebug/pull/850): Support for MRI 3.1, 3.2, and 3.3 ([@marshall-lee]).
+* [#688](https://github.com/deivid-rodriguez/byebug/pull/688): `where` command now receives an optional numeric argument `<n>` to print the nth first frames ([@sergioro9].
 
 ### Removed
 
-* Support for MRI 2.4. Byebug no longer installs on this platform.
+* Support for MRI 2.4, 2.5, 2.6, 2.7, and 3.0. Byebug no longer installs on this platform.
 
 ## [11.1.3] - 2020-04-23
 
@@ -840,6 +843,7 @@
 * Initial release.
 
 [Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.3...HEAD
+[12.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.3...v12.0.0
 [11.1.3]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.2...v11.1.3
 [11.1.2]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.1...v11.1.2
 [11.1.1]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.0...v11.1.1
@@ -938,10 +942,12 @@
 [@k0kubun]: https://github.com/k0kubun
 [@ko1]: https://github.com/ko1
 [@luislavena]: https://github.com/luislavena
+[@marshall-lee]: https://github.com/marshall-lee
 [@mrkn]: https://github.com/mrkn
 [@nobu]: https://github.com/nobu
 [@Olgagr]: https://github.com/Olgagr
 [@sethk]: https://github.com/sethk
+[@sergioro9]: https://github.com/sergioro9
 [@shuky19]: https://github.com/shuky19
 [@tacnoman]: https://github.com/tacnoman
 [@terceiro]: https://github.com/terceiro
