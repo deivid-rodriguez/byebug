@@ -1,0 +1,31 @@
+---
+
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        version: [3.1.6, 3.2.7, 3.3.7]
+        line_editor: [libedit, readline]
+        compiler: [clang, gcc]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.7
+          bundler-cache: true
+
+      - name: Build and push docker image
+        run: bin/rake docker:build_and_push[${{ matrix.version }},${{ matrix.line_editor }},${{ matrix.compiler }}]
+        env:
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}

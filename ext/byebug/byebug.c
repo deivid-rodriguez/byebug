@@ -136,26 +136,32 @@ cleanup(debug_context_t *dc)
 
 #define EVENT_TEARDOWN cleanup(dc);
 
-#define EVENT_SETUP                                     \
-  debug_context_t *dc;                                  \
-  VALUE context;                                        \
-  rb_trace_arg_t *trace_arg;                            \
-                                                        \
-  UNUSED(data);                                         \
-                                                        \
-  if (!is_living_thread(rb_thread_current()))           \
-    return;                                             \
-                                                        \
-  thread_context_lookup(rb_thread_current(), &context); \
-  Data_Get_Struct(context, debug_context_t, dc);        \
-                                                        \
-  trace_arg = rb_tracearg_from_tracepoint(trace_point); \
-  if (verbose == Qtrue)                                 \
-    trace_print(trace_arg, dc, 0, 0);                   \
-                                                        \
-  if (CTX_FL_TEST(dc, CTX_FL_IGNORE))                   \
-    return;                                             \
-                                                        \
+#define EVENT_SETUP                                              \
+  debug_context_t *dc;                                           \
+  VALUE context;                                                 \
+  rb_trace_arg_t *trace_arg;                                     \
+                                                                 \
+  UNUSED(data);                                                  \
+                                                                 \
+  if (!is_living_thread(rb_thread_current()))                    \
+    return;                                                      \
+                                                                 \
+  thread_context_lookup(rb_thread_current(), &context);          \
+  Data_Get_Struct(context, debug_context_t, dc);                 \
+                                                                 \
+  trace_arg = rb_tracearg_from_tracepoint(trace_point);          \
+  if (verbose == Qtrue)                                          \
+    trace_print(trace_arg, dc, 0, 0);                            \
+                                                                 \
+  if (CTX_FL_TEST(dc, CTX_FL_IGNORE))                            \
+    return;                                                      \
+                                                                 \
+  VALUE rb_path = rb_tracearg_path(trace_arg);                   \
+  const char *path = NIL_P(rb_path) ? "" : RSTRING_PTR(rb_path); \
+                                                                 \
+  if (!strncmp(path, "<internal:", strlen("<internal:")))        \
+    return;                                                      \
+                                                                 \
   acquire_lock(dc);
 
 

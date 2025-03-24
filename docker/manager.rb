@@ -10,12 +10,9 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      2.5.9
-      2.6.10
-      2.7.8
-      3.0.6
-      3.1.4
-      3.2.2
+      3.1.6
+      3.2.7
+      3.3.7
     ].freeze
 
     LINE_EDITORS = %w[
@@ -106,7 +103,7 @@ module Docker
       def release_info
         @release_info ||= YAML.safe_load(
           Net::HTTP.get(URI.parse(releases_url)),
-          [Date]
+          permitted_classes: [Date]
         )
       end
 
@@ -128,7 +125,7 @@ module Docker
           docker
           login
           -u
-          #{ENV['DOCKER_USER']}
+          deividrodriguez
           -p
           #{ENV['DOCKER_PASS']}
         ]

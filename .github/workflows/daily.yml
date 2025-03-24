@@ -8,9 +8,9 @@ on:
 
 jobs:
   build_head_images:
-    container: deividrodriguez/byebug:2.7.2-readline-gcc
+    container: deividrodriguez/byebug:3.1.6-readline-gcc
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -20,7 +20,7 @@ jobs:
         compiler: [clang, gcc]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install Docker client
         run: |
@@ -34,7 +34,6 @@ jobs:
       - name: Build and push docker image
         run: bin/rake docker:build_and_push_head[${{ matrix.line_editor }},${{ matrix.compiler }}]
         env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
         continue-on-error: true
 
@@ -43,7 +42,7 @@ jobs:
 
     needs: build_head_images
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false

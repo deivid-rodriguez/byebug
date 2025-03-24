@@ -97,12 +97,23 @@ module Byebug
       end
     end
 
-    def test_linetrace_does_not_show_a_line_in_eval_context
-      with_setting :linetrace, true do
-        enter "cont"
-        debug_code(program)
+    if Gem.ruby_version < Gem::Version.new("3.3.a")
+      def test_linetrace_does_not_show_a_line_in_eval_context
+        with_setting :linetrace, true do
+          enter "cont"
+          debug_code(program)
 
-        check_output_includes "Tracing: (eval):1"
+          check_output_includes "Tracing: (eval):1"
+        end
+      end
+    else
+      def test_linetrace_shows_a_line_in_eval_context
+        with_setting :linetrace, true do
+          enter "cont"
+          debug_code(program)
+
+          check_output_includes "Tracing: (eval at #{example_path}:16):1"
+        end
       end
     end
   end

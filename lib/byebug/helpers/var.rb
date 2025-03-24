@@ -14,7 +14,7 @@ module Byebug
         vars = ary.sort.map do |name|
           code = name.to_s
 
-          if code == "$SAFE" && Gem.ruby_version >= Gem::Version.new("2.7.0.preview3")
+          if code == "$SAFE"
             code = <<~RUBY
               original_stderr = $stderr
 

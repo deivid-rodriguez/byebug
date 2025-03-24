@@ -42,7 +42,7 @@ module Byebug
     private
 
     def help_for_all
-      puts(processor.command_list.to_s)
+      puts(processor.command_list.to_s) # rubocop:disable Lint/RedundantStringCoercion
     end
 
     def help_for(input, cmd)

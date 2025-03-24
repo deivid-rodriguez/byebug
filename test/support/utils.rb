@@ -242,30 +242,15 @@ module Byebug
     end
 
     #
-    # Common environment shared by specs that shell out. It needs to:
+    # Common environment shared by specs that shell out. It needs to add byebug
+    # to the LOAD_PATH.
     #
-    # * Adds byebug to the LOAD_PATH.
-    # * (Optionally) Setup coverage tracking so that coverage in the subprocess
-    #   is tracked.
-    #
-    def shell_out_env(simplecov: true)
-      minitest_test = Thread.current.backtrace_locations.find do |location|
-        location.label.start_with?("test_")
-      end
-
+    def shell_out_env
       lib_dir = File.expand_path("../../lib", __dir__)
 
-      base = {
-        "MINITEST_TEST" => "#{self.class}##{minitest_test.label}",
+      {
         "RUBYOPT" => "-I #{lib_dir}"
       }
-
-      if simplecov
-        test_dir = File.expand_path("..", __dir__)
-        base["RUBYOPT"] += " -r #{test_dir}/support/simplecov.rb"
-      end
-
-      base
     end
 
     #
