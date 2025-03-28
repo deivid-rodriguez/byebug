@@ -19,11 +19,11 @@ The main features supported by Byebug are:
 
 * Analyzing. Studying program status at a certain point during its execution
   (including right after termination). Specifically, we can:
-  * Inspect and move around the backtrace (`backtrace`, `up`, `down` and
-    `frame` commands).
-  * Have a basic REPL functionality, evaluating custom code (`eval`, `irb`,
-    `pry`, `method`, `pp`, `ps`, `putl`, `var` commands).
-  * Look and change the program's source code (`edit`, `list`, `info` commands).
+   * Inspect and move around the backtrace (`backtrace`, `up`, `down` and
+     `frame` commands).
+   * Have a basic REPL functionality, evaluating custom code (`eval`, `irb`,
+     `pry`, `method`, `pp`, `ps`, `putl`, `var` commands).
+   * Look and change the program's source code (`edit`, `list`, `info` commands).
 
 * Stepping: Running your program one line or instruction at a time, or until
   specific points in the program are reached. Related commands: `step`, `next`,
@@ -76,13 +76,13 @@ This is the list of available commands and a short explanation of its usage:
 
 * _thread list_: Lists threads. This is equivalent to Ruby's `Thread.list`, but
   it has the following format:
-  * A mark '+' for the current thread.
-  * A mark '$' for a stopped thread.
-  * An internal `id` for the thread, specific to Byebug.
-  * Ruby's id and status for the thread, in the format
-    `#<Thread:0x0123456789ABCD (run|sleep)> </path/to/file>:<line_number>`.
-  * Current file and line number location of the thread's execution, in the
-    format `file:line`.
+   * A mark '+' for the current thread.
+   * A mark '$' for a stopped thread.
+   * An internal `id` for the thread, specific to Byebug.
+   * Ruby's id and status for the thread, in the format
+     `#<Thread:0x0123456789ABCD (run|sleep)> </path/to/file>:<line_number>`.
+   * Current file and line number location of the thread's execution, in the
+     format `file:line`.
 
 * _thread current_: Shows the `thread list` entry for the current thread, just
   like the `frame` command shows the current frame whereas the `backtrace`
