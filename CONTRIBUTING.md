@@ -31,15 +31,15 @@ abide by its terms.
 * Run the test suite using the default rake task (`bin/rake`). This task is
   composed of 3 subtasks: `bin/rake compile`, `bin/rake test` & `bin/rake lint`.
 * If you want to run specific tests, use the provided test runner, like so:
-  * Specific test files. For example, `bin/minitest test/commands/break_test.rb`
-  * Specific test classes. For example, `bin/minitest BreakAtLinesTest`
-  * Specific tests. For example,
-    `bin/minitest test_catch_removes_specific_catchpoint`
-  * Specific fully qualified tests. For example,
-    `bin/minitest BreakAtLinesTest#test_setting_breakpoint_sets_correct_fields`
-  * You can combine any of them and you will get the union of all filters. For
-    example: `bin/minitest BreakAtLinesTest
-    test_catch_removes_specific_catchpoint`
+   * Specific test files. For example, `bin/minitest test/commands/break_test.rb`
+   * Specific test classes. For example, `bin/minitest BreakAtLinesTest`
+   * Specific tests. For example,
+     `bin/minitest test_catch_removes_specific_catchpoint`
+   * Specific fully qualified tests. For example,
+     `bin/minitest BreakAtLinesTest#test_setting_breakpoint_sets_correct_fields`
+   * You can combine any of them and you will get the union of all filters. For
+     example: `bin/minitest BreakAtLinesTest
+     test_catch_removes_specific_catchpoint`
 
 ## Code style
 
