@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: daily
+    versioning-strategy: increase-if-necessary
+
+  - package-ecosystem: bundler
+    directory: /gemfiles/lint
+    schedule:
+      interval: daily
+    versioning-strategy: increase-if-necessary
