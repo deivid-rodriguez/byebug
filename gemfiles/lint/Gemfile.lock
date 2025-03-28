@@ -12,7 +12,7 @@ GEM
     ast (2.4.3)
     chef-utils (16.6.14)
     json (2.10.2)
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
