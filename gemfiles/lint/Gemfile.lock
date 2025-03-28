@@ -61,7 +61,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    yard (0.9.26)
+    yard (0.9.37)
 
 PLATFORMS
   ruby
@@ -72,7 +72,7 @@ DEPENDENCIES
   rubocop (~> 1.74)
   rubocop-packaging!
   rubocop-performance (~> 1.24)
-  yard (= 0.9.26)
+  yard (= 0.9.37)
 
 BUNDLED WITH
    2.6.6
