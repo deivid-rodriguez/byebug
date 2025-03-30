@@ -119,8 +119,8 @@ Command     | Aliases         | Subcommands
 `quit!`     | `q!`            |
 `restart`   |                 |
 `save`      | `sa`            |
-`set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-`show`      |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+`set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `ignore_empty_commands` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
+`show`      |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `ignore_empty_commands` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
 `skip`      | `sk`            |
 `source`    | `so`            |
 `step`      | `s`             |
