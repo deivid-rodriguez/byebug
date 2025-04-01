@@ -1455,7 +1455,7 @@ display a short list of named classes of commands
   frame      -- Moves to a frame in the call stack
   help       -- Helps you using byebug
   history    -- Shows byebug's history of commands
-  info       -- Shows several informations about the program being debugged
+  info       -- Shows information about the program being debugged
   interrupt  -- Interrupts the program
   irb        -- Starts an IRB session
   kill       -- Sends a signal to the current process
