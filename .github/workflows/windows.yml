@@ -38,6 +38,5 @@ jobs:
 
       - name: Run tests
         run: ruby bin/rake
-        continue-on-error: ${{ matrix.version == 'head' }}
 
     timeout-minutes: 15
