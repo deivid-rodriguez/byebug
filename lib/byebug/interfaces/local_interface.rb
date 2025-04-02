@@ -15,13 +15,13 @@ module Byebug
     end
 
     #
-    # Reads a single line of input using Readline. If Ctrl-D is pressed, it
+    # Reads a single line of input using Reline. If Ctrl-D is pressed, it
     # returns "continue", meaning that program's execution will go on.
     #
     # @param prompt Prompt to be displayed.
     #
     def readline(prompt)
-      with_repl_like_sigint { without_readline_completion { Readline.readline(prompt) || EOF_ALIAS } }
+      with_repl_like_sigint { without_reline_completion { Reline.readline(prompt) || EOF_ALIAS } }
     end
 
     #
@@ -42,21 +42,21 @@ module Byebug
     end
 
     #
-    # Disable any Readline completion procs.
+    # Disable any Reline completion procs.
     #
     # Other gems, for example, IRB could've installed completion procs that are
     # dependent on them being loaded. Disable those while byebug is the REPL
-    # making use of Readline.
+    # making use of Reline.
     #
-    def without_readline_completion
-      orig_completion = Readline.completion_proc
+    def without_reline_completion
+      orig_completion = Reline.completion_proc
       return yield unless orig_completion
 
       begin
-        Readline.completion_proc = ->(_) { nil }
+        Reline.completion_proc = ->(_) { nil }
         yield
       ensure
-        Readline.completion_proc = orig_completion
+        Reline.completion_proc = orig_completion
       end
     end
   end
