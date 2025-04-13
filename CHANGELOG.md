@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+* [#615](https://github.com/deivid-rodriguez/byebug/pull/615): Byebug now uses a [pure ruby readline implementation](https://github.com/ruby/reline).
+
 ## [12.0.0] - 2025-03-25
 
 ### Changed
