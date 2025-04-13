@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "../command"
-require_relative "../helpers/parse"
+require_relative "../subcommands"
+
+require_relative "condition/expression"
+require_relative "condition/hitcount"
 
 module Byebug
   #
@@ -10,24 +12,19 @@ module Byebug
   # Adds the ability to stop on breakpoints only under certain conditions.
   #
   class ConditionCommand < Command
-    include Helpers::ParseHelper
+    include Subcommands
 
     self.allow_in_post_mortem = true
 
     def self.regexp
-      /^\s* cond(?:ition)? (?:\s+(\d+)(?:\s+(.*))?)? \s*$/x
+      /^\s* cond(?:ition)? (?:\s+ (.+))? \s*$/x
     end
 
     def self.description
       <<-DESCRIPTION
-        cond[ition] <n>[ expr]
+        cond[ition] <subcommand>
 
         #{short_description}
-
-        Specify breakpoint number <n> to break only if <expr> is true. <n> is
-        an integer and <expr> is an expression to be evaluated whenever
-        breakpoint <n> is reached. If no expression is specified, the condition
-        is removed.
       DESCRIPTION
     end
 
@@ -36,20 +33,12 @@ module Byebug
     end
 
     def execute
-      return puts(help) unless @match[1]
+      subcmd_name = @match[1]
+      return puts(help) unless subcmd_name
 
-      breakpoints = Byebug.breakpoints.sort_by(&:id)
-      return errmsg(pr("condition.errors.no_breakpoints")) if breakpoints.empty?
-
-      pos, err = get_int(@match[1], "Condition", 1)
-      return errmsg(err) if err
-
-      breakpoint = breakpoints.find { |b| b.id == pos }
-      return errmsg(pr("break.errors.no_breakpoint")) unless breakpoint
-
-      return errmsg(pr("break.errors.not_changed", expr: @match[2])) unless syntax_valid?(@match[2])
-
-      breakpoint.expr = @match[2]
+      # default to the expression subcommand, for backwards compatability
+      subcmd = subcommand_list.match(subcmd_name) || subcommand_list.match('expression')
+      subcmd.new(processor, arguments).execute
     end
   end
 end
