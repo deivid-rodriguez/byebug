@@ -71,6 +71,8 @@ module Byebug
       line = readline(prompt)
       return unless line
 
+      return "" if line.empty? && Setting[:ignore_empty_commands]
+
       last_if_empty(line)
     end
 
