@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "../command"
-require "irb"
 require "English"
 
 module Byebug
@@ -29,6 +28,8 @@ module Byebug
 
     def execute
       return errmsg(pr("base.errors.only_local")) unless processor.interface.instance_of?(LocalInterface)
+
+      require "irb"
 
       # @todo IRB tries to parse $ARGV so we must clear it (see #197). Add a
       #   test case for it so we can remove this comment.
