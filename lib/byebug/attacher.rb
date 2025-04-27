@@ -13,6 +13,7 @@ module Byebug
 
       start
       run_init_script
+      ensure_foreground
     end
 
     current_context.step_out(3, true)
