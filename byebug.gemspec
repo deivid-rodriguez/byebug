@@ -25,5 +25,8 @@ Gem::Specification.new do |s|
   s.extensions = ["ext/byebug/extconf.rb"]
   s.require_path = "lib"
 
+  s.add_dependency "reline", "~> 0.3"
+
+  s.add_development_dependency "irb"
   s.add_development_dependency "bundler", "~> 2.0"
 end
