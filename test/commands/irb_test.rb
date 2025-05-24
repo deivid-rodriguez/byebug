@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "minitest/mock"
+require "irb"
 
 module Byebug
   #
