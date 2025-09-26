@@ -54,7 +54,7 @@ module Byebug
           context.stack_size
         end
 
-      bt = prc("frame.line", (0...max_frame)) do |_, index|
+      bt = prc("frame.line", 0...max_frame) do |_, index|
         Frame.new(context, index).to_hash
       end
 

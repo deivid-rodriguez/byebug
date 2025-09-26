@@ -506,7 +506,7 @@ Naming/MemoizedInstanceVariableName:
 Naming/MethodName:
   Enabled: true
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: true
 
 Naming/RescuedExceptionsVariableName:
