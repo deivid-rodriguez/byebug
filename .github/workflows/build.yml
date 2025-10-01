@@ -17,8 +17,8 @@ jobs:
       matrix:
         version:
           - { name: 3.1, value: 3.1.6 }
-          - { name: 3.2, value: 3.2.7 }
-          - { name: 3.3, value: 3.3.7 }
+          - { name: 3.2, value: 3.2.9 }
+          - { name: 3.3, value: 3.3.9 }
 
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
@@ -28,7 +28,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.7
+          ruby-version: 3.3.9
           bundler-cache: true
 
       - name: Build and push docker image
