@@ -39,4 +39,4 @@ jobs:
       - name: Run tests
         run: ruby bin/rake
 
-    timeout-minutes: 15
+    timeout-minutes: 10
