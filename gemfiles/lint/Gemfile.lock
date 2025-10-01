@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/utkarsh2102/rubocop-packaging.git
-  revision: 277bcfead602e59c3a89dca346c7ab58eeeb18ad
+  revision: 13de3eb1686cc4d54417199e257f857e89ef2885
   specs:
     rubocop-packaging (0.6.0)
       lint_roller (~> 1.1.0)
