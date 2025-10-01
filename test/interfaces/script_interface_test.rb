@@ -11,9 +11,13 @@ module Byebug
       with_new_tempfile("show") do |path|
         interface = ScriptInterface.new(path)
 
-        assert_instance_of File, interface.input
-        assert_instance_of StringIO, interface.output
-        assert_equal $stderr, interface.error
+        begin
+          assert_instance_of File, interface.input
+          assert_instance_of StringIO, interface.output
+          assert_equal $stderr, interface.error
+        ensure
+          interface.close
+        end
       end
     end
 
@@ -21,9 +25,13 @@ module Byebug
       with_new_tempfile("show") do |path|
         interface = ScriptInterface.new(path, true)
 
-        assert_instance_of File, interface.input
-        assert_equal $stdout, interface.output
-        assert_equal $stderr, interface.error
+        begin
+          assert_instance_of File, interface.input
+          assert_equal $stdout, interface.output
+          assert_equal $stderr, interface.error
+        ensure
+          interface.close
+        end
       end
     end
 
@@ -31,7 +39,11 @@ module Byebug
       with_new_tempfile("# Run the show command\nshow\n") do |path|
         interface = ScriptInterface.new(path)
 
-        assert_equal "show", interface.readline
+        begin
+          assert_equal "show", interface.readline
+        ensure
+          interface.close
+        end
       end
     end
   end
