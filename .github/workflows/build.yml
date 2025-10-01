@@ -7,13 +7,19 @@ on:
 
 jobs:
   build:
+    name: Ruby ${{ matrix.version.name }} (${{ matrix.line_editor }}, ${{ matrix.compiler }})
+
     runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
 
       matrix:
-        version: [3.1.6, 3.2.7, 3.3.7]
+        version:
+          - { name: 3.1, value: 3.1.6 }
+          - { name: 3.2, value: 3.2.7 }
+          - { name: 3.3, value: 3.3.7 }
+
         line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
@@ -26,6 +32,6 @@ jobs:
           bundler-cache: true
 
       - name: Build and push docker image
-        run: bin/rake docker:build_and_push[${{ matrix.version }},${{ matrix.line_editor }},${{ matrix.compiler }}]
+        run: bin/rake docker:build_and_push[${{ matrix.version.value }},${{ matrix.line_editor }},${{ matrix.compiler }}]
         env:
           DOCKER_PASS: ${{ secrets.DOCKER_PASS }}

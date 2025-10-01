@@ -11,20 +11,25 @@ on:
 
 jobs:
   test:
+    name: Ruby ${{ matrix.version.name }}
+
     runs-on: windows-2025
 
     strategy:
       fail-fast: false
 
       matrix:
-        version: [3.1.6, 3.2.7, 3.3.7]
+        version:
+          - { name: 3.1, value: 3.1.6 }
+          - { name: 3.2, value: 3.2.7 }
+          - { name: 3.3, value: 3.3.7 }
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.version }}
+          ruby-version: ${{ matrix.version.value }}
 
       - name: Patch rb-readline
         run: |
