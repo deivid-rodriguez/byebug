@@ -55,14 +55,12 @@ module Byebug
     # Temporary creates a new file a yields it to the passed block
     #
     def with_new_tempfile(content)
-      file = Tempfile.new("foo")
-      file.write(content)
-      file.close
+      Tempfile.create("foo") do |tempfile|
+        tempfile.write(content)
+        tempfile.close
 
-      yield(file.path)
-    ensure
-      file.close
-      file.unlink
+        yield(tempfile.path)
+      end
     end
 
     #
