@@ -7,8 +7,12 @@ doc
 .yardoc
 
 .gdb_history
+
 .bundle/*
 !.bundle/config
+gemfiles/lint/.bundle/*
+!gemfiles/lint/.bundle/config
+
 .byebugrc
 .byebug_history
 .envrc
