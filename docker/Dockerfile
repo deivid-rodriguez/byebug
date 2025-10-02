@@ -13,7 +13,7 @@ ARG line_edit_lib=
 ARG line_edit_config=
 ARG compiler=
 
-ENV CC $compiler
+ENV CC=$compiler
 
 RUN set -ex \
   \
