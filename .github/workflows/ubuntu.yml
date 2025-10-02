@@ -44,7 +44,7 @@ jobs:
         compiler: [clang, gcc]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run CI checks
         run: |
