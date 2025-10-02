@@ -248,9 +248,15 @@ module Byebug
     def shell_out_env
       lib_dir = File.expand_path("../../lib", __dir__)
 
-      {
-        "RUBYOPT" => "-I #{lib_dir}"
-      }
+      if Gem.win_platform?
+        reline_dir = File.dirname($LOADED_FEATURES.find { |f| f.end_with?("/reline.rb") })
+        io_console_dir = File.dirname(File.dirname($LOADED_FEATURES.find { |f| f.match?(%r{io/console.\w+$}) }))
+        reline_support = File.expand_path("reline.rb", __dir__)
+
+        { "RUBYOPT" => "-I #{lib_dir} -I#{reline_dir} -I #{io_console_dir} -r#{reline_support}" }
+      else
+        { "RUBYOPT" => "-I #{lib_dir}" }
+      end
     end
 
     #
