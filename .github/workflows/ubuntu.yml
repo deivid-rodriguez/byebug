@@ -10,10 +10,24 @@ on:
       - master
 
 jobs:
+  configure:
+    runs-on: ubuntu-24.04
+
+    outputs:
+      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
+
+    steps:
+      - id: get-user
+        run: echo "uid_gid=$(id -u):$(id -g)" >> $GITHUB_OUTPUT
+
   test:
+    needs: configure
+
     name: Ruby ${{ matrix.version.name }} (${{ matrix.line_editor }}, ${{ matrix.compiler }})
 
-    container: deividrodriguez/byebug:${{ matrix.version.value }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+    container:
+      image: deividrodriguez/byebug:${{ matrix.version.value }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+      options: --user ${{ needs.configure.outputs.uid_gid }}
 
     runs-on: ubuntu-24.04
 
