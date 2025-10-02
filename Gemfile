@@ -12,4 +12,5 @@ group :development do
   gem "rake-compiler", "~> 1.0"
   gem "yard", "0.9.37"
   gem "faraday-retry", "~> 2.2"
+  gem "irb", "~> 1.15"
 end
