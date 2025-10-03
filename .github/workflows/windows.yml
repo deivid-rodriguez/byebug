@@ -7,7 +7,7 @@ on:
 
   push:
     branches:
-      - master
+      - remove-rb-readline-hack-2
 
 jobs:
   test:
@@ -20,8 +20,6 @@ jobs:
 
       matrix:
         version:
-          - { name: 3.1, value: 3.1.6 }
-          - { name: 3.2, value: 3.2.9 }
           - { name: 3.3, value: 3.3.9 }
 
     steps:
@@ -36,6 +34,11 @@ jobs:
         run: bin/setup.sh
 
       - name: Run tests
-        run: ruby bin/rake
+        run: |
+          ruby bin/rake compile
+          ruby foo.rb
+          ruby bin/rake
+        env:
+          TESTOPTS: --name=test_run_with_a_single_include_flag
 
-    timeout-minutes: 10
+    timeout-minutes: 3

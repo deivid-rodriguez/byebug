@@ -222,6 +222,8 @@ module Byebug
     # @return Program's output
     #
     def run_program(cmd, input = "")
+      puts shell_out_env
+      puts cmd
       stdout, = Open3.capture2e(shell_out_env, *cmd, stdin_data: input)
 
       stdout
@@ -237,7 +239,7 @@ module Byebug
     #
     # @return Byebug's output
     #
-    def run_byebug(*args, input: "")
+    def run_byebug(*args, input: nil)
       run_program([*binstub, *args], input)
     end
 
