@@ -31,17 +31,15 @@ jobs:
         with:
           ruby-version: ${{ matrix.version.value }}
 
-      - name: Patch rb-readline
-        run: |
-          git clone -q --depth=5  --no-tags --branch=byebug https://github.com/deivid-rodriguez/rb-readline.git C:\rb-readline
-          $n_dir = $(ruby -e "print RbConfig::CONFIG['sitelibdir']")
-          Copy-Item -Path C:\rb-readline\lib\* -Destination $n_dir -Recurse
-
       - name: Setup dependencies
         shell: bash
         run: bin/setup.sh
 
       - name: Run tests
-        run: ruby bin/rake
+        run: |
+          ruby foo.rb
+          ruby bin/rake
+        env:
+          TESTOPTS: --name=test_run_with_a_single_include_flag
 
     timeout-minutes: 10

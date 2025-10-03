@@ -12,6 +12,8 @@ module Byebug
     def test_script_processor_clears_history
       previous_history = Readline::HISTORY.to_a
 
+      assert true
+
       process_rc_file("set callstyle long")
 
       assert_equal previous_history, Readline::HISTORY.to_a
@@ -20,6 +22,7 @@ module Byebug
     def test_script_processor_closes_files
       process_rc_file("set callstyle long")
 
+      assert true
       assert_equal 0, dangling_descriptors.count
     end
 
