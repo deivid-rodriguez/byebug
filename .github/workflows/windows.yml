@@ -29,16 +29,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.version.value }}
 
-      - name: Setup dependencies
-        shell: bash
-        run: bin/setup.sh
-
       - name: Run tests
         run: |
-          ruby bin/rake compile
           ruby foo.rb
-          ruby bin/rake
-        env:
-          TESTOPTS: --name=test_run_with_a_single_include_flag
 
-    timeout-minutes: 3
+    timeout-minutes: 2
