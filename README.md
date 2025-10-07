@@ -41,7 +41,7 @@ more][Tidelift for enterprise].
 
 ## Requirements
 
-* _Required_: MRI 3.1.0 or higher.
+* _Required_: MRI 3.2.0 or higher.
 
 ## Install
 
