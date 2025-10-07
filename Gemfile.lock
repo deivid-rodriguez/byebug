@@ -44,6 +44,7 @@ GEM
     yard (0.9.37)
 
 PLATFORMS
+  arm64-darwin
   ruby
   x86_64-linux
 
