@@ -10,7 +10,6 @@ module Docker
   #
   class Manager
     VERSIONS = %w[
-      3.1.6
       3.2.9
       3.3.9
     ].freeze
