@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     byebug (12.0.0)
+      reline (>= 0.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -20,6 +21,7 @@ GEM
       net-http (>= 0.5.0)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
+    io-console (0.8.0)
     json (2.15.0)
     logger (1.7.0)
     method_source (1.0.0)
@@ -37,6 +39,8 @@ GEM
     rake (13.3.0)
     rake-compiler (1.3.0)
       rake
+    reline (0.6.0)
+      io-console (~> 0.5)
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
@@ -44,6 +48,7 @@ GEM
     yard (0.9.37)
 
 PLATFORMS
+  arm64-darwin
   ruby
   x86_64-linux
 
