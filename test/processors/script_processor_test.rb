@@ -10,11 +10,11 @@ module Byebug
     include TestUtils
 
     def test_script_processor_clears_history
-      previous_history = Readline::HISTORY.to_a
+      previous_history = Reline::HISTORY.to_a
 
       process_rc_file("set callstyle long")
 
-      assert_equal previous_history, Readline::HISTORY.to_a
+      assert_equal previous_history, Reline::HISTORY.to_a
     end
 
     def test_script_processor_closes_files
