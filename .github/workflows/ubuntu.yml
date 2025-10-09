@@ -23,10 +23,10 @@ jobs:
   test:
     needs: configure
 
-    name: Ruby ${{ matrix.version.name }} (${{ matrix.line_editor }}, ${{ matrix.compiler }})
+    name: Ruby ${{ matrix.version.name }} (${{ matrix.compiler }})
 
     container:
-      image: deividrodriguez/byebug:${{ matrix.version.value }}-${{ matrix.line_editor }}-${{ matrix.compiler }}
+      image: deividrodriguez/byebug:${{ matrix.version.value }}-${{ matrix.compiler }}
       options: --user ${{ needs.configure.outputs.uid_gid }}
 
     runs-on: ubuntu-24.04
@@ -39,7 +39,6 @@ jobs:
           - { name: 3.2, value: 3.2.9 }
           - { name: 3.3, value: 3.3.9 }
 
-        line_editor: [libedit, readline]
         compiler: [clang, gcc]
 
     steps:
