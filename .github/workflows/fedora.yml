@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install OS dependencies
-        run: dnf install -y ruby ruby-devel make gcc redhat-rpm-config
+        run: dnf install -y ruby ruby-devel make gcc redhat-rpm-config libyaml-devel
 
       - name: Install development dependencies
         run: bundle install

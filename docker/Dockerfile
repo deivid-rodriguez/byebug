@@ -25,6 +25,7 @@ RUN set -ex \
     libffi-dev \
     libressl-dev \
     make \
+    yaml-dev \
   " \
   && buildOnlyDeps=" \
     autoconf \
@@ -43,7 +44,6 @@ RUN set -ex \
     openssl \
     openssl-dev \
     ruby \
-    yaml-dev \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
   \
