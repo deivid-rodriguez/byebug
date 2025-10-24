@@ -61,7 +61,7 @@ temporarily pausing/resuming threads.
 To try out the feature, you might want to use a real application (a Rails app
 for example) using threads or just follow the sample session about threads
 included in Byebug's Guide. See [here](
-https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md#threading-support)
+https://github.com/deivid-rodriguez/byebug/blob/main/GUIDE.md#threading-support)
 for details.
 
 The feature is also fully tested. You can clone _byebug_'s repo and then run
