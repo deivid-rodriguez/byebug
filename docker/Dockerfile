@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.17
 
 # skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
@@ -24,7 +24,7 @@ RUN set -ex \
     gcc \
     libc-dev \
     libffi-dev \
-    libressl-dev \
+    openssl-dev \
     make \
     yaml-dev \
   " \
@@ -42,7 +42,6 @@ RUN set -ex \
     linux-headers \
     ncurses-dev \
     openssl \
-    openssl-dev \
     ruby \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
