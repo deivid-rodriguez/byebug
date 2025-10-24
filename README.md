@@ -141,7 +141,7 @@ relying on `byebug`.
 ## Getting Started
 
 Read [byebug's markdown
-guide](https://github.com/deivid-rodriguez/byebug/blob/master/GUIDE.md) to get
+guide](https://github.com/deivid-rodriguez/byebug/blob/main/GUIDE.md) to get
 started. Proper documentation will be eventually written.
 
 ## Related projects
