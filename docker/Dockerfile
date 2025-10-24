@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.22
 
 # skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
@@ -22,8 +22,9 @@ RUN set -ex \
     clang \
     clang-extra-tools \
     gcc \
+    libc-dev \
     libffi-dev \
-    libressl-dev \
+    openssl-dev \
     make \
     yaml-dev \
   " \
@@ -36,13 +37,11 @@ RUN set -ex \
     dpkg-dev \
     gdbm-dev \
     glib-dev \
-    libc-dev \
     libxml2-dev \
     libxslt-dev \
     linux-headers \
     ncurses-dev \
     openssl \
-    openssl-dev \
     ruby \
   " \
   && apk add --no-cache --virtual .ruby-builddeps $baseDeps $buildOnlyDeps \
@@ -76,7 +75,6 @@ RUN set -ex \
     $libDeps \
     binutils \
     git \
-    libc-dev \
     libc6-compat \
   " \
   && apk add --virtual .ruby-rundeps $baseDeps $runOnlyDeps \
