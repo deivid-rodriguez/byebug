@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "net/http"
+require "faraday"
 require "yaml"
 require "open3"
 
@@ -93,7 +93,7 @@ module Docker
 
       def release_info
         @release_info ||= YAML.safe_load(
-          Net::HTTP.get(URI.parse(releases_url)),
+          Faraday.get(releases_url).body,
           permitted_classes: [Date]
         )
       end
