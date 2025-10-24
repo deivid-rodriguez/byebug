@@ -22,6 +22,7 @@ RUN set -ex \
     clang \
     clang-extra-tools \
     gcc \
+    libc-dev \
     libffi-dev \
     libressl-dev \
     make \
@@ -36,7 +37,6 @@ RUN set -ex \
     dpkg-dev \
     gdbm-dev \
     glib-dev \
-    libc-dev \
     libxml2-dev \
     libxslt-dev \
     linux-headers \
@@ -76,7 +76,6 @@ RUN set -ex \
     $libDeps \
     binutils \
     git \
-    libc-dev \
     libc6-compat \
   " \
   && apk add --virtual .ruby-rundeps $baseDeps $runOnlyDeps \
