@@ -88,48 +88,48 @@ byebug myscript.rb
 
 ## Byebug's commands
 
-Command     | Aliases         | Subcommands
--------     | -------         | -----------
-`backtrace` | `bt` `w` `where`|
-`break`     | `b`             |
-`catch`     | `cat`           |
-`condition` | `cond`          |
-`continue`  | `c` `cont`      |
-`continue!` | `c!` `cont!`    |
-`debug`     |                 |
-`delete`    | `del`           |
-`disable`   | `dis`           | `breakpoints` `display`
-`display`   | `disp`          |
-`down`      |                 |
-`edit`      | `ed`            |
-`enable`    | `en`            | `breakpoints` `display`
-`finish`    | `fin`           |
-`frame`     | `f`             |
-`help`      | `h`             |
-`history`   | `hist`          |
-`info`      | `i`             | `args` `breakpoints` `catch` `display` `file` `line` `program`
-`interrupt` | `int`           |
-`irb`       |                 |
-`kill`      |                 |
-`list`      | `l`             |
-`method`    | `m`             | `instance`
-`next`      | `n`             |
-`pry`       |                 |
-`quit`      | `q`             |
-`quit!`     | `q!`            |
-`restart`   |                 |
-`save`      | `sa`            |
-`set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-`show`      |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width`
-`skip`      | `sk`            |
-`source`    | `so`            |
-`step`      | `s`             |
-`thread`    | `th`            | `current` `list` `resume` `stop` `switch`
-`tracevar`  | `tr`            |
-`undisplay` | `undisp`        |
-`untracevar`| `untr`          |
-`up`        |                 |
-`var`       | `v`             | `all` `constant` `global` `instance` `local`
+Command     | Aliases         | Subcommands | Description
+-------     | -------         | ----------- | -----------
+`backtrace` | `bt` `w` `where`| | Displays the backtrace
+`break`     | `b`             | | Sets breakpoints in the source code
+`catch`     | `cat`           | | Handles exception catchpoints
+`condition` | `cond`          | | Sets conditions on breakpoints
+`continue`  | `c` `cont`      | | Runs until program ends, hits a breakpoint or reaches a line
+`continue!` | `c!` `cont!`    | | Unconditional continue
+`debug`     |                 | | Spawns a subdebugger
+`delete`    | `del`           | | Deletes breakpoints
+`disable`   | `dis`           | `breakpoints` `display` | Disables breakpoints or displays
+`display`   | `disp`          | | Evaluates expressions every time the debugger stops
+`down`      |                 | | Moves to a lower frame in the stack trace
+`edit`      | `ed`            | | Edits source files
+`enable`    | `en`            | `breakpoints` `display` | Enables breakpoints or displays
+`finish`    | `fin`           | | Runs the program until frame returns
+`frame`     | `f`             | | Moves to a frame in the call stack
+`help`      | `h`             | | Helps you using byebug
+`history`   | `hist`          | | Shows byebug's command history
+`info`      | `i`             | `args` `breakpoints` `catch` `display` `file` `line` `program` | Shows information about the program being debugged
+`interrupt` | `int`           | | Interrupts the program
+`irb`       |                 | | Starts an IRB session
+`kill`      |                 | | Sends a signal to the current process
+`list`      | `l`             | | Lists lines of source code
+`method`    | `m`             | `instance` | Shows methods of an object, class or module
+`next`      | `n`             | | Runs one or more lines of code
+`pry`       |                 | | Starts a Pry session
+`quit`      | `q`             | | Exits byebug
+`quit!`     | `q!`            | | Exits byebug unconditionally
+`restart`   |                 | | Restarts the debugged program
+`save`      | `sa`            | | Saves current byebug session to a file
+`set`       |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width` | Modifies byebug settings
+`show`      |                 | `autoirb` `autolist` `autopry` `autosave` `basename` `callstyle` `fullpath` `histfile` `histsize` `linetrace` `listsize` `post_mortem` `savefile` `stack_on_error` `width` | Shows byebug settings
+`skip`      | `sk`            | | Runs until the next breakpoint as long as it is different from the current one
+`source`    | `so`            | | Restores a previously saved byebug session
+`step`      | `s`             | | Steps into blocks or methods one or more times
+`thread`    | `th`            | `current` `list` `resume` `stop` `switch` | Commands to manipulate threads
+`tracevar`  | `tr`            | | Enables tracing of a global variable
+`undisplay` | `undisp`        | | Stops displaying all or some expressions when program stops
+`untracevar`| `untr`          | | Stops tracing a global variable
+`up`        |                 | | Moves to a higher frame in the stack trace
+`var`       | `v`             | `all` `constant` `global` `instance` `local` | Shows variables and their values
 
 ## Semantic Versioning
 
