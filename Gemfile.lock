@@ -31,7 +31,7 @@ GEM
     json (2.15.0)
     logger (1.7.0)
     method_source (1.0.0)
-    minitest (5.26.0)
+    minitest (5.26.1)
     net-http (0.6.0)
       uri
     netrc (0.11.0)
