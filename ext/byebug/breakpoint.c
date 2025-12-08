@@ -21,6 +21,29 @@ eval_expression(VALUE args)
   return rb_funcall2(rb_mKernel, idEval, 2, RARRAY_PTR(args));
 }
 
+static void
+mark_breakpoint(void *data)
+{
+  breakpoint_t *breakpoint = data;
+
+  rb_gc_mark(breakpoint->source);
+  rb_gc_mark(breakpoint->expr);
+}
+
+static const rb_data_type_t breakpoint_type = {
+  "Byebug::Breakpoint",
+  {mark_breakpoint, RUBY_TYPED_DEFAULT_FREE},
+};
+
+static breakpoint_t *
+brkpt_ptr(VALUE self)
+{
+  breakpoint_t *breakpoint;
+
+  TypedData_Get_Struct(self, breakpoint_t, &breakpoint_type, breakpoint);
+  return breakpoint;
+}
+
 /*
  *  call-seq:
  *    breakpoint.enabled? -> bool
@@ -30,9 +53,8 @@ eval_expression(VALUE args)
 static VALUE
 brkpt_enabled(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return breakpoint->enabled;
 }
 
@@ -45,9 +67,8 @@ brkpt_enabled(VALUE self)
 static VALUE
 brkpt_set_enabled(VALUE self, VALUE enabled)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return breakpoint->enabled = enabled;
 }
 
@@ -61,9 +82,8 @@ brkpt_set_enabled(VALUE self, VALUE enabled)
 static VALUE
 brkpt_expr(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return breakpoint->expr;
 }
 
@@ -77,9 +97,8 @@ brkpt_expr(VALUE self)
 static VALUE
 brkpt_set_expr(VALUE self, VALUE expr)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   breakpoint->expr = NIL_P(expr) ? expr : StringValue(expr);
   return expr;
 }
@@ -94,9 +113,8 @@ brkpt_set_expr(VALUE self, VALUE expr)
 static VALUE
 brkpt_hit_condition(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   switch (breakpoint->hit_condition)
   {
     case HIT_COND_GE:
@@ -124,10 +142,8 @@ brkpt_hit_condition(VALUE self)
 static VALUE
 brkpt_set_hit_condition(VALUE self, VALUE value)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
   ID id_value;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
 
   if (NIL_P(value))
   {
@@ -157,9 +173,8 @@ brkpt_set_hit_condition(VALUE self, VALUE value)
 static VALUE
 brkpt_hit_count(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return INT2FIX(breakpoint->hit_count);
 }
 
@@ -173,9 +188,8 @@ brkpt_hit_count(VALUE self)
 static VALUE
 brkpt_hit_value(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return INT2FIX(breakpoint->hit_value);
 }
 
@@ -189,9 +203,8 @@ brkpt_hit_value(VALUE self)
 static VALUE
 brkpt_set_hit_value(VALUE self, VALUE value)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   breakpoint->hit_value = FIX2INT(value);
   return value;
 }
@@ -205,9 +218,8 @@ brkpt_set_hit_value(VALUE self, VALUE value)
 static VALUE
 brkpt_id(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return INT2FIX(breakpoint->id);
 }
 
@@ -221,9 +233,8 @@ brkpt_id(VALUE self)
 static VALUE
 brkpt_pos(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   if (breakpoint->type == BP_METHOD_TYPE)
     return rb_str_new2(rb_id2name(breakpoint->pos.mid));
   else
@@ -239,33 +250,23 @@ brkpt_pos(VALUE self)
 static VALUE
 brkpt_source(VALUE self)
 {
-  breakpoint_t *breakpoint;
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
   return breakpoint->source;
-}
-
-static void
-mark_breakpoint(breakpoint_t *breakpoint)
-{
-  rb_gc_mark(breakpoint->source);
-  rb_gc_mark(breakpoint->expr);
 }
 
 static VALUE
 brkpt_create(VALUE klass)
 {
-  breakpoint_t *breakpoint = ALLOC(breakpoint_t);
+  breakpoint_t *breakpoint;
 
-  return Data_Wrap_Struct(klass, mark_breakpoint, xfree, breakpoint);
+  return TypedData_Make_Struct(klass, breakpoint_t, &breakpoint_type, breakpoint);
 }
 
 static VALUE
 brkpt_initialize(VALUE self, VALUE source, VALUE pos, VALUE expr)
 {
-  breakpoint_t *breakpoint;
-
-  Data_Get_Struct(self, breakpoint_t, breakpoint);
+  breakpoint_t *breakpoint = brkpt_ptr(self);
 
   breakpoint->type = FIXNUM_P(pos) ? BP_POS_TYPE : BP_METHOD_TYPE;
   if (breakpoint->type == BP_POS_TYPE)
@@ -360,7 +361,7 @@ check_breakpoint_by_hit_condition(VALUE rb_breakpoint)
   if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
+  breakpoint = brkpt_ptr(rb_breakpoint);
   breakpoint->hit_count++;
 
   if (Qtrue != breakpoint->enabled)
@@ -397,7 +398,7 @@ check_breakpoint_by_pos(VALUE rb_breakpoint, char *file, int line)
   if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
+  breakpoint = brkpt_ptr(rb_breakpoint);
 
   if (Qfalse == breakpoint->enabled || breakpoint->type != BP_POS_TYPE
       || breakpoint->pos.line != line)
@@ -414,7 +415,7 @@ check_breakpoint_by_method(VALUE rb_breakpoint, VALUE klass, ID mid, VALUE self)
   if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
+  breakpoint = brkpt_ptr(rb_breakpoint);
 
   if (Qfalse == breakpoint->enabled || breakpoint->type != BP_METHOD_TYPE
       || breakpoint->pos.mid != mid)
@@ -437,7 +438,7 @@ check_breakpoint_by_expr(VALUE rb_breakpoint, VALUE bind)
   if (NIL_P(rb_breakpoint))
     return 0;
 
-  Data_Get_Struct(rb_breakpoint, breakpoint_t, breakpoint);
+  breakpoint = brkpt_ptr(rb_breakpoint);
 
   if (Qfalse == breakpoint->enabled)
     return 0;
