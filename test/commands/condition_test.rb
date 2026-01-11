@@ -39,7 +39,7 @@ module Byebug
             -> { "cond #{Breakpoint.first.id} b ==" }
 
       debug_code(program)
-      check_error_includes \
+      assert_error_includes \
         'Incorrect expression "b ==", breakpoint not changed'
     end
 
@@ -74,14 +74,14 @@ module Byebug
       enter "cond 1 true"
 
       debug_code(program)
-      check_error_includes "No breakpoints have been set"
+      assert_error_includes "No breakpoints have been set"
     end
 
     def test_shows_error_if_breakpoint_id_is_incorrect
       enter "break 5", -> { "cond #{Breakpoint.last.id + 1} b == 3" }
 
       debug_code(program)
-      check_error_includes \
+      assert_error_includes \
         "Invalid breakpoint id. " \
         'Use "info breakpoint" to find out the correct id'
     end

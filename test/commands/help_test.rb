@@ -53,7 +53,7 @@ module Byebug
       where: "Displays the backtrace"
     }.each do |command, description|
       define_method(:"test_shows_summary_for_#{command}_command") do
-        check_output_includes(/#{description}/)
+        assert_output_includes(/#{description}/)
       end
     end
   end
@@ -77,7 +77,7 @@ module Byebug
 
         TXT
 
-        check_output_includes(*expected_output)
+        assert_output_includes(*expected_output)
       end
     end
 
@@ -96,44 +96,44 @@ module Byebug
         a breakpoint in the current line.
       TXT
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_help_with_undefined_command_shows_an_error
       enter "help foobar"
       debug_code(minimal_program)
 
-      check_error_includes "Unknown command 'foobar'. Try 'help'"
+      assert_error_includes "Unknown command 'foobar'. Try 'help'"
     end
 
     def test_help_with_undefined_subcommand_shows_an_error
       enter "help info foobar"
       debug_code(minimal_program)
 
-      check_error_includes "Unknown command 'info foobar'. Try 'help info'"
+      assert_error_includes "Unknown command 'info foobar'. Try 'help info'"
     end
 
     def test_help_with_command_and_subcommand_shows_subcommands_help
       enter "help info breakpoints"
       debug_code(minimal_program)
 
-      check_output_includes("Status of user settable breakpoints")
+      assert_output_includes("Status of user settable breakpoints")
     end
 
     def test_help_set_shows_help_for_set_command_and_includes_settings
       enter "help set"
       debug_code(minimal_program)
 
-      check_output_includes("Modifies byebug settings",
-                            "List of supported settings:")
+      assert_output_includes("Modifies byebug settings",
+                             "List of supported settings:")
     end
 
     def test_help_show_shows_help_for_show_command_and_includes_settings
       enter "help show"
       debug_code(minimal_program)
 
-      check_output_includes("Shows byebug settings",
-                            "List of supported settings:")
+      assert_output_includes("Shows byebug settings",
+                             "List of supported settings:")
     end
   end
 end

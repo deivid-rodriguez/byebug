@@ -88,7 +88,7 @@ module Byebug
         debug_code(program)
 
         assert_equal 250, Setting[:histsize]
-        check_output_includes "Maximum size of byebug's command history is 250"
+        assert_output_includes "Maximum size of byebug's command history is 250"
       end
     end
 
@@ -96,7 +96,7 @@ module Byebug
       enter "set histsize"
       debug_code(program)
 
-      check_error_includes "You must specify a value for setting :histsize"
+      assert_error_includes "You must specify a value for setting :histsize"
     end
 
     def test_set_histfile_sets_command_history_file
@@ -106,7 +106,7 @@ module Byebug
         debug_code(program)
 
         assert_equal filename, Setting[:histfile]
-        check_output_includes "The command history file is #{filename}"
+        assert_output_includes "The command history file is #{filename}"
         File.delete(filename)
       end
     end
@@ -115,7 +115,7 @@ module Byebug
       enter "set histfile"
       debug_code(program)
 
-      check_error_includes "You must specify a value for setting :histfile"
+      assert_error_includes "You must specify a value for setting :histfile"
     end
 
     %i[listsize width].each do |set|
@@ -134,7 +134,7 @@ module Byebug
         enter "set linetrace", "cont 5"
         debug_code(program)
 
-        check_output_includes \
+        assert_output_includes \
           "linetrace is on", "Tracing: #{example_path}:5   z += 1"
       end
     end
@@ -144,8 +144,8 @@ module Byebug
         enter "cont 5", "set nolinetrace"
         debug_code(program)
 
-        check_output_includes "Tracing: #{example_path}:5   z += 1"
-        check_output_doesnt_include "Tracing: #{example_path}:6   z + 1"
+        assert_output_includes "Tracing: #{example_path}:5   z += 1"
+        assert_output_doesnt_include "Tracing: #{example_path}:6   z + 1"
       end
     end
 
@@ -154,7 +154,7 @@ module Byebug
         enter "set linetrace", "cont 5", "set nolinetrace"
         debug_code(program)
 
-        check_output_includes \
+        assert_output_includes \
           "Tracing: #{File.basename(example_path)}:5   z += 1"
       end
     end
@@ -163,8 +163,8 @@ module Byebug
       enter "set"
       debug_code(program)
 
-      check_output_includes("Modifies byebug settings",
-                            "List of supported settings:")
+      assert_output_includes("Modifies byebug settings",
+                             "List of supported settings:")
     end
   end
 end

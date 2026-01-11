@@ -48,8 +48,8 @@ module Byebug
       enter "break 21", "break 22", "disable breakpoints", "enable breakpoints"
       debug_code(program)
 
-      check_output_includes(/Breakpoint #{Breakpoint.first.id} enabled/,
-                            /Breakpoint #{Breakpoint.last.id} enabled/)
+      assert_output_includes(/Breakpoint #{Breakpoint.first.id} enabled/,
+                             /Breakpoint #{Breakpoint.last.id} enabled/)
     end
 
     def test_enable_all_breakpoints_stops_at_first_breakpoint
@@ -77,7 +77,7 @@ module Byebug
             -> { "enable breakpoints #{Breakpoint.last.id}" }
       debug_code(program)
 
-      check_output_includes(/Breakpoint #{Breakpoint.last.id} enabled/)
+      assert_output_includes(/Breakpoint #{Breakpoint.last.id} enabled/)
     end
 
     def test_enable_specific_breakpoints_stops_at_enabled_breakpoint
@@ -93,28 +93,28 @@ module Byebug
       debug_code(program)
 
       assert_equal 1, interface.error.size
-      check_error_includes(/"enable breakpoints" argument/)
+      assert_error_includes(/"enable breakpoints" argument/)
     end
 
     def test_enable_breakpoints_help
       enter "help enable breakpoints"
       debug_code(program)
 
-      check_output_includes "Enable all or specific breakpoints."
+      assert_output_includes "Enable all or specific breakpoints."
     end
 
     def test_enable_displays_help
       enter "help enable display"
       debug_code(program)
 
-      check_output_includes "Enables expressions to be displayed when program stops."
+      assert_output_includes "Enables expressions to be displayed when program stops."
     end
 
     def test_enable_by_itself_shows_help
       enter "enable"
       debug_code(program)
 
-      check_output_includes(/Enables breakpoints or displays/)
+      assert_output_includes(/Enables breakpoints or displays/)
     end
   end
 end

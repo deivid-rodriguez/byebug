@@ -48,15 +48,15 @@ module Byebug
       enter "break 21", "break 22", "disable breakpoints"
       debug_code(program)
 
-      check_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/,
-                            /Breakpoint #{Breakpoint.last.id} disabled/)
+      assert_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/,
+                             /Breakpoint #{Breakpoint.last.id} disabled/)
     end
 
     def test_disable_all_breakpoints_ignores_all_breakpoints
       enter "break 21", "break 22", "disable breakpoints", "cont"
       debug_code(program)
 
-      check_output_doesnt_include "Stopped by breakpoint"
+      assert_output_doesnt_include "Stopped by breakpoint"
     end
 
     def test_disable_specific_breakpoints_sets_enabled_to_false
@@ -70,7 +70,7 @@ module Byebug
             -> { "disable breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
 
-      check_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/)
+      assert_output_includes(/Breakpoint #{Breakpoint.first.id} disabled/)
     end
 
     def test_disable_specific_breakpoints_properly_ignores_them
@@ -86,28 +86,28 @@ module Byebug
       debug_code(program)
 
       assert_equal 1, interface.error.size
-      check_error_includes(/"disable breakpoints" argument/)
+      assert_error_includes(/"disable breakpoints" argument/)
     end
 
     def test_disable_breakpoints_help
       enter "help disable breakpoints"
       debug_code(program)
 
-      check_output_includes "Disable all or specific breakpoints."
+      assert_output_includes "Disable all or specific breakpoints."
     end
 
     def test_disable_displays_help
       enter "help disable display"
       debug_code(program)
 
-      check_output_includes "Disables expressions to be displayed when program stops."
+      assert_output_includes "Disables expressions to be displayed when program stops."
     end
 
     def test_disable_without_an_argument_shows_help
       enter "disable"
       debug_code(program)
 
-      check_output_includes "Disables breakpoints or displays"
+      assert_output_includes "Disables breakpoints or displays"
     end
   end
 end

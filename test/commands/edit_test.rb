@@ -39,7 +39,7 @@ module Byebug
       enter "edit no_such_file:6"
       debug_code(minimal_program)
 
-      check_error_includes "File #{file} does not exist."
+      assert_error_includes "File #{file} does not exist."
     end
 
     def test_edit_shows_an_error_if_the_specified_file_is_not_readable
@@ -47,7 +47,7 @@ module Byebug
         enter "edit README.md:6"
         debug_code(minimal_program)
 
-        check_error_includes "File #{readme_path} is not readable."
+        assert_error_includes "File #{readme_path} is not readable."
       end
     end
 

@@ -40,23 +40,23 @@ module Byebug
       enter "cont 7", "method #{example_class}"
       debug_code(program)
 
-      check_output_includes("bla")
-      check_output_doesnt_include("foo")
+      assert_output_includes("bla")
+      assert_output_doesnt_include("foo")
     end
 
     def test_m_shows_an_error_if_specified_object_is_not_a_class_or_module
       enter "m a"
       debug_code(program)
 
-      check_output_includes "Should be Class/Module: a"
+      assert_output_includes "Should be Class/Module: a"
     end
 
     def test_method_instance_shows_methods_of_object
       enter "cont 23", "method instance a"
       debug_code(program)
 
-      check_output_includes("bla")
-      check_output_doesnt_include("foo")
+      assert_output_includes("bla")
+      assert_output_doesnt_include("foo")
     end
   end
 end

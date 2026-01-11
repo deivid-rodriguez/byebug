@@ -85,7 +85,7 @@ module Byebug
       enter "cont 100"
       debug_code(program)
 
-      check_error_includes "Line 100 is not a valid stopping point in file"
+      assert_error_includes "Line 100 is not a valid stopping point in file"
     end
 
     def test_tracing_after_set_linetrace_and_continue
@@ -93,7 +93,7 @@ module Byebug
         enter "set linetrace", "cont"
         debug_code(program)
 
-        check_output_includes "Tracing: #{example_path}:14   c = b + 5"
+        assert_output_includes "Tracing: #{example_path}:14   c = b + 5"
       end
     end
 
@@ -102,7 +102,7 @@ module Byebug
         enter "cont"
         debug_code(program)
 
-        check_output_includes "Tracing: (eval at #{example_path}:16):1"
+        assert_output_includes "Tracing: (eval at #{example_path}:16):1"
       end
     end
   end

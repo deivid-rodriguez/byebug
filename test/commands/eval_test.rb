@@ -20,8 +20,8 @@ module Byebug
     def test_eval_prints_values
       enter "Foo", "foo"
       debug_code(program)
-      check_output_includes('"Foo constant"')
-      check_output_includes(":foo_variable")
+      assert_output_includes('"Foo constant"')
+      assert_output_includes(":foo_variable")
     end
   end
 
@@ -53,8 +53,8 @@ module Byebug
       with_new_file("foo.rb", foo_program) do
         enter "Foo.bar", "result"
         debug_code(program)
-        check_output_includes('"Foo.bar called"')
-        check_output_includes(":tp_class_called")
+        assert_output_includes('"Foo.bar called"')
+        assert_output_includes(":tp_class_called")
       end
     end
   end

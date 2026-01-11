@@ -32,21 +32,21 @@ module Byebug
       enter "catch"
       debug_code(minimal_program)
 
-      check_output_includes "No exceptions set to be caught."
+      assert_output_includes "No exceptions set to be caught."
     end
 
     def test_catch_without_arguments_and_exceptions_caught
       enter "catch NoMethodError", "catch"
       debug_code(minimal_program)
 
-      check_output_includes "NoMethodError: false"
+      assert_output_includes "NoMethodError: false"
     end
 
     def test_catch_help
       enter "help catch"
       debug_code(minimal_program)
 
-      check_output_includes "cat[ch][ (off|<exception>[ off])]"
+      assert_output_includes "cat[ch][ (off|<exception>[ off])]"
     end
   end
 end

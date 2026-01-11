@@ -47,7 +47,7 @@ module Byebug
         enter "kill", "y"
         debug_code(program)
 
-        check_output_includes "Really kill? (y/n)"
+        assert_output_includes "Really kill? (y/n)"
       end
     end
 
@@ -62,7 +62,7 @@ module Byebug
       enter "kill BLA"
       debug_code(program)
 
-      check_error_includes "signal name BLA is not a signal I know about"
+      assert_error_includes "signal name BLA is not a signal I know about"
     end
   end
 end

@@ -37,7 +37,7 @@ module Byebug
       enter "tracevar $VERBOSE", "cont 19", "untracevar $VERBOSE"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "traced global variable '$VERBOSE' has value 'false'",
         "traced global variable '$VERBOSE' has value 'true'"
     end
@@ -58,14 +58,14 @@ module Byebug
       enter "tracevar"
       debug_code(program)
 
-      check_error_includes("tracevar needs a global variable name")
+      assert_error_includes("tracevar needs a global variable name")
     end
 
     def test_tracevar_shows_an_error_message_if_there_is_no_such_global_var
       enter "tracevar $FOO"
       debug_code(program)
 
-      check_error_includes "'$FOO' is not a global variable."
+      assert_error_includes "'$FOO' is not a global variable."
     end
   end
 end

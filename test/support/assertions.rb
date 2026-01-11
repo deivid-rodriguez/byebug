@@ -68,7 +68,7 @@ module Minitest
         yield
 
         expected = Regexp.new(Regexp.escape(signature(method, *expected_args)))
-        send(:"check_output_#{check_method}", expected)
+        send(:"assert_output_#{check_method}", expected)
       end
     end
 

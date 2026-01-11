@@ -59,7 +59,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_where_displays_backtraces_using_long_callstyle_by_default
@@ -86,7 +86,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_where_displays_backtraces_using_short_callstyle
@@ -102,7 +102,7 @@ module Byebug
             #5  <top (required)> at #{example_path}:1
       TXT
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_where_displays_instance_exec_block_frames
@@ -140,7 +140,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_where_with_argument_less_than_largest_frame
@@ -161,7 +161,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
 
     def test_where_with_argument_greater_than_largest_frame
@@ -188,7 +188,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
   end
 
@@ -226,7 +226,7 @@ module Byebug
                             TXT
                           end
 
-        check_output_includes(*expected_output)
+        assert_output_includes(*expected_output)
       end
     end
   end
@@ -272,7 +272,7 @@ module Byebug
                           TXT
                         end
 
-      check_output_includes(*expected_output)
+      assert_output_includes(*expected_output)
     end
   end
 end

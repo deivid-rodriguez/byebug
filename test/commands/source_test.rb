@@ -48,14 +48,14 @@ module Byebug
       enter "source blabla"
       debug_code(program)
 
-      check_error_includes(/File ".*blabla" not found/)
+      assert_error_includes(/File ".*blabla" not found/)
     end
 
     def test_source_without_arguments_shows_help
       enter "source"
       debug_code(program)
 
-      check_output_includes("Restores a previously saved byebug session")
+      assert_output_includes("Restores a previously saved byebug session")
     end
   end
 end

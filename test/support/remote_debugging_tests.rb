@@ -13,7 +13,7 @@ module Byebug
 
       remote_debug_and_connect("quit!")
 
-      check_output_includes \
+      assert_output_includes \
         "Connecting to byebug server at 127.0.0.1:8989...",
         "Connected."
     end
@@ -23,7 +23,7 @@ module Byebug
 
       remote_debug_and_connect("cont 9", "cont")
 
-      check_output_includes \
+      assert_output_includes \
         "7:   class ByebugExampleClass",
         "8:     def a",
         "=>  9:       3",
@@ -43,7 +43,7 @@ module Byebug
 
       remote_debug_and_connect("thread list", "cont")
 
-      check_output_includes \
+      assert_output_includes \
         %r{!.*/byebug/remote/server.rb},
         %r{!.*/byebug/remote/server.rb}
     end
