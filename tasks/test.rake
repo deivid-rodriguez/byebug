@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-desc "Runs the test suite"
-task :test do
-  require_relative "../test/minitest_runner"
+require "minitest/test_task"
 
-  raise unless Byebug::MinitestRunner.new.run
-end
+Minitest::TestTask.create
