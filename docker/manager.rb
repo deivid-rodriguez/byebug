@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "faraday"
+require "open-uri"
 require "yaml"
 require "open3"
 
@@ -93,7 +93,7 @@ module Docker
 
       def release_info
         @release_info ||= YAML.safe_load(
-          Faraday.get(releases_url).body,
+          URI.parse(releases_url).read,
           permitted_classes: [Date]
         )
       end

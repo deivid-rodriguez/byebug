@@ -22,8 +22,6 @@ GEM
       logger
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
-    faraday-retry (2.4.0)
-      faraday (~> 2.0)
     io-console (0.8.2)
     irb (1.18.0)
       pp (>= 0.6.0)
@@ -81,8 +79,6 @@ DEPENDENCIES
   bundler (~> 2.0)
   byebug!
   chandler (= 0.9.0)
-  faraday (~> 2.14)
-  faraday-retry (~> 2.2)
   irb (~> 1.15)
   minitest (~> 6.0)
   minitest-mock (~> 5.27)
