@@ -135,7 +135,7 @@ module Byebug
       debug_code(minimal_program)
 
       assert_error_includes "ZeroDivisionError Exception: divided by 0"
-      assert_error_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
+      assert_error_doesnt_include(/\S+:\d+:in .(?:Binding#)?eval'/)
     end
   end
 
