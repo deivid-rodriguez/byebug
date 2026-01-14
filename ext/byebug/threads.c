@@ -42,6 +42,14 @@ t_tbl_free(void *data)
   xfree(t_tbl);
 }
 
+static const rb_data_type_t threads_table_type = {
+  "Byebug::ThreadsTable",
+  {
+    t_tbl_mark,
+    t_tbl_free,
+  },
+};
+
 /*
  *  Creates a numeric hash whose keys are the currently active threads and
  *  whose values are their associated contexts.
@@ -50,10 +58,19 @@ VALUE
 create_threads_table(void)
 {
   threads_table_t *t_tbl;
+  VALUE tbl = TypedData_Make_Struct(cThreadsTable, threads_table_t, &threads_table_type, t_tbl);
 
-  t_tbl = ALLOC(threads_table_t);
   t_tbl->tbl = st_init_numtable();
-  return Data_Wrap_Struct(cThreadsTable, t_tbl_mark, t_tbl_free, t_tbl);
+  return tbl;
+}
+
+threads_table_t *
+threads_table_ptr(VALUE threads)
+{
+  threads_table_t *t_tbl;
+
+  TypedData_Get_Struct(threads, threads_table_t, &threads_table_type, t_tbl);
+  return t_tbl;
 }
 
 /*
@@ -100,9 +117,7 @@ is_living_thread(VALUE thread)
 static void
 cleanup_dead_threads(void)
 {
-  threads_table_t *t_tbl;
-
-  Data_Get_Struct(threads, threads_table_t, t_tbl);
+  threads_table_t *t_tbl = threads_table_ptr(threads);
   st_foreach(t_tbl->tbl, check_thread_i, 0);
 }
 
@@ -112,9 +127,7 @@ cleanup_dead_threads(void)
 void
 thread_context_lookup(VALUE thread, VALUE *context)
 {
-  threads_table_t *t_tbl;
-
-  Data_Get_Struct(threads, threads_table_t, t_tbl);
+  threads_table_t *t_tbl = threads_table_ptr(threads);
 
   if (!st_lookup(t_tbl->tbl, thread, context) || !*context)
   {
@@ -186,7 +199,7 @@ Unlock(VALUE self)
   UNUSED(self);
 
   thread_context_lookup(rb_thread_current(), &context);
-  Data_Get_Struct(context, debug_context_t, dc);
+  dc = debug_context_ptr(context);
 
   CTX_FL_SET(dc, CTX_FL_IGNORE);
 
@@ -213,7 +226,7 @@ Lock(VALUE self)
     rb_raise(rb_eRuntimeError, "Current thread is dead!");
 
   thread_context_lookup(rb_thread_current(), &context);
-  Data_Get_Struct(context, debug_context_t, dc);
+  dc = debug_context_ptr(context);
 
   acquire_lock(dc);
 

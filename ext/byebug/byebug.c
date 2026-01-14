@@ -147,7 +147,7 @@ cleanup(debug_context_t *dc)
     return;                                                      \
                                                                  \
   thread_context_lookup(rb_thread_current(), &context);          \
-  Data_Get_Struct(context, debug_context_t, dc);                 \
+  dc = debug_context_ptr(context);                               \
                                                                  \
   trace_arg = rb_tracearg_from_tracepoint(trace_point);          \
   if (verbose == Qtrue)                                          \
@@ -442,7 +442,7 @@ raise_event(VALUE trace_point, void *data)
     pm_context = context_dup(dc);
     rb_ivar_set(raised_exception, rb_intern("@__bb_context"), pm_context);
 
-    Data_Get_Struct(pm_context, debug_context_t, new_dc);
+    new_dc = debug_context_ptr(pm_context);
     rb_debug_inspector_open(context_backtrace_set, (void *)new_dc);
   }
 
@@ -568,13 +568,13 @@ Contexts(VALUE self)
     rb_ary_push(new_list, context);
   }
 
-  Data_Get_Struct(threads, threads_table_t, t_tbl);
+  t_tbl = threads_table_ptr(threads);
   st_clear(t_tbl->tbl);
 
   for (i = 0; i < RARRAY_LENINT(new_list); i++)
   {
     context = rb_ary_entry(new_list, i);
-    Data_Get_Struct(context, debug_context_t, dc);
+    dc = debug_context_ptr(context);
     st_insert(t_tbl->tbl, dc->thread, context);
   }
 
@@ -683,7 +683,7 @@ Stoppable(VALUE self)
   context = Current_context(self);
   if (!NIL_P(context))
   {
-    Data_Get_Struct(context, debug_context_t, dc);
+    dc = debug_context_ptr(context);
 
     if (dc->steps > 0)
       return Qfalse;
@@ -737,7 +737,7 @@ Debug_load(int argc, VALUE *argv, VALUE self)
   Start(self);
 
   context = Current_context(self);
-  Data_Get_Struct(context, debug_context_t, dc);
+  dc = debug_context_ptr(context);
 
   dc->calced_stack_size = 1;
 

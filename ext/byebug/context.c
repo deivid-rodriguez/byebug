@@ -15,6 +15,25 @@ byebug_reset_stepping_stop_points(debug_context_t *context)
   context->steps_out = -1;
 }
 
+static void context_mark(void *data);
+
+static const rb_data_type_t debug_context_type = {
+  "Byebug::Context",
+  {
+    context_mark,
+    RUBY_NEVER_FREE,
+  },
+};
+
+debug_context_t *
+debug_context_ptr(VALUE self)
+{
+  debug_context_t *context;
+
+  TypedData_Get_Struct(self, debug_context_t, &debug_context_type, context);
+  return context;
+}
+
 /*
  *  call-seq:
  *    context.dead? -> bool
@@ -25,9 +44,8 @@ byebug_reset_stepping_stop_points(debug_context_t *context)
 static inline VALUE
 Context_dead(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
-  Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_DEAD) ? Qtrue : Qfalse;
 }
 
@@ -58,7 +76,8 @@ dc_stack_size(debug_context_t *context)
 extern VALUE
 byebug_context_create(VALUE thread)
 {
-  debug_context_t *context = ALLOC(debug_context_t);
+  debug_context_t *context;
+  VALUE obj = TypedData_Make_Struct(cContext, debug_context_t, &debug_context_type, context);
 
   context->flags = 0;
   context->thnum = ++thnum_max;
@@ -72,20 +91,21 @@ byebug_context_create(VALUE thread)
   if (rb_obj_class(thread) == cDebugThread)
     CTX_FL_SET(context, CTX_FL_IGNORE);
 
-  return Data_Wrap_Struct(cContext, context_mark, 0, context);
+  return obj;
 }
 
 extern VALUE
 context_dup(debug_context_t *context)
 {
-  debug_context_t *new_context = ALLOC(debug_context_t);
+  debug_context_t *new_context;
+  VALUE obj = TypedData_Make_Struct(cContext, debug_context_t, &debug_context_type, new_context);
 
   memcpy(new_context, context, sizeof(debug_context_t));
   byebug_reset_stepping_stop_points(new_context);
   new_context->backtrace = context->backtrace;
   CTX_FL_SET(new_context, CTX_FL_DEAD);
 
-  return Data_Wrap_Struct(cContext, context_mark, 0, new_context);
+  return obj;
 }
 
 
@@ -204,14 +224,13 @@ call_with_debug_inspector(struct call_with_inspection_data *data)
                    (VALUE)data);
 }
 
-#define FRAME_SETUP                                \
-  debug_context_t *context;                        \
-  VALUE frame_no;                                  \
-  int frame_n;                                     \
-  Data_Get_Struct(self, debug_context_t, context); \
-  if (!rb_scan_args(argc, argv, "01", &frame_no))  \
-    frame_n = 0;                                   \
-  else                                             \
+#define FRAME_SETUP                                   \
+  debug_context_t *context = debug_context_ptr(self); \
+  VALUE frame_no;                                     \
+  int frame_n;                                        \
+  if (!rb_scan_args(argc, argv, "01", &frame_no))     \
+    frame_n = 0;                                      \
+  else                                                \
     frame_n = FIX2INT(frame_no);
 
 /*
@@ -325,9 +344,8 @@ Context_frame_self(int argc, VALUE *argv, VALUE self)
 static inline VALUE
 Context_ignored(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
-  Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_IGNORE) ? Qtrue : Qfalse;
 }
 
@@ -340,9 +358,7 @@ Context_ignored(VALUE self)
 static VALUE
 Context_resume(VALUE self)
 {
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   if (!CTX_FL_TEST(context, CTX_FL_SUSPEND))
     return Qnil;
@@ -364,9 +380,7 @@ Context_resume(VALUE self)
 static inline VALUE
 Context_backtrace(VALUE self)
 {
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   return dc_backtrace(context);
 }
@@ -374,10 +388,8 @@ Context_backtrace(VALUE self)
 static VALUE
 Context_stop_reason(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
   const char *symbol;
-
-  Data_Get_Struct(self, debug_context_t, context);
 
   if (CTX_FL_TEST(context, CTX_FL_DEAD))
     symbol = "post-mortem";
@@ -412,9 +424,7 @@ Context_step_into(int argc, VALUE *argv, VALUE self)
 {
   VALUE steps, v_frame;
   int n_args, from_frame;
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
@@ -452,12 +462,10 @@ Context_step_out(int argc, VALUE *argv, VALUE self)
 {
   int n_args, n_frames;
   VALUE v_frames, force;
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
   n_args = rb_scan_args(argc, argv, "02", &v_frames, &force);
   n_frames = n_args == 0 ? 1 : FIX2INT(v_frames);
-
-  Data_Get_Struct(self, debug_context_t, context);
 
   if (n_frames < 0 || n_frames > context->calced_stack_size)
     rb_raise(rb_eRuntimeError,
@@ -485,9 +493,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
 {
   int n_args, frame;
   VALUE lines, v_frame;
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   if (context->calced_stack_size == 0)
     rb_raise(rb_eRuntimeError, "No frames collected.");
@@ -515,9 +521,7 @@ static VALUE
 Context_suspend(VALUE self)
 {
   VALUE status;
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   status = rb_funcall(context->thread, rb_intern("status"), 0);
 
@@ -542,9 +546,7 @@ Context_suspend(VALUE self)
 static VALUE
 Context_switch(VALUE self)
 {
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   next_thread = context->thread;
 
@@ -564,9 +566,7 @@ Context_switch(VALUE self)
 static VALUE
 Context_is_suspended(VALUE self)
 {
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   return CTX_FL_TEST(context, CTX_FL_SUSPEND) ? Qtrue : Qfalse;
 }
@@ -580,9 +580,8 @@ Context_is_suspended(VALUE self)
 static inline VALUE
 Context_thnum(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
-  Data_Get_Struct(self, debug_context_t, context);
   return INT2FIX(context->thnum);
 }
 
@@ -595,9 +594,8 @@ Context_thnum(VALUE self)
 static inline VALUE
 Context_thread(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
-  Data_Get_Struct(self, debug_context_t, context);
   return context->thread;
 }
 
@@ -610,9 +608,8 @@ Context_thread(VALUE self)
 static VALUE
 Context_tracing(VALUE self)
 {
-  debug_context_t *context;
+  debug_context_t *context = debug_context_ptr(self);
 
-  Data_Get_Struct(self, debug_context_t, context);
   return CTX_FL_TEST(context, CTX_FL_TRACING) ? Qtrue : Qfalse;
 }
 
@@ -625,9 +622,7 @@ Context_tracing(VALUE self)
 static VALUE
 Context_set_tracing(VALUE self, VALUE value)
 {
-  debug_context_t *context;
-
-  Data_Get_Struct(self, debug_context_t, context);
+  debug_context_t *context = debug_context_ptr(self);
 
   if (RTEST(value))
     CTX_FL_SET(context, CTX_FL_TRACING);

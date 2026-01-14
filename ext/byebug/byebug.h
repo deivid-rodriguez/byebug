@@ -116,6 +116,7 @@ extern void byebug_remove_from_locked(VALUE thread);
 /* functions from threads.c */
 extern void Init_threads_table(VALUE mByebug);
 extern VALUE create_threads_table(void);
+extern threads_table_t *threads_table_ptr(VALUE thrads);
 extern void thread_context_lookup(VALUE thread, VALUE *context);
 extern int is_living_thread(VALUE thread);
 extern void acquire_lock(debug_context_t *dc);
@@ -128,6 +129,7 @@ extern VALUE next_thread;
 /* functions from context.c */
 extern void Init_byebug_context(VALUE mByebug);
 extern VALUE byebug_context_create(VALUE thread);
+extern debug_context_t *debug_context_ptr(VALUE context);
 extern VALUE context_dup(debug_context_t *context);
 extern void byebug_reset_stepping_stop_points(debug_context_t *context);
 extern VALUE call_with_debug_inspector(struct call_with_inspection_data *data);
