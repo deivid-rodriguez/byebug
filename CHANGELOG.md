@@ -2,11 +2,27 @@
 
 ## [Unreleased]
 
+## [13.0.0] - 2026-01-15
+
+### Fixed
+
+* [#924](https://github.com/deivid-rodriguez/byebug/pull/924): Use typed data APIs to fix Ruby 4.0 deprecation ([@nobu]).
+* [#876](https://github.com/deivid-rodriguez/byebug/pull/876): Add explicit require of `stringio` ([@pabloh]).
+* [#909](https://github.com/deivid-rodriguez/byebug/pull/909): Avoid loading readline at all to play nice with Ruby 4.0.
+* [#905](https://github.com/deivid-rodriguez/byebug/pull/905): Make reline an explicit dependency to fix Ruby 3.4 warnings.
+* [#824](https://github.com/deivid-rodriguez/byebug/pull/824): Improve startup by loading IRB lazily ([@pocke]).
+* [#848](https://github.com/deivid-rodriguez/byebug/pull/848): Grammar fixes in GUIDE.md ([@alexymik]).
+* [#804](https://github.com/deivid-rodriguez/byebug/pull/804): Fix typo in context.rb documentation ([@ono-max]).
+
+### Removed
+
+* Support for MRI 3.1. Byebug no longer installs on this platform.
+
 ## [12.0.0] - 2025-03-25
 
 ### Changed
 
-* [#690](https://github.com/deivid-rodriguez/byebug/pull/690): `break` without any arguments now sets a breakpoint on the current line, just like `gdb` ([@sergioro9].
+* [#690](https://github.com/deivid-rodriguez/byebug/pull/690): `break` without any arguments now sets a breakpoint on the current line, just like `gdb` ([@sergioro9]).
 
 ### Fixed
 
@@ -843,6 +859,7 @@
 * Initial release.
 
 [Unreleased]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.3...HEAD
+[13.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v12.0.0...v13.0.0
 [12.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.3...v12.0.0
 [11.1.3]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.2...v11.1.3
 [11.1.2]: https://github.com/deivid-rodriguez/byebug/compare/v11.1.1...v11.1.2
@@ -926,6 +943,7 @@
 [1.0.0]: https://github.com/deivid-rodriguez/byebug/compare/v0.0.1...v1.0.0
 
 [@akaneko3]: https://github.com/akaneko3
+[@alexymik]: https://github.com/alexymik
 [@andreychernih]: https://github.com/andreychernih
 [@ark6]: https://github.com/ark6
 [@astashov]: https://github.com/astashov
@@ -946,6 +964,9 @@
 [@mrkn]: https://github.com/mrkn
 [@nobu]: https://github.com/nobu
 [@Olgagr]: https://github.com/Olgagr
+[@ono-max]: https://github.com/ono-max
+[@pabloh]: https://github.com/pabloh
+[@pocke]: https://github.com/pocke
 [@sethk]: https://github.com/sethk
 [@sergioro9]: https://github.com/sergioro9
 [@shuky19]: https://github.com/shuky19
