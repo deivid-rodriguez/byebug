@@ -61,7 +61,7 @@ GEM
       faraday (>= 0.17.3, < 3)
     stringio (3.1.7)
     uri (1.0.4)
-    yard (0.9.37)
+    yard (0.9.38)
 
 PLATFORMS
   arm64-darwin
@@ -79,7 +79,7 @@ DEPENDENCIES
   pry (= 0.15.2)
   rake (~> 13.0)
   rake-compiler (~> 1.0)
-  yard (= 0.9.37)
+  yard (= 0.9.38)
 
 BUNDLED WITH
    2.7.2
