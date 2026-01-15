@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 group :development do
-  gem "mdl", "0.13.0"
+  gem "mdl", "0.15.0"
   gem "rubocop", "~> 1.74"
   gem "rubocop-packaging", github: "utkarsh2102/rubocop-packaging"
   gem "rubocop-performance", "~> 1.24"
