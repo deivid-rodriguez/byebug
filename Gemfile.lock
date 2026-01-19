@@ -30,7 +30,7 @@ GEM
       reline (>= 0.4.2)
     json (2.18.0)
     logger (1.7.0)
-    method_source (1.0.0)
+    method_source (1.1.0)
     minitest (5.27.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -41,9 +41,10 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    pry (0.15.2)
+    pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
+      reline (>= 0.6.0)
     psych (5.3.1)
       date
       stringio
@@ -78,7 +79,7 @@ DEPENDENCIES
   faraday-retry (~> 2.2)
   irb (~> 1.15)
   minitest (~> 5.25)
-  pry (= 0.15.2)
+  pry (= 0.16.0)
   rake (~> 13.0)
   rake-compiler (~> 1.0)
   yard (= 0.9.38)
