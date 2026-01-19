@@ -87,7 +87,7 @@ module Byebug
       enter "where"
       program = strip_line_numbers <<-RUBY
          1:  module Byebug
-         2:    class #{example_full_class}
+         2:    class #{example_class}
          3:      def foo
          4:        Object.new.instance_exec do
          5:          byebug
@@ -95,7 +95,7 @@ module Byebug
          7:      end
          8:    end
          9:
-        10:    #{example_full_class}.new.foo
+        10:    #{example_class}.new.foo
         11:  end
       RUBY
       debug_code(program)
