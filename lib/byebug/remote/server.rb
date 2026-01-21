@@ -19,6 +19,9 @@ module Byebug
       #
       # Start the remote debugging server
       #
+      # If wait_connection is set to true, the call waits for the first client
+      # connection.
+      #
       def start(host, port)
         return if @thread
 
