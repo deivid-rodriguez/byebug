@@ -275,9 +275,9 @@ line_event(VALUE trace_point, void *data)
   if (!CTX_FL_TEST(dc, CTX_FL_IGNORE_STEPS))
     dc->steps = dc->steps <= 0 ? -1 : dc->steps - 1;
 
-  if (dc->calced_stack_size <= dc->dest_frame)
+  if (dc->ruby_stack_size <= dc->dest_frame)
   {
-    dc->dest_frame = dc->calced_stack_size;
+    dc->dest_frame = dc->ruby_stack_size;
     CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
 
     dc->lines = dc->lines <= 0 ? -1 : dc->lines - 1;
@@ -309,6 +309,7 @@ call_event(VALUE trace_point, void *data)
   if (dc->calced_stack_size <= dc->dest_frame)
     CTX_FL_UNSET(dc, CTX_FL_IGNORE_STEPS);
 
+  dc->ruby_stack_size++;
   CALL_EVENT_SETUP;
 
   msym = rb_tracearg_method_id(trace_arg);
@@ -339,6 +340,8 @@ return_event(VALUE trace_point, void *data)
 
   EVENT_SETUP;
 
+  if (rb_tracearg_event_flag(trace_arg) & RUBY_EVENT_RETURN)
+    dc->ruby_stack_size--;
   RETURN_EVENT_SETUP;
 
   if ((dc->steps_out == 0) && (CTX_FL_TEST(dc, CTX_FL_STOP_ON_RET)))

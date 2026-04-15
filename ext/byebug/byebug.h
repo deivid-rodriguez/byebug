@@ -40,7 +40,8 @@ typedef enum
 
 typedef struct
 {
-  int calced_stack_size;
+  int calced_stack_size; /* all frames: Ruby + C + blocks          */
+  int ruby_stack_size;   /* Ruby-only frames (CALL/RETURN events)  */
   int flags;
   ctx_stop_reason stop_reason;
 
