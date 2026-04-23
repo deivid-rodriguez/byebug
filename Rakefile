@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "bundler"
+Bundler.require
+
 import "tasks/compile.rake"
 import "tasks/test.rake"
 import "tasks/release.rake"
