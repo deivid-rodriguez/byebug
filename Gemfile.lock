@@ -67,7 +67,7 @@ GEM
     stringio (3.2.0)
     tsort (0.2.0)
     uri (1.1.1)
-    yard (0.9.38)
+    yard (0.9.42)
 
 PLATFORMS
   arm64-darwin
@@ -86,7 +86,7 @@ DEPENDENCIES
   pry (= 0.16.0)
   rake (~> 13.0)
   rake-compiler (~> 1.0)
-  yard (= 0.9.38)
+  yard (= 0.9.42)
 
 BUNDLED WITH
    2.7.2
