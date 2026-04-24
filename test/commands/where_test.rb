@@ -101,7 +101,7 @@ module Byebug
       debug_code(program)
 
       expected_output = prepare_for_regexp <<-TXT
-        --> #0  block in #{example_full_class}.block in foo at #{example_path}:6
+        --> #0  block in #{example_full_class}.foo at #{example_path}:6
             #1  BasicObject.instance_exec(*args) at #{example_path}:4
             #2  #{example_full_class}.foo at #{example_path}:4
             #3  <module:Byebug> at #{example_path}:10
