@@ -33,7 +33,7 @@ GEM
     json (2.19.4)
     logger (1.7.0)
     method_source (1.1.0)
-    minitest (6.0.3)
+    minitest (6.0.5)
       drb (~> 2.0)
       prism (~> 1.5)
     minitest-mock (5.27.0)
