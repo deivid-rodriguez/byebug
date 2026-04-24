@@ -121,7 +121,12 @@ module Byebug
       enter "set stack_on_error", "2 / 0"
       debug_code(minimal_program)
 
-      check_error_includes(/\s*from \S+:in \`eval\'/)
+      if RUBY_VERSION >= "3.4"
+        check_error_includes(/\s*from \S+:in \'Binding.eval\'/)
+      else
+        check_error_includes(/\s*from \S+:in \`eval\'/)
+      end
+
       check_error_doesnt_include "ZeroDivisionError Exception: divided by 0"
     end
 
