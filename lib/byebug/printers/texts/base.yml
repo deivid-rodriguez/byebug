@@ -14,6 +14,7 @@ break:
     no_breakpoint: "Invalid breakpoint id. Use \"info breakpoint\" to find out the correct id"
     no_breakpoint_delete: "No breakpoint number {pos}"
     not_changed: "Incorrect expression \"{expr}\", breakpoint not changed"
+    hit_condition: "Invalid hit condition \"{cond}\". See \"help cond hit\"."
   confirmations:
     delete_all: "Delete all breakpoints?"
   messages:
