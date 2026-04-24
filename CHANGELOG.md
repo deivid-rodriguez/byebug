@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* [#553](https://github.com/deivid-rodriguez/byebug/pull/553): Shows the line number in the byebug statement so that supporting IDEs can take cursor to the debug point instead of the head of the file ([@senhalil]).
+
 ## [13.0.0] - 2026-01-15
 
 ### Fixed
