@@ -78,7 +78,7 @@ module Byebug
     end
 
     def deco_method
-      _method[/((?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/]
+      _method[/(?:(?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/, 1]
     end
 
     #
