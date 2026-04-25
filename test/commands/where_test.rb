@@ -39,14 +39,25 @@ module Byebug
       enter "where"
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
-            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
-            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
-            ͱ-- #3  Class.new(*args) at #{example_path}:20
-            #4  <module:Byebug> at #{example_path}:20
-            #5  <top (required)> at #{example_path}:1
-      TXT
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}#to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}#encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}#initialize(l#String) at #{example_path}:7
+              ͱ-- #3  Class#new(*args) at #{example_path}:20
+              #4  <module:Byebug> at #{example_path}:20
+              #5  <top (required)> at #{example_path}:1
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+              ͱ-- #3  Class.new(*args) at #{example_path}:20
+              #4  <module:Byebug> at #{example_path}:20
+              #5  <top (required)> at #{example_path}:1
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end
@@ -55,14 +66,25 @@ module Byebug
       enter "where"
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}#to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}#encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}#initialize(l#String) at #{example_path}:7
+              ͱ-- #3  Class#new\(*args) at #{example_path}:20
+              #4  <module:Byebug> at #{example_path}:20
+              #5  <top (required)> at #{example_path}:1
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
             #1  #{example_full_class}.encode(str#String) at #{example_path}:11
             #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
             ͱ-- #3  Class.new\(*args) at #{example_path}:20
             #4  <module:Byebug> at #{example_path}:20
             #5  <top (required)> at #{example_path}:1
-      TXT
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end
@@ -100,13 +122,23 @@ module Byebug
       RUBY
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  block in #{example_full_class}.foo at #{example_path}:6
-            #1  BasicObject.instance_exec(*args) at #{example_path}:4
-            #2  #{example_full_class}.foo at #{example_path}:4
-            #3  <module:Byebug> at #{example_path}:10
-            #4  <top (required)> at #{example_path}:1
-      TXT
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  block in #{example_full_class}#foo at #{example_path}:6
+              #1  BasicObject#instance_exec(*args) at #{example_path}:4
+              #2  #{example_full_class}#foo at #{example_path}:4
+              #3  <module:Byebug> at #{example_path}:10
+              #4  <top (required)> at #{example_path}:1
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  block in #{example_full_class}.foo at #{example_path}:6
+              #1  BasicObject.instance_exec(*args) at #{example_path}:4
+              #2  #{example_full_class}.foo at #{example_path}:4
+              #3  <module:Byebug> at #{example_path}:10
+              #4  <top (required)> at #{example_path}:1
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end
@@ -115,11 +147,19 @@ module Byebug
       enter "where 3"
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
-            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
-            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
-      TXT
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}#to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}#encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}#initialize(l#String) at #{example_path}:7
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end
@@ -128,14 +168,25 @@ module Byebug
       enter "where 20"
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
-            #1  #{example_full_class}.encode(str#String) at #{example_path}:11
-            #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
-            ͱ-- #3  Class.new(*args) at #{example_path}:20
-            #4  <module:Byebug> at #{example_path}:20
-            #5  <top (required)> at #{example_path}:1
-      TXT
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}#to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}#encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}#initialize(l#String) at #{example_path}:7
+              ͱ-- #3  Class#new(*args) at #{example_path}:20
+              #4  <module:Byebug> at #{example_path}:20
+              #5  <top (required)> at #{example_path}:1
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+              #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+              #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+              ͱ-- #3  Class.new(*args) at #{example_path}:20
+              #4  <module:Byebug> at #{example_path}:20
+              #5  <top (required)> at #{example_path}:1
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end
@@ -155,14 +206,25 @@ module Byebug
         enter "set nofullpath", "where", "set fullpath"
         debug_code(program)
 
-        expected_output = prepare_for_regexp <<-TXT
-          --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
-              #1  #{example_full_class}.encode(str#String) at #{example_path}:11
-              #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
-              ͱ-- #3  Class.new(*args) at #{example_path}:20
-              #4  <module:Byebug> at #{example_path}:20
-              #5  <top (required)> at #{example_path}:1
-        TXT
+        expected_output = if RUBY_VERSION >= "3.4"
+                            prepare_for_regexp <<-TXT
+            --> #0  #{example_full_class}#to_int(str#String) at #{example_path}:16
+                #1  #{example_full_class}#encode(str#String) at #{example_path}:11
+                #2  #{example_full_class}#initialize(l#String) at #{example_path}:7
+                ͱ-- #3  Class#new(*args) at #{example_path}:20
+                #4  <module:Byebug> at #{example_path}:20
+                #5  <top (required)> at #{example_path}:1
+                            TXT
+                          else
+                            prepare_for_regexp <<-TXT
+            --> #0  #{example_full_class}.to_int(str#String) at #{example_path}:16
+                #1  #{example_full_class}.encode(str#String) at #{example_path}:11
+                #2  #{example_full_class}.initialize(l#String) at #{example_path}:7
+                ͱ-- #3  Class.new(*args) at #{example_path}:20
+                #4  <module:Byebug> at #{example_path}:20
+                #5  <top (required)> at #{example_path}:1
+                            TXT
+                          end
 
         check_output_includes(*expected_output)
       end
@@ -190,14 +252,25 @@ module Byebug
       enter "set nofullpath", "where", "set fullpath"
       debug_code(program)
 
-      expected_output = prepare_for_regexp <<-TXT
-        --> #0  #{example_full_class}.to_int(str#String) at ...
-            #1  #{example_full_class}.encode(str#String) at ...
-            #2  #{example_full_class}.initialize(l#String) at ...
-            ͱ-- #3  Class.new(*args) at ...
-            #4  <module:Byebug> at ...
-            #5  <top (required)> at ...
-      TXT
+      expected_output = if RUBY_VERSION >= "3.4"
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}#to_int(str#String) at ...
+              #1  #{example_full_class}#encode(str#String) at ...
+              #2  #{example_full_class}#initialize(l#String) at ...
+              ͱ-- #3  Class#new(*args) at ...
+              #4  <module:Byebug> at ...
+              #5  <top (required)> at ...
+                          TXT
+                        else
+                          prepare_for_regexp <<-TXT
+          --> #0  #{example_full_class}.to_int(str#String) at ...
+              #1  #{example_full_class}.encode(str#String) at ...
+              #2  #{example_full_class}.initialize(l#String) at ...
+              ͱ-- #3  Class.new(*args) at ...
+              #4  <module:Byebug> at ...
+              #5  <top (required)> at ...
+                          TXT
+                        end
 
       check_output_includes(*expected_output)
     end

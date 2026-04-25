@@ -40,6 +40,14 @@ module Byebug
       @context.frame_method(pos)
     end
 
+    def _unqualified_method
+      if RUBY_VERSION >= "3.4"
+        _method[/(?:#|\.)?(\w+)$/, 1] || _method
+      else
+        _method
+      end
+    end
+
     def current?
       @context.frame.pos == pos
     end
@@ -66,11 +74,10 @@ module Byebug
     end
 
     #
-    # Returns the current class in the frame or an empty string if the current
-    # +callstyle+ setting is 'short'
+    # Returns the current class in the frame
     #
     def deco_class
-      Setting[:callstyle] == "short" || _class.to_s.empty? ? "" : "#{_class}."
+      _class.to_s.empty? ? "" : "#{_class}."
     end
 
     def deco_block
@@ -78,7 +85,13 @@ module Byebug
     end
 
     def deco_method
-      _method[/(?:(?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/, 1]
+      if callstyle_short?
+        _unqualified_method[/(?:(?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/, 1]
+      elsif RUBY_VERSION >= "3.4"
+        _method[/(?:(?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/, 1]
+      else
+        deco_class + _method[/(?:(?:block(?: \(\d+ levels\))?|rescue) in )?(.*)/, 1]
+      end
     end
 
     #
@@ -104,7 +117,7 @@ module Byebug
     # Builds a formatted string containing information about current method call
     #
     def deco_call
-      deco_block + deco_class + deco_method + deco_args
+      deco_block + deco_method + deco_args
     end
 
     #
@@ -158,7 +171,7 @@ module Byebug
     def c_args
       return [] unless _self.to_s != "main"
 
-      _class.instance_method(_method).parameters
+      _class.instance_method(_unqualified_method).parameters
     end
 
     def ruby_args
@@ -172,7 +185,11 @@ module Byebug
     end
 
     def use_short_style?(arg)
-      Setting[:callstyle] == "short" || arg[1].nil? || locals.empty?
+      callstyle_short? || arg[1].nil? || locals.empty?
+    end
+
+    def callstyle_short?
+      Setting[:callstyle] == "short"
     end
 
     def prefix_and_default(arg_type)
