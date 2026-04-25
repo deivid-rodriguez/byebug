@@ -119,7 +119,7 @@ module Byebug
          7:
          8:    c = b + 5
          9:
-        10:    d = c + 5
+        10:    c + 5
         11:  end
       RUBY
     end

@@ -6,6 +6,4 @@ ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 require "rubygems"
 require "bundler/setup"
 
-require_relative "../test/minitest_runner"
-
-exit Byebug::MinitestRunner.new.run
+load Gem.bin_path("minitest", "minitest")

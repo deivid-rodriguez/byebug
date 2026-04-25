@@ -13,7 +13,8 @@ module Byebug
          2:    Foo = "Foo constant"
          3:    foo = :foo_variable
          4:    byebug
-         5:  end
+         5:    foo
+         6:  end
       RUBY
     end
 
@@ -35,7 +36,7 @@ module Byebug
          2:  autoload :Foo, "./foo"
          3:  TracePoint.new(:class) { |tp| result = :tp_class_called }.enable
          4:  byebug
-         5:  result
+         5:  result.to_s
       RUBY
     end
 
