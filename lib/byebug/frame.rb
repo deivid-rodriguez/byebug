@@ -37,7 +37,12 @@ module Byebug
     end
 
     def _method
-      @context.frame_method(pos)
+      result = @context.frame_method(pos)
+      if RUBY_VERSION > "4.0"
+        result[/(?:#|::)(\w+)$/, 1]
+      else
+        result
+      end
     end
 
     def _unqualified_method

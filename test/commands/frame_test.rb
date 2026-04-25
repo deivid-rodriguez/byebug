@@ -77,10 +77,22 @@ module Byebug
     def test_frame_minus_one_sets_frame_to_the_last_one
       enter "frame -1"
 
+      # TODO: isn't the "last" frame the one byebug stopped on? that'd be 16, not 1
       debug_code(program) { assert_location example_path, 1 }
     end
 
+    def test_frame_zero_sets_frame_to_the_first_one
+      enter "frame 0"
+
+      # TODO: same as above, but opposite
+      debug_code(program) { assert_location example_path, 16 }
+    end
+
+    def skip_ruby4 = (skip "ruby 4 changed c frames" if RUBY_VERSION > "4")
+
     def test_frame_cannot_navigate_to_c_frames
+      skip_ruby4
+
       enter "frame 3"
       debug_code(program)
 
