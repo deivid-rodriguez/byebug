@@ -56,11 +56,7 @@ module Byebug
       # True for special files like -e, false otherwise
       #
       def virtual_file?(name)
-        if Gem.ruby_version >= Gem::Version.new("3.3.a")
-          ["(irb)", "-e", "(byebug)"].include?(name) || name.start_with?("(eval ")
-        else
-          ["(irb)", "-e", "(byebug)", "(eval)"].include?(name)
-        end
+        ["(irb)", "-e", "(byebug)"].include?(name) || name.start_with?("(eval ")
       end
     end
   end
