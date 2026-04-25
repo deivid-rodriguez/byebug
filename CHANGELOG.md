@@ -14,6 +14,10 @@
 
 * [#966](https://github.com/deivid-rodriguez/byebug/pull/966): Fix showing blocks in backtraces.
 
+### Removed
+
+* Support for MRI 3.2. Byebug no longer installs on this platform.
+
 ## [13.0.0] - 2026-01-15
 
 ### Fixed

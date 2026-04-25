@@ -14,7 +14,7 @@ AllCops:
 
   DisabledByDefault: true
 
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
 
 Layout/AccessModifierIndentation:
   Enabled: true

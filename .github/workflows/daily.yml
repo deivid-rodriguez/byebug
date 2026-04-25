@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_head_images:
-    container: deividrodriguez/byebug:3.2.9-gcc
+    container: deividrodriguez/byebug:3.3.9-gcc
 
     runs-on: ubuntu-24.04
 
