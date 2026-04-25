@@ -43,70 +43,70 @@ module Byebug
       enter "break 12", "break 13 if x == w", "info breakpoints"
       debug_code(program)
 
-      check_output_includes "Num Enb What",
-                            /\d+ +y   at #{example_path}:12/,
-                            /\d+ +y   at #{example_path}:13 if x == w/
+      assert_output_includes "Num Enb What",
+                             /\d+ +y   at #{example_path}:12/,
+                             /\d+ +y   at #{example_path}:13 if x == w/
     end
 
     def test_info_breakpoints_with_ids_shows_information_on_specific_breakpoints
       enter "b 12", "b 13", -> { "info breakpoints #{Breakpoint.first.id}" }
       debug_code(program)
 
-      check_output_includes "Num Enb What", /\d+ +y   at #{example_path}:12/
-      check_output_doesnt_include(/\d+ +y   at #{example_path}:13/)
+      assert_output_includes "Num Enb What", /\d+ +y   at #{example_path}:12/
+      assert_output_doesnt_include(/\d+ +y   at #{example_path}:13/)
     end
 
     def test_info_breakpoints_shows_a_message_when_no_breakpoints_found
       enter "info breakpoints"
       debug_code(program)
 
-      check_output_includes "No breakpoints."
+      assert_output_includes "No breakpoints."
     end
 
     def test_info_breakpoints_shows_error_if_specific_breakpoint_do_not_exist
       enter "break 12", "break 13", "delete 100", "info breakpoints 100"
       debug_code(program)
 
-      check_error_includes "No breakpoints found among list given"
+      assert_error_includes "No breakpoints found among list given"
     end
 
     def test_info_breakpoints_shows_hit_counts
       enter "break 12", "cont", "info breakpoints"
       debug_code(program)
 
-      check_output_includes(/\d+ +y   at #{example_path}:12/,
-                            "breakpoint already hit 1 time")
+      assert_output_includes(/\d+ +y   at #{example_path}:12/,
+                             "breakpoint already hit 1 time")
     end
 
     def test_info_display_shows_all_display_expressions
       enter "display 3 + 3", "display a + b", "info display"
       debug_code(program) { clear_displays }
 
-      check_output_includes "Auto-display expressions now in effect:",
-                            "Num Enb Expression",
-                            "1: y  3 + 3",
-                            "2: y  a + b"
+      assert_output_includes "Auto-display expressions now in effect:",
+                             "Num Enb Expression",
+                             "1: y  3 + 3",
+                             "2: y  a + b"
     end
 
     def test_info_display_shows_a_message_when_no_display_expressions_found
       enter "info display"
       debug_code(program)
 
-      check_output_includes "There are no auto-display expressions now."
+      assert_output_includes "There are no auto-display expressions now."
     end
 
     def test_info_line_shows_info_about_the_current_line
       enter "break 12", "cont", "info line"
       debug_code(program)
 
-      check_output_includes "Line 12 of \"#{example_path}\""
+      assert_output_includes "Line 12 of \"#{example_path}\""
     end
 
     def test_info_program_shows_the_initial_stop_reason
       enter "info program"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "It stopped after stepping, next'ing or initial start."
     end
 
@@ -114,7 +114,7 @@ module Byebug
       enter "step", "info program"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "Program stopped.",
         "It stopped after stepping, next'ing or initial start."
     end
@@ -123,14 +123,14 @@ module Byebug
       enter "break 12", "cont", "info program"
       debug_code(program)
 
-      check_output_includes "Program stopped.", "It stopped at a breakpoint."
+      assert_output_includes "Program stopped.", "It stopped at a breakpoint."
     end
 
     def test_info_alone_shows_help
       enter "info", "cont"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "Shows short description and information about the program being debugged"
     end
   end
@@ -152,7 +152,7 @@ module Byebug
       enter "info file"
       debug_code(program)
 
-      check_output_includes "File #{example_path} (4 lines)"
+      assert_output_includes "File #{example_path} (4 lines)"
     end
 
     def test_info_file_with_a_file_name_shows_basic_info_about_a_specific_file
@@ -160,7 +160,7 @@ module Byebug
         enter "info file #{script_name}"
         debug_code(program)
 
-        check_output_includes "File #{script_name} (1 line)"
+        assert_output_includes "File #{script_name} (1 line)"
       end
     end
 
@@ -168,7 +168,7 @@ module Byebug
       enter "info file"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "Modification time: #{File.stat(example_path).mtime}"
     end
 
@@ -177,7 +177,7 @@ module Byebug
         enter "info file #{script_name}"
         debug_code(program)
 
-        check_output_includes \
+        assert_output_includes \
           "Modification time: #{File.stat(script_name).mtime}"
       end
     end
@@ -186,7 +186,7 @@ module Byebug
       enter "info file"
       debug_code(program)
 
-      check_output_includes \
+      assert_output_includes \
         "Sha1 Signature: #{Digest::SHA1.hexdigest(example_path)}"
     end
 
@@ -195,7 +195,7 @@ module Byebug
         enter "info file #{script_name}"
         debug_code(program)
 
-        check_output_includes \
+        assert_output_includes \
           "Sha1 Signature: #{Digest::SHA1.hexdigest(script_name)}"
       end
     end
@@ -204,7 +204,7 @@ module Byebug
       enter "info file"
       debug_code(minimal_program)
 
-      check_output_includes "Breakpoint line numbers: 1 2 4 5"
+      assert_output_includes "Breakpoint line numbers: 1 2 4 5"
     end
 
     def test_info_file_w_filename_shows_potential_breakpoint_lines_in_filename
@@ -212,7 +212,7 @@ module Byebug
         enter "info file #{script_name}"
         debug_code(program)
 
-        check_output_includes "Breakpoint line numbers: 1"
+        assert_output_includes "Breakpoint line numbers: 1"
       end
     end
 
@@ -220,14 +220,14 @@ module Byebug
       enter "info file blabla"
       debug_code(program)
 
-      check_error_includes "blabla is not a valid source file"
+      assert_error_includes "blabla is not a valid source file"
     end
 
     def test_info_file_with_a_file_name_with_space_doesnt_fail
       enter "info file /filename/with space"
       debug_code(program)
 
-      check_error_includes "/filename/with space is not a valid source file"
+      assert_error_includes "/filename/with space is not a valid source file"
     end
   end
 
@@ -247,7 +247,7 @@ module Byebug
       enter "catch RuntimeError", "cont", "info program", "catch off", "y"
 
       assert_raises(RuntimeError) { debug_code(program_raising) }
-      check_output_includes "Program stopped.", "It stopped at a catchpoint."
+      assert_output_includes "Program stopped.", "It stopped at a catchpoint."
     end
   end
 end

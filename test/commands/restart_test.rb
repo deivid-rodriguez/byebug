@@ -72,7 +72,7 @@ module Byebug
         enter ["restart", arg].compact.join(" ")
         debug_code(minimal_program)
 
-        check_output_includes "Re exec'ing:"
+        assert_output_includes "Re exec'ing:"
       end
     end
 

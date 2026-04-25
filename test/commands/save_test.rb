@@ -71,7 +71,7 @@ module Byebug
       enter "save"
       debug_code(program)
 
-      check_output_includes "Saved to '#{Setting[:savefile]}'"
+      assert_output_includes "Saved to '#{Setting[:savefile]}'"
       cleanup(Setting[:savefile])
     end
 
@@ -87,7 +87,7 @@ module Byebug
       enter "save output.txt"
       debug_code(program)
 
-      check_output_includes "Saved to 'output.txt'"
+      assert_output_includes "Saved to 'output.txt'"
       cleanup("output.txt")
     end
   end

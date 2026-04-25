@@ -33,7 +33,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
       end
     end
 
@@ -42,7 +42,7 @@ module Byebug
         enter "set listsize 5.0", "list"
         debug_code(program)
 
-        check_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [11, 15]:"
+        assert_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [11, 15]:"
       end
     end
 
@@ -51,7 +51,7 @@ module Byebug
         enter "cont 7", "list"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:7. Showing lines [1, 15]:"
+        assert_output_includes "Stopped at #{example_path}:7. Showing lines [1, 15]:"
       end
     end
 
@@ -60,7 +60,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [4, 16]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [4, 16]:"
       end
     end
 
@@ -69,7 +69,7 @@ module Byebug
         enter "list"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [1, 16]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [1, 16]:"
       end
     end
 
@@ -78,7 +78,7 @@ module Byebug
         enter "cont 7", "list", "list"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:7. Showing lines [9, 11]:"
+        assert_output_includes "Stopped at #{example_path}:7. Showing lines [9, 11]:"
       end
     end
 
@@ -87,7 +87,7 @@ module Byebug
         enter "list-"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
       end
     end
 
@@ -96,7 +96,7 @@ module Byebug
         enter "list-", "list-"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [9, 11]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [9, 11]:"
       end
     end
 
@@ -105,7 +105,7 @@ module Byebug
         enter "list 14-16", "list -"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [11, 13]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [11, 13]:"
       end
     end
 
@@ -114,7 +114,7 @@ module Byebug
         enter "list ="
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [12, 14]:"
       end
     end
 
@@ -122,30 +122,30 @@ module Byebug
       enter "list 6-8"
       debug_code(program)
 
-      check_output_includes "Stopped at #{example_path}:13. Showing lines [6, 8]:"
+      assert_output_includes "Stopped at #{example_path}:13. Showing lines [6, 8]:"
     end
 
     def test_lists_specific_range_when_requested_in_comma_format
       enter "list 6,8"
       debug_code(program)
 
-      check_output_includes "Stopped at #{example_path}:13. Showing lines [6, 8]:"
+      assert_output_includes "Stopped at #{example_path}:13. Showing lines [6, 8]:"
     end
 
     def test_lists_nothing_if_unexistent_range_is_specified
       enter "list 20,25"
       debug_code(program)
 
-      check_error_includes '"List" argument "20" needs to be at most 16'
-      check_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [20, 25]:"
+      assert_error_includes '"List" argument "20" needs to be at most 16'
+      assert_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [20, 25]:"
     end
 
     def test_lists_nothing_if_invalid_range_is_specified
       enter "list 5,4"
       debug_code(program)
 
-      check_error_includes "Invalid line range"
-      check_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [5, 4]:"
+      assert_error_includes "Invalid line range"
+      assert_output_doesnt_include "Stopped at #{example_path}:13. Showing lines [5, 4]:"
     end
 
     def test_list_proper_lines_when_range_around_specific_line_with_hyphen
@@ -153,7 +153,7 @@ module Byebug
         enter "list 4-"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [3, 5]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [3, 5]:"
       end
     end
 
@@ -162,7 +162,7 @@ module Byebug
         enter "list 4,"
         debug_code(program)
 
-        check_output_includes "Stopped at #{example_path}:13. Showing lines [3, 5]:"
+        assert_output_includes "Stopped at #{example_path}:13. Showing lines [3, 5]:"
       end
     end
 
@@ -170,14 +170,14 @@ module Byebug
       enter "list 7"
       debug_code(program)
 
-      check_output_includes(/7:\s+"%1"/)
+      assert_output_includes(/7:\s+"%1"/)
     end
 
     def test_shows_error_when_invoked_with_invalid_syntax
       enter "list rdfe87"
       debug_code(program)
 
-      check_error_includes(/needs to be a number/)
+      assert_error_includes(/needs to be a number/)
     end
 
     def test_gives_back_a_prompt_when_invoked_with_invalid_syntax
@@ -195,7 +195,7 @@ module Byebug
       enter -> { replace_build_percentage_string_line_and_list_it }
       debug_code(program)
 
-      check_output_includes(/7:\s+"%11"/)
+      assert_output_includes(/7:\s+"%11"/)
     end
   end
 end

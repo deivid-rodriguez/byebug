@@ -46,7 +46,7 @@ module Byebug
         enter "frame 2"
         debug_code(program)
 
-        check_output_includes "=>  7:       @letter = encode(letter)"
+        assert_output_includes "=>  7:       @letter = encode(letter)"
       end
     end
 
@@ -55,7 +55,7 @@ module Byebug
         enter "frame 2"
         debug_code(program)
 
-        check_output_doesnt_include "=>  7:       @letter = encode(letter)"
+        assert_output_doesnt_include "=>  7:       @letter = encode(letter)"
       end
     end
 
@@ -63,7 +63,7 @@ module Byebug
       enter "up", "frame"
       debug_code(program)
 
-      check_output_includes(
+      assert_output_includes(
         /--> #1  .*encode\(str#String\)\s* at .*#{example_path}:11/
       )
     end
@@ -84,7 +84,7 @@ module Byebug
       enter "frame 3"
       debug_code(program)
 
-      check_error_includes "Can't navigate to c-frame"
+      assert_error_includes "Can't navigate to c-frame"
     end
   end
 end

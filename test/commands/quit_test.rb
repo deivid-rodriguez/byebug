@@ -17,7 +17,7 @@ module Byebug
         enter "quit", "y"
         debug_code(minimal_program)
 
-        check_output_includes "Really quit? (y/n)"
+        assert_output_includes "Really quit? (y/n)"
       end
     end
 
@@ -26,7 +26,7 @@ module Byebug
         enter "quit!"
         debug_code(minimal_program)
 
-        check_output_doesnt_include "Really quit? (y/n)"
+        assert_output_doesnt_include "Really quit? (y/n)"
       end
     end
 
@@ -35,7 +35,7 @@ module Byebug
         enter "quit unconditionally"
         debug_code(minimal_program)
 
-        check_output_doesnt_include "Really quit? (y/n)"
+        assert_output_doesnt_include "Really quit? (y/n)"
       end
     end
 
@@ -43,7 +43,7 @@ module Byebug
       enter "quit", "n"
       debug_code(minimal_program)
 
-      check_output_includes "Really quit? (y/n)"
+      assert_output_includes "Really quit? (y/n)"
     end
   end
 end

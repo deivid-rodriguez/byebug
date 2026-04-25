@@ -48,7 +48,7 @@ module Byebug
       enter "info unknown_subcmd"
       debug_code(minimal_program)
 
-      check_error_includes \
+      assert_error_includes \
         "Unknown command 'info unknown_subcmd'. Try 'help info'"
     end
   end
@@ -85,21 +85,21 @@ module Byebug
       enter "3 + 2"
       debug_code(minimal_program)
 
-      check_output_includes "5"
+      assert_output_includes "5"
     end
 
     def test_ruby_code_is_evaluated_on_unknown_input
       enter "[5, 6, 7].inject(&:+)"
       debug_code(minimal_program)
 
-      check_output_includes "18"
+      assert_output_includes "18"
     end
 
     def test_arrays_are_properly_printed_after_evaluation_of_unknown_input
       enter "(1..3).to_a"
       debug_code(minimal_program)
 
-      check_output_includes "[1, 2, 3]"
+      assert_output_includes "[1, 2, 3]"
     end
 
     def test_eval_evaluates_just_like_without_it
@@ -107,14 +107,14 @@ module Byebug
 
       debug_code(minimal_program)
 
-      check_output_includes '"s is something"'
+      assert_output_includes '"s is something"'
     end
 
     def test_evaluation_results_on_unknown_input_prefer_inspect_over_to_s
       enter "#{example_class}.new"
       debug_code(program)
 
-      check_output_includes "A very cool string representation"
+      assert_output_includes "A very cool string representation"
     end
 
     def test_shows_backtrace_on_error_if_stack_on_error_enabled
@@ -122,20 +122,20 @@ module Byebug
       debug_code(minimal_program)
 
       if RUBY_VERSION >= "3.4"
-        check_error_includes(/\s*from \S+:in \'Binding.eval\'/)
+        assert_error_includes(/\s*from \S+:in \'Binding.eval\'/)
       else
-        check_error_includes(/\s*from \S+:in \`eval\'/)
+        assert_error_includes(/\s*from \S+:in \`eval\'/)
       end
 
-      check_error_doesnt_include "ZeroDivisionError Exception: divided by 0"
+      assert_error_doesnt_include "ZeroDivisionError Exception: divided by 0"
     end
 
     def test_shows_only_exception_if_stack_on_error_disabled
       enter "set stack_on_error off", "2 / 0"
       debug_code(minimal_program)
 
-      check_error_includes "ZeroDivisionError Exception: divided by 0"
-      check_error_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
+      assert_error_includes "ZeroDivisionError Exception: divided by 0"
+      assert_error_doesnt_include(/\S+:\d+:in `eval':divided by 0/)
     end
   end
 
@@ -173,11 +173,11 @@ module Byebug
       debug_code(program)
 
       # Regular breakpoint: OK
-      check_output_includes(/Stopped by breakpoint \d/)
+      assert_output_includes(/Stopped by breakpoint \d/)
 
       # Incorrect info when evaluating something from command prompt
-      check_output_doesnt_include(/Stopped by breakpoint \d/,
-                                  /Stopped by breakpoint \d/)
+      assert_output_doesnt_include(/Stopped by breakpoint \d/,
+                                   /Stopped by breakpoint \d/)
     end
   end
 
@@ -207,7 +207,7 @@ module Byebug
     def test_autolists_lists_source_before_stopping
       debug_code(program)
 
-      check_output_includes "Stopped at #{example_path}:11. Showing lines [5, 14]:"
+      assert_output_includes "Stopped at #{example_path}:11. Showing lines [5, 14]:"
     end
 
     def test_shows_error_when_current_source_location_is_unknown
@@ -216,7 +216,7 @@ module Byebug
       expected_file = "(eval at #{example_path}:6)"
 
       debug_code(program) { assert_equal expected_file, frame.file }
-      check_error_includes "No sourcefile available for #{expected_file}"
+      assert_error_includes "No sourcefile available for #{expected_file}"
     end
   end
 
@@ -275,29 +275,29 @@ module Byebug
       enter "Timeout::timeout(60) { 1 }"
       debug_code(minimal_program)
 
-      check_output_includes "1"
+      assert_output_includes "1"
     end
 
     def test_does_not_hang_when_evaluating_expressions_using_new_threads
       enter "Thread.new {}.join"
       debug_code(minimal_program)
 
-      check_output_includes(/#<Thread:0x.*>/)
+      assert_output_includes(/#<Thread:0x.*>/)
     end
 
     def test_does_not_hang_when_evaluating_expressions_using_old_threads
       enter "worker.calc(10)"
       debug_code(program)
 
-      check_output_includes "100"
+      assert_output_includes "100"
     end
 
     def test_thread_context_is_kept
       enter 'Thread.current[:greeting] = "hi!"', "Thread.current[:greeting]"
       debug_code(minimal_program)
 
-      check_output_includes '"hi!"', # After set
-                            '"hi!"' # After get
+      assert_output_includes '"hi!"', # After set
+                             '"hi!"' # After get
     end
   end
 end

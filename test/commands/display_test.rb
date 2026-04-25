@@ -24,14 +24,14 @@ module Byebug
       enter "display d + 1"
       debug_code(program) { clear_displays }
 
-      check_output_includes "1: d + 1 = 1"
+      assert_output_includes "1: d + 1 = 1"
     end
 
     def test_shows_undefined_expressions
       enter "display e"
       debug_code(program) { clear_displays }
 
-      check_output_includes "1: e = (undefined)"
+      assert_output_includes "1: e = (undefined)"
     end
 
     def test_saves_displayed_expressions
@@ -48,7 +48,7 @@ module Byebug
 
       debug_code(program) { clear_displays }
 
-      check_output_includes "1: d = 0", "2: d + 1 = 1"
+      assert_output_includes "1: d = 0", "2: d + 1 = 1"
     end
   end
 end

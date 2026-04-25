@@ -48,9 +48,9 @@ module Byebug
 
       debug_code(program)
 
-      check_output_includes "=> 10:         i *= new_number"
-      check_output_doesnt_include "=> 10:         i *= new_number", "=> 10:         i *= new_number"
-      check_output_includes "=> 17:   sleep 0"
+      assert_output_includes "=> 10:         i *= new_number"
+      assert_output_doesnt_include "=> 10:         i *= new_number", "=> 10:         i *= new_number"
+      assert_output_includes "=> 17:   sleep 0"
     end
 
     def test_restores_previous_autolisting_after_skip
@@ -59,7 +59,7 @@ module Byebug
 
         debug_code(program)
 
-        check_output_doesnt_include '=> 18:   "Result is: " + result.to_s'
+        assert_output_doesnt_include '=> 18:   "Result is: " + result.to_s'
       end
     end
   end

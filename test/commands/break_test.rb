@@ -86,14 +86,14 @@ module Byebug
       enter "break B.a"
       debug_code(program)
 
-      check_output_includes(/Created breakpoint/)
+      assert_output_includes(/Created breakpoint/)
     end
 
     def test_setting_breakpoint_to_an_undefined_class_shows_error_message
       enter "break ::B.a"
       debug_code(program)
 
-      check_error_includes "Warning: breakpoint source is not yet defined"
+      assert_error_includes "Warning: breakpoint source is not yet defined"
     end
 
     def test_setting_breakpoint_to_invalid_location_does_not_create_breakpoint
@@ -106,7 +106,7 @@ module Byebug
       enter "break foo"
       debug_code(program)
 
-      check_error_includes "Invalid breakpoint location"
+      assert_error_includes "Invalid breakpoint location"
     end
   end
 
@@ -218,21 +218,21 @@ module Byebug
       enter "break asf:234"
       debug_code(program)
 
-      check_error_includes "No file named asf"
+      assert_error_includes "No file named asf"
     end
 
     def test_setting_breakpoint_with_bad_relative_path_doesnt_crash
       enter "break ../relative/path.rb:8"
       debug_code(program)
 
-      check_error_includes "No file named ../relative/path.rb"
+      assert_error_includes "No file named ../relative/path.rb"
     end
 
     def test_setting_breakpoint_with_relative_path_adds_the_breakpoint
       enter "break ./test/commands/break_test.rb:3"
       debug_code(program)
 
-      check_output_includes(/Created breakpoint/)
+      assert_output_includes(/Created breakpoint/)
     end
 
     def test_setting_breakpoint_with_space_in_path_adds_the_breakpoint
@@ -240,7 +240,7 @@ module Byebug
         enter "break hello world.rb:1"
         debug_code(program)
 
-        check_output_includes(/Created breakpoint/)
+        assert_output_includes(/Created breakpoint/)
       end
     end
 
@@ -248,14 +248,14 @@ module Byebug
       enter "break /this path/isnt there/abc xyz:8"
       debug_code(program)
 
-      check_error_includes "No file named /this path/isnt there/abc xyz"
+      assert_error_includes "No file named /this path/isnt there/abc xyz"
     end
 
     def test_setting_breakpoint_to_path_with_colons_does_not_crash
       enter "break C:/bb.rb:1"
       debug_code(program)
 
-      check_error_includes "No file named C:/bb.rb"
+      assert_error_includes "No file named C:/bb.rb"
     end
 
     def test_setting_breakpoint_to_invalid_line_does_not_create_breakpoint
@@ -280,7 +280,7 @@ module Byebug
       enter "break 10", "cont"
       debug_code(program)
 
-      check_output_includes "Return value is: 3"
+      assert_output_includes "Return value is: 3"
     end
 
     def test_breaking_w_byebug_keyword_stops_at_the_next_line
@@ -309,7 +309,7 @@ module Byebug
       enter "break 11 if y -=) 1"
       debug_code(program)
 
-      check_error_includes 'Incorrect expression "y -=) 1"; breakpoint disabled'
+      assert_error_includes 'Incorrect expression "y -=) 1"; breakpoint disabled'
     end
 
     def test_setting_breakpoint_uses_new_source
@@ -322,21 +322,21 @@ module Byebug
       enter "break 7"
       debug_code(program) { @id = Breakpoint.first.id }
 
-      check_output_includes(/Created breakpoint #{@id}/)
+      assert_output_includes(/Created breakpoint #{@id}/)
     end
 
     def test_setting_breakpoint_to_nonexistent_line_shows_an_error
       enter "break 1000"
       debug_code(program)
 
-      check_error_includes "There are only 16 lines in file #{example_path}"
+      assert_error_includes "There are only 16 lines in file #{example_path}"
     end
 
     def test_setting_breakpoint_to_invalid_line_shows_an_error_and_alternatives
       enter "break 14"
       debug_code(program)
 
-      check_error_includes \
+      assert_error_includes \
         "Line 14 is not a valid breakpoint in file #{example_path}.",
         "Valid break points are:",
         "[B] 10:     end",
@@ -377,7 +377,7 @@ module Byebug
     def test_shows_nil_return_value
       debug_code(program)
 
-      check_output_includes "Return value is: nil"
+      assert_output_includes "Return value is: nil"
     end
   end
 
@@ -413,7 +413,7 @@ module Byebug
     def test_shows_nil_return_value
       debug_code(program)
 
-      check_output_includes "Return value is: nil"
+      assert_output_includes "Return value is: nil"
     end
   end
 
@@ -445,7 +445,7 @@ module Byebug
     def test_does_not_show_return_value_information
       debug_code(program)
 
-      check_output_doesnt_include "Return value is: nil"
+      assert_output_doesnt_include "Return value is: nil"
     end
   end
 

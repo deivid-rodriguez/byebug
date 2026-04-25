@@ -46,7 +46,7 @@ module Byebug
         enter "up 2", "down"
         debug_code(program)
 
-        check_output_includes '=> 11:       integerize(str + "x") + 5'
+        assert_output_includes '=> 11:       integerize(str + "x") + 5'
       end
     end
 
@@ -55,7 +55,7 @@ module Byebug
         enter "up 2", "down"
         debug_code(program)
 
-        check_output_doesnt_include '=> 11:       integerize(str + "x") + 5'
+        assert_output_doesnt_include '=> 11:       integerize(str + "x") + 5'
       end
     end
 
@@ -69,7 +69,7 @@ module Byebug
       enter "up 3", "down", "frame"
       debug_code(program)
 
-      check_output_includes(
+      assert_output_includes(
         /--> #2  .*initialize\(letter#String\)\s* at .*#{example_path}:7/
       )
     end
@@ -78,7 +78,7 @@ module Byebug
       enter "down"
 
       debug_code(program) { assert_equal 16, frame.line }
-      check_error_includes "Can't navigate beyond the newest frame"
+      assert_error_includes "Can't navigate beyond the newest frame"
     end
   end
 end

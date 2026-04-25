@@ -38,77 +38,77 @@ module Byebug
       enter "break 14", "cont", "var args"
       debug_code(program)
 
-      check_output_includes "level = 2"
+      assert_output_includes "level = 2"
     end
 
     def test_var_args_help
       enter "help var args"
       debug_code(program)
 
-      check_output_includes "Information about arguments of the current scope."
+      assert_output_includes "Information about arguments of the current scope."
     end
 
     def test_var_const_shows_constants_in_class_or_module
       enter "var const Byebug::#{example_class}"
       debug_code(program)
 
-      check_output_includes "SOMECONST = foo"
+      assert_output_includes "SOMECONST = foo"
     end
 
     def test_var_const_shows_constants_in_current_scope_when_without_argument
       enter "var const"
       debug_code(program)
 
-      check_output_includes "SOMECONST = foo"
+      assert_output_includes "SOMECONST = foo"
     end
 
     def test_var_const_shows_error_if_given_object_is_not_a_class_or_module
       enter "break 21", "cont", "var const v"
       debug_code(program)
 
-      check_error_includes "Should be Class/Module: v"
+      assert_error_includes "Should be Class/Module: v"
     end
 
     def test_var_const_help
       enter "help var const"
       debug_code(program)
 
-      check_output_includes "Shows constants of an object."
+      assert_output_includes "Shows constants of an object."
     end
 
     def test_var_instance_shows_instance_vars_of_an_object
       enter "break 21", "cont", "var instance v"
       debug_code(program)
 
-      check_output_includes '@instance_variable = "11111111111111111111"'
+      assert_output_includes '@instance_variable = "11111111111111111111"'
     end
 
     def test_var_instance_help
       enter "help var instance"
       debug_code(program)
 
-      check_output_includes "Shows instance variables of self or a specific object."
+      assert_output_includes "Shows instance variables of self or a specific object."
     end
 
     def test_var_global_shows_global_variables
       enter "var global"
       debug_code(program)
 
-      check_output_includes "$ERROR_INFO = nil"
+      assert_output_includes "$ERROR_INFO = nil"
     end
 
     def test_var_global_help
       enter "help var global"
       debug_code(program)
 
-      check_output_includes "Shows global variables."
+      assert_output_includes "Shows global variables."
     end
 
     def test_var_instance_shows_instance_variables_of_self_if_no_object_given
       enter "var instance"
       debug_code(program)
 
-      check_output_includes '@instance_variable = "11111111111111111111"'
+      assert_output_includes '@instance_variable = "11111111111111111111"'
     end
 
     def test_var_instance_cuts_long_variable_values_according_to_width_setting
@@ -116,7 +116,7 @@ module Byebug
         enter "var instance"
         debug_code(program)
 
-        check_output_includes '@instance_variable = "111111111111111...'
+        assert_output_includes '@instance_variable = "111111111111111...'
       end
     end
 
@@ -124,30 +124,30 @@ module Byebug
       enter "break 15", "cont", "var local"
       debug_code(program)
 
-      check_output_includes "i = 1", "level = 2"
+      assert_output_includes "i = 1", "level = 2"
     end
 
     def test_var_local_help
       enter "help var local"
       debug_code(program)
 
-      check_output_includes "Shows local variables in current scope."
+      assert_output_includes "Shows local variables in current scope."
     end
 
     def test_var_all_shows_all_variables
       enter "break 15", "cont", "var all"
       debug_code(program)
 
-      check_output_includes "$ERROR_INFO = nil",
-                            '@instance_variable = "11111111111111111111"',
-                            "level = 2"
+      assert_output_includes "$ERROR_INFO = nil",
+                             '@instance_variable = "11111111111111111111"',
+                             "level = 2"
     end
 
     def test_var_all_help
       enter "help var all"
       debug_code(program)
 
-      check_output_includes "Shows local, global and instance variables of self."
+      assert_output_includes "Shows local, global and instance variables of self."
     end
   end
 end

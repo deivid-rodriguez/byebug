@@ -75,7 +75,7 @@ module Byebug
       enter "break 21", "cont", "finish foo"
       debug_code(program)
 
-      check_error_includes '"finish" argument "foo" needs to be a number'
+      assert_error_includes '"finish" argument "foo" needs to be a number'
     end
 
     def test_finish_stays_at_the_same_line_if_incorrect_frame_number_specified
@@ -131,7 +131,7 @@ module Byebug
       enter "b 7", "cont", "finish 0"
       debug_code(program)
 
-      check_output_includes "Return value is: [1, 4, 9, 16, 25]"
+      assert_output_includes "Return value is: [1, 4, 9, 16, 25]"
     end
 
     def test_finish_0_stops_right_before_frame_returns__convoluted_case

@@ -23,28 +23,28 @@ unless ENV["LIBEDIT"]
         enter "show", "history"
         debug_code(program)
 
-        check_output_includes(/\d+  show$/, /\d+  history$/)
+        assert_output_includes(/\d+  show$/, /\d+  history$/)
       end
 
       def test_history_n_displays_whole_history_if_n_is_bigger_than_history_size
         enter "show", "history 3"
         debug_code(program)
 
-        check_output_includes(/\d+  show$/, /\d+  history 3$/)
+        assert_output_includes(/\d+  show$/, /\d+  history 3$/)
       end
 
       def test_history_n_displays_latest_n_records_from_readline_history
         enter "show width", "show autolist", "history 2"
         debug_code(program)
 
-        check_output_includes(/\d+  show autolist$/, /\d+  history 2$/)
+        assert_output_includes(/\d+  show autolist$/, /\d+  history 2$/)
       end
 
       def test_history_does_not_save_empty_commands
         enter "show", "show width", "", "history 3"
         debug_code(program)
 
-        check_output_includes(
+        assert_output_includes(
           /\d+  show$/, /\d+  show width$/, /\d+  history 3$/
         )
       end
@@ -53,7 +53,7 @@ unless ENV["LIBEDIT"]
         enter "show", "show width", "show width", "history 3"
         debug_code(program)
 
-        check_output_includes(
+        assert_output_includes(
           /\d+  show$/, /\d+  show width$/, /\d+  history 3$/
         )
       end
@@ -63,7 +63,7 @@ unless ENV["LIBEDIT"]
           enter "next", "history 2"
           debug_code(program)
 
-          check_output_includes(/\d+  next$/, /\d+  history 2$/)
+          assert_output_includes(/\d+  next$/, /\d+  history 2$/)
         end
       end
 
@@ -72,8 +72,8 @@ unless ENV["LIBEDIT"]
           enter "next", "history"
           debug_code(program)
 
-          check_output_includes(/\d+  history$/)
-          check_output_doesnt_include(/\d+  next$/)
+          assert_output_includes(/\d+  history$/)
+          assert_output_doesnt_include(/\d+  next$/)
         end
       end
     end

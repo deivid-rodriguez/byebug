@@ -37,7 +37,7 @@ module Byebug
       enter "break 9", -> { "delete #{Breakpoint.first.id}" }
       debug_code(program)
 
-      check_output_includes(/Deleted breakpoint/)
+      assert_output_includes(/Deleted breakpoint/)
     end
 
     def test_does_not_stop_at_the_deleted_breakpoint
@@ -62,7 +62,7 @@ module Byebug
       enter "break 9", -> { "delete #{Breakpoint.last.id + 1}" }, "cont"
       debug_code(program)
 
-      check_error_includes(/No breakpoint number/)
+      assert_error_includes(/No breakpoint number/)
     end
   end
 end

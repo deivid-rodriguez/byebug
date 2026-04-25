@@ -67,7 +67,7 @@ module Byebug
           begin
             debug_code(program)
           rescue RuntimeError
-            check_error_includes "Unknown command 'next'. Try 'help'"
+            assert_error_includes "Unknown command 'next'. Try 'help'"
           end
         end
       end
@@ -81,7 +81,7 @@ module Byebug
           begin
             debug_code(program)
           rescue RuntimeError
-            check_output_includes "Displays the backtrace"
+            assert_output_includes "Displays the backtrace"
           end
         end
       end

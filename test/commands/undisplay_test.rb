@@ -24,7 +24,7 @@ module Byebug
       enter "display d", "display d + 1", "undisplay"
       debug_code(program) { clear_displays }
 
-      check_output_includes "Clear all expressions? (y/n)"
+      assert_output_includes "Clear all expressions? (y/n)"
     end
 
     def test_removes_all_expressions_from_list_if_confirmed
@@ -35,7 +35,7 @@ module Byebug
         clear_displays
       end
 
-      check_output_doesnt_include "1: d = 3", "2: d + 1 = 4"
+      assert_output_doesnt_include "1: d = 3", "2: d + 1 = 4"
     end
 
     def test_does_not_remove_all_expressions_from_list_unless_confirmed
@@ -46,7 +46,7 @@ module Byebug
         clear_displays
       end
 
-      check_output_includes "1: d = 0", "2: d + 1 = 1"
+      assert_output_includes "1: d = 0", "2: d + 1 = 1"
     end
 
     def test_marks_specific_expression_from_list_as_inactive
@@ -62,8 +62,8 @@ module Byebug
       enter "display d", "display d + 1", "undisplay 1", "next"
       debug_code(program) { clear_displays }
 
-      check_output_includes "2: d + 1 = 4"
-      check_output_doesnt_include "1: d = 3"
+      assert_output_includes "2: d + 1 = 4"
+      assert_output_doesnt_include "1: d = 3"
     end
 
     def test_disable_display_removes_the_expression_from_display_list
@@ -79,14 +79,14 @@ module Byebug
       enter "disable display 1"
       debug_code(program)
 
-      check_error_includes "No display expressions have been set"
+      assert_error_includes "No display expressions have been set"
     end
 
     def test_disable_display_shows_an_error_if_theres_no_such_display_position
       enter "display d", "disable display 4"
       debug_code(program) { clear_displays }
 
-      check_error_includes \
+      assert_error_includes \
         '"disable display" argument "4" needs to be at most 1'
     end
 
