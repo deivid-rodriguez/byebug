@@ -87,6 +87,7 @@ byebug_context_create(VALUE thread)
 
   rb_debug_inspector_open(context_backtrace_set, (void *)context);
   context->calced_stack_size = dc_stack_size(context) + 1;
+  context->ruby_stack_size = context->calced_stack_size;
 
   if (rb_obj_class(thread) == cDebugThread)
     CTX_FL_SET(context, CTX_FL_IGNORE);
@@ -102,6 +103,7 @@ context_dup(debug_context_t *context)
 
   memcpy(new_context, context, sizeof(debug_context_t));
   byebug_reset_stepping_stop_points(new_context);
+  new_context->ruby_stack_size = context->ruby_stack_size;
   new_context->backtrace = context->backtrace;
   CTX_FL_SET(new_context, CTX_FL_DEAD);
 
@@ -506,7 +508,7 @@ Context_step_over(int argc, VALUE *argv, VALUE self)
              frame, context->calced_stack_size);
 
   context->lines = FIX2INT(lines);
-  context->dest_frame = context->calced_stack_size - frame;
+  context->dest_frame = context->ruby_stack_size - frame;
 
   return Qnil;
 }

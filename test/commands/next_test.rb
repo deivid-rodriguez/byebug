@@ -287,4 +287,37 @@ module Byebug
       debug_code(program) { assert_equal 5, frame.line }
     end
   end
+
+  #
+  # Test for [#877](https://github.com/deivid-rodriguez/byebug/issues/877)
+  #
+  class NextWithMethodCallChainTest < TestCase
+    def program
+      strip_line_numbers <<-RUBY
+         1:  module Byebug
+         2:    class #{example_class}
+         3:      def self.get_obj
+         4:        self
+         5:      end
+         6:
+         7:      def self.target
+         8:        true
+         9:      end
+        10:    end
+        11:
+        12:    byebug
+        13:
+        14:    #{example_class}.get_obj.method(:target).call
+        15:
+        16:    "done"
+        17:  end
+      RUBY
+    end
+
+    def test_next_does_not_skip_chained_call_through_c_method
+      enter "step", "next"
+
+      debug_code(program) { assert_location example_path, 8 }
+    end
+  end
 end
