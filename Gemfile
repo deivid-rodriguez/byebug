@@ -11,6 +11,6 @@ group :development do
   gem "pry", "0.16.0"
   gem "rake", "~> 13.0"
   gem "rake-compiler", "~> 1.0"
-  gem "yard", "0.9.43"
+  gem "yard", "0.9.44"
   gem "irb", "~> 1.15"
 end
