@@ -447,7 +447,7 @@ raise_event(VALUE trace_point, void *data)
   }
 
   if (NIL_P(catchpoints) || dc->calced_stack_size == 0
-      || RHASH_TBL(catchpoints)->num_entries == 0)
+      || RHASH_SIZE(catchpoints) == 0)
   {
     EVENT_TEARDOWN;
     return;
