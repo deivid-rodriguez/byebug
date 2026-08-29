@@ -18,16 +18,19 @@ module Byebug
     end
 
     def lines(min, max)
-      File.foreach(file).with_index.map do |line, lineno|
-        next unless (min..max).cover?(lineno + 1)
+      selected_lines = []
+      File.foreach(file).with_index(1) do |line, lineno|
+        next if lineno < min
+        break if lineno > max
 
-        format(
+        selected_lines << format(
           "%<annotation>s %<lineno>#{max.to_s.size}d: %<source>s",
-          annotation: annotator.call(lineno + 1),
-          lineno: lineno + 1,
+          annotation: annotator.call(lineno),
+          lineno: lineno,
           source: line
         )
       end
+      selected_lines
     end
 
     def lines_around(center)
