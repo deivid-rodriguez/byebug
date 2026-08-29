@@ -17,11 +17,11 @@ module Byebug
     end
 
     def file
-      @context.frame_file(pos)
+      source_position.first
     end
 
     def line
-      @context.frame_line(pos)
+      source_position.last
     end
 
     def _self
@@ -124,6 +124,8 @@ module Byebug
     # Formatted filename in frame
     #
     def deco_file
+      return "<native>" unless file
+
       Setting[:fullpath] ? File.expand_path(file) : shortpath(file)
     end
 
@@ -162,11 +164,24 @@ module Byebug
         call: deco_call,
         file: deco_file,
         line: line,
-        full_path: File.expand_path(deco_file)
+        full_path: file && File.expand_path(file)
       }
     end
 
     private
+
+    def source_position
+      @source_position ||= begin
+        frame_range = pos...@context.stack_size
+        source_frame = frame_range.find { |index| @context.frame_file(index) }
+
+        if source_frame
+          [@context.frame_file(source_frame), @context.frame_line(source_frame)]
+        else
+          [nil, 0]
+        end
+      end
+    end
 
     def c_args
       return [] unless _self.to_s != "main"
