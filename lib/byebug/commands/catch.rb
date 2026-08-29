@@ -55,7 +55,7 @@ module Byebug
     end
 
     def add(exception)
-      errmsg pr("catch.errors.not_class", class: exception) if warning_eval(exception.is_a?(Class).to_s)
+      errmsg pr("catch.errors.not_class", class: exception) unless silent_eval(exception).is_a?(Class)
 
       puts pr("catch.added", exception: exception)
       Byebug.add_catchpoint(exception)
