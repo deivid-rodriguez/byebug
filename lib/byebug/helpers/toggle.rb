@@ -26,7 +26,7 @@ module Byebug
       def enable_disable_display(is_enable, args)
         raise pr("toggle.errors.no_display") if n_displays.zero?
 
-        selected_displays = args ? args.split(/ +/) : [1..n_displays + 1]
+        selected_displays = args ? args.split(/ +/) : (1..n_displays).map(&:to_s)
 
         selected_displays.each do |pos|
           pos, err = get_int(pos, "#{is_enable} display", 1, n_displays)
